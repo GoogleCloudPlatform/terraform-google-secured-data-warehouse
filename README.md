@@ -1,53 +1,16 @@
-# New Project Template
+# Secured Data Warehouse Blueprint
 
-This repository contains a template that can be used to seed a repository for a
-new Google open source project.
+This repository contains Terraform configuration modules that allow customers to
+quickly deploy a secured BigQuery data warehouse. The blueprint allows customers
+to use Google Cloud's core strengths in data analytics, and to overcome typical
+challenges that include:
 
-See [go/releasing](http://go/releasing) (available externally at
-https://opensource.google/docs/releasing/) for more information about
-releasing a new Google open source project.
+- Limited knowledge/experience with best practices for creating, deploying and operating in Google 
+Cloud  
+- Security/risk concerns and restrictions from their internal security, risk and compliance teams
+- Regulatory and compliance approval from external auditors.
 
-This template uses the Apache license, as is Google's default.  See the
-documentation for instructions on using alternate license.
-
-## How to use this template
-
-1. Clone it from GitHub.
-    * There is no reason to fork it.
-1. Create a new local repository and copy the files from this repo into it.
-1. Modify README.md and docs/contributing.md to represent your project, not the
-   template project.
-1. Develop your new project!
-
-``` shell
-git clone https://github.com/google/new-project
-mkdir my-new-thing
-cd my-new-thing
-git init
-cp -r ../new-project/* ../new-project/.github .
-git add *
-git commit -a -m 'Boilerplate for new Google open source project'
-```
-
-## Source Code Headers
-
-Every file containing source code must include copyright and license
-information. This includes any JS/CSS files that you might be serving out to
-browsers. (This is to help well-intentioned people avoid accidental copying that
-doesn't comply with the license.)
-
-Apache header:
-
-    Copyright 2021 Google LLC
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
+The Terraform configurations in this repository provide customers with an opinionated architecture
+that incorporates and documents best practices for a performant and scalable design, combined with
+security by default for control, logging and evidence generation. It can be  simply deployed by
+customers through a Terraform workflow.
