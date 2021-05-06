@@ -1,7 +1,7 @@
 ---
 name: Enhancement
 labels: enhancement
-about: For when something (a resource, field, etc.) is missing, and should be added.
+about: For when something (a module, resource, field, etc.) is missing, and should be added.
 
 ---
 
