@@ -42,7 +42,9 @@ Please do NOT paste the execution log in the issue; just paste a link to the Gis
 
 <!--- Please list the steps required to reproduce the issue. --->
 
-1. `terraform-validator convert tfplan.json`
+1.
+1.
+1.
 
 ### Important Factoids
 
