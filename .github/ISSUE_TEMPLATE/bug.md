@@ -24,12 +24,10 @@ about: For when something is there, but doesn't work how it should.
 - Platform:
 
 
-### Debug Output
+### Terraform execution logs
 
-<!---
-Please provide a link to a GitHub Gist containing the complete debug output. Please do NOT paste the debug output in the issue; just paste a link to the Gist.
-
-To obtain the debug output, run your terraform-validator command with the `--verbose` option.
+Please provide a link to a GitHub Gist containing the REDACTED Terraform execution log. 
+Please do NOT paste the execution log in the issue; just paste a link to the Gist.
 --->
 
 ### Expected Behavior
