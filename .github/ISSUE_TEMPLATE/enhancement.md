@@ -20,19 +20,6 @@ about: For when something (a module, resource, field, etc.) is missing, and shou
 
 <!--- Please leave a helpful description of the enhancement here. Including use cases and why it would help you is a great way to convince maintainers to spend time on it. --->
 
-### New or Affected Resource(s)
-
-<!--- Please list the new or affected Terraform resources. --->
-
-* google_XXXXX
-
-### Terraform-google-conversion support?
-
-<!-- Is this enhancement already supported by terraform-google-conversion? (If relevant.) https://github.com/GoogleCloudPlatform/terraform-google-conversion/tree/master/google -->
-
-- [google_XXXXX is in terraform-google-conversion](https://github.com/GoogleCloudPlatform/terraform-google-conversion/tree/master/google)
-- google_YYYYY is not
-
 ### References
 
 <!---
