@@ -16,11 +16,12 @@ about: For when something is there, but doesn't work how it should.
 
 <!--- Thank you for keeping this note for the community --->
 
-### Terraform Validator version
+### Secured Data Warehouse Specifications
 
-<!--- This is the version of terraform-validator you downloaded, or the SHA if you are building from source yourself --->
+<!--- This is the version of Secured Data Warehouse if you are using a released version, or the SHA if you are using from main --->
 
-terraform-validator: vXXXX-XX-XX
+- Version: vXXXX-XX-XX
+- Platform:
 
 ### Affected Resource(s)
 
