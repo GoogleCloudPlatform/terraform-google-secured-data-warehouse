@@ -23,24 +23,6 @@ about: For when something is there, but doesn't work how it should.
 - Version: vXXXX-XX-XX
 - Platform:
 
-### Affected Resource(s)
-
-<!--- Please list the affected Terraform resources --->
-
-* google_XXXXX
-
-### Terraform Plan JSON
-
-<!--- Information about code formatting: https://help.github.com/articles/basic-writing-and-formatting-syntax/#quoting-code --->
-
-```json
-# Copy-paste your Terraform plan JSON here
-#
-# Ideally this would be a minimal plan that reproduces your issue.
-# For large plan files, please use a service like Dropbox and share a link to the ZIP file.
-# For security, you can also encrypt the files using our GPG public key:
-#    https://www.hashicorp.com/security
-```
 
 ### Debug Output
 
