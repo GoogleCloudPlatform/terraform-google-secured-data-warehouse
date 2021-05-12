@@ -5,8 +5,8 @@ quickly deploy a secured BigQuery data warehouse. The blueprint allows customers
 to use Google Cloud's core strengths in data analytics, and to overcome typical
 challenges that include:
 
-- Limited knowledge/experience with best practices for creating, deploying and operating in Google 
-Cloud  
+- Limited knowledge/experience with best practices for creating, deploying and operating in Google
+Cloud
 - Security/risk concerns and restrictions from their internal security, risk and compliance teams
 - Regulatory and compliance approval from external auditors.
 
