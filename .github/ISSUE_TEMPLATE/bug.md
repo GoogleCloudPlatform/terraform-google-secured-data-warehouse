@@ -26,7 +26,7 @@ about: For when something is there, but doesn't work how it should.
 
 ### Terraform execution logs
 
-Please provide a link to a GitHub Gist containing the REDACTED Terraform execution log. 
+Please provide a link to a GitHub Gist containing the REDACTED Terraform execution log.
 Please do NOT paste the execution log in the issue; just paste a link to the Gist.
 --->
 
