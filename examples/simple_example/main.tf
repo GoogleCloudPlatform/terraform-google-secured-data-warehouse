@@ -15,7 +15,7 @@
  */
 
 provider "google" {
-  version = "~> 2.0"
+  version = "~> 3.67"
 }
 
 module "secured_data_warehouse" {

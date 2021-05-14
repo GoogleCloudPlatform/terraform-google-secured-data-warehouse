@@ -33,15 +33,15 @@ module "secured_data_warehouse" {
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|:----:|:-----:|:-----:|
-| bucket\_name | The name of the bucket to create | string | n/a | yes |
-| project\_id | The project ID to deploy to | string | n/a | yes |
+|------|-------------|------|---------|:--------:|
+| bucket\_name | The name of the bucket to create | `any` | n/a | yes |
+| project\_id | The project ID to deploy to | `any` | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| bucket\_name |  |
+| bucket\_name | n/a |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
@@ -53,8 +53,8 @@ These sections describe requirements for using this module.
 
 The following dependencies must be available:
 
-- [Terraform][terraform] v0.12
-- [Terraform Provider for GCP][terraform-provider-gcp] plugin v2.0
+- [Terraform][terraform] v0.13
+- [Terraform Provider for GCP][terraform-provider-gcp] plugin v3.67.0
 
 ### Service Account
 
