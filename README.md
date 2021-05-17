@@ -86,3 +86,6 @@ information on contributing to this module.
 [project-factory-module]: https://registry.terraform.io/modules/terraform-google-modules/project-factory/google
 [terraform-provider-gcp]: https://www.terraform.io/docs/providers/google/index.html
 [terraform]: https://www.terraform.io/downloads.html
+
+---
+This is not an officially supported Google product
