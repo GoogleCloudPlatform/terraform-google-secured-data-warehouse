@@ -18,48 +18,43 @@ resource "random_id" "suffix" {
   byte_length = 4
 }
 
-//Dataflow controller service account
-module "dataflow_controller_service_account" {
-  source = "..//modules/service_account"
+//storage ingest bucket
+module "data_ingest_bucket" {
+  source  = "terraform-google-modules/cloud-storage/google"
+  version = "~> 1.7"
 
-  project_id   = var.project_id
-  account_id   = "sa-dataflow-${random_id.suffix.hex}"
-  display_name = "Cloud Dataflow controller service account"
+  project_id = var.project_id
+  prefix     = "bkt-${random_id.suffix.hex}"
+  names      = [var.bucket_name]
+  location   = var.bucket_location
 
-  project_roles = [
-    "roles/dataflow.worker",
-    "roles/pubsub.admin",
-    "roles/storage.admin",
-    "roles/bigquery.admin",
-    "roles/cloudkms.admin",
-    "roles/dlp.admin",
-    "roles/cloudkms.cryptoKeyEncrypterDecrypter"
-  ]
-
+  labels = {
+    "enterprise_data_ingest_bucket" = "true"
+  }
 }
 
-//service account for storage
-module "storage_writer_service_account" {
-  source = "..//modules/service_account"
-
-  project_id   = var.project_id
-  account_id   = "sa-storage-writer-${random_id.suffix.hex}"
-  display_name = "Cloud Storage data writer service account"
-
-  project_roles = [
-    "roles/pubsub.admin"
-  ]
+//pub/sub ingest topic
+module "data_ingest_topic" {
+  source     = "terraform-google-modules/pubsub/google"
+  version    = "~> 1.4"
+  topic      = "tpc-data-ingest-${random_id.suffix.hex}"
+  project_id = var.project_id
 }
 
-//service account for Pub/sub
-module "pubsub_writer_service_account" {
-  source = "..//modules/service_account"
+//BigQuery dataset
+module "bigquery_dataset" {
+  source  = "terraform-google-modules/bigquery/google"
+  version = "~> 4.4"
 
-  project_id   = var.project_id
-  account_id   = "sa-pubsub-writer-${random_id.suffix.hex}"
-  display_name = "Cloud PubSub data writer service account"
+  project_id                  = var.project_id
+  dataset_id                  = var.dataset_id
+  dataset_name                = var.dataset_name
+  description                 = var.dataset_description
+  location                    = var.dataset_location
+  default_table_expiration_ms = var.dataset_default_table_expiration_ms
 
-  project_roles = [
-    "roles/storage.admin"
-  ]
+  dataset_labels = {
+    porpouse = "ingest"
+    billable = "true"
+  }
 }
