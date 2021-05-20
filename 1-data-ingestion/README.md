@@ -5,17 +5,17 @@
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| account\_id | The ID of the service account to be created. | `string` | n/a | yes |
-| display\_name | The display name of the service account to be created. | `string` | n/a | yes |
-| org\_id | GCP Organization ID. | `string` | `""` | no |
 | organization\_roles | The roles to be granted to the service account in the organization. | `list(string)` | `[]` | no |
 | project\_id | The ID of the project in which the service account will be created. | `string` | n/a | yes |
 | project\_roles | The roles to be granted to the service account in the project. | `list(string)` | `[]` | no |
+| terraform\_service\_account | Service account email of the account to impersonate to run Terraform. | `string` | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| email | The service account email. |
+| dataflow\_controller\_service\_account\_email | The service account email. |
+| pubsub\_writer\_service\_account\_email | The service account email. |
+| storage\_writer\_service\_account\_email | The service account email. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
