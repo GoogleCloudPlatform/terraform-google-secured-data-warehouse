@@ -22,6 +22,14 @@ locals {
   Provider credential configuration
  *****************************************/
 provider "google" {
-  version                     = "~> 3.68"
+  version                     = "~> 3.69"
+  impersonate_service_account = local.tf_sa
+}
+
+/******************************************
+  Provider credential configuration
+ *****************************************/
+provider "google-beta" {
+  version                     = "~> 3.69"
   impersonate_service_account = local.tf_sa
 }

@@ -34,10 +34,26 @@ variable "project_id" {
   type        = string
 }
 
+variable "vpc_name" {
+  type        = string
+  description = "the name of the network."
+}
+
 variable "subnet_ip" {
   type        = string
   description = "The CDIR IP range of the subnetwork."
   default     = "10.0.32.0/21"
+}
+
+variable "access_context_manager_policy_id" {
+  type        = number
+  description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
+}
+
+variable "perimeter_additional_members" {
+  description = "The list additional members to be added on perimeter access. Prefix of group: user: or serviceAccount: is required."
+  type        = list(string)
+  default     = []
 }
 
 variable "bucket_name" {

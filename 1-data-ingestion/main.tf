@@ -21,7 +21,7 @@ resource "random_id" "suffix" {
 //storage ingest bucket
 module "data_ingest_bucket" {
   source  = "terraform-google-modules/cloud-storage/google"
-  version = "~> 1.7"
+  version = "~> 2.0"
 
   project_id = var.project_id
   prefix     = "bkt-${random_id.suffix.hex}"
@@ -36,7 +36,7 @@ module "data_ingest_bucket" {
 //pub/sub ingest topic
 module "data_ingest_topic" {
   source     = "terraform-google-modules/pubsub/google"
-  version    = "~> 1.4"
+  version    = "~> 2.0"
   topic      = "tpc-data-ingest-${random_id.suffix.hex}"
   project_id = var.project_id
 }
@@ -44,7 +44,7 @@ module "data_ingest_topic" {
 //BigQuery dataset
 module "bigquery_dataset" {
   source  = "terraform-google-modules/bigquery/google"
-  version = "~> 4.4"
+  version = "~> 5.1"
 
   project_id                  = var.project_id
   dataset_id                  = var.dataset_id

@@ -28,3 +28,58 @@ output "pubsub_writer_service_account_email" {
   description = "The service account email."
   value       = module.pubsub_writer_service_account.email
 }
+
+output "data_ingest_bucket_names" {
+  description = "The name list of the buckets created for data ingest pipeline."
+  value       = module.data_ingest_bucket.names_list
+}
+
+output "data_ingest_topic_name" {
+  description = "The topic created for data ingest pipeline."
+  value       = module.data_ingest_topic.topic
+}
+
+output "data_ingest_bigquery_dataset" {
+  description = "The bigquery dataset created for data ingest pipeline."
+  value       = module.bigquery_dataset.bigquery_dataset
+}
+
+output "network_name" {
+  value       = module.vpc_service_controls.network_name
+  description = "The name of the VPC being created"
+}
+
+output "network_self_link" {
+  value       = module.vpc_service_controls.network_self_link
+  description = "The URI of the VPC being created"
+}
+
+output "subnets_names" {
+  value       = module.vpc_service_controls.subnets_names
+  description = "The names of the subnets being created"
+}
+
+output "subnets_ips" {
+  value       = module.vpc_service_controls.subnets_ips
+  description = "The IPs and CIDRs of the subnets being created"
+}
+
+output "subnets_self_links" {
+  value       = module.vpc_service_controls.subnets_self_links
+  description = "The self-links of subnets being created"
+}
+
+output "subnets_regions" {
+  value       = module.vpc_service_controls.subnets_regions
+  description = "The region where the subnets will be created"
+}
+
+output "access_level_name" {
+  value       = module.vpc_service_controls.access_level_name
+  description = "Access context manager access level name "
+}
+
+output "service_perimeter_name" {
+  value       = module.vpc_service_controls.service_perimeter_name
+  description = "Access context manager service perimeter name "
+}
