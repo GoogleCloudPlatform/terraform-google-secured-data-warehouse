@@ -209,7 +209,7 @@ If your user does not have the necessary roles to run the commands above you can
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | perimeter\_additional\_members | The list additional members to be added on perimeter access. Prefix of group: user: or serviceAccount: is required. | `list(string)` | `[]` | no |
 | project\_id | The ID of the project in which the service account will be created. | `string` | n/a | yes |
-| region | The region in which the subnetwork will be created. | `string` | n/a | yes |
+| region | The region in which the subnetwork will be created. | `string` | `"us-central1"` | no |
 | subnet\_ip | The CDIR IP range of the subnetwork. | `string` | `"10.0.32.0/21"` | no |
 | terraform\_service\_account | Service account email of the account to impersonate to run Terraform. | `string` | n/a | yes |
 | vpc\_name | the name of the network. | `string` | n/a | yes |
