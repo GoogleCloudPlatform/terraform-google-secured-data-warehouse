@@ -22,6 +22,7 @@ variable "org_id" {
 variable "region" {
   type        = string
   description = "The region in which the subnetwork will be created."
+  default     = "us-central1"
 }
 
 variable "terraform_service_account" {

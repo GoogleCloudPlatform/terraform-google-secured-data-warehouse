@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-locals {
-  tf_sa = var.terraform_service_account
-}
-
 /******************************************
   Provider credential configuration
  *****************************************/
 provider "google" {
-  version                     = "~> 3.69"
-  impersonate_service_account = local.tf_sa
+  version                     = "~> 3.63"
+  impersonate_service_account = var.terraform_service_account
 }
 
 /******************************************
@@ -31,5 +27,5 @@ provider "google" {
  *****************************************/
 provider "google-beta" {
   version                     = "~> 3.69"
-  impersonate_service_account = local.tf_sa
+  impersonate_service_account = var.terraform_service_account
 }
