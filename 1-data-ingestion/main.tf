@@ -23,10 +23,11 @@ module "data_ingest_bucket" {
   source  = "terraform-google-modules/cloud-storage/google"
   version = "~> 2.0"
 
-  project_id = var.project_id
-  prefix     = "bkt-${random_id.suffix.hex}"
-  names      = [var.bucket_name]
-  location   = var.bucket_location
+  project_id      = var.project_id
+  prefix          = "bkt-${random_id.suffix.hex}"
+  names           = [var.bucket_name]
+  location        = var.bucket_location
+  lifecycle_rules = var.bucket_lifecycle_rules
 
   labels = {
     "enterprise_data_ingest_bucket" = "true"
@@ -54,7 +55,7 @@ module "bigquery_dataset" {
   default_table_expiration_ms = var.dataset_default_table_expiration_ms
 
   dataset_labels = {
-    porpouse = "ingest"
+    purpose  = "ingest"
     billable = "true"
   }
 }

@@ -24,13 +24,11 @@ module "dataflow_controller_service_account" {
   display_name = "Cloud Dataflow controller service account"
 
   project_roles = [
-    "roles/dataflow.worker",
-    "roles/pubsub.admin",
-    "roles/storage.admin",
-    "roles/bigquery.admin",
-    "roles/cloudkms.admin",
-    "roles/dlp.admin",
-    "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+    "roles/pubsub.subscriber",
+    "roles/bigquery.jobUser",
+    "roles/bigquery.jobUser",
+    "roles/dlp.reader",
+    "roles/storage.objectViewer"
   ]
 
 }
@@ -44,7 +42,8 @@ module "storage_writer_service_account" {
   display_name = "Cloud Storage data writer service account"
 
   project_roles = [
-    "roles/pubsub.admin"
+    "roles/storage.objectViewer",
+    "roles/storage.objectCreator"
   ]
 }
 
@@ -57,6 +56,7 @@ module "pubsub_writer_service_account" {
   display_name = "Cloud PubSub data writer service account"
 
   project_roles = [
-    "roles/storage.admin"
+    "roles/pubsub.publisher",
+    "roles/pubsub.subscriber"
   ]
 }
