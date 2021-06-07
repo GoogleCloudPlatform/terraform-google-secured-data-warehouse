@@ -1,4 +1,4 @@
-# Copyright 2018 Google LLC
+# Copyright 2021 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,18 +26,13 @@ platforms:
   - name: default
 
 suites:
-  - name: simple_example
+  - name: data-ingestion
     driver:
-      root_module_directory: test/fixtures/simple_example/
+      root_module_directory: test/fixtures/data-ingestion/
     verifier:
       color: false
       systems:
-        - name: simple_example local
-          backend: local
-          controls:
-            - gcloud
-            - gsutil
-        - name: simple_example gcp
+        - name: data_ingestion gcp
           backend: gcp
           controls:
             - gcp

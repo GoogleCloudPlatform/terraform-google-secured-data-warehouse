@@ -18,7 +18,7 @@
   Provider credential configuration
  *****************************************/
 provider "google" {
-  version                     = "~> 3.63"
+  # version                     = "~> 3.69"
   impersonate_service_account = var.terraform_service_account
 }
 

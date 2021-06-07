@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 variable "org_id" {
   description = "The numeric organization id"
 }
@@ -23,4 +24,8 @@ variable "folder_id" {
 
 variable "billing_account" {
   description = "The billing account id associated with the project, e.g. XXXXXX-YYYYYY-ZZZZZZ"
+}
+
+variable "group_email" {
+  description = "The group that will be assigned permissions for testing."
 }
