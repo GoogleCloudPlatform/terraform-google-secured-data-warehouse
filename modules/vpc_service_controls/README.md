@@ -29,6 +29,7 @@
 | access\_level\_name | Access context manager access level name |
 | network\_name | The name of the VPC being created |
 | network\_self\_link | The URI of the VPC being created |
+| project\_number | Project number included on perimeter |
 | service\_perimeter\_name | Access context manager service perimeter name |
 | subnets\_ips | The IPs and CIDRs of the subnets being created |
 | subnets\_names | The names of the subnets being created |

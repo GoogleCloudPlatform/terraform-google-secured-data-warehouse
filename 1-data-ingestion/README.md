@@ -226,6 +226,7 @@ If your user does not have the necessary roles to run the commands above you can
 | dataflow\_controller\_service\_account\_email | The service account email. |
 | network\_name | The name of the VPC being created |
 | network\_self\_link | The URI of the VPC being created |
+| project\_number | Project number included on perimeter |
 | pubsub\_writer\_service\_account\_email | The service account email. |
 | service\_perimeter\_name | Access context manager service perimeter name |
 | storage\_writer\_service\_account\_email | The service account email. |

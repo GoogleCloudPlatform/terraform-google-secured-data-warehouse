@@ -20,6 +20,21 @@ output "project_id" {
   value       = var.project_id
 }
 
+output "project_number" {
+  description = "The project_number used to create infra."
+  value       = module.data_ingestion.project_number
+}
+
+output "org_id" {
+  description = "The organization used to create infra."
+  value       = var.org_id
+}
+
+output "organization_policy_name" {
+  description = "The organization policy name used to create infra."
+  value       = var.access_context_manager_policy_id
+}
+
 output "dataflow_controller_service_account_email" {
   description = "The service account email."
   value       = module.data_ingestion.dataflow_controller_service_account_email
@@ -88,5 +103,15 @@ output "access_level_name" {
 output "service_perimeter_name" {
   value       = module.data_ingestion.service_perimeter_name
   description = "Access context manager service perimeter name "
+}
+
+output "perimeter_additional_members" {
+  description = "The list additional members to be added on perimeter access. Prefix of group: user: or serviceAccount: is required."
+  value       = var.perimeter_additional_members
+}
+
+output "terraform_service_account" {
+  description = "Service account email of the account to impersonate to run Terraform."
+  value       = var.terraform_service_account
 }
 

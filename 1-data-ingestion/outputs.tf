@@ -83,3 +83,8 @@ output "service_perimeter_name" {
   value       = module.vpc_service_controls.service_perimeter_name
   description = "Access context manager service perimeter name "
 }
+
+output "project_number" {
+  value       = module.vpc_service_controls.project_number
+  description = "Project number included on perimeter"
+}

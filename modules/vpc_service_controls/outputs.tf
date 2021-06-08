@@ -20,6 +20,11 @@ output "network_name" {
   description = "The name of the VPC being created"
 }
 
+output "project_number" {
+  value       = data.google_project.target_project.number
+  description = "Project number included on perimeter"
+}
+
 output "network_self_link" {
   value       = module.network.network_self_link
   description = "The URI of the VPC being created"
