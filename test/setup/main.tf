@@ -31,6 +31,7 @@ module "project" {
     "iam.googleapis.com",
     "dns.googleapis.com",
     "pubsub.googleapis.com",
-    "bigquery.googleapis.com"
+    "bigquery.googleapis.com",
+    "accesscontextmanager.googleapis.com"
   ]
 }
