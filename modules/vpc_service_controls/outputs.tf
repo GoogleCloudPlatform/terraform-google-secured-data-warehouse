@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Google LLC
+ * Copyright  2021  Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,10 +52,10 @@ output "subnets_regions" {
 
 output "access_level_name" {
   value       = module.access_level_policy.name
-  description = "Access context manager access level name "
+  description = "Access context manager access level name"
 }
 
 output "service_perimeter_name" {
   value       = local.regular_service_perimeter_name
-  description = "Access context manager service perimeter name "
+  description = "Access context manager service perimeter name"
 }
