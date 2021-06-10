@@ -16,9 +16,9 @@
 
 
 locals {
-  template_prefix = var.template_prefix != "" ? var.template_prefix : "sbp_deidentification"
-  template_id     = "${local.template_prefix}_${random_id.random_template_id_suffix.hex}"
-
+  template_prefix      = var.template_prefix != "" ? var.template_prefix : "sbp_deidentification"
+  template_id          = "${local.template_prefix}_${random_id.random_template_id_suffix.hex}"
+  template_file_sha256 = filesha256(var.template_file)
   deidentification_template = templatefile(
     var.template_file,
     {
@@ -31,8 +31,9 @@ locals {
 
 resource "random_id" "random_template_id_suffix" {
   keepers = {
-    crypto_key  = module.kms_dlp_tkek.keys[var.dlp_tkek_key_name],
-    wrapped_key = google_kms_secret_ciphertext.kms_wrapped_dlp_key.ciphertext
+    crypto_key      = module.kms_dlp_tkek.keys[var.dlp_tkek_key_name],
+    wrapped_key     = google_kms_secret_ciphertext.kms_wrapped_dlp_key.ciphertext
+    template_sha256 = local.template_file_sha256
   }
 
   byte_length = 8
