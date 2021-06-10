@@ -14,20 +14,13 @@
 The existing project must have the following APIs enabled:
 
 - Access Context Manager API: `accesscontextmanager.googleapis.com`
-- Compute Engine: `compute.googleapis.com`
-- Cloud Asset API: `cloudasset.googleapis.com`
-- Cloud Build API: `cloudbuild.googleapis.com`
+- Bigquery API: `bigquery.googleapis.com`
 - Cloud DNS API: `dns.googleapis.com`
-- Cloud Functions API: `cloudfunctions.googleapis.com`
-- Cloud Logging API: `logging.googleapis.com`
-- Cloud Monitoring API: `monitoring.googleapis.com`
 - Cloud Pub/Sub API: `pubsub.googleapis.com`
 - Cloud Resource Manager API: `cloudresourcemanager.googleapis.com`
-- Cloud Storage API: `storage-component.googleapis.com`
+- Cloud Storage API: `storage-api.googleapis.com`
 - Identity and Access Management (IAM) API: `iam.googleapis.com`
-- Serverless VPC Access API: `vpcaccess.googleapis.com`
 - Service Usage API: `serviceusage.googleapis.com`
-- Security Command Center API: `securitycenter.googleapis.com`
 
 You can use the following command to enable all the APIs, just replace the <project-id> placeholder
 with your project id:
@@ -37,20 +30,13 @@ export project_id=<project-id>
 
 gcloud services enable \
 accesscontextmanager.googleapis.com \
-cloudasset.googleapis.com \
-cloudbuild.googleapis.com \
-cloudfunctions.googleapis.com \
 cloudresourcemanager.googleapis.com \
-compute.googleapis.com \
+bigquery.googleapis.com \
 dns.googleapis.com \
 iam.googleapis.com \
-logging.googleapis.com \
 pubsub.googleapis.com \
-securitycenter.googleapis.com \
 serviceusage.googleapis.com \
-storage-component.googleapis.com \
-vpcaccess.googleapis.com \
-monitoring.googleapis.com \
+storage-api.googleapis.com \
 --project ${project_id}
 ```
 ### GCP user account
