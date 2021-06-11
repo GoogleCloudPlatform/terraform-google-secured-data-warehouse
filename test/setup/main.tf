@@ -27,6 +27,13 @@ module "project" {
   activate_apis = [
     "cloudresourcemanager.googleapis.com",
     "storage-api.googleapis.com",
-    "serviceusage.googleapis.com"
+    "serviceusage.googleapis.com",
+    "iam.googleapis.com",
+    "dns.googleapis.com",
+    "pubsub.googleapis.com",
+    "bigquery.googleapis.com",
+    "accesscontextmanager.googleapis.com",
+    "cloudkms.googleapis.com",
+    "dlp.googleapis.com"
   ]
 }

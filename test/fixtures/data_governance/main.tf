@@ -14,14 +14,10 @@
  * limitations under the License.
  */
 
-terraform {
-  required_version = ">= 0.13"
-}
+module "data_governance" {
+  source = "../../..//modules/data_governance"
 
-provider "google" {
-  version = "~> 3.69"
-}
-
-provider "google-beta" {
-  version = "~> 3.69"
+  project_id                = var.project_id
+  terraform_service_account = var.terraform_service_account
+  template_file             = "${path.module}/deidentification.tmpl"
 }

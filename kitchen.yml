@@ -26,18 +26,17 @@ platforms:
   - name: default
 
 suites:
-  - name: simple_example
+  - name: data-governance
     driver:
-      root_module_directory: test/fixtures/simple_example/
+      root_module_directory: test/fixtures/data-governance/
     verifier:
       color: false
       systems:
-        - name: simple_example local
-          backend: local
-          controls:
-            - gcloud
-            - gsutil
-        - name: simple_example gcp
+        - name: data_governance gcp
           backend: gcp
           controls:
             - gcp
+        - name: data_governance gcloud
+          backend: local
+          controls:
+            - gcloud

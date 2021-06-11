@@ -14,14 +14,22 @@
  * limitations under the License.
  */
 
-terraform {
-  required_version = ">= 0.13"
+output "data_governance_keyring" {
+  description = "The name of the keyring."
+  value       = module.data_governance.keyring
 }
 
-provider "google" {
-  version = "~> 3.69"
+output "data_governance_location" {
+  description = "The location of the keyring."
+  value       = module.data_governance.location
 }
 
-provider "google-beta" {
-  version = "~> 3.69"
+output "data_governance_key" {
+  description = "Created key name."
+  value       = module.data_governance.keys[0]
+}
+
+output "data_governance_template_id" {
+  description = "ID of the DLP de-identification template created."
+  value       = module.data_governance.template_id
 }

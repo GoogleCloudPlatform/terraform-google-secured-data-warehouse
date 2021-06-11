@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-terraform {
-  required_version = ">= 0.13"
+variable "project_id" {
+  description = "The ID of the project in which to provision resources."
+  type        = string
 }
 
-provider "google" {
-  version = "~> 3.69"
-}
-
-provider "google-beta" {
-  version = "~> 3.69"
+variable "terraform_service_account" {
+  description = "Service account email of the account to impersonate to run Terraform"
+  type        = string
 }

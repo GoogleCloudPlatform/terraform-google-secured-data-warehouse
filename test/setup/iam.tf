@@ -15,9 +15,54 @@
  */
 
 locals {
-  int_required_roles = [
-    "roles/owner"
+  int_org_required_roles = [
+    "roles/securitycenter.notificationConfigEditor",
+    "roles/securitycenter.assetSecurityMarksWriter",
+    "roles/securitycenter.assetsViewer",
+    "roles/orgpolicy.policyAdmin",
+    "roles/accesscontextmanager.policyAdmin",
+    "roles/resourcemanager.organizationAdmin",
+    "roles/accesscontextmanager.policyAdmin",
+    "roles/vpcaccess.admin",
+    "roles/compute.xpnAdmin",
+    "roles/billing.user",
   ]
+
+  int_proj_required_roles = [
+    "roles/cloudfunctions.developer",
+    "roles/storage.admin",
+    "roles/pubsub.admin",
+    "roles/iam.serviceAccountUser",
+    "roles/logging.configWriter",
+    "roles/iam.serviceAccountCreator",
+    "roles/iam.serviceAccountDeleter",
+    "roles/iam.securityReviewer",
+    "roles/compute.networkAdmin",
+    "roles/compute.securityAdmin",
+    "roles/dns.admin",
+    "roles/iam.serviceAccountTokenCreator",
+    "roles/iam.serviceAccountUser",
+    "roles/owner",
+    "roles/cloudkms.admin",
+    "roles/dlp.deidentifyTemplatesEditor",
+    "roles/dlp.inspectTemplatesEditor",
+    "roles/dlp.user",
+    "roles/iam.serviceAccountTokenCreator"
+  ]
+}
+
+
+resource "google_organization_iam_member" "org_admins_group" {
+  for_each = toset(local.int_org_required_roles)
+  org_id   = var.org_id
+  role     = each.value
+  member   = "serviceAccount:${google_service_account.int_test.email}"
+}
+
+resource "google_billing_account_iam_member" "tf_billing_user" {
+  billing_account_id = var.billing_account
+  role               = "roles/billing.admin"
+  member             = "serviceAccount:${google_service_account.int_test.email}"
 }
 
 resource "google_service_account" "int_test" {
@@ -27,10 +72,10 @@ resource "google_service_account" "int_test" {
 }
 
 resource "google_project_iam_member" "int_test" {
-  count = length(local.int_required_roles)
+  for_each = toset(local.int_proj_required_roles)
 
   project = module.project.project_id
-  role    = local.int_required_roles[count.index]
+  role    = each.value
   member  = "serviceAccount:${google_service_account.int_test.email}"
 }
 
