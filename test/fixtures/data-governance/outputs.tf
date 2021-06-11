@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+output "project_id" {
+  description = "The project_id used to create infra."
+  value       = var.project_id
+}
+
 output "data_governance_keyring" {
   description = "The name of the keyring."
   value       = module.data_governance.keyring
