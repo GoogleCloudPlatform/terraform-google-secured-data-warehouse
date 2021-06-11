@@ -41,9 +41,21 @@ variable "template_file" {
   type        = string
 }
 
-variable "template_prefix" {
+variable "template_id_prefix" {
   description = "Prefix of the ID of the DLP de-identification template to be created."
   type        = string
   default     = ""
 
+}
+
+variable "template_display_name" {
+  description = "Display name of the DLP de-identification template"
+  type        = string
+  default     = "KMS Wrapped crypto Key de-identification"
+}
+
+variable "template_description" {
+  description = "Description name of the DLP de-identification template"
+  type        = string
+  default     = "De-identifies sensitive content defined in the template with a KMS Wrapped crypto Key."
 }

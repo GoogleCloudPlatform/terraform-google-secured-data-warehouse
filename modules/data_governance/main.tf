@@ -16,15 +16,17 @@
 
 
 locals {
-  template_prefix      = var.template_prefix != "" ? var.template_prefix : "sbp_deidentification"
-  template_id          = "${local.template_prefix}_${random_id.random_template_id_suffix.hex}"
+  template_id_prefix   = var.template_id_prefix != "" ? var.template_id_prefix : "sbp_deidentification"
+  template_id          = "${local.template_id_prefix}_${random_id.random_template_id_suffix.hex}"
   template_file_sha256 = filesha256(var.template_file)
   deidentification_template = templatefile(
     var.template_file,
     {
-      crypto_key  = module.kms_dlp_tkek.keys[var.dlp_tkek_key_name],
-      wrapped_key = google_kms_secret_ciphertext.kms_wrapped_dlp_key.ciphertext,
-      template_id = local.template_id
+      crypto_key   = module.kms_dlp_tkek.keys[var.dlp_tkek_key_name],
+      wrapped_key  = google_kms_secret_ciphertext.kms_wrapped_dlp_key.ciphertext,
+      template_id  = local.template_id,
+      display_name = var.template_display_name,
+      description  = var.template_description
     }
   )
 }

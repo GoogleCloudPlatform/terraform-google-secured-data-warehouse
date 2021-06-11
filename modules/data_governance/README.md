@@ -35,8 +35,10 @@ This includes an example template file.
 | dlp\_tkek\_key\_name | Name to be used for KMS Key | `string` | `"dlp-de-identification-crypto-key"` | no |
 | dlp\_tkek\_keyring\_name | Name to be used for KMS Keyring | `string` | `"dlp-de-identification-keyring"` | no |
 | project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
+| template\_description | Description name of the DLP de-identification template | `string` | `"De-identifies sensitive content defined in the template with a KMS Wrapped crypto Key."` | no |
+| template\_display\_name | Display name of the DLP de-identification template | `string` | `"KMS Wrapped crypto Key de-identification"` | no |
 | template\_file | Path to the DLP de-identification template file. | `string` | n/a | yes |
-| template\_prefix | Prefix of the ID of the DLP de-identification template to be created. | `string` | `""` | no |
+| template\_id\_prefix | Prefix of the ID of the DLP de-identification template to be created. | `string` | `""` | no |
 | terraform\_service\_account | Service account email of the account to impersonate to run Terraform | `string` | n/a | yes |
 
 ## Outputs
