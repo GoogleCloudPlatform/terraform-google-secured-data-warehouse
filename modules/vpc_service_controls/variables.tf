@@ -59,7 +59,6 @@ variable "perimeter_additional_members" {
 variable "restricted_services" {
   type        = list(string)
   description = "The list of services to be restricted by the VPC Service Control"
-  default     = ["storage.googleapis.com"]
 }
 
 variable "access_context_manager_policy_id" {

@@ -19,13 +19,24 @@ data_ingest_bucket_names = attribute('data_ingest_bucket_names')
 data_ingest_topic_name = attribute('data_ingest_topic_name')
 network_name = attribute('network_name')
 project_id = attribute('project_id')
-network_self_link = attribute('network_self_link')
-subnets_names = attribute('subnets_names')
-subnets_ips = attribute('subnets_ips')
-subnets_self_links = attribute('subnets_self_links')
-subnets_regions = attribute('subnets_regions')
-access_level_name = attribute('access_level_name')
+project_number = attribute('project_number')
 service_perimeter_name = attribute('service_perimeter_name')
+service_perimeter_title = service_perimeter_name.split('/')[-1]
+access_level_name = attribute('access_level_name')
+organization_policy_name = attribute('organization_policy_name')
+terraform_service_account = attribute('terraform_service_account')
+perimeter_additional_members = attribute('perimeter_additional_members')
+
+restricted_services = ['pubsub.googleapis.com', 'bigquery.googleapis.com', 'storage.googleapis.com', 'dataflow.googleapis.com']
+
+members = [
+  "serviceAccount:#{terraform_service_account}",
+  "serviceAccount:#{dataflow_controller_service_account_email}",
+  "serviceAccount:#{storage_writer_service_account_email}",
+  "serviceAccount:#{pubsub_writer_service_account_email}"
+].concat(perimeter_additional_members)
+
+resources = ["projects/#{project_number}"]
 
 control 'gcp' do
   title 'GCP Resources'
@@ -54,5 +65,28 @@ control 'gcp' do
 
   describe google_service_account(project: project_id, name: pubsub_writer_service_account_email) do
     it { should exist }
+  end
+
+  describe google_access_context_manager_access_level(parent: organization_policy_name, name: access_level_name) do
+    it { should exist }
+    its('title') { should cmp access_level_name }
+    members.each do |member|
+      its('basic.conditions.first.members') { should include member }
+    end
+  end
+
+  describe google_access_context_manager_service_perimeter(policy_name: organization_policy_name, name: service_perimeter_title) do
+    it { should exist }
+    its('title') { should cmp service_perimeter_title }
+
+    restricted_services.each do |service|
+      its('status.restricted_services') { should include service }
+    end
+
+    resources.each do |resource|
+      its('status.resources') { should include resource }
+    end
+
+    its('status.access_levels') { should include "accessPolicies/#{organization_policy_name}/accessLevels/#{access_level_name}" }
   end
 end

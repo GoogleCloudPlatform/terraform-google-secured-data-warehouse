@@ -36,7 +36,3 @@ suites:
           backend: gcp
           controls:
             - gcp
-        - name: data_ingestion gcloud
-          backend: local
-          controls:
-            - gcloud
