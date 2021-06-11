@@ -32,6 +32,7 @@ module "project" {
     "dns.googleapis.com",
     "pubsub.googleapis.com",
     "bigquery.googleapis.com",
-    "accesscontextmanager.googleapis.com"
+    "accesscontextmanager.googleapis.com",
+    "cloudbilling.googleapis.com"
   ]
 }

@@ -16,33 +16,21 @@
 
 locals {
   int_org_required_roles = [
-    "roles/securitycenter.notificationConfigEditor",
-    "roles/securitycenter.assetSecurityMarksWriter",
-    "roles/securitycenter.assetsViewer",
     "roles/orgpolicy.policyAdmin",
     "roles/accesscontextmanager.policyAdmin",
     "roles/resourcemanager.organizationAdmin",
-    "roles/accesscontextmanager.policyAdmin",
     "roles/vpcaccess.admin",
     "roles/compute.xpnAdmin",
-    "roles/billing.user",
+    "roles/billing.user"
   ]
 
   int_proj_required_roles = [
-    "roles/cloudfunctions.developer",
     "roles/storage.admin",
     "roles/pubsub.admin",
-    "roles/iam.serviceAccountUser",
-    "roles/logging.configWriter",
-    "roles/iam.serviceAccountCreator",
-    "roles/iam.serviceAccountDeleter",
-    "roles/iam.securityReviewer",
     "roles/compute.networkAdmin",
     "roles/compute.securityAdmin",
     "roles/dns.admin",
-    "roles/iam.serviceAccountTokenCreator",
-    "roles/iam.serviceAccountUser",
-    "roles/owner"
+    "roles/browser"
   ]
 }
 
