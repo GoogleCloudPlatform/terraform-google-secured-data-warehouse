@@ -37,3 +37,11 @@ module "project" {
     "dlp.googleapis.com"
   ]
 }
+
+resource "null_resource" "wait_iam_propagation" {
+  # Adding a pause to wait for IAM propagation
+  provisioner "local-exec" {
+    command = "echo sleep 90s for IAM propagation; sleep 90"
+  }
+  depends_on = [module.project]
+}
