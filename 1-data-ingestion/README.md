@@ -15,6 +15,7 @@ The existing project must have the following APIs enabled:
 
 - Access Context Manager API: `accesscontextmanager.googleapis.com`
 - Bigquery API: `bigquery.googleapis.com`
+- Cloud Billing API: `cloudbilling.googleapis.com`
 - Cloud DNS API: `dns.googleapis.com`
 - Cloud Pub/Sub API: `pubsub.googleapis.com`
 - Cloud Resource Manager API: `cloudresourcemanager.googleapis.com`
@@ -29,14 +30,15 @@ with your project id:
 export project_id=<project-id>
 
 gcloud services enable \
-accesscontextmanager.googleapis.com \
 cloudresourcemanager.googleapis.com \
-bigquery.googleapis.com \
+storage-api.googleapis.com \
+serviceusage.googleapis.com \
 dns.googleapis.com \
 iam.googleapis.com \
 pubsub.googleapis.com \
-serviceusage.googleapis.com \
-storage-api.googleapis.com \
+bigquery.googleapis.com \
+accesscontextmanager.googleapis.com \
+cloudbilling.googleapis.com \
 --project ${project_id}
 ```
 ### GCP user account
@@ -68,16 +70,19 @@ gcloud projects add-iam-policy-binding ${project_id} \
 The Service Account which will be used to invoke this module must have the following IAM roles:
 
 - Project level:
+  - Bigquery Admin: `roles/bigquery.admin`
   - Storage Admin: `roles/storage.admin`
   - Pub/Sub Admin: `roles/pubsub.admin`
   - Service Account User: `roles/iam.serviceAccountUser`
   - Create Service Accounts: `roles/iam.serviceAccountCreator`
   - Delete Service Accounts: `roles/iam.serviceAccountDeleter`
+  - Service Accounts Token Creator: `roles/iam.serviceAccountTokenCreator`
   - Security Reviewer: `roles/iam.securityReviewer`
   - Compute Network Admin `roles/compute.networkAdmin`
   - Compute Security Admin `roles/compute.securityAdmin`
   - DNS Admin `roles/dns.admin`
 - Organization level
+  - Billing User: `roles/billing.user`
   - Organization Policy Administrator: `roles/orgpolicy.policyAdmin`
   - Access Context Manager Admin: `roles/accesscontextmanager.policyAdmin`
   - Organization Administrator: `roles/resourcemanager.organizationAdmin`
@@ -90,6 +95,10 @@ You can use the following command to grant these roles, just replace the placeho
 export project_id=<project-id>
 export organization_id=<organization-id>
 export sa_email=<service-account-email>
+
+gcloud organizations add-iam-policy-binding ${organization_id} \
+ --member="serviceAccount:${sa_email}" \
+ --role="roles/billing.user"
 
 gcloud organizations add-iam-policy-binding ${organization_id} \
  --member="serviceAccount:${sa_email}" \
@@ -121,11 +130,19 @@ gcloud projects add-iam-policy-binding ${project_id} \
 
 gcloud projects add-iam-policy-binding ${project_id} \
 --member="serviceAccount:${sa_email}" \
---role="roles/iam.serviceAccountUser"
+--role="roles/compute.networkAdmin"
 
 gcloud projects add-iam-policy-binding ${project_id} \
 --member="serviceAccount:${sa_email}" \
---role="roles/logging.configWriter"
+--role="roles/compute.securityAdmin"
+
+gcloud projects add-iam-policy-binding ${project_id} \
+--member="serviceAccount:${sa_email}" \
+--role="roles/bigquery.admin"
+
+gcloud projects add-iam-policy-binding ${project_id} \
+--member="serviceAccount:${sa_email}" \
+--role="roles/dns.admin"
 
 gcloud projects add-iam-policy-binding ${project_id} \
 --member="serviceAccount:${sa_email}" \
@@ -137,32 +154,15 @@ gcloud projects add-iam-policy-binding ${project_id} \
 
 gcloud projects add-iam-policy-binding ${project_id} \
 --member="serviceAccount:${sa_email}" \
---role="roles/iam.securityReviewer"
+--role="roles/iam.serviceAccountTokenCreator"
 
 gcloud projects add-iam-policy-binding ${project_id} \
 --member="serviceAccount:${sa_email}" \
---role="roles/compute.networkAdmin"
+--role="roles/iam.serviceAccountUser"
 
 gcloud projects add-iam-policy-binding ${project_id} \
 --member="serviceAccount:${sa_email}" \
---role="roles/compute.securityAdmin"
-
-gcloud projects add-iam-policy-binding ${project_id} \
---member="serviceAccount:${sa_email}" \
---role="roles/dns.admin"
-```
-#### Assign Cloud Storage to the logging Bucket
-
-You need a bucket already created to store objects access logging.
-You may need to configure some access for this bucket, and you can find more
-information [here](https://cloud.google.com/storage/docs/access-logs).
-
-The only step to be done manually, is provide Cloud Storage the `roles/storage.legacyBucketWriter` role for the bucket. Terraform will enable logging during bucket creation.
-
-__Note:__ If you have [Domain Restricted Sharing](https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains) enabled on your organization, you will need to temporally disable it to run the command bellow. Enable it again after running the command.
-
-```
-gsutil iam ch group:cloud-storage-analytics@google.com:legacyBucketWriter gs://<YOUR-LOGGING-BUCKET>
+--role="roles/browser"
 ```
 
 #### Set up Access Policy Context Policy
