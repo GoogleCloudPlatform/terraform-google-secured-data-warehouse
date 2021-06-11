@@ -21,7 +21,8 @@ locals {
     "roles/resourcemanager.organizationAdmin",
     "roles/vpcaccess.admin",
     "roles/compute.xpnAdmin",
-    "roles/billing.user"
+    "roles/billing.user",
+    "roles/browser"
   ]
 
   int_proj_required_roles = [
@@ -30,7 +31,7 @@ locals {
     "roles/compute.networkAdmin",
     "roles/compute.securityAdmin",
     "roles/dns.admin",
-    "roles/browser"
+    "roles/viewer"
   ]
 }
 
