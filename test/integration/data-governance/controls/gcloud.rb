@@ -13,7 +13,6 @@
 # limitations under the License.
 
 project_id = attribute('project_id')
-terraform_service_account = attribute('terraform_service_account')
 data_governance_keyring = attribute('data_governance_keyring')
 data_governance_location = attribute('data_governance_location')
 data_governance_key = attribute('data_governance_key')

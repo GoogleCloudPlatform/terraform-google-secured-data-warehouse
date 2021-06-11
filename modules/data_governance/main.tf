@@ -52,11 +52,10 @@ data "google_project" "dlp_project" {
 resource "null_resource" "initalize_dlp_service_account" {
   provisioner "local-exec" {
     command = <<EOF
-    curl --request POST \
+    curl -s --request POST \
     "https://dlp.googleapis.com/v2/projects/${var.project_id}/locations/us-central1/content:inspect" \
-    --no-progress-meter \
     --header "X-Goog-User-Project: ${var.project_id}" \
-    --header "Authorization: Bearer $(gcloud auth application-default print-access-token)"" \
+    --header "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
     --header 'Accept: application/json' \
     --header 'Content-Type: application/json' \
     --data '{"item":{"value":"google@google.com"}}' \
@@ -98,9 +97,8 @@ resource "null_resource" "deidentification_template_setup" {
   provisioner "local-exec" {
     when    = create
     command = <<EOF
-    curl https://dlp.googleapis.com/v2/projects/${var.project_id}/deidentifyTemplates \
+    curl -s https://dlp.googleapis.com/v2/projects/${var.project_id}/deidentifyTemplates \
     --header "X-Goog-User-Project: ${var.project_id}" \
-    --no-progress-meter \
     --header "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
     --header 'Accept: application/json' \
     --header "Content-Type: application/json" \
@@ -112,10 +110,9 @@ EOF
   provisioner "local-exec" {
     when    = destroy
     command = <<EOF
-    curl --request DELETE \
+    curl -s --request DELETE \
     https://dlp.googleapis.com/v2/projects/${self.triggers.project_id}/deidentifyTemplates/${self.triggers.template_id} \
     --header "X-Goog-User-Project: ${self.triggers.project_id}" \
-    --silent \
     --header "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
     --header 'Accept: application/json' \
     --header "Content-Type: application/json"
