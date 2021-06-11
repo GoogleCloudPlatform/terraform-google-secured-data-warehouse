@@ -26,9 +26,9 @@ platforms:
   - name: default
 
 suites:
-  - name: data_governance
+  - name: data-governance
     driver:
-      root_module_directory: test/fixtures/data_governance/
+      root_module_directory: test/fixtures/data-governance/
     verifier:
       color: false
       systems:
