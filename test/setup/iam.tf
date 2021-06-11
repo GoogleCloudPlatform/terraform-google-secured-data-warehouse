@@ -29,7 +29,7 @@ locals {
     "roles/pubsub.admin",
     "roles/compute.networkAdmin",
     "roles/compute.securityAdmin",
-    "roles/bigquery.admin"
+    "roles/bigquery.admin",
     "roles/dns.admin",
     "roles/iam.serviceAccountCreator",
     "roles/iam.serviceAccountDeleter",
