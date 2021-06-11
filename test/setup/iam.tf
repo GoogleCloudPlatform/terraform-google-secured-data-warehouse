@@ -31,7 +31,7 @@ locals {
     "roles/compute.networkAdmin",
     "roles/compute.securityAdmin",
     "roles/dns.admin",
-    "roles/viewer"
+    "roles/editor"
   ]
 }
 
