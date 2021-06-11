@@ -21,8 +21,7 @@ locals {
     "roles/resourcemanager.organizationAdmin",
     "roles/vpcaccess.admin",
     "roles/compute.xpnAdmin",
-    "roles/billing.user",
-    "roles/browser"
+    "roles/billing.user"
   ]
 
   int_proj_required_roles = [
@@ -30,7 +29,12 @@ locals {
     "roles/pubsub.admin",
     "roles/compute.networkAdmin",
     "roles/compute.securityAdmin",
+    "roles/bigquery.admin"
     "roles/dns.admin",
+    "roles/iam.serviceAccountCreator",
+    "roles/iam.serviceAccountDeleter",
+    "roles/iam.serviceAccountTokenCreator",
+    "roles/iam.serviceAccountUser",
     "roles/editor"
   ]
 }
