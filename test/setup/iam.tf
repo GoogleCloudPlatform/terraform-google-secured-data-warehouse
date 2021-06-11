@@ -35,7 +35,7 @@ locals {
     "roles/iam.serviceAccountDeleter",
     "roles/iam.serviceAccountTokenCreator",
     "roles/iam.serviceAccountUser",
-    "roles/owner"
+    "roles/browser"
   ]
 }
 
