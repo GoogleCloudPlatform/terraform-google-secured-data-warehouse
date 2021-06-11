@@ -33,7 +33,14 @@ control 'gcloud' do
       end
     end
 
-    it { expect(data).to include(name: "projects/#{project_id}/deidentifyTemplates/#{data_governance_template_id}") }
+    describe "de-identification Template #{data_governance_template_id}" do
+
+      it 'should exist' do
+        expect(data).to_not be_empty
+      end
+
+      it { expect(data).to include('name' => "projects/#{project_id}/deidentifyTemplates/#{data_governance_template_id}") }
+    end
 
   end
 end
