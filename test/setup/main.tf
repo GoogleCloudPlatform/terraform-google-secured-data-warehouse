@@ -43,5 +43,8 @@ resource "null_resource" "wait_iam_propagation" {
   provisioner "local-exec" {
     command = "echo sleep 90s for IAM propagation; sleep 90"
   }
-  depends_on = [module.project]
+  depends_on = [
+    google_project_iam_member.int_test,
+    google_organization_iam_member.org_admins_group
+  ]
 }
