@@ -96,10 +96,14 @@ module "kms_dlp_tkek" {
 resource "null_resource" "deidentification_template_setup" {
 
   triggers = {
-    "template" = local.deidentification_template
+    template                  = local.deidentification_template,
+    project_id                = var.project_id,
+    template_id               = local.template_id,
+    terraform_service_account = var.terraform_service_account
   }
 
   provisioner "local-exec" {
+    when    = create
     command = <<EOF
     curl https://dlp.googleapis.com/v2/projects/${var.project_id}/deidentifyTemplates \
     --header "X-Goog-User-Project: ${var.project_id}" \
@@ -111,4 +115,19 @@ resource "null_resource" "deidentification_template_setup" {
 EOF
 
   }
+
+  provisioner "local-exec" {
+    when    = destroy
+    command = <<EOF
+    curl --request DELETE \
+    https://dlp.googleapis.com/v2/projects/${self.triggers.project_id}/deidentifyTemplates/${self.triggers.template_id} \
+    --header "X-Goog-User-Project: ${self.triggers.project_id}" \
+    --silent \
+    --header "Authorization: Bearer $(gcloud auth print-access-token --impersonate-service-account="${self.triggers.terraform_service_account}")" \
+    --header 'Accept: application/json' \
+    --header "Content-Type: application/json"
+EOF
+
+  }
+
 }
