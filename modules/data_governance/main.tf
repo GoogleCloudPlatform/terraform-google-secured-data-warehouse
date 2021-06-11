@@ -48,12 +48,6 @@ data "google_project" "dlp_project" {
   project_id = var.project_id
 }
 
-data "google_service_account_access_token" "terraform_sa_token" {
-  target_service_account = var.terraform_service_account
-  scopes                 = ["userinfo-email", "cloud-platform"]
-  lifetime               = "300s"
-}
-
 // https://cloud.google.com/dlp/docs/iam-permissions#service_account
 resource "null_resource" "initalize_dlp_service_account" {
   provisioner "local-exec" {
@@ -62,7 +56,7 @@ resource "null_resource" "initalize_dlp_service_account" {
     "https://dlp.googleapis.com/v2/projects/${var.project_id}/locations/us-central1/content:inspect" \
     --no-progress-meter \
     --header "X-Goog-User-Project: ${var.project_id}" \
-    --header "Authorization: Bearer ${data.google_service_account_access_token.terraform_sa_token.access_token}" \
+    --header "Authorization: Bearer $(gcloud auth application-default print-access-token)"" \
     --header 'Accept: application/json' \
     --header 'Content-Type: application/json' \
     --data '{"item":{"value":"google@google.com"}}' \
@@ -96,10 +90,9 @@ module "kms_dlp_tkek" {
 resource "null_resource" "deidentification_template_setup" {
 
   triggers = {
-    template                  = local.deidentification_template,
-    project_id                = var.project_id,
-    template_id               = local.template_id,
-    terraform_service_account = var.terraform_service_account
+    template    = local.deidentification_template,
+    project_id  = var.project_id,
+    template_id = local.template_id
   }
 
   provisioner "local-exec" {
@@ -108,7 +101,7 @@ resource "null_resource" "deidentification_template_setup" {
     curl https://dlp.googleapis.com/v2/projects/${var.project_id}/deidentifyTemplates \
     --header "X-Goog-User-Project: ${var.project_id}" \
     --no-progress-meter \
-    --header "Authorization: Bearer ${data.google_service_account_access_token.terraform_sa_token.access_token}" \
+    --header "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
     --header 'Accept: application/json' \
     --header "Content-Type: application/json" \
     --data '${local.deidentification_template}'
@@ -123,7 +116,7 @@ EOF
     https://dlp.googleapis.com/v2/projects/${self.triggers.project_id}/deidentifyTemplates/${self.triggers.template_id} \
     --header "X-Goog-User-Project: ${self.triggers.project_id}" \
     --silent \
-    --header "Authorization: Bearer $(gcloud auth print-access-token --impersonate-service-account="${self.triggers.terraform_service_account}")" \
+    --header "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
     --header 'Accept: application/json' \
     --header "Content-Type: application/json"
 EOF
