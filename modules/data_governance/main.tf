@@ -53,7 +53,7 @@ resource "null_resource" "initalize_dlp_service_account" {
   provisioner "local-exec" {
     command = <<EOF
     curl -s --request POST \
-    "https://dlp.googleapis.com/v2/projects/${var.project_id}/locations/us-central1/content:inspect" \
+    "https://dlp.googleapis.com/v2/projects/${var.project_id}/content:inspect" \
     --header "X-Goog-User-Project: ${var.project_id}" \
     --header "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
     --header 'Accept: application/json' \
