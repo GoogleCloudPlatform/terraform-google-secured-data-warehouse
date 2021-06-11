@@ -84,6 +84,10 @@ module "kms_dlp_tkek" {
   decrypters         = ["serviceAccount:service-${data.google_project.dlp_project.number}@dlp-api.iam.gserviceaccount.com"]
   set_decrypters_for = [var.dlp_tkek_key_name]
   prevent_destroy    = false
+
+  depends_on = [
+    null_resource.initalize_dlp_service_account
+  ]
 }
 
 resource "null_resource" "deidentification_template_setup" {
