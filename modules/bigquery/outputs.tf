@@ -34,11 +34,6 @@ output "location" {
   value       = var.location
 }
 
-output "project_id" {
-  description = "Project where service accounts and core APIs will be enabled."
-  value       = var.project_id
-}
-
 output "dataset_id" {
   description = "The dataset ID to deploy to data-warehouse."
   value       = var.dataset_id
