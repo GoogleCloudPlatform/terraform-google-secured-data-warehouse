@@ -15,6 +15,7 @@
  */
 
 module "project-services" {
+  enable_apis                 = var.enable
   source                      = "terraform-google-modules/project-factory/google//modules/project_services"
   project_id                  = var.project_id
   disable_services_on_destroy = true
@@ -28,8 +29,8 @@ module "project-services" {
 
 module "service_accounts" {
   source       = "terraform-google-modules/service-accounts/google"
+  version      = ">=4.0.0"
   project_id   = var.project_id
-  prefix       = ""
   names        = ["terraform-private-sa", "terraform-confidential-sa"]
   display_name = "Terraform SA accounts"
   description  = "Service accounts for Secure BigQuery"
@@ -79,11 +80,6 @@ module "secure_bigquery" {
   dataset_labels = {
     env = "dtwh-bq-dataset"
   }
-
-  depends_on = [
-    google_data_catalog_policy_tag.name_child_policy_tag,
-    google_data_catalog_policy_tag.ssn_child_policy_tag,
-  ]
 }
 
 resource "google_data_catalog_taxonomy" "secure_taxonomy" {
@@ -94,9 +90,6 @@ resource "google_data_catalog_taxonomy" "secure_taxonomy" {
   description            = "Taxonomy created for Secure BigQuery"
   activated_policy_types = ["FINE_GRAINED_ACCESS_CONTROL"]
 
-  depends_on = [
-    module.service_accounts,
-  ]
 }
 
 resource "google_data_catalog_policy_tag" "medium_policy_tag" {
