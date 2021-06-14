@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
+variable "enable" {
+  description = "Actually enable the APIs listed."
+  type        = bool
+  default     = false
+}
+
 variable "names" {
   type        = list(string)
   description = "Names of the service accounts to create."
@@ -29,7 +35,6 @@ variable "project_roles" {
 variable "project_id" {
   description = "Project where the dataset and table are created."
   type        = string
-  default     = ""
 }
 
 variable "dataset_id" {
