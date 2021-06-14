@@ -2,8 +2,9 @@
 
 This sub module allows you to create:
 
-- A Cloud [Data Loss Prevention](https://cloud.google.com/dlp/docs) (DLP) [de-identification template](https://cloud.google.com/dlp/docs/deidentify-sensitive-data) that uses a [Format-preserving encryption transformation](https://cloud.google.com/dlp/docs/samples/dlp-deidentify-fpe)
-- A Cloud [Key Management Service](https://cloud.google.com/kms/docs) (KMS) keyring and key to be used by the DLP template.
+- A Cloud [Data Loss Prevention](https://cloud.google.com/dlp/docs) (DLP) [de-identification template](https://cloud.google.com/dlp/docs/deidentify-sensitive-data) from a json template file provided by the user.
+- A Cloud [Key Management Service](https://cloud.google.com/kms/docs) (KMS) keyring and key.
+- A [KMS wrapped crypto key](https://cloud.google.com/dlp/docs/transformations-reference#crypto) created from a secret provided by the user that can be used by the DLP template.
 
 ## Compatibility
 
@@ -23,9 +24,27 @@ module "data_governance" {
 }
 ```
 
-Functional example is included under the
-[examples](./examples/data_governance/) directory.
-This includes an example template file.
+### Template file
+
+The template file must be a json representation of a `deidentifyTemplates` call [request body](https://cloud.google.com/dlp/docs/reference/rest/v2/projects.deidentifyTemplates/create#request-body).
+
+Available substitutions to be used in the template file:
+
+- `display_name`: The display name of the DLP template.
+- `description`: The description of the DLP template.
+- `wrapped_key`: A user provided encryption key provided by the user encrypted with the `crypto_key`.
+- `crypto_key`: The KMS key used to encrypt the `wrapped kwy`.
+- `template_id`: The template ID, composed by the variable `template_id_prefix` and a random suffix.
+
+See the terraform [templatefile](https://www.terraform.io/docs/language/functions/templatefile.html) function documentation and
+the [sample template file](../../examples/data_governance/deidentification.tmpl) in the examples folder for details on how substitutions are handled.
+
+Since the actual de-identification template is provided by the user,
+it can be an [Info Type Transformation](https://cloud.google.com/dlp/docs/reference/rest/v2/projects.deidentifyTemplates#DeidentifyTemplate.InfoTypeTransformations) for unstructured text
+or a [Record Transformation](https://cloud.google.com/dlp/docs/reference/rest/v2/projects.deidentifyTemplates#DeidentifyTemplate.RecordTransformations) for structured data.
+
+A functional example for a Record Transformation is included under the
+[examples/data_governance](./examples/data_governance/) directory.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
