@@ -33,7 +33,7 @@ and will be used by the de-identification template.
 Create a secret using Secret Manager to hold your key:
 
 ```
-echo 'MY_DLP_KEY' | gcloud secrets create <ORIGINAL-KEY-SECRET-NAME> \
+echo 'MY_DLP_KEY' | base64 | gcloud secrets create <ORIGINAL-KEY-SECRET-NAME> \
 --project <PROJECT_ID> \
 --replication-policy=automatic \
 --data-file=-
