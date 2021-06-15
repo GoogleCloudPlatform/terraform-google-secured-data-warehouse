@@ -36,6 +36,11 @@ variable "dlp_tkek_key_name" {
   default     = "dlp-de-identification-crypto-key"
 }
 
+variable "original_key_secret_name" {
+  description = "Name of the secret used to hold a user provided key for encryption"
+  type        = string
+}
+
 variable "template_file" {
   description = "Path to the DLP de-identification template file."
   type        = string

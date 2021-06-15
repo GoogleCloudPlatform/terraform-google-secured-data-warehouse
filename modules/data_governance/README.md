@@ -21,7 +21,22 @@ module "data_governance" {
   project_id                = "<PROJECT_ID>"
   terraform_service_account = "<SERVICE-ACCOUNT-EMAIL>"
   template_file             = "<PATH-TO-TEMPLATE-FILE>"
+  original_key_secret_name  = "<ORIGINAL-KEY-SECRET-NAME>"
 }
+```
+
+### Original DLP de-identification key
+
+It is necessary to provide a de-identification key that will be encrypted by KMS
+and will be used by the de-identification template.
+
+Create a secret using Secret Manager to hold your key:
+
+```
+echo 'MY_DLP_KEY' | gcloud secrets create <ORIGINAL-KEY-SECRET-NAME> \
+--project <PROJECT_ID> \
+--replication-policy=automatic \
+--data-file=-
 ```
 
 ### Template file
@@ -53,6 +68,7 @@ A functional example for a Record Transformation is included under the
 |------|-------------|------|---------|:--------:|
 | dlp\_tkek\_key\_name | Name to be used for KMS Key | `string` | `"dlp-de-identification-crypto-key"` | no |
 | dlp\_tkek\_keyring\_name | Name to be used for KMS Keyring | `string` | `"dlp-de-identification-keyring"` | no |
+| original\_key\_secret\_name | Name of the secret used to hold a user provided key for encryption | `string` | n/a | yes |
 | project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
 | template\_description | Description name of the DLP de-identification template | `string` | `"De-identifies sensitive content defined in the template with a KMS Wrapped crypto Key."` | no |
 | template\_display\_name | Display name of the DLP de-identification template | `string` | `"KMS Wrapped crypto Key de-identification"` | no |

@@ -41,11 +41,6 @@ resource "random_id" "random_template_id_suffix" {
   byte_length = 8
 }
 
-resource "random_password" "original_dlp_key" {
-  length  = 32
-  special = false
-}
-
 data "google_project" "dlp_project" {
   project_id = var.project_id
 }
@@ -67,9 +62,14 @@ EOF
   }
 }
 
+data "google_secret_manager_secret_version" "original_dlp_key" {
+  project = var.project_id
+  secret  = var.original_key_secret_name
+}
+
 resource "google_kms_secret_ciphertext" "kms_wrapped_dlp_key" {
   crypto_key = module.kms_dlp_tkek.keys[var.dlp_tkek_key_name]
-  plaintext  = random_password.original_dlp_key.result
+  plaintext  = base64encode(chomp(data.google_secret_manager_secret_version.original_dlp_key.secret_data))
 }
 
 // KMS

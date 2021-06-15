@@ -19,5 +19,6 @@ module "data_governance_example" {
 
   project_id                = var.project_id
   terraform_service_account = var.terraform_service_account
+  original_key_secret_name  = var.original_key_secret_name
   template_file             = "${path.module}/deidentification.tmpl"
 }

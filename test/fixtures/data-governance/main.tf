@@ -14,10 +14,28 @@
  * limitations under the License.
  */
 
+resource "null_resource" "set_secret_key" {
+
+  provisioner "local-exec" {
+    command = <<EOT
+    head -c 32 /dev/urandom | base64 | gcloud secrets create original_key_secret_name \
+    --project ${var.project_id} \
+    --replication-policy=automatic \
+    --data-file=-
+EOT
+
+  }
+}
+
 module "data_governance" {
   source = "../../..//modules/data_governance"
 
   project_id                = var.project_id
   terraform_service_account = var.terraform_service_account
+  original_key_secret_name  = "original_key_secret_name"
   template_file             = "${path.module}/deidentification.tmpl"
+
+  depends_on = [
+    null_resource.set_secret_key
+  ]
 }

@@ -34,7 +34,8 @@ module "project" {
     "bigquery.googleapis.com",
     "accesscontextmanager.googleapis.com",
     "cloudkms.googleapis.com",
-    "dlp.googleapis.com"
+    "dlp.googleapis.com",
+    "secretmanager.googleapis.com"
   ]
 }
 

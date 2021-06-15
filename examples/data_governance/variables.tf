@@ -23,3 +23,8 @@ variable "terraform_service_account" {
   description = "Service account email of the account to impersonate to run Terraform"
   type        = string
 }
+
+variable "original_key_secret_name" {
+  description = "Name of the secret used to hold a user provided key for encryption"
+  type        = string
+}
