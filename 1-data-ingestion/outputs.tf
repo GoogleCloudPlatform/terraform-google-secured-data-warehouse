@@ -15,17 +15,17 @@
  */
 
 output "dataflow_controller_service_account_email" {
-  description = "The service account email."
+  description = "The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account"
   value       = module.dataflow_controller_service_account.email
 }
 
 output "storage_writer_service_account_email" {
-  description = "The service account email."
+  description = "The Storage writer service account email. Should be used to write data to the buckets the ingestion pipeline reads from."
   value       = module.storage_writer_service_account.email
 }
 
 output "pubsub_writer_service_account_email" {
-  description = "The service account email."
+  description = "The PubSub writer service account email. Should be used to write data to the PubSub topics the ingestion pipeline reads from."
   value       = module.pubsub_writer_service_account.email
 }
 
