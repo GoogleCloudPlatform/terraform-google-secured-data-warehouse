@@ -18,10 +18,10 @@ Basic usage of this module is as follows:
 module "data_governance" {
   source = "github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse//modules/data_governance"
 
-  project_id                = "<PROJECT_ID>"
-  terraform_service_account = "<SERVICE-ACCOUNT-EMAIL>"
-  template_file             = "<PATH-TO-TEMPLATE-FILE>"
-  original_key_secret_name  = "<ORIGINAL-KEY-SECRET-NAME>"
+  project_id                = "PROJECT_ID"
+  terraform_service_account = "SERVICE_ACCOUNT_EMAIL"
+  template_file             = "PATH_TO_TEMPLATE_FILE"
+  original_key_secret_name  = "ORIGINAL_KEY_SECRET_NAME"
 }
 ```
 
@@ -33,8 +33,8 @@ and will be used by the de-identification template.
 Create a secret using Secret Manager to hold your key:
 
 ```
-echo 'MY_DLP_KEY' | base64 | gcloud secrets create <ORIGINAL-KEY-SECRET-NAME> \
---project <PROJECT_ID> \
+echo 'MY_DLP_KEY' | base64 | gcloud secrets create ORIGINAL_KEY_SECRET_NAME \
+--project PROJECT_ID \
 --replication-policy=automatic \
 --data-file=-
 ```

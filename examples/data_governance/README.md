@@ -6,8 +6,8 @@ To provision this example, do the following from within this directory:
 
 1. Create a key and secret:
    ```
-   head -c 32 /dev/urandom | base64 | gcloud secrets create <ORIGINAL-KEY-SECRET-NAME> \
-   --project <PROJECT_ID> \
+   head -c 32 /dev/urandom | base64 | gcloud secrets create ORIGINAL_KEY_SECRET_NAME \
+   --project PROJECT_ID \
    --replication-policy=automatic \
    --data-file=-
    ```
