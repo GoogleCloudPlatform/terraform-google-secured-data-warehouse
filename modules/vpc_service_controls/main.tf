@@ -37,10 +37,8 @@ data "google_project" "target_project" {
 }
 
 module "access_level_policy" {
-  # source = "terraform-google-modules/vpc-service-controls/google//modules/access_level"
-  # replace after new release from https://github.com/terraform-google-modules/terraform-google-vpc-service-controls
-  source = "github.com/terraform-google-modules/terraform-google-vpc-service-controls//modules/access_level"
-
+  source      = "terraform-google-modules/vpc-service-controls/google//modules/access_level"
+  version     = "3.0.1"
   policy      = local.actual_policy
   name        = local.access_policy_name
   description = "policy with all available options to configure"
