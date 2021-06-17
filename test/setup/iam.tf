@@ -16,33 +16,26 @@
 
 locals {
   int_org_required_roles = [
-    "roles/securitycenter.notificationConfigEditor",
-    "roles/securitycenter.assetSecurityMarksWriter",
-    "roles/securitycenter.assetsViewer",
     "roles/orgpolicy.policyAdmin",
     "roles/accesscontextmanager.policyAdmin",
     "roles/resourcemanager.organizationAdmin",
-    "roles/accesscontextmanager.policyAdmin",
     "roles/vpcaccess.admin",
     "roles/compute.xpnAdmin",
-    "roles/billing.user",
+    "roles/billing.user"
   ]
 
   int_proj_required_roles = [
-    "roles/cloudfunctions.developer",
     "roles/storage.admin",
     "roles/pubsub.admin",
-    "roles/iam.serviceAccountUser",
-    "roles/logging.configWriter",
-    "roles/iam.serviceAccountCreator",
-    "roles/iam.serviceAccountDeleter",
-    "roles/iam.securityReviewer",
     "roles/compute.networkAdmin",
     "roles/compute.securityAdmin",
+    "roles/bigquery.admin",
     "roles/dns.admin",
+    "roles/iam.serviceAccountCreator",
+    "roles/iam.serviceAccountDeleter",
     "roles/iam.serviceAccountTokenCreator",
     "roles/iam.serviceAccountUser",
-    "roles/owner",
+    "roles/browser",
     "roles/cloudkms.admin",
     "roles/dlp.deidentifyTemplatesEditor",
     "roles/dlp.inspectTemplatesEditor",
@@ -50,7 +43,6 @@ locals {
     "roles/iam.serviceAccountTokenCreator"
   ]
 }
-
 
 resource "google_organization_iam_member" "org_admins_group" {
   for_each = toset(local.int_org_required_roles)
@@ -82,3 +74,10 @@ resource "google_project_iam_member" "int_test" {
 resource "google_service_account_key" "int_test" {
   service_account_id = google_service_account.int_test.id
 }
+
+resource "time_sleep" "wait_90_seconds" {
+  depends_on = [google_project_iam_member.int_test, google_organization_iam_member.org_admins_group]
+
+  create_duration = "90s"
+}
+

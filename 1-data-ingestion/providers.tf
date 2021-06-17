@@ -14,7 +14,20 @@
  * limitations under the License.
  */
 
-resource "google_storage_bucket" "main" {
-  project = var.project_id
-  name    = var.bucket_name
+/******************************************
+  Provider credential configuration
+ *****************************************/
+provider "google" {
+  # version                     = "~> 3.69"
+  impersonate_service_account = var.terraform_service_account
+  request_timeout             = "60s"
+}
+
+/******************************************
+  Provider credential configuration
+ *****************************************/
+provider "google-beta" {
+  version                     = "~> 3.69"
+  impersonate_service_account = var.terraform_service_account
+  request_timeout             = "60s"
 }

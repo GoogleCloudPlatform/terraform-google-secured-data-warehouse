@@ -58,6 +58,7 @@ override.tf.json
 **/tmp_plan
 
 credentials.json
+**/.credentials/
 
 # File to populate env vars used by Docker test runs
 .envrc
