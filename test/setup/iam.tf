@@ -40,7 +40,8 @@ locals {
     "roles/dlp.deidentifyTemplatesEditor",
     "roles/dlp.inspectTemplatesEditor",
     "roles/dlp.user",
-    "roles/secretmanager.admin"
+    "roles/secretmanager.admin",
+    "roles/cloudkms.cryptoKeyEncrypter"
   ]
 }
 
