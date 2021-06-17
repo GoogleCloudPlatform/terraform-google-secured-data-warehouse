@@ -111,6 +111,7 @@ the resources of this module:
 - DLP Inspect Templates Editor: `roles/dlp.inspectTemplatesEditor`
 - DLP User: `roles/dlp.user`
 - Service Account Token Creator: `roles/iam.serviceAccountTokenCreator`
+- Secret Manager Viewer: `roles/secretmanager.viewer`
 
 The [Project Factory module][project-factory-module] and the
 [IAM module][iam-module] may be used in combination to provision a
@@ -125,6 +126,7 @@ resources of this module:
 - Cloud Data Loss Prevention API: `dlp.googleapis.com`
 - Cloud Identity and Access Management API: `iam.googleapis.com`
 - Cloud Resource Manager API: `cloudresourcemanager.googleapis.com`
+- Cloud Secret Manager API: `secretmanager.googleapis.com`
 
 The [Project Factory module][project-factory-module] can be used to
 provision a project with the necessary APIs enabled.

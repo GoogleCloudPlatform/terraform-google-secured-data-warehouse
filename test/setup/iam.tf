@@ -40,7 +40,7 @@ locals {
     "roles/dlp.deidentifyTemplatesEditor",
     "roles/dlp.inspectTemplatesEditor",
     "roles/dlp.user",
-    "roles/iam.serviceAccountTokenCreator"
+    "roles/secretmanager.admin"
   ]
 }
 
