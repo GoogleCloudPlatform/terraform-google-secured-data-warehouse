@@ -56,7 +56,8 @@ module "access_level_policy" {
 }
 
 module "regular_service_perimeter" {
-  source = "terraform-google-modules/vpc-service-controls/google//modules/regular_service_perimeter"
+  source  = "terraform-google-modules/vpc-service-controls/google//modules/regular_service_perimeter"
+  version = "3.0.1"
 
   policy         = local.actual_policy
   perimeter_name = local.perimeter_name
