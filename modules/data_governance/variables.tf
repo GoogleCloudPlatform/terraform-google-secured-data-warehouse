@@ -20,24 +20,29 @@ variable "project_id" {
 }
 
 variable "terraform_service_account" {
-  description = "Service account email of the account to impersonate to run Terraform"
+  description = "Service account email of the account to impersonate to run Terraform."
   type        = string
 }
 
 variable "dlp_tkek_keyring_name" {
-  description = "Name to be used for KMS Keyring"
+  description = "Name to be used for KMS Keyring."
   type        = string
   default     = "dlp-de-identification-keyring"
 }
 
 variable "dlp_tkek_key_name" {
-  description = "Name to be used for KMS Key"
+  description = "Name to be used for KMS Key."
   type        = string
   default     = "dlp-de-identification-crypto-key"
 }
 
 variable "original_key_secret_name" {
-  description = "Name of the secret used to hold a user provided key for encryption"
+  description = "Name of the secret used to hold a user provided key for encryption."
+  type        = string
+}
+
+variable "project_id_secret_mgr" {
+  description = "ID of the project that hosts the Secret Manager service been used."
   type        = string
 }
 
@@ -50,17 +55,16 @@ variable "template_id_prefix" {
   description = "Prefix of the ID of the DLP de-identification template to be created."
   type        = string
   default     = ""
-
 }
 
 variable "template_display_name" {
-  description = "Display name of the DLP de-identification template"
+  description = "Display name of the DLP de-identification template."
   type        = string
   default     = "KMS Wrapped crypto Key de-identification"
 }
 
 variable "template_description" {
-  description = "Description name of the DLP de-identification template"
+  description = "Description name of the DLP de-identification template."
   type        = string
   default     = "De-identifies sensitive content defined in the template with a KMS Wrapped crypto Key."
 }
