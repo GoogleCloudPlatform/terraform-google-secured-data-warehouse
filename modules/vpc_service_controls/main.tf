@@ -38,7 +38,7 @@ data "google_project" "target_project" {
 
 module "access_level_policy" {
   source      = "terraform-google-modules/vpc-service-controls/google//modules/access_level"
-  version     = "3.0.1"
+  version     = "~> 3.0"
   policy      = local.actual_policy
   name        = local.access_policy_name
   description = "policy with all available options to configure"
@@ -57,7 +57,7 @@ module "access_level_policy" {
 
 module "regular_service_perimeter" {
   source  = "terraform-google-modules/vpc-service-controls/google//modules/regular_service_perimeter"
-  version = "3.0.1"
+  version = "~> 3.0"
 
   policy         = local.actual_policy
   perimeter_name = local.perimeter_name
