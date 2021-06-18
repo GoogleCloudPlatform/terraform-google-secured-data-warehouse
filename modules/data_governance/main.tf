@@ -16,6 +16,7 @@
 
 
 locals {
+  dlp_location         = var.kms_location == "global" ? "" : "locations/${var.kms_location}/"
   template_id_prefix   = var.template_id_prefix != "" ? var.template_id_prefix : "sbp_deidentification"
   template_id          = "${local.template_id_prefix}_${random_id.random_template_id_suffix.hex}"
   template_file_sha256 = filesha256(var.template_file)
@@ -78,7 +79,7 @@ module "kms_dlp_tkek" {
   version = "~> 1.2"
 
   project_id         = var.project_id
-  location           = "global"
+  location           = var.kms_location
   keyring            = var.dlp_tkek_keyring_name
   keys               = [var.dlp_tkek_key_name]
   encrypters         = ["serviceAccount:service-${data.google_project.dlp_project.number}@dlp-api.iam.gserviceaccount.com"]
@@ -95,15 +96,16 @@ module "kms_dlp_tkek" {
 resource "null_resource" "deidentification_template_setup" {
 
   triggers = {
-    template    = local.deidentification_template,
-    project_id  = var.project_id,
-    template_id = local.template_id
+    template     = local.deidentification_template,
+    project_id   = var.project_id,
+    template_id  = local.template_id
+    dlp_location = local.dlp_location
   }
 
   provisioner "local-exec" {
     when    = create
     command = <<EOF
-    curl -s https://dlp.googleapis.com/v2/projects/${var.project_id}/deidentifyTemplates \
+    curl -s https://dlp.googleapis.com/v2/projects/${var.project_id}/${local.dlp_location}deidentifyTemplates \
     --header "X-Goog-User-Project: ${var.project_id}" \
     --header "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
     --header 'Accept: application/json' \
@@ -117,7 +119,7 @@ EOF
     when    = destroy
     command = <<EOF
     curl -s --request DELETE \
-    https://dlp.googleapis.com/v2/projects/${self.triggers.project_id}/deidentifyTemplates/${self.triggers.template_id} \
+    https://dlp.googleapis.com/v2/projects/${self.triggers.project_id}/${self.triggers.dlp_location}deidentifyTemplates/${self.triggers.template_id} \
     --header "X-Goog-User-Project: ${self.triggers.project_id}" \
     --header "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
     --header 'Accept: application/json' \

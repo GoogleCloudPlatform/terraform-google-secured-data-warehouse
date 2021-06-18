@@ -34,6 +34,7 @@ module "data_governance" {
   terraform_service_account = var.terraform_service_account
   original_key_secret_name  = "original_key_secret_name"
   project_id_secret_mgr     = var.project_id
+  kms_location              = "us-east1"
   template_file             = "${path.module}/deidentification.tmpl"
 
   depends_on = [

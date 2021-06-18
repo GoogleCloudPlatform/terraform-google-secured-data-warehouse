@@ -69,6 +69,7 @@ A functional example for a Record Transformation is included under the
 |------|-------------|------|---------|:--------:|
 | dlp\_tkek\_key\_name | Name to be used for KMS Key. | `string` | `"dlp-de-identification-crypto-key"` | no |
 | dlp\_tkek\_keyring\_name | Name to be used for KMS Keyring. | `string` | `"dlp-de-identification-keyring"` | no |
+| kms\_location | The location of KMS resources. See https://cloud.google.com/dlp/docs/locations for a list of locations that can be used for both KMS and DLP. The 'global' KMS location is valid. | `string` | n/a | yes |
 | original\_key\_secret\_name | Name of the secret used to hold a user provided key for encryption. | `string` | n/a | yes |
 | project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
 | project\_id\_secret\_mgr | ID of the project that hosts the Secret Manager service been used. | `string` | n/a | yes |

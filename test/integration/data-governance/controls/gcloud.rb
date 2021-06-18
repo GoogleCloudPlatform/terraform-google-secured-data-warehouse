@@ -21,7 +21,7 @@ data_governance_template_id = attribute('data_governance_template_id')
 control 'gcloud' do
   title 'Gcloud Resources'
 
-  describe command("curl -s -X GET -H \"Authorization: Bearer \"`gcloud auth print-access-token` https://dlp.googleapis.com/v2/projects/#{project_id}/deidentifyTemplates/#{data_governance_template_id}") do
+  describe command("curl -s -X GET -H \"Authorization: Bearer \"`gcloud auth print-access-token` https://dlp.googleapis.com/v2/projects/#{project_id}/locations/#{data_governance_location}/deidentifyTemplates/#{data_governance_template_id}") do
     its(:exit_status) { should eq 0 }
     its(:stderr) { should eq '' }
 
@@ -39,7 +39,7 @@ control 'gcloud' do
         expect(data).to_not be_empty
       end
 
-      it { expect(data).to include('name' => "projects/#{project_id}/deidentifyTemplates/#{data_governance_template_id}") }
+      it { expect(data).to include('name' => "projects/#{project_id}/locations/#{data_governance_location}/deidentifyTemplates/#{data_governance_template_id}") }
     end
 
   end

@@ -24,6 +24,11 @@ variable "terraform_service_account" {
   type        = string
 }
 
+variable "kms_location" {
+  description = "The location of KMS resources. See https://cloud.google.com/dlp/docs/locations for a list of locations that can be used for both KMS and DLP. The 'global' KMS location is valid."
+  type        = string
+}
+
 variable "dlp_tkek_keyring_name" {
   description = "Name to be used for KMS Keyring."
   type        = string
