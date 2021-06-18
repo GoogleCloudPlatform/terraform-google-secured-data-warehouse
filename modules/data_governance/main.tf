@@ -64,7 +64,7 @@ EOF
 }
 
 data "google_secret_manager_secret_version" "original_dlp_key" {
-  project = var.project_id
+  project = var.project_id_secret_mgr
   secret  = var.original_key_secret_name
 }
 
