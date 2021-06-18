@@ -27,12 +27,9 @@ organization_policy_name = attribute('organization_policy_name')
 terraform_service_account = attribute('terraform_service_account')
 perimeter_additional_members = attribute('perimeter_additional_members')
 
-<<<<<<< HEAD
-=======
 restricted_googleapis_cidr = '199.36.153.4/30'
 private_googleapis_cidr = '199.36.153.8/30'
 
->>>>>>> feat/adds-step-1
 restricted_services = ['pubsub.googleapis.com', 'bigquery.googleapis.com', 'storage.googleapis.com', 'dataflow.googleapis.com']
 
 members = [
