@@ -26,7 +26,7 @@ module "data_governance" {
 }
 ```
 
-### Original DLP de-identification key
+### DLP de-identification key
 
 It is necessary to provide a de-identification key that will be encrypted by KMS
 and will be used by the de-identification template.
@@ -99,8 +99,13 @@ These sections describe requirements for using this module.
 The following dependencies must be available:
 
 - [Terraform](https://www.terraform.io/downloads.html) >= 0.13.0
-- [Terraform Provider for GCP][terraform-provider-gcp] plugin v3.0
+- [Terraform Provider for GCP](https://github.com/terraform-providers/terraform-provider-google) plugin v3.0
 - [curl](https://curl.haxx.se/)
+
+### User provided DLP de-identification key
+
+The user must create a Google Cloud Secret Manager secret to hold the DLP de-identification key
+**before** executing this module as detailed in the [DLP de-identification key](#dlp-de-identification-key) section.
 
 ### Service Account
 
@@ -115,8 +120,8 @@ the resources of this module:
 - Service Account Token Creator: `roles/iam.serviceAccountTokenCreator`
 - Secret Manager Viewer: `roles/secretmanager.viewer`
 
-The [Project Factory module][project-factory-module] and the
-[IAM module][iam-module] may be used in combination to provision a
+The [Project Factory module](https://github.com/terraform-google-modules/terraform-google-project-factory) and the
+[IAM module](https://github.com/terraform-google-modules/terraform-google-iam) may be used in combination to provision a
 service account with the necessary roles applied.
 
 ### APIs
@@ -130,5 +135,5 @@ resources of this module:
 - Cloud Resource Manager API: `cloudresourcemanager.googleapis.com`
 - Cloud Secret Manager API: `secretmanager.googleapis.com`
 
-The [Project Factory module][project-factory-module] can be used to
+The [Project Factory module](https://github.com/terraform-google-modules/terraform-google-project-factory) can be used to
 provision a project with the necessary APIs enabled.
