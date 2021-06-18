@@ -24,6 +24,11 @@ output "emails_list" {
   value       = module.bigquery.emails_list
 }
 
+output "emails" {
+  description = "The service account emails."
+  value       = module.bigquery.emails
+}
+
 output "dataset_id" {
   description = "The dataset ID to deploy to datawarehouse."
   value       = module.bigquery.dataset_id
