@@ -40,13 +40,11 @@ variable "project_id" {
 variable "dataset_id" {
   description = "The dataset ID to deploy to datawarehouse."
   type        = string
-  default     = ""
 }
 
 variable "table_id" {
   description = "The table ID to deploy to datawarehouse."
   type        = string
-  default     = ""
 }
 
 variable "parent_folder" {

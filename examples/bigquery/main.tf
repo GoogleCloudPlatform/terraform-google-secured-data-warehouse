@@ -16,6 +16,7 @@
 
 module "bigquery" {
   source     = "../..//modules/bigquery"
+  table_id   = var.table_id
   dataset_id = var.dataset_id
   project_id = var.project_id
   location   = "US"

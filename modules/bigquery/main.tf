@@ -24,6 +24,7 @@ module "project-services" {
     "bigquery.googleapis.com",
     "cloudresourcemanager.googleapis.com",
     "iam.googleapis.com",
+    "datacatalog.googleapis.com",
   ]
 }
 
@@ -72,14 +73,20 @@ module "secure_bigquery" {
       expiration_time    = null,
       clustering         = ["social_security_number"]
       labels = {
-        env = "dtwh-bq-dataset"
+        env = "dtwh_bq_dataset"
       },
     }
   ]
 
   dataset_labels = {
-    env = "dtwh-bq-dataset"
+    env = "dtwh_bq_dataset"
   }
+
+  depends_on = [
+    google_data_catalog_policy_tag.name_child_policy_tag,
+    google_data_catalog_policy_tag.ssn_child_policy_tag,
+  ]
+
 }
 
 resource "google_data_catalog_taxonomy" "secure_taxonomy" {
@@ -89,6 +96,10 @@ resource "google_data_catalog_taxonomy" "secure_taxonomy" {
   display_name           = "secure_bigquery_taxonomy"
   description            = "Taxonomy created for Secure BigQuery"
   activated_policy_types = ["FINE_GRAINED_ACCESS_CONTROL"]
+
+  depends_on = [
+    module.service_accounts,
+  ]
 
 }
 

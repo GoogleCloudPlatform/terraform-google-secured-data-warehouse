@@ -18,15 +18,21 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
 
-  name              = "ci-secured_data_warehouse"
+  name              = "ci-secured-bigquery"
   random_project_id = "true"
   org_id            = var.org_id
   folder_id         = var.folder_id
   billing_account   = var.billing_account
 
   activate_apis = [
+    "iam.googleapis.com",
+    "datacatalog.googleapis.com",
+    "bigquery.googleapis.com",
+    "serviceusage.googleapis.com",
+    "dns.googleapis.com",
+    "pubsub.googleapis.com",
     "cloudresourcemanager.googleapis.com",
-    "storage-api.googleapis.com",
-    "serviceusage.googleapis.com"
+    "accesscontextmanager.googleapis.com",
+    "cloudbilling.googleapis.com"
   ]
 }

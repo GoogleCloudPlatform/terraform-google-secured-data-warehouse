@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Copyright 2021 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,27 +14,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
----
-driver:
-  name: terraform
+set -e
 
-provisioner:
-  name: terraform
+POLICY_EXISTS=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)")
 
-verifier:
-  name: terraform
+if [ -z "${POLICY_EXISTS}" ]; then
+   gcloud access-context-manager policies create --organization="${TF_VAR_org_id:?}" --title="default policy"
+   POLICY_EXISTS=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)")
+fi
 
-platforms:
-  - name: default
-
-suites:
-  - name: bigquery
-    driver:
-      root_module_directory: test/fixtures/bigquery/
-    verifier:
-      color: false
-      systems:
-        - name: secure_bigquery gcp
-          backend: gcp
-          controls:
-            - gcp
+export TF_VAR_policy_id="${POLICY_EXISTS}"

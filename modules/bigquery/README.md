@@ -28,14 +28,14 @@ Functional examples are included in the [examples](./examples/bigquery) director
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| dataset\_id | The dataset ID to deploy to datawarehouse. | `string` | `""` | no |
+| dataset\_id | The dataset ID to deploy to datawarehouse. | `string` | n/a | yes |
 | enable | Actually enable the APIs listed. | `bool` | `false` | no |
 | location | Default region to create resources where applicable. | `string` | `""` | no |
 | names | Names of the service accounts to create. | `list(string)` | `[]` | no |
 | parent\_folder | Optional - for an organization with existing projects or for development/validation. It will place all the example foundation resources under the provided folder instead of the root organization. The value is the numeric folder ID. The folder must already exist. | `string` | `""` | no |
 | project\_id | Project where the dataset and table are created. | `string` | n/a | yes |
 | project\_roles | Common roles to apply to all service accounts, project=>role as elements. | `list(string)` | `[]` | no |
-| table\_id | The table ID to deploy to datawarehouse. | `string` | `""` | no |
+| table\_id | The table ID to deploy to datawarehouse. | `string` | n/a | yes |
 
 ## Outputs
 
@@ -43,6 +43,7 @@ Functional examples are included in the [examples](./examples/bigquery) director
 |------|-------------|
 | dataset\_id | The dataset ID to deploy to data-warehouse. |
 | emails | The service account emails. |
+| emails\_list | The service account emails. |
 | high\_policy\_ssn | Content for Social Security Number policy tag. |
 | location | Location for storing your BigQuery data when you create a dataset. |
 | medium\_policy\_name | Content for Name policy tag. |
