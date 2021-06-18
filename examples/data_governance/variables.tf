@@ -30,6 +30,6 @@ variable "original_key_secret_name" {
 }
 
 variable "project_id_secret_mgr" {
-  description = "ID of the project that hosts the Secret Manager service been used."
+  description = "ID of the project that hosts the Secret Manager service being used."
   type        = string
 }

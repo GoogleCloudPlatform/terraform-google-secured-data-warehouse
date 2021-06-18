@@ -35,7 +35,7 @@ To provision this example, do the following from within this directory:
 |------|-------------|------|---------|:--------:|
 | original\_key\_secret\_name | Name of the secret used to hold a user provided key for encryption. | `string` | n/a | yes |
 | project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
-| project\_id\_secret\_mgr | ID of the project that hosts the Secret Manager service been used. | `string` | n/a | yes |
+| project\_id\_secret\_mgr | ID of the project that hosts the Secret Manager service being used. | `string` | n/a | yes |
 | terraform\_service\_account | Service account email of the account to impersonate to run Terraform. | `string` | n/a | yes |
 
 ## Outputs

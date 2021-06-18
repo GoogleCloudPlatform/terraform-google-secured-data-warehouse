@@ -72,7 +72,7 @@ A functional example for a Record Transformation is included under the
 | kms\_location | The location of KMS resources. See https://cloud.google.com/dlp/docs/locations for a list of locations that can be used for both KMS and DLP. The 'global' KMS location is valid. | `string` | n/a | yes |
 | original\_key\_secret\_name | Name of the secret used to hold a user provided key for encryption. | `string` | n/a | yes |
 | project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
-| project\_id\_secret\_mgr | ID of the project that hosts the Secret Manager service been used. | `string` | n/a | yes |
+| project\_id\_secret\_mgr | ID of the project that hosts the Secret Manager service being used. | `string` | n/a | yes |
 | template\_description | Description name of the DLP de-identification template. | `string` | `"De-identifies sensitive content defined in the template with a KMS Wrapped crypto Key."` | no |
 | template\_display\_name | Display name of the DLP de-identification template. | `string` | `"KMS Wrapped crypto Key de-identification"` | no |
 | template\_file | Path to the DLP de-identification template file. | `string` | n/a | yes |
