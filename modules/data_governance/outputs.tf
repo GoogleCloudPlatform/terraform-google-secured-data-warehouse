@@ -19,6 +19,16 @@ output "keyring" {
   value       = module.kms_dlp_tkek.keyring_resource.name
 }
 
+output "template_display_name" {
+  description = "Display name of the DLP de-identification template."
+  value       = var.template_display_name
+}
+
+output "template_description" {
+  description = "Description of the DLP de-identification template."
+  value = var.template_description
+}
+
 output "location" {
   description = "The location of the keyring."
   value       = module.kms_dlp_tkek.keyring_resource.location

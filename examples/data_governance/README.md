@@ -2,6 +2,8 @@
 
 This example illustrates how to use the `data_governance` sub module.
 
+**Note:** In a real context, the key stored in the secret should be provided by your security team.
+
 To provision this example, do the following from within this directory:
 
 1. Create a key and secret:

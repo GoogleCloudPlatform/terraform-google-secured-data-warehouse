@@ -17,11 +17,13 @@ data_governance_keyring = attribute('data_governance_keyring')
 data_governance_location = attribute('data_governance_location')
 data_governance_key = attribute('data_governance_key')
 data_governance_template_id = attribute('data_governance_template_id')
+template_display_name = attribute('template_display_name')
+template_description = attribute('template_description')
 
 control 'gcloud' do
   title 'Gcloud Resources'
 
-  describe command("curl -s -X GET -H \"Authorization: Bearer \"`gcloud auth print-access-token` https://dlp.googleapis.com/v2/projects/#{project_id}/locations/#{data_governance_location}/deidentifyTemplates/#{data_governance_template_id}") do
+  describe command("curl -s -X GET -H \"Authorization: Bearer \" $(gcloud auth print-access-token) https://dlp.googleapis.com/v2/projects/#{project_id}/locations/#{data_governance_location}/deidentifyTemplates/#{data_governance_template_id}") do
     its(:exit_status) { should eq 0 }
     its(:stderr) { should eq '' }
 
@@ -40,6 +42,22 @@ control 'gcloud' do
       end
 
       it { expect(data).to include('name' => "projects/#{project_id}/locations/#{data_governance_location}/deidentifyTemplates/#{data_governance_template_id}") }
+      it { expect(data).to include('display_name' => "#{template_display_name}") }
+      it { expect(data).to include('description' => "#{template_description}") }
+
+      it { expect(data["deidentifyConfig"]["recordTransformations"]["fieldTransformations"]).to include(
+        including(
+          "primitiveTransformation" => including(
+            "cryptoReplaceFfxFpeConfig" => including(
+              "cryptoKey" => including(
+                "kmsWrapped" => including(
+                  "cryptoKeyName" => "#{data_governance_key}"
+                )
+              )
+            )
+          )
+        )
+      )
     end
 
   end

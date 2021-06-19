@@ -22,3 +22,9 @@ attributes:
   - name: data_governance_template_id
     required: true
     type: string
+  - name: template_description
+    required: true
+    type: string
+  - name: template_display_name
+    required: true
+    type: string

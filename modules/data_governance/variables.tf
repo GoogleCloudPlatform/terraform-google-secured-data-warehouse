@@ -69,7 +69,7 @@ variable "template_display_name" {
 }
 
 variable "template_description" {
-  description = "Description name of the DLP de-identification template."
+  description = "Description of the DLP de-identification template."
   type        = string
   default     = "De-identifies sensitive content defined in the template with a KMS Wrapped crypto Key."
 }

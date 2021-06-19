@@ -16,8 +16,7 @@
 
 
 locals {
-  dlp_location         = var.kms_location == "global" ? "" : "locations/${var.kms_location}/"
-  template_id_prefix   = var.template_id_prefix != "" ? var.template_id_prefix : "sbp_deidentification"
+  template_id_prefix   = var.template_id_prefix != "" ? var.template_id_prefix : "de_identification"
   template_id          = "${local.template_id_prefix}_${random_id.random_template_id_suffix.hex}"
   template_file_sha256 = filesha256(var.template_file)
   deidentification_template = templatefile(
@@ -51,7 +50,7 @@ resource "null_resource" "initalize_dlp_service_account" {
   provisioner "local-exec" {
     command = <<EOF
     curl -s --request POST \
-    "https://dlp.googleapis.com/v2/projects/${var.project_id}/locations/us-central1/content:inspect" \
+    "https://dlp.googleapis.com/v2/projects/${var.project_id}/locations/${var.kms_location}/content:inspect" \
     --header "X-Goog-User-Project: ${var.project_id}" \
     --header "Authorization: Bearer $(gcloud auth print-access-token)" \
     --header 'Accept: application/json' \
@@ -99,13 +98,13 @@ resource "null_resource" "deidentification_template_setup" {
     template     = local.deidentification_template,
     project_id   = var.project_id,
     template_id  = local.template_id
-    dlp_location = local.dlp_location
+    kms_location = var.kms_location
   }
 
   provisioner "local-exec" {
     when    = create
     command = <<EOF
-    curl -s https://dlp.googleapis.com/v2/projects/${var.project_id}/${local.dlp_location}deidentifyTemplates \
+    curl -s https://dlp.googleapis.com/v2/projects/${var.project_id}/locations/${var.kms_location}/deidentifyTemplates \
     --header "X-Goog-User-Project: ${var.project_id}" \
     --header "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
     --header 'Accept: application/json' \
@@ -119,7 +118,7 @@ EOF
     when    = destroy
     command = <<EOF
     curl -s --request DELETE \
-    https://dlp.googleapis.com/v2/projects/${self.triggers.project_id}/${self.triggers.dlp_location}deidentifyTemplates/${self.triggers.template_id} \
+    https://dlp.googleapis.com/v2/projects/${self.triggers.project_id}/locations/${self.triggers.kms_location}/deidentifyTemplates/${self.triggers.template_id} \
     --header "X-Goog-User-Project: ${self.triggers.project_id}" \
     --header "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
     --header 'Accept: application/json' \

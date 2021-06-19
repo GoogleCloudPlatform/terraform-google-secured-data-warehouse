@@ -21,6 +21,7 @@ module "data_governance_example" {
   terraform_service_account = var.terraform_service_account
   original_key_secret_name  = var.original_key_secret_name
   project_id_secret_mgr     = var.project_id_secret_mgr
-  kms_location              = "us-east1"
+  dlp_tkek_keyring_name     = "wrwwewer-02"
+  kms_location              = "global"
   template_file             = "${path.module}/deidentification.tmpl"
 }
