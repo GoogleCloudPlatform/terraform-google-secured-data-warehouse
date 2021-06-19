@@ -27,6 +27,9 @@ organization_policy_name = attribute('organization_policy_name')
 terraform_service_account = attribute('terraform_service_account')
 perimeter_additional_members = attribute('perimeter_additional_members')
 
+restricted_googleapis_cidr = '199.36.153.4/30'
+private_googleapis_cidr = '199.36.153.8/30'
+
 restricted_services = ['pubsub.googleapis.com', 'bigquery.googleapis.com', 'storage.googleapis.com', 'dataflow.googleapis.com']
 
 members = [
@@ -88,5 +91,51 @@ control 'gcp' do
     end
 
     its('status.access_levels') { should include "accessPolicies/#{organization_policy_name}/accessLevels/#{access_level_name}" }
+  end
+
+  describe google_dns_managed_zone(
+    project: project_id,
+    zone: 'dz-e-shared-restricted-apis'
+  ) do
+    it { should exist }
+  end
+
+  describe google_compute_firewall(
+    project: project_id,
+    name: 'fw-e-shared-restricted-65535-e-d-all-all-all'
+  ) do
+    its('direction') { should cmp 'EGRESS' }
+    its('destination_ranges') { should eq ['0.0.0.0/0'] }
+    it 'denies all protocols' do
+      expect(subject.denied).to contain_exactly(
+        an_object_having_attributes(ip_protocol: 'all', ports: nil)
+      )
+    end
+  end
+
+  describe google_compute_firewall(
+    project: project_id,
+    name: 'fw-e-shared-restricted-65534-e-a-allow-google-apis-all-tcp-443'
+  ) do
+    its('direction') { should cmp 'EGRESS' }
+    its('destination_ranges') { should eq [restricted_googleapis_cidr] }
+    it 'allows TCP' do
+      expect(subject.allowed).to contain_exactly(
+        an_object_having_attributes(ip_protocol: 'tcp', ports: ['443'])
+      )
+    end
+  end
+
+  describe google_compute_firewall(
+    project: project_id,
+    name: 'fw-e-shared-private-65533-e-a-allow-google-apis-all-tcp-443'
+  ) do
+    its('direction') { should cmp 'EGRESS' }
+    its('destination_ranges') { should eq [private_googleapis_cidr] }
+    it 'allows TCP' do
+      expect(subject.allowed).to contain_exactly(
+        an_object_having_attributes(ip_protocol: 'tcp', ports: ['443'])
+      )
+    end
   end
 end
