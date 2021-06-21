@@ -31,13 +31,13 @@ variable "names" {
 }
 
 variable "dataset_id" {
-  description = "The dataset ID to deploy to datawarehouse."
+  description = "The dataset ID to deploy to data-warehouse."
   type        = string
   default     = "dtwh_dataset"
 }
 
 variable "table_id" {
-  description = "The table ID to deploy to datawarehouse."
+  description = "The table ID to deploy to data-warehouse."
   type        = string
   default     = "sample_data"
 }

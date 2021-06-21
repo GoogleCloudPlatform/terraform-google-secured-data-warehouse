@@ -14,6 +14,9 @@
 
 names = attribute('emails')
 project_id = attribute('project_id')
+dataset_id = attribute('dataset_id')
+#location
+#taxonomy
 
 control 'gcp' do
   title 'GCP Resources'
@@ -22,6 +25,10 @@ control 'gcp' do
     it { should exist }
   end
   describe google_service_account(project: project_id, name: names['terraform-confidential-sa']) do
+    it { should exist }
+  end
+
+  describe google_dataset(project: project_id, name: dataset_id) do
     it { should exist }
   end
 end

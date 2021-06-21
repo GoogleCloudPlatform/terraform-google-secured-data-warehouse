@@ -10,3 +10,6 @@ attributes:
   - name: emails
     required: true
     type: hash
+  - name: dataset_id
+    required: true
+    type: string
