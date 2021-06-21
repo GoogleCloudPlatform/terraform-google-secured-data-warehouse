@@ -43,11 +43,10 @@ control 'gcloud' do
       end
 
       it { expect(data).to include('name' => "projects/#{project_id}/locations/#{data_governance_location}/deidentifyTemplates/#{data_governance_template_id}") }
-      it { expect(data).to include('display_name' => "#{template_display_name}") }
+      it { expect(data).to include('displayName' => "#{template_display_name}") }
       it { expect(data).to include('description' => "#{template_description}") }
 
-      it { expect(data["deidentifyConfig"]["recordTransformations"]["fieldTransformations"][0]).to include(
-        including(
+      it { expect(data["deidentifyConfig"]["recordTransformations"]["fieldTransformations"]).to include(
           "primitiveTransformation" => including(
             "cryptoReplaceFfxFpeConfig" => including(
               "cryptoKey" => including(
@@ -59,8 +58,7 @@ control 'gcloud' do
             )
           )
         )
-      )
-    }
+      }
     end
 
   end
