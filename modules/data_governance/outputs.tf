@@ -26,7 +26,7 @@ output "template_display_name" {
 
 output "template_description" {
   description = "Description of the DLP de-identification template."
-  value = var.template_description
+  value       = var.template_description
 }
 
 output "location" {

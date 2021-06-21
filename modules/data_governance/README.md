@@ -73,7 +73,7 @@ A functional example for a Record Transformation is included under the
 | original\_key\_secret\_name | Name of the secret used to hold a user provided key for encryption. | `string` | n/a | yes |
 | project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
 | project\_id\_secret\_mgr | ID of the project that hosts the Secret Manager service being used. | `string` | n/a | yes |
-| template\_description | Description name of the DLP de-identification template. | `string` | `"De-identifies sensitive content defined in the template with a KMS Wrapped crypto Key."` | no |
+| template\_description | Description of the DLP de-identification template. | `string` | `"De-identifies sensitive content defined in the template with a KMS Wrapped crypto Key."` | no |
 | template\_display\_name | Display name of the DLP de-identification template. | `string` | `"KMS Wrapped crypto Key de-identification"` | no |
 | template\_file | Path to the DLP de-identification template file. | `string` | n/a | yes |
 | template\_id\_prefix | Prefix of the ID of the DLP de-identification template to be created. | `string` | `""` | no |
@@ -86,6 +86,8 @@ A functional example for a Record Transformation is included under the
 | keyring | The name of the keyring. |
 | keys | List of created key names. |
 | location | The location of the keyring. |
+| template\_description | Description of the DLP de-identification template. |
+| template\_display\_name | Display name of the DLP de-identification template. |
 | template\_id | ID of the DLP de-identification template created. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
