@@ -17,7 +17,6 @@
 variable "project_id" {
   description = "Project where the dataset and table are created"
   type        = string
-  default     = ""
 }
 
 variable "terraform_service_account" {

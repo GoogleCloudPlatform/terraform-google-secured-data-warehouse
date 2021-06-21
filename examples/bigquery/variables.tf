@@ -17,13 +17,12 @@
 variable "project_id" {
   description = "Project where the dataset and table are created"
   type        = string
-  default     = ""
 }
 
 variable "dataset_id" {
   description = "The dataset ID to deploy to data-warehouse"
   type        = string
-  default     = ""
+  default     = "dtwh_dataset"
 }
 
 variable "table_id" {
