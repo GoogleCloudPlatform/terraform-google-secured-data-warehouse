@@ -30,11 +30,26 @@ output "data_governance_location" {
 }
 
 output "data_governance_key" {
-  description = "Created key name."
+  description = "The KMS key name."
   value       = module.data_governance.keys[0]
+}
+
+output "data_governance_wrapped_key" {
+  description = "The Wrapped key."
+  value       = module.data_governance.wrapped_key
 }
 
 output "data_governance_template_id" {
   description = "ID of the DLP de-identification template created."
   value       = module.data_governance.template_id
+}
+
+output "template_display_name" {
+  description = "Display name of the DLP de-identification template."
+  value       = module.data_governance.template_display_name
+}
+
+output "template_description" {
+  description = "Description of the DLP de-identification template."
+  value       = module.data_governance.template_description
 }

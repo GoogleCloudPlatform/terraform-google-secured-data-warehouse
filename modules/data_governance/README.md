@@ -89,6 +89,7 @@ A functional example for a Record Transformation is included under the
 | template\_description | Description of the DLP de-identification template. |
 | template\_display\_name | Display name of the DLP de-identification template. |
 | template\_id | ID of the DLP de-identification template created. |
+| wrapped\_key | The Wrapped key. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 

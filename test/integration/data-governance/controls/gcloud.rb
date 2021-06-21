@@ -16,6 +16,7 @@ project_id = attribute('project_id')
 data_governance_keyring = attribute('data_governance_keyring')
 data_governance_location = attribute('data_governance_location')
 data_governance_key = attribute('data_governance_key')
+data_governance_wrapped_key = attribute('data_governance_wrapped_key')
 data_governance_template_id = attribute('data_governance_template_id')
 template_display_name = attribute('template_display_name')
 template_description = attribute('template_description')
@@ -45,13 +46,14 @@ control 'gcloud' do
       it { expect(data).to include('display_name' => "#{template_display_name}") }
       it { expect(data).to include('description' => "#{template_description}") }
 
-      it { expect(data["deidentifyConfig"]["recordTransformations"]["fieldTransformations"]).to include(
+      it { expect(data["deidentifyConfig"]["recordTransformations"]["fieldTransformations"][0]).to include(
         including(
           "primitiveTransformation" => including(
             "cryptoReplaceFfxFpeConfig" => including(
               "cryptoKey" => including(
                 "kmsWrapped" => including(
-                  "cryptoKeyName" => "#{data_governance_key}"
+                  "cryptoKeyName" => "#{data_governance_key}",
+                  "wrappedKey"=> "#{data_governance_wrapped_key}"
                 )
               )
             )

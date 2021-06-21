@@ -19,6 +19,9 @@ attributes:
   - name: data_governance_key
     required: true
     type: string
+  - name: data_governance_wrapped_key
+    required: true
+    type: string
   - name: data_governance_template_id
     required: true
     type: string

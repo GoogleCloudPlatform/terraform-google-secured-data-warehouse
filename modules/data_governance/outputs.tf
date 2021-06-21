@@ -39,6 +39,11 @@ output "keys" {
   value       = keys(module.kms_dlp_tkek.keys)
 }
 
+output "wrapped_key" {
+  description = "The Wrapped key."
+  value       = google_kms_secret_ciphertext.kms_wrapped_dlp_key.ciphertext
+}
+
 output "template_id" {
   description = "ID of the DLP de-identification template created."
   value       = local.template_id
