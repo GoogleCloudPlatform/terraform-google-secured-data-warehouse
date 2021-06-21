@@ -33,3 +33,8 @@ output "dataset_id" {
   description = "The dataset ID to deploy to datawarehouse."
   value       = module.bigquery.dataset_id
 }
+
+output "taxonomy_name" {
+  description = "The taxonomy display name."
+  value       = module.bigquery.taxonomy_name
+}

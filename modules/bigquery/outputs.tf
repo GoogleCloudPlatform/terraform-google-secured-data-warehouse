@@ -43,3 +43,8 @@ output "dataset_id" {
   description = "The dataset ID to deploy to data-warehouse."
   value       = var.dataset_id
 }
+
+output "taxonomy_name" {
+  description = "The taxonomy display name."
+  value       = google_data_catalog_taxonomy.secure_taxonomy.display_name
+}

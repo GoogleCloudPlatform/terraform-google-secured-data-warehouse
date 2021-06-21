@@ -47,6 +47,7 @@ Functional examples are included in the [examples](./examples/bigquery) director
 | high\_policy\_ssn | Content for Social Security Number policy tag. |
 | location | Location for storing your BigQuery data when you create a dataset. |
 | medium\_policy\_name | Content for Name policy tag. |
+| taxonomy\_name | The taxonomy display name. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 

@@ -12,11 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-names = attribute('emails')
-project_id = attribute('project_id')
-dataset_id = attribute('dataset_id')
-#location
-#taxonomy
+names         = attribute('emails')
+project_id    = attribute('project_id')
+dataset_id    = attribute('dataset_id')
+taxonomy_name = attribute('taxonomy_name')
 
 control 'gcp' do
   title 'GCP Resources'
@@ -28,7 +27,11 @@ control 'gcp' do
     it { should exist }
   end
 
-  describe google_dataset(project: project_id, name: dataset_id) do
+  describe google_dataset_id(project: project_id, name: dataset_id) do
+    it { should exist }
+  end
+
+  describe google_taxonomy_name(project: project_id, name: taxonomy_name) do
     it { should exist }
   end
 end
