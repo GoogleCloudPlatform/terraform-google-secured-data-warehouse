@@ -43,3 +43,6 @@ suites:
       color: false
       systems:
         - name: secure_bigquery gcp
+          backend: gcp
+          controls:
+            - gcp
