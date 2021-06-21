@@ -58,6 +58,7 @@ control 'gcloud' do
           )
         )
       )
+    }
     end
 
   end
