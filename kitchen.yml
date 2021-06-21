@@ -26,6 +26,16 @@ platforms:
   - name: default
 
 suites:
+  - name: data-ingestion
+    driver:
+      root_module_directory: test/fixtures/data-ingestion/
+    verifier:
+      color: false
+      systems:
+        - name: data_ingestion gcp
+          backend: gcp
+          controls:
+            - gcp
   - name: bigquery
     driver:
       root_module_directory: test/fixtures/bigquery/
@@ -33,6 +43,3 @@ suites:
       color: false
       systems:
         - name: secure_bigquery gcp
-          backend: gcp
-          controls:
-            - gcp

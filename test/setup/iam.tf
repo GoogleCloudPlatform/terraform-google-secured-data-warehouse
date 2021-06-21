@@ -53,6 +53,19 @@ resource "google_billing_account_iam_member" "tf_billing_user" {
   member             = "serviceAccount:${google_service_account.int_test.email}"
 }
 
+resource "google_organization_iam_member" "org_admins_group" {
+  for_each = toset(local.int_org_required_roles)
+  org_id   = var.org_id
+  role     = each.value
+  member   = "serviceAccount:${google_service_account.int_test.email}"
+}
+
+resource "google_billing_account_iam_member" "tf_billing_user" {
+  billing_account_id = var.billing_account
+  role               = "roles/billing.admin"
+  member             = "serviceAccount:${google_service_account.int_test.email}"
+}
+
 resource "google_service_account" "int_test" {
   project      = module.project.project_id
   account_id   = "ci-account"
@@ -76,3 +89,4 @@ resource "time_sleep" "wait_90_seconds" {
 
   create_duration = "90s"
 }
+

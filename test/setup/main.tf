@@ -25,13 +25,14 @@ module "project" {
   billing_account   = var.billing_account
 
   activate_apis = [
-    "iam.googleapis.com",
     "datacatalog.googleapis.com",
-    "bigquery.googleapis.com",
+    "cloudresourcemanager.googleapis.com",
+    "storage-api.googleapis.com",
     "serviceusage.googleapis.com",
+    "iam.googleapis.com",
     "dns.googleapis.com",
     "pubsub.googleapis.com",
-    "cloudresourcemanager.googleapis.com",
+    "bigquery.googleapis.com",
     "accesscontextmanager.googleapis.com",
     "cloudbilling.googleapis.com"
   ]

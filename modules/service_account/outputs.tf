@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-resource "google_storage_bucket" "main" {
-  project = var.project_id
-  name    = var.bucket_name
+output "email" {
+  description = "The service account email."
+  value       = google_service_account.service_account.email
 }
