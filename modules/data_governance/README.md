@@ -83,6 +83,7 @@ A functional example for a Record Transformation is included under the
 
 | Name | Description |
 |------|-------------|
+| crypto\_key | Crypto key used to wrap the wrapped key. |
 | keyring | The name of the keyring. |
 | keys | List of created key names. |
 | location | The location of the keyring. |

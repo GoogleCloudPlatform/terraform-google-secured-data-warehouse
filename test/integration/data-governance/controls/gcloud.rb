@@ -13,9 +13,8 @@
 # limitations under the License.
 
 project_id = attribute('project_id')
-data_governance_keyring = attribute('data_governance_keyring')
 data_governance_location = attribute('data_governance_location')
-data_governance_key = attribute('data_governance_key')
+data_governance_crypto_key = attribute('data_governance_crypto_key')
 data_governance_wrapped_key = attribute('data_governance_wrapped_key')
 data_governance_template_id = attribute('data_governance_template_id')
 template_display_name = attribute('template_display_name')
@@ -51,7 +50,7 @@ control 'gcloud' do
             "cryptoReplaceFfxFpeConfig" => including(
               "cryptoKey" => including(
                 "kmsWrapped" => including(
-                  "cryptoKeyName" => "#{data_governance_key}",
+                  "cryptoKeyName" => "#{data_governance_crypto_key}",
                   "wrappedKey"=> "#{data_governance_wrapped_key}"
                 )
               )

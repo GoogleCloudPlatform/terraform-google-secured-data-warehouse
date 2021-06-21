@@ -39,6 +39,11 @@ output "keys" {
   value       = keys(module.kms_dlp_tkek.keys)
 }
 
+output "crypto_key" {
+  description = "Crypto key used to wrap the wrapped key."
+  value       = local.crypto_key
+}
+
 output "wrapped_key" {
   description = "The Wrapped key."
   value       = google_kms_secret_ciphertext.kms_wrapped_dlp_key.ciphertext

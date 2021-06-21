@@ -19,6 +19,7 @@ locals {
   template_id_prefix   = var.template_id_prefix != "" ? var.template_id_prefix : "de_identification"
   template_id          = "${local.template_id_prefix}_${random_id.random_template_id_suffix.hex}"
   template_file_sha256 = filesha256(var.template_file)
+  crypto_key           = module.kms_dlp_tkek.keys[var.dlp_tkek_key_name]
   deidentification_template = templatefile(
     var.template_file,
     {

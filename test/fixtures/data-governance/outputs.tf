@@ -34,6 +34,11 @@ output "data_governance_key" {
   value       = module.data_governance.keys[0]
 }
 
+output "data_governance_crypto_key" {
+  description = "Crypto key used to wrap the wrapped key."
+  value       = module.data_governance.crypto_key
+}
+
 output "data_governance_wrapped_key" {
   description = "The Wrapped key."
   value       = module.data_governance.wrapped_key
