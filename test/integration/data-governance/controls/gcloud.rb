@@ -45,7 +45,7 @@ control 'gcloud' do
       it { expect(data).to include('displayName' => "#{template_display_name}") }
       it { expect(data).to include('description' => "#{template_description}") }
 
-      it { expect(data["deidentifyConfig"]["recordTransformations"]["fieldTransformations"]).to include(
+      it { expect(data["deidentifyConfig"]["recordTransformations"]["fieldTransformations"]).to include(including(
           "primitiveTransformation" => including(
             "cryptoReplaceFfxFpeConfig" => including(
               "cryptoKey" => including(
@@ -57,8 +57,8 @@ control 'gcloud' do
             )
           )
         )
+      )
       }
     end
-
   end
 end
