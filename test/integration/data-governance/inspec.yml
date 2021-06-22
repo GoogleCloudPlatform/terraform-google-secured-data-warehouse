@@ -10,13 +10,7 @@ attributes:
   - name: terraform_service_account
     required: true
     type: string
-  - name: data_governance_keyring
-    required: true
-    type: string
-  - name: data_governance_location
-    required: true
-    type: string
-  - name: data_governance_key
+  - name: data_governance_dlp_location
     required: true
     type: string
   - name: data_governance_crypto_key

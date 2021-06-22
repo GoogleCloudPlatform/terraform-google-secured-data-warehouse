@@ -14,11 +14,6 @@
  * limitations under the License.
  */
 
-output "keyring" {
-  description = "The name of the keyring."
-  value       = module.kms_dlp_tkek.keyring_resource.name
-}
-
 output "template_display_name" {
   description = "Display name of the DLP de-identification template."
   value       = var.template_display_name
@@ -29,24 +24,19 @@ output "template_description" {
   value       = var.template_description
 }
 
-output "location" {
-  description = "The location of the keyring."
-  value       = module.kms_dlp_tkek.keyring_resource.location
-}
-
-output "keys" {
-  description = "List of created key names."
-  value       = keys(module.kms_dlp_tkek.keys)
+output "dlp_location" {
+  description = "The location of the DLP resources."
+  value       = var.dlp_location
 }
 
 output "crypto_key" {
   description = "Crypto key used to wrap the wrapped key."
-  value       = local.crypto_key
+  value       = var.crypto_key
 }
 
 output "wrapped_key" {
   description = "The Wrapped key."
-  value       = google_kms_secret_ciphertext.kms_wrapped_dlp_key.ciphertext
+  value       = var.wrapped_key
 }
 
 output "template_id" {

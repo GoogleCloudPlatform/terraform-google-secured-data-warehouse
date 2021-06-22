@@ -16,15 +16,15 @@
 
 
 locals {
+  kms_roles            = toset(["roles/cloudkms.cryptoKeyEncrypter", "roles/cloudkms.cryptoKeyDecrypter"])
   template_id_prefix   = var.template_id_prefix != "" ? var.template_id_prefix : "de_identification"
   template_id          = "${local.template_id_prefix}_${random_id.random_template_id_suffix.hex}"
   template_file_sha256 = filesha256(var.template_file)
-  crypto_key           = module.kms_dlp_tkek.keys[var.dlp_tkek_key_name]
-  deidentification_template = templatefile(
+  de_identification_template = templatefile(
     var.template_file,
     {
-      crypto_key   = module.kms_dlp_tkek.keys[var.dlp_tkek_key_name],
-      wrapped_key  = google_kms_secret_ciphertext.kms_wrapped_dlp_key.ciphertext,
+      crypto_key   = var.crypto_key,
+      wrapped_key  = var.wrapped_key,
       template_id  = local.template_id,
       display_name = var.template_display_name,
       description  = var.template_description
@@ -34,8 +34,8 @@ locals {
 
 resource "random_id" "random_template_id_suffix" {
   keepers = {
-    crypto_key      = module.kms_dlp_tkek.keys[var.dlp_tkek_key_name],
-    wrapped_key     = google_kms_secret_ciphertext.kms_wrapped_dlp_key.ciphertext
+    crypto_key      = var.crypto_key,
+    wrapped_key     = var.wrapped_key,
     template_sha256 = local.template_file_sha256
   }
 
@@ -47,11 +47,11 @@ data "google_project" "dlp_project" {
 }
 
 // https://cloud.google.com/dlp/docs/iam-permissions#service_account
-resource "null_resource" "initalize_dlp_service_account" {
+resource "null_resource" "initialize_dlp_service_account" {
   provisioner "local-exec" {
     command = <<EOF
     curl -s --request POST \
-    "https://dlp.googleapis.com/v2/projects/${var.project_id}/locations/${var.kms_location}/content:inspect" \
+    "https://dlp.googleapis.com/v2/projects/${var.project_id}/locations/${var.dlp_location}/content:inspect" \
     --header "X-Goog-User-Project: ${var.project_id}" \
     --header "Authorization: Bearer $(gcloud auth print-access-token)" \
     --header 'Accept: application/json' \
@@ -63,54 +63,36 @@ EOF
   }
 }
 
-data "google_secret_manager_secret_version" "original_dlp_key" {
-  project = var.project_id_secret_mgr
-  secret  = var.original_key_secret_name
-}
-
-resource "google_kms_secret_ciphertext" "kms_wrapped_dlp_key" {
-  crypto_key = module.kms_dlp_tkek.keys[var.dlp_tkek_key_name]
-  plaintext  = base64encode(chomp(data.google_secret_manager_secret_version.original_dlp_key.secret_data))
-}
-
-// KMS
-module "kms_dlp_tkek" {
-  source  = "terraform-google-modules/kms/google"
-  version = "~> 1.2"
-
-  project_id         = var.project_id
-  location           = var.kms_location
-  keyring            = var.dlp_tkek_keyring_name
-  keys               = [var.dlp_tkek_key_name]
-  encrypters         = ["serviceAccount:service-${data.google_project.dlp_project.number}@dlp-api.iam.gserviceaccount.com"]
-  set_encrypters_for = [var.dlp_tkek_key_name]
-  decrypters         = ["serviceAccount:service-${data.google_project.dlp_project.number}@dlp-api.iam.gserviceaccount.com"]
-  set_decrypters_for = [var.dlp_tkek_key_name]
-  prevent_destroy    = false
+resource "google_kms_crypto_key_iam_binding" "dlp_encrypters_decrypters" {
+  for_each      = local.kms_roles
+  role          = each.key
+  crypto_key_id = var.crypto_key
+  members       = ["serviceAccount:service-${data.google_project.dlp_project.number}@dlp-api.iam.gserviceaccount.com"]
 
   depends_on = [
-    null_resource.initalize_dlp_service_account
+    null_resource.initialize_dlp_service_account
   ]
 }
 
-resource "null_resource" "deidentification_template_setup" {
+
+resource "null_resource" "de_identification_template_setup" {
 
   triggers = {
-    template     = local.deidentification_template,
+    template     = local.de_identification_template,
     project_id   = var.project_id,
     template_id  = local.template_id
-    kms_location = var.kms_location
+    dlp_location = var.dlp_location
   }
 
   provisioner "local-exec" {
     when    = create
     command = <<EOF
-    curl -s https://dlp.googleapis.com/v2/projects/${var.project_id}/locations/${var.kms_location}/deidentifyTemplates \
+    curl -s https://dlp.googleapis.com/v2/projects/${var.project_id}/locations/${var.dlp_location}/deidentifyTemplates \
     --header "X-Goog-User-Project: ${var.project_id}" \
     --header "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
     --header 'Accept: application/json' \
     --header "Content-Type: application/json" \
-    --data '${local.deidentification_template}'
+    --data '${local.de_identification_template}'
 EOF
 
   }
@@ -119,7 +101,7 @@ EOF
     when    = destroy
     command = <<EOF
     curl -s --request DELETE \
-    https://dlp.googleapis.com/v2/projects/${self.triggers.project_id}/locations/${self.triggers.kms_location}/deidentifyTemplates/${self.triggers.template_id} \
+    https://dlp.googleapis.com/v2/projects/${self.triggers.project_id}/locations/${self.triggers.dlp_location}/deidentifyTemplates/${self.triggers.template_id} \
     --header "X-Goog-User-Project: ${self.triggers.project_id}" \
     --header "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
     --header 'Accept: application/json' \

@@ -24,12 +24,17 @@ variable "terraform_service_account" {
   type        = string
 }
 
-variable "original_key_secret_name" {
-  description = "Name of the secret used to hold a user provided key for encryption."
+variable "dlp_location" {
+  description = "The location of DLP resources. See https://cloud.google.com/dlp/docs/locations. The 'global' KMS location is valid."
   type        = string
 }
 
-variable "project_id_secret_mgr" {
-  description = "ID of the project that hosts the Secret Manager service being used."
+variable "crypto_key" {
+  description = "Crypto key used to wrap the wrapped key."
+  type        = string
+}
+
+variable "wrapped_key" {
+  description = "The Wrapped key."
   type        = string
 }

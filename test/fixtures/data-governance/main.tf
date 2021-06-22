@@ -14,17 +14,30 @@
  * limitations under the License.
  */
 
-resource "null_resource" "set_secret_key" {
+locals {
+  keyring  = "keyring_kek"
+  key_name = "key_name_kek"
+}
 
-  provisioner "local-exec" {
-    command = <<EOT
-    head -c 32 /dev/urandom | base64 | gcloud secrets create original_key_secret_name \
-    --project ${var.project_id} \
-    --replication-policy=automatic \
-    --data-file=-
-EOT
+module "kms" {
+  source  = "terraform-google-modules/kms/google"
+  version = "~> 1.2"
 
-  }
+  project_id      = var.project_id
+  location        = "us-east1"
+  keyring         = local.keyring
+  keys            = [local.key_name]
+  prevent_destroy = false
+}
+
+resource "random_password" "original_dlp_key" {
+  length  = 32
+  special = false
+}
+
+resource "google_kms_secret_ciphertext" "wrapped_key" {
+  crypto_key = module.kms.keys[local.key_name]
+  plaintext  = base64encode(random_password.original_dlp_key.result)
 }
 
 module "data_governance" {
@@ -32,12 +45,8 @@ module "data_governance" {
 
   project_id                = var.project_id
   terraform_service_account = var.terraform_service_account
-  original_key_secret_name  = "original_key_secret_name"
-  project_id_secret_mgr     = var.project_id
-  kms_location              = "us-east1"
+  crypto_key                = module.kms.keys[local.key_name]
+  wrapped_key               = google_kms_secret_ciphertext.wrapped_key.ciphertext
+  dlp_location              = "us-east1"
   template_file             = "${path.module}/deidentification.tmpl"
-
-  depends_on = [
-    null_resource.set_secret_key
-  ]
 }

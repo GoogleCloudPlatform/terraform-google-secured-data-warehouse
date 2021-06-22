@@ -24,30 +24,18 @@ variable "terraform_service_account" {
   type        = string
 }
 
-variable "kms_location" {
-  description = "The location of KMS resources. See https://cloud.google.com/dlp/docs/locations for a list of locations that can be used for both KMS and DLP. The 'global' KMS location is valid."
+variable "dlp_location" {
+  description = "The location of DLP resources. See https://cloud.google.com/dlp/docs/locations. The 'global' KMS location is valid."
   type        = string
 }
 
-variable "dlp_tkek_keyring_name" {
-  description = "Name to be used for KMS Keyring."
-  type        = string
-  default     = "dlp-de-identification-keyring"
-}
-
-variable "dlp_tkek_key_name" {
-  description = "Name to be used for KMS Key."
-  type        = string
-  default     = "dlp-de-identification-crypto-key"
-}
-
-variable "original_key_secret_name" {
-  description = "Name of the secret used to hold a user provided key for encryption."
+variable "crypto_key" {
+  description = "Crypto key used to wrap the wrapped key."
   type        = string
 }
 
-variable "project_id_secret_mgr" {
-  description = "ID of the project that hosts the Secret Manager service being used."
+variable "wrapped_key" {
+  description = "The Wrapped key."
   type        = string
 }
 

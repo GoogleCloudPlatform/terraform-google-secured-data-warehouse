@@ -19,19 +19,9 @@ output "project_id" {
   value       = var.project_id
 }
 
-output "data_governance_keyring" {
-  description = "The name of the keyring."
-  value       = module.data_governance.keyring
-}
-
-output "data_governance_location" {
-  description = "The location of the keyring."
-  value       = module.data_governance.location
-}
-
-output "data_governance_key" {
-  description = "The KMS key name."
-  value       = module.data_governance.keys[0]
+output "data_governance_dlp_location" {
+  description = "The location of the DLP resources."
+  value       = module.data_governance.dlp_location
 }
 
 output "data_governance_crypto_key" {

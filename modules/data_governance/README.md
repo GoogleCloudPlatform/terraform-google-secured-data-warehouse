@@ -1,6 +1,6 @@
-# Data Governance sub module
+# Data Governance submodule
 
-This sub module allows you to create:
+This submodule allows you to create:
 
 - A Cloud [Data Loss Prevention](https://cloud.google.com/dlp/docs) (DLP) [de-identification template](https://cloud.google.com/dlp/docs/deidentify-sensitive-data) from a json template file provided by the user.
 - A Cloud [Key Management Service](https://cloud.google.com/kms/docs) (KMS) keyring and key.
@@ -20,9 +20,10 @@ module "data_governance" {
 
   project_id                = "PROJECT_ID"
   terraform_service_account = "SERVICE_ACCOUNT_EMAIL"
+  crypto_key                = "CRYPTO_KEY"
+  wrapped_key               = "WRAPPED_KEY"
+  dlp_location              = "DLP_LOCATION"
   template_file             = "PATH_TO_TEMPLATE_FILE"
-  original_key_secret_name  = "ORIGINAL_KEY_SECRET_NAME"
-  project_id_secret_mgr     = "PROJECT_ID_SECRET_MGR"
 }
 ```
 
@@ -31,14 +32,6 @@ module "data_governance" {
 It is necessary to provide a de-identification key that will be encrypted by KMS
 and will be used by the de-identification template.
 
-Create a secret using Secret Manager to hold your key:
-
-```
-echo 'MY_DLP_KEY' | base64 | gcloud secrets create ORIGINAL_KEY_SECRET_NAME \
---project PROJECT_ID_SECRET_MGR \
---replication-policy=automatic \
---data-file=-
-```
 
 ### Template file
 
@@ -67,26 +60,22 @@ A functional example for a Record Transformation is included under the
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| dlp\_tkek\_key\_name | Name to be used for KMS Key. | `string` | `"dlp-de-identification-crypto-key"` | no |
-| dlp\_tkek\_keyring\_name | Name to be used for KMS Keyring. | `string` | `"dlp-de-identification-keyring"` | no |
-| kms\_location | The location of KMS resources. See https://cloud.google.com/dlp/docs/locations for a list of locations that can be used for both KMS and DLP. The 'global' KMS location is valid. | `string` | n/a | yes |
-| original\_key\_secret\_name | Name of the secret used to hold a user provided key for encryption. | `string` | n/a | yes |
+| crypto\_key | Crypto key used to wrap the wrapped key. | `string` | n/a | yes |
+| dlp\_location | The location of DLP resources. See https://cloud.google.com/dlp/docs/locations. The 'global' KMS location is valid. | `string` | n/a | yes |
 | project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
-| project\_id\_secret\_mgr | ID of the project that hosts the Secret Manager service being used. | `string` | n/a | yes |
 | template\_description | Description of the DLP de-identification template. | `string` | `"De-identifies sensitive content defined in the template with a KMS Wrapped crypto Key."` | no |
 | template\_display\_name | Display name of the DLP de-identification template. | `string` | `"KMS Wrapped crypto Key de-identification"` | no |
 | template\_file | Path to the DLP de-identification template file. | `string` | n/a | yes |
 | template\_id\_prefix | Prefix of the ID of the DLP de-identification template to be created. | `string` | `""` | no |
 | terraform\_service\_account | Service account email of the account to impersonate to run Terraform. | `string` | n/a | yes |
+| wrapped\_key | The Wrapped key. | `string` | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
 | crypto\_key | Crypto key used to wrap the wrapped key. |
-| keyring | The name of the keyring. |
-| keys | List of created key names. |
-| location | The location of the keyring. |
+| dlp\_location | The location of the DLP resources. |
 | template\_description | Description of the DLP de-identification template. |
 | template\_display\_name | Display name of the DLP de-identification template. |
 | template\_id | ID of the DLP de-identification template created. |

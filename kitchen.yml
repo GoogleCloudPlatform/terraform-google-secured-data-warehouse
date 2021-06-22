@@ -42,10 +42,6 @@ suites:
     verifier:
       color: false
       systems:
-        - name: data_governance gcp
-          backend: gcp
-          controls:
-            - gcp
         - name: data_governance gcloud
           backend: local
           controls:

@@ -14,19 +14,11 @@
  * limitations under the License.
  */
 
-output "keyring" {
-  description = "The name of the keyring."
-  value       = module.data_governance_example.keyring
-}
 
-output "location" {
-  description = "The location of the keyring."
-  value       = module.data_governance_example.location
-}
 
-output "keys" {
-  description = "List of created key names."
-  value       = module.data_governance_example.keys
+output "dlp_location" {
+  description = "The location of the DLP resources."
+  value       = module.data_governance_example.dlp_location
 }
 
 output "template_id" {
