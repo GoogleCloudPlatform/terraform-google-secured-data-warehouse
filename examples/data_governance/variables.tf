@@ -20,7 +20,7 @@ variable "project_id" {
 }
 
 variable "terraform_service_account" {
-  description = "Service account email of the account to impersonate to run Terraform."
+  description = "The email address of the service account that will run the Terraform code."
   type        = string
 }
 
@@ -30,11 +30,11 @@ variable "dlp_location" {
 }
 
 variable "crypto_key" {
-  description = "Crypto key used to wrap the wrapped key."
+  description = "The full resource name of the Cloud KMS key that encrypts the Customer-supplied key."
   type        = string
 }
 
 variable "wrapped_key" {
-  description = "The Wrapped key."
+  description = "The Customer-supplied wrapped key."
   type        = string
 }

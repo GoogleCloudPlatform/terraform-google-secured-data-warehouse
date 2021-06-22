@@ -30,16 +30,16 @@ output "dlp_location" {
 }
 
 output "crypto_key" {
-  description = "Crypto key used to wrap the wrapped key."
+  description = "The full resource name of the Cloud KMS key that encrypts the Customer-supplied key."
   value       = var.crypto_key
 }
 
 output "wrapped_key" {
-  description = "The Wrapped key."
+  description = "The Customer-supplied wrapped key."
   value       = var.wrapped_key
 }
 
 output "template_id" {
-  description = "ID of the DLP de-identification template created."
+  description = "The ID of the Cloud DLP de-identification template that is created."
   value       = local.template_id
 }

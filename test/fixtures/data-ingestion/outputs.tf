@@ -111,7 +111,7 @@ output "perimeter_additional_members" {
 }
 
 output "terraform_service_account" {
-  description = "Service account email of the account to impersonate to run Terraform."
+  description = "The email address of the service account that will run the Terraform code."
   value       = var.terraform_service_account
 }
 

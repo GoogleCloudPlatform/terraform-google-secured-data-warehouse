@@ -35,17 +35,17 @@ To provision this example, complete these tasks from within this directory:
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| crypto\_key | Crypto key used to wrap the wrapped key. | `string` | n/a | yes |
+| crypto\_key | The full resource name of the Cloud KMS key that encrypts the Customer-supplied key. | `string` | n/a | yes |
 | dlp\_location | The location of DLP resources. See https://cloud.google.com/dlp/docs/locations. The 'global' KMS location is valid. | `string` | n/a | yes |
 | project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
-| terraform\_service\_account | Service account email of the account to impersonate to run Terraform. | `string` | n/a | yes |
-| wrapped\_key | The Wrapped key. | `string` | n/a | yes |
+| terraform\_service\_account | The email address of the service account that will run the Terraform code. | `string` | n/a | yes |
+| wrapped\_key | The Customer-supplied wrapped key. | `string` | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
 | dlp\_location | The location of the DLP resources. |
-| template\_id | ID of the DLP de-identification template created. |
+| template\_id | The ID of the Cloud DLP de-identification template that is created. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

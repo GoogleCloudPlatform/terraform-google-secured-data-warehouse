@@ -22,6 +22,6 @@ output "dlp_location" {
 }
 
 output "template_id" {
-  description = "ID of the DLP de-identification template created."
+  description = "The ID of the Cloud DLP de-identification template that is created."
   value       = module.data_governance_example.template_id
 }

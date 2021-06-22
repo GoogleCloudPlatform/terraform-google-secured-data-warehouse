@@ -25,17 +25,17 @@ output "data_governance_dlp_location" {
 }
 
 output "data_governance_crypto_key" {
-  description = "Crypto key used to wrap the wrapped key."
+  description = "The full resource name of the Cloud KMS key that encrypts the Customer-supplied key."
   value       = module.data_governance.crypto_key
 }
 
 output "data_governance_wrapped_key" {
-  description = "The Wrapped key."
+  description = "The Customer-supplied wrapped key."
   value       = module.data_governance.wrapped_key
 }
 
 output "data_governance_template_id" {
-  description = "ID of the DLP de-identification template created."
+  description = "The ID of the Cloud DLP de-identification template that is created."
   value       = module.data_governance.template_id
 }
 

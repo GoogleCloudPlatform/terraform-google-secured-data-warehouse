@@ -20,7 +20,7 @@ variable "project_id" {
 }
 
 variable "terraform_service_account" {
-  description = "Service account email of the account to impersonate to run Terraform."
+  description = "The email address of the service account that will run the Terraform code."
   type        = string
 }
 
@@ -30,17 +30,17 @@ variable "dlp_location" {
 }
 
 variable "crypto_key" {
-  description = "Crypto key used to wrap the wrapped key."
+  description = "The full resource name of the Cloud KMS key that encrypts the Customer-supplied key."
   type        = string
 }
 
 variable "wrapped_key" {
-  description = "The Wrapped key."
+  description = "The Customer-supplied wrapped key."
   type        = string
 }
 
 variable "template_file" {
-  description = "Path to the DLP de-identification template file."
+  description = "the path to the DLP de-identification template file."
   type        = string
 }
 
@@ -51,13 +51,13 @@ variable "template_id_prefix" {
 }
 
 variable "template_display_name" {
-  description = "Display name of the DLP de-identification template."
+  description = "The display name of the DLP de-identification template."
   type        = string
-  default     = "KMS Wrapped crypto Key de-identification"
+  default     = "De-identification template using a KMS wrapped CMEK"
 }
 
 variable "template_description" {
-  description = "Description of the DLP de-identification template."
+  description = "A description for the DLP de-identification template."
   type        = string
-  default     = "De-identifies sensitive content defined in the template with a KMS Wrapped crypto Key."
+  default     = "De-identifies sensitive content defined in the template with a KMS wrapped CMEK."
 }
