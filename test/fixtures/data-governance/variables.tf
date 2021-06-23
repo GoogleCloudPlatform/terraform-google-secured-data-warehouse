@@ -20,6 +20,6 @@ variable "project_id" {
 }
 
 variable "terraform_service_account" {
-  description = "The email address of the service account that will run the Terraform code."
+  description = "The email address of the service account that will run the Terraform config."
   type        = string
 }

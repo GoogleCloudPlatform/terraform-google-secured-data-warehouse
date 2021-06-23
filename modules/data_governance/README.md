@@ -69,7 +69,7 @@ A functional example for a Record Transformation is included under the
 | template\_display\_name | The display name of the DLP de-identification template. | `string` | `"De-identification template using a KMS wrapped CMEK"` | no |
 | template\_file | the path to the DLP de-identification template file. | `string` | n/a | yes |
 | template\_id\_prefix | Prefix to be used in the creation of the ID of the DLP de-identification template. | `string` | `"de_identification"` | no |
-| terraform\_service\_account | The email address of the service account that will run the Terraform code. | `string` | n/a | yes |
+| terraform\_service\_account | The email address of the service account that will run the Terraform config. | `string` | n/a | yes |
 | wrapped\_key | The base64 encoded data crypto key wrapped by KMS. | `string` | n/a | yes |
 
 ## Outputs
@@ -93,8 +93,10 @@ These sections describe the requirements for using this module.
 
 Install the following dependencies:
 
+- [gcloud SDK](https://cloud.google.com/sdk/install) >= 281.0.0
 - [Terraform](https://www.terraform.io/downloads.html) >= 0.13.0
-- [Terraform Provider for GCP](https://github.com/terraform-providers/terraform-provider-google) plugin v3.0
+- [Terraform Provider for GCP](https://github.com/terraform-providers/terraform-provider-google) plugin >= 3.67.0
+- [Terraform Provider Beta for GCP](https://github.com/terraform-providers/terraform-provider-google) plugin >= 3.67.0
 - [curl](https://curl.haxx.se/)
 
 ### Service Account
