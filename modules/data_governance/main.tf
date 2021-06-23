@@ -17,9 +17,9 @@
 
 locals {
   kms_roles            = toset(["roles/cloudkms.cryptoKeyEncrypter", "roles/cloudkms.cryptoKeyDecrypter"])
-  template_id_prefix   = var.template_id_prefix != "" ? var.template_id_prefix : "de_identification"
-  template_id          = "${local.template_id_prefix}_${random_id.random_template_id_suffix.hex}"
+  template_id          = "${var.template_id_prefix}_${random_id.random_template_id_suffix.hex}"
   template_file_sha256 = filesha256(var.template_file)
+
   de_identification_template = templatefile(
     var.template_file,
     {
@@ -33,13 +33,13 @@ locals {
 }
 
 resource "random_id" "random_template_id_suffix" {
+  byte_length = 8
+
   keepers = {
     crypto_key      = var.crypto_key,
     wrapped_key     = var.wrapped_key,
     template_sha256 = local.template_file_sha256
   }
-
-  byte_length = 8
 }
 
 data "google_project" "dlp_project" {

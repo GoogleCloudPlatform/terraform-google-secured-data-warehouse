@@ -30,12 +30,12 @@ variable "dlp_location" {
 }
 
 variable "crypto_key" {
-  description = "The full resource name of the Cloud KMS key that encrypts the Customer-supplied key."
+  description = "The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP."
   type        = string
 }
 
 variable "wrapped_key" {
-  description = "The Customer-supplied wrapped key."
+  description = "The base64 encoded data crypto key wrapped by KMS."
   type        = string
 }
 
@@ -45,9 +45,9 @@ variable "template_file" {
 }
 
 variable "template_id_prefix" {
-  description = "Prefix of the ID of the DLP de-identification template to be created."
+  description = "Prefix to be used in the creation of the ID of the DLP de-identification template."
   type        = string
-  default     = ""
+  default     = "de_identification"
 }
 
 variable "template_display_name" {

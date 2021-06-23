@@ -25,9 +25,12 @@ module "data_governance" {
 
 ### DLP de-identification key
 
-Create a Customer-supplied [wrapped key](https://cloud.google.com/dlp/docs/create-wrapped-key) that you will use to create the Cloud DLP de-identification template.
+Create a base64 encoded data crypto key [wrapped by KMS](https://cloud.google.com/dlp/docs/create-wrapped-key) that you will use to create the Cloud DLP de-identification template.
 
-You will need the wrapped key and the full resource name of the Cloud KMS key that encrypted the Customer-supplied key.
+You will need the wrapped key and the full resource name of the Cloud KMS key that encrypted the data crypto key.
+
+**Note:** Contact your Security Team to obtain the `crypto_key` and `wrapped_key` pair.
+The `crypto_key` location must be the same location used for the `dlp_location`.
 
 ### Template file
 
@@ -35,12 +38,12 @@ Crate a [DLP de-identification](https://cloud.google.com/dlp/docs/deidentify-sen
 
 The template file is a JSON representation of a `deidentifyTemplates` call [request body](https://cloud.google.com/dlp/docs/reference/rest/v2/projects.deidentifyTemplates/create#request-body).
 
-You can substitute the following variables in the template file::
+You can substitute the following variables in the template file:
 
 - `display_name`: The display name of the DLP template.
 - `description`: The description of the DLP template.
-- `wrapped_key`: A [Customer-supplied encryption key](https://cloud.google.com/storage/docs/encryption/customer-supplied-keys) that is encrypted with the `crypto_key`.
-- `crypto_key`: The Cloud KMS key used to encrypt the `wrapped_key`.
+- `wrapped_key`: The base64 encoded data crypto key wrapped by the Cloud KMS `crypto_key`.
+- `crypto_key`: The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP.
 - `template_id`: The template ID, composed by the variable `template_id_prefix` and a random suffix.
 
 See the Terraform [templatefile](https://www.terraform.io/docs/language/functions/templatefile.html) function documentation and
@@ -59,26 +62,26 @@ A functional example for a Record Transformation is included under the
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| crypto\_key | The full resource name of the Cloud KMS key that encrypts the Customer-supplied key. | `string` | n/a | yes |
+| crypto\_key | The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP. | `string` | n/a | yes |
 | dlp\_location | The location of DLP resources. See https://cloud.google.com/dlp/docs/locations. The 'global' KMS location is valid. | `string` | n/a | yes |
 | project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
 | template\_description | A description for the DLP de-identification template. | `string` | `"De-identifies sensitive content defined in the template with a KMS wrapped CMEK."` | no |
 | template\_display\_name | The display name of the DLP de-identification template. | `string` | `"De-identification template using a KMS wrapped CMEK"` | no |
 | template\_file | the path to the DLP de-identification template file. | `string` | n/a | yes |
-| template\_id\_prefix | Prefix of the ID of the DLP de-identification template to be created. | `string` | `""` | no |
+| template\_id\_prefix | Prefix to be used in the creation of the ID of the DLP de-identification template. | `string` | `"de_identification"` | no |
 | terraform\_service\_account | The email address of the service account that will run the Terraform code. | `string` | n/a | yes |
-| wrapped\_key | The Customer-supplied wrapped key. | `string` | n/a | yes |
+| wrapped\_key | The base64 encoded data crypto key wrapped by KMS. | `string` | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| crypto\_key | The full resource name of the Cloud KMS key that encrypts the Customer-supplied key. |
+| crypto\_key | The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP. |
 | dlp\_location | The location of the DLP resources. |
 | template\_description | Description of the DLP de-identification template. |
 | template\_display\_name | Display name of the DLP de-identification template. |
 | template\_id | The ID of the Cloud DLP de-identification template that is created. |
-| wrapped\_key | The Customer-supplied wrapped key. |
+| wrapped\_key | The base64 encoded data crypto key wrapped by KMS. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 

@@ -2,22 +2,16 @@
 
 This example illustrates how to use the `data_governance` submodule.
 
-**Note:** In a real context, the key stored in the secret should be provided by your security team.
+**Note:** Contact your Security Team to obtain the `crypto_key` and `wrapped_key` pair.
+The `crypto_key` location must be the same location used for the `dlp_location`.
 
 To provision this example, complete these tasks from within this directory:
 
-1. Create a key and a secret:
-   ```
-   head -c 32 /dev/urandom | base64 | gcloud secrets create ORIGINAL_KEY_SECRET_NAME \
-   --project PROJECT_ID_SECRET_MGR \
-   --replication-policy=automatic \
-   --data-file=-
-   ```
 1. Initialize the directory:
    ```
    terraform init
    ```
-1. Review the infrastructure plan. When prompted, enter the `project_id`, `terraform_service_account`, and `original_key_secret_name`
+1. Review the infrastructure plan. When prompted, enter the `project_id`, `terraform_service_account`, `dlp_location`, `crypto_key` and `wrapped_key`
    ```
    terraform plan
    ```
@@ -35,11 +29,11 @@ To provision this example, complete these tasks from within this directory:
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| crypto\_key | The full resource name of the Cloud KMS key that encrypts the Customer-supplied key. | `string` | n/a | yes |
+| crypto\_key | The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP. | `string` | n/a | yes |
 | dlp\_location | The location of DLP resources. See https://cloud.google.com/dlp/docs/locations. The 'global' KMS location is valid. | `string` | n/a | yes |
 | project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
 | terraform\_service\_account | The email address of the service account that will run the Terraform code. | `string` | n/a | yes |
-| wrapped\_key | The Customer-supplied wrapped key. | `string` | n/a | yes |
+| wrapped\_key | The base64 encoded data crypto key wrapped by KMS. | `string` | n/a | yes |
 
 ## Outputs
 

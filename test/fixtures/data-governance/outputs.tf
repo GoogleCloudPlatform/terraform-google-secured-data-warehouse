@@ -25,12 +25,12 @@ output "data_governance_dlp_location" {
 }
 
 output "data_governance_crypto_key" {
-  description = "The full resource name of the Cloud KMS key that encrypts the Customer-supplied key."
+  description = "The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP."
   value       = module.data_governance.crypto_key
 }
 
 output "data_governance_wrapped_key" {
-  description = "The Customer-supplied wrapped key."
+  description = "The base64 encoded data crypto key wrapped by KMS."
   value       = module.data_governance.wrapped_key
 }
 

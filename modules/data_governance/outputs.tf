@@ -30,12 +30,12 @@ output "dlp_location" {
 }
 
 output "crypto_key" {
-  description = "The full resource name of the Cloud KMS key that encrypts the Customer-supplied key."
+  description = "The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP."
   value       = var.crypto_key
 }
 
 output "wrapped_key" {
-  description = "The Customer-supplied wrapped key."
+  description = "The base64 encoded data crypto key wrapped by KMS."
   value       = var.wrapped_key
 }
 

@@ -21,6 +21,6 @@ module "data_governance_example" {
   terraform_service_account = var.terraform_service_account
   crypto_key                = var.crypto_key
   wrapped_key               = var.wrapped_key
-  dlp_location              = "global"
+  dlp_location              = var.dlp_location
   template_file             = "${path.module}/deidentification.tmpl"
 }
