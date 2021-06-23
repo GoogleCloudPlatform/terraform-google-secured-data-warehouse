@@ -23,7 +23,7 @@ control 'gcp' do
   describe google_service_account(project: project_id, name: names['terraform-confidential-sa']) do
     it { should exist }
   end
-  describe google_service_account(project: project_id, name: names['terraform-confidential-sa']) do
+  describe google_service_account(project: project_id, name: names['terraform-private-sa']) do
     it { should exist }
   end
 

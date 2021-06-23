@@ -16,3 +16,9 @@ attributes:
   - name: taxonomy_name
     required: true
     type: string
+  - name: medium_policy_taxonomy_id
+    required: true
+    type: string
+  - name: high_policy_taxonomy_id
+    required: true
+    type: string

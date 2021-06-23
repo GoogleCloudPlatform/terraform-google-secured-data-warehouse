@@ -46,3 +46,7 @@ suites:
           backend: gcp
           controls:
             - gcp
+        - name: secure_bigquery gcloud
+          backend: local
+          controls:
+            - gcloud

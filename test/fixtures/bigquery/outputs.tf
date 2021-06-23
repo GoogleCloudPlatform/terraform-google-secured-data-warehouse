@@ -28,6 +28,15 @@ output "emails" {
   description = "The service account emails."
   value       = module.bigquery.emails
 }
+output "medium_policy_taxonomy_id" {
+  description = "Content for Policy Tag ID in medium policy."
+  value       = module.bigquery.medium_policy_taxonomy_id
+}
+
+output "high_policy_taxonomy_id" {
+  description = "Content for Policy Tag ID in high policy."
+  value       = module.bigquery.high_policy_taxonomy_id
+}
 
 output "dataset_id" {
   description = "The dataset ID to deploy to datawarehouse."
