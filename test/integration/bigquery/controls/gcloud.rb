@@ -17,7 +17,7 @@ project_id                = attribute('project_id')
 high_policy_taxonomy_id   = attribute('high_policy_taxonomy_id')
 medium_policy_taxonomy_id = attribute('medium_policy_taxonomy_id')
 taxonomy_name             = attribute('taxonomy_name')
-  
+
 control 'gcloud' do
   title 'Gcloud Resources'
 

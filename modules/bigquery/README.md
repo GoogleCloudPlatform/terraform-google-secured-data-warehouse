@@ -45,8 +45,10 @@ Functional examples are included in the [examples](./examples/bigquery) director
 | emails | The service account emails. |
 | emails\_list | The service account emails. |
 | high\_policy\_ssn | Content for Social Security Number policy tag. |
+| high\_policy\_taxonomy\_id | Content for Policy Tag ID in high policy. |
 | location | Location for storing your BigQuery data when you create a dataset. |
 | medium\_policy\_name | Content for Name policy tag. |
+| medium\_policy\_taxonomy\_id | Content for Policy Tag ID in medium policy. |
 | taxonomy\_name | The taxonomy display name. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
