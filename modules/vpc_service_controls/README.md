@@ -19,7 +19,7 @@
 | region | The region in which the subnetwork will be created. | `string` | n/a | yes |
 | restricted\_services | The list of services to be restricted by the VPC Service Control | `list(string)` | n/a | yes |
 | subnet\_ip | The CDIR IP range of the subnetwork. | `string` | n/a | yes |
-| terraform\_service\_account | Service account email of the account to impersonate to run Terraform. | `string` | n/a | yes |
+| terraform\_service\_account | The email address of the service account that will run the Terraform code. | `string` | n/a | yes |
 | vpc\_name | the name of the network. | `string` | n/a | yes |
 
 ## Outputs

@@ -33,6 +33,9 @@ module "project" {
     "pubsub.googleapis.com",
     "bigquery.googleapis.com",
     "accesscontextmanager.googleapis.com",
-    "cloudbilling.googleapis.com"
+    "cloudbilling.googleapis.com",
+    "cloudkms.googleapis.com",
+    "dlp.googleapis.com",
+    "secretmanager.googleapis.com"
   ]
 }
