@@ -1,4 +1,4 @@
-name: data-governance
+name: de-identification-template
 depends:
   - name: inspec-gcp
     git: https://github.com/inspec/inspec-gcp.git
@@ -10,16 +10,16 @@ attributes:
   - name: terraform_service_account
     required: true
     type: string
-  - name: data_governance_dlp_location
+  - name: de_identification_template_dlp_location
     required: true
     type: string
-  - name: data_governance_crypto_key
+  - name: de_identification_template_crypto_key
     required: true
     type: string
-  - name: data_governance_wrapped_key
+  - name: de_identification_template_wrapped_key
     required: true
     type: string
-  - name: data_governance_template_id
+  - name: de_identification_template_template_id
     required: true
     type: string
   - name: template_description

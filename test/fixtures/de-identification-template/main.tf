@@ -40,8 +40,8 @@ resource "google_kms_secret_ciphertext" "wrapped_key" {
   plaintext  = base64encode(random_password.original_dlp_key.result)
 }
 
-module "data_governance" {
-  source = "../../..//modules/data_governance"
+module "de_identification_template" {
+  source = "../../..//modules/de_identification_template"
 
   project_id                = var.project_id
   terraform_service_account = var.terraform_service_account

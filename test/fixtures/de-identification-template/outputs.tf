@@ -19,32 +19,32 @@ output "project_id" {
   value       = var.project_id
 }
 
-output "data_governance_dlp_location" {
+output "de_identification_template_dlp_location" {
   description = "The location of the DLP resources."
-  value       = module.data_governance.dlp_location
+  value       = module.de_identification_template.dlp_location
 }
 
-output "data_governance_crypto_key" {
+output "de_identification_template_crypto_key" {
   description = "The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP."
-  value       = module.data_governance.crypto_key
+  value       = module.de_identification_template.crypto_key
 }
 
-output "data_governance_wrapped_key" {
+output "de_identification_template_wrapped_key" {
   description = "The base64 encoded data crypto key wrapped by KMS."
-  value       = module.data_governance.wrapped_key
+  value       = module.de_identification_template.wrapped_key
 }
 
-output "data_governance_template_id" {
+output "de_identification_template_template_id" {
   description = "The ID of the Cloud DLP de-identification template that is created."
-  value       = module.data_governance.template_id
+  value       = module.de_identification_template.template_id
 }
 
 output "template_display_name" {
   description = "Display name of the DLP de-identification template."
-  value       = module.data_governance.template_display_name
+  value       = module.de_identification_template.template_display_name
 }
 
 output "template_description" {
   description = "Description of the DLP de-identification template."
-  value       = module.data_governance.template_description
+  value       = module.de_identification_template.template_description
 }

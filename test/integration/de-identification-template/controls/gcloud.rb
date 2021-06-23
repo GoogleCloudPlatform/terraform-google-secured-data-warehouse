@@ -13,17 +13,17 @@
 # limitations under the License.
 
 project_id = attribute('project_id')
-data_governance_dlp_location = attribute('data_governance_dlp_location')
-data_governance_crypto_key = attribute('data_governance_crypto_key')
-data_governance_wrapped_key = attribute('data_governance_wrapped_key')
-data_governance_template_id = attribute('data_governance_template_id')
+de_identification_template_dlp_location = attribute('de_identification_template_dlp_location')
+de_identification_template_crypto_key = attribute('de_identification_template_crypto_key')
+de_identification_template_wrapped_key = attribute('de_identification_template_wrapped_key')
+de_identification_template_template_id = attribute('de_identification_template_template_id')
 template_display_name = attribute('template_display_name')
 template_description = attribute('template_description')
 
 control 'gcloud' do
   title 'Gcloud Resources'
 
-  describe command("curl -s -X GET -H \"Authorization: Bearer $(gcloud auth application-default print-access-token)\" https://dlp.googleapis.com/v2/projects/#{project_id}/locations/#{data_governance_dlp_location}/deidentifyTemplates/#{data_governance_template_id}") do
+  describe command("curl -s -X GET -H \"Authorization: Bearer $(gcloud auth application-default print-access-token)\" https://dlp.googleapis.com/v2/projects/#{project_id}/locations/#{de_identification_template_dlp_location}/deidentifyTemplates/#{de_identification_template_template_id}") do
     its(:exit_status) { should eq 0 }
     its(:stderr) { should eq '' }
 
@@ -35,13 +35,13 @@ control 'gcloud' do
       end
     end
 
-    describe "de-identification Template #{data_governance_template_id}" do
+    describe "de-identification Template #{de_identification_template_template_id}" do
 
       it 'should exist' do
         expect(data).to_not be_empty
       end
 
-      it { expect(data).to include('name' => "projects/#{project_id}/locations/#{data_governance_dlp_location}/deidentifyTemplates/#{data_governance_template_id}") }
+      it { expect(data).to include('name' => "projects/#{project_id}/locations/#{de_identification_template_dlp_location}/deidentifyTemplates/#{de_identification_template_template_id}") }
       it { expect(data).to include('displayName' => "#{template_display_name}") }
       it { expect(data).to include('description' => "#{template_description}") }
 
@@ -50,8 +50,8 @@ control 'gcloud' do
             "cryptoReplaceFfxFpeConfig" => including(
               "cryptoKey" => including(
                 "kmsWrapped" => including(
-                  "cryptoKeyName" => "#{data_governance_crypto_key}",
-                  "wrappedKey"=> "#{data_governance_wrapped_key}"
+                  "cryptoKeyName" => "#{de_identification_template_crypto_key}",
+                  "wrappedKey"=> "#{de_identification_template_wrapped_key}"
                 )
               )
             )

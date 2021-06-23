@@ -1,6 +1,6 @@
 # Simple Example
 
-This example illustrates how to use the `data_governance` submodule.
+This example illustrates how to use the `de_identification_template` submodule.
 
 **Note:** Contact your Security Team to obtain the `crypto_key` and `wrapped_key` pair.
 The `crypto_key` location must be the same location used for the `dlp_location`.

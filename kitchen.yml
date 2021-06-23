@@ -36,13 +36,13 @@ suites:
           backend: gcp
           controls:
             - gcp
-  - name: data-governance
+  - name: de-identification-template
     driver:
-      root_module_directory: test/fixtures/data-governance/
+      root_module_directory: test/fixtures/de-identification-template/
     verifier:
       color: false
       systems:
-        - name: data_governance gcloud
+        - name: de_identification_template gcloud
           backend: local
           controls:
             - gcloud

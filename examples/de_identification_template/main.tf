@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-module "data_governance_example" {
-  source = "../..//modules/data_governance"
+module "de_identification_template_example" {
+  source = "../..//modules/de_identification_template"
 
   project_id                = var.project_id
   terraform_service_account = var.terraform_service_account
