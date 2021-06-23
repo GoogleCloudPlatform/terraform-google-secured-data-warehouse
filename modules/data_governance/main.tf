@@ -42,36 +42,19 @@ resource "random_id" "random_template_id_suffix" {
   }
 }
 
-data "google_project" "dlp_project" {
-  project_id = var.project_id
-}
+resource "google_project_service_identity" "dlp_sa" {
+  provider = google-beta
 
-// https://cloud.google.com/dlp/docs/iam-permissions#service_account
-resource "null_resource" "initialize_dlp_service_account" {
-  provisioner "local-exec" {
-    command = <<EOF
-    curl -s --request POST \
-    "https://dlp.googleapis.com/v2/projects/${var.project_id}/locations/${var.dlp_location}/content:inspect" \
-    --header "X-Goog-User-Project: ${var.project_id}" \
-    --header "Authorization: Bearer $(gcloud auth print-access-token --impersonate-service-account=${var.terraform_service_account})" \
-    --header 'Accept: application/json' \
-    --header 'Content-Type: application/json' \
-    --data '{"item":{"value":"google@google.com"}}' \
-    --compressed
-EOF
-
-  }
+  project = var.project_id
+  service = "dlp.googleapis.com"
 }
 
 resource "google_kms_crypto_key_iam_binding" "dlp_encrypters_decrypters" {
-  for_each      = local.kms_roles
+  for_each = local.kms_roles
+
   role          = each.key
   crypto_key_id = var.crypto_key
-  members       = ["serviceAccount:service-${data.google_project.dlp_project.number}@dlp-api.iam.gserviceaccount.com"]
-
-  depends_on = [
-    null_resource.initialize_dlp_service_account
-  ]
+  members       = ["serviceAccount:${google_project_service_identity.dlp_sa.email}"]
 }
 
 
