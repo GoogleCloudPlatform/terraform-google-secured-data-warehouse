@@ -27,11 +27,11 @@ control 'gcp' do
     it { should exist }
   end
 
-  describe google_dataset_id(project: project_id, name: dataset_id) do
+  describe google_bigquery_dataset(project: project_id, name: dataset_id) do
     it { should exist }
   end
 
-  describe google_taxonomy_name(project: project_id, name: taxonomy_name) do
-    it { should exist }
-  end
+  #describe google_taxonomy_name(project: project_id, name: taxonomy_name) do
+  ##  it { should exist }
+  #end
 end
