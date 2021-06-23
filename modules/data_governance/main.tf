@@ -53,7 +53,7 @@ resource "null_resource" "initialize_dlp_service_account" {
     curl -s --request POST \
     "https://dlp.googleapis.com/v2/projects/${var.project_id}/locations/${var.dlp_location}/content:inspect" \
     --header "X-Goog-User-Project: ${var.project_id}" \
-    --header "Authorization: Bearer $(gcloud auth print-access-token)" \
+    --header "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
     --header 'Accept: application/json' \
     --header 'Content-Type: application/json' \
     --data '{"item":{"value":"google@google.com"}}' \
