@@ -35,7 +35,8 @@ locals {
     "roles/iam.serviceAccountDeleter",
     "roles/iam.serviceAccountTokenCreator",
     "roles/iam.serviceAccountUser",
-    "roles/browser"
+    "roles/browser",
+    "roles/cloudkms.admin"
   ]
 }
 
