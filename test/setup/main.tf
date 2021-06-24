@@ -34,6 +34,7 @@ module "project" {
     "bigquery.googleapis.com",
     "accesscontextmanager.googleapis.com",
     "cloudbilling.googleapis.com",
-    "cloudkms.googleapis.com"
+    "cloudkms.googleapis.com",
+    "dataflow.googleapis.com"
   ]
 }
