@@ -36,7 +36,8 @@ locals {
     "roles/iam.serviceAccountTokenCreator",
     "roles/iam.serviceAccountUser",
     "roles/browser",
-    "roles/cloudkms.admin"
+    "roles/cloudkms.admin",
+    "roles/dataflow.developer"
   ]
 }
 
