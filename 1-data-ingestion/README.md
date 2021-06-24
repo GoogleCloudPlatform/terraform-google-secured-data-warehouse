@@ -188,11 +188,14 @@ If your user does not have the necessary roles to run the commands above you can
 | bucket\_lifecycle\_rules | List of lifecycle rules to configure. Format is the same as described in provider documentation https://www.terraform.io/docs/providers/google/r/storage_bucket.html#lifecycle_rule except condition.matches\_storage\_class should be a comma delimited string. | <pre>set(object({<br>    action    = map(string)<br>    condition = map(string)<br>  }))</pre> | <pre>[<br>  {<br>    "action": {<br>      "type": "Delete"<br>    },<br>    "condition": {<br>      "age": 30,<br>      "with_state": "ANY"<br>    }<br>  }<br>]</pre> | no |
 | bucket\_location | Bucket location. | `string` | `"US"` | no |
 | bucket\_name | The main part of the name of the bucket to be created. | `string` | n/a | yes |
+| create\_key\_ring | Boolean for determining whether to create key ring with keys(true or false) | `bool` | `true` | no |
 | dataset\_default\_table\_expiration\_ms | TTL of tables using the dataset in MS. The default value is almost 12 months. | `number` | `31536000000` | no |
 | dataset\_description | Dataset description. | `string` | `"Ingest dataset"` | no |
 | dataset\_id | Unique ID for the dataset being provisioned. | `string` | n/a | yes |
 | dataset\_location | The regional location for the dataset only US and EU are allowed in module | `string` | `"US"` | no |
 | dataset\_name | Friendly name for the dataset being provisioned. | `string` | `"Ingest dataset"` | no |
+| key\_ring | The GCP KMS key ring to be created | `string` | n/a | yes |
+| kms\_key\_name | The GCP KMS key to be created going under the key ring | `string` | n/a | yes |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | perimeter\_additional\_members | The list additional members to be added on perimeter access. Prefix of group: user: or serviceAccount: is required. | `list(string)` | `[]` | no |
 | project\_id | The ID of the project in which the service account will be created. | `string` | n/a | yes |
@@ -200,6 +203,7 @@ If your user does not have the necessary roles to run the commands above you can
 | subnet\_ip | The CDIR IP range of the subnetwork. | `string` | n/a | yes |
 | terraform\_service\_account | Service account email of the account to impersonate to run Terraform. | `string` | n/a | yes |
 | vpc\_name | the name of the network. | `string` | n/a | yes |
+| wrapped\_key | Wrapped key from KMS leave blank if create\_key\_ring=true | `string` | `""` | no |
 
 ## Outputs
 
