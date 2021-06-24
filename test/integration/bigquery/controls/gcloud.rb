@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+project_id                      = attribute('project_id')
 high_policy_taxonomy_id         = attribute('high_policy_taxonomy_id')
 medium_policy_taxonomy_id       = attribute('medium_policy_taxonomy_id')
 taxonomy_name                   = attribute('taxonomy_name')
@@ -69,7 +70,7 @@ control 'gcloud' do
     end
   end
 
-  describe command("gcloud data-catalog taxonomies list --location='us-east1' --format=json") do
+  describe command("gcloud data-catalog taxonomies list --location='us-east1' --project=#{project_id} --format=json") do
     its(:exit_status) { should eq 0 }
   end
 end
