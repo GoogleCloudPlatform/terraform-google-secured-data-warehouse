@@ -2,10 +2,10 @@
 
 This module creates:
 
-- A Taxonomy and 2 policy tags splitting in 2 layers: confidential and private mode
-- A BigQuery dataset
-- A BigQuery table where policy tags will be applied
-- Two service accounts binded to policy tags
+- A taxonomy and two policy tags that are split into two layers: confidential and private.
+- A BigQuery dataset.
+- A BigQuery table where policy tags will be applied.
+- Two service accounts binded to policy tags.
 
 ## Usage
 
@@ -49,25 +49,26 @@ Functional examples are included in the [examples](./examples/bigquery) director
 | location | Location for storing your BigQuery data when you create a dataset. |
 | medium\_policy\_name | Content for Name policy tag. |
 | medium\_policy\_taxonomy\_id | Content for Policy Tag ID in medium policy. |
+| member\_policy\_name\_private | SA member for Person Name policy tag. |
+| member\_policy\_ssn\_confidential | SA member for Social Security Number policy tag. |
 | taxonomy\_name | The taxonomy display name. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 ## Requirements
 
-These sections describe requirements for using this module.
+These sections describe the requirements for using this module.
 
 ### Software
 
-The following dependencies must be available:
+Install the following dependencies:
 
 - [Terraform][terraform] v0.13
 - [Terraform Provider for GCP][terraform-provider-gcp] plugin v3.63
 
 ### Service Account
 
-A service account with the following roles must be used to provision
-the resources of this module:
+Create a service account with the following roles to provision the resources for this module:
 
 - BigQuery Data Owner: `roles/bigquery.dataOwner`,
 - Data Catalog Viewer: `roles/datacatalog.viewer`,
@@ -76,17 +77,13 @@ the resources of this module:
 
 ### APIs
 
-A project with the following APIs enabled must be used to host the
-resources of this module:
+Create a project with the following APIs enabled to host the resources for this module:
 
 - BigQuery API: `bigquery.googleapis.com`,
 - Cloud Resource Manager API: `cloudresourcemanager.googleapis.com`,
 - Identity and Access Management: `iam.googleapis.com`
 
-The [Project Factory module](https://github.com/terraform-google-modules/terraform-google-project-factory) can be used to
-provision a project with the necessary APIs enabled. The
-[IAM module](https://github.com/terraform-google-modules/terraform-google-iam) may be used in combination to provision a
-service account with the necessary roles applied.
+You can use the [Project Factory module](https://github.com/terraform-google-modules/terraform-google-project-factory) to provision a project with the necessary APIs enabled. To provision the service account, you can use the[IAM module](https://github.com/terraform-google-modules/terraform-google-iam) in combination with the Project Factory module.
 
 ### Note:
 

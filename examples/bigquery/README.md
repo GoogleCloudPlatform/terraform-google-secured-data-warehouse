@@ -24,16 +24,20 @@ This example illustrates how to use the `bigquery secured-data-warehouse` submod
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 ## Setup
-Update the contents of `terraform.tfvars` to match your test environment.
+Create the `terraform.tfvars` file and add the values from your test environment.
 
 ## Run example
-1. Create file `terraform.tfvars` and add the values from your environment.
-1. `terraform init`
-1. `terraform plan`
-1. `terraform apply`
-1. Run the following command to populate your dataset with sample data:
+1. Run `terraform init`.
+1. Run `terraform plan`.
+1. Run `terraform apply`.
+1. Populate your dataset with sample data:
    ```
    export DATASET_ID=<your-dataset-id>
    bq load $DATASET_ID.sample_data \
    sample_data.txt name:string,gender:string,social_security_number:integer
    ```
+**Note:**
+You can use the command below to list your dataset_id.
+```
+bq ls --project_id <my-project-id>
+```
