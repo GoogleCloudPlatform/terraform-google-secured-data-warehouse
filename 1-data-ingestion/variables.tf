@@ -112,3 +112,25 @@ variable "dataset_default_table_expiration_ms" {
   type        = number
   default     = 31536000000
 }
+
+variable "key_ring" {
+  type        = string
+  description = "The GCP KMS key ring to be created"
+}
+
+variable "kms_key_name" {
+  type        = string
+  description = "The GCP KMS key to be created going under the key ring"
+}
+
+variable "wrapped_key" {
+  type        = string
+  description = "Wrapped key from KMS leave blank if create_key_ring=true"
+  default     = ""
+}
+
+variable "create_key_ring" {
+  type        = bool
+  description = "Boolean for determining whether to create key ring with keys(true or false)"
+  default     = true
+}
