@@ -37,7 +37,8 @@ locals {
     "roles/iam.serviceAccountUser",
     "roles/browser",
     "roles/cloudkms.admin",
-    "roles/dataflow.developer"
+    "roles/dataflow.developer",
+    "roles/dlp.deidentifyTemplatesEditor"
   ]
 }
 
