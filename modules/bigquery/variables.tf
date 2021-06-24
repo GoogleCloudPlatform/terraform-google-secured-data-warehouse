@@ -28,7 +28,7 @@ variable "names" {
 
 variable "project_roles" {
   type        = list(string)
-  description = "Common roles to apply to all service accounts, project=>role as elements."
+  description = "Common roles to apply to all service accounts in the project."
   default     = []
 }
 
