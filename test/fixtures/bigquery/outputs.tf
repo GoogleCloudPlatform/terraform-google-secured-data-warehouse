@@ -38,6 +38,16 @@ output "high_policy_taxonomy_id" {
   value       = module.bigquery.high_policy_taxonomy_id
 }
 
+output "member_policy_ssn_confidential" {
+  description = "SA member for Social Security Number policy tag."
+  value       = module.bigquery.member_policy_ssn_confidential
+}
+
+output "member_policy_name_private" {
+  description = "SA member for Person Name policy tag."
+  value       = module.bigquery.member_policy_name_private
+}
+
 output "dataset_id" {
   description = "The dataset ID to deploy to datawarehouse."
   value       = module.bigquery.dataset_id

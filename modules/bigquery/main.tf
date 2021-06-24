@@ -81,12 +81,6 @@ module "secure_bigquery" {
   dataset_labels = {
     env = "dtwh_bq_dataset"
   }
-
-  depends_on = [
-    google_data_catalog_policy_tag.name_child_policy_tag,
-    google_data_catalog_policy_tag.ssn_child_policy_tag,
-  ]
-
 }
 
 resource "google_data_catalog_taxonomy" "secure_taxonomy" {
@@ -100,7 +94,6 @@ resource "google_data_catalog_taxonomy" "secure_taxonomy" {
   depends_on = [
     module.service_accounts,
   ]
-
 }
 
 resource "google_data_catalog_policy_tag" "medium_policy_tag" {

@@ -41,7 +41,17 @@ output "high_policy_ssn" {
 
 output "high_policy_taxonomy_id" {
   description = "Content for Policy Tag ID in high policy."
-  value       = google_data_catalog_policy_tag.name_child_policy_tag.id
+  value       = google_data_catalog_policy_tag.ssn_child_policy_tag.id
+}
+
+output "member_policy_ssn_confidential" {
+  description = "SA member for Social Security Number policy tag."
+  value       = google_data_catalog_policy_tag_iam_member.confidential_sa_ssn.member
+}
+
+output "member_policy_name_private" {
+  description = "SA member for Person Name policy tag."
+  value       = google_data_catalog_policy_tag_iam_member.private_sa_name.member
 }
 
 output "location" {
