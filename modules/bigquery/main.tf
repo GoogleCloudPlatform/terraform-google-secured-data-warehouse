@@ -72,13 +72,13 @@ module "secure_bigquery" {
       expiration_time    = null,
       clustering         = ["social_security_number"]
       labels = {
-        env = "dtwh_bq_dataset"
+        env = var.label_dataset
       },
     }
   ]
 
   dataset_labels = {
-    env = "dtwh_bq_dataset"
+    env = var.label_dataset
   }
 }
 

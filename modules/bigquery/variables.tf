@@ -26,6 +26,11 @@ variable "delete_contents_on_destroy" {
   default     = null
 }
 
+variable "label_dataset" {
+  type        = string
+  description = "Label used in dataset."
+}
+
 variable "names" {
   type        = list(string)
   description = "Names of the service accounts to create."
