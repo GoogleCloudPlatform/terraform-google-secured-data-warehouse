@@ -25,6 +25,6 @@ module "data_ingestion" {
   terraform_service_account        = var.terraform_service_account
   vpc_name                         = var.vpc_name
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  perimeter_additional_members     = ["user:amandak@clsecteam.com", "user:dandrade@clsecteam.com", "user:dandrade@ciandt.com"]
+  perimeter_additional_members     = var.perimeter_additional_members
   subnet_ip                        = var.subnet_ip
 }
