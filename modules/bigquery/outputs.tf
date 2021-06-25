@@ -20,7 +20,7 @@ output "emails_list" {
 }
 
 output "emails" {
-  description = "The service account emails."
+  description = "The list of service account emails."
   value       = module.service_accounts.emails
 }
 
