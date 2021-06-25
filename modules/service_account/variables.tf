@@ -15,7 +15,7 @@
  */
 
 variable "org_id" {
-  description = "GCP Organization ID."
+  description = "The GCP Organization ID."
   type        = string
   default     = ""
 }
