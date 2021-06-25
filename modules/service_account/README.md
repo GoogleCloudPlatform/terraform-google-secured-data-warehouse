@@ -1,4 +1,5 @@
 # Service account module
+This module creates the service account requried for data ingestion.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
