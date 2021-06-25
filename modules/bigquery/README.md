@@ -82,6 +82,7 @@ Create a project with the following APIs enabled to host the resources for this 
 - BigQuery API: `bigquery.googleapis.com`,
 - Cloud Resource Manager API: `cloudresourcemanager.googleapis.com`,
 - Identity and Access Management: `iam.googleapis.com`
+- Cloud Data Catalog API: `datacatalog.googleapis.com`
 
 You can use the [Project Factory module](https://github.com/terraform-google-modules/terraform-google-project-factory) to provision a project with the necessary APIs enabled. To provision the service account, you can use the[IAM module](https://github.com/terraform-google-modules/terraform-google-iam) in combination with the Project Factory module.
 

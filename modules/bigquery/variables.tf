@@ -14,27 +14,16 @@
  * limitations under the License.
  */
 
-variable "enable" {
-  description = "Actually enable the APIs listed."
-  type        = bool
-  default     = false
-}
-
 variable "delete_contents_on_destroy" {
   description = "(Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present."
   type        = bool
   default     = null
 }
 
-variable "label_dataset" {
-  type        = string
-  description = "Label used in dataset."
-}
-
-variable "names" {
-  type        = list(string)
-  description = "Names of the service accounts to create."
-  default     = []
+variable "dataset_labels" {
+  description = "Key value pairs in a map for dataset labels."
+  type        = map(string)
+  default     = {}
 }
 
 variable "project_roles" {
@@ -56,12 +45,6 @@ variable "dataset_id" {
 variable "table_id" {
   description = "The table ID to deploy to datawarehouse."
   type        = string
-}
-
-variable "parent_folder" {
-  description = "Optional - for an organization with existing projects or for development/validation. It will place all the example foundation resources under the provided folder instead of the root organization. The value is the numeric folder ID. The folder must already exist."
-  type        = string
-  default     = ""
 }
 
 variable "location" {

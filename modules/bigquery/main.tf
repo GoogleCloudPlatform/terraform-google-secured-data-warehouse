@@ -14,20 +14,6 @@
  * limitations under the License.
  */
 
-module "project-services" {
-  enable_apis                 = var.enable
-  source                      = "terraform-google-modules/project-factory/google//modules/project_services"
-  project_id                  = var.project_id
-  disable_services_on_destroy = true
-
-  activate_apis = [
-    "bigquery.googleapis.com",
-    "cloudresourcemanager.googleapis.com",
-    "iam.googleapis.com",
-    "datacatalog.googleapis.com",
-  ]
-}
-
 module "service_accounts" {
   source       = "terraform-google-modules/service-accounts/google"
   version      = ">=4.0.0"
@@ -39,13 +25,6 @@ module "service_accounts" {
   project_roles = [
     "${var.project_id}=>roles/bigquery.dataViewer",
     "${var.project_id}=>roles/datacatalog.viewer",
-    "${var.project_id}=>roles/bigquery.dataOwner",
-    "${var.project_id}=>roles/resourcemanager.projectIamAdmin",
-    "${var.project_id}=>roles/iam.serviceAccountCreator",
-  ]
-
-  depends_on = [
-    module.project-services,
   ]
 }
 
@@ -70,17 +49,14 @@ module "secure_bigquery" {
       time_partitioning  = null,
       range_partitioning = null,
       expiration_time    = null,
-      clustering         = ["social_security_number"]
-      labels = {
-        env = var.label_dataset
-      },
+      clustering         = null,
+      labels             = null,
     }
   ]
 
-  dataset_labels = {
-    env = var.label_dataset
-  }
+  dataset_labels = var.dataset_labels
 }
+
 
 resource "google_data_catalog_taxonomy" "secure_taxonomy" {
   provider               = google-beta
