@@ -27,6 +27,4 @@ module "data_ingestion" {
   access_context_manager_policy_id = var.access_context_manager_policy_id
   perimeter_additional_members     = var.perimeter_additional_members
   subnet_ip                        = var.subnet_ip
-  key_ring                         = "kms_key_ring_test"
-  kms_key_name                     = "kms_key_name_test"
 }

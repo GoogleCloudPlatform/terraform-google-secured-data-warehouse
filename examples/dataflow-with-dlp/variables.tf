@@ -14,15 +14,39 @@
  * limitations under the License.
  */
 
-variable "org_id" {
-  description = "GCP Organization ID."
-  type        = string
-}
-
 variable "region" {
   type        = string
   description = "The region in which the subnetwork will be created."
   default     = "us-central1"
+}
+
+variable "zone" {
+  type        = string
+  description = "The zone in which the created job should run."
+  default     = "us-central1-a"
+}
+
+variable "dataflow_service_account" {
+  type        = string
+  description = "The Service Account email that will be used to identify the VMs in which the jobs are running"
+}
+
+variable "subnetwork_self_link" {
+  type        = string
+  description = "The subnetwork self link to which VMs will be assigned."
+  default     = ""
+}
+
+variable "network_self_link" {
+  type        = string
+  description = "The network self link to which VMs will be assigned."
+  default     = "default"
+}
+
+variable "ip_configuration" {
+  type        = string
+  description = "The configuration for VM IPs. Options are 'WORKER_IP_PUBLIC' or 'WORKER_IP_PRIVATE'."
+  default     = null
 }
 
 variable "terraform_service_account" {
@@ -35,27 +59,6 @@ variable "project_id" {
   type        = string
 }
 
-variable "vpc_name" {
-  type        = string
-  description = "the name of the network."
-}
-
-variable "subnet_ip" {
-  type        = string
-  description = "The CDIR IP range of the subnetwork."
-}
-
-variable "access_context_manager_policy_id" {
-  type        = number
-  description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
-}
-
-variable "perimeter_additional_members" {
-  description = "The list additional members to be added on perimeter access. Prefix of group: user: or serviceAccount: is required."
-  type        = list(string)
-  default     = []
-}
-
 variable "bucket_name" {
   description = "The main part of the name of the bucket to be created."
   type        = string
@@ -65,6 +68,12 @@ variable "bucket_location" {
   description = "Bucket location."
   type        = string
   default     = "US"
+}
+
+variable "bucket_force_destroy" {
+  type        = bool
+  description = "When deleting a bucket, this boolean option will delete all contained objects. If you try to delete a bucket that contains objects, Terraform will fail that run."
+  default     = false
 }
 
 variable "bucket_lifecycle_rules" {
@@ -89,26 +98,24 @@ variable "dataset_id" {
   type        = string
 }
 
-variable "dataset_name" {
-  description = "Friendly name for the dataset being provisioned."
+variable "key_ring" {
   type        = string
-  default     = "Ingest dataset"
+  description = "The GCP KMS key ring to be created"
 }
 
-variable "dataset_description" {
-  description = "Dataset description."
+variable "kms_key_name" {
   type        = string
-  default     = "Ingest dataset"
+  description = "The GCP KMS key to be created going under the key ring"
 }
 
-variable "dataset_location" {
-  description = "The regional location for the dataset only US and EU are allowed in module"
+variable "wrapped_key" {
   type        = string
-  default     = "US"
+  description = "Wrapped key from KMS leave blank if create_key_ring=true"
+  default     = ""
 }
 
-variable "dataset_default_table_expiration_ms" {
-  description = "TTL of tables using the dataset in MS. The default value is almost 12 months."
-  type        = number
-  default     = 31536000000
+variable "create_key_ring" {
+  type        = bool
+  description = "Boolean for determining whether to create key ring with keys(true or false)"
+  default     = true
 }

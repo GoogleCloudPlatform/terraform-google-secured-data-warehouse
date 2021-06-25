@@ -1,0 +1,37 @@
+/**
+ * Copyright 2021 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+data "google_service_account" "dataflow_service_account" {
+  account_id = "sa-dataflow"
+  project    = var.project_id
+}
+
+module "dataflow-with-dlp" {
+  source                    = "../../../examples/dataflow-with-dlp"
+  dataset_id                = "dts_test_int"
+  project_id                = var.project_id
+  bucket_name               = "tmp-dataflow"
+  region                    = "us-central1"
+  zone                      = "us-central1-a"
+  key_ring                  = "kms_key_ring_test1"
+  kms_key_name              = "kms_key_name_test1"
+  bucket_force_destroy      = true
+  bucket_location           = var.bucket_location
+  terraform_service_account = var.terraform_service_account
+  dataflow_service_account  = data.google_service_account.dataflow_service_account.email
+  network_self_link         = var.network_self_link
+  subnetwork_self_link      = var.subnetwork_self_link
+}

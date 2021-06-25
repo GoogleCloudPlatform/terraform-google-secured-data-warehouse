@@ -60,5 +60,8 @@ override.tf.json
 credentials.json
 **/.credentials/
 
+**/original_key.txt
+**/wrapped_key.txt
+
 # File to populate env vars used by Docker test runs
 .envrc

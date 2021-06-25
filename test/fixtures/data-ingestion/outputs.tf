@@ -65,6 +65,11 @@ output "data_ingest_bigquery_dataset" {
   value       = module.data_ingestion.data_ingest_bigquery_dataset
 }
 
+output "data_ingest_bigquery_dataset_id" {
+  description = "The bigquery dataset_id created for data ingest pipeline."
+  value       = module.bigquery_dataset.bigquery_dataset.dataset_id
+}
+
 output "network_name" {
   value       = module.data_ingestion.network_name
   description = "The name of the VPC being created"
@@ -85,9 +90,9 @@ output "subnets_ips" {
   description = "The IPs and CIDRs of the subnets being created"
 }
 
-output "subnets_self_links" {
-  value       = module.data_ingestion.subnets_self_links
-  description = "The self-links of subnets being created"
+output "subnetwork_self_link" {
+  value       = module.data_ingestion.subnets_self_links[0]
+  description = "The self-link of subnet being created"
 }
 
 output "subnets_regions" {
