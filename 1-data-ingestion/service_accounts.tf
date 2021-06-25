@@ -28,7 +28,9 @@ module "dataflow_controller_service_account" {
     "roles/bigquery.jobUser",
     "roles/dlp.reader",
     "roles/storage.objectViewer",
-    "roles/dataflow.serviceAgent"
+    "roles/dataflow.serviceAgent",
+    "roles/dataflow.worker",
+    "roles/compute.viewer"
   ]
 
 }

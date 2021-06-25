@@ -17,7 +17,7 @@
 variable "ip_configuration" {
   type        = string
   description = "The configuration for VM IPs. Options are 'WORKER_IP_PUBLIC' or 'WORKER_IP_PRIVATE'."
-  default     = null
+  default     = "WORKER_IP_PRIVATE"
 }
 
 variable "terraform_service_account" {
