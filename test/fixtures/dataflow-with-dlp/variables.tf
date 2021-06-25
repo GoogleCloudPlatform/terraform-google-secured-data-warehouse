@@ -14,18 +14,6 @@
  * limitations under the License.
  */
 
-variable "subnetwork_self_link" {
-  type        = string
-  description = "The subnetwork self link to which VMs will be assigned."
-  default     = ""
-}
-
-variable "network_self_link" {
-  type        = string
-  description = "The network self link to which VMs will be assigned."
-  default     = "default"
-}
-
 variable "ip_configuration" {
   type        = string
   description = "The configuration for VM IPs. Options are 'WORKER_IP_PUBLIC' or 'WORKER_IP_PRIVATE'."

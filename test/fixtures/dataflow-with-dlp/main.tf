@@ -19,6 +19,11 @@ data "google_service_account" "dataflow_service_account" {
   project    = var.project_id
 }
 
+data "google_compute_network" "vpc_network" {
+  name    = "vpc-tst-network"
+  project = var.project_id
+}
+
 module "dataflow-with-dlp" {
   source                    = "../../../examples/dataflow-with-dlp"
   dataset_id                = "dts_test_int"
@@ -32,6 +37,6 @@ module "dataflow-with-dlp" {
   bucket_location           = var.bucket_location
   terraform_service_account = var.terraform_service_account
   dataflow_service_account  = data.google_service_account.dataflow_service_account.email
-  network_self_link         = var.network_self_link
-  subnetwork_self_link      = var.subnetwork_self_link
+  network_self_link         = data.google_compute_network.vpc_network.id
+  # subnetwork_self_link      = data.google_compute_network.vpc_network.subnetworks_self_links[0]
 }

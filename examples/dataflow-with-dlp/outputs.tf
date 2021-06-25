@@ -34,6 +34,11 @@ output "df_job_name" {
   value       = module.dataflow-job.name
 }
 
+output "controller_service_account" {
+  description = "The Service Account email that will be used to identify the VMs in which the jobs are running"
+  value       = var.dataflow_service_account
+}
+
 output "bucket_name" {
   description = "The name of the bucket"
   value       = module.dataflow-bucket.name

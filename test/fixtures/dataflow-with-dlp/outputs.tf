@@ -35,6 +35,11 @@ output "df_job_name" {
   value       = module.dataflow-with-dlp.df_job_name
 }
 
+output "df_job_network" {
+  description = "The name of the network used for create Dataflow job"
+  value       = data.google_compute_network.vpc_network.id
+}
+
 output "bucket_name" {
   description = "The name of the bucket"
   value       = module.dataflow-with-dlp.bucket_name

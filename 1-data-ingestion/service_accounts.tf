@@ -26,7 +26,6 @@ module "dataflow_controller_service_account" {
   project_roles = [
     "roles/pubsub.subscriber",
     "roles/bigquery.jobUser",
-    "roles/bigquery.jobUser",
     "roles/dlp.reader",
     "roles/storage.objectViewer",
     "roles/dataflow.serviceAgent"
