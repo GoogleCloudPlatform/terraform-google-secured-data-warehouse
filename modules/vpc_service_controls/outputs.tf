@@ -17,22 +17,22 @@
 
 output "network_name" {
   value       = module.network.network_name
-  description = "The name of the VPC being created"
+  description = "The name of the VPC being created."
 }
 
 output "project_number" {
   value       = data.google_project.target_project.number
-  description = "Project number included on perimeter"
+  description = "the project number that is included on the perimeter."
 }
 
 output "network_self_link" {
   value       = module.network.network_self_link
-  description = "The URI of the VPC being created"
+  description = "The URI of the VPC being created."
 }
 
 output "subnets_names" {
   value       = module.network.subnets_names
-  description = "The names of the subnets being created"
+  description = "The names of the subnets being created."
 }
 
 output "subnets_ips" {
