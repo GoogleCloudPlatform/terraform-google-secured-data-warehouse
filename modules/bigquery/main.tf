@@ -37,7 +37,6 @@ module "service_accounts" {
   description  = "Service accounts for Secure BigQuery"
 
   project_roles = [
-    "${var.project_id}=>roles/viewer",
     "${var.project_id}=>roles/bigquery.dataViewer",
     "${var.project_id}=>roles/datacatalog.viewer",
     "${var.project_id}=>roles/bigquery.dataOwner",
