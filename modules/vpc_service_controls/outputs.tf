@@ -22,7 +22,7 @@ output "network_name" {
 
 output "project_number" {
   value       = data.google_project.target_project.number
-  description = "the project number that is included on the perimeter."
+  description = "The project number that is included on the perimeter."
 }
 
 output "network_self_link" {
@@ -37,25 +37,25 @@ output "subnets_names" {
 
 output "subnets_ips" {
   value       = module.network.subnets_ips
-  description = "The IPs and CIDRs of the subnets being created"
+  description = "The IPs and CIDRs of the subnets being created."
 }
 
 output "subnets_self_links" {
   value       = module.network.subnets_self_links
-  description = "The self-links of subnets being created"
+  description = "The self-links of subnets being created."
 }
 
 output "subnets_regions" {
   value       = module.network.subnets_regions
-  description = "The region where the subnets will be created"
+  description = "The region where the subnets will be created."
 }
 
 output "access_level_name" {
   value       = module.access_level_policy.name
-  description = "Access context manager access level name"
+  description = "The access level name for the Access Context Manager."
 }
 
 output "service_perimeter_name" {
   value       = local.regular_service_perimeter_name
-  description = "Access context manager service perimeter name"
+  description = "The service perimeter name for the Access Context Manager."
 }
