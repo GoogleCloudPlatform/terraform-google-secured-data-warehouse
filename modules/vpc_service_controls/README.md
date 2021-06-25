@@ -1,4 +1,5 @@
 # VPC Service Controls
+This module creates service perimeters using [VPC Service Controls](https://cloud.google.com/vpc-service-controls/docs/overview). The Secured Data Warehouse blueprint uses these perimeters to protect the project resources and the data that you store in BigQuery.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
