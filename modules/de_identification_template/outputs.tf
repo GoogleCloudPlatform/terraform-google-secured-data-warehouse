@@ -15,12 +15,12 @@
  */
 
 output "template_display_name" {
-  description = "Display name of the DLP de-identification template."
+  description = "The display name of the DLP de-identification template."
   value       = var.template_display_name
 }
 
 output "template_description" {
-  description = "Description of the DLP de-identification template."
+  description = "The description of the DLP de-identification template."
   value       = var.template_description
 }
 
