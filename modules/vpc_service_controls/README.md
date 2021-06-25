@@ -1,4 +1,4 @@
-# Service account module
+# VPC Service Controls
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
