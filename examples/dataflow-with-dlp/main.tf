@@ -116,6 +116,11 @@ module "dataflow-job" {
     dlpProjectId           = var.project_id
     deidentifyTemplateName = "projects/${var.project_id}/deidentifyTemplates/15"
   }
+
+  depends_on = [
+    google_compute_firewall.allow_egress_dataflow_workers,
+    google_compute_firewall.allow_ingress_dataflow_workers
+  ]
 }
 
 resource "null_resource" "destroy_deidentify_template" {
