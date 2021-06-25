@@ -34,8 +34,8 @@ module "secured_data_warehouse" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| bucket\_name | The name of the bucket to create | `any` | n/a | yes |
-| project\_id | The project ID to deploy to | `any` | n/a | yes |
+| bucket\_name | The name of the bucket to create. | `any` | n/a | yes |
+| project\_id | The project ID to deploy to. | `any` | n/a | yes |
 
 ## Outputs
 
