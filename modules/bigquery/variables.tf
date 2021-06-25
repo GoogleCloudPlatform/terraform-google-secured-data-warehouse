@@ -20,6 +20,12 @@ variable "enable" {
   default     = false
 }
 
+variable "delete_contents_on_destroy" {
+  description = "(Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present."
+  type        = bool
+  default     = null
+}
+
 variable "names" {
   type        = list(string)
   description = "Names of the service accounts to create."
@@ -56,5 +62,4 @@ variable "parent_folder" {
 variable "location" {
   description = "Default region to create resources where applicable."
   type        = string
-  default     = ""
 }

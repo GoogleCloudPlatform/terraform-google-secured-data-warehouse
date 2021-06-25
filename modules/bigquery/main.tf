@@ -58,7 +58,7 @@ module "secure_bigquery" {
   description                 = "Dataset for Secure BigQuery"
   project_id                  = var.project_id
   location                    = var.location
-  default_table_expiration_ms = 3600000
+  delete_contents_on_destroy  = var.delete_contents_on_destroy
 
   tables = [
     {
