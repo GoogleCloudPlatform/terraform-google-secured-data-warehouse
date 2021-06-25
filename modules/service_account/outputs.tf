@@ -15,6 +15,6 @@
  */
 
 output "email" {
-  description = "The service account email."
+  description = "The service account email address."
   value       = google_service_account.service_account.email
 }
