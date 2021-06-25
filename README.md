@@ -51,7 +51,7 @@ These sections describe requirements for using this module.
 
 ### Software
 
-The following dependencies must be available:
+Install the following dependencies:
 
 - [Terraform][terraform] v0.13
 - [Terraform Provider for GCP][terraform-provider-gcp] plugin v3.67.0

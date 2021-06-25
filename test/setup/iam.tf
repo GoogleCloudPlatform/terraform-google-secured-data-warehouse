@@ -36,7 +36,13 @@ locals {
     "roles/iam.serviceAccountDeleter",
     "roles/iam.serviceAccountTokenCreator",
     "roles/iam.serviceAccountUser",
-    "roles/browser"
+    "roles/browser",
+    "roles/cloudkms.admin",
+    "roles/dlp.deidentifyTemplatesEditor",
+    "roles/dlp.inspectTemplatesEditor",
+    "roles/dlp.user",
+    "roles/secretmanager.admin",
+    "roles/cloudkms.cryptoKeyEncrypter"
   ]
 }
 
