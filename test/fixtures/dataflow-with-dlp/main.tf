@@ -15,7 +15,7 @@
  */
 
 data "google_service_account" "dataflow_service_account" {
-  account_id = "sa-dataflow"
+  account_id = "sa-dataflow-controller"
   project    = var.project_id
 }
 
@@ -31,12 +31,12 @@ module "dataflow-with-dlp" {
   bucket_name               = "tmp-dataflow"
   region                    = "us-central1"
   zone                      = "us-central1-a"
-  key_ring                  = "kms_key_ring_test1"
-  kms_key_name              = "kms_key_name_test1"
+  key_ring                  = "kms_key_ring_test2"
+  kms_key_name              = "kms_key_name_test2"
   bucket_force_destroy      = true
   bucket_location           = var.bucket_location
   terraform_service_account = var.terraform_service_account
   dataflow_service_account  = data.google_service_account.dataflow_service_account.email
   network_self_link         = data.google_compute_network.vpc_network.id
-  # subnetwork_self_link      = data.google_compute_network.vpc_network.subnetworks_self_links[0]
+  subnetwork_self_link      = data.google_compute_network.vpc_network.subnetworks_self_links[0]
 }

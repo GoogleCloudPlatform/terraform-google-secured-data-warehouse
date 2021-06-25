@@ -35,9 +35,19 @@ output "df_job_name" {
   value       = module.dataflow-with-dlp.df_job_name
 }
 
+output "df_job_controller_service_account" {
+  description = "The email of the service account used for create Dataflow job"
+  value       = data.google_service_account.dataflow_service_account.email
+}
+
 output "df_job_network" {
   description = "The name of the network used for create Dataflow job"
   value       = data.google_compute_network.vpc_network.id
+}
+
+output "df_job_subnetwork" {
+  description = "The name of the network used for create Dataflow job"
+  value       = data.google_compute_network.vpc_network.subnetworks_self_links[0]
 }
 
 output "bucket_name" {
