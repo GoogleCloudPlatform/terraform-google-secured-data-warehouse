@@ -112,3 +112,13 @@ variable "dataset_default_table_expiration_ms" {
   type        = number
   default     = 31536000000
 }
+
+variable "cmek_location" {
+  description = "The location for the KMS Customer Managed Encryption Keys."
+  type        = string
+}
+
+variable "cmek_keyring_name" {
+  description = "The Keyring name for the KMS Customer Managed Encryption Keys."
+  type        = string
+}

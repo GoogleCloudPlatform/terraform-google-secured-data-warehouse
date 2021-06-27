@@ -88,3 +88,23 @@ output "project_number" {
   value       = module.vpc_service_controls.project_number
   description = "Project number included on perimeter"
 }
+
+output "cmek_keyring_name" {
+  value       = module.cmek.keyring
+  description = "The Keyring name for the KMS Customer Managed Encryption Keys."
+}
+
+output "cmek_storage_crypto_key" {
+  value       = module.cmek.keys[local.storage_key]
+  description = "The Customer Managed Crypto Key for the Storage service."
+}
+
+output "cmek_bigquery_crypto_key" {
+  value       = module.cmek.keys[local.bigquery_key]
+  description = "The Customer Managed Crypto Key for the BigQuery service."
+}
+
+output "cmek_pubsub_crypto_key" {
+  value       = module.cmek.keys[local.pubsub_key]
+  description = "The Customer Managed Crypto Key for the PubSub service."
+}

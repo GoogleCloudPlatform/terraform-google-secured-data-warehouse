@@ -19,9 +19,11 @@ The existing project must have the following APIs enabled:
 - Cloud DNS API: `dns.googleapis.com`
 - Cloud Pub/Sub API: `pubsub.googleapis.com`
 - Cloud Resource Manager API: `cloudresourcemanager.googleapis.com`
-- Cloud Storage API: `storage-api.googleapis.com`
+- Cloud Storage JSON API: `storage-api.googleapis.com`
 - Identity and Access Management (IAM) API: `iam.googleapis.com`
 - Service Usage API: `serviceusage.googleapis.com`
+- Cloud Data Loss Prevention (DLP) API: `dlp.googleapis.com`
+- Cloud Key Management Service (KMS) API: `cloudkms.googleapis.com`
 
 You can use the following command to enable all the APIs, just replace the <project-id> placeholder
 with your project id:
@@ -188,6 +190,8 @@ If your user does not have the necessary roles to run the commands above you can
 | bucket\_lifecycle\_rules | List of lifecycle rules to configure. Format is the same as described in provider documentation https://www.terraform.io/docs/providers/google/r/storage_bucket.html#lifecycle_rule except condition.matches\_storage\_class should be a comma delimited string. | <pre>set(object({<br>    action    = map(string)<br>    condition = map(string)<br>  }))</pre> | <pre>[<br>  {<br>    "action": {<br>      "type": "Delete"<br>    },<br>    "condition": {<br>      "age": 30,<br>      "with_state": "ANY"<br>    }<br>  }<br>]</pre> | no |
 | bucket\_location | Bucket location. | `string` | `"US"` | no |
 | bucket\_name | The main part of the name of the bucket to be created. | `string` | n/a | yes |
+| cmek\_keyring\_name | The Keyring name for the KMS Customer Managed Encryption Keys. | `string` | n/a | yes |
+| cmek\_location | The location for the KMS Customer Managed Encryption Keys. | `string` | n/a | yes |
 | dataset\_default\_table\_expiration\_ms | TTL of tables using the dataset in MS. The default value is almost 12 months. | `number` | `31536000000` | no |
 | dataset\_description | Dataset description. | `string` | `"Ingest dataset"` | no |
 | dataset\_id | Unique ID for the dataset being provisioned. | `string` | n/a | yes |
@@ -206,6 +210,10 @@ If your user does not have the necessary roles to run the commands above you can
 | Name | Description |
 |------|-------------|
 | access\_level\_name | Access context manager access level name |
+| cmek\_bigquery\_crypto\_key | The Customer Managed Crypto Key for the BigQuery service. |
+| cmek\_keyring\_name | The Keyring name for the KMS Customer Managed Encryption Keys. |
+| cmek\_pubsub\_crypto\_key | The Customer Managed Crypto Key for the PubSub service. |
+| cmek\_storage\_crypto\_key | The Customer Managed Crypto Key for the Storage service. |
 | data\_ingest\_bigquery\_dataset | The bigquery dataset created for data ingest pipeline. |
 | data\_ingest\_bucket\_names | The name list of the buckets created for data ingest pipeline. |
 | data\_ingest\_topic\_name | The topic created for data ingest pipeline. |
