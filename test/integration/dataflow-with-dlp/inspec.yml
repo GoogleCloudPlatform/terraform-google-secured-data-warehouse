@@ -16,6 +16,9 @@ attributes:
   - name: df_job_name
     required: true
     type: string
+  - name: df_job_region
+    required: true
+    type: string
   - name: df_job_controller_service_account
     required: true
     type: string
