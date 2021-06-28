@@ -1,13 +1,13 @@
 # Secured Data Warehouse Blueprint
 
-This repository contains Terraform configuration modules that allow customers to
-quickly deploy a secured BigQuery data warehouse. The blueprint allows customers
+This repository contains Terraform configuration modules that allow Google Cloud customers to
+quickly deploy a secured [BigQuery](https://cloud.google.com/bigquery) data warehouse. The blueprint allows customers
 to use Google Cloud's core strengths in data analytics, and to overcome typical
 challenges that include:
 
-- Limited knowledge/experience with best practices for creating, deploying and operating in Google
-Cloud
-- Security/risk concerns and restrictions from their internal security, risk and compliance teams
+- Limited knowledge/experience with best practices for creating, deploying, and operating in Google
+Cloud.
+- Security/risk concerns and restrictions from their internal security, risk, and compliance teams.
 - Regulatory and compliance approval from external auditors.
 
 The Terraform configurations in this repository provide customers with an opinionated architecture
@@ -34,8 +34,8 @@ module "secured_data_warehouse" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| bucket\_name | The name of the bucket to create | `any` | n/a | yes |
-| project\_id | The project ID to deploy to | `any` | n/a | yes |
+| bucket\_name | The name of the bucket to create. | `any` | n/a | yes |
+| project\_id | The project ID to deploy to. | `any` | n/a | yes |
 
 ## Outputs
 
@@ -58,23 +58,23 @@ Install the following dependencies:
 
 ### Service Account
 
-A service account with the following roles must be used to provision
-the resources of this module:
+To provision the resources of this module, create a service account
+with the following roles:
 
 - Storage Admin: `roles/storage.admin`
 
-The [Project Factory module][project-factory-module] and the
-[IAM module][iam-module] may be used in combination to provision a
+You can use the [Project Factory module][project-factory-module] and the
+[IAM module][iam-module] in combination to provision a
 service account with the necessary roles applied.
 
 ### APIs
 
-A project with the following APIs enabled must be used to host the
+Create a project with the following APIs enabled mto host the
 resources of this module:
 
 - Google Cloud Storage JSON API: `storage-api.googleapis.com`
 
-The [Project Factory module][project-factory-module] can be used to
+You can use he [Project Factory module][project-factory-module] to
 provision a project with the necessary APIs enabled.
 
 ## Contributing
