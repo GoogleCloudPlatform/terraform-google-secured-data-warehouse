@@ -26,7 +26,7 @@ variable "region" {
 }
 
 variable "terraform_service_account" {
-  description = "Service account email of the account to impersonate to run Terraform."
+  description = "The email address of the service account that will run the Terraform code."
   type        = string
 }
 

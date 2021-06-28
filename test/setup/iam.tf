@@ -38,7 +38,11 @@ locals {
     "roles/browser",
     "roles/cloudkms.admin",
     "roles/dataflow.developer",
-    "roles/dlp.deidentifyTemplatesEditor"
+    "roles/dlp.deidentifyTemplatesEditor",
+    "roles/dlp.inspectTemplatesEditor",
+    "roles/dlp.user",
+    "roles/secretmanager.admin",
+    "roles/cloudkms.cryptoKeyEncrypter"
   ]
 }
 
