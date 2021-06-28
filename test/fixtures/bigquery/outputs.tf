@@ -28,23 +28,28 @@ output "emails" {
   description = "The service account emails."
   value       = module.bigquery.emails
 }
-output "medium_policy_taxonomy_id" {
+output "person_name_policy_tag" {
   description = "Content for Policy Tag ID in medium policy."
   value       = module.bigquery.medium_policy_taxonomy_id
 }
 
-output "high_policy_taxonomy_id" {
+output "social_security_number_policy_tag" {
   description = "Content for Policy Tag ID in high policy."
   value       = module.bigquery.high_policy_taxonomy_id
 }
 
 output "member_policy_ssn_confidential" {
-  description = "SA member for Social Security Number policy tag."
+  description = "SA member for Social Security Number policy tag confidential."
   value       = module.bigquery.member_policy_ssn_confidential
 }
 
+output "member_policy_name_confidential" {
+  description = "SA member for Person Name policy tag confidential."
+  value       = module.bigquery.member_policy_name_confidential
+}
+
 output "member_policy_name_private" {
-  description = "SA member for Person Name policy tag."
+  description = "SA member for Person Name policy tag private."
   value       = module.bigquery.member_policy_name_private
 }
 

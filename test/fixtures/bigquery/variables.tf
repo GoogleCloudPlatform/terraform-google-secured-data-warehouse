@@ -41,3 +41,9 @@ variable "table_id" {
   type        = string
   default     = "sample_data"
 }
+
+variable "taxonomy_name" {
+  description = "The taxonomy display name."
+  type        = string
+  default     = "bq_secure_taxonomy"
+}

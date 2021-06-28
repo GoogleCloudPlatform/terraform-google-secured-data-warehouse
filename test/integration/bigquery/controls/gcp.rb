@@ -29,4 +29,5 @@ control 'gcp' do
   describe google_bigquery_dataset(project: project_id, name: dataset_id) do
     it { should exist }
   end
+
 end

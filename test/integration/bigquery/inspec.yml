@@ -16,13 +16,16 @@ attributes:
   - name: taxonomy_name
     required: true
     type: string
-  - name: medium_policy_taxonomy_id
+  - name: person_name_policy_tag
     required: true
     type: string
-  - name: high_policy_taxonomy_id
+  - name: social_security_number_policy_tag
     required: true
     type: string
   - name: member_policy_ssn_confidential
+    required: true
+    type: string
+  - name: member_policy_name_confidential
     required: true
     type: string
   - name: member_policy_name_private
