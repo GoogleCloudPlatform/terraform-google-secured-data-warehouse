@@ -50,6 +50,11 @@ output "df_job_subnetwork" {
   value       = data.google_compute_network.vpc_network.subnetworks_self_links[0]
 }
 
+output "df_job_subnetwork_region" {
+  description = "The name of the network used for create Dataflow job"
+  value       = data.google_compute_network.vpc_network.subnetworks_self_links[0]
+}
+
 output "bucket_name" {
   description = "The name of the bucket"
   value       = module.dataflow-with-dlp.bucket_name
