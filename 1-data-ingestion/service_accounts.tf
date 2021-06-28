@@ -25,9 +25,11 @@ module "dataflow_controller_service_account" {
 
   project_roles = [
     "roles/pubsub.subscriber",
-    "roles/bigquery.jobUser",
-    "roles/dlp.reader",
-    "roles/storage.objectViewer",
+    "roles/bigquery.admin",
+    "roles/cloudkms.admin",
+    "roles/cloudkms.cryptoKeyDecrypter",
+    "roles/dlp.admin",
+    "roles/storage.admin",
     "roles/dataflow.serviceAgent",
     "roles/dataflow.worker",
     "roles/compute.viewer"
