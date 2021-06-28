@@ -27,7 +27,7 @@ module "dataflow-bucket" {
   prefix        = "bkt-${random_id.random_suffix.hex}"
   names         = [var.bucket_name]
   location      = var.bucket_location
-  force_destroy = tomap({ "${var.bucket_name}" = var.bucket_force_destroy })
+  force_destroy = tomap({ (var.bucket_name) = var.bucket_force_destroy })
 
   labels = {
     "enterprise_data_ingest_bucket" = "true"
@@ -40,12 +40,18 @@ resource "null_resource" "download_sample_cc_into_gcs" {
     curl http://eforexcel.com/wp/wp-content/uploads/2017/07/1500000%20CC%20Records.zip > cc_records.zip
     unzip cc_records.zip
     rm cc_records.zip
-    mv 1500000\ CC\ Records.csv cc_records.csv
+    mv 1500000\ CC\ Records.csv cc_records_original.csv
+    iconv -f="ISO-8859-1" -t="UTF-8" cc_records_original.csv > cc_records.csv
+    rm cc_records_original.csv
     gsutil cp cc_records.csv gs://${module.dataflow-bucket.name}
     rm cc_records.csv
 EOF
 
   }
+
+  depends_on = [
+    module.dataflow-bucket
+  ]
 }
 
 resource "null_resource" "deinspection_template_setup" {
@@ -57,7 +63,7 @@ resource "null_resource" "deinspection_template_setup" {
       wrapped_key=${var.wrapped_key}
     fi
     echo $wrapped_key
-    curl https://dlp.googleapis.com/v2/projects/${var.project_id}/deidentifyTemplates -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
+    curl https://dlp.googleapis.com/v2/projects/${var.project_id}/deidentifyTemplates -H "Authorization: Bearer $(gcloud auth print-access-token --impersonate-service-account=${var.terraform_service_account})" \
     -H "Content-Type: application/json" \
     -d '{"deidentifyTemplate": {"deidentifyConfig": {"recordTransformations": {"fieldTransformations": [{"fields": [{"name": "Card Number"}, {"name": "Card PIN"}], "primitiveTransformation": {"cryptoReplaceFfxFpeConfig": {"cryptoKey": {"kmsWrapped": {"cryptoKeyName": "projects/${var.project_id}/locations/global/keyRings/${var.key_ring}/cryptoKeys/${var.kms_key_name}", "wrappedKey": "'$wrapped_key'"}}, "commonAlphabet": "ALPHA_NUMERIC"}}}]}}}, "templateId": "15"}'
 EOF
@@ -79,16 +85,17 @@ resource "google_kms_crypto_key" "create_kms_key" {
 }
 
 resource "null_resource" "create_kms_wrapped_key" {
-  count = length(google_kms_crypto_key.create_kms_key)
+  count      = var.create_key_ring ? 1 : 0
+  depends_on = [google_kms_crypto_key.create_kms_key]
 
   provisioner "local-exec" {
     command = <<EOF
   rm original_key.txt
   rm wrapped_key.txt
-  python -c "import os,base64; key=os.urandom(32); encoded_key = base64.b64encode(key).decode('utf-8'); print(encoded_key)" >> original_key.txt
+  python3 -c "import os,base64; key=os.urandom(32); encoded_key = base64.b64encode(key).decode('utf-8'); print(encoded_key)" >> original_key.txt
   original_key="$(cat original_key.txt)"
   gcloud kms keys add-iam-policy-binding ${var.kms_key_name} --project ${var.project_id} --location global --keyring ${var.key_ring} --member serviceAccount:${var.terraform_service_account} --role roles/cloudkms.cryptoKeyEncrypterDecrypter
-  curl -s -X POST "https://cloudkms.googleapis.com/v1/projects/${var.project_id}/locations/global/keyRings/${var.key_ring}/cryptoKeys/${var.kms_key_name}:encrypt"  -d '{"plaintext":"'$original_key'"}'  -H "Authorization:Bearer $(gcloud auth application-default print-access-token)"  -H "Content-Type:application/json" | python -c "import sys, json; print(json.load(sys.stdin)['ciphertext'])" >> wrapped_key.txt
+  curl -s -X POST "https://cloudkms.googleapis.com/v1/projects/${var.project_id}/locations/global/keyRings/${var.key_ring}/cryptoKeys/${var.kms_key_name}:encrypt"  -d '{"plaintext":"'$original_key'"}'  -H "Authorization:Bearer $(gcloud auth print-access-token --impersonate-service-account=${var.terraform_service_account})"  -H "Content-Type:application/json" | python3 -c "import sys, json; print(json.load(sys.stdin)['ciphertext'])" >> wrapped_key.txt
 EOF
 
   }
@@ -125,13 +132,14 @@ module "dataflow-job" {
 
 resource "null_resource" "destroy_deidentify_template" {
   triggers = {
-    project_id = var.project_id
+    project_id                = var.project_id
+    terraform_service_account = var.terraform_service_account
   }
 
   provisioner "local-exec" {
     when    = destroy
     command = <<EOF
-  curl -s -X DELETE "https://dlp.googleapis.com/v2/projects/${self.triggers.project_id}/deidentifyTemplates/15" -H "Authorization:Bearer $(gcloud auth application-default print-access-token)"
+  curl -s -X DELETE "https://dlp.googleapis.com/v2/projects/${self.triggers.project_id}/deidentifyTemplates/15" -H "Authorization:Bearer $(gcloud auth print-access-token --impersonate-service-account=${self.triggers.terraform_service_account})"
 EOF
   }
 }

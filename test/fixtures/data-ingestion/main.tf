@@ -23,7 +23,7 @@ module "data_ingestion" {
   project_id                       = var.project_id
   region                           = var.region
   terraform_service_account        = var.terraform_service_account
-  vpc_name                         = var.vpc_name
+  vpc_name                         = "tst-network"
   access_context_manager_policy_id = var.access_context_manager_policy_id
   perimeter_additional_members     = var.perimeter_additional_members
   subnet_ip                        = var.subnet_ip

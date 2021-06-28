@@ -24,6 +24,10 @@ data "google_compute_network" "vpc_network" {
   project = var.project_id
 }
 
+resource "random_id" "random_suffix" {
+  byte_length = 4
+}
+
 module "dataflow-with-dlp" {
   source                    = "../../../examples/dataflow-with-dlp"
   dataset_id                = "dts_test_int"
@@ -31,8 +35,8 @@ module "dataflow-with-dlp" {
   bucket_name               = "tmp-dataflow"
   region                    = "us-central1"
   zone                      = "us-central1-a"
-  key_ring                  = "kms_key_ring_test2"
-  kms_key_name              = "kms_key_name_test2"
+  key_ring                  = "kms_key_ring_${random_id.random_suffix.hex}"
+  kms_key_name              = "kms_key_name_test_${random_id.random_suffix.hex}"
   bucket_force_destroy      = true
   bucket_location           = var.bucket_location
   terraform_service_account = var.terraform_service_account
