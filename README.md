@@ -58,7 +58,7 @@ Install the following dependencies:
 
 ### Service Account
 
-To provision the resources of this module, create a service account 
+To provision the resources of this module, create a service account
 with the following roles:
 
 - Storage Admin: `roles/storage.admin`
