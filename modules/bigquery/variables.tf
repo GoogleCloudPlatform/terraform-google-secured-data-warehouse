@@ -51,3 +51,8 @@ variable "location" {
   description = "Default region to create resources where applicable."
   type        = string
 }
+
+variable "taxonomy_name" {
+  description = "The taxonomy display name."
+  type        = string
+}

@@ -49,6 +49,11 @@ output "member_policy_ssn_confidential" {
   value       = google_data_catalog_policy_tag_iam_member.confidential_sa_ssn.member
 }
 
+output "member_policy_name_confidential" {
+  description = "SA member for Person Name policy tag."
+  value       = google_data_catalog_policy_tag_iam_member.confidential_sa_name.member
+}
+
 output "member_policy_name_private" {
   description = "SA member for Person Name policy tag."
   value       = google_data_catalog_policy_tag_iam_member.private_sa_name.member
@@ -66,5 +71,5 @@ output "dataset_id" {
 
 output "taxonomy_name" {
   description = "The taxonomy display name."
-  value       = google_data_catalog_taxonomy.secure_taxonomy.display_name
+  value       = var.taxonomy_name
 }
