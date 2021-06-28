@@ -67,7 +67,7 @@ output "data_ingest_bigquery_dataset" {
 
 output "data_ingest_bigquery_dataset_id" {
   description = "The bigquery dataset_id created for data ingest pipeline."
-  value       = module.bigquery_dataset.bigquery_dataset.dataset_id
+  value       = module.data_ingestion.data_ingest_bigquery_dataset.id
 }
 
 output "network_name" {
