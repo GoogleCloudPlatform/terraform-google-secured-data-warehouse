@@ -32,11 +32,11 @@ module "secure_bigquery" {
   source  = "terraform-google-modules/bigquery/google"
   version = "~> 5.1.0"
 
-  dataset_id                  = var.dataset_id
-  description                 = "Dataset for Secure BigQuery"
-  project_id                  = var.project_id
-  location                    = var.location
-  delete_contents_on_destroy  = var.delete_contents_on_destroy
+  dataset_id                 = var.dataset_id
+  description                = "Dataset for Secure BigQuery"
+  project_id                 = var.project_id
+  location                   = var.location
+  delete_contents_on_destroy = var.delete_contents_on_destroy
 
   tables = [
     {
@@ -59,10 +59,10 @@ module "secure_bigquery" {
 
 
 resource "google_data_catalog_taxonomy" "secure_taxonomy" {
-  provider               = google-beta
-  project                = var.project_id
-  region                 = var.location
-  display_name           = var.taxonomy_name
+  provider     = google-beta
+  project      = var.project_id
+  region       = var.location
+  display_name = var.taxonomy_name
   #display_name           = "bq_secure_taxonomy"
   description            = "Taxonomy created for Secure BigQuery"
   activated_policy_types = ["FINE_GRAINED_ACCESS_CONTROL"]

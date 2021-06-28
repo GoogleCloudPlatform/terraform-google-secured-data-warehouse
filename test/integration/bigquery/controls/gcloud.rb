@@ -112,12 +112,12 @@ control 'gcloud' do
     it { expect(data).to include(
       including(
         'name' => 'social_security_number', 'policyTags' => including('names' => including("#{social_security_number_policy_tag}")))
-      ) 
+      )
     }
     it { expect(data).to include(
       including(
         'name' => 'name', 'policyTags' => including('names' => including("#{person_name_policy_tag}")))
-      ) 
+      )
     }
   end
 end
