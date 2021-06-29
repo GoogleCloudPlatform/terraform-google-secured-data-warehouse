@@ -18,7 +18,7 @@
   Provider credential configuration
  *****************************************/
 provider "google" {
-  version                     = "3.73"
+  version                     = "~> 3.63"
   impersonate_service_account = var.terraform_service_account
   request_timeout             = "60s"
 }
@@ -27,7 +27,7 @@ provider "google" {
   Provider credential configuration
  *****************************************/
 provider "google-beta" {
-  version                     = "3.73"
+  version                     = "~> 3.63"
   impersonate_service_account = var.terraform_service_account
   request_timeout             = "60s"
 }

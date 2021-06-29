@@ -59,14 +59,8 @@ variable "bucket_lifecycle_rules" {
   }]
 }
 
-variable "wrapped_key" {
+variable "dlp_location" {
+  description = "The location of DLP resources. See https://cloud.google.com/dlp/docs/locations. The 'global' KMS location is valid."
   type        = string
-  description = "Wrapped key from KMS leave blank if create_key_ring=true"
-  default     = ""
-}
-
-variable "create_key_ring" {
-  type        = bool
-  description = "Boolean for determining whether to create key ring with keys(true or false)"
-  default     = true
+  default     = "us"
 }

@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+locals {
+  keyring  = "keyring_kek"
+  key_name = "key_name_kek"
+}
+
 data "google_service_account" "dataflow_service_account" {
   account_id = "sa-dataflow-controller"
   project    = var.project_id
@@ -28,6 +33,28 @@ resource "random_id" "random_suffix" {
   byte_length = 4
 }
 
+module "kms" {
+  source  = "terraform-google-modules/kms/google"
+  version = "~> 1.2"
+
+  project_id      = var.project_id
+  location        = var.dlp_location
+  keyring         = local.keyring
+  keys            = [local.key_name]
+  prevent_destroy = false
+}
+
+resource "random_password" "original_dlp_key" {
+  length  = 32
+  special = false
+}
+
+resource "google_kms_secret_ciphertext" "wrapped_key" {
+  crypto_key = module.kms.keys[local.key_name]
+  plaintext  = base64encode(random_password.original_dlp_key.result)
+}
+
+
 module "dataflow-with-dlp" {
   source                    = "../../../examples/dataflow-with-dlp"
   dataset_id                = "dts_test_int"
@@ -35,8 +62,9 @@ module "dataflow-with-dlp" {
   bucket_name               = "tmp-dataflow"
   region                    = "us-central1"
   zone                      = "us-central1-a"
-  key_ring                  = "kms_key_ring_${random_id.random_suffix.hex}"
-  kms_key_name              = "kms_key_name_test_${random_id.random_suffix.hex}"
+  crypto_key                = module.kms.keys[local.key_name]
+  wrapped_key               = google_kms_secret_ciphertext.wrapped_key.ciphertext
+  dlp_location              = var.dlp_location
   bucket_force_destroy      = true
   bucket_location           = var.bucket_location
   terraform_service_account = var.terraform_service_account

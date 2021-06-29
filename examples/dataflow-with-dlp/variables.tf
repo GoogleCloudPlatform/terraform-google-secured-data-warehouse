@@ -34,13 +34,11 @@ variable "dataflow_service_account" {
 variable "subnetwork_self_link" {
   type        = string
   description = "The subnetwork self link to which VMs will be assigned."
-  default     = ""
 }
 
 variable "network_self_link" {
   type        = string
   description = "The network self link to which VMs will be assigned."
-  default     = "default"
 }
 
 variable "ip_configuration" {
@@ -98,24 +96,17 @@ variable "dataset_id" {
   type        = string
 }
 
-variable "key_ring" {
+variable "crypto_key" {
+  description = "The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP."
   type        = string
-  description = "The GCP KMS key ring to be created"
-}
-
-variable "kms_key_name" {
-  type        = string
-  description = "The GCP KMS key to be created going under the key ring"
 }
 
 variable "wrapped_key" {
+  description = "The base64 encoded data crypto key wrapped by KMS."
   type        = string
-  description = "Wrapped key from KMS leave blank if create_key_ring=true"
-  default     = ""
 }
 
-variable "create_key_ring" {
-  type        = bool
-  description = "Boolean for determining whether to create key ring with keys(true or false)"
-  default     = true
+variable "dlp_location" {
+  description = "The location of DLP resources. See https://cloud.google.com/dlp/docs/locations. The 'global' KMS location is valid."
+  type        = string
 }
