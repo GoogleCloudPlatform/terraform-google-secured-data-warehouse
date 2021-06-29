@@ -24,7 +24,7 @@ module "dataflow-bucket" {
   version = "~> 2.1"
 
   project_id    = var.project_id
-  name         = "bkt-${random_id.random_suffix.hex}-${var.bucket_name}"
+  name          = "bkt-${random_id.random_suffix.hex}-${var.bucket_name}"
   location      = var.bucket_location
   force_destroy = var.bucket_force_destroy
 
@@ -33,27 +33,23 @@ module "dataflow-bucket" {
   }
 }
 
-
-module "download_sample_cc_into_gcs" {
-  source  = "terraform-google-modules/gcloud/google"
-  version = "~> 3.0"
-
-  skip_download = true
-
-  create_cmd_entrypoint = "curl"
-  create_cmd_body       = <<EOF
-    http://eforexcel.com/wp/wp-content/uploads/2017/07/1500000%20CC%20Records.zip > cc_records.zip
+resource "null_resource" "download_sample_cc_into_gcs" {
+  provisioner "local-exec" {
+    command = <<EOF
+    curl http://eforexcel.com/wp/wp-content/uploads/2017/07/1500000%20CC%20Records.zip > cc_records.zip
     unzip cc_records.zip
     rm cc_records.zip
     mv 1500000\ CC\ Records.csv cc_records.csv
-    gsutil cp cc_records.csv gs://${module.dataflow-bucket.bucket}
+    gsutil cp cc_records.csv gs://${module.dataflow-bucket.bucket.name}
     rm cc_records.csv
 EOF
 
+  }
   depends_on = [
     module.dataflow-bucket
   ]
 }
+
 
 module "de_identification_template" {
   source = "../..//modules/de_identification_template"
@@ -70,12 +66,12 @@ module "de_identification_template" {
 module "dataflow-job" {
   source                = "github.com/terraform-google-modules/terraform-google-dataflow"
   project_id            = var.project_id
-  name                  = "dlp_example_${var.dlp_location}_${random_id.random_suffix.hex}"
+  name                  = "dlp_example_${null_resource.download_sample_cc_into_gcs.id}_${random_id.random_suffix.hex}"
   on_delete             = "cancel"
   region                = var.region
   zone                  = var.zone
   template_gcs_path     = "gs://dataflow-templates/latest/Stream_DLP_GCS_Text_to_BigQuery"
-  temp_gcs_location     = module.dataflow-bucket.bucket
+  temp_gcs_location     = module.dataflow-bucket.bucket.name
   service_account_email = var.dataflow_service_account
   subnetwork_self_link  = var.subnetwork_self_link
   network_self_link     = var.network_self_link
@@ -83,7 +79,7 @@ module "dataflow-job" {
   max_workers           = 5
 
   parameters = {
-    inputFilePattern       = "gs://${module.dataflow-bucket.bucket}/cc_records.csv"
+    inputFilePattern       = "gs://${module.dataflow-bucket.bucket.name}/cc_records.csv"
     datasetName            = var.dataset_id
     batchSize              = 1000
     dlpProjectId           = var.project_id
