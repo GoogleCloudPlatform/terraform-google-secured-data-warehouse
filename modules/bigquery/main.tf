@@ -59,10 +59,10 @@ module "secure_bigquery" {
 
 
 resource "google_data_catalog_taxonomy" "secure_taxonomy" {
-  provider     = google-beta
-  project      = var.project_id
-  region       = var.location
-  display_name = var.taxonomy_name
+  provider               = google-beta
+  project                = var.project_id
+  region                 = var.location
+  display_name           = var.taxonomy_name
   description            = "Taxonomy created for Secure BigQuery"
   activated_policy_types = ["FINE_GRAINED_ACCESS_CONTROL"]
 

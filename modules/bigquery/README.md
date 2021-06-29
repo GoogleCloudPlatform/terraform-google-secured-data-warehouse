@@ -44,10 +44,8 @@ Functional examples are included in the [examples](./examples/bigquery) director
 | dataset\_id | The dataset ID to deploy to data-warehouse. |
 | emails | The list of service account emails. |
 | emails\_list | The service account emails. |
-| high\_policy\_ssn | Content for Social Security Number policy tag. |
 | high\_policy\_taxonomy\_id | Content for Policy Tag ID in high policy. |
 | location | Location for storing your BigQuery data when you create a dataset. |
-| medium\_policy\_name | Content for Name policy tag. |
 | medium\_policy\_taxonomy\_id | Content for Policy Tag ID in medium policy. |
 | member\_policy\_name\_confidential | SA member for Person Name policy tag. |
 | member\_policy\_name\_private | SA member for Person Name policy tag. |

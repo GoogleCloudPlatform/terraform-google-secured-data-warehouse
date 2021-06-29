@@ -21,5 +21,5 @@ module "bigquery" {
   taxonomy_name = var.taxonomy_name
   source        = "../../..//modules/bigquery"
 
-  location      = "us-east1"
+  location = "us-east1"
 }
