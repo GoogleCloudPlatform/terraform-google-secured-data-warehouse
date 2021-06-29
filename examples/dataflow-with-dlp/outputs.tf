@@ -46,7 +46,7 @@ output "controller_service_account" {
 
 output "bucket_name" {
   description = "The name of the bucket"
-  value       = module.dataflow-bucket.name
+  value       = module.dataflow-bucket.bucket
 }
 
 output "dlp_location" {

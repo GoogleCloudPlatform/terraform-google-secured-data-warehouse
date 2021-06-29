@@ -20,14 +20,13 @@ resource "random_id" "random_suffix" {
 
 //storage ingest bucket
 module "dataflow-bucket" {
-  source  = "terraform-google-modules/cloud-storage/google"
+  source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 2.1"
 
   project_id    = var.project_id
-  prefix        = "bkt-${random_id.random_suffix.hex}"
-  names         = [var.bucket_name]
+  name         = "bkt-${random_id.random_suffix.hex}-${var.bucket_name}"
   location      = var.bucket_location
-  force_destroy = tomap({ (var.bucket_name) = var.bucket_force_destroy })
+  force_destroy = var.bucket_force_destroy
 
   labels = {
     "enterprise_data_ingest_bucket" = "true"
@@ -47,7 +46,7 @@ module "download_sample_cc_into_gcs" {
     unzip cc_records.zip
     rm cc_records.zip
     mv 1500000\ CC\ Records.csv cc_records.csv
-    gsutil cp cc_records.csv gs://${module.dataflow-bucket.name}
+    gsutil cp cc_records.csv gs://${module.dataflow-bucket.bucket}
     rm cc_records.csv
 EOF
 
@@ -76,7 +75,7 @@ module "dataflow-job" {
   region                = var.region
   zone                  = var.zone
   template_gcs_path     = "gs://dataflow-templates/latest/Stream_DLP_GCS_Text_to_BigQuery"
-  temp_gcs_location     = module.dataflow-bucket.name
+  temp_gcs_location     = module.dataflow-bucket.bucket
   service_account_email = var.dataflow_service_account
   subnetwork_self_link  = var.subnetwork_self_link
   network_self_link     = var.network_self_link
@@ -84,7 +83,7 @@ module "dataflow-job" {
   max_workers           = 5
 
   parameters = {
-    inputFilePattern       = "gs://${module.dataflow-bucket.name}/cc_records.csv"
+    inputFilePattern       = "gs://${module.dataflow-bucket.bucket}/cc_records.csv"
     datasetName            = var.dataset_id
     batchSize              = 1000
     dlpProjectId           = var.project_id
