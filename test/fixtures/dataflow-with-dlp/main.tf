@@ -15,8 +15,8 @@
  */
 
 locals {
-  keyring  = "keyring_kek"
-  key_name = "key_name_kek"
+  keyring  = "keyring_kek_${random_id.random_suffix.hex}"
+  key_name = "key_name_kek_${random_id.random_suffix.hex}"
 }
 
 data "google_service_account" "dataflow_service_account" {

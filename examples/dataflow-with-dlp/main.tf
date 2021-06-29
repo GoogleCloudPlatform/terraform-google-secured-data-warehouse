@@ -39,8 +39,10 @@ resource "null_resource" "download_sample_cc_into_gcs" {
     curl http://eforexcel.com/wp/wp-content/uploads/2017/07/1500000%20CC%20Records.zip > cc_records.zip
     unzip cc_records.zip
     rm cc_records.zip
-    mv 1500000\ CC\ Records.csv cc_records.csv
+    mv 1500000\ CC\ Records.csv cc_records_original.csv
+    iconv -f="ISO-8859-1" -t="UTF-8" cc_records_original.csv > cc_records.csv
     gsutil cp cc_records.csv gs://${module.dataflow-bucket.bucket.name}
+    rm cc_records_original.csv
     rm cc_records.csv
 EOF
 
@@ -60,6 +62,7 @@ module "de_identification_template" {
   wrapped_key               = var.wrapped_key
   dlp_location              = var.dlp_location
   template_file             = "${path.module}/deidentification.tmpl"
+  dataflow_service_account  = var.dataflow_service_account
 }
 
 

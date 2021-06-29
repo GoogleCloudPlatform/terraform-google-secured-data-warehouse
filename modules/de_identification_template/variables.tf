@@ -61,3 +61,8 @@ variable "template_description" {
   type        = string
   default     = "De-identifies sensitive content defined in the template with a KMS wrapped CMEK."
 }
+
+variable "dataflow_service_account" {
+  type        = string
+  description = "The Service Account email that will be used to identify the VMs in which the jobs are running"
+}
