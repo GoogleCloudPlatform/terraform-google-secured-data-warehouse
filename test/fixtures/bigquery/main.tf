@@ -15,10 +15,11 @@
  */
 
 module "bigquery" {
+  project_id    = var.project_id
   dataset_id    = var.dataset_id
   table_id      = var.table_id
   taxonomy_name = var.taxonomy_name
   source        = "../../..//modules/bigquery"
-  project_id    = var.project_id
+
   location      = "us-east1"
 }

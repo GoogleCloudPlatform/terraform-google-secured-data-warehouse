@@ -99,7 +99,7 @@ control 'gcloud' do
     its(:exit_status) { should eq 0 }
   end
 
-  describe command("bq show --schema --project_id=#{project_id} dtwh_dataset.sample_data") do
+  describe command("bq show --schema  --headless --location=us-east1 --project_id=#{project_id} dtwh_dataset.sample_data") do
     its(:exit_status) { should eq 0 }
     its(:stderr) { should eq '' }
     let(:data) do

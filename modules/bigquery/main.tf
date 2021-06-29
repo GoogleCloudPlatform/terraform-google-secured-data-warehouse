@@ -63,7 +63,6 @@ resource "google_data_catalog_taxonomy" "secure_taxonomy" {
   project      = var.project_id
   region       = var.location
   display_name = var.taxonomy_name
-  #display_name           = "bq_secure_taxonomy"
   description            = "Taxonomy created for Secure BigQuery"
   activated_policy_types = ["FINE_GRAINED_ACCESS_CONTROL"]
 
