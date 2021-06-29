@@ -24,19 +24,9 @@ output "emails" {
   value       = module.service_accounts.emails
 }
 
-output "medium_policy_name" {
-  description = "Content for Name policy tag."
-  value       = google_data_catalog_policy_tag.name_child_policy_tag
-}
-
 output "medium_policy_taxonomy_id" {
   description = "Content for Policy Tag ID in medium policy."
   value       = google_data_catalog_policy_tag.name_child_policy_tag.id
-}
-
-output "high_policy_ssn" {
-  description = "Content for Social Security Number policy tag."
-  value       = google_data_catalog_policy_tag.ssn_child_policy_tag
 }
 
 output "high_policy_taxonomy_id" {

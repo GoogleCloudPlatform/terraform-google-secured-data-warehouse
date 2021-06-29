@@ -28,6 +28,7 @@ output "emails" {
   description = "The service account emails."
   value       = module.bigquery.emails
 }
+
 output "person_name_policy_tag" {
   description = "Content for Policy Tag ID in medium policy."
   value       = module.bigquery.medium_policy_taxonomy_id
