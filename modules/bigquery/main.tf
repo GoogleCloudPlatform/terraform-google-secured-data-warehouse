@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-module "service_accounts" {
+/*module "service_accounts" {
   source       = "terraform-google-modules/service-accounts/google"
   version      = ">=4.0.0"
   project_id   = var.project_id
@@ -26,7 +26,7 @@ module "service_accounts" {
     "${var.project_id}=>roles/bigquery.dataViewer",
     "${var.project_id}=>roles/datacatalog.viewer",
   ]
-}
+}*/
 
 module "secure_bigquery" {
   source  = "terraform-google-modules/bigquery/google"
@@ -66,9 +66,9 @@ resource "google_data_catalog_taxonomy" "secure_taxonomy" {
   description            = "Taxonomy created for Secure BigQuery"
   activated_policy_types = ["FINE_GRAINED_ACCESS_CONTROL"]
 
-  depends_on = [
-    module.service_accounts,
-  ]
+  #depends_on = [
+  #  module.service_accounts,
+  #]
 }
 
 resource "google_data_catalog_policy_tag" "medium_policy_tag" {
@@ -105,31 +105,34 @@ resource "google_data_catalog_policy_tag_iam_member" "private_sa_name" {
   provider   = google-beta
   policy_tag = google_data_catalog_policy_tag.name_child_policy_tag.name
   role       = "roles/datacatalog.categoryFineGrainedReader"
-  member     = "serviceAccount:${module.service_accounts.emails["terraform-private-sa"]}"
+  #member     = "serviceAccount:${module.service_accounts.emails["terraform-private-sa"]}"
+  member     = "user:renatojr@clsecteam.com"
 
-  depends_on = [
-    module.service_accounts,
-  ]
+  #depends_on = [
+  #  module.service_accounts,
+  #]
 }
 
 resource "google_data_catalog_policy_tag_iam_member" "confidential_sa_name" {
   provider   = google-beta
   policy_tag = google_data_catalog_policy_tag.name_child_policy_tag.name
   role       = "roles/datacatalog.categoryFineGrainedReader"
-  member     = "serviceAccount:${module.service_accounts.emails["terraform-confidential-sa"]}"
+  #member     = "serviceAccount:${module.service_accounts.emails["terraform-confidential-sa"]}"
+  member     = "user:renatojr@ciandt.com"
 
-  depends_on = [
-    module.service_accounts,
-  ]
+  #depends_on = [
+  #  module.service_accounts,
+  #]
 }
 
 resource "google_data_catalog_policy_tag_iam_member" "confidential_sa_ssn" {
   provider   = google-beta
   policy_tag = google_data_catalog_policy_tag.ssn_child_policy_tag.name
   role       = "roles/datacatalog.categoryFineGrainedReader"
-  member     = "serviceAccount:${module.service_accounts.emails["terraform-confidential-sa"]}"
+  #member     = "serviceAccount:${module.service_accounts.emails["terraform-confidential-sa"]}"
+  member     = "user:renatojr@ciandt.com"
 
-  depends_on = [
-    module.service_accounts,
-  ]
+  #depends_on = [
+  #  module.service_accounts,
+  #]
 }
