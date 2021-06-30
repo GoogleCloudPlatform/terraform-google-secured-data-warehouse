@@ -40,14 +40,17 @@ resource "null_resource" "download_sample_cc_into_gcs" {
     unzip cc_records.zip
     rm cc_records.zip
     mv 1500000\ CC\ Records.csv cc_records.csv
+    if [ "${var.change_sample_file_encoding}" = "true" ]
+    then
+      echo "Changing sample file encoding from ${var.sample_file_original_encoding} to UTF-8"
+      iconv -f="${var.sample_file_original_encoding}" -t="UTF-8" cc_records.csv > temp_cc_records.csv
+      mv temp_cc_records.csv cc_records.csv
+    fi
     gsutil cp cc_records.csv gs://${module.dataflow-bucket.bucket.name}
     rm cc_records.csv
 EOF
 
   }
-  depends_on = [
-    module.dataflow-bucket
-  ]
 }
 
 

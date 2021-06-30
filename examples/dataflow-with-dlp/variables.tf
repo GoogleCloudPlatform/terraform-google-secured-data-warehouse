@@ -111,3 +111,15 @@ variable "dlp_location" {
   type        = string
   default     = "global"
 }
+
+variable "change_sample_file_encoding" {
+  description = "Flag to decide if the encoding of the the sample file should be converted to UTF-8."
+  type        = string
+  default     = "true"
+}
+
+variable "sample_file_original_encoding" {
+  description = "(Optional) The original encoding of the sample file."
+  type        = string
+  default     = "ISO-8859-1"
+}
