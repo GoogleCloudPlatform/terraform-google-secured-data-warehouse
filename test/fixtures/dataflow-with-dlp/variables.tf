@@ -62,5 +62,5 @@ variable "bucket_lifecycle_rules" {
 variable "dlp_location" {
   description = "The location of DLP resources. See https://cloud.google.com/dlp/docs/locations. The 'global' KMS location is valid."
   type        = string
-  default     = "us"
+  default     = "global"
 }

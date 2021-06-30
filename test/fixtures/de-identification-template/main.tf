@@ -24,20 +24,19 @@ module "kms" {
   version = "~> 1.2"
 
   project_id      = var.project_id
-  location        = "us-east1"
+  location        = var.dlp_location
   keyring         = local.keyring
   keys            = [local.key_name]
   prevent_destroy = false
 }
 
-resource "random_password" "original_dlp_key" {
-  length  = 32
-  special = false
+resource "random_id" "original_key" {
+  byte_length = 16
 }
 
 resource "google_kms_secret_ciphertext" "wrapped_key" {
   crypto_key = module.kms.keys[local.key_name]
-  plaintext  = base64encode(random_password.original_dlp_key.result)
+  plaintext  = random_id.original_key.b64_std
 }
 
 module "de_identification_template" {
@@ -45,8 +44,9 @@ module "de_identification_template" {
 
   project_id                = var.project_id
   terraform_service_account = var.terraform_service_account
+  dataflow_service_account  = var.terraform_service_account
   crypto_key                = module.kms.keys[local.key_name]
   wrapped_key               = google_kms_secret_ciphertext.wrapped_key.ciphertext
-  dlp_location              = "us-east1"
+  dlp_location              = var.dlp_location
   template_file             = "${path.module}/deidentification.tmpl"
 }

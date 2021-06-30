@@ -44,16 +44,14 @@ module "kms" {
   prevent_destroy = false
 }
 
-resource "random_password" "original_dlp_key" {
-  length  = 32
-  special = false
+resource "random_id" "original_key" {
+  byte_length = 16
 }
 
 resource "google_kms_secret_ciphertext" "wrapped_key" {
   crypto_key = module.kms.keys[local.key_name]
-  plaintext  = base64encode(random_password.original_dlp_key.result)
+  plaintext  = random_id.original_key.b64_std
 }
-
 
 module "dataflow-with-dlp" {
   source                    = "../../../examples/dataflow-with-dlp"

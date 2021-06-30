@@ -27,6 +27,7 @@ variable "terraform_service_account" {
 variable "dlp_location" {
   description = "The location of DLP resources. See https://cloud.google.com/dlp/docs/locations. The 'global' KMS location is valid."
   type        = string
+  default     = "global"
 }
 
 variable "crypto_key" {

@@ -19,6 +19,7 @@ module "de_identification_template_example" {
 
   project_id                = var.project_id
   terraform_service_account = var.terraform_service_account
+  dataflow_service_account  = var.dataflow_service_account
   crypto_key                = var.crypto_key
   wrapped_key               = var.wrapped_key
   dlp_location              = var.dlp_location

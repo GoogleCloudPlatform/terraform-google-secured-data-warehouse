@@ -27,6 +27,7 @@ variable "terraform_service_account" {
 variable "dlp_location" {
   description = "The location of DLP resources. See https://cloud.google.com/dlp/docs/locations. The 'global' KMS location is valid."
   type        = string
+  default     = "global"
 }
 
 variable "crypto_key" {
@@ -37,4 +38,9 @@ variable "crypto_key" {
 variable "wrapped_key" {
   description = "The base64 encoded data crypto key wrapped by KMS."
   type        = string
+}
+
+variable "dataflow_service_account" {
+  type        = string
+  description = "The Service Account email that will be used to identify the VMs in which the jobs are running"
 }

@@ -40,7 +40,7 @@ To provision this example, complete these tasks from within this directory:
 | crypto\_key | The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP. | `string` | n/a | yes |
 | dataflow\_service\_account | The Service Account email that will be used to identify the VMs in which the jobs are running | `string` | n/a | yes |
 | dataset\_id | Unique ID for the dataset being provisioned. | `string` | n/a | yes |
-| dlp\_location | The location of DLP resources. See https://cloud.google.com/dlp/docs/locations. The 'global' KMS location is valid. | `string` | n/a | yes |
+| dlp\_location | The location of DLP resources. See https://cloud.google.com/dlp/docs/locations. The 'global' KMS location is valid. | `string` | `"global"` | no |
 | ip\_configuration | The configuration for VM IPs. Options are 'WORKER\_IP\_PUBLIC' or 'WORKER\_IP\_PRIVATE'. | `string` | `"WORKER_IP_PRIVATE"` | no |
 | network\_self\_link | The network self link to which VMs will be assigned. | `string` | n/a | yes |
 | project\_id | The ID of the project in which the service account will be created. | `string` | n/a | yes |
