@@ -34,13 +34,13 @@ variable "table_id" {
 variable "taxonomy_name" {
   description = "The taxonomy display name."
   type        = string
-  default     = "bq_secure_taxonomy"
+  default     = "secure_taxonomy_bq"
 }
 
 variable "location" {
   description = "Default region to create resources where applicable."
   type        = string
-  default     = ""
+  default     = "us-east1"
 }
 
 variable "terraform_service_account" {

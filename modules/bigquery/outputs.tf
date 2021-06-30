@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/*output "emails_list" {
+output "emails_list" {
   description = "The service account emails."
   value       = module.service_accounts.emails_list
 }
@@ -22,7 +22,7 @@
 output "emails" {
   description = "The list of service account emails."
   value       = module.service_accounts.emails
-}*/
+}
 
 output "medium_policy_taxonomy_id" {
   description = "Content for Policy Tag ID in medium policy."

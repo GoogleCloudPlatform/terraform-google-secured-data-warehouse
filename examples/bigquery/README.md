@@ -8,10 +8,10 @@ This example illustrates how to use the `bigquery secured-data-warehouse` submod
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | dataset\_id | The dataset ID to deploy to data-warehouse | `string` | `"dtwh_dataset"` | no |
-| location | Default region to create resources where applicable. | `string` | `""` | no |
+| location | Default region to create resources where applicable. | `string` | `"us-east1"` | no |
 | project\_id | Project where the dataset and table are created | `string` | n/a | yes |
 | table\_id | The table ID to deploy to datawarehouse. | `string` | `"sample_data"` | no |
-| taxonomy\_name | The taxonomy display name. | `string` | `"bq_secure_taxonomy"` | no |
+| taxonomy\_name | The taxonomy display name. | `string` | `"secure_taxonomy_bq"` | no |
 | terraform\_service\_account | Service account email of the account to impersonate to run Terraform | `string` | n/a | yes |
 
 ## Outputs
