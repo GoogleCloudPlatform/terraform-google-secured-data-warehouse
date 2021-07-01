@@ -45,5 +45,5 @@ variable "table_id" {
 variable "taxonomy_name" {
   description = "The taxonomy display name."
   type        = string
-  default     = "bigquery_secure_taxonomy"
+  default     = "secure_bq-taxonomy"
 }
