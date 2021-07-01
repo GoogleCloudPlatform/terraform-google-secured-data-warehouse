@@ -65,7 +65,8 @@ module "de_identification_template" {
 
 
 module "dataflow-job" {
-  source                = "github.com/terraform-google-modules/terraform-google-dataflow"
+  source = "github.com/terraform-google-modules/terraform-google-dataflow"
+
   project_id            = var.project_id
   name                  = "dlp_example_${null_resource.download_sample_cc_into_gcs.id}_${random_id.random_suffix.hex}"
   on_delete             = "cancel"
@@ -86,9 +87,4 @@ module "dataflow-job" {
     dlpProjectId           = var.project_id
     deidentifyTemplateName = "projects/${var.project_id}/locations/global/deidentifyTemplates/${module.de_identification_template.template_id}"
   }
-
-  depends_on = [
-    google_compute_firewall.allow_egress_dataflow_workers,
-    google_compute_firewall.allow_ingress_dataflow_workers
-  ]
 }
