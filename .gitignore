@@ -63,5 +63,7 @@ credentials.json
 **/original_key.txt
 **/wrapped_key.txt
 
+demo/
+
 # File to populate env vars used by Docker test runs
 .envrc
