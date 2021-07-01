@@ -11,6 +11,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 locals {
+  locations          = {
+    for location, l in var.trusted_locations : "in:l"
+  }
   folder_trusted     = "folders/${data.google_project.secured_data_warehouse.folder_id}"
 }
 

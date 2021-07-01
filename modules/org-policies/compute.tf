@@ -103,6 +103,6 @@ module "vpc_subnet_policy" {
   policy_for        = "folder"
   folder_id         = local.folder_trusted
   policy_type       = "list"
-  allow             = ["under:projects/${split("/", var.trusted_private_subnet)[1]}"] #double check this
+  allow             = ["under:projects/${split("/", var.trusted_private_subnet)[1]}"] 
   allow_list_length = 1
 }

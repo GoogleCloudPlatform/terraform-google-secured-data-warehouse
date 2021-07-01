@@ -20,3 +20,9 @@ variable "trusted_private_subnet" {
   description = "This list constraint defines the set of shared VPC subnetworks that eligible resources can use."
   type        = string
 }
+
+variable "trusted_locations" {
+  description = "This is a list of trusted regions where location-based GCP resources can be created. ie us-locations eu-locations"
+  default     = ["us-locations", "eu-locations"]
+  type        = list(string)
+}
