@@ -28,3 +28,9 @@ module "data_ingestion" {
   perimeter_additional_members     = var.perimeter_additional_members
   subnet_ip                        = var.subnet_ip
 }
+
+resource "time_sleep" "wait_90_seconds_for_vpc_sc_propagation" {
+  depends_on = [module.data_ingestion]
+
+  create_duration = "90s"
+}
