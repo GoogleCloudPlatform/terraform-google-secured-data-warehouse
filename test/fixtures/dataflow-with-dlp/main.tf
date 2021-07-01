@@ -17,6 +17,7 @@
 locals {
   keyring  = "keyring_kek_${random_id.random_suffix.hex}"
   key_name = "key_name_kek_${random_id.random_suffix.hex}"
+  region   = "us-central1"
 }
 
 data "google_service_account" "dataflow_service_account" {
@@ -55,16 +56,9 @@ resource "google_kms_secret_ciphertext" "wrapped_key" {
 
 module "dataflow-with-dlp" {
   source                    = "../../../examples/dataflow-with-dlp"
-  dataset_id                = "dts_test_int"
   project_id                = var.project_id
-  bucket_name               = "tmp-dataflow"
-  region                    = "us-central1"
-  zone                      = "us-central1-a"
   crypto_key                = module.kms.keys[local.key_name]
   wrapped_key               = google_kms_secret_ciphertext.wrapped_key.ciphertext
-  dlp_location              = var.dlp_location
-  bucket_force_destroy      = true
-  bucket_location           = var.bucket_location
   terraform_service_account = var.terraform_service_account
   dataflow_service_account  = data.google_service_account.dataflow_service_account.email
   network_self_link         = data.google_compute_network.vpc_network.id

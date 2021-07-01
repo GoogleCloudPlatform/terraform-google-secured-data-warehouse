@@ -24,9 +24,9 @@ module "dataflow-bucket" {
   version = "~> 2.1"
 
   project_id    = var.project_id
-  name          = "bkt-${random_id.random_suffix.hex}-${var.bucket_name}"
-  location      = var.bucket_location
-  force_destroy = var.bucket_force_destroy
+  name          = "bkt-${random_id.random_suffix.hex}-tmp-dataflow"
+  location      = "US"
+  force_destroy = false
 
   labels = {
     "enterprise_data_ingest_bucket" = "true"
@@ -40,12 +40,9 @@ resource "null_resource" "download_sample_cc_into_gcs" {
     unzip cc_records.zip
     rm cc_records.zip
     mv 1500000\ CC\ Records.csv cc_records.csv
-    if [ "${var.change_sample_file_encoding}" = "true" ]
-    then
-      echo "Changing sample file encoding from ${var.sample_file_original_encoding} to UTF-8"
-      iconv -f="${var.sample_file_original_encoding}" -t="UTF-8" cc_records.csv > temp_cc_records.csv
-      mv temp_cc_records.csv cc_records.csv
-    fi
+    echo "Changing sample file encoding from ISO-8859-1 to UTF-8"
+    iconv -f="ISO-8859-1" -t="UTF-8" cc_records.csv > temp_cc_records.csv
+    mv temp_cc_records.csv cc_records.csv
     gsutil cp cc_records.csv gs://${module.dataflow-bucket.bucket.name}
     rm cc_records.csv
 EOF
@@ -61,7 +58,7 @@ module "de_identification_template" {
   terraform_service_account = var.terraform_service_account
   crypto_key                = var.crypto_key
   wrapped_key               = var.wrapped_key
-  dlp_location              = var.dlp_location
+  dlp_location              = "global"
   template_file             = "${path.module}/deidentification.tmpl"
   dataflow_service_account  = var.dataflow_service_account
 }
@@ -72,22 +69,22 @@ module "dataflow-job" {
   project_id            = var.project_id
   name                  = "dlp_example_${null_resource.download_sample_cc_into_gcs.id}_${random_id.random_suffix.hex}"
   on_delete             = "cancel"
-  region                = var.region
-  zone                  = var.zone
+  region                = "us-central1"
+  zone                  = "us-central1-a"
   template_gcs_path     = "gs://dataflow-templates/latest/Stream_DLP_GCS_Text_to_BigQuery"
   temp_gcs_location     = module.dataflow-bucket.bucket.name
   service_account_email = var.dataflow_service_account
   subnetwork_self_link  = var.subnetwork_self_link
   network_self_link     = var.network_self_link
-  ip_configuration      = var.ip_configuration
+  ip_configuration      = "WORKER_IP_PRIVATE"
   max_workers           = 5
 
   parameters = {
     inputFilePattern       = "gs://${module.dataflow-bucket.bucket.name}/cc_records.csv"
-    datasetName            = var.dataset_id
+    datasetName            = "dts_example_datflow_dlp"
     batchSize              = 1000
     dlpProjectId           = var.project_id
-    deidentifyTemplateName = "projects/${var.project_id}/locations/${var.dlp_location}/deidentifyTemplates/${module.de_identification_template.template_id}"
+    deidentifyTemplateName = "projects/${var.project_id}/locations/global/deidentifyTemplates/${module.de_identification_template.template_id}"
   }
 
   depends_on = [

@@ -29,11 +29,6 @@ output "df_job_id" {
   value       = module.dataflow-job.id
 }
 
-output "df_job_region" {
-  description = "The region of the newly created Dataflow job"
-  value       = var.region
-}
-
 output "df_job_name" {
   description = "The name of the newly created Dataflow job"
   value       = module.dataflow-job.name

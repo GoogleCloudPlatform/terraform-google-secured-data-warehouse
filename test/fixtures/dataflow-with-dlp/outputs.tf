@@ -17,45 +17,45 @@
 
 output "project_id" {
   value       = var.project_id
-  description = "The project's ID"
+  description = "The project's ID."
 }
 
 output "df_job_state" {
-  description = "The state of the newly created Dataflow job"
+  description = "The state of the newly created Dataflow job."
   value       = module.dataflow-with-dlp.df_job_state
 }
 
 output "df_job_id" {
-  description = "The unique Id of the newly created Dataflow job"
+  description = "The unique Id of the newly created Dataflow job."
   value       = module.dataflow-with-dlp.df_job_id
 }
 
 output "df_job_name" {
-  description = "The name of the newly created Dataflow job"
+  description = "The name of the newly created Dataflow job."
   value       = module.dataflow-with-dlp.df_job_name
 }
 
 output "df_job_controller_service_account" {
-  description = "The email of the service account used for create Dataflow job"
+  description = "The email of the service account used for create Dataflow job."
   value       = data.google_service_account.dataflow_service_account.email
 }
 
 output "df_job_region" {
-  description = "The name of the network used for create Dataflow job"
-  value       = module.dataflow-with-dlp.df_job_region
+  description = "The region of the newly created Dataflow job."
+  value       = local.region
 }
 
 output "df_job_network" {
-  description = "The name of the network used for create Dataflow job"
+  description = "The name of the network used for create Dataflow job."
   value       = data.google_compute_network.vpc_network.id
 }
 
 output "df_job_subnetwork" {
-  description = "The name of the network used for create Dataflow job"
+  description = "The name of the subnetwork used for create Dataflow job."
   value       = data.google_compute_network.vpc_network.subnetworks_self_links[0]
 }
 
 output "bucket_name" {
-  description = "The name of the bucket"
+  description = "The name of the bucket."
   value       = module.dataflow-with-dlp.bucket_name
 }
