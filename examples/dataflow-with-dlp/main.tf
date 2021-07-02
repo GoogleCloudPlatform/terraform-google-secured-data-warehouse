@@ -65,7 +65,8 @@ module "de_identification_template" {
 
 
 module "dataflow-job" {
-  source = "github.com/terraform-google-modules/terraform-google-dataflow"
+  source  = "terraform-google-modules/dataflow/google"
+  version = "2.0.0"
 
   project_id            = var.project_id
   name                  = "dlp_example_${null_resource.download_sample_cc_into_gcs.id}_${random_id.random_suffix.hex}"
