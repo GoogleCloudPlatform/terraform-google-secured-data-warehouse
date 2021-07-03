@@ -14,20 +14,14 @@
  * limitations under the License.
  */
 
-/******************************************
-  Provider credential configuration
- *****************************************/
 provider "google" {
-  # version                     = "~> 3.69"
+  version                     = "~> 3.63"
   impersonate_service_account = var.terraform_service_account
   request_timeout             = "60s"
 }
 
-/******************************************
-  Provider credential configuration
- *****************************************/
 provider "google-beta" {
-  version                     = "~> 3.69"
+  version                     = "~> 3.63"
   impersonate_service_account = var.terraform_service_account
   request_timeout             = "60s"
 }
