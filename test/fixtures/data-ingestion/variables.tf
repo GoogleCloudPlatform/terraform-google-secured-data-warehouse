@@ -35,12 +35,6 @@ variable "project_id" {
   type        = string
 }
 
-variable "vpc_name" {
-  type        = string
-  description = "the name of the network."
-  default     = "vpc-tst-network"
-}
-
 variable "subnet_ip" {
   type        = string
   description = "The CDIR IP range of the subnetwork."

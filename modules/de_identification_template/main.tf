@@ -42,19 +42,12 @@ resource "random_id" "random_template_id_suffix" {
   }
 }
 
-resource "google_project_service_identity" "dlp_sa" {
-  provider = google-beta
-
-  project = var.project_id
-  service = "dlp.googleapis.com"
-}
-
 resource "google_kms_crypto_key_iam_binding" "dlp_encrypters_decrypters" {
   for_each = local.kms_roles
 
   role          = each.key
   crypto_key_id = var.crypto_key
-  members       = ["serviceAccount:${google_project_service_identity.dlp_sa.email}"]
+  members       = ["serviceAccount:${var.dataflow_service_account}"]
 }
 
 module "de_identify_template" {
