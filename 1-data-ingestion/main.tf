@@ -30,7 +30,7 @@ module "data_ingest_bucket" {
   lifecycle_rules = var.bucket_lifecycle_rules
 
   encryption_key_names = {
-    (var.bucket_name) = module.cmek.keys[local.storage_key]
+    (var.bucket_name) = module.cmek.keys[local.storage_key_name]
   }
 
   labels = {
@@ -45,7 +45,7 @@ module "data_ingest_topic" {
 
   project_id         = var.project_id
   topic              = "tpc-data-ingest-${random_id.suffix.hex}"
-  topic_kms_key_name = module.cmek.keys[local.pubsub_key]
+  topic_kms_key_name = module.cmek.keys[local.pubsub_key_name]
 
 }
 
@@ -59,7 +59,7 @@ module "bigquery_dataset" {
   dataset_name                = var.dataset_name
   description                 = var.dataset_description
   location                    = var.dataset_location
-  encryption_key              = module.cmek.keys[local.bigquery_key]
+  encryption_key              = module.cmek.keys[local.bigquery_key_name]
   default_table_expiration_ms = var.dataset_default_table_expiration_ms
 
   dataset_labels = {

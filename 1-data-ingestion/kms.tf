@@ -15,18 +15,20 @@
  */
 
 locals {
-  storage_key  = "storage_crypto_key"
-  bigquery_key = "bigquery_crypto_key"
-  pubsub_key   = "pubsub_crypto_key"
-  storage_sa   = data.google_storage_project_service_account.gcs_account.email_address
-  pubsub_sa    = google_project_service_identity.pubsub_sa.email
-  bigquery_sa  = data.google_bigquery_default_service_account.bigquery_sa.email
-  keys         = [local.storage_key, local.bigquery_key, local.pubsub_key]
+  storage_key_name  = "storage_kms_key"
+  bigquery_key_name = "bigquery_kms_key"
+  pubsub_key_name   = "pubsub_kms_key"
+
+  storage_sa  = data.google_storage_project_service_account.gcs_account.email_address
+  pubsub_sa   = google_project_service_identity.pubsub_sa.email
+  bigquery_sa = data.google_bigquery_default_service_account.bigquery_sa.email
+
+  keys = [local.storage_key_name, local.bigquery_key_name, local.pubsub_key_name]
 
   sa_key_mapping = {
-    (local.storage_key)  = local.storage_sa,
-    (local.bigquery_key) = local.bigquery_sa,
-    (local.pubsub_key)   = local.pubsub_sa
+    (local.storage_key_name)  = local.storage_sa,
+    (local.bigquery_key_name) = local.bigquery_sa,
+    (local.pubsub_key_name)   = local.pubsub_sa
   }
 }
 

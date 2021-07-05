@@ -95,16 +95,16 @@ output "cmek_keyring_name" {
 }
 
 output "cmek_storage_crypto_key" {
-  value       = module.cmek.keys[local.storage_key]
+  value       = module.cmek.keys[local.storage_key_name]
   description = "The Customer Managed Crypto Key for the Storage service."
 }
 
 output "cmek_bigquery_crypto_key" {
-  value       = module.cmek.keys[local.bigquery_key]
+  value       = module.cmek.keys[local.bigquery_key_name]
   description = "The Customer Managed Crypto Key for the BigQuery service."
 }
 
 output "cmek_pubsub_crypto_key" {
-  value       = module.cmek.keys[local.pubsub_key]
+  value       = module.cmek.keys[local.pubsub_key_name]
   description = "The Customer Managed Crypto Key for the PubSub service."
 }
