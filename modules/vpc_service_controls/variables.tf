@@ -15,7 +15,7 @@
  */
 
 variable "org_id" {
-  description = "GCP Organization ID."
+  description = "The GCP Organization ID."
   type        = string
 }
 
@@ -42,7 +42,7 @@ variable "region" {
 
 variable "vpc_name" {
   type        = string
-  description = "the name of the network."
+  description = "The name of the network."
 }
 
 variable "subnet_ip" {
@@ -51,29 +51,29 @@ variable "subnet_ip" {
 }
 
 variable "perimeter_additional_members" {
-  description = "The list additional members to be added on perimeter access. Prefix of group: user: or serviceAccount: is required."
+  description = "The list of additional members to be added on perimeter access. Prefix of group: user: or serviceAccount: is required."
   type        = list(string)
   default     = []
 }
 
 variable "restricted_services" {
   type        = list(string)
-  description = "The list of services to be restricted by the VPC Service Control"
+  description = "The list of services to be restricted by VPC Service Controls."
 }
 
 variable "access_context_manager_policy_id" {
   type        = number
-  description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
+  description = "The id of the default Access Context Manager policy (see https://cloud.google.com/access-context-manager/docs/overview). Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
 }
 
 variable "access_level_ip_subnetworks" {
-  description = "Condition - A list of CIDR block IP subnetwork specification. May be IPv4 or IPv6. Note that for a CIDR IP address block, the specified IP address portion must be properly truncated (i.e. all the host bits must be zero) or the input is considered malformed. For example, \"192.0.2.0/24\" is accepted but \"192.0.2.1/24\" is not. Similarly, for IPv6, \"2001:db8::/32\" is accepted whereas \"2001:db8::1/32\" is not. The originating IP of a request must be in one of the listed subnets in order for this Condition to be true. If empty, all IP addresses are allowed."
+  description = "Condition - A list of CIDR block IP subnetwork specification. May be IPv4 or IPv6. Note that for a CIDR IP address block, the specified IP address portion must be properly truncated (that is, all the host bits must be zero) or the input is considered malformed. For example, \"192.0.2.0/24\" is accepted but \"192.0.2.1/24\" is not. Similarly, for IPv6, \"2001:db8::/32\" is accepted whereas \"2001:db8::1/32\" is not. The originating IP of a request must be in one of the listed subnets in order for this Condition to be true. If empty, all IP addresses are allowed."
   type        = list(string)
   default     = []
 }
 
 variable "access_level_regions" {
-  description = "Condition - The request must originate from one of the provided countries/regions. Format: A valid ISO 3166-1 alpha-2 code."
+  description = "Condition - The request must originate from one of the provided countries or regions. Format: A valid ISO 3166-1 alpha-2 code."
   type        = list(string)
   default     = []
 }
@@ -85,19 +85,19 @@ variable "access_level_require_screen_lock" {
 }
 
 variable "access_level_require_corp_owned" {
-  description = "Condition - Whether the device needs to be corp owned."
+  description = "Condition - Whether the device needs to be company owned."
   type        = bool
   default     = true
 }
 
 variable "access_level_allowed_encryption_statuses" {
-  description = "Condition - A list of allowed encryptions statuses. An empty list allows all statuses."
+  description = "Condition - A list of allowed encryption statuses. An empty list allows all statuses. For more information, see https://cloud.google.com/access-context-manager/docs/reference/rest/Shared.Types/DeviceEncryptionStatus."
   type        = list(string)
   default     = ["ENCRYPTED"]
 }
 
 variable "organization_has_mdm_license" {
-  description = "Indicates that the organization has a MDM license (See https://cloud.google.com/access-context-manager/docs/use-mobile-devices). Will allow require_screen_lock, require_corp_owned and allowed_encryption_statuses to be used on policy access level."
+  description = "Whether the organization has an MDM license (see https://cloud.google.com/access-context-manager/docs/use-mobile-devices). Will allow require_screen_lock, require_corp_owned and allowed_encryption_statuses to be used on policy access level."
   type        = bool
   default     = false
 }

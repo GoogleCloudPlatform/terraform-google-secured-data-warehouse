@@ -17,45 +17,45 @@
 
 output "network_name" {
   value       = module.network.network_name
-  description = "The name of the VPC being created"
+  description = "The name of the VPC being created."
 }
 
 output "project_number" {
   value       = data.google_project.target_project.number
-  description = "Project number included on perimeter"
+  description = "The project number that is included on the perimeter."
 }
 
 output "network_self_link" {
   value       = module.network.network_self_link
-  description = "The URI of the VPC being created"
+  description = "The URI of the VPC being created."
 }
 
 output "subnets_names" {
   value       = module.network.subnets_names
-  description = "The names of the subnets being created"
+  description = "The names of the subnets being created."
 }
 
 output "subnets_ips" {
   value       = module.network.subnets_ips
-  description = "The IPs and CIDRs of the subnets being created"
+  description = "The IPs and CIDRs of the subnets being created."
 }
 
 output "subnets_self_links" {
   value       = module.network.subnets_self_links
-  description = "The self-links of subnets being created"
+  description = "The self-links of subnets being created."
 }
 
 output "subnets_regions" {
   value       = module.network.subnets_regions
-  description = "The region where the subnets will be created"
+  description = "The region where the subnets will be created."
 }
 
 output "access_level_name" {
   value       = module.access_level_policy.name
-  description = "Access context manager access level name"
+  description = "The access level name for the Access Context Manager."
 }
 
 output "service_perimeter_name" {
   value       = local.regular_service_perimeter_name
-  description = "Access context manager service perimeter name"
+  description = "The service perimeter name for the Access Context Manager."
 }

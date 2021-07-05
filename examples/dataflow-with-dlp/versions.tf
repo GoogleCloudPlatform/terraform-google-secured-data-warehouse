@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-output "email" {
-  description = "The service account email address."
-  value       = google_service_account.service_account.email
+terraform {
+  required_version = ">= 0.13"
 }

@@ -1,6 +1,6 @@
 # De-identification template submodule
 
-This submodule allows you to create a Cloud [Data Loss Prevention](https://cloud.google.com/dlp/docs) (DLP) [de-identification template](https://cloud.google.com/dlp/docs/deidentify-sensitive-data) from a JSON template file that you provide.
+This submodule allows you to create a [Cloud Data Loss Prevention](https://cloud.google.com/dlp/docs) (DLP) [de-identification template](https://cloud.google.com/dlp/docs/deidentify-sensitive-data) from a JSON template file that you provide.
 
 ## Compatibility
 
@@ -34,7 +34,7 @@ The `crypto_key` location must be the same location used for the `dlp_location`.
 
 ### Template file
 
-Crate a [DLP de-identification](https://cloud.google.com/dlp/docs/deidentify-sensitive-data) template file.
+Create a [DLP de-identification](https://cloud.google.com/dlp/docs/deidentify-sensitive-data) template file.
 
 The template file is a JSON representation of a `deidentifyTemplates` call [request body](https://cloud.google.com/dlp/docs/reference/rest/v2/projects.deidentifyTemplates/create#request-body).
 
@@ -63,7 +63,8 @@ A functional example for a Record Transformation is included under the
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | crypto\_key | The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP. | `string` | n/a | yes |
-| dlp\_location | The location of DLP resources. See https://cloud.google.com/dlp/docs/locations. The 'global' KMS location is valid. | `string` | n/a | yes |
+| dataflow\_service\_account | The Service Account email that will be used to identify the VMs in which the jobs are running | `string` | n/a | yes |
+| dlp\_location | The location of DLP resources. See https://cloud.google.com/dlp/docs/locations. The 'global' KMS location is valid. | `string` | `"global"` | no |
 | project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
 | template\_description | A description for the DLP de-identification template. | `string` | `"De-identifies sensitive content defined in the template with a KMS wrapped CMEK."` | no |
 | template\_display\_name | The display name of the DLP de-identification template. | `string` | `"De-identification template using a KMS wrapped CMEK"` | no |
@@ -78,8 +79,8 @@ A functional example for a Record Transformation is included under the
 |------|-------------|
 | crypto\_key | The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP. |
 | dlp\_location | The location of the DLP resources. |
-| template\_description | Description of the DLP de-identification template. |
-| template\_display\_name | Display name of the DLP de-identification template. |
+| template\_description | The description of the DLP de-identification template. |
+| template\_display\_name | The display name of the DLP de-identification template. |
 | template\_id | The ID of the Cloud DLP de-identification template that is created. |
 | wrapped\_key | The base64 encoded data crypto key wrapped by KMS. |
 
@@ -101,7 +102,7 @@ Install the following dependencies:
 
 ### Service Account
 
-Create a service account with the following roles to provision the resources for this module:
+Create a [service account](https://cloud.google.com/iam/docs/creating-managing-service-accounts) with the following roles to provision the resources for this module:
 
 - Cloud KMS Admin: `roles/cloudkms.admin`
 - DLP De-identify Templates Editor: `roles/dlp.deidentifyTemplatesEditor`
@@ -111,7 +112,7 @@ Create a service account with the following roles to provision the resources for
 
 ### APIs
 
-Create a project with the following APIs enabled to host the resources for this module:
+Create a [project](https://cloud.google.com/resource-manager/docs/creating-managing-projects) with the following APIs enabled to host the resources for this module:
 
 - Cloud Key Management Service API: `cloudkms.googleapis.com`
 - Cloud Data Loss Prevention API: `dlp.googleapis.com`
@@ -119,4 +120,5 @@ Create a project with the following APIs enabled to host the resources for this 
 - Cloud Resource Manager API: `cloudresourcemanager.googleapis.com`
 
 You can use the [Project Factory module](https://github.com/terraform-google-modules/terraform-google-project-factory) to provision a project with the necessary APIs enabled.
+
 To provision the service account, you can use the [IAM module](https://github.com/terraform-google-modules/terraform-google-iam) in combination with the Project Factory module.

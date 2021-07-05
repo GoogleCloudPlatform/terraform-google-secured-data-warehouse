@@ -14,7 +14,20 @@
  * limitations under the License.
  */
 
-output "email" {
-  description = "The service account email address."
-  value       = google_service_account.service_account.email
+/******************************************
+  Provider credential configuration
+ *****************************************/
+provider "google" {
+  version                     = "~> 3.63"
+  impersonate_service_account = var.terraform_service_account
+  request_timeout             = "60s"
+}
+
+/******************************************
+  Provider credential configuration
+ *****************************************/
+provider "google-beta" {
+  version                     = "~> 3.63"
+  impersonate_service_account = var.terraform_service_account
+  request_timeout             = "60s"
 }
