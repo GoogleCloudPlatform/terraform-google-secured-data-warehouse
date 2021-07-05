@@ -15,12 +15,12 @@
  */
 
 output "emails_list" {
-  description = "The service account emails."
+  description = "The service account email addresses as list."
   value       = module.service_accounts.emails_list
 }
 
 output "emails" {
-  description = "The list of service account emails."
+  description = "The service account email addresses by name."
   value       = module.service_accounts.emails
 }
 
@@ -50,12 +50,12 @@ output "member_policy_name_private" {
 }
 
 output "location" {
-  description = "Location for storing your BigQuery data when you create a dataset."
+  description = "The region for storing your BigQuery data when you create a dataset."
   value       = var.location
 }
 
 output "dataset_id" {
-  description = "The dataset ID to deploy to data-warehouse."
+  description = "The dataset ID to deploy to data warehouse."
   value       = var.dataset_id
 }
 

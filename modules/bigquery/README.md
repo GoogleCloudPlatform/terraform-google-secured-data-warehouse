@@ -5,7 +5,7 @@ This module creates:
 - A taxonomy and two policy tags that are split into two layers: confidential and private.
 - A BigQuery dataset.
 - A BigQuery table where policy tags will be applied.
-- Two service accounts binded to policy tags.
+- Two service accounts that are bound to the policy tags.
 
 ## Usage
 
@@ -28,24 +28,24 @@ Functional examples are included in the [examples](./examples/bigquery) director
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| dataset\_id | The dataset ID to deploy to datawarehouse. | `string` | n/a | yes |
+| dataset\_id | The dataset ID to deploy to the data warehouse. | `string` | n/a | yes |
 | dataset\_labels | Key value pairs in a map for dataset labels. | `map(string)` | `{}` | no |
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `null` | no |
 | location | Default region to create resources where applicable. | `string` | n/a | yes |
-| project\_id | Project where the dataset and table are created. | `string` | n/a | yes |
+| project\_id | The project where the dataset and table are created. | `string` | n/a | yes |
 | project\_roles | Common roles to apply to all service accounts in the project. | `list(string)` | `[]` | no |
-| table\_id | The table ID to deploy to datawarehouse. | `string` | n/a | yes |
+| table\_id | The table ID to deploy to data warehouse. | `string` | n/a | yes |
 | taxonomy\_name | The taxonomy display name. | `string` | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| dataset\_id | The dataset ID to deploy to data-warehouse. |
-| emails | The list of service account emails. |
-| emails\_list | The service account emails. |
+| dataset\_id | The dataset ID to deploy to data warehouse. |
+| emails | The service account email addresses by name. |
+| emails\_list | The service account email addresses as list. |
 | high\_policy\_taxonomy\_id | Content for Policy Tag ID in high policy. |
-| location | Location for storing your BigQuery data when you create a dataset. |
+| location | The region for storing your BigQuery data when you create a dataset. |
 | medium\_policy\_taxonomy\_id | Content for Policy Tag ID in medium policy. |
 | member\_policy\_name\_confidential | SA member for Person Name policy tag. |
 | member\_policy\_name\_private | SA member for Person Name policy tag. |

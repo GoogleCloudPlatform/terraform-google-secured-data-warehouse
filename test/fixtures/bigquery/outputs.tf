@@ -20,12 +20,12 @@ output "project_id" {
 }
 
 output "emails_list" {
-  description = "The service account emails as a list."
+  description = "The service account email addresses as list."
   value       = module.bigquery.emails_list
 }
 
 output "emails" {
-  description = "The service account emails."
+  description = "The service account email addresses by name."
   value       = module.bigquery.emails
 }
 
@@ -55,7 +55,7 @@ output "member_policy_name_private" {
 }
 
 output "dataset_id" {
-  description = "The dataset ID to deploy to datawarehouse."
+  description = "The dataset ID to deploy to data warehouse."
   value       = module.bigquery.dataset_id
 }
 

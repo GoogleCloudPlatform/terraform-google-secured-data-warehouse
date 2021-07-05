@@ -38,12 +38,12 @@ variable "project_id" {
 }
 
 variable "dataset_id" {
-  description = "The dataset ID to deploy to datawarehouse."
+  description = "The dataset ID to deploy to data warehouse."
   type        = string
 }
 
 variable "table_id" {
-  description = "The table ID to deploy to datawarehouse."
+  description = "The table ID to deploy to data warehouse."
   type        = string
 }
 

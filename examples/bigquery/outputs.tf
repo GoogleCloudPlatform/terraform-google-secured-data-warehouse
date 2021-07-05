@@ -15,7 +15,7 @@
  */
 
 output "location" {
-  description = "Location for storing your BigQuery data when you create a dataset."
+  description = "The region for storing your BigQuery data when you create a dataset."
   value       = var.location
 }
 
@@ -25,6 +25,6 @@ output "project_id" {
 }
 
 output "dataset_id" {
-  description = "The dataset ID to deploy to data-warehouse"
+  description = "The dataset ID to deploy to data warehouse"
   value       = var.dataset_id
 }
