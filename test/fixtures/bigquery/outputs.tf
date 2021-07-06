@@ -14,11 +14,6 @@
  * limitations under the License.
  */
 
-output "project_id" {
-  description = "Project where service accounts and core APIs will be enabled."
-  value       = var.project_id
-}
-
 output "emails_list" {
   description = "The service account email addresses as list."
   value       = module.bigquery.emails_list
@@ -52,6 +47,11 @@ output "member_policy_name_confidential" {
 output "member_policy_name_private" {
   description = "SA member for Person Name policy tag private."
   value       = module.bigquery.member_policy_name_private
+}
+
+output "project_id" {
+  description = "Project where service accounts and core APIs will be enabled."
+  value       = module.bigquery.project_id
 }
 
 output "dataset_id" {
