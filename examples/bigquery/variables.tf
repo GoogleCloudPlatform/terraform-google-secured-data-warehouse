@@ -40,7 +40,7 @@ variable "taxonomy_name" {
 variable "location" {
   description = "Default region to create resources where applicable."
   type        = string
-  default     = "us-east1"
+  default     = "US"
 }
 
 variable "terraform_service_account" {
