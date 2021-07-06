@@ -108,3 +108,18 @@ output "cmek_pubsub_crypto_key" {
   value       = module.cmek.keys[local.pubsub_key_name]
   description = "The Customer Managed Crypto Key for the PubSub service."
 }
+
+output "default_storage_sa" {
+  description = "The default Storage service account granted encrypt/decrypt permission on the KMS key."
+  value       = local.storage_sa
+}
+
+output "default_pubsub_sa" {
+  description = "The default Pub/Sub service account granted encrypt/decrypt permission on the KMS key."
+  value       = local.pubsub_sa
+}
+
+output "default_bigquery_sa" {
+  description = "The default Bigquery service account granted encrypt/decrypt permission on the KMS key."
+  value       = local.bigquery_sa
+}

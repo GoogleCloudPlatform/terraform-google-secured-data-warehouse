@@ -132,15 +132,15 @@ output "cmek_keyring_name" {
 
 output "default_storage_sa" {
   description = "The default Storage service account granted encrypt/decrypt permission on the KMS key."
-  value       = local.storage_sa
+  value       = module.data_ingestion.default_storage_sa
 }
 
 output "default_pubsub_sa" {
   description = "The default Pub/Sub service account granted encrypt/decrypt permission on the KMS key."
-  value       = local.pubsub_sa
+  value       = module.data_ingestion.default_pubsub_sa
 }
 
 output "default_bigquery_sa" {
   description = "The default Bigquery service account granted encrypt/decrypt permission on the KMS key."
-  value       = local.bigquery_sa
+  value       = module.data_ingestion.default_bigquery_sa
 }

@@ -218,6 +218,9 @@ If your user does not have the necessary roles to run the commands above you can
 | data\_ingest\_bucket\_names | The name list of the buckets created for data ingest pipeline. |
 | data\_ingest\_topic\_name | The topic created for data ingest pipeline. |
 | dataflow\_controller\_service\_account\_email | The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account |
+| default\_bigquery\_sa | The default Bigquery service account granted encrypt/decrypt permission on the KMS key. |
+| default\_pubsub\_sa | The default Pub/Sub service account granted encrypt/decrypt permission on the KMS key. |
+| default\_storage\_sa | The default Storage service account granted encrypt/decrypt permission on the KMS key. |
 | network\_name | The name of the VPC being created |
 | network\_self\_link | The URI of the VPC being created |
 | project\_number | Project number included on perimeter |
