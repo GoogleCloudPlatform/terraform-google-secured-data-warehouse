@@ -59,6 +59,11 @@ output "dataset_id" {
   value       = var.dataset_id
 }
 
+output "project_id" {
+  description = "Project where the dataset and table are created."
+  value       = var.project_id
+}
+
 output "taxonomy_name" {
   description = "The taxonomy display name."
   value       = var.taxonomy_name
