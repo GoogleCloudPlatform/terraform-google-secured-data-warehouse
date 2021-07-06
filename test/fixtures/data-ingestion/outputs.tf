@@ -72,42 +72,42 @@ output "data_ingest_bigquery_dataset_id" {
 
 output "network_name" {
   value       = module.data_ingestion.network_name
-  description = "The name of the VPC being created"
+  description = "The name of the VPC being created."
 }
 
 output "network_self_link" {
   value       = module.data_ingestion.network_self_link
-  description = "The URI of the VPC being created"
+  description = "The URI of the VPC being created."
 }
 
 output "subnets_names" {
   value       = module.data_ingestion.subnets_names
-  description = "The names of the subnets being created"
+  description = "The names of the subnets being created."
 }
 
 output "subnets_ips" {
   value       = module.data_ingestion.subnets_ips
-  description = "The IPs and CIDRs of the subnets being created"
+  description = "The IPs and CIDRs of the subnets being created."
 }
 
 output "subnetwork_self_link" {
   value       = module.data_ingestion.subnets_self_links[0]
-  description = "The self-link of subnet being created"
+  description = "The self-link of subnet being created."
 }
 
 output "subnets_regions" {
   value       = module.data_ingestion.subnets_regions
-  description = "The region where the subnets will be created"
+  description = "The region where the subnets will be created."
 }
 
 output "access_level_name" {
   value       = module.data_ingestion.access_level_name
-  description = "Access context manager access level name "
+  description = "Access context manager access level name."
 }
 
 output "service_perimeter_name" {
   value       = module.data_ingestion.service_perimeter_name
-  description = "Access context manager service perimeter name "
+  description = "Access context manager service perimeter name."
 }
 
 output "perimeter_additional_members" {
@@ -120,3 +120,27 @@ output "terraform_service_account" {
   value       = var.terraform_service_account
 }
 
+output "cmek_location" {
+  description = "The location for the KMS Customer Managed Encryption Keys."
+  value       = var.cmek_location
+}
+
+output "cmek_keyring_name" {
+  description = "The Keyring name for the KMS Customer Managed Encryption Keys."
+  value       = var.cmek_keyring_name
+}
+
+output "default_storage_sa" {
+  description = "The default Storage service account granted encrypt/decrypt permission on the KMS key."
+  value       = local.storage_sa
+}
+
+output "default_pubsub_sa" {
+  description = "The default Pub/Sub service account granted encrypt/decrypt permission on the KMS key."
+  value       = local.pubsub_sa
+}
+
+output "default_bigquery_sa" {
+  description = "The default Bigquery service account granted encrypt/decrypt permission on the KMS key."
+  value       = local.bigquery_sa
+}

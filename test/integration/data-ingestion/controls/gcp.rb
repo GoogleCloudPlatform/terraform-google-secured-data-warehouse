@@ -26,6 +26,11 @@ access_level_name = attribute('access_level_name')
 organization_policy_name = attribute('organization_policy_name')
 terraform_service_account = attribute('terraform_service_account')
 perimeter_additional_members = attribute('perimeter_additional_members')
+cmek_location = attribute('cmek_location')
+cmek_keyring_name = attribute('cmek_keyring_name')
+default_storage_sa = attribute('default_storage_sa')
+default_pubsub_sa = attribute('default_pubsub_sa')
+default_bigquery_sa = attribute('default_bigquery_sa')
 
 restricted_googleapis_cidr = '199.36.153.4/30'
 private_googleapis_cidr = '199.36.153.8/30'
@@ -137,5 +142,62 @@ control 'gcp' do
         an_object_having_attributes(ip_protocol: 'tcp', ports: ['443'])
       )
     end
+  end
+
+  describe google_kms_key_ring(project: project_id, location: cmek_location, name: cmek_keyring_name) do
+    it { should exist }
+    its('key_ring_name'){ should eq cmek_keyring_name }
+    its('key_ring_url'){ should match cmek_keyring_name }
+  end
+
+  describe google_kms_crypto_key(project: project_id, location: cmek_location, key_ring_name: cmek_keyring_name, name: 'storage_kms_key') do
+    it { should exist }
+    its('crypto_key_name') { should cmp 'storage_kms_key' }
+    its('primary_state') { should eq "ENABLED" }
+    its('purpose') { should eq "ENCRYPT_DECRYPT" }
+  end
+
+  describe google_kms_crypto_key_iam_binding(project: project_id, location: cmek_location, key_ring_name: cmek_keyring_name, crypto_key_name: "storage_kms_key", role: "roles/cloudkms.cryptoKeyDecrypter") do
+    it { should exist }
+    its('members') { should include "serviceAccount:#{default_storage_sa}" }
+  end
+
+  describe google_kms_crypto_key_iam_binding(project: project_id, location: cmek_location, key_ring_name: cmek_keyring_name, crypto_key_name: "storage_kms_key", role: "roles/cloudkms.cryptoKeyEncrypter") do
+    it { should exist }
+    its('members') { should include "serviceAccount:#{default_storage_sa}" }
+  end
+
+  describe google_kms_crypto_key(project: project_id, location: cmek_location, key_ring_name: cmek_keyring_name, name: 'bigquery_kms_key') do
+    it { should exist }
+    its('crypto_key_name') { should cmp 'bigquery_kms_key' }
+    its('primary_state') { should eq "ENABLED" }
+    its('purpose') { should eq "ENCRYPT_DECRYPT" }
+  end
+
+  describe google_kms_crypto_key_iam_binding(project: project_id, location: cmek_location, key_ring_name: cmek_keyring_name, crypto_key_name: "bigquery_kms_key", role: "roles/cloudkms.cryptoKeyDecrypter") do
+    it { should exist }
+    its('members') { should include "serviceAccount:#{default_bigquery_sa}" }
+  end
+
+  describe google_kms_crypto_key_iam_binding(project: project_id, location: cmek_location, key_ring_name: cmek_keyring_name, crypto_key_name: "bigquery_kms_key", role: "roles/cloudkms.cryptoKeyEncrypter") do
+    it { should exist }
+    its('members') { should include "serviceAccount:#{default_bigquery_sa}" }
+  end
+
+  describe google_kms_crypto_key(project: project_id, location: cmek_location, key_ring_name: cmek_keyring_name, name: 'pubsub_kms_key') do
+    it { should exist }
+    its('crypto_key_name') { should cmp 'pubsub_kms_key' }
+    its('primary_state') { should eq "ENABLED" }
+    its('purpose') { should eq "ENCRYPT_DECRYPT" }
+  end
+
+  describe google_kms_crypto_key_iam_binding(project: project_id, location: cmek_location, key_ring_name: cmek_keyring_name, crypto_key_name: "pubsub_kms_key", role: "roles/cloudkms.cryptoKeyDecrypter") do
+    it { should exist }
+    its('members') { should include "serviceAccount:#{default_pubsub_sa}" }
+  end
+
+  describe google_kms_crypto_key_iam_binding(project: project_id, location: cmek_location, key_ring_name: cmek_keyring_name, crypto_key_name: "pubsub_kms_key", role: "roles/cloudkms.cryptoKeyEncrypter") do
+    it { should exist }
+    its('members') { should include "serviceAccount:#{default_pubsub_sa}" }
   end
 end
