@@ -42,4 +42,11 @@ module "vpc_service_controls" {
     "dataflow.googleapis.com",
     "pubsub.googleapis.com"
   ]
+
+  depends_on = [
+    module.data_ingest_bucket,
+    module.bigquery_dataset,
+    module.data_ingest_topic,
+    module.cmek
+  ]
 }

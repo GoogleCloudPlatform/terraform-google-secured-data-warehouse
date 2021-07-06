@@ -36,6 +36,10 @@ module "data_ingest_bucket" {
   labels = {
     "enterprise_data_ingest_bucket" = "true"
   }
+
+  depends_on = [
+    module.cmek
+  ]
 }
 
 //pub/sub ingest topic
@@ -47,6 +51,9 @@ module "data_ingest_topic" {
   topic              = "tpc-data-ingest-${random_id.suffix.hex}"
   topic_kms_key_name = module.cmek.keys[local.pubsub_key_name]
 
+  depends_on = [
+    module.cmek
+  ]
 }
 
 //BigQuery dataset
@@ -66,4 +73,8 @@ module "bigquery_dataset" {
     purpose  = "ingest"
     billable = "true"
   }
+
+  depends_on = [
+    module.cmek
+  ]
 }
