@@ -14,14 +14,20 @@
  * limitations under the License.
  */
 
-module "de_identification_template_example" {
-  source = "../..//modules/de_identification_template"
+/******************************************
+  Provider credential configuration
+ *****************************************/
+provider "google" {
+  version                     = "~> 3.63"
+  impersonate_service_account = var.terraform_service_account
+  request_timeout             = "60s"
+}
 
-  project_id                = var.project_id
-  terraform_service_account = var.terraform_service_account
-  dataflow_service_account  = var.dataflow_service_account
-  crypto_key                = var.crypto_key
-  wrapped_key               = var.wrapped_key
-  dlp_location              = var.dlp_location
-  template_file             = "${path.module}/deidentification.tmpl"
+/******************************************
+  Provider credential configuration
+ *****************************************/
+provider "google-beta" {
+  version                     = "~> 3.63"
+  impersonate_service_account = var.terraform_service_account
+  request_timeout             = "60s"
 }

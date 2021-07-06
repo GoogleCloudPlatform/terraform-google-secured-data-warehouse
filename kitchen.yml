@@ -36,6 +36,20 @@ suites:
           backend: gcp
           controls:
             - gcp
+  - name: dataflow-with-dlp
+    driver:
+      root_module_directory: test/fixtures/dataflow-with-dlp/
+    verifier:
+      color: false
+      systems:
+        - name: dataflow_with_dlp gcp
+          backend: gcp
+          controls:
+            - gcp
+        - name: dataflow_with_dlp gcloud
+          backend: local
+          controls:
+            - gcloud
   - name: de-identification-template
     driver:
       root_module_directory: test/fixtures/de-identification-template/

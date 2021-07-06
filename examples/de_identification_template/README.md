@@ -11,7 +11,7 @@ To provision this example, complete these tasks from within this directory:
    ```
    terraform init
    ```
-1. Review the infrastructure plan. When prompted, enter the `project_id`, `terraform_service_account`, `dlp_location`, `crypto_key` and `wrapped_key`
+1. Review the infrastructure plan. When prompted, enter the requested values.
    ```
    terraform plan
    ```
@@ -30,7 +30,8 @@ To provision this example, complete these tasks from within this directory:
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | crypto\_key | The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP. | `string` | n/a | yes |
-| dlp\_location | The location of DLP resources. See https://cloud.google.com/dlp/docs/locations. The 'global' KMS location is valid. | `string` | n/a | yes |
+| dataflow\_service\_account | The Service Account email that will be used to identify the VMs in which the jobs are running | `string` | n/a | yes |
+| dlp\_location | The location of DLP resources. See https://cloud.google.com/dlp/docs/locations. The 'global' KMS location is valid. | `string` | `"global"` | no |
 | project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
 | terraform\_service\_account | The email address of the service account that will run the Terraform config. | `string` | n/a | yes |
 | wrapped\_key | The base64 encoded data crypto key wrapped by KMS. | `string` | n/a | yes |

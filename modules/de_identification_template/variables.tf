@@ -27,6 +27,7 @@ variable "terraform_service_account" {
 variable "dlp_location" {
   description = "The location of DLP resources. See https://cloud.google.com/dlp/docs/locations. The 'global' KMS location is valid."
   type        = string
+  default     = "global"
 }
 
 variable "crypto_key" {
@@ -60,4 +61,9 @@ variable "template_description" {
   description = "A description for the DLP de-identification template."
   type        = string
   default     = "De-identifies sensitive content defined in the template with a KMS wrapped CMEK."
+}
+
+variable "dataflow_service_account" {
+  type        = string
+  description = "The Service Account email that will be used to identify the VMs in which the jobs are running"
 }

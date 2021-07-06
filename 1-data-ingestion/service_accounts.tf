@@ -20,15 +20,19 @@ module "dataflow_controller_service_account" {
   source = "..//modules/service_account"
 
   project_id   = var.project_id
-  account_id   = "sa-dataflow-${random_id.suffix.hex}"
+  account_id   = "sa-dataflow-controller"
   display_name = "Cloud Dataflow controller service account"
 
   project_roles = [
     "roles/pubsub.subscriber",
-    "roles/bigquery.jobUser",
-    "roles/bigquery.jobUser",
-    "roles/dlp.reader",
-    "roles/storage.objectViewer"
+    "roles/bigquery.admin",
+    "roles/cloudkms.admin",
+    "roles/cloudkms.cryptoKeyDecrypter",
+    "roles/dlp.admin",
+    "roles/storage.admin",
+    "roles/dataflow.serviceAgent",
+    "roles/dataflow.worker",
+    "roles/compute.viewer"
   ]
 
 }
@@ -38,7 +42,7 @@ module "storage_writer_service_account" {
   source = "..//modules/service_account"
 
   project_id   = var.project_id
-  account_id   = "sa-storage-writer-${random_id.suffix.hex}"
+  account_id   = "sa-storage-writer"
   display_name = "Cloud Storage data writer service account"
 
   project_roles = [
@@ -52,7 +56,7 @@ module "pubsub_writer_service_account" {
   source = "..//modules/service_account"
 
   project_id   = var.project_id
-  account_id   = "sa-pubsub-writer-${random_id.suffix.hex}"
+  account_id   = "sa-pubsub-writer"
   display_name = "Cloud PubSub data writer service account"
 
   project_roles = [

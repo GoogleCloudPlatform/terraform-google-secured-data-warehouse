@@ -15,19 +15,28 @@
  */
 
 variable "project_id" {
-  description = "The ID of the project in which to provision resources."
+  description = "The ID of the project in which the service account will be created."
   type        = string
 }
 
 variable "terraform_service_account" {
-  description = "The email address of the service account that will run the Terraform config."
+  description = "Service account email of the account to impersonate to run Terraform."
   type        = string
 }
 
-variable "dlp_location" {
-  description = "The location of DLP resources. See https://cloud.google.com/dlp/docs/locations. The 'global' KMS location is valid."
+variable "dataflow_service_account" {
   type        = string
-  default     = "global"
+  description = "The Service Account email that will be used to identify the VMs in which the jobs are running"
+}
+
+variable "subnetwork_self_link" {
+  type        = string
+  description = "The subnetwork self link to which VMs will be assigned."
+}
+
+variable "network_self_link" {
+  type        = string
+  description = "The network self link to which VMs will be assigned."
 }
 
 variable "crypto_key" {
@@ -38,9 +47,4 @@ variable "crypto_key" {
 variable "wrapped_key" {
   description = "The base64 encoded data crypto key wrapped by KMS."
   type        = string
-}
-
-variable "dataflow_service_account" {
-  type        = string
-  description = "The Service Account email that will be used to identify the VMs in which the jobs are running"
 }

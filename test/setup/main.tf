@@ -36,7 +36,7 @@ module "project" {
     "accesscontextmanager.googleapis.com",
     "cloudbilling.googleapis.com",
     "cloudkms.googleapis.com",
-    "dlp.googleapis.com",
-    "secretmanager.googleapis.com"
+    "dataflow.googleapis.com",
+    "dlp.googleapis.com"
   ]
 }
