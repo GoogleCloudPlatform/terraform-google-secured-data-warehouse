@@ -21,6 +21,5 @@ module "bigquery" {
   table_id      = var.table_id
   taxonomy_name = var.taxonomy_name
 
-
   location = "us-east1"
 }

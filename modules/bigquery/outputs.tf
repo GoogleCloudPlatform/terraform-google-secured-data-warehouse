@@ -66,5 +66,5 @@ output "project_id" {
 
 output "taxonomy_name" {
   description = "The taxonomy display name."
-  value       = var.taxonomy_name
+  value       = google_data_catalog_taxonomy.secure_taxonomy.display_name
 }
