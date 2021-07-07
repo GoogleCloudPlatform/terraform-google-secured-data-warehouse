@@ -49,11 +49,6 @@ output "member_policy_name_private" {
   value       = google_data_catalog_policy_tag_iam_member.private_sa_name.member
 }
 
-output "location" {
-  description = "The region for storing your BigQuery data when you create a dataset."
-  value       = var.location
-}
-
 output "dataset_id" {
   description = "The dataset ID to deploy to data warehouse."
   value       = var.dataset_id
