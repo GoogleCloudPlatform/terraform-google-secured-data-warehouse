@@ -17,9 +17,9 @@
 module "bigquery" {
   source        = "../../..//modules/bigquery"
   project_id    = var.project_id
-  dataset_id    = var.dataset_id
-  table_id      = var.table_id
-  taxonomy_name = var.taxonomy_name
+  dataset_id    = "dtwh_dataset"
+  table_id      = "sample_data"
+  taxonomy_name = "secure_bq-taxonomy"
 
   location = "us-east1"
 }
