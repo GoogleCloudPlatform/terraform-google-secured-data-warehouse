@@ -77,24 +77,24 @@ steps:
   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do destroy data-ingestion']
   env:
   - 'TF_VAR_org_id=$_ORG_ID'
-- id: create-bigquery_sensitive_data
+- id: create-bigquery-sensitive-data
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do create bigquery_sensitive_data']
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do create bigquery-sensitive-data']
   env:
   - 'TF_VAR_org_id=$_ORG_ID'
-- id: converge-bigquery_sensitive_data
+- id: converge-bigquery-sensitive-data
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do converge bigquery_sensitive_data']
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do converge bigquery-sensitive-data']
   env:
   - 'TF_VAR_org_id=$_ORG_ID'
-- id: verify-bigquery_sensitive_data
+- id: verify-bigquery-sensitive-data
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do verify bigquery_sensitive_data']
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do verify bigquery-sensitive-data']
   env:
   - 'TF_VAR_org_id=$_ORG_ID'
-- id: destroy-bigquery_sensitive_data
+- id: destroy-bigquery-sensitive-data
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do destroy bigquery_sensitive_data']
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do destroy bigquery-sensitive-data']
   env:
   - 'TF_VAR_org_id=$_ORG_ID'
 tags:
