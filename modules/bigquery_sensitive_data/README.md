@@ -32,7 +32,7 @@ Functional examples are included in the [examples](./examples/bigquery_sensitive
 | dataset\_labels | Key value pairs in a map for dataset labels. | `map(string)` | `{}` | no |
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `null` | no |
 | location | Default region to create resources where applicable. | `string` | n/a | yes |
-| project\_id | The project where the dataset and table are created. | `string` | n/a | yes |
+| project\_id | Project where the dataset and table are created. | `string` | n/a | yes |
 | project\_roles | Common roles to apply to all service accounts in the project. | `list(string)` | `[]` | no |
 | table\_id | The table ID to deploy to data warehouse. | `string` | n/a | yes |
 | taxonomy\_name | The taxonomy display name. | `string` | n/a | yes |

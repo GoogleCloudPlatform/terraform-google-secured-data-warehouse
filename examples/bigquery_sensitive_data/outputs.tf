@@ -14,7 +14,3 @@
  * limitations under the License.
  */
 
-output "bigquery_dataset" {
-  description = "Dataset created"
-  value       = modules.bigquery_sensitive_data
-}

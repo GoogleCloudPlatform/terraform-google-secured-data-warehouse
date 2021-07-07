@@ -13,8 +13,3 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-variable "terraform_service_account" {
-  description = "Service account email of the account to impersonate to run Terraform"
-  type        = string
-}
