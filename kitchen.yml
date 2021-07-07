@@ -60,7 +60,7 @@ suites:
           backend: local
           controls:
             - gcloud
-  - name: bigquery_sensitive_data
+  - name: bigquery-sensitive-data
     driver:
       root_module_directory: test/fixtures/bigquery_sensitive_data/
     verifier:
