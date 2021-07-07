@@ -28,7 +28,7 @@ Functional examples are included in the [examples](./examples/bigquery_sensitive
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| dataset\_id | The dataset ID to deploy to the data warehouse. | `string` | n/a | yes |
+| dataset\_id | The dataset ID to deploy to data warehouse. | `string` | n/a | yes |
 | dataset\_labels | Key value pairs in a map for dataset labels. | `map(string)` | `{}` | no |
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `null` | no |
 | location | Default region to create resources where applicable. | `string` | n/a | yes |
@@ -45,11 +45,11 @@ Functional examples are included in the [examples](./examples/bigquery_sensitive
 | emails | The service account email addresses by name. |
 | emails\_list | The service account email addresses as list. |
 | high\_policy\_taxonomy\_id | Content for Policy Tag ID in high policy. |
-| location | The region for storing your BigQuery data when you create a dataset. |
 | medium\_policy\_taxonomy\_id | Content for Policy Tag ID in medium policy. |
 | member\_policy\_name\_confidential | SA member for Person Name policy tag. |
 | member\_policy\_name\_private | SA member for Person Name policy tag. |
 | member\_policy\_ssn\_confidential | SA member for Social Security Number policy tag. |
+| project\_id | Project where the dataset and table are created. |
 | taxonomy\_name | The taxonomy display name. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
