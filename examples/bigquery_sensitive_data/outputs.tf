@@ -16,5 +16,5 @@
 
 output "bigquery_dataset" {
   description = "Dataset created"
-  value       = modules.bigquery
+  value       = modules.bigquery_sensitive_data
 }

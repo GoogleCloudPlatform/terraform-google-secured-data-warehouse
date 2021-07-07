@@ -16,50 +16,50 @@
 
 output "emails_list" {
   description = "The service account email addresses as list."
-  value       = module.bigquery.emails_list
+  value       = module.bigquery_sensitive_data.emails_list
 }
 
 output "emails" {
   description = "The service account email addresses by name."
-  value       = module.bigquery.emails
+  value       = module.bigquery_sensitive_data.emails
 }
 
 output "person_name_policy_tag" {
   description = "Content for Policy Tag ID in medium policy."
-  value       = module.bigquery.medium_policy_taxonomy_id
+  value       = module.bigquery_sensitive_data.medium_policy_taxonomy_id
 }
 
 output "social_security_number_policy_tag" {
   description = "Content for Policy Tag ID in high policy."
-  value       = module.bigquery.high_policy_taxonomy_id
+  value       = module.bigquery_sensitive_data.high_policy_taxonomy_id
 }
 
 output "member_policy_ssn_confidential" {
   description = "SA member for Social Security Number policy tag confidential."
-  value       = module.bigquery.member_policy_ssn_confidential
+  value       = module.bigquery_sensitive_data.member_policy_ssn_confidential
 }
 
 output "member_policy_name_confidential" {
   description = "SA member for Person Name policy tag confidential."
-  value       = module.bigquery.member_policy_name_confidential
+  value       = module.bigquery_sensitive_data.member_policy_name_confidential
 }
 
 output "member_policy_name_private" {
   description = "SA member for Person Name policy tag private."
-  value       = module.bigquery.member_policy_name_private
+  value       = module.bigquery_sensitive_data.member_policy_name_private
 }
 
 output "project_id" {
   description = "Project where service accounts and core APIs will be enabled."
-  value       = module.bigquery.project_id
+  value       = module.bigquery_sensitive_data.project_id
 }
 
 output "dataset_id" {
   description = "The dataset ID to deploy to data warehouse."
-  value       = module.bigquery.dataset_id
+  value       = module.bigquery_sensitive_data.dataset_id
 }
 
 output "taxonomy_name" {
   description = "The taxonomy display name."
-  value       = module.bigquery.taxonomy_name
+  value       = module.bigquery_sensitive_data.taxonomy_name
 }

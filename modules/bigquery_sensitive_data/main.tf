@@ -24,7 +24,7 @@ module "service_accounts" {
   project_id   = var.project_id
   names        = ["terraform-private-sa", "terraform-confidential-sa"]
   display_name = "Terraform SA accounts"
-  description  = "Service accounts for Secure BigQuery"
+  description  = "Service accounts for BigQuery Sensitive Data"
 
   project_roles = [
     "${var.project_id}=>roles/bigquery.dataViewer",
@@ -32,12 +32,12 @@ module "service_accounts" {
   ]
 }
 
-module "secure_bigquery" {
+module "bigquery_sensitive_data" {
   source  = "terraform-google-modules/bigquery/google"
   version = "~> 5.1.0"
 
   dataset_id                 = var.dataset_id
-  description                = "Dataset for Secure BigQuery"
+  description                = "Dataset for BigQuery Sensitive Data"
   project_id                 = var.project_id
   location                   = var.location
   delete_contents_on_destroy = var.delete_contents_on_destroy
@@ -66,7 +66,7 @@ resource "google_data_catalog_taxonomy" "secure_taxonomy" {
   project                = var.project_id
   region                 = var.location
   display_name           = "${var.taxonomy_name}-${random_id.suffix.hex}"
-  description            = "Taxonomy created for Secure BigQuery"
+  description            = "Taxonomy created for BigQuery Sensitive Data"
   activated_policy_types = ["FINE_GRAINED_ACCESS_CONTROL"]
 }
 

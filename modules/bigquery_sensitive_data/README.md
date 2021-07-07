@@ -12,16 +12,16 @@ This module creates:
 Basic usage of this module is as follows:
 
 ```hcl
-module "secure_bigquery" {
-  source  = "github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse//modules/bigquery"
+module "bigquery_sensitive_data" {
+  source  = "github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse//modules/bigquery_sensitive_data"
 
   dataset_id                  = var.dataset_id
-  description                 = "Dataset for Secure BigQuery"
+  description                 = "Dataset for BigQuery Sensitive Data"
   project_id                  = var.project_id
   location                    = var.location
 }
 ```
-Functional examples are included in the [examples](./examples/bigquery) directory.
+Functional examples are included in the [examples](./examples/bigquery_sensitive_data) directory.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs

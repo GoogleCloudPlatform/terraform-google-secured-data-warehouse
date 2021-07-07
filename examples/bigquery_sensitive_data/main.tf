@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-module "bigquery" {
-  source        = "../../..//modules/bigquery"
-  project_id    = var.project_id
-  dataset_id    = "dtwh_dataset"
+module "bigquery_sensitive_data" {
+  source        = "../..//modules/bigquery_sensitive_data"
+  taxonomy_name = "secured_taxonomy"
   table_id      = "sample_data"
-  taxonomy_name = "secure_bq-taxonomy"
-
-  location = "us-east1"
+  dataset_id    = "secured_dataset"
+  project_id    = "bigquery_sensitive_data"
+  location      = "US"
 }

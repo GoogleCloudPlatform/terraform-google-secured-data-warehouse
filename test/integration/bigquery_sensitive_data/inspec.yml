@@ -1,4 +1,4 @@
-name: bigquery
+name: bigquery_sensitive_data
 depends:
   - name: inspec-gcp
     git: https://github.com/inspec/inspec-gcp.git
