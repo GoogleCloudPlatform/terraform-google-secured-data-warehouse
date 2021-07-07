@@ -14,35 +14,6 @@
  * limitations under the License.
  */
 
-variable "project_id" {
-  description = "Project where the dataset and table are created"
-  type        = string
-}
-
-variable "dataset_id" {
-  description = "The dataset ID to deploy to data warehouse"
-  type        = string
-  default     = "dtwh_dataset"
-}
-
-variable "table_id" {
-  description = "The table ID to deploy to data warehouse."
-  type        = string
-  default     = "sample_data"
-}
-
-variable "taxonomy_name" {
-  description = "The taxonomy display name."
-  type        = string
-  default     = "secure_taxonomy_bq"
-}
-
-variable "location" {
-  description = "Default region to create resources where applicable."
-  type        = string
-  default     = "US"
-}
-
 variable "terraform_service_account" {
   description = "Service account email of the account to impersonate to run Terraform"
   type        = string
