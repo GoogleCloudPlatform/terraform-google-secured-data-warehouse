@@ -70,7 +70,7 @@ resource "google_data_catalog_taxonomy" "secure_taxonomy" {
   activated_policy_types = ["FINE_GRAINED_ACCESS_CONTROL"]
 }
 
-resource "google_data_catalog_policy_tag" "medium_policy_tag" {
+resource "google_data_catalog_policy_tag" "medium_parent_policy_tag" {
   provider     = google-beta
   taxonomy     = google_data_catalog_taxonomy.secure_taxonomy.id
   display_name = "Medium security policy"
@@ -82,10 +82,10 @@ resource "google_data_catalog_policy_tag" "name_child_policy_tag" {
   taxonomy          = google_data_catalog_taxonomy.secure_taxonomy.id
   display_name      = "PERSON_NAME"
   description       = "A full person name, which can include first names, middle names or initials, and last names."
-  parent_policy_tag = google_data_catalog_policy_tag.medium_policy_tag.id
+  parent_policy_tag = google_data_catalog_policy_tag.medium_parent_policy_tag.id
 }
 
-resource "google_data_catalog_policy_tag" "high_policy_tag" {
+resource "google_data_catalog_policy_tag" "high_parent_policy_tag" {
   provider     = google-beta
   taxonomy     = google_data_catalog_taxonomy.secure_taxonomy.id
   display_name = "High security policy"
@@ -97,7 +97,7 @@ resource "google_data_catalog_policy_tag" "ssn_child_policy_tag" {
   taxonomy          = google_data_catalog_taxonomy.secure_taxonomy.id
   display_name      = "US_SOCIAL_SECURITY_NUMBER"
   description       = "A United States Social Security number (SSN) is a 9-digit number issued to US citizens, permanent residents, and temporary residents."
-  parent_policy_tag = google_data_catalog_policy_tag.high_policy_tag.id
+  parent_policy_tag = google_data_catalog_policy_tag.high_parent_policy_tag.id
 }
 
 resource "google_data_catalog_policy_tag_iam_member" "private_sa_name" {
