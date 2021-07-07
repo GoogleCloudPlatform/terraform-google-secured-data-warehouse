@@ -23,7 +23,7 @@ member_policy_name_private        = attribute('member_policy_name_private')
 control 'gcloud' do
   title 'Gcloud Resources'
 
-  describe command("gcloud data-catalog taxonomies policy-tags get-iam-policy #{social_security_number_policy_tag} --taxonomy='#{taxonomy_name}' --location='us-east1' --format=json") do
+  describe command("gcloud data-catalog taxonomies policy-tags get-iam-policy #{social_security_number_policy_tag} --taxonomy='#{taxonomy_name}' --location='US' --format=json") do
     its(:exit_status) { should eq 0 }
     its(:stderr) { should eq '' }
 
@@ -47,7 +47,7 @@ control 'gcloud' do
     end
   end
 
-  describe command("gcloud data-catalog taxonomies policy-tags get-iam-policy #{person_name_policy_tag} --taxonomy='#{taxonomy_name}' --location='us-east1' --format=json") do
+  describe command("gcloud data-catalog taxonomies policy-tags get-iam-policy #{person_name_policy_tag} --taxonomy='#{taxonomy_name}' --location='US' --format=json") do
     its(:exit_status) { should eq 0 }
     its(:stderr) { should eq '' }
 
@@ -71,7 +71,7 @@ control 'gcloud' do
     end
   end
 
-  describe command("gcloud data-catalog taxonomies policy-tags get-iam-policy #{person_name_policy_tag} --taxonomy='#{taxonomy_name}' --location='us-east1' --format=json") do
+  describe command("gcloud data-catalog taxonomies policy-tags get-iam-policy #{person_name_policy_tag} --taxonomy='#{taxonomy_name}' --location='US' --format=json") do
     its(:exit_status) { should eq 0 }
     its(:stderr) { should eq '' }
 
@@ -95,14 +95,14 @@ control 'gcloud' do
     end
   end
 
-  describe command("gcloud data-catalog taxonomies list --location='us-east1' --project=#{project_id} --format=json") do
+  describe command("gcloud data-catalog taxonomies list --location='US' --project=#{project_id} --format=json") do
     its(:exit_status) { should eq 0 }
   end
 
 =begin
 # The test below depends of the fix from the bug https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/35
 
-  describe command("bq show --schema  --headless --location=us-east1 --project_id=#{project_id} dtwh_dataset.sample_data") do
+  describe command("bq show --schema  --headless --location=US --project_id=#{project_id} dtwh_dataset.sample_data") do
     its(:exit_status) { should eq 0 }
     its(:stderr) { should eq '' }
     let(:data) do

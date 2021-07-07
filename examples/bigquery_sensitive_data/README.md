@@ -8,7 +8,7 @@ This example illustrates how to use the `bigquery_sensitive_data` submodule.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | dataset\_id | The dataset ID to deploy to data warehouse. | `string` | `"dtwh_dataset"` | yes |
-| location | Default region to create resources where applicable. | `string` | `"us-east1"` | yes |
+| location | Default region to create resources where applicable. | `string` | `"US"` | yes |
 | project\_id | The project where the dataset and table are created. | `string` | n/a | yes |
 | table\_id | The table ID to deploy to data warehouse. | `string` | `"sample_data"` | yes |
 | taxonomy\_name | The taxonomy display name. | `string` | `"secure_taxonomy_bq"` | yes |
