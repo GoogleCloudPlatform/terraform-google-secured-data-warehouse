@@ -123,6 +123,5 @@ control 'gcloud' do
       )
     }
   end
-
 =end
 end

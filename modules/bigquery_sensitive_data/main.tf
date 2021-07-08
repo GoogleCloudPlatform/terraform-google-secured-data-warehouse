@@ -68,10 +68,6 @@ resource "google_data_catalog_taxonomy" "secure_taxonomy" {
   display_name           = "${var.taxonomy_name}-${random_id.suffix.hex}"
   description            = "Taxonomy created for BigQuery Sensitive Data"
   activated_policy_types = ["FINE_GRAINED_ACCESS_CONTROL"]
-
-  #depends_on = [
-  #  module.service_accounts,
-  #]
 }
 
 resource "google_data_catalog_policy_tag" "medium_parent_policy_tag" {
