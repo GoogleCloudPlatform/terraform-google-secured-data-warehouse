@@ -62,7 +62,7 @@ suites:
             - gcloud
   - name: bigquery-sensitive-data
     driver:
-      root_module_directory: test/fixtures/bigquery_sensitive_data/
+      root_module_directory: test/fixtures/bigquery-sensitive-data/
     verifier:
       color: false
       systems:
