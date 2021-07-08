@@ -20,5 +20,5 @@ module "bigquery_sensitive_data" {
   dataset_id    = "dtwh_dataset"
   table_id      = "sample_data"
   taxonomy_name = "secure_bq-taxonomy"
-  location      = "US"
+  location      = "us-east1"
 }

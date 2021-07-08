@@ -20,5 +20,5 @@ module "bigquery_sensitive_data" {
   table_id      = "sample_data"
   dataset_id    = "secured_dataset"
   project_id    = "bigquery_sensitive_data"
-  location      = "US"
+  location      = "us-east1"
 }
