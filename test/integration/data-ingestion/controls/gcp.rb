@@ -56,9 +56,6 @@ other_kms_roles = [
   "roles/cloudkms.cryptoKeyEncrypterDecrypter"
 ]
 
-ingestion_crypto_key = "projects/#{project_id}/locations/#{cmek_location}/keyRings/#{cmek_keyring_name}/cryptoKeys/ingestion_kms_key"
-biquery_crypto_key = "projects/#{project_id}/locations/#{cmek_location}/keyRings/#{cmek_keyring_name}/cryptoKeys/bigquery_kms_key"
-
 control 'gcp' do
   title 'GCP Resources'
 
@@ -239,7 +236,7 @@ control 'gcp' do
     its('members') { should include "serviceAccount:#{default_bigquery_sa}" }
   end
 
-  google_project_iam_bindings(project: project_id).iam_binding_roles.each do |iam_binding_role|
+  google_project_iam_policy(project: project_id).iam_binding_roles.each do |iam_binding_role|
     if other_kms_roles.include?(iam_binding_role)
       describe google_project_iam_binding(project: project_id, role: iam_binding_role) do
         its('members') { should_not include "serviceAccount:#{default_storage_sa}" }
@@ -249,9 +246,11 @@ control 'gcp' do
     end
   end
 
-  google_kms_crypto_key_iam_bindings(
+  google_kms_crypto_key_iam_policy(
     project: project_id,
-    crypto_key_url: ingestion_crypto_key
+    location: cmek_location,
+    key_ring_name: cmek_keyring_name,
+    crypto_key_name: "ingestion_kms_key"
   ).iam_binding_roles.each do |iam_binding_role|
     if other_kms_roles.include?(iam_binding_role)
       describe google_kms_crypto_key_iam_binding(
@@ -268,9 +267,11 @@ control 'gcp' do
     end
   end
 
-  google_kms_crypto_key_iam_bindings(
+  google_kms_crypto_key_iam_policy(
     project: project_id,
-    crypto_key_url: biquery_crypto_key
+    location: cmek_location,
+    key_ring_name: cmek_keyring_name,
+    crypto_key_name: "bigquery_kms_key"
   ).iam_binding_roles.each do |iam_binding_role|
     if other_kms_roles.include?(iam_binding_role)
       describe google_kms_crypto_key_iam_binding(
@@ -286,6 +287,5 @@ control 'gcp' do
       end
     end
   end
-
 
 end
