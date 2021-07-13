@@ -88,3 +88,33 @@ output "project_number" {
   value       = module.vpc_service_controls.project_number
   description = "Project number included on perimeter"
 }
+
+output "cmek_keyring_name" {
+  value       = module.cmek.keyring
+  description = "The Keyring name for the KMS Customer Managed Encryption Keys."
+}
+
+output "cmek_ingestion_crypto_key" {
+  value       = module.cmek.keys[local.ingestion_key_name]
+  description = "The Customer Managed Crypto Key for the Ingestion crypto boundary."
+}
+
+output "cmek_bigquery_crypto_key" {
+  value       = module.cmek.keys[local.bigquery_key_name]
+  description = "The Customer Managed Crypto Key for the BigQuery service."
+}
+
+output "default_storage_sa" {
+  description = "The default Storage service account granted encrypt/decrypt permission on the KMS key."
+  value       = local.storage_sa
+}
+
+output "default_pubsub_sa" {
+  description = "The default Pub/Sub service account granted encrypt/decrypt permission on the KMS key."
+  value       = local.pubsub_sa
+}
+
+output "default_bigquery_sa" {
+  description = "The default Bigquery service account granted encrypt/decrypt permission on the KMS key."
+  value       = local.bigquery_sa
+}
