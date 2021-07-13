@@ -30,7 +30,7 @@ module "data_ingest_bucket" {
   lifecycle_rules = var.bucket_lifecycle_rules
 
   encryption_key_names = {
-    (var.bucket_name) = module.cmek.keys[local.storage_key_name]
+    (var.bucket_name) = module.cmek.keys[local.ingestion_key_name]
   }
 
   labels = {
@@ -49,7 +49,7 @@ module "data_ingest_topic" {
 
   project_id         = var.project_id
   topic              = "tpc-data-ingest-${random_id.suffix.hex}"
-  topic_kms_key_name = module.cmek.keys[local.pubsub_key_name]
+  topic_kms_key_name = module.cmek.keys[local.ingestion_key_name]
 
   depends_on = [
     module.cmek

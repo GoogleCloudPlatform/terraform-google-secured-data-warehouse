@@ -15,21 +15,30 @@
  */
 
 locals {
-  storage_key_name  = "storage_kms_key"
-  bigquery_key_name = "bigquery_kms_key"
-  pubsub_key_name   = "pubsub_kms_key"
-
   storage_sa  = data.google_storage_project_service_account.gcs_account.email_address
   pubsub_sa   = google_project_service_identity.pubsub_sa.email
   bigquery_sa = data.google_bigquery_default_service_account.bigquery_sa.email
 
-  keys = [local.storage_key_name, local.bigquery_key_name, local.pubsub_key_name]
+  ingestion_key_name = "ingestion_kms_key"
+  bigquery_key_name  = "bigquery_kms_key"
 
-  sa_key_mapping = {
-    (local.storage_key_name)  = local.storage_sa,
-    (local.bigquery_key_name) = local.bigquery_sa,
-    (local.pubsub_key_name)   = local.pubsub_sa
-  }
+  ingestion_key_encrypters_decrypters = "serviceAccount:${local.storage_sa},serviceAccount:${local.pubsub_sa}"
+  bigquery_key_encrypters_decrypters  = "serviceAccount:${local.bigquery_sa}"
+
+  keys = [
+    local.ingestion_key_name,
+    local.bigquery_key_name
+  ]
+
+  encrypters = [
+    local.ingestion_key_encrypters_decrypters,
+    local.bigquery_key_encrypters_decrypters
+  ]
+
+  decrypters = [
+    local.ingestion_key_encrypters_decrypters,
+    local.bigquery_key_encrypters_decrypters
+  ]
 }
 
 data "google_storage_project_service_account" "gcs_account" {
@@ -51,23 +60,13 @@ module "cmek" {
   source  = "terraform-google-modules/kms/google"
   version = "~> 2.0"
 
-  project_id         = var.project_id
+  project_id         = var.data_governance_project_id
   location           = var.cmek_location
   keyring            = var.cmek_keyring_name
   prevent_destroy    = false
   keys               = local.keys
   set_encrypters_for = local.keys
   set_decrypters_for = local.keys
-
-  encrypters = [
-    "serviceAccount:${local.sa_key_mapping[local.keys[0]]}",
-    "serviceAccount:${local.sa_key_mapping[local.keys[1]]}",
-    "serviceAccount:${local.sa_key_mapping[local.keys[2]]}"
-  ]
-
-  decrypters = [
-    "serviceAccount:${local.sa_key_mapping[local.keys[0]]}",
-    "serviceAccount:${local.sa_key_mapping[local.keys[1]]}",
-    "serviceAccount:${local.sa_key_mapping[local.keys[2]]}"
-  ]
+  encrypters         = local.encrypters
+  decrypters         = local.decrypters
 }

@@ -21,6 +21,7 @@ module "data_ingestion" {
   dataset_id                       = var.dataset_id
   org_id                           = var.org_id
   project_id                       = var.project_id
+  data_governance_project_id       = var.project_id
   region                           = var.region
   terraform_service_account        = var.terraform_service_account
   vpc_name                         = "tst-network"

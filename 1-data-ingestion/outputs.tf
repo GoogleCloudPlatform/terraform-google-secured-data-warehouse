@@ -94,19 +94,14 @@ output "cmek_keyring_name" {
   description = "The Keyring name for the KMS Customer Managed Encryption Keys."
 }
 
-output "cmek_storage_crypto_key" {
-  value       = module.cmek.keys[local.storage_key_name]
-  description = "The Customer Managed Crypto Key for the Storage service."
+output "cmek_ingestion_crypto_key" {
+  value       = module.cmek.keys[local.ingestion_key_name]
+  description = "The Customer Managed Crypto Key for the Ingestion crypto boundary."
 }
 
 output "cmek_bigquery_crypto_key" {
   value       = module.cmek.keys[local.bigquery_key_name]
   description = "The Customer Managed Crypto Key for the BigQuery service."
-}
-
-output "cmek_pubsub_crypto_key" {
-  value       = module.cmek.keys[local.pubsub_key_name]
-  description = "The Customer Managed Crypto Key for the PubSub service."
 }
 
 output "default_storage_sa" {
