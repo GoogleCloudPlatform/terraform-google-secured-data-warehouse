@@ -37,6 +37,8 @@ module "data_ingest_bucket" {
     "enterprise_data_ingest_bucket" = "true"
   }
 
+  # depends_on needed to wait for the KMS roles
+  # to be granted to the Storage Service Account.
   depends_on = [
     module.cmek
   ]
@@ -51,6 +53,8 @@ module "data_ingest_topic" {
   topic              = "tpc-data-ingest-${random_id.suffix.hex}"
   topic_kms_key_name = module.cmek.keys[local.ingestion_key_name]
 
+  # depends_on needed to wait for the KMS roles
+  # to be granted to the PubSub Service Account.
   depends_on = [
     module.cmek
   ]
@@ -74,6 +78,8 @@ module "bigquery_dataset" {
     billable = "true"
   }
 
+  # depends_on needed to wait for the KMS roles
+  # to be granted to the Bigquery Service Account.
   depends_on = [
     module.cmek
   ]
