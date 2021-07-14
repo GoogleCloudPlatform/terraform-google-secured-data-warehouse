@@ -35,6 +35,11 @@ variable "project_id" {
   type        = string
 }
 
+variable "data_governance_project_id" {
+  description = "The ID of the project in which the data governance resources will be created."
+  type        = string
+}
+
 variable "vpc_name" {
   type        = string
   description = "the name of the network."
@@ -111,4 +116,14 @@ variable "dataset_default_table_expiration_ms" {
   description = "TTL of tables using the dataset in MS. The default value is almost 12 months."
   type        = number
   default     = 31536000000
+}
+
+variable "cmek_location" {
+  description = "The location for the KMS Customer Managed Encryption Keys."
+  type        = string
+}
+
+variable "cmek_keyring_name" {
+  description = "The Keyring name for the KMS Customer Managed Encryption Keys."
+  type        = string
 }
