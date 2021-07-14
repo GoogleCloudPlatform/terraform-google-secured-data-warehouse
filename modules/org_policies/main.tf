@@ -11,10 +11,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 locals {
-  folder_trusted = "folders/${data.google_project.secured_data_warehouse.folder_id}"
-  locations      = [for l in var.trusted_locations : "in:${l}"]
-}
-
-data "google_project" "secured_data_warehouse" {
+  locations  = [for l in var.trusted_locations : "in:${l}"]
   project_id = var.project_secured_data_warehouse
 }

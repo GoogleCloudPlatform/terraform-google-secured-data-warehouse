@@ -19,9 +19,7 @@
 # Organizational Policies (applied at the project level)
 #
 # These are the minimum policies
-# - No default SA: constraints/iam.disableServiceAccountCreation
 # - No SA Key creation: constraints/iam.disableServiceAccountKeyCreation
-# - No default grants: constraints/iam.automaticIamGrantsForDefaultServiceAccounts
 #
 # (Optional policies)
 # - No outside domains: constraints/iam.allowedPolicyMemberDomains
@@ -30,7 +28,7 @@
 
 module "service_account_key_policy" {
   source      = "terraform-google-modules/org-policy/google"
-  version     = "~> 4.0"
+  version     = "~> 5.0"
   policy_for  = "project"
   project_id  = local.project_id
   constraint  = "iam.disableServiceAccountKeyCreation"

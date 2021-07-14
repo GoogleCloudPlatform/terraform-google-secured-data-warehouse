@@ -12,7 +12,7 @@ limitations under the License.
 */
 
 variable "project_secured_data_warehouse" {
-  description = "The project for the secured data warehouse."
+  description = "The project id for the secured data warehouse."
   type        = string
 }
 
