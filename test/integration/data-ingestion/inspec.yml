@@ -61,3 +61,18 @@ attributes:
   - name: service_perimeter_name
     required: true
     type: string
+  - name: cmek_location
+    required: true
+    type: string
+  - name: cmek_keyring_name
+    required: true
+    type: string
+  - name: default_storage_sa
+    required: true
+    type: string
+  - name: default_pubsub_sa
+    required: true
+    type: string
+  - name: default_bigquery_sa
+    required: true
+    type: string

@@ -29,17 +29,35 @@ module "data_ingest_bucket" {
   location        = var.bucket_location
   lifecycle_rules = var.bucket_lifecycle_rules
 
+  encryption_key_names = {
+    (var.bucket_name) = module.cmek.keys[local.ingestion_key_name]
+  }
+
   labels = {
     "enterprise_data_ingest_bucket" = "true"
   }
+
+  # depends_on needed to wait for the KMS roles
+  # to be granted to the Storage Service Account.
+  depends_on = [
+    module.cmek
+  ]
 }
 
 //pub/sub ingest topic
 module "data_ingest_topic" {
-  source     = "terraform-google-modules/pubsub/google"
-  version    = "~> 2.0"
-  topic      = "tpc-data-ingest-${random_id.suffix.hex}"
-  project_id = var.project_id
+  source  = "terraform-google-modules/pubsub/google"
+  version = "~> 2.0"
+
+  project_id         = var.project_id
+  topic              = "tpc-data-ingest-${random_id.suffix.hex}"
+  topic_kms_key_name = module.cmek.keys[local.ingestion_key_name]
+
+  # depends_on needed to wait for the KMS roles
+  # to be granted to the PubSub Service Account.
+  depends_on = [
+    module.cmek
+  ]
 }
 
 //BigQuery dataset
@@ -52,10 +70,17 @@ module "bigquery_dataset" {
   dataset_name                = var.dataset_name
   description                 = var.dataset_description
   location                    = var.dataset_location
+  encryption_key              = module.cmek.keys[local.bigquery_key_name]
   default_table_expiration_ms = var.dataset_default_table_expiration_ms
 
   dataset_labels = {
     purpose  = "ingest"
     billable = "true"
   }
+
+  # depends_on needed to wait for the KMS roles
+  # to be granted to the Bigquery Service Account.
+  depends_on = [
+    module.cmek
+  ]
 }
