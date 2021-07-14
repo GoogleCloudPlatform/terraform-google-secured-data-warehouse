@@ -13,3 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+module "org_policies" {
+  source                         = "../../../modules/org_policies"
+  project_secured_data_warehouse = var.project_id
+}

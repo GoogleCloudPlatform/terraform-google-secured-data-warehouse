@@ -12,27 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License
 
-folder_trusted = attribute('folder_trusted')
+project_id = attribute('project_id')
 
 boolean_policy_constraints = [
   'constraints.gcp.resourceLocations',
   'constraints/iam.disableServiceAccountCreation',
-  'constraints/iam.disableServiceAccountKeyCreation',
-  'constraints/iam.automaticIamGrantsForDefaultServiceAccounts',
   'constraints/compute.requireOsLogin',
   'constraints/compute.restrictProtocolForwardingCreationForTypes',
   'constraints/compute.restrictSharedVpcSubnetworks',
-  'constraints/compute.vmExternalIpAccess',
-  'constraints/compute.skipDefaultNetworkCreation',
-  'constraints/compute.disableSerialPortAccess',
   'constraints/compute.disableSerialPortLogging',
-  'constraints/storage.uniformBucketLevelAccess'
-  'constraints/compute.disableGuestAttributesAccess',
 ]
 
-control 'gcloud_policies' do
+control 'gcloud' do
+  title 'folder organization policy tests'
+
   boolean_policy_constraints.each do |constraint|
-  describe command("gcloud resource-manager org-policies list --folder=#{folder_trusted} --format=json") do
+  describe command("gcloud resource-manager org-policies list --project=#{project_id} --format=json") do
     its(:exit_status) { should eq 0 }
     its(:stderr) { should eq '' }
 
@@ -50,6 +45,4 @@ control 'gcloud_policies' do
       end
     end
   end
-
-
 end
