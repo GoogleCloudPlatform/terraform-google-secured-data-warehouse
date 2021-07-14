@@ -49,16 +49,6 @@ output "member_policy_name_private" {
   value       = google_data_catalog_policy_tag_iam_member.private_sa_name.member
 }
 
-output "dataset_id" {
-  description = "The dataset ID to deploy to data warehouse."
-  value       = var.dataset_id
-}
-
-output "project_id" {
-  description = "Project where the dataset and table are created."
-  value       = var.project_id
-}
-
 output "taxonomy_name" {
   description = "The taxonomy display name."
   value       = google_data_catalog_taxonomy.secure_taxonomy.display_name

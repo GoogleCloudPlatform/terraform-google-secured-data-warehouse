@@ -19,6 +19,12 @@ variable "project_id" {
   type        = string
 }
 
+variable "dataset_id" {
+  description = "The dataset ID to deploy to data warehouse."
+  type        = string
+  default     = "dtwh_dataset"
+}
+
 variable "terraform_service_account" {
   description = "Service account email of the account to impersonate to run Terraform"
   type        = string

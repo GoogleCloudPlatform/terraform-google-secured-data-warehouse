@@ -41,7 +41,6 @@ Functional examples are included in the [examples](./examples/bigquery_sensitive
 
 | Name | Description |
 |------|-------------|
-| dataset\_id | The dataset ID to deploy to data warehouse. |
 | emails | The service account email addresses by name. |
 | emails\_list | The service account email addresses as list. |
 | high\_policy\_taxonomy\_id | Content for Policy Tag ID in high policy. |
@@ -49,7 +48,6 @@ Functional examples are included in the [examples](./examples/bigquery_sensitive
 | member\_policy\_name\_confidential | SA member for Person Name policy tag. |
 | member\_policy\_name\_private | SA member for Person Name policy tag. |
 | member\_policy\_ssn\_confidential | SA member for Social Security Number policy tag. |
-| project\_id | Project where the dataset and table are created. |
 | taxonomy\_name | The taxonomy display name. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

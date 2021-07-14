@@ -51,12 +51,12 @@ output "member_policy_name_private" {
 
 output "project_id" {
   description = "Project where service accounts and core APIs will be enabled."
-  value       = module.bigquery_sensitive_data.project_id
+  value       = var.project_id
 }
 
 output "dataset_id" {
   description = "The dataset ID to deploy to data warehouse."
-  value       = module.bigquery_sensitive_data.dataset_id
+  value       = var.dataset_id
 }
 
 output "taxonomy_name" {
