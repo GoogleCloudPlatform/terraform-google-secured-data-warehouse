@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-# Organizational Policies (applied at the folder level)
+# Organizational Policies (applied at the project level)
 #
 # These are the policies defined
 # - Disable all public IP:  constraint/compute.vmExternalIpAccess
@@ -28,57 +28,29 @@
 # (Optional policies)
 # - none
 
-# compute.vmExternalIpAccess
-module "external_ip_policy" {
-  source      = "terraform-google-modules/org-policy/google"
-  version     = "~> 4.0"
-  constraint  = "compute.vmExternalIpAccess"
-  policy_for  = "folder"
-  folder_id   = local.folder_trusted
-  policy_type = "list"
-  enforce     = true
-}
 
-# compute.skipDefaultNetworkCreation
-module "network_policy" {
-  source      = "terraform-google-modules/org-policy/google"
-  version     = "~> 4.0"
-  policy_for  = "folder"
-  folder_id   = local.folder_trusted
-  constraint  = "compute.skipDefaultNetworkCreation"
-  policy_type = "boolean"
-  enforce     = true
-}
+
+
 
 # compute.restrictProtocolForwardingCreationForTypes
 module "protocol_forwarding_creation" {
   source            = "terraform-google-modules/org-policy/google"
   version           = "~> 4.0"
   constraint        = "compute.restrictProtocolForwardingCreationForTypes"
-  policy_for        = "folder"
-  folder_id         = local.folder_trusted
+  policy_for        = "project"
+  project_id        = local.project_id
   policy_type       = "list"
   allow             = ["is:INTERNAL"]
   allow_list_length = 1
 }
 
-# compute.disableSerialPortAccess
-module "serial_port_access_policy" {
-  source      = "terraform-google-modules/org-policy/google"
-  version     = "~> 4.0"
-  policy_for  = "folder"
-  folder_id   = local.folder_trusted
-  constraint  = "compute.disableSerialPortAccess"
-  policy_type = "boolean"
-  enforce     = true
-}
 
 # compute.disableSerialPortLogging
 module "serial_port_logging_policy" {
   source      = "terraform-google-modules/org-policy/google"
   version     = "~> 4.0"
-  policy_for  = "folder"
-  folder_id   = local.folder_trusted
+  policy_for  = "project"
+  project_id  = local.project_id
   constraint  = "compute.disableSerialPortLogging"
   policy_type = "boolean"
   enforce     = true
@@ -88,8 +60,8 @@ module "serial_port_logging_policy" {
 module "ssh_policy" {
   source      = "terraform-google-modules/org-policy/google"
   version     = "~> 4.0"
-  policy_for  = "folder"
-  folder_id   = local.folder_trusted
+  policy_for  = "project"
+  project_id  = local.project_id
   constraint  = "compute.requireOsLogin"
   policy_type = "boolean"
   enforce     = true
@@ -100,9 +72,9 @@ module "vpc_subnet_policy" {
   source            = "terraform-google-modules/org-policy/google"
   version           = "~> 4.0"
   constraint        = "compute.restrictSharedVpcSubnetworks"
-  policy_for        = "folder"
-  folder_id         = local.folder_trusted
+  policy_for        = "project"
+  project_id        = local.project_id
   policy_type       = "list"
-  allow             = ["under:projects/${split("/", var.trusted_private_subnet)[1]}"] 
+  allow             = ["under:projects/${split("/", var.trusted_private_subnet)[1]}"]
   allow_list_length = 1
 }

@@ -16,7 +16,7 @@
  */
 
 
-# Organizational Policies (applied at the folder level)
+# Organizational Policies (applied at the project level)
 #
 # These are the minimum policies
 # - No default SA: constraints/iam.disableServiceAccountCreation
@@ -26,32 +26,14 @@
 # (Optional policies)
 # - No outside domains: constraints/iam.allowedPolicyMemberDomains
 
-module "service_account_policy" {
-  source      = "terraform-google-modules/org-policy/google"
-  version     = "~> 4.0"
-  policy_for  = "folder"
-  folder_id   = local.folder_trusted
-  constraint  = "iam.disableServiceAccountCreation"
-  policy_type = "boolean"
-  enforce     = true
-}
+
 
 module "service_account_key_policy" {
   source      = "terraform-google-modules/org-policy/google"
   version     = "~> 4.0"
-  policy_for  = "folder"
-  folder_id   = local.folder_trusted
+  policy_for  = "project"
+  project_id  = local.project_id
   constraint  = "iam.disableServiceAccountKeyCreation"
-  policy_type = "boolean"
-  enforce     = true
-}
-
-module "iam_grant_policy" {
-  source      = "terraform-google-modules/org-policy/google"
-  version     = "~> 4.0"
-  policy_for  = "folder"
-  folder_id   = local.folder_trusted
-  constraint  = "iam.automaticIamGrantsForDefaultServiceAccounts"
   policy_type = "boolean"
   enforce     = true
 }

@@ -15,19 +15,19 @@
  *
  */
 
- # Organizational Policies
- #
- # These are the policies define
- # - Resource Location Restriction - constraints/gcp.resourceLocations
+# Organizational Policies
+#
+# These are the policies define
+# - Resource Location Restriction - constraints/gcp.resourceLocations
 
 
- module "location_restriction_policy" {
-   source             = "terraform-google-modules/org-policy/google"
-   version            = "~> 4.0"
-   constraint         = "gcp.resourceLocations"
-   policy_for         = "folder"
-   folder_id          = local.folder_trusted
-   policy_type        = "list"
-   allow              = local.locations[*]
-   allow_list_length  = 1
- }
+module "location_restriction_policy" {
+  source            = "terraform-google-modules/org-policy/google"
+  version           = "~> 4.0"
+  constraint        = "gcp.resourceLocations"
+  policy_for        = "project"
+  project_id        = local.project_id
+  policy_type       = "list"
+  allow             = local.locations[*]
+  allow_list_length = 1
+}
