@@ -13,3 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+output "project_id" {
+  description = "The project_id used to create infra."
+  value       = var.project_id
+}
