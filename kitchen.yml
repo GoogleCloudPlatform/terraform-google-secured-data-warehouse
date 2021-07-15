@@ -1,0 +1,86 @@
+# Copyright 2021 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+driver:
+  name: terraform
+
+provisioner:
+  name: terraform
+
+verifier:
+  name: terraform
+
+platforms:
+  - name: default
+
+suites:
+  - name: data-ingestion
+    driver:
+      root_module_directory: test/fixtures/data-ingestion/
+    verifier:
+      color: false
+      systems:
+        - name: data_ingestion gcp
+          backend: gcp
+          controls:
+            - gcp
+  - name: dataflow-with-dlp
+    driver:
+      root_module_directory: test/fixtures/dataflow-with-dlp/
+    verifier:
+      color: false
+      systems:
+        - name: dataflow_with_dlp gcp
+          backend: gcp
+          controls:
+            - gcp
+        - name: dataflow_with_dlp gcloud
+          backend: local
+          controls:
+            - gcloud
+  - name: de-identification-template
+    driver:
+      root_module_directory: test/fixtures/de-identification-template/
+    verifier:
+      color: false
+      systems:
+        - name: de_identification_template gcloud
+          backend: local
+          controls:
+            - gcloud
+  - name: bigquery-sensitive-data
+    driver:
+      root_module_directory: test/fixtures/bigquery-sensitive-data/
+    verifier:
+      color: false
+      systems:
+        - name: bigquery_sensitive_data gcp
+          backend: gcp
+          controls:
+            - gcp
+        - name: bigquery_sensitive_data gcloud
+          backend: local
+          controls:
+            - gcloud
+  - name: org-policies
+    driver:
+      root_module_directory: test/fixtures/org-policies/
+    verifier:
+      color: false
+      systems:
+        - name: org_policies gcloud
+          backend: local
+          controls:
+            - gcloud

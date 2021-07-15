@@ -1,0 +1,30 @@
+name: de-identification-template
+depends:
+  - name: inspec-gcp
+    git: https://github.com/inspec/inspec-gcp.git
+    tag: v1.8.8
+attributes:
+  - name: project_id
+    required: true
+    type: string
+  - name: terraform_service_account
+    required: true
+    type: string
+  - name: de_identification_template_dlp_location
+    required: true
+    type: string
+  - name: de_identification_template_crypto_key
+    required: true
+    type: string
+  - name: de_identification_template_wrapped_key
+    required: true
+    type: string
+  - name: de_identification_template_template_id
+    required: true
+    type: string
+  - name: template_description
+    required: true
+    type: string
+  - name: template_display_name
+    required: true
+    type: string

@@ -1,0 +1,33 @@
+name: bigquery-sensitive-data
+depends:
+  - name: inspec-gcp
+    git: https://github.com/inspec/inspec-gcp.git
+    tag: v1.8.8
+attributes:
+  - name: project_id
+    required: true
+    type: string
+  - name: emails
+    required: true
+    type: hash
+  - name: dataset_id
+    required: true
+    type: string
+  - name: taxonomy_name
+    required: true
+    type: string
+  - name: person_name_policy_tag
+    required: true
+    type: string
+  - name: social_security_number_policy_tag
+    required: true
+    type: string
+  - name: member_policy_ssn_confidential
+    required: true
+    type: string
+  - name: member_policy_name_confidential
+    required: true
+    type: string
+  - name: member_policy_name_private
+    required: true
+    type: string
