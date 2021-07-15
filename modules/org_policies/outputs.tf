@@ -15,7 +15,3 @@
  */
 
 # used for testing
-output "folder_trusted" {
-  description = "Folder that holds all the trusted projects and constraints"
-  value       = local.folder_trusted
-}
