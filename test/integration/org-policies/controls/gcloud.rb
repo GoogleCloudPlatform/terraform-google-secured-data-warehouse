@@ -27,21 +27,22 @@ control 'gcloud' do
   title 'folder organization policy tests'
 
   boolean_policy_constraints.each do |constraint|
-  describe command("gcloud resource-manager org-policies list --project=#{project_id} --format=json") do
-    its(:exit_status) { should eq 0 }
-    its(:stderr) { should eq '' }
+    describe command("gcloud beta resource-manager org-policies list --project=#{project_id} --format=json") do
+      its(:exit_status) { should eq 0 }
+      its(:stderr) { should eq '' }
 
-    let(:data) do
-      if subject.exit_status.zero?
-        JSON.parse(subject.stdout).select { |x| x['constraint'] == constraint }[0]
-      else
-        {}
+      let(:data) do
+        if subject.exit_status.zero?
+          JSON.parse(subject.stdout).select { |x| x['constraint'] == constraint }[0]
+        else
+          {}
+        end
       end
-    end
 
-    describe "boolean folder org policy #{constraint}" do
-      it 'should exist' do
-        expect(data).to_not be_empty
+      describe "boolean folder org policy #{constraint}" do
+        it 'should exist' do
+          expect(data).to_not be_empty
+        end
       end
     end
   end
