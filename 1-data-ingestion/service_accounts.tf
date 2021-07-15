@@ -20,7 +20,7 @@ module "dataflow_controller_service_account" {
   source       = "terraform-google-modules/service-accounts/google"
   version      = "~> 3.0"
   project_id   = var.project_id
-  account_id   = ["sa-dataflow-controller"]
+  names        = ["sa-dataflow-controller"]
   display_name = "Cloud Dataflow controller service account"
   project_roles = [
     "${var.project_id}=>roles/pubsub.subscriber",
