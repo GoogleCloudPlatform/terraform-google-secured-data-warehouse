@@ -14,23 +14,6 @@
  * limitations under the License.
  */
 
-# Organizational Policies (applied at the project level)
-#
-# These are the policies defined
-# - Disable all public IP:  constraint/compute.vmExternalIpAccess
-# - No default network: constraints/compute.skipDefaultNetworkCreation
-# - No Serial Port access: constraints/compute.disableSerialPortAccess
-# - No serial port logging: constraints/compute.disableSerialPortLogging
-# - Require OS login: constraints/compute.requireOsLogin
-# - Restrict forwarding to internal only: compute.restrictProtocolForwardingCreationForTypes"
-# - Restrict Shared VPC Subnets: constraints/compute.restrictSharedVpcSubnetworks
-#
-# (Optional policies)
-# - none
-
-
-
-
 
 # compute.restrictProtocolForwardingCreationForTypes
 module "protocol_forwarding_creation" {
