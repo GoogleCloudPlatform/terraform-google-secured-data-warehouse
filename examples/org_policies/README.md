@@ -27,11 +27,10 @@ To provision this example, complete these tasks from within this directory:
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| project_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
+| project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
+No output.
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
