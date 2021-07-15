@@ -17,50 +17,46 @@
 
 //Dataflow controller service account
 module "dataflow_controller_service_account" {
-  source = "..//modules/service_account"
-
+  source       = "terraform-google-modules/service-accounts/google"
+  version      = "~> 3.0"
   project_id   = var.project_id
-  account_id   = "sa-dataflow-controller"
+  account_id   = ["sa-dataflow-controller"]
   display_name = "Cloud Dataflow controller service account"
-
   project_roles = [
-    "roles/pubsub.subscriber",
-    "roles/bigquery.admin",
-    "roles/cloudkms.admin",
-    "roles/cloudkms.cryptoKeyDecrypter",
-    "roles/dlp.admin",
-    "roles/storage.admin",
-    "roles/dataflow.serviceAgent",
-    "roles/dataflow.worker",
-    "roles/compute.viewer"
+    "${var.project_id}=>roles/pubsub.subscriber",
+    "${var.project_id}=>roles/bigquery.admin",
+    "${var.project_id}=>roles/cloudkms.admin",
+    "${var.project_id}=>roles/cloudkms.cryptoKeyDecrypter",
+    "${var.project_id}=>roles/dlp.admin",
+    "${var.project_id}=>roles/storage.admin",
+    "${var.project_id}=>roles/dataflow.serviceAgent",
+    "${var.project_id}=>roles/dataflow.worker",
+    "${var.project_id}=>roles/compute.viewer",
   ]
-
 }
 
 //service account for storage
 module "storage_writer_service_account" {
-  source = "..//modules/service_account"
-
+  source       = "terraform-google-modules/service-accounts/google"
+  version      = "~> 3.0"
   project_id   = var.project_id
-  account_id   = "sa-storage-writer"
+  names        = ["sa-storage-writer"]
   display_name = "Cloud Storage data writer service account"
-
   project_roles = [
-    "roles/storage.objectViewer",
-    "roles/storage.objectCreator"
+    "${var.project_id}=>roles/storage.objectViewer",
+    "${var.project_id}=>roles/storage.objectCreator",
   ]
 }
 
 //service account for Pub/sub
 module "pubsub_writer_service_account" {
-  source = "..//modules/service_account"
-
+  source       = "terraform-google-modules/service-accounts/google"
+  version      = "~> 3.0"
   project_id   = var.project_id
-  account_id   = "sa-pubsub-writer"
+  names        = ["sa-pubsub-writer"]
   display_name = "Cloud PubSub data writer service account"
-
   project_roles = [
-    "roles/pubsub.publisher",
-    "roles/pubsub.subscriber"
+    "${var.project_id}=>roles/pubsub.publisher",
+    "${var.project_id}=>roles/pubsub.subscriber",
   ]
 }

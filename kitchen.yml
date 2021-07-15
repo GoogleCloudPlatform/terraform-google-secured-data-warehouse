@@ -60,6 +60,7 @@ suites:
           backend: local
           controls:
             - gcloud
+<<<<<<< HEAD
   - name: org-policies
     driver:
       root_module_directory: test/fixtures/org-policies/
@@ -67,6 +68,19 @@ suites:
       color: false
       systems:
         - name: org_policies gcloud
+=======
+  - name: bigquery-sensitive-data
+    driver:
+      root_module_directory: test/fixtures/bigquery-sensitive-data/
+    verifier:
+      color: false
+      systems:
+        - name: bigquery_sensitive_data gcp
+          backend: gcp
+          controls:
+            - gcp
+        - name: bigquery_sensitive_data gcloud
+>>>>>>> main
           backend: local
           controls:
             - gcloud

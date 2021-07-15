@@ -25,11 +25,13 @@ locals {
   ]
 
   int_proj_required_roles = [
+    "roles/datacatalog.admin",
     "roles/storage.admin",
     "roles/pubsub.admin",
     "roles/compute.networkAdmin",
     "roles/compute.securityAdmin",
     "roles/bigquery.admin",
+    "roles/resourcemanager.projectIamAdmin",
     "roles/dns.admin",
     "roles/iam.serviceAccountCreator",
     "roles/iam.serviceAccountDeleter",
@@ -82,4 +84,3 @@ resource "time_sleep" "wait_90_seconds" {
 
   create_duration = "90s"
 }
-
