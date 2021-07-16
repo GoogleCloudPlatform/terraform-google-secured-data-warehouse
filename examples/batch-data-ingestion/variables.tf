@@ -29,6 +29,12 @@ variable "dataflow_service_account" {
   description = "The Service Account email that will be used to identify the VMs in which the jobs are running"
 }
 
+variable "dataset_id" {
+  description = "Unique ID for the dataset being provisioned."
+  type        = string
+  default     = "dts_test_int"
+}
+
 variable "subnetwork_self_link" {
   type        = string
   description = "The subnetwork self link to which VMs will be assigned."

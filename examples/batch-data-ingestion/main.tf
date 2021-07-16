@@ -83,7 +83,11 @@ resource "google_cloud_scheduler_job" "scheduler" {
 
   http_target {
     http_method = "POST"
-    uri         = "https://dataflow.googleapis.com/v1b3/projects/${var.project_id}/locations/${local.region}/templates"
+    headers = {
+      "Accept"       = "application/json"
+      "Content-Type" = "application/json"
+    }
+    uri = "https://dataflow.googleapis.com/v1b3/projects/${var.project_id}/locations/${local.region}/templates"
     oauth_token {
       service_account_email = var.terraform_service_account
     }
@@ -104,12 +108,12 @@ resource "google_cloud_scheduler_job" "scheduler" {
       },
       "parameters" : {
         "inputFilePattern"       : "gs://${module.dataflow-bucket.bucket.name}/cc_records.csv",
-        "datasetName"            : "dts_batch_dataflow_dlp",
+        "datasetName"            : "${var.dataset_id}",
         "batchSize"              : "1000",
         "dlpProjectId"           : "${var.project_id}",
         "deidentifyTemplateName" : "projects/${var.project_id}/locations/global/deidentifyTemplates/${module.de_identification_template.template_id}",
       },
-      "gcsPath": "gs://dataflow-templates/latest/Stream_DLP_GCS_Text_to_BigQuery"
+      "gcsPath": "gs://dataflow-templates/latest/GCS_Text_to_BigQuery"
     }
 EOT
     )

@@ -26,7 +26,7 @@ platforms:
   - name: default
 
 suites:
-  - name: data-ingestion
+  - name: 1-data-ingestion
     driver:
       root_module_directory: test/fixtures/data-ingestion/
     verifier:

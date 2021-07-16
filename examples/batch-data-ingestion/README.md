@@ -35,6 +35,7 @@ To provision this example, complete these tasks from within this directory:
 |------|-------------|------|---------|:--------:|
 | crypto\_key | The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP. | `string` | n/a | yes |
 | dataflow\_service\_account | The Service Account email that will be used to identify the VMs in which the jobs are running | `string` | n/a | yes |
+| dataset\_id | Unique ID for the dataset being provisioned. | `string` | `"dts_test_int"` | no |
 | network\_self\_link | The network self link to which VMs will be assigned. | `string` | n/a | yes |
 | project\_id | The ID of the project in which the service account will be created. | `string` | n/a | yes |
 | subnetwork\_self\_link | The subnetwork self link to which VMs will be assigned. | `string` | n/a | yes |
@@ -47,11 +48,9 @@ To provision this example, complete these tasks from within this directory:
 |------|-------------|
 | bucket\_name | The name of the bucket |
 | controller\_service\_account | The Service Account email that will be used to identify the VMs in which the jobs are running |
-| df\_job\_id | The unique Id of the newly created Dataflow job |
-| df\_job\_name | The name of the newly created Dataflow job |
-| df\_job\_state | The state of the newly created Dataflow job |
 | dlp\_location | The location of the DLP resources. |
 | project\_id | The project's ID |
+| scheduler\_id | Cloud Scheduler Job id created |
 | template\_id | The ID of the Cloud DLP de-identification template that is created. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

@@ -63,4 +63,5 @@ module "dataflow-with-dlp" {
   dataflow_service_account  = data.google_service_account.dataflow_service_account.email
   network_self_link         = data.google_compute_network.vpc_network.id
   subnetwork_self_link      = data.google_compute_network.vpc_network.subnetworks_self_links[0]
+  dataset_id                = "dts_test_data_ingestion"
 }

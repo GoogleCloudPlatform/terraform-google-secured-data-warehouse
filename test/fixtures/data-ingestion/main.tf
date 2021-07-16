@@ -18,7 +18,7 @@
 module "data_ingestion" {
   source                           = "../../../1-data-ingestion"
   bucket_name                      = var.bucket_name
-  dataset_id                       = var.dataset_id
+  dataset_id                       = "dts_test_data_ingestion"
   org_id                           = var.org_id
   project_id                       = var.project_id
   data_governance_project_id       = var.project_id
@@ -29,7 +29,7 @@ module "data_ingestion" {
   perimeter_additional_members     = var.perimeter_additional_members
   subnet_ip                        = var.subnet_ip
   cmek_location                    = var.cmek_location
-  cmek_keyring_name                = var.cmek_keyring_name
+  cmek_keyring_name                = "cmked_test_keyring"
 }
 
 resource "time_sleep" "wait_90_seconds_for_vpc_sc_propagation" {
