@@ -1,0 +1,23 @@
+[
+    {
+      "name": "name",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "policyTags": {
+        "names": ["${pt_name}"]
+      }
+    },
+    {
+      "name": "gender",
+      "mode": "NULLABLE",
+      "type": "STRING"
+    },
+    {
+      "name": "social_security_number",
+      "mode": "NULLABLE",
+      "type": "INTEGER",
+      "policyTags": {
+        "names": ["${pt_ssn}"]
+      }
+    }
+  ]
