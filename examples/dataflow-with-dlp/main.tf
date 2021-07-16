@@ -83,7 +83,7 @@ module "dataflow-job" {
 
   parameters = {
     inputFilePattern       = "gs://${module.dataflow-bucket.bucket.name}/cc_records.csv"
-    datasetName            = "dts_example_datflow_dlp"
+    datasetName            = var.dataset_id
     batchSize              = 1000
     dlpProjectId           = var.project_id
     deidentifyTemplateName = "projects/${var.project_id}/locations/global/deidentifyTemplates/${module.de_identification_template.template_id}"

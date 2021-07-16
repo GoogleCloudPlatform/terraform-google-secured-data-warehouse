@@ -1,6 +1,6 @@
 # Dataflow with DLP de-identification
 
-This example illustrates how to run a Dataflow job that uses the `de_identification_template` submodule with the `1-data-ingestion` step.
+This example illustrates how to run a Dataflow job that uses the `de_identification_template` submodule with the `1-data-ingestion` step, some of the variable that you will need to execute this module can be obtained as output of `1-data-ingestion` step.
 
 ## Prerequisites
 
@@ -15,7 +15,7 @@ To provision this example, complete these tasks from within this directory:
    ```
    terraform init
    ```
-1. Review the infrastructure plan. When prompted, enter the `project_id`, `terraform_service_account`, `network_self_link`, `subnetwork_self_link`, `dataset_id`, `dlp_location`, `crypto_key` and `wrapped_key`
+1. Review the infrastructure plan. When prompted, enter the `project_id`, `terraform_service_account`, `network_self_link`, `subnetwork_self_link`, `dataset_id`, `dlp_location`, `crypto_key`, `wrapped_key` and `dataset_name`
    ```
    terraform plan
    ```
@@ -35,6 +35,7 @@ To provision this example, complete these tasks from within this directory:
 |------|-------------|------|---------|:--------:|
 | crypto\_key | The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP. | `string` | n/a | yes |
 | dataflow\_service\_account | The Service Account email that will be used to identify the VMs in which the jobs are running | `string` | n/a | yes |
+| dataset\_id | The id of dataset the will be used. | `string` | n/a | yes |
 | network\_self\_link | The network self link to which VMs will be assigned. | `string` | n/a | yes |
 | project\_id | The ID of the project in which the service account will be created. | `string` | n/a | yes |
 | subnetwork\_self\_link | The subnetwork self link to which VMs will be assigned. | `string` | n/a | yes |
