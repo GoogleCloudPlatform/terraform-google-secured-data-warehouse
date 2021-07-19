@@ -15,7 +15,6 @@
  */
 
 
-# compute.restrictProtocolForwardingCreationForTypes
 module "protocol_forwarding_creation" {
   source            = "terraform-google-modules/org-policy/google"
   version           = "~> 4.0"
@@ -28,7 +27,6 @@ module "protocol_forwarding_creation" {
 }
 
 
-# compute.disableSerialPortLogging
 module "serial_port_logging_policy" {
   source      = "terraform-google-modules/org-policy/google"
   version     = "~> 4.0"
@@ -39,7 +37,6 @@ module "serial_port_logging_policy" {
   enforce     = true
 }
 
-# compute.requireOsLogin
 module "ssh_policy" {
   source      = "terraform-google-modules/org-policy/google"
   version     = "~> 4.0"
@@ -50,7 +47,6 @@ module "ssh_policy" {
   enforce     = true
 }
 
-# compute.restrictSharedVpcSubnetworks
 module "vpc_subnet_policy" {
   source            = "terraform-google-modules/org-policy/google"
   version           = "~> 4.0"
