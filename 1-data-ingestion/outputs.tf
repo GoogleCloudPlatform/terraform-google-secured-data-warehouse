@@ -89,8 +89,13 @@ output "project_number" {
   description = "Project number included on perimeter"
 }
 
-output "cmek_keyring_name" {
+output "cmek_keyring_full_name" {
   value       = module.cmek.keyring
+  description = "The Keyring full name for the KMS Customer Managed Encryption Keys."
+}
+
+output "cmek_keyring_name" {
+  value       = var.cmek_keyring_name
   description = "The Keyring name for the KMS Customer Managed Encryption Keys."
 }
 

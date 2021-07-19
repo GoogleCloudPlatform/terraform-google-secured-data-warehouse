@@ -130,6 +130,11 @@ output "cmek_keyring_name" {
   value       = module.data_ingestion.cmek_keyring_name
 }
 
+output "cmek_keyring_full_name" {
+  description = "The Keyring full name for the KMS Customer Managed Encryption Keys."
+  value       = module.data_ingestion.cmek_keyring_full_name
+}
+
 output "default_storage_sa" {
   description = "The default Storage service account granted encrypt/decrypt permission on the KMS key."
   value       = module.data_ingestion.default_storage_sa
