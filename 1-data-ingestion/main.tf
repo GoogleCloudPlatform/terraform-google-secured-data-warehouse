@@ -27,6 +27,7 @@ module "data_ingest_bucket" {
   prefix          = "bkt-${random_id.suffix.hex}"
   names           = [var.bucket_name]
   location        = var.bucket_location
+  storage_class   = var.bucket_class
   lifecycle_rules = var.bucket_lifecycle_rules
 
   encryption_key_names = {
