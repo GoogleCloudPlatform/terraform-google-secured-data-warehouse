@@ -23,6 +23,7 @@ module "org-policies" {
   source = "../../modules/org_policies"
 
   project_secured_data_warehouse = var.project_id
-  trusted_private_subnet         = "10.100.100.0/24"
+  region                         = "us-central1"
+  trusted_subnetwork             = "testing"
   trusted_locations              = ["us-locations", "eu-locations"]
 }
