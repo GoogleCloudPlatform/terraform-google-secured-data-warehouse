@@ -16,9 +16,18 @@
 
 module "bigquery_sensitive_data" {
   source        = "../..//modules/bigquery_sensitive_data"
+  project_id    = var.project_id
+  taxonomy_name = var.taxonomy_name
+  table_id      = "sample_data"
+  dataset_id    = var.dataset_id
+  location      = var.location
+}
+
+/*module "bigquery_sensitive_data" {
+  source        = "../..//modules/bigquery_sensitive_data"
   taxonomy_name = "secured_taxonomy"
   table_id      = "sample_data"
   dataset_id    = "secured_dataset"
   project_id    = "bigquery_sensitive_data"
   location      = "us-east1"
-}
+}*/
