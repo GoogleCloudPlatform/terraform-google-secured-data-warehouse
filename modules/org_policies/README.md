@@ -12,8 +12,9 @@ This creates the following:
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | project\_secured\_data\_warehouse | The project id for the secured data warehouse. | `string` | n/a | yes |
+| region | The region in which the subnetwork resides. | `string` | n/a | yes |
 | trusted\_locations | This is a list of trusted regions where location-based GCP resources can be created. ie us-locations eu-locations | `list(string)` | <pre>[<br>  "us-locations",<br>  "eu-locations"<br>]</pre> | no |
-| trusted\_private\_subnet | This list constraint defines the set of shared VPC subnetworks that eligible resources can use. | `string` | n/a | yes |
+| trusted\_subnetwork | Subnetwork name that eligible resources can use. | `string` | n/a | yes |
 
 ## Outputs
 
