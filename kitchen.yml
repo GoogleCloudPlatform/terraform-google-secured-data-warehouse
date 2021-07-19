@@ -28,11 +28,11 @@ platforms:
 suites:
   - name: 1-data-ingestion
     driver:
-      root_module_directory: test/fixtures/data-ingestion/
+      root_module_directory: test/fixtures/1-data-ingestion/
     verifier:
       color: false
       systems:
-        - name: data_ingestion gcp
+        - name: 1-data_ingestion gcp
           backend: gcp
           controls:
             - gcp
