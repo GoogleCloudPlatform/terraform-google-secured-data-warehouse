@@ -55,6 +55,23 @@ EOF
   }
 }
 
+resource "google_storage_bucket_object" "schema" {
+  name   = "code/schema.json"
+  source = "${path.module}/schema.json"
+  bucket = "${module.dataflow-bucket.bucket.name}"
+  depends_on = [
+    module.dataflow-bucket
+  ]
+} 
+
+resource "google_storage_bucket_object" "transform_code" {
+  name   = "code/transform.js"
+  source = "${path.module}/transform.js"
+  bucket = "${module.dataflow-bucket.bucket.name}"
+  depends_on = [
+    module.dataflow-bucket
+  ]
+} 
 
 module "de_identification_template" {
   source = "../..//modules/de_identification_template"
@@ -98,7 +115,6 @@ resource "google_cloud_scheduler_job" "scheduler" {
       "jobName": "batch-dataflow-flow",
       "environment": {
         "maxWorkers": 5,
-        "tempLocation": "gs://${module.dataflow-bucket.bucket.name}",
         "zone": "${local.location}",
         "ipConfiguration": "WORKER_IP_PRIVATE",
         "enableStreamingEngine": true,
@@ -108,10 +124,11 @@ resource "google_cloud_scheduler_job" "scheduler" {
       },
       "parameters" : {
         "inputFilePattern"       : "gs://${module.dataflow-bucket.bucket.name}/cc_records.csv",
-        "datasetName"            : "${var.dataset_id}",
-        "batchSize"              : "1000",
-        "dlpProjectId"           : "${var.project_id}",
-        "deidentifyTemplateName" : "projects/${var.project_id}/locations/global/deidentifyTemplates/${module.de_identification_template.template_id}",
+        "outputTable"            : "${var.project_id}:${var.dataset_id}.test_table",
+        "javascriptTextTransformFunctionName" : "transform",
+        "JSONPath" : "gs://${module.dataflow-bucket.bucket.name}/code/schema.json",
+        "javascriptTextTransformGcsPath" : "gs://${module.dataflow-bucket.bucket.name}/code/transform.js",
+        "bigQueryLoadingTemporaryDirectory" : "gs://${module.dataflow-bucket.bucket.name}/tmp"
       },
       "gcsPath": "gs://dataflow-templates/latest/GCS_Text_to_BigQuery"
     }
@@ -119,6 +136,8 @@ EOT
     )
   }
   depends_on = [
-    google_app_engine_application.app
+    google_app_engine_application.app,
+    google_storage_bucket_object.schema,
+    google_storage_bucket_object.transform_code
   ]
 }
