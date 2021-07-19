@@ -72,6 +72,12 @@ variable "bucket_location" {
   default     = "US"
 }
 
+variable "bucket_class" {
+  description = "Bucket storage class."
+  type        = string
+  default     = "STANDARD"
+}
+
 variable "bucket_lifecycle_rules" {
   type = set(object({
     action    = map(string)
