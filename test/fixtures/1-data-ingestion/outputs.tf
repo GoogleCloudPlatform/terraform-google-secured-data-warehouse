@@ -127,7 +127,7 @@ output "cmek_location" {
 
 output "cmek_keyring_name" {
   description = "The Keyring name for the KMS Customer Managed Encryption Keys."
-  value       = var.cmek_keyring_name
+  value       = module.data_ingestion.cmek_keyring_name
 }
 
 output "default_storage_sa" {
