@@ -47,13 +47,13 @@ module "ssh_policy" {
   enforce     = true
 }
 
-module "vpc_subnet_policy" {
+module "vpc_subnetwork_policy" {
   source            = "terraform-google-modules/org-policy/google"
   version           = "~> 4.0"
   constraint        = "compute.restrictSharedVpcSubnetworks"
   policy_for        = "project"
   project_id        = local.project_id
   policy_type       = "list"
-  allow             = ["under:projects/${split("/", var.trusted_private_subnet)[1]}"]
+  allow             = ["under:projects/${local.project_id}/regions/${var.region}/subnetworks/${var.trusted_subnetwork}"]
   allow_list_length = 1
 }

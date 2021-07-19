@@ -15,7 +15,7 @@
 project_id = attribute('project_id')
 
 boolean_policy_constraints = [
-  'constraints.gcp.resourceLocations',
+  'constraints/gcp.resourceLocations',
   'constraints/iam.disableServiceAccountCreation',
   'constraints/compute.requireOsLogin',
   'constraints/compute.restrictProtocolForwardingCreationForTypes',

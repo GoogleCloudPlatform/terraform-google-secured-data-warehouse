@@ -19,8 +19,13 @@ variable "project_secured_data_warehouse" {
   type        = string
 }
 
-variable "trusted_private_subnet" {
-  description = "This list constraint defines the set of shared VPC subnetworks that eligible resources can use."
+variable "region" {
+  type        = string
+  description = "The region in which the subnetwork resides."
+}
+
+variable "trusted_subnetwork" {
+  description = "Subnetwork name that eligible resources can use."
   type        = string
 }
 
