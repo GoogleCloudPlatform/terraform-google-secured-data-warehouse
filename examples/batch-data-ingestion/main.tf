@@ -58,20 +58,20 @@ EOF
 resource "google_storage_bucket_object" "schema" {
   name   = "code/schema.json"
   source = "${path.module}/schema.json"
-  bucket = "${module.dataflow-bucket.bucket.name}"
+  bucket = module.dataflow-bucket.bucket.name
   depends_on = [
     module.dataflow-bucket
   ]
-} 
+}
 
 resource "google_storage_bucket_object" "transform_code" {
   name   = "code/transform.js"
   source = "${path.module}/transform.js"
-  bucket = "${module.dataflow-bucket.bucket.name}"
+  bucket = module.dataflow-bucket.bucket.name
   depends_on = [
     module.dataflow-bucket
   ]
-} 
+}
 
 module "de_identification_template" {
   source = "../..//modules/de_identification_template"
