@@ -15,17 +15,19 @@
 project_id = attribute('project_id')
 
 boolean_policy_constraints = [
-  'constraints/gcp.resourceLocations',
   'constraints/iam.disableServiceAccountCreation',
   'constraints/compute.requireOsLogin',
-  'constraints/compute.restrictProtocolForwardingCreationForTypes',
-  'constraints/compute.restrictSharedVpcSubnetworks',
   'constraints/compute.disableSerialPortLogging',
 ]
 
+list_policy_constraints = [
+  'constraints/compute.restrictProtocolForwardingCreationForTypes',
+  'constraints/compute.restrictSharedVpcSubnetworks',
+  'constraints/gcp.resourceLocations',
+]
 
 control 'gcloud' do
-  title 'organization policy tests'
+  title 'organization boolean and list policy tests'
 
   boolean_policy_constraints.each do |constraint|
     describe command("gcloud beta resource-manager org-policies list --project=#{project_id} --format=json") do
@@ -40,9 +42,42 @@ control 'gcloud' do
         end
       end
 
-      describe "boolean folder org policy #{constraint}" do
+      describe "boolean org policy #{constraint}" do
         it 'should exist' do
           expect(data).to_not be_empty
+        end
+      end
+
+      describe "bolean org policy #{constraint}" do
+        it 'should be enforced' do
+          expect(data["booleanPolicy"]["enforced"]).to eq true
+        end
+      end
+    end
+  end
+
+  list_policy_constraints.each do |constraint|
+    describe command("gcloud beta resource-manager org-policies list --project=#{project_id} --format=json") do
+      its(:exit_status) { should eq 0 }
+      its(:stderr) { should eq '' }
+
+      let(:data) do
+        if subject.exit_status.zero?
+          JSON.parse(subject.stdout).select { |x| x['constraint'] == constraint }[0]
+        else
+          {}
+        end
+      end
+
+      describe "list org policy #{constraint}" do
+        it 'should exist' do
+          expect(data).to_not be_empty
+        end
+      end
+
+      describe "list org policy #{constraint}" do
+        it 'should have allowedValues' do
+          expect(data["listPolicy"]["allowedValues"]).to_not be_empty
         end
       end
     end
