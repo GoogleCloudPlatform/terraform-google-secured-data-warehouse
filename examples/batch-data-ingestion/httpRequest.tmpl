@@ -1,0 +1,21 @@
+{
+      "jobName": "batch-dataflow-flow",
+      "environment": {
+        "maxWorkers": 5,
+        "zone": "${location}",
+        "ipConfiguration": "WORKER_IP_PRIVATE",
+        "enableStreamingEngine": true,
+        "network": "${network_self_link}",
+        "serviceAccountEmail": "${dataflow_service_account}",
+        "subnetwork": "${subnetwork_self_link}"
+      },
+      "parameters" : {
+        "inputFilePattern"       : "${inputFilePattern}",
+        "outputTable"            : "${project_id}:${dataset_id}.${table_name}",
+        "javascriptTextTransformFunctionName" : "${javascriptTextTransformFunctionName}",
+        "JSONPath" : "${JSONPath}",
+        "javascriptTextTransformGcsPath" : "${javascriptTextTransformGcsPath}",
+        "bigQueryLoadingTemporaryDirectory" : "${bigQueryLoadingTemporaryDirectory}"
+      },
+      "gcsPath": "gs://dataflow-templates/latest/GCS_Text_to_BigQuery"
+    }

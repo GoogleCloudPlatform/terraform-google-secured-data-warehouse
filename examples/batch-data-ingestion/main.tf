@@ -21,6 +21,23 @@ resource "random_id" "random_suffix" {
 locals {
   region   = "us-central1"
   location = "us-central1-a"
+  httpRequestTemplate = templatefile(
+    "${path.module}/httpRequest.tmpl",
+    {
+      location                            = local.location,
+      network_self_link                   = var.network_self_link,
+      dataflow_service_account            = var.dataflow_service_account,
+      subnetwork_self_link                = var.subnetwork_self_link,
+      inputFilePattern                    = "gs://${module.dataflow-bucket.bucket.name}/cc_records.csv",
+      project_id                          = var.project_id,
+      dataset_id                          = var.dataset_id,
+      table_name                          = var.table_name,
+      javascriptTextTransformFunctionName = "transform",
+      JSONPath                            = "gs://${module.dataflow-bucket.bucket.name}/code/schema.json",
+      javascriptTextTransformGcsPath      = "gs://${module.dataflow-bucket.bucket.name}/code/transform.js",
+      bigQueryLoadingTemporaryDirectory   = "gs://${module.dataflow-bucket.bucket.name}/tmp"
+    }
+  )
 }
 
 //storage ingest bucket
@@ -110,30 +127,7 @@ resource "google_cloud_scheduler_job" "scheduler" {
     }
 
     # need to encode the string
-    body = base64encode(<<-EOT
-    {
-      "jobName": "batch-dataflow-flow",
-      "environment": {
-        "maxWorkers": 5,
-        "zone": "${local.location}",
-        "ipConfiguration": "WORKER_IP_PRIVATE",
-        "enableStreamingEngine": true,
-        "network": "${var.network_self_link}",
-        "serviceAccountEmail": "${var.dataflow_service_account}",
-        "subnetwork": "${var.subnetwork_self_link}"
-      },
-      "parameters" : {
-        "inputFilePattern"       : "gs://${module.dataflow-bucket.bucket.name}/cc_records.csv",
-        "outputTable"            : "${var.project_id}:${var.dataset_id}.test_table",
-        "javascriptTextTransformFunctionName" : "transform",
-        "JSONPath" : "gs://${module.dataflow-bucket.bucket.name}/code/schema.json",
-        "javascriptTextTransformGcsPath" : "gs://${module.dataflow-bucket.bucket.name}/code/transform.js",
-        "bigQueryLoadingTemporaryDirectory" : "gs://${module.dataflow-bucket.bucket.name}/tmp"
-      },
-      "gcsPath": "gs://dataflow-templates/latest/GCS_Text_to_BigQuery"
-    }
-EOT
-    )
+    body = base64encode(local.httpRequestTemplate)
   }
   depends_on = [
     google_app_engine_application.app,

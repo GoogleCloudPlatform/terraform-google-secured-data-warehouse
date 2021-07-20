@@ -39,6 +39,7 @@ To provision this example, complete these tasks from within this directory:
 | network\_self\_link | The network self link to which VMs will be assigned. | `string` | n/a | yes |
 | project\_id | The ID of the project in which the service account will be created. | `string` | n/a | yes |
 | subnetwork\_self\_link | The subnetwork self link to which VMs will be assigned. | `string` | n/a | yes |
+| table\_name | Unique ID for the table in dataset being provisioned. | `string` | `"table_test_int"` | no |
 | terraform\_service\_account | Service account email of the account to impersonate to run Terraform. | `string` | n/a | yes |
 | wrapped\_key | The base64 encoded data crypto key wrapped by KMS. | `string` | n/a | yes |
 

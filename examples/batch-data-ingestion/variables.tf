@@ -35,6 +35,12 @@ variable "dataset_id" {
   default     = "dts_test_int"
 }
 
+variable "table_name" {
+  description = "Unique ID for the table in dataset being provisioned."
+  type        = string
+  default     = "table_test_int"
+}
+
 variable "subnetwork_self_link" {
   type        = string
   description = "The subnetwork self link to which VMs will be assigned."
