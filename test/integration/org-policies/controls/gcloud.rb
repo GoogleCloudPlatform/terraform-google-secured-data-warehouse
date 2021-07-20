@@ -48,7 +48,7 @@ control 'gcloud' do
         end
       end
 
-      describe "bolean org policy #{constraint}" do
+      describe "boolean org policy #{constraint}" do
         it 'should be enforced' do
           expect(data["booleanPolicy"]["enforced"]).to eq true
         end
