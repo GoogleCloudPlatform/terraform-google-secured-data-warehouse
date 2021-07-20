@@ -48,3 +48,18 @@ output "member_policy_name_private" {
   description = "SA member for Person Name policy tag private."
   value       = module.bigquery_sensitive_data.member_policy_name_private
 }
+
+output "project_id" {
+  description = "Project where service accounts and core APIs will be enabled."
+  value       = var.project_id
+}
+
+output "dataset_id" {
+  description = "The dataset ID to deploy to data warehouse."
+  value       = var.dataset_id
+}
+
+output "taxonomy_name" {
+  description = "The taxonomy display name."
+  value       = module.bigquery_sensitive_data.taxonomy_name
+}
