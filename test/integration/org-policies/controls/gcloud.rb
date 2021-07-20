@@ -23,8 +23,9 @@ boolean_policy_constraints = [
   'constraints/compute.disableSerialPortLogging',
 ]
 
+
 control 'gcloud' do
-  title 'folder organization policy tests'
+  title 'organization policy tests'
 
   boolean_policy_constraints.each do |constraint|
     describe command("gcloud beta resource-manager org-policies list --project=#{project_id} --format=json") do

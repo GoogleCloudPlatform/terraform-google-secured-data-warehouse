@@ -29,7 +29,7 @@ module "service_account_key_policy" {
   version     = "~> 5.0"
   policy_for  = "project"
   project_id  = local.project_id
-  constraint  = "iam.disableServiceAccountKeyCreation"
+  constraint  = "iam.disableServiceAccountCreation"
   policy_type = "boolean"
   enforce     = true
 }

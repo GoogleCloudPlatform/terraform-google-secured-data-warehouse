@@ -54,6 +54,6 @@ module "vpc_subnetwork_policy" {
   policy_for        = "project"
   project_id        = local.project_id
   policy_type       = "list"
-  allow             = ["under:projects/${local.project_id}/regions/${var.region}/subnetworks/${var.trusted_subnetwork}"]
+  allow             = ["projects/${local.project_id}/regions/${var.region}/subnetworks/${var.trusted_subnetwork}"]
   allow_list_length = 1
 }
