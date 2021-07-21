@@ -42,7 +42,6 @@ Functional examples are included in the [examples](./examples/bigquery_sensitive
 | Name | Description |
 |------|-------------|
 | emails | The service account email addresses by name. |
-| emails\_list | The service account email addresses as list. |
 | high\_policy\_taxonomy\_id | Content for Policy Tag ID in high policy. |
 | medium\_policy\_taxonomy\_id | Content for Policy Tag ID in medium policy. |
 | member\_policy\_name\_confidential | SA member for Person Name policy tag. |

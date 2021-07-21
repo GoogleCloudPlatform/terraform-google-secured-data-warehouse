@@ -14,11 +14,6 @@
  * limitations under the License.
  */
 
-output "emails_list" {
-  description = "The service account email addresses as list."
-  value       = module.bigquery_sensitive_data.emails_list
-}
-
 output "emails" {
   description = "The service account email addresses by name."
   value       = module.bigquery_sensitive_data.emails
@@ -26,12 +21,12 @@ output "emails" {
 
 output "person_name_policy_tag" {
   description = "Content for Policy Tag ID in medium policy."
-  value       = module.bigquery_sensitive_data.medium_policy_taxonomy_id
+  value       = module.bigquery_sensitive_data.person_name_policy_tag
 }
 
 output "social_security_number_policy_tag" {
   description = "Content for Policy Tag ID in high policy."
-  value       = module.bigquery_sensitive_data.high_policy_taxonomy_id
+  value       = module.bigquery_sensitive_data.social_security_number_policy_tag
 }
 
 output "member_policy_ssn_confidential" {

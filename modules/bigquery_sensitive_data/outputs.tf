@@ -14,11 +14,6 @@
  * limitations under the License.
  */
 
-output "emails_list" {
-  description = "The service account email addresses as list."
-  value       = module.service_accounts.emails_list
-}
-
 output "emails" {
   description = "The service account email addresses by name."
   value       = module.service_accounts.emails
