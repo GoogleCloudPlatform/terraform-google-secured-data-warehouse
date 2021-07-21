@@ -18,23 +18,3 @@ variable "project_id" {
   description = "Project where the dataset and table are created."
   type        = string
 }
-
-variable "dataset_id" {
-  description = "The dataset ID to deploy to data warehouse."
-  type        = string
-}
-
-variable "table_id" {
-  description = "The table ID to deploy to data warehouse."
-  type        = string
-}
-
-variable "location" {
-  description = "Default region to create resources where applicable."
-  type        = string
-}
-
-variable "taxonomy_name" {
-  description = "The taxonomy display name."
-  type        = string
-}

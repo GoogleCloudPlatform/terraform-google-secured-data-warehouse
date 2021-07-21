@@ -17,8 +17,8 @@
 module "bigquery_sensitive_data" {
   source        = "../..//modules/bigquery_sensitive_data"
   project_id    = var.project_id
-  taxonomy_name = var.taxonomy_name
+  taxonomy_name = "secured_taxonomy"
   table_id      = "sample_data"
-  dataset_id    = var.dataset_id
-  location      = var.location
+  dataset_id    = "secured_dataset"
+  location      = "us-east1"
 }

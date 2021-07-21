@@ -15,10 +15,6 @@
  */
 
 module "bigquery_sensitive_data" {
-  source        = "../../..//examples/bigquery_sensitive_data"
-  project_id    = var.project_id
-  dataset_id    = "dtwh_dataset"
-  table_id      = "sample_data"
-  taxonomy_name = "secure_bq-taxonomy"
-  location      = "us-east1"
+  source     = "../../..//examples/bigquery_sensitive_data"
+  project_id = var.project_id
 }
