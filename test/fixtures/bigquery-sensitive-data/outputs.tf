@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-output "emails" {
+output "emails_list" {
   description = "The service account email addresses by name."
-  value       = module.bigquery_sensitive_data.emails
+  value       = module.bigquery_sensitive_data.emails_list
 }
 
 output "person_name_policy_tag" {

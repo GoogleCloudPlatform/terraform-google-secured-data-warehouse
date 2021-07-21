@@ -13,7 +13,7 @@ This example illustrates how to use the `bigquery_sensitive_data` submodule.
 
 | Name | Description |
 |------|-------------|
-| emails | The service account email addresses by name. |
+| emails\_list | The service account email addresses by name. |
 | member\_policy\_name\_confidential | SA member for Person Name policy tag confidential. |
 | member\_policy\_name\_private | SA member for Person Name policy tag private. |
 | member\_policy\_ssn\_confidential | SA member for Social Security Number policy tag confidential. |

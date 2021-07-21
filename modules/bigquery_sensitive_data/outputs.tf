@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-output "emails" {
+output "emails_list" {
   description = "The service account email addresses by name."
   value       = module.service_accounts.emails
 }
