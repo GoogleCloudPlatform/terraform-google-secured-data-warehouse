@@ -22,7 +22,7 @@ variable "project_id" {
 variable "dataset_id" {
   description = "The dataset ID to deploy to data warehouse."
   type        = string
-  default     = "dtwh_dataset"
+  default     = "secured_dataset"
 }
 
 variable "terraform_service_account" {
