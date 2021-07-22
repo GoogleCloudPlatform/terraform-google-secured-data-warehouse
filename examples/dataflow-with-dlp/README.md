@@ -1,6 +1,6 @@
 # Dataflow with DLP de-identification
 
-This example illustrates how to run a Dataflow job that uses the `de_identification_template` submodule with the `1-data-ingestion` step, some of the variable that you will need to execute this module can be obtained as output of `1-data-ingestion` step.
+This example illustrates how to run a Dataflow job that uses the `de_identification_template` submodule with the `1-data-ingestion` step.
 
 ## Prerequisites
 
