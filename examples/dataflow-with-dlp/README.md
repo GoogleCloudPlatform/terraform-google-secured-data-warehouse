@@ -15,7 +15,7 @@ To provision this example, complete these tasks from within this directory:
    ```
    terraform init
    ```
-1. Review the infrastructure plan. When prompted, enter the [inputs](##Inputs)
+1. Review the infrastructure plan. When prompted, enter the [inputs](#Inputs)
    ```
    terraform plan
    ```
