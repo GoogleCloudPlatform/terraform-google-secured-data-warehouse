@@ -33,6 +33,7 @@ To provision this example, complete these tasks from within this directory:
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| bucket\_force\_destroy | When deleting a bucket, this boolean option will delete all contained objects. If you try to delete a bucket that contains objects, Terraform will fail that run. | `bool` | `false` | no |
 | crypto\_key | The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP. | `string` | n/a | yes |
 | dataflow\_service\_account | The Service Account email that will be used to identify the VMs in which the jobs are running | `string` | n/a | yes |
 | dataset\_id | Unique ID for the dataset being provisioned. | `string` | `"dts_test_int"` | no |
@@ -47,11 +48,11 @@ To provision this example, complete these tasks from within this directory:
 
 | Name | Description |
 |------|-------------|
-| bucket\_name | The name of the bucket |
 | controller\_service\_account | The Service Account email that will be used to identify the VMs in which the jobs are running |
+| dataflow\_bucket\_name | The name of the bucket |
 | dlp\_location | The location of the DLP resources. |
+| dlp\_template\_id | The ID of the Cloud DLP de-identification template that is created. |
 | project\_id | The project's ID |
 | scheduler\_id | Cloud Scheduler Job id created |
-| template\_id | The ID of the Cloud DLP de-identification template that is created. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

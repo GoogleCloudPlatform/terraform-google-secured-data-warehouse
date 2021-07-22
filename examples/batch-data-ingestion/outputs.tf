@@ -29,7 +29,7 @@ output "controller_service_account" {
   value       = var.dataflow_service_account
 }
 
-output "bucket_name" {
+output "dataflow_bucket_name" {
   description = "The name of the bucket"
   value       = module.dataflow-bucket.bucket.name
 }
@@ -39,7 +39,7 @@ output "dlp_location" {
   value       = module.de_identification_template.dlp_location
 }
 
-output "template_id" {
+output "dlp_template_id" {
   description = "The ID of the Cloud DLP de-identification template that is created."
   value       = module.de_identification_template.template_id
 }

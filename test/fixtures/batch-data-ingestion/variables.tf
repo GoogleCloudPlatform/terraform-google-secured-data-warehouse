@@ -36,12 +36,6 @@ variable "bucket_location" {
   default     = "US"
 }
 
-variable "bucket_force_destroy" {
-  type        = bool
-  description = "When deleting a bucket, this boolean option will delete all contained objects. If you try to delete a bucket that contains objects, Terraform will fail that run."
-  default     = false
-}
-
 variable "bucket_lifecycle_rules" {
   type = set(object({
     action    = map(string)

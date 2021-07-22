@@ -25,8 +25,8 @@ variable "terraform_service_account" {
 }
 
 variable "dataflow_service_account" {
-  type        = string
   description = "The Service Account email that will be used to identify the VMs in which the jobs are running"
+  type        = string
 }
 
 variable "dataset_id" {
@@ -59,4 +59,10 @@ variable "crypto_key" {
 variable "wrapped_key" {
   description = "The base64 encoded data crypto key wrapped by KMS."
   type        = string
+}
+
+variable "bucket_force_destroy" {
+  type        = bool
+  description = "When deleting a bucket, this boolean option will delete all contained objects. If you try to delete a bucket that contains objects, Terraform will fail that run."
+  default     = false
 }

@@ -95,7 +95,7 @@ output "cmek_keyring_full_name" {
 }
 
 output "cmek_keyring_name" {
-  value       = var.cmek_keyring_name
+  value       = module.cmek.keyring_name
   description = "The Keyring name for the KMS Customer Managed Encryption Keys."
 }
 

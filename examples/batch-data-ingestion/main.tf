@@ -48,7 +48,7 @@ module "dataflow-bucket" {
   project_id    = var.project_id
   name          = "bkt-${random_id.random_suffix.hex}-tmp-dataflow"
   location      = "US"
-  force_destroy = true
+  force_destroy = var.bucket_force_destroy
 
   labels = {
     "enterprise_data_ingest_bucket" = "true"
