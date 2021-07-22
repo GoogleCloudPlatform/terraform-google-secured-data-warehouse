@@ -15,7 +15,7 @@ To provision this example, complete these tasks from within this directory:
    ```
    terraform init
    ```
-1. Review the infrastructure plan. When prompted, enter the `project_id`, `terraform_service_account`, `network_self_link`, `subnetwork_self_link`, `dataset_id`, `dlp_location`, `crypto_key`, `wrapped_key` and `dataset_name`
+1. Review the infrastructure plan. When prompted, enter the [inputs](##Inputs)
    ```
    terraform plan
    ```
