@@ -21,6 +21,8 @@ resource "random_id" "random_suffix" {
 locals {
   region   = "us-central1"
   location = "us-central1-a"
+  schema_file = "schema.json"
+  transform_code_file = "transform.js"
   httpRequestTemplate = templatefile(
     "${path.module}/httpRequest.tmpl",
     {
@@ -33,8 +35,8 @@ locals {
       dataset_id                          = var.dataset_id,
       table_name                          = var.table_name,
       javascriptTextTransformFunctionName = "transform",
-      JSONPath                            = "gs://${module.dataflow-bucket.bucket.name}/code/schema.json",
-      javascriptTextTransformGcsPath      = "gs://${module.dataflow-bucket.bucket.name}/code/transform.js",
+      JSONPath                            = "gs://${module.dataflow-bucket.bucket.name}/code/${local.schema_file}",
+      javascriptTextTransformGcsPath      = "gs://${module.dataflow-bucket.bucket.name}/code/${local.transform_code_file}",
       bigQueryLoadingTemporaryDirectory   = "gs://${module.dataflow-bucket.bucket.name}/tmp"
     }
   )
@@ -74,8 +76,8 @@ EOF
 }
 
 resource "google_storage_bucket_object" "schema" {
-  name   = "code/schema.json"
-  source = "${path.module}/schema.json"
+  name   = "code/${local.schema_file}"
+  source = "${path.module}/${local.schema_file}"
   bucket = module.dataflow-bucket.bucket.name
   depends_on = [
     module.dataflow-bucket
@@ -83,8 +85,8 @@ resource "google_storage_bucket_object" "schema" {
 }
 
 resource "google_storage_bucket_object" "transform_code" {
-  name   = "code/transform.js"
-  source = "${path.module}/transform.js"
+  name   = "code/${local.transform_code_file}"
+  source = "${path.module}/${local.transform_code_file}"
   bucket = module.dataflow-bucket.bucket.name
   depends_on = [
     module.dataflow-bucket
