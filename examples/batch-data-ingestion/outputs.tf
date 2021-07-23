@@ -33,13 +33,3 @@ output "dataflow_bucket_name" {
   description = "The name of the bucket"
   value       = module.dataflow-bucket.bucket.name
 }
-
-output "dlp_location" {
-  description = "The location of the DLP resources."
-  value       = module.de_identification_template.dlp_location
-}
-
-output "dlp_template_id" {
-  description = "The ID of the Cloud DLP de-identification template that is created."
-  value       = module.de_identification_template.template_id
-}

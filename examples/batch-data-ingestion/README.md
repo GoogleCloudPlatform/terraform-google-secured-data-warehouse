@@ -49,8 +49,6 @@ To provision this example, complete these tasks from within this directory:
 |------|-------------|
 | controller\_service\_account | The Service Account email that will be used to identify the VMs in which the jobs are running |
 | dataflow\_bucket\_name | The name of the bucket |
-| dlp\_location | The location of the DLP resources. |
-| dlp\_template\_id | The ID of the Cloud DLP de-identification template that is created. |
 | project\_id | The project's ID |
 | scheduler\_id | Cloud Scheduler Job id created |
 
