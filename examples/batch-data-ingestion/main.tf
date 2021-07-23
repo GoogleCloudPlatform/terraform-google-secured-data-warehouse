@@ -19,9 +19,9 @@ resource "random_id" "random_suffix" {
 }
 
 locals {
-  region   = "us-central1"
-  location = "us-central1-a"
-  schema_file = "schema.json"
+  region              = "us-central1"
+  location            = "us-central1-a"
+  schema_file         = "schema.json"
   transform_code_file = "transform.js"
   httpRequestTemplate = templatefile(
     "${path.module}/httpRequest.tmpl",
