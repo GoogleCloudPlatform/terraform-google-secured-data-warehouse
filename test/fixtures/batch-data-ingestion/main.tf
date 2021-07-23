@@ -15,8 +15,6 @@
  */
 
 locals {
-  keyring  = "keyring_kek_${random_id.random_suffix.hex}"
-  key_name = "key_name_kek_${random_id.random_suffix.hex}"
   region   = "us-central1"
 }
 
@@ -34,31 +32,21 @@ resource "random_id" "random_suffix" {
   byte_length = 4
 }
 
-module "kms" {
-  source  = "terraform-google-modules/kms/google"
-  version = "~> 1.2"
-
-  project_id      = var.project_id
-  location        = var.dlp_location
-  keyring         = local.keyring
-  keys            = [local.key_name]
-  prevent_destroy = false
+data "google_kms_key_ring" "kms" {
+  name     = "${var.cmek_keyring_name}_test"
+  location = var.cmek_location
+  project = var.project_id
 }
 
-resource "random_id" "original_key" {
-  byte_length = 16
+data "google_kms_crypto_key" "crypto_key" {
+  name     = "ingestion_kms_key"
+  key_ring = data.google_kms_key_ring.kms.self_link
 }
 
-resource "google_kms_secret_ciphertext" "wrapped_key" {
-  crypto_key = module.kms.keys[local.key_name]
-  plaintext  = random_id.original_key.b64_std
-}
-
-module "dataflow-with-dlp" {
+module "batch-dataflow" {
   source                    = "../../../examples/batch-data-ingestion"
   project_id                = var.project_id
-  crypto_key                = module.kms.keys[local.key_name]
-  wrapped_key               = google_kms_secret_ciphertext.wrapped_key.ciphertext
+  crypto_key                = data.google_kms_crypto_key.crypto_key.self_link
   terraform_service_account = var.terraform_service_account
   dataflow_service_account  = data.google_service_account.dataflow_service_account.email
   network_self_link         = data.google_compute_network.vpc_network.id

@@ -22,7 +22,7 @@ output "project_id" {
 
 output "scheduler_id" {
   description = "Cloud Scheduler Job id created"
-  value       = module.dataflow-with-dlp.scheduler_id
+  value       = module.batch-dataflow.scheduler_id
 }
 
 output "df_job_controller_service_account" {
@@ -47,5 +47,5 @@ output "df_job_subnetwork" {
 
 output "dataflow_bucket_name" {
   description = "The name of the bucket."
-  value       = module.dataflow-with-dlp.dataflow_bucket_name
+  value       = module.batch-dataflow.dataflow_bucket_name
 }

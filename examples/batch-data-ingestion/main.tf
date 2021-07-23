@@ -49,6 +49,7 @@ module "dataflow-bucket" {
   name          = "bkt-${random_id.random_suffix.hex}-tmp-dataflow"
   location      = "US"
   force_destroy = var.bucket_force_destroy
+  encryption    = { "default_kms_key_name" = var.crypto_key}
 
   labels = {
     "enterprise_data_ingest_bucket" = "true"
@@ -88,18 +89,6 @@ resource "google_storage_bucket_object" "transform_code" {
   depends_on = [
     module.dataflow-bucket
   ]
-}
-
-module "de_identification_template" {
-  source = "../..//modules/de_identification_template"
-
-  project_id                = var.project_id
-  terraform_service_account = var.terraform_service_account
-  crypto_key                = var.crypto_key
-  wrapped_key               = var.wrapped_key
-  dlp_location              = "global"
-  template_file             = "${path.module}/deidentification.tmpl"
-  dataflow_service_account  = var.dataflow_service_account
 }
 
 resource "google_app_engine_application" "app" {

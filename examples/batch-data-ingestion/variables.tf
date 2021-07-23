@@ -56,11 +56,6 @@ variable "crypto_key" {
   type        = string
 }
 
-variable "wrapped_key" {
-  description = "The base64 encoded data crypto key wrapped by KMS."
-  type        = string
-}
-
 variable "bucket_force_destroy" {
   type        = bool
   description = "When deleting a bucket, this boolean option will delete all contained objects. If you try to delete a bucket that contains objects, Terraform will fail that run."
