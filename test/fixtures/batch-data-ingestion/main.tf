@@ -15,7 +15,7 @@
  */
 
 locals {
-  region   = "us-central1"
+  region = "us-central1"
 }
 
 data "google_service_account" "dataflow_service_account" {
@@ -35,7 +35,7 @@ resource "random_id" "random_suffix" {
 data "google_kms_key_ring" "kms" {
   name     = "${var.cmek_keyring_name}_test"
   location = var.cmek_location
-  project = var.project_id
+  project  = var.project_id
 }
 
 data "google_kms_crypto_key" "crypto_key" {

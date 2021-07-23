@@ -49,7 +49,7 @@ module "dataflow-bucket" {
   name          = "bkt-${random_id.random_suffix.hex}-tmp-dataflow"
   location      = "US"
   force_destroy = var.bucket_force_destroy
-  encryption    = { "default_kms_key_name" = var.crypto_key}
+  encryption    = { "default_kms_key_name" = var.crypto_key }
 
   labels = {
     "enterprise_data_ingest_bucket" = "true"
