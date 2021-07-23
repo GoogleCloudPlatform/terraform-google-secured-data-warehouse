@@ -42,8 +42,8 @@ variable "table_name" {
 }
 
 variable "subnetwork_self_link" {
-  type        = string
   description = "The subnetwork self link to which VMs will be assigned."
+  type        = string
 }
 
 variable "network_self_link" {
@@ -57,7 +57,7 @@ variable "crypto_key" {
 }
 
 variable "bucket_force_destroy" {
-  type        = bool
   description = "When deleting a bucket, this boolean option will delete all contained objects. If you try to delete a bucket that contains objects, Terraform will fail that run."
+  type        = bool
   default     = false
 }

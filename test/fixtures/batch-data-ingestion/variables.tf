@@ -15,8 +15,8 @@
  */
 
 variable "ip_configuration" {
-  type        = string
   description = "The configuration for VM IPs. Options are 'WORKER_IP_PUBLIC' or 'WORKER_IP_PRIVATE'."
+  type        = string
   default     = "WORKER_IP_PRIVATE"
 }
 
@@ -37,11 +37,11 @@ variable "bucket_location" {
 }
 
 variable "bucket_lifecycle_rules" {
+  description = "List of lifecycle rules to configure. Format is the same as described in provider documentation https://www.terraform.io/docs/providers/google/r/storage_bucket.html#lifecycle_rule except condition.matches_storage_class should be a comma delimited string."
   type = set(object({
     action    = map(string)
     condition = map(string)
   }))
-  description = "List of lifecycle rules to configure. Format is the same as described in provider documentation https://www.terraform.io/docs/providers/google/r/storage_bucket.html#lifecycle_rule except condition.matches_storage_class should be a comma delimited string."
   default = [{
     action = {
       type = "Delete"

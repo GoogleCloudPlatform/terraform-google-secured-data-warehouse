@@ -33,7 +33,7 @@ resource "random_id" "random_suffix" {
 }
 
 data "google_kms_key_ring" "kms" {
-  name     = "${var.cmek_keyring_name}_test"
+  name     = "${var.cmek_keyring_name}"
   location = var.cmek_location
   project  = var.project_id
 }
