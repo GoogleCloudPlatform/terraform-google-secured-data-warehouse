@@ -28,7 +28,7 @@ module "service_account_key_policy" {
   source      = "terraform-google-modules/org-policy/google"
   version     = "~> 5.0"
   policy_for  = "project"
-  project_id  = local.project_id
+  project_id  = var.project_id
   constraint  = "iam.disableServiceAccountCreation"
   policy_type = "boolean"
   enforce     = true

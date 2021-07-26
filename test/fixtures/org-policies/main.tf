@@ -15,9 +15,9 @@
  */
 
 module "org_policies" {
-  source                         = "../../../modules/org_policies"
-  project_secured_data_warehouse = var.project_id
-  region                         = "us-central1"
-  trusted_subnetwork             = "testing"
-  trusted_locations              = ["us-locations", "eu-locations"]
+  source             = "../../../modules/org_policies"
+  region             = "us-central1"
+  project_id         = var.project_id
+  trusted_subnetwork = "testing"
+  trusted_locations  = ["us-locations", "eu-locations"]
 }

@@ -19,7 +19,7 @@ module "location_restriction_policy" {
   version           = "~> 4.0"
   constraint        = "gcp.resourceLocations"
   policy_for        = "project"
-  project_id        = local.project_id
+  project_id        = var.project_id
   policy_type       = "list"
   allow             = local.locations[*]
   allow_list_length = 1
