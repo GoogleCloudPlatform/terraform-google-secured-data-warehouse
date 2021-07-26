@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-variable "project_secured_data_warehouse" {
+variable "project_id" {
   description = "The project id for the secured data warehouse."
   type        = string
 }

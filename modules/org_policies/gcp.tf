@@ -14,13 +14,6 @@
  * limitations under the License.
  */
 
-
-# Organizational Policies
-#
-# These are the policies define
-# - Resource Location Restriction - constraints/gcp.resourceLocations
-
-
 module "location_restriction_policy" {
   source            = "terraform-google-modules/org-policy/google"
   version           = "~> 4.0"

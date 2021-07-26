@@ -15,6 +15,5 @@
  */
 
 locals {
-  locations  = [for l in var.trusted_locations : "in:${l}"]
-  project_id = var.project_secured_data_warehouse
+  locations = [for l in var.trusted_locations : "in:${l}"]
 }
