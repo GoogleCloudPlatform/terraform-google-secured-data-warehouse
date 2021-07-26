@@ -48,3 +48,8 @@ variable "wrapped_key" {
   description = "The base64 encoded data crypto key wrapped by KMS."
   type        = string
 }
+
+variable "dataset_id" {
+  description = "The id of dataset the will be used."
+  type        = string
+}

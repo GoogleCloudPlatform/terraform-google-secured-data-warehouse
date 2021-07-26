@@ -58,6 +58,7 @@ module "dataflow-with-dlp" {
   source                    = "../../../examples/dataflow-with-dlp"
   project_id                = var.project_id
   crypto_key                = module.kms.keys[local.key_name]
+  dataset_id                = "dts_test_int"
   wrapped_key               = google_kms_secret_ciphertext.wrapped_key.ciphertext
   terraform_service_account = var.terraform_service_account
   dataflow_service_account  = data.google_service_account.dataflow_service_account.email
