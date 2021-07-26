@@ -14,7 +14,7 @@
 
 names         = attribute('emails_list')
 project_id    = attribute('project_id')
-dataset_id    = attribute('dataset_id')
+dataset_id    = "secured_dataset"
 
 control 'gcp' do
   title 'GCP Resources'
