@@ -18,14 +18,3 @@ variable "project_id" {
   description = "Project where the dataset and table are created"
   type        = string
 }
-
-variable "terraform_service_account" {
-  description = "Service account email of the account to impersonate to run Terraform"
-  type        = string
-}
-
-variable "names" {
-  type        = list(string)
-  description = "Names of the service accounts to create."
-  default     = []
-}
