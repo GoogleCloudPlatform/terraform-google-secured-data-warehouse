@@ -38,7 +38,7 @@ module "bigquery_sensitive_data" {
 
   dataset_id                 = var.dataset_id
   description                = "Dataset for BigQuery Sensitive Data"
-  project_id                 = var.project_id
+  project_id                 = var.bigquery_project_id
   location                   = var.location
   delete_contents_on_destroy = var.delete_contents_on_destroy
 
