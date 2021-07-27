@@ -47,13 +47,13 @@ members = [
 resources = ["projects/#{project_number}"]
 
 other_kms_roles = [
-  "roles/cloudkms.admin",
-  "roles/cloudkms.publicKeyViewer",
-  "roles/cloudkms.signer",
-  "roles/cloudkms.signerVerifier",
-  "roles/cloudkms.importer",
-  "roles/cloudkms.serviceAgent",
-  "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+  'roles/cloudkms.admin',
+  'roles/cloudkms.publicKeyViewer',
+  'roles/cloudkms.signer',
+  'roles/cloudkms.signerVerifier',
+  'roles/cloudkms.importer',
+  'roles/cloudkms.serviceAgent',
+  'roles/cloudkms.cryptoKeyEncrypterDecrypter'
 ]
 
 control 'gcp' do
@@ -156,8 +156,8 @@ control 'gcp' do
 
   describe google_kms_key_ring(project: project_id, location: cmek_location, name: cmek_keyring_name) do
     it { should exist }
-    its('key_ring_name'){ should eq cmek_keyring_name }
-    its('key_ring_url'){ should match cmek_keyring_name }
+    its('key_ring_name') { should eq cmek_keyring_name }
+    its('key_ring_url') { should match cmek_keyring_name }
   end
 
   describe google_kms_crypto_key(
@@ -168,16 +168,16 @@ control 'gcp' do
   ) do
     it { should exist }
     its('crypto_key_name') { should cmp 'ingestion_kms_key' }
-    its('primary_state') { should eq "ENABLED" }
-    its('purpose') { should eq "ENCRYPT_DECRYPT" }
+    its('primary_state') { should eq 'ENABLED' }
+    its('purpose') { should eq 'ENCRYPT_DECRYPT' }
   end
 
   describe google_kms_crypto_key_iam_binding(
     project: project_id,
     location: cmek_location,
     key_ring_name: cmek_keyring_name,
-    crypto_key_name: "ingestion_kms_key",
-    role: "roles/cloudkms.cryptoKeyDecrypter"
+    crypto_key_name: 'ingestion_kms_key',
+    role: 'roles/cloudkms.cryptoKeyDecrypter'
   ) do
     it { should exist }
     its('members') { should include "serviceAccount:#{default_storage_sa}" }
@@ -189,8 +189,8 @@ control 'gcp' do
     project: project_id,
     location: cmek_location,
     key_ring_name: cmek_keyring_name,
-    crypto_key_name: "ingestion_kms_key",
-    role: "roles/cloudkms.cryptoKeyEncrypter"
+    crypto_key_name: 'ingestion_kms_key',
+    role: 'roles/cloudkms.cryptoKeyEncrypter'
   ) do
     it { should exist }
     its('members') { should include "serviceAccount:#{default_storage_sa}" }
@@ -206,16 +206,16 @@ control 'gcp' do
   ) do
     it { should exist }
     its('crypto_key_name') { should cmp 'bigquery_kms_key' }
-    its('primary_state') { should eq "ENABLED" }
-    its('purpose') { should eq "ENCRYPT_DECRYPT" }
+    its('primary_state') { should eq 'ENABLED' }
+    its('purpose') { should eq 'ENCRYPT_DECRYPT' }
   end
 
   describe google_kms_crypto_key_iam_binding(
     project: project_id,
     location: cmek_location,
     key_ring_name: cmek_keyring_name,
-    crypto_key_name: "bigquery_kms_key",
-    role: "roles/cloudkms.cryptoKeyDecrypter"
+    crypto_key_name: 'bigquery_kms_key',
+    role: 'roles/cloudkms.cryptoKeyDecrypter'
   ) do
     it { should exist }
     its('members') { should_not include "serviceAccount:#{default_storage_sa}" }
@@ -227,8 +227,8 @@ control 'gcp' do
     project: project_id,
     location: cmek_location,
     key_ring_name: cmek_keyring_name,
-    crypto_key_name: "bigquery_kms_key",
-    role: "roles/cloudkms.cryptoKeyEncrypter"
+    crypto_key_name: 'bigquery_kms_key',
+    role: 'roles/cloudkms.cryptoKeyEncrypter'
   ) do
     it { should exist }
     its('members') { should_not include "serviceAccount:#{default_storage_sa}" }
@@ -237,12 +237,12 @@ control 'gcp' do
   end
 
   google_project_iam_policy(project: project_id).iam_binding_roles.each do |iam_binding_role|
-    if other_kms_roles.include?(iam_binding_role)
-      describe google_project_iam_binding(project: project_id, role: iam_binding_role) do
-        its('members') { should_not include "serviceAccount:#{default_storage_sa}" }
-        its('members') { should_not include "serviceAccount:#{default_pubsub_sa}" }
-        its('members') { should_not include "serviceAccount:#{default_bigquery_sa}" }
-      end
+    next unless other_kms_roles.include?(iam_binding_role)
+
+    describe google_project_iam_binding(project: project_id, role: iam_binding_role) do
+      its('members') { should_not include "serviceAccount:#{default_storage_sa}" }
+      its('members') { should_not include "serviceAccount:#{default_pubsub_sa}" }
+      its('members') { should_not include "serviceAccount:#{default_bigquery_sa}" }
     end
   end
 
@@ -250,20 +250,20 @@ control 'gcp' do
     project: project_id,
     location: cmek_location,
     key_ring_name: cmek_keyring_name,
-    crypto_key_name: "ingestion_kms_key"
+    crypto_key_name: 'ingestion_kms_key'
   ).iam_binding_roles.each do |iam_binding_role|
-    if other_kms_roles.include?(iam_binding_role)
-      describe google_kms_crypto_key_iam_binding(
-        project: project_id,
-        location: cmek_location,
-        key_ring_name: cmek_keyring_name,
-        crypto_key_name: "ingestion_kms_key",
-        role: iam_binding_role
-      ) do
-        its('members') { should_not include "serviceAccount:#{default_storage_sa}" }
-        its('members') { should_not include "serviceAccount:#{default_pubsub_sa}" }
-        its('members') { should_not include "serviceAccount:#{default_bigquery_sa}" }
-      end
+    next unless other_kms_roles.include?(iam_binding_role)
+
+    describe google_kms_crypto_key_iam_binding(
+      project: project_id,
+      location: cmek_location,
+      key_ring_name: cmek_keyring_name,
+      crypto_key_name: 'ingestion_kms_key',
+      role: iam_binding_role
+    ) do
+      its('members') { should_not include "serviceAccount:#{default_storage_sa}" }
+      its('members') { should_not include "serviceAccount:#{default_pubsub_sa}" }
+      its('members') { should_not include "serviceAccount:#{default_bigquery_sa}" }
     end
   end
 
@@ -271,21 +271,20 @@ control 'gcp' do
     project: project_id,
     location: cmek_location,
     key_ring_name: cmek_keyring_name,
-    crypto_key_name: "bigquery_kms_key"
+    crypto_key_name: 'bigquery_kms_key'
   ).iam_binding_roles.each do |iam_binding_role|
-    if other_kms_roles.include?(iam_binding_role)
-      describe google_kms_crypto_key_iam_binding(
-        project: project_id,
-        location: cmek_location,
-        key_ring_name: cmek_keyring_name,
-        crypto_key_name: "bigquery_kms_key",
-        role: iam_binding_role
-      ) do
-        its('members') { should_not include "serviceAccount:#{default_storage_sa}" }
-        its('members') { should_not include "serviceAccount:#{default_pubsub_sa}" }
-        its('members') { should_not include "serviceAccount:#{default_bigquery_sa}" }
-      end
+    next unless other_kms_roles.include?(iam_binding_role)
+
+    describe google_kms_crypto_key_iam_binding(
+      project: project_id,
+      location: cmek_location,
+      key_ring_name: cmek_keyring_name,
+      crypto_key_name: 'bigquery_kms_key',
+      role: iam_binding_role
+    ) do
+      its('members') { should_not include "serviceAccount:#{default_storage_sa}" }
+      its('members') { should_not include "serviceAccount:#{default_pubsub_sa}" }
+      its('members') { should_not include "serviceAccount:#{default_bigquery_sa}" }
     end
   end
-
 end

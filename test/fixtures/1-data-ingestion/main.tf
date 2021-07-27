@@ -29,7 +29,7 @@ module "data_ingestion" {
   perimeter_additional_members     = var.perimeter_additional_members
   subnet_ip                        = var.subnet_ip
   cmek_location                    = var.cmek_location
-  cmek_keyring_name                = var.cmek_keyring_name
+  cmek_keyring_name                = "${var.cmek_keyring_name}"
 }
 
 resource "time_sleep" "wait_90_seconds_for_vpc_sc_propagation" {
