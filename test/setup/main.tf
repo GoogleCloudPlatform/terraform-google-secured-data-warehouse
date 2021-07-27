@@ -37,6 +37,8 @@ module "project" {
     "cloudbilling.googleapis.com",
     "cloudkms.googleapis.com",
     "dataflow.googleapis.com",
-    "dlp.googleapis.com"
+    "dlp.googleapis.com",
+    "cloudscheduler.googleapis.com",
+    "appengine.googleapis.com"
   ]
 }

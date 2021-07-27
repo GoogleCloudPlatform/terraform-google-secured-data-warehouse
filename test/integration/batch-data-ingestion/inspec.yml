@@ -1,0 +1,95 @@
+# Copyright 2021 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: batch-data-ingestion
+depends:
+  - name: inspec-gcp
+    git: https://github.com/inspec/inspec-gcp.git
+    tag: v1.8.8
+attributes:
+  - name: project_id
+    required: true
+    type: string
+  - name: access_level_name
+    required: true
+    type: string
+  - name: project_number
+    required: true
+    type: numeric
+  - name: terraform_service_account
+    required: true
+    type: string
+  - name: organization_policy_name
+    required: true
+    type: numeric
+  - name: perimeter_additional_members
+    required: true
+    type: array
+  - name: dataflow_controller_service_account_email
+    required: true
+    type: string
+  - name: storage_writer_service_account_email
+    required: true
+    type: string
+  - name: pubsub_writer_service_account_email
+    required: true
+    type: string
+  - name: dataflow_bucket_name
+    required: true
+    type: string
+  - name: data_ingest_topic_name
+    required: true
+    type: string
+  - name: network_name
+    required: true
+    type: string
+  - name: network_self_link
+    required: true
+    type: string
+  - name: subnets_names
+    required: true
+    type: array
+  - name: subnets_ips
+    required: true
+    type: array
+  - name: subnets_self_links
+    required: true
+    type: array
+  - name: subnets_regions
+    required: true
+    type: array
+  - name: access_level_name
+    required: true
+    type: string
+  - name: service_perimeter_name
+    required: true
+    type: string
+  - name: cmek_location
+    required: true
+    type: string
+  - name: cmek_keyring_name
+    required: true
+    type: string
+  - name: default_storage_sa
+    required: true
+    type: string
+  - name: default_pubsub_sa
+    required: true
+    type: string
+  - name: default_bigquery_sa
+    required: true
+    type: string
+  - name: scheduler_id
+    required: true
+    type: string
