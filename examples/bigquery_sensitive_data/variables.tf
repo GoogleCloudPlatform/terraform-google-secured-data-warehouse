@@ -13,3 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+variable "project_id" {
+  description = "Project where the dataset and table are created."
+  type        = string
+}

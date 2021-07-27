@@ -7,7 +7,7 @@ attributes:
   - name: project_id
     required: true
     type: string
-  - name: emails
+  - name: emails_list
     required: true
     type: hash
   - name: dataset_id

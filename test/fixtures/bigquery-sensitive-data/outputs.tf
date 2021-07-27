@@ -15,23 +15,18 @@
  */
 
 output "emails_list" {
-  description = "The service account email addresses as list."
-  value       = module.bigquery_sensitive_data.emails_list
-}
-
-output "emails" {
   description = "The service account email addresses by name."
-  value       = module.bigquery_sensitive_data.emails
+  value       = module.bigquery_sensitive_data.emails_list
 }
 
 output "person_name_policy_tag" {
   description = "Content for Policy Tag ID in medium policy."
-  value       = module.bigquery_sensitive_data.medium_policy_taxonomy_id
+  value       = module.bigquery_sensitive_data.person_name_policy_tag
 }
 
 output "social_security_number_policy_tag" {
   description = "Content for Policy Tag ID in high policy."
-  value       = module.bigquery_sensitive_data.high_policy_taxonomy_id
+  value       = module.bigquery_sensitive_data.social_security_number_policy_tag
 }
 
 output "member_policy_ssn_confidential" {
@@ -52,11 +47,6 @@ output "member_policy_name_private" {
 output "project_id" {
   description = "Project where service accounts and core APIs will be enabled."
   value       = var.project_id
-}
-
-output "dataset_id" {
-  description = "The dataset ID to deploy to data warehouse."
-  value       = var.dataset_id
 }
 
 output "taxonomy_name" {
