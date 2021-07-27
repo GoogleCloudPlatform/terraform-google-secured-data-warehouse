@@ -32,8 +32,13 @@ variable "project_roles" {
   default     = []
 }
 
-variable "project_id" {
+variable "bigquery_project_id" {
   description = "Project where the dataset and table are created."
+  type        = string
+}
+
+variable "taxonomy_project_id" {
+  description = "Project where the tanoxomy is going to be created."
   type        = string
 }
 
