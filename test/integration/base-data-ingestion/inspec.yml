@@ -1,4 +1,4 @@
-name: 1-data-ingestion
+name: base-data-ingestion
 depends:
   - name: inspec-gcp
     git: https://github.com/inspec/inspec-gcp.git

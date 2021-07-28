@@ -26,13 +26,13 @@ platforms:
   - name: default
 
 suites:
-  - name: 1-data-ingestion
+  - name: base-data-ingestion
     driver:
-      root_module_directory: test/fixtures/1-data-ingestion/
+      root_module_directory: test/fixtures/base-data-ingestion/
     verifier:
       color: false
       systems:
-        - name: 1-data_ingestion gcp
+        - name: base_data_ingestion gcp
           backend: gcp
           controls:
             - gcp
