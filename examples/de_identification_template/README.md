@@ -5,25 +5,6 @@ This example illustrates how to use the `de_identification_template` submodule.
 **Note:** Contact your Security Team to obtain the `crypto_key` and `wrapped_key` pair.
 The `crypto_key` location must be the same location used for the `dlp_location`.
 
-To provision this example, complete these tasks from within this directory:
-
-1. Initialize the directory:
-   ```
-   terraform init
-   ```
-1. Review the infrastructure plan. When prompted, enter the requested values.
-   ```
-   terraform plan
-   ```
-1. After reviewing the plan, apply it:
-   ```
-   terraform apply
-   ```
-1. After you are done with the example, destroy the built infrastructure:
-   ```
-   terraform destroy
-   ```
-
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
 

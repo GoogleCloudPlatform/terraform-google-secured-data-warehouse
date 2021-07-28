@@ -7,27 +7,6 @@ This example illustrates how to run a Dataflow job that uses the `de_identificat
 1. 1-data-ingestion executed successfully.
 2. A `crypto_key` and `wrapped_key` pair.  Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location used for the `dlp_location`.
 
-## Usage
-
-To provision this example, complete these tasks from within this directory:
-
-1. Initialize the directory:
-   ```
-   terraform init
-   ```
-1. Review the infrastructure plan. When prompted, enter the [inputs](#Inputs)
-   ```
-   terraform plan
-   ```
-1. After reviewing the plan, apply it:
-   ```
-   terraform apply
-   ```
-1. After you are done with the example, destroy the built infrastructure:
-   ```
-   terraform destroy
-   ```
-
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
 
