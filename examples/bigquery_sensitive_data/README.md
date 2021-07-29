@@ -14,7 +14,6 @@ This example illustrates how to use the `bigquery_sensitive_data` submodule.
 
 | Name | Description |
 |------|-------------|
-| bigquery\_project\_id | Project where bigquery and table were created. |
 | emails\_list | The service account email addresses by name. |
 | member\_policy\_name\_confidential | SA member for Person Name policy tag confidential. |
 | member\_policy\_name\_private | SA member for Person Name policy tag private. |
@@ -22,6 +21,5 @@ This example illustrates how to use the `bigquery_sensitive_data` submodule.
 | person\_name\_policy\_tag | Content for Policy Tag ID in medium policy. |
 | social\_security\_number\_policy\_tag | Content for Policy Tag ID in high policy. |
 | taxonomy\_name | The taxonomy display name. |
-| taxonomy\_project\_id | Project where taxonomy was created. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

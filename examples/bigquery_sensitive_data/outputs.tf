@@ -44,16 +44,6 @@ output "member_policy_name_private" {
   value       = module.bigquery_sensitive_data.member_policy_name_private
 }
 
-output "bigquery_project_id" {
-  description = "Project where bigquery and table were created."
-  value       = var.bigquery_project_id
-}
-
-output "taxonomy_project_id" {
-  description = "Project where taxonomy was created."
-  value       = var.taxonomy_project_id
-}
-
 output "taxonomy_name" {
   description = "The taxonomy display name."
   value       = module.bigquery_sensitive_data.taxonomy_name
