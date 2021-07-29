@@ -24,7 +24,7 @@ locals {
 
 // vpc service controls
 module "vpc_service_controls" {
-  source = "..//modules/vpc_service_controls"
+  source = "../..//modules/vpc_service_controls"
 
   org_id                           = var.org_id
   project_id                       = var.project_id

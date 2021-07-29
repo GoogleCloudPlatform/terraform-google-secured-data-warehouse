@@ -16,7 +16,7 @@
 
 
 module "data_ingestion" {
-  source                           = "../../../1-data-ingestion"
+  source                           = "../../..//modules/base-data-ingestion"
   bucket_name                      = var.bucket_name
   dataset_id                       = var.dataset_id
   org_id                           = var.org_id
