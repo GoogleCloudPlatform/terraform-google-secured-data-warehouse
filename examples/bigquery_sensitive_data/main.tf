@@ -15,10 +15,11 @@
  */
 
 module "bigquery_sensitive_data" {
-  source        = "../..//modules/bigquery_sensitive_data"
-  project_id    = var.project_id
-  taxonomy_name = "secured_taxonomy"
-  table_id      = "sample_data"
-  dataset_id    = "secured_dataset"
-  location      = "us-east1"
+  source              = "../..//modules/data_warehouse_taxonomy"
+  taxonomy_project_id = var.taxonomy_project_id
+  bigquery_project_id = var.bigquery_project_id
+  taxonomy_name       = "secured_taxonomy"
+  table_id            = "sample_data"
+  dataset_id          = "secured_dataset"
+  location            = "us-east1"
 }

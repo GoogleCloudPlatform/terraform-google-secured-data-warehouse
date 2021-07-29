@@ -21,14 +21,14 @@ resource "random_id" "suffix" {
 module "service_accounts" {
   source       = "terraform-google-modules/service-accounts/google"
   version      = ">=4.0.0"
-  project_id   = var.project_id
+  project_id   = var.bigquery_project_id
   names        = ["terraform-private-sa", "terraform-confidential-sa"]
   display_name = "Terraform SA accounts"
   description  = "Service accounts for BigQuery Sensitive Data"
 
   project_roles = [
-    "${var.project_id}=>roles/bigquery.dataViewer",
-    "${var.project_id}=>roles/datacatalog.viewer",
+    "${var.bigquery_project_id}=>roles/bigquery.dataViewer",
+    "${var.bigquery_project_id}=>roles/datacatalog.viewer",
   ]
 }
 
@@ -38,7 +38,7 @@ module "bigquery_sensitive_data" {
 
   dataset_id                 = var.dataset_id
   description                = "Dataset for BigQuery Sensitive Data"
-  project_id                 = var.project_id
+  project_id                 = var.bigquery_project_id
   location                   = var.location
   delete_contents_on_destroy = var.delete_contents_on_destroy
 
@@ -63,7 +63,7 @@ module "bigquery_sensitive_data" {
 
 resource "google_data_catalog_taxonomy" "secure_taxonomy" {
   provider               = google-beta
-  project                = var.project_id
+  project                = var.taxonomy_project_id
   region                 = var.location
   display_name           = "${var.taxonomy_name}-${random_id.suffix.hex}"
   description            = "Taxonomy created for BigQuery Sensitive Data"

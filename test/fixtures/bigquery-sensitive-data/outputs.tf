@@ -44,8 +44,13 @@ output "member_policy_name_private" {
   value       = module.bigquery_sensitive_data.member_policy_name_private
 }
 
-output "project_id" {
-  description = "Project where service accounts and core APIs will be enabled."
+output "bigquery_project_id" {
+  description = "Project where bigquery and table were created."
+  value       = var.project_id
+}
+
+output "taxonomy_project_id" {
+  description = "Project where taxonomy was created."
   value       = var.project_id
 }
 
