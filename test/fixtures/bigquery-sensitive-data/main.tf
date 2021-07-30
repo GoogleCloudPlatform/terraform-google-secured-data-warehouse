@@ -15,6 +15,7 @@
  */
 
 module "bigquery_sensitive_data" {
-  source     = "../../..//examples/bigquery_sensitive_data"
-  project_id = var.project_id
+  source              = "../../..//examples/bigquery_sensitive_data"
+  bigquery_project_id = var.project_id
+  taxonomy_project_id = var.project_id
 }

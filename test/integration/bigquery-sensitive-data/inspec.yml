@@ -4,7 +4,10 @@ depends:
     git: https://github.com/inspec/inspec-gcp.git
     tag: v1.8.8
 attributes:
-  - name: project_id
+  - name: taxonomy_project_id
+    required: true
+    type: string
+  - name: bigquery_project_id
     required: true
     type: string
   - name: emails_list
