@@ -27,13 +27,13 @@ variable "dataset_labels" {
 }
 
 variable "confidential_access_members" {
-  description = "Members who will have access to confidential information in BigQuery. Prefix of group: user: or serviceAccount: is required."
+  description = "List of members in the standard GCP form: user:{email}, serviceAccount:{email}, group:{email} who will have access to confidential information in BigQuery."
   type        = list(string)
   default     = []
 }
 
 variable "private_access_members" {
-  description = "Members who will have access to private information in BigQuery. Prefix of group: user: or serviceAccount: is required."
+  description = "List of members in the standard GCP form: user:{email}, serviceAccount:{email}, group:{email} who will have access to private information in BigQuery."
   type        = list(string)
   default     = []
 }

@@ -29,12 +29,12 @@ Functional examples are included in the [examples](./examples/bigquery_sensitive
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | bigquery\_project\_id | Project where the dataset and table are created. | `string` | n/a | yes |
-| confidential\_access\_members | Members who will have access to confidential information in BigQuery. Prefix of group: user: or serviceAccount: is required. | `list(string)` | `[]` | no |
+| confidential\_access\_members | List of members in the standard GCP form: user:{email}, serviceAccount:{email}, group:{email} who will have access to confidential information in BigQuery. | `list(string)` | `[]` | no |
 | dataset\_id | The dataset ID to deploy to data warehouse. | `string` | n/a | yes |
 | dataset\_labels | Key value pairs in a map for dataset labels. | `map(string)` | `{}` | no |
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `null` | no |
 | location | Default region to create resources where applicable. | `string` | n/a | yes |
-| private\_access\_members | Members who will have access to private information in BigQuery. Prefix of group: user: or serviceAccount: is required. | `list(string)` | `[]` | no |
+| private\_access\_members | List of members in the standard GCP form: user:{email}, serviceAccount:{email}, group:{email} who will have access to private information in BigQuery. | `list(string)` | `[]` | no |
 | project\_roles | Common roles to apply to all service accounts in the project. | `list(string)` | `[]` | no |
 | table\_id | The table ID to deploy to data warehouse. | `string` | n/a | yes |
 | taxonomy\_name | The taxonomy display name. | `string` | n/a | yes |
