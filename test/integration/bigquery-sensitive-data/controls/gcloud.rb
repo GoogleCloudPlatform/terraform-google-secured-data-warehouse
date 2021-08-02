@@ -35,38 +35,16 @@ control 'gcloud' do
       end
     end
 
-    describe "Verifies SA social_security_number_policy_tag #{member_policy_ssn_confidential}" do
-      it 'should exist' do
-        expect(data).to_not be_empty
-      end
+    member_policy_ssn_confidential.each do |member|
+      describe "Verifies SA social_security_number_policy_tag #{member}" do
+        it 'should exist' do
+          expect(data).to_not be_empty
+        end
 
-      it "#{member_policy_ssn_confidential} Confidential SA should have the right role on high policy tag" do
-        expect(data['bindings'][0]['members']).to include(member_policy_ssn_confidential)
-        expect(data['bindings'][0]['role']).to eq 'roles/datacatalog.categoryFineGrainedReader'
-      end
-    end
-  end
-
-  describe command("gcloud data-catalog taxonomies policy-tags get-iam-policy #{person_name_policy_tag} --taxonomy='#{taxonomy_name}' --location='us-east1' --format=json") do
-    its(:exit_status) { should eq 0 }
-    its(:stderr) { should eq '' }
-
-    let(:data) do
-      if subject.exit_status.zero?
-        JSON.parse(subject.stdout)
-      else
-        {}
-      end
-    end
-
-    describe "Verifies SA person_name_policy_tag #{member_policy_name_private}" do
-      it 'should exist' do
-        expect(data).to_not be_empty
-      end
-
-      it "#{member_policy_name_private} Confidential SA should have the right role on medium policy" do
-        expect(data['bindings'][0]['members']).to include(member_policy_name_private)
-        expect(data['bindings'][0]['role']).to eq 'roles/datacatalog.categoryFineGrainedReader'
+        it "#{member} Confidential SA should have the right role on high policy tag" do
+          expect(data['bindings'][0]['members']).to include(member)
+          expect(data['bindings'][0]['role']).to eq 'roles/datacatalog.categoryFineGrainedReader'
+        end
       end
     end
   end
@@ -83,14 +61,42 @@ control 'gcloud' do
       end
     end
 
-    describe "Verifies SA social_security_number_policy_tag #{member_policy_name_confidential}" do
-      it 'should exist' do
-        expect(data).to_not be_empty
-      end
+    member_policy_name_private.each do |member|
+      describe "Verifies SA person_name_policy_tag #{member}" do
+        it 'should exist' do
+          expect(data).to_not be_empty
+        end
 
-      it "#{member_policy_name_private} Confidential SA should have the right role on medium policy" do
-        expect(data['bindings'][0]['members']).to include(member_policy_name_confidential)
-        expect(data['bindings'][0]['role']).to eq 'roles/datacatalog.categoryFineGrainedReader'
+        it "#{member} Confidential SA should have the right role on medium policy" do
+          expect(data['bindings'][0]['members']).to include(member)
+          expect(data['bindings'][0]['role']).to eq 'roles/datacatalog.categoryFineGrainedReader'
+        end
+      end
+    end
+  end
+
+  describe command("gcloud data-catalog taxonomies policy-tags get-iam-policy #{person_name_policy_tag} --taxonomy='#{taxonomy_name}' --location='us-east1' --format=json") do
+    its(:exit_status) { should eq 0 }
+    its(:stderr) { should eq '' }
+
+    let(:data) do
+      if subject.exit_status.zero?
+        JSON.parse(subject.stdout)
+      else
+        {}
+      end
+    end
+
+    member_policy_name_confidential.each do |member|
+      describe "Verifies SA social_security_number_policy_tag #{member}" do
+        it 'should exist' do
+          expect(data).to_not be_empty
+        end
+
+        it "#{member_policy_name_private} Confidential SA should have the right role on medium policy" do
+          expect(data['bindings'][0]['members']).to include(member)
+          expect(data['bindings'][0]['role']).to eq 'roles/datacatalog.categoryFineGrainedReader'
+        end
       end
     end
   end

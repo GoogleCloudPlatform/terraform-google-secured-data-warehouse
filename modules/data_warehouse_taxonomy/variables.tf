@@ -26,6 +26,18 @@ variable "dataset_labels" {
   default     = {}
 }
 
+variable "confidential_access_members" {
+  description = "Members who will have access to confidential information in BigQuery. Prefix of group: user: or serviceAccount: is required."
+  type        = list(string)
+  default     = []
+}
+
+variable "private_access_members" {
+  description = "Members who will have access to private information in BigQuery. Prefix of group: user: or serviceAccount: is required."
+  type        = list(string)
+  default     = []
+}
+
 variable "project_roles" {
   type        = list(string)
   description = "Common roles to apply to all service accounts in the project."
