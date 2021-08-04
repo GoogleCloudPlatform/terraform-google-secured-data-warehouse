@@ -19,6 +19,16 @@ variable "project_id" {
   type        = string
 }
 
+variable "bucket_location" {
+  description = "Bucket location."
+  type        = string
+  default     = "US"
+}
+variable "data_ingestion_bucket" {
+  description = "The bucket name where the files for ingestion is located."
+  type        = string
+}
+
 variable "terraform_service_account" {
   description = "Service account email of the account to impersonate to run Terraform."
   type        = string
