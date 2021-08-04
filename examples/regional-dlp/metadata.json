@@ -1,0 +1,55 @@
+{
+  "name": "Streaming beam Python structured DLP flex template",
+  "description": "Streaming beam Python structured DLP flex template with support for global and regional resources.",
+  "parameters": [
+    {
+      "name": "input_subscription",
+      "label": "Input PubSub subscription.",
+      "helpText": "Name of the input PubSub subscription to consume from. Format is 'projects/<PROJECT>/subscriptions/<SUBSCRIPTION>.'",
+      "isOptional": true,
+      "regexes": [
+        "projects/[^/]+/subscriptions/[a-zA-Z][-_.~+%a-zA-Z0-9]{2,}"
+      ]
+    },
+    {
+      "name": "input_topic",
+      "label": "Input PubSub Topic.",
+      "helpText": "Name of the input PubSub Topic to consume from. Format is 'projects/<PROJECT>/topics/<TOPIC>'",
+      "isOptional": true,
+      "regexes": [
+        "projects/[^/]+/topics/[a-zA-Z][-_.~+%a-zA-Z0-9]{2,}"
+      ]
+    },
+    {
+      "name": "inspection_template_name",
+      "label": "Inspection Template Name.",
+      "isOptional": true,
+      "helpText": "Name of the inspection template"
+    },
+    {
+      "name": "deidentification_template_name",
+      "label": "De-identification Template Name.",
+      "helpText": "Name of the De-identification Template ."
+    },
+    {
+      "name": "dlp_location",
+      "label": "DLP Location.",
+      "helpText": "The Location of the DLP resources."
+    },
+    {
+      "name": "dlp_project",
+      "label": "DLP Project.",
+      "helpText": "ID of the project that holds the DLP template."
+    },
+    {
+      "name": "bq_schema",
+      "label": "BigQuery table schema.",
+      "helpText": "Output BigQuery table schema specified as a string"
+    },
+    {
+      "name": "output_table",
+      "label": "BigQuery output table name.",
+      "helpText": "Output BigQuery table for results specified as: PROJECT:DATASET.TABLE or DATASET.TABLE."
+    }
+  ]
+}
