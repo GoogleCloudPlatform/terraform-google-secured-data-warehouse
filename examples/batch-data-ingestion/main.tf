@@ -30,7 +30,7 @@ locals {
       network_self_link                   = var.network_self_link,
       dataflow_service_account            = var.dataflow_service_account,
       subnetwork_self_link                = var.subnetwork_self_link,
-      inputFilePattern                    = "gs://${module.dataflow-bucket.bucket.name}/cc_records.csv",
+      inputFilePattern                    = "gs://${var.data_ingestion_bucket}/cc_records.csv",
       project_id                          = var.project_id,
       dataset_id                          = var.dataset_id,
       table_name                          = var.table_name,
@@ -49,7 +49,7 @@ module "dataflow-bucket" {
 
   project_id    = var.project_id
   name          = "bkt-${random_id.random_suffix.hex}-tmp-dataflow"
-  location      = "US"
+  location      = var.bucket_location
   force_destroy = var.bucket_force_destroy
   encryption    = { "default_kms_key_name" = var.crypto_key }
 
@@ -68,7 +68,7 @@ resource "null_resource" "download_sample_cc_into_gcs" {
     echo "Changing sample file encoding from ISO-8859-1 to UTF-8"
     iconv -f="ISO-8859-1" -t="UTF-8" cc_records.csv > temp_cc_records.csv
     mv temp_cc_records.csv cc_records.csv
-    gsutil cp cc_records.csv gs://${module.dataflow-bucket.bucket.name}
+    gsutil cp cc_records.csv gs://${var.data_ingestion_bucket}
     rm cc_records.csv
 EOF
 
@@ -91,11 +91,6 @@ resource "google_storage_bucket_object" "transform_code" {
   depends_on = [
     module.dataflow-bucket
   ]
-}
-
-resource "google_app_engine_application" "app" {
-  project     = var.project_id
-  location_id = "us-central"
 }
 
 resource "google_cloud_scheduler_job" "scheduler" {

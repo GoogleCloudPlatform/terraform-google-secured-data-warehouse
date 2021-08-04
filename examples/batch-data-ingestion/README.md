@@ -1,11 +1,11 @@
-# Dataflow with DLP de-identification
+# Batch Dataflow with DLP de-identification
 
-This example illustrates how to run a Dataflow job that uses the `de_identification_template` submodule with the `base-data-ingestion` submodule.
+This example illustrates how to run a Dataflow job that uses the `batch templates with DLP` submodule with the `base-data-ingestion` submodule.
 
 ## Prerequisites
 
-1. base-data-ingestion executed successfully.
-2. A `crypto_key` and `wrapped_key` pair.  Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location used for the `dlp_location`.
+1. A project created with App Engine Enabled
+1. A `crypto_key` and `wrapped_key` pair.  Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location used for the `dlp_location`.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
