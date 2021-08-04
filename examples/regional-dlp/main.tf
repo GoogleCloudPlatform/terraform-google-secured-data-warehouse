@@ -21,6 +21,12 @@ locals {
   kek_keyring                 = "kek_keyring_${random_id.random_suffix.hex}"
   kek_key_name                = "kek_key_${random_id.random_suffix.hex}"
   bq_schema                   = "book:STRING, author:STRING"
+  perimeter_additional_members = distinct(
+    concat(
+      ["serviceAccount:${google_project_service_identity.cloudbuild_sa.email}"],
+      var.perimeter_additional_members
+    )
+  )
 }
 
 resource "random_id" "random_suffix" {
@@ -47,6 +53,12 @@ resource "google_kms_secret_ciphertext" "wrapped_key" {
   plaintext  = random_id.original_key.b64_std
 }
 
+resource "google_project_service_identity" "cloudbuild_sa" {
+  provider = google-beta
+
+  project = var.project_id
+  service = "cloudbuild.googleapis.com"
+}
 
 module "data_ingestion" {
   source                           = "../..//modules/base-data-ingestion"
@@ -57,7 +69,7 @@ module "data_ingestion" {
   data_governance_project_id       = var.project_id
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  perimeter_additional_members     = var.perimeter_additional_members
+  perimeter_additional_members     = local.perimeter_additional_members
   vpc_name                         = "dlp-flex-ingest"
   subnet_ip                        = "10.0.32.0/21"
   region                           = var.location

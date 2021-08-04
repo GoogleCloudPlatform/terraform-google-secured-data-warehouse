@@ -123,9 +123,15 @@ The Service Account which will be used to invoke this module must have the follo
   - Delete Service Accounts: `roles/iam.serviceAccountDeleter`
   - Service Accounts Token Creator: `roles/iam.serviceAccountTokenCreator`
   - Security Reviewer: `roles/iam.securityReviewer`
-  - Compute Network Admin `roles/compute.networkAdmin`
-  - Compute Security Admin `roles/compute.securityAdmin`
-  - DNS Admin `roles/dns.admin`
+  - Compute Network Admin: `roles/compute.networkAdmin`
+  - Compute Security Admin: `roles/compute.securityAdmin`
+  - DNS Admin: `roles/dns.admin`
+  - Cloud Build Editor: `roles/cloudbuild.builds.editor`
+  - Artifact Registry Administrator: `roles/artifactregistry.admin`
+  - Cloud KMS Admin: `roles/cloudkms.admin`
+  - Dataflow Developer: `roles/dataflow.developer`
+  - DLP User: `roles/dlp.user`
+  - DLP De-identify Templates Editor: `roles/dlp.deidentifyTemplatesEditor`
 - Organization level
   - Billing User: `roles/billing.user`
   - Organization Policy Administrator: `roles/orgpolicy.policyAdmin`
@@ -208,6 +214,30 @@ gcloud projects add-iam-policy-binding ${project_id} \
 gcloud projects add-iam-policy-binding ${project_id} \
 --member="serviceAccount:${sa_email}" \
 --role="roles/browser"
+
+gcloud projects add-iam-policy-binding ${project_id} \
+--member="serviceAccount:${sa_email}" \
+--role="roles/cloudbuild.builds.editor"
+
+gcloud projects add-iam-policy-binding ${project_id} \
+--member="serviceAccount:${sa_email}" \
+--role="roles/artifactregistry.admin"
+
+gcloud projects add-iam-policy-binding ${project_id} \
+--member="serviceAccount:${sa_email}" \
+--role="roles/cloudkms.admin"
+
+gcloud projects add-iam-policy-binding ${project_id} \
+--member="serviceAccount:${sa_email}" \
+--role="roles/dataflow.developer"
+
+gcloud projects add-iam-policy-binding ${project_id} \
+--member="serviceAccount:${sa_email}" \
+--role="roles/dlp.deidentifyTemplatesEditor"
+
+gcloud projects add-iam-policy-binding ${project_id} \
+--member="serviceAccount:${sa_email}" \
+--role="roles/dlp.user"
 ```
 
 #### Set up Access Policy Context Policy
