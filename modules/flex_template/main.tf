@@ -18,6 +18,8 @@ locals {
   flex_template_image_tag = "${var.location}-docker.pkg.dev/${var.project_id}/${var.repository_id}/${var.image_name}:${var.image_tag}"
   template_gs_path        = "${google_storage_bucket.templates.url}/dataflow/flex_templates/${var.image_name}.json"
   metadata_file_md5       = filemd5(var.template_files.metadata_file)
+  requirements_file_md5   = filemd5(var.template_files.requirements_file)
+  code_file_md5           = filemd5(var.template_files.code_file)
 }
 
 resource "null_resource" "module_depends_on" {
@@ -52,7 +54,8 @@ resource "google_storage_bucket" "cloud-build-logs" {
   uniform_bucket_level_access = true
 
   depends_on = [
-    null_resource.module_depends_on
+    null_resource.module_depends_on,
+    google_artifact_registry_repository.flex-repository
   ]
 }
 
@@ -76,10 +79,6 @@ resource "local_file" "docker-file" {
     }
   )
   filename = "${path.module}/Dockerfile"
-
-  depends_on = [
-    google_artifact_registry_repository.flex-repository
-  ]
 }
 
 resource "local_file" "requirements-file" {
@@ -103,6 +102,11 @@ module "build-container-image" {
 
   skip_download = true
 
+  create_cmd_triggers = {
+    requirements_file_md5 = local.requirements_file_md5
+    code_file_md5         = local.code_file_md5
+  }
+
   create_cmd_entrypoint = "gcloud"
   create_cmd_body       = <<EOF
     builds submit \
@@ -113,9 +117,7 @@ module "build-container-image" {
 EOF
 
   module_depends_on = [
-    local_file.docker-file,
-    local_file.requirements-file,
-    local_file.code-file
+    google_storage_bucket.cloud-build-logs
   ]
 
 }
@@ -127,7 +129,9 @@ module "flex_template_builder" {
   skip_download = true
 
   create_cmd_triggers = {
-    metadata_file_md5 = local.metadata_file_md5
+    metadata_file_md5     = local.metadata_file_md5
+    requirements_file_md5 = local.requirements_file_md5
+    code_file_md5         = local.code_file_md5
   }
 
   create_cmd_entrypoint = "gcloud"
