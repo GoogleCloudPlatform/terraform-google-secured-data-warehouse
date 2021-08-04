@@ -53,7 +53,8 @@ module "data_ingest_topic" {
   project_id         = var.project_id
   topic              = "tpc-data-ingest-${random_id.suffix.hex}"
   topic_kms_key_name = module.cmek.keys[local.ingestion_key_name]
-
+  message_storage_policy = { allowed_persistence_regions: [ var.region ] }
+  
   # depends_on needed to wait for the KMS roles
   # to be granted to the PubSub Service Account.
   depends_on = [
