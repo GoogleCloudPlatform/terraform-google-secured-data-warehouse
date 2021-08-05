@@ -80,3 +80,8 @@ variable "module_depends_on" {
   type        = list
   default     = []
 }
+
+variable "kms_key_name" {
+  description = "ID of a Cloud KMS key that will be used for encryption."
+  type        = string
+}

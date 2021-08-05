@@ -108,6 +108,7 @@ module "flex_dlp_template" {
   terraform_service_account   = var.terraform_service_account
   image_name                  = "regional_dlp_flex"
   image_tag                   = "0.1.0"
+  kms_key_name                = module.data_ingestion.cmek_ingestion_crypto_key
 
   template_files = {
     code_file         = "${path.module}/pubsub_dlp_bigquery.py"
@@ -163,6 +164,21 @@ resource "google_artifact_registry_repository_iam_member" "python-registry-iam" 
   ]
 }
 
+module "dataflow-bucket" {
+  source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
+  version = "~> 2.1"
+
+  project_id         = var.project_id
+  name               = "bkt-${random_id.random_suffix.hex}-tmp-dataflow"
+  location           = var.location
+  force_destroy      = true
+  bucket_policy_only = true
+
+  encryption = {
+    default_kms_key_name = module.data_ingestion.cmek_ingestion_crypto_key
+  }
+}
+
 resource "google_dataflow_flex_template_job" "flex_job" {
   provider = google-beta
 
@@ -180,6 +196,8 @@ resource "google_dataflow_flex_template_job" "flex_job" {
     output_table                   = "${var.project_id}:${module.data_ingestion.data_ingest_bigquery_dataset.dataset_id}.classical_books"
     service_account_email          = module.data_ingestion.dataflow_controller_service_account_email
     subnetwork                     = module.data_ingestion.subnets_self_links[0]
+    dataflow_kms_key               = module.data_ingestion.cmek_ingestion_crypto_key
+    temp_location                  = "${module.dataflow-bucket.bucket.url}/tmp/"
     no_use_public_ips              = "true"
   }
 

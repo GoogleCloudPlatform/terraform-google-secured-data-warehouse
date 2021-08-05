@@ -16,7 +16,7 @@
 
 locals {
   flex_template_image_tag = "${var.location}-docker.pkg.dev/${var.project_id}/${var.repository_id}/${var.image_name}:${var.image_tag}"
-  template_gs_path        = "${google_storage_bucket.templates.url}/dataflow/flex_templates/${var.image_name}.json"
+  template_gs_path        = "${module.templates.bucket.url}/dataflow/flex_templates/${var.image_name}.json"
   metadata_file_md5       = filemd5(var.template_files.metadata_file)
   requirements_file_md5   = filemd5(var.template_files.requirements_file)
   code_file_md5           = filemd5(var.template_files.code_file)
@@ -45,13 +45,19 @@ resource "google_artifact_registry_repository" "flex-repository" {
   ]
 }
 
-resource "google_storage_bucket" "cloud-build-logs" {
-  project       = var.project_id
-  name          = "bkt-${var.location}-${var.project_id}-cb-logs"
-  location      = var.location
-  force_destroy = true
+module "cloud-build-logs" {
+  source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
+  version = "~> 2.1.0"
 
-  uniform_bucket_level_access = true
+  project_id         = var.project_id
+  location           = var.location
+  name               = "bkt-${var.location}-${var.project_id}-cb-logs"
+  bucket_policy_only = true
+  force_destroy      = true
+
+  encryption = {
+    default_kms_key_name = var.kms_key_name
+  }
 
   depends_on = [
     null_resource.module_depends_on,
@@ -59,13 +65,19 @@ resource "google_storage_bucket" "cloud-build-logs" {
   ]
 }
 
-resource "google_storage_bucket" "templates" {
-  project       = var.project_id
-  name          = "bkt-${var.location}-${var.project_id}-templates"
-  location      = var.location
-  force_destroy = true
+module "templates" {
+  source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
+  version = "~> 2.1.0"
 
-  uniform_bucket_level_access = true
+  project_id         = var.project_id
+  location           = var.location
+  name               = "bkt-${var.location}-${var.project_id}-templates"
+  bucket_policy_only = true
+  force_destroy      = true
+
+  encryption = {
+    default_kms_key_name = var.kms_key_name
+  }
 
   depends_on = [
     null_resource.module_depends_on
@@ -112,12 +124,12 @@ module "build-container-image" {
     builds submit \
     --tag="${local.flex_template_image_tag}" ${path.module} \
     --project=${var.project_id} \
-    --gcs-log-dir=${google_storage_bucket.cloud-build-logs.url}/build-logs \
+    --gcs-log-dir=${module.cloud-build-logs.bucket.url}/build-logs \
     --impersonate-service-account=${var.terraform_service_account}
 EOF
 
   module_depends_on = [
-    google_storage_bucket.cloud-build-logs
+    module.cloud-build-logs
   ]
 
 }
