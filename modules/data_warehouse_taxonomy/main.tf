@@ -123,11 +123,11 @@ resource "google_data_catalog_policy_tag" "ssn_child_policy_tag" {
 }
 
 resource "google_data_catalog_policy_tag_iam_member" "private_sa_name" {
-  for_each   = toset(local.private_accounts)
+  count      = length(local.private_accounts)
   provider   = google-beta
   policy_tag = google_data_catalog_policy_tag.name_child_policy_tag.name
   role       = "roles/datacatalog.categoryFineGrainedReader"
-  member     = each.value
+  member     = local.private_accounts[count.index]
 
   depends_on = [
     module.project-iam-bindings, module.service_accounts,
@@ -135,11 +135,11 @@ resource "google_data_catalog_policy_tag_iam_member" "private_sa_name" {
 }
 
 resource "google_data_catalog_policy_tag_iam_member" "confidential_sa_name" {
-  for_each   = toset(local.confidential_accounts)
+  count      = length(local.confidential_accounts)
   provider   = google-beta
   policy_tag = google_data_catalog_policy_tag.name_child_policy_tag.name
   role       = "roles/datacatalog.categoryFineGrainedReader"
-  member     = each.value
+  member     = local.confidential_accounts[count.index]
 
   depends_on = [
     module.project-iam-bindings, module.service_accounts,
@@ -147,11 +147,11 @@ resource "google_data_catalog_policy_tag_iam_member" "confidential_sa_name" {
 }
 
 resource "google_data_catalog_policy_tag_iam_member" "confidential_sa_ssn" {
-  for_each   = toset(local.confidential_accounts)
+  count      = length(local.confidential_accounts)
   provider   = google-beta
   policy_tag = google_data_catalog_policy_tag.ssn_child_policy_tag.name
   role       = "roles/datacatalog.categoryFineGrainedReader"
-  member     = each.value
+  member     = local.confidential_accounts[count.index]
 
   depends_on = [
     module.project-iam-bindings, module.service_accounts,
