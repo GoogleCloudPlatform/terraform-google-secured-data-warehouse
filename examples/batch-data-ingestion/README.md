@@ -2,9 +2,9 @@
 
 This example illustrates how to run a Dataflow job that uses the `batch templates with DLP` submodule with the `base-data-ingestion` submodule.
 
-## Prerequisites
+## Requirements
 
-1. A project created with App Engine Enabled
+1. A project previusly created, with [Google App Engine Application Enabled](https://cloud.google.com/scheduler/docs/quickstart#create_a_project_with_an_app_engine_app).
 1. A `crypto_key` and `wrapped_key` pair.  Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location used for the `dlp_location`.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
