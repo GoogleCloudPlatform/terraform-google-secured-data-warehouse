@@ -19,10 +19,6 @@ resource "random_id" "suffix" {
 }
 
 locals {
-  project_roles = [
-    "roles/bigquery.dataViewer",
-    "roles/datacatalog.viewer",
-  ]
   create_confidential_sa = length(var.confidential_access_members) == 0 ? ["terraform-confidential-sa"] : []
   create_private_sa      = length(var.private_access_members) == 0 ? ["terraform-private-sa"] : []
   sa_names               = concat(local.create_confidential_sa, local.create_private_sa)
@@ -47,6 +43,7 @@ module "service_accounts" {
 
 module "project-iam-bindings" {
   source   = "terraform-google-modules/iam/google//modules/projects_iam"
+  version  = "7.2.0"
   projects = [var.bigquery_project_id]
   mode     = "additive"
 
@@ -126,11 +123,11 @@ resource "google_data_catalog_policy_tag" "ssn_child_policy_tag" {
 }
 
 resource "google_data_catalog_policy_tag_iam_member" "private_sa_name" {
-  count      = length(local.private_accounts)
+  for_each   = toset(local.private_accounts)
   provider   = google-beta
   policy_tag = google_data_catalog_policy_tag.name_child_policy_tag.name
   role       = "roles/datacatalog.categoryFineGrainedReader"
-  member     = local.private_accounts[count.index]
+  member     = each.value
 
   depends_on = [
     module.project-iam-bindings, module.service_accounts,
@@ -138,11 +135,11 @@ resource "google_data_catalog_policy_tag_iam_member" "private_sa_name" {
 }
 
 resource "google_data_catalog_policy_tag_iam_member" "confidential_sa_name" {
-  count      = length(local.confidential_accounts)
+  for_each   = toset(local.confidential_accounts)
   provider   = google-beta
   policy_tag = google_data_catalog_policy_tag.name_child_policy_tag.name
   role       = "roles/datacatalog.categoryFineGrainedReader"
-  member     = local.confidential_accounts[count.index]
+  member     = each.value
 
   depends_on = [
     module.project-iam-bindings, module.service_accounts,
@@ -150,11 +147,11 @@ resource "google_data_catalog_policy_tag_iam_member" "confidential_sa_name" {
 }
 
 resource "google_data_catalog_policy_tag_iam_member" "confidential_sa_ssn" {
-  count      = length(local.confidential_accounts)
+  for_each   = toset(local.confidential_accounts)
   provider   = google-beta
   policy_tag = google_data_catalog_policy_tag.ssn_child_policy_tag.name
   role       = "roles/datacatalog.categoryFineGrainedReader"
-  member     = local.confidential_accounts[count.index]
+  member     = each.value
 
   depends_on = [
     module.project-iam-bindings, module.service_accounts,
