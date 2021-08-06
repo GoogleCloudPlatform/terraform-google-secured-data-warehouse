@@ -35,15 +35,15 @@ locals {
       dataset_id                          = var.dataset_id,
       table_name                          = var.table_name,
       javascriptTextTransformFunctionName = "transform",
-      JSONPath                            = "gs://${module.dataflow-bucket.bucket.name}/code/${local.schema_file}",
-      javascriptTextTransformGcsPath      = "gs://${module.dataflow-bucket.bucket.name}/code/${local.transform_code_file}",
-      bigQueryLoadingTemporaryDirectory   = "gs://${module.dataflow-bucket.bucket.name}/tmp"
+      JSONPath                            = "gs://${module.dataflow-tmp-bucket.bucket.name}/code/${local.schema_file}",
+      javascriptTextTransformGcsPath      = "gs://${module.dataflow-tmp-bucket.bucket.name}/code/${local.transform_code_file}",
+      bigQueryLoadingTemporaryDirectory   = "gs://${module.dataflow-tmp-bucket.bucket.name}/tmp"
     }
   )
 }
 
 //dataflow temp bucket
-module "dataflow-bucket" {
+module "dataflow-tmp-bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 2.1"
 
@@ -78,18 +78,18 @@ EOF
 resource "google_storage_bucket_object" "schema" {
   name   = "code/${local.schema_file}"
   source = "${path.module}/${local.schema_file}"
-  bucket = module.dataflow-bucket.bucket.name
+  bucket = module.dataflow-tmp-bucket.bucket.name
   depends_on = [
-    module.dataflow-bucket
+    module.dataflow-tmp-bucket
   ]
 }
 
 resource "google_storage_bucket_object" "transform_code" {
   name   = "code/${local.transform_code_file}"
   source = "${path.module}/${local.transform_code_file}"
-  bucket = module.dataflow-bucket.bucket.name
+  bucket = module.dataflow-tmp-bucket.bucket.name
   depends_on = [
-    module.dataflow-bucket
+    module.dataflow-tmp-bucket
   ]
 }
 

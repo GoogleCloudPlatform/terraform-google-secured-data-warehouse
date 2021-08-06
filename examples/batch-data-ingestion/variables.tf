@@ -20,10 +20,11 @@ variable "project_id" {
 }
 
 variable "bucket_location" {
-  description = "Bucket location."
+  description = "Dataflow temporary bucket location."
   type        = string
   default     = "US"
 }
+
 variable "data_ingestion_bucket" {
   description = "The bucket name where the files for ingestion is located."
   type        = string

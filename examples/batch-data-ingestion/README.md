@@ -13,7 +13,7 @@ This example illustrates how to run a Dataflow job that uses the `de_identificat
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | bucket\_force\_destroy | When deleting a bucket, this boolean option will delete all contained objects. If you try to delete a bucket that contains objects, Terraform will fail that run. | `bool` | `false` | no |
-| bucket\_location | Bucket location. | `string` | `"US"` | no |
+| bucket\_location | Dataflow temporary bucket location. | `string` | `"US"` | no |
 | crypto\_key | The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP. | `string` | n/a | yes |
 | data\_ingestion\_bucket | The bucket name where the files for ingestion is located. | `string` | n/a | yes |
 | dataflow\_service\_account | The Service Account email that will be used to identify the VMs in which the jobs are running | `string` | n/a | yes |
