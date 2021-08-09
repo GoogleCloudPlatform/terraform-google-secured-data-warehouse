@@ -14,22 +14,30 @@
  * limitations under the License.
  */
 
-output "flex_template_image_tag" {
-  value       = local.flex_template_image_tag
-  description = "The Flex Template image TAG created."
+output "project_id" {
+  value = var.project_id
 }
 
-output "flex_template_gs_path" {
-  value       = local.template_gs_path
-  description = "Google Cloud Storage path to the flex template."
+output "terraform_service_account" {
+  value = var.terraform_service_account
+}
+
+output "dataflow_bucket_name" {
+  value       = module.regional_dlp_example.dataflow_bucket_name
+  description = "The name of the bucket created to store Dataflow temporary data."
 }
 
 output "cloud_build_logs_bucket_name" {
-  value       = module.cloud-build-logs.bucket.name
+  value       = module.regional_dlp_example.cloud_build_logs_bucket_name
   description = "The name of the bucket created to store the Cloud Build logs."
 }
 
 output "templates_bucket_name" {
-  value       = module.templates.bucket.name
+  value       = module.regional_dlp_example.templates_bucket_name
   description = "The name of the bucket created to store the flex template."
+}
+
+output "dataflow_controller_service_account_email" {
+  description = "The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account"
+  value       = module.regional_dlp_example.dataflow_controller_service_account_email
 }

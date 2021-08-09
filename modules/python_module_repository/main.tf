@@ -47,6 +47,22 @@ resource "google_artifact_registry_repository" "python-modules" {
   ]
 }
 
+resource "google_artifact_registry_repository_iam_member" "python-registry-iam" {
+  provider = google-beta
+  for_each = toset(var.read_access_members)
+
+  project    = var.project_id
+  location   = var.location
+  repository = var.repository_id
+  role       = "roles/artifactregistry.reader"
+  member     = each.key
+
+  depends_on = [
+    null_resource.module_depends_on,
+    google_artifact_registry_repository.python-modules
+  ]
+}
+
 resource "local_file" "requirements-file" {
   content  = file(var.requirements_filename)
   filename = "${path.module}/requirements.txt"

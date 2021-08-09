@@ -48,6 +48,12 @@ variable "repository_description" {
   default     = "Repository for Python modules for Dataflow flex templates"
 }
 
+variable "read_access_members" {
+  type        = list
+  description = "List of members in the standard GCP form: user:{email}, serviceAccount:{email}, group:{email} who will have read access to the repository."
+  default     = []
+}
+
 variable "requirements_filename" {
   type        = string
   description = "The requirements.txt file to fetch Python modules."

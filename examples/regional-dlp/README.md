@@ -261,14 +261,21 @@ If your user does not have the necessary roles to run the commands above you can
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | access\_context\_manager\_policy\_id | The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format="value(name)"`. | `number` | n/a | yes |
+| crypto\_key | The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP. | `string` | n/a | yes |
 | location | The location of Artifact registry. Run `gcloud artifacts locations list` to list available locations. | `string` | `"us-central1"` | no |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | perimeter\_additional\_members | The list additional members to be added on perimeter access. Prefix of group: user: or serviceAccount: is required. | `list(string)` | `[]` | no |
 | project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
 | terraform\_service\_account | The email address of the service account that will run the Terraform config. | `string` | n/a | yes |
+| wrapped\_key | The base64 encoded data crypto key wrapped by KMS. | `string` | n/a | yes |
 
 ## Outputs
 
-No output.
+| Name | Description |
+|------|-------------|
+| cloud\_build\_logs\_bucket\_name | The name of the bucket created to store the Cloud Build logs. |
+| dataflow\_bucket\_name | The name of the bucket created to store Dataflow temporary data. |
+| dataflow\_controller\_service\_account\_email | The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account |
+| templates\_bucket\_name | The name of the bucket created to store the flex template. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

@@ -30,6 +30,10 @@ resource "null_resource" "module_depends_on" {
   }
 }
 
+resource "random_id" "random_suffix" {
+  byte_length = 2
+}
+
 resource "google_artifact_registry_repository" "flex-repository" {
   provider = google-beta
   count    = var.create_flex_repository ? 1 : 0
@@ -45,13 +49,29 @@ resource "google_artifact_registry_repository" "flex-repository" {
   ]
 }
 
+resource "google_artifact_registry_repository_iam_member" "flex-template-iam" {
+  provider = google-beta
+  for_each = toset(var.read_access_members)
+
+  project    = var.project_id
+  location   = var.location
+  repository = var.repository_id
+  role       = "roles/artifactregistry.reader"
+  member     = each.key
+
+  depends_on = [
+    null_resource.module_depends_on,
+    google_artifact_registry_repository.flex-repository
+  ]
+}
+
 module "cloud-build-logs" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 2.1.0"
 
   project_id         = var.project_id
   location           = var.location
-  name               = "bkt-${var.location}-${var.project_id}-cb-logs"
+  name               = "bkt-${var.location}-${var.project_id}-cb-logs-${random_id.random_suffix.hex}"
   bucket_policy_only = true
   force_destroy      = true
 
@@ -71,7 +91,7 @@ module "templates" {
 
   project_id         = var.project_id
   location           = var.location
-  name               = "bkt-${var.location}-${var.project_id}-templates"
+  name               = "bkt-${var.location}-${var.project_id}-tpl-${random_id.random_suffix.hex}"
   bucket_policy_only = true
   force_destroy      = true
 

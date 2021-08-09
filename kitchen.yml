@@ -36,6 +36,20 @@ suites:
           backend: gcp
           controls:
             - gcp
+  - name: regional-dlp
+    driver:
+      root_module_directory: test/fixtures/regional-dlp/
+    verifier:
+      color: false
+      systems:
+        - name: regional_dlp gcp
+          backend: gcp
+          controls:
+            - gcp
+        - name: regional_dlp gcloud
+          backend: local
+          controls:
+            - gcloud
   - name: dataflow-with-dlp
     driver:
       root_module_directory: test/fixtures/dataflow-with-dlp/

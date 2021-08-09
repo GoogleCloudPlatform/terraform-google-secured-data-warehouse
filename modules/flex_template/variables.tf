@@ -75,6 +75,12 @@ variable "python_modules_private_repo" {
   description = "The private Python modules repository. If using artifact registry should be in the format https://LOCATION-python.pkg.dev/PROJECT_ID/REPO_NAME/simple/"
 }
 
+variable "read_access_members" {
+  type        = list
+  description = "List of members in the standard GCP form: user:{email}, serviceAccount:{email}, group:{email} who will have read access to the repository."
+  default     = []
+}
+
 variable "module_depends_on" {
   description = "List of modules or resources this module depends on."
   type        = list

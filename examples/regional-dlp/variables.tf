@@ -46,12 +46,12 @@ variable "location" {
   default     = "us-central1"
 }
 
-# variable "crypto_key" {
-#   description = "The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP."
-#   type        = string
-# }
+variable "crypto_key" {
+  description = "The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP."
+  type        = string
+}
 
-# variable "wrapped_key" {
-#   description = "The base64 encoded data crypto key wrapped by KMS."
-#   type        = string
-# }
+variable "wrapped_key" {
+  description = "The base64 encoded data crypto key wrapped by KMS."
+  type        = string
+}
