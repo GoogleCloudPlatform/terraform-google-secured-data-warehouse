@@ -51,13 +51,13 @@ resource "google_artifact_registry_repository" "flex-repository" {
 
 resource "google_artifact_registry_repository_iam_member" "flex-template-iam" {
   provider = google-beta
-  for_each = toset(var.read_access_members)
+  count    = length(var.read_access_members)
 
   project    = var.project_id
   location   = var.location
   repository = var.repository_id
   role       = "roles/artifactregistry.reader"
-  member     = each.key
+  member     =  var.read_access_members[count.index]
 
   depends_on = [
     null_resource.module_depends_on,
