@@ -31,7 +31,7 @@ output "pubsub_writer_service_account_email" {
 
 output "data_ingest_bucket_names" {
   description = "The name list of the buckets created for data ingest pipeline."
-  value       = module.data_ingest_bucket.names_list
+  value       = [module.data_ingest_bucket.bucket.name]
 }
 
 output "data_ingest_topic_name" {
