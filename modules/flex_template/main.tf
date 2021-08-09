@@ -57,7 +57,7 @@ resource "google_artifact_registry_repository_iam_member" "flex-template-iam" {
   location   = var.location
   repository = var.repository_id
   role       = "roles/artifactregistry.reader"
-  member     =  var.read_access_members[count.index]
+  member     = var.read_access_members[count.index]
 
   depends_on = [
     null_resource.module_depends_on,
