@@ -75,14 +75,14 @@ module "upload_modules" {
 
   skip_download = true
 
-  create_cmd_entrypoint = "pip"
+  create_cmd_entrypoint = "pip3"
   create_cmd_body       = <<EOF
     install --no-cache-dir twine keyrings.google-artifactregistry-auth
     mkdir -p ${local.temp_folder}
     # Download modules
-    pip download --dest=${local.temp_folder} -r ${path.module}/requirements.txt --no-deps --no-binary=:all:
-    pip download --dest=${local.temp_folder} apache-beam==${local.apache_beam_version} --no-deps --no-binary=:all:
-    pip download --dest=${local.temp_folder} apache-beam==${local.apache_beam_version} --no-deps --only-binary=:all: \
+    pip3 download --dest=${local.temp_folder} -r ${path.module}/requirements.txt --no-deps --no-binary=:all:
+    pip3 download --dest=${local.temp_folder} apache-beam==${local.apache_beam_version} --no-deps --no-binary=:all:
+    pip3 download --dest=${local.temp_folder} apache-beam==${local.apache_beam_version} --no-deps --only-binary=:all: \
     --python-version=37 --implementation=cp --abi=cp37m --platform=manylinux1_x86_64
     # Unzip Apache-beam modules
     unzip -q ${local.temp_folder}/apache-beam-${local.apache_beam_version}.zip  -d ${local.temp_folder}
