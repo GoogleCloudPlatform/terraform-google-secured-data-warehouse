@@ -89,8 +89,9 @@ variable "bucket_lifecycle_rules" {
       type = "Delete"
     }
     condition = {
-      age        = 30
-      with_state = "ANY"
+      age                   = 30
+      with_state            = "ANY"
+      matches_storage_class = null
     }
   }]
 }
