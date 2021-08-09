@@ -23,8 +23,8 @@ locals {
   create_private_sa      = length(var.private_access_members) == 0 ? ["terraform-private-sa"] : []
   sa_names               = concat(local.create_confidential_sa, local.create_private_sa)
 
-  private_accounts      = length(var.confidential_access_members) == 0 ? ["serviceAccount:${module.service_accounts.emails["terraform-private-sa"]}"] : var.private_access_members
-  confidential_accounts = length(var.private_access_members) == 0 ? ["serviceAccount:${module.service_accounts.emails["terraform-confidential-sa"]}"] : var.confidential_access_members
+  private_accounts      = length(var.private_access_members) == 0 ? ["serviceAccount:${module.service_accounts.emails["terraform-private-sa"]}"] : var.private_access_members
+  confidential_accounts = length(var.confidential_access_members) == 0 ? ["serviceAccount:${module.service_accounts.emails["terraform-confidential-sa"]}"] : var.confidential_access_members
 }
 
 module "service_accounts" {
