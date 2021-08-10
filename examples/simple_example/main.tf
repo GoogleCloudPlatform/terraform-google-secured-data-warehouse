@@ -19,23 +19,15 @@ provider "google" {
 }
 
 module "secured_data_warehouse" {
-  source                              = "../.."
-  dataset_default_table_expiration_ms = var.dataset_default_table_expiration_ms
-  bucket_name                         = var.bucket_name
-  bucket_class                        = var.bucket_class
-  bucket_lifecycle_rules              = var.bucket_lifecycle_rules
-  dataset_id                          = var.dataset_id
-  dataset_name                        = var.dataset_name
-  dataset_description                 = var.dataset_description
-  org_id                              = var.org_id
-  project_id                          = var.project_id
-  data_governance_project_id          = var.data_governance_project_id
-  terraform_service_account           = var.terraform_service_account
-  vpc_name                            = var.vpc_name
-  access_context_manager_policy_id    = var.access_context_manager_policy_id
-  perimeter_additional_members        = var.perimeter_additional_members
-  location                            = var.location
-  region                              = var.region
-  cmek_keyring_name                   = var.cmek_keyring_name
-  subnet_ip                           = var.subnet_ip
+  source                           = "../.."
+  org_id                           = var.org_id
+  data_governance_project_id       = var.data_governance_project_id
+  project_id                       = var.project_id
+  terraform_service_account        = var.terraform_service_account
+  access_context_manager_policy_id = var.access_context_manager_policy_id
+  bucket_name                      = "bucket_simple_exemple"
+  dataset_id                       = "dataset_simple_exemple"
+  vpc_name                         = "vpc-simple-exemple"
+  cmek_keyring_name                = "key_name_simple_exemple"
+  subnet_ip                        = "10.0.32.0/21"
 }
