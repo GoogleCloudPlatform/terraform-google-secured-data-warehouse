@@ -93,11 +93,6 @@ resource "google_storage_bucket_object" "transform_code" {
   ]
 }
 
-resource "google_app_engine_application" "app" {
-  project     = var.project_id
-  location_id = "us-central"
-}
-
 resource "google_cloud_scheduler_job" "scheduler" {
   name     = "scheduler-demo"
   schedule = "0 0 * * *"
@@ -121,7 +116,6 @@ resource "google_cloud_scheduler_job" "scheduler" {
     body = base64encode(local.httpRequestTemplate)
   }
   depends_on = [
-    google_app_engine_application.app,
     google_storage_bucket_object.schema,
     google_storage_bucket_object.transform_code
   ]
