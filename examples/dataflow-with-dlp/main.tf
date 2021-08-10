@@ -63,6 +63,44 @@ module "de_identification_template" {
   dataflow_service_account  = var.dataflow_service_account
 }
 
+resource "google_kms_crypto_key_iam_binding" "dlp_encrypters_decrypters" {
+  for_each = local.kms_roles
+
+  role          = each.key
+  crypto_key_id = var.crypto_key
+  members       = ["serviceAccount:${var.dataflow_service_account}"]
+}
+
+resource "google_data_loss_prevention_deidentify_template" "de_identify_template" {
+  parent       = "projects/${var.project_id}/locations/${var.dlp_location}"
+  description  = var.template_description
+  display_name = var.template_display_name
+
+  deidentify_config {
+    info_type_transformations {
+      transformations {
+        info_types {
+          name = "Card Number"
+        }
+        info_types {
+          name = "Card PIN"
+        }
+        primitive_transformation {
+          crypto_replace_ffx_fpe_config {
+            crypto_key {
+              kms_wrapped {
+                wrapped_key     = var.wrapped_key
+                crypto_key_name = var.wrapped_key
+              }
+            }
+            common_alphabet = "ALPHA_NUMERIC"
+          }
+        }
+      }
+    }
+  }
+}
+
 
 module "dataflow-job" {
   source  = "terraform-google-modules/dataflow/google"
