@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
- locals {
-  region   = lower(var.region)
-  location = var.location == "" ? lower(var.region) : lower(var.location)
+locals {
+  region        = lower(var.region)
+  location      = var.location == "" ? lower(var.region) : lower(var.location)
   cmek_location = local.location == "eu" ? "europe" : local.location
 }
 

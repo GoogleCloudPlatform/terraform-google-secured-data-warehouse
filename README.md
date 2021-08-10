@@ -66,8 +66,7 @@ Then perform the following commands on the root folder:
 | region | The region for the resources | `string` | `"us-central1"` | no |
 | subnet\_ip | The CDIR IP range of the subnetwork. | `string` | n/a | yes |
 | terraform\_service\_account | The email address of the service account that will run the Terraform code. | `string` | n/a | yes |
-| vpc\_name | the name of the network. | `string` | n/a | yes |
-| zone | The zone in which the created job should run. | `string` | `"us-central1-a"` | no |
+| vpc\_name | The name of the network. | `string` | n/a | yes |
 
 ## Outputs
 

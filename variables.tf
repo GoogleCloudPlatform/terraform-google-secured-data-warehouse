@@ -48,7 +48,7 @@ variable "data_governance_project_id" {
 
 variable "vpc_name" {
   type        = string
-  description = "the name of the network."
+  description = "The name of the network."
 }
 
 variable "subnet_ip" {
