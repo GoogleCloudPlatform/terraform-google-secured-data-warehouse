@@ -14,7 +14,32 @@
  * limitations under the License.
  */
 
-resource "google_storage_bucket" "main" {
-  project = var.project_id
-  name    = var.bucket_name
+ locals {
+  region   = lower(var.region)
+  location = var.location == "" ? lower(var.region) : lower(var.location)
+  cmek_location = local.location == "eu" ? "europe" : local.location
+}
+
+module "data_ingestion" {
+  source                              = "./modules/base-data-ingestion"
+  dataset_default_table_expiration_ms = var.dataset_default_table_expiration_ms
+  bucket_name                         = var.bucket_name
+  bucket_class                        = var.bucket_class
+  bucket_lifecycle_rules              = var.bucket_lifecycle_rules
+  dataset_id                          = var.dataset_id
+  dataset_name                        = var.dataset_name
+  dataset_description                 = var.dataset_description
+  org_id                              = var.org_id
+  project_id                          = var.project_id
+  data_governance_project_id          = var.data_governance_project_id
+  terraform_service_account           = var.terraform_service_account
+  vpc_name                            = var.vpc_name
+  access_context_manager_policy_id    = var.access_context_manager_policy_id
+  perimeter_additional_members        = var.perimeter_additional_members
+  cmek_location                       = local.cmek_location
+  region                              = local.region
+  dataset_location                    = local.location
+  bucket_location                     = local.location
+  cmek_keyring_name                   = var.cmek_keyring_name
+  subnet_ip                           = var.subnet_ip
 }
