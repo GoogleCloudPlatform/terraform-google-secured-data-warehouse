@@ -19,12 +19,6 @@ variable "org_id" {
   type        = string
 }
 
-variable "zone" {
-  type        = string
-  description = "The zone in which the created job should run."
-  default     = "us-central1-a"
-}
-
 variable "region" {
   type        = string
   description = "The region for the resources"
