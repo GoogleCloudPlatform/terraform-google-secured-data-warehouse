@@ -83,7 +83,7 @@ resource "google_data_loss_prevention_deidentify_template" "de_identify_template
             crypto_key {
               kms_wrapped {
                 wrapped_key     = var.wrapped_key
-                crypto_key_name = var.wrapped_key
+                crypto_key_name = var.crypto_key
               }
             }
             common_alphabet = "ALPHA_NUMERIC"
