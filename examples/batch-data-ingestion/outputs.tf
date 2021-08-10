@@ -31,5 +31,5 @@ output "controller_service_account" {
 
 output "dataflow_bucket_name" {
   description = "The name of the bucket"
-  value       = module.dataflow-bucket.bucket.name
+  value       = module.dataflow-tmp-bucket.bucket.name
 }
