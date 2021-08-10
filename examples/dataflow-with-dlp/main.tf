@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
+locals {
+  dlp_location = "global"
+  kms_roles    = toset(["roles/cloudkms.cryptoKeyEncrypter", "roles/cloudkms.cryptoKeyDecrypter"])
+
+}
+
 resource "random_id" "random_suffix" {
   byte_length = 4
 }
@@ -50,19 +56,6 @@ EOF
   }
 }
 
-
-module "de_identification_template" {
-  source = "../..//modules/de_identification_template"
-
-  project_id                = var.project_id
-  terraform_service_account = var.terraform_service_account
-  crypto_key                = var.crypto_key
-  wrapped_key               = var.wrapped_key
-  dlp_location              = "global"
-  template_file             = "${path.module}/deidentification.tmpl"
-  dataflow_service_account  = var.dataflow_service_account
-}
-
 resource "google_kms_crypto_key_iam_binding" "dlp_encrypters_decrypters" {
   for_each = local.kms_roles
 
@@ -72,9 +65,9 @@ resource "google_kms_crypto_key_iam_binding" "dlp_encrypters_decrypters" {
 }
 
 resource "google_data_loss_prevention_deidentify_template" "de_identify_template" {
-  parent       = "projects/${var.project_id}/locations/${var.dlp_location}"
-  description  = var.template_description
-  display_name = var.template_display_name
+  parent       = "projects/${var.project_id}/locations/${local.dlp_location}"
+  description  = "De-identifies sensitive content defined in the template with a KMS wrapped CMEK."
+  display_name = "De-identification template using a KMS wrapped CMEK"
 
   deidentify_config {
     info_type_transformations {
@@ -101,7 +94,6 @@ resource "google_data_loss_prevention_deidentify_template" "de_identify_template
   }
 }
 
-
 module "dataflow-job" {
   source  = "terraform-google-modules/dataflow/google"
   version = "2.0.0"
@@ -124,6 +116,6 @@ module "dataflow-job" {
     datasetName            = var.dataset_id
     batchSize              = 1000
     dlpProjectId           = var.project_id
-    deidentifyTemplateName = "projects/${var.project_id}/locations/global/deidentifyTemplates/${module.de_identification_template.template_id}"
+    deidentifyTemplateName = google_data_loss_prevention_deidentify_template.de_identify_template.id
   }
 }
