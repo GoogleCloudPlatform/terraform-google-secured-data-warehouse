@@ -76,7 +76,6 @@ control 'gcloud' do
 
     let(:data) do
       if subject.exit_status.zero?
-        puts subject.stdout
         JSON.parse(subject.stdout)
       else
         {}
@@ -148,7 +147,6 @@ control 'gcloud' do
 
     let(:data) do
       if subject.exit_status.zero?
-        puts subject.stdout
         JSON.parse(subject.stdout)
       else
         {}
@@ -163,36 +161,6 @@ control 'gcloud' do
 
       it { expect(data).to include(including("name" => "apache-beam")) }
       it { expect(data).to include(including("name" => "google-cloud-dlp")) }
-
-    end
-  end
-
-  describe command("gcloud beta dataflow jobs list --region=us-central1 --project=#{project_id} --format=json") do
-    its(:exit_status) { should eq 0 }
-
-    let(:data) do
-      if subject.exit_status.zero?
-        puts subject.stdout
-        JSON.parse(subject.stdout)
-      else
-        {}
-      end
-    end
-
-    describe "Dataflow Flex regional DLP job" do
-
-      it 'should exist' do
-        expect(data).to_not be_empty
-      end
-
-      it { expect(data).to include(
-        including(
-          "type" => "Streaming",
-          "location" => "us-central1",
-          "name" => "dataflow-flex-regional-dlp-job"
-        )
-        )
-      }
 
     end
   end
