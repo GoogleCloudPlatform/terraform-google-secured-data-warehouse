@@ -15,26 +15,28 @@
  */
 
 output "project_id" {
-  value = var.project_id
+  description = "The project_id used to create infra."
+  value       = var.project_id
 }
 
 output "terraform_service_account" {
-  value = var.terraform_service_account
+  description = "The email address of the service account that will run the Terraform code."
+  value       = var.terraform_service_account
 }
 
 output "dataflow_bucket_name" {
-  value       = module.regional_dlp_example.dataflow_bucket_name
   description = "The name of the bucket created to store Dataflow temporary data."
+  value       = module.regional_dlp_example.dataflow_bucket_name
 }
 
 output "cloud_build_logs_bucket_name" {
-  value       = module.regional_dlp_example.cloud_build_logs_bucket_name
   description = "The name of the bucket created to store the Cloud Build logs."
+  value       = module.regional_dlp_example.cloud_build_logs_bucket_name
 }
 
 output "templates_bucket_name" {
-  value       = module.regional_dlp_example.templates_bucket_name
   description = "The name of the bucket created to store the flex template."
+  value       = module.regional_dlp_example.templates_bucket_name
 }
 
 output "dataflow_controller_service_account_email" {
