@@ -34,6 +34,10 @@ resource "random_id" "random_suffix" {
   byte_length = 2
 }
 
+data "google_project" "cloudbuild_project" {
+  project_id = var.project_id
+}
+
 resource "google_artifact_registry_repository" "flex-repository" {
   provider = google-beta
   count    = var.create_flex_repository ? 1 : 0
@@ -64,6 +68,28 @@ resource "google_artifact_registry_repository_iam_member" "flex-template-iam" {
     google_artifact_registry_repository.flex-repository
   ]
 }
+
+resource "google_artifact_registry_repository_iam_member" "flex-template-iam-write" {
+  provider = google-beta
+
+  project    = var.project_id
+  location   = var.location
+  repository = var.repository_id
+  role       = "roles/artifactregistry.writer"
+  member     = "serviceAccount:${data.google_project.cloudbuild_project.number}@cloudbuild.gserviceaccount.com"
+
+  depends_on = [
+    null_resource.module_depends_on,
+    google_artifact_registry_repository.flex-repository
+  ]
+}
+
+resource "google_project_iam_member" "cloud-build-iam" {
+  project = var.project_id
+  role    = "roles/cloudbuild.builds.builder"
+  member  = "serviceAccount:${data.google_project.cloudbuild_project.number}@cloudbuild.gserviceaccount.com"
+}
+
 
 module "cloud-build-logs" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"

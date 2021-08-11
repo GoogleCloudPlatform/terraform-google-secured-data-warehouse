@@ -24,6 +24,10 @@ resource "random_id" "suffix" {
   byte_length = 2
 }
 
+data "google_project" "cloudbuild_project" {
+  project_id = var.project_id
+}
+
 resource "null_resource" "module_depends_on" {
   count = length(var.module_depends_on) > 0 ? 1 : 0
 
@@ -63,6 +67,29 @@ resource "google_artifact_registry_repository_iam_member" "python-registry-iam" 
   ]
 }
 
+resource "google_artifact_registry_repository_iam_member" "python-registry-iam-write" {
+  provider = google-beta
+
+  project    = var.project_id
+  location   = var.location
+  repository = var.repository_id
+  role       = "roles/artifactregistry.writer"
+  member     = "serviceAccount:${data.google_project.cloudbuild_project.number}@cloudbuild.gserviceaccount.com"
+
+  depends_on = [
+    null_resource.module_depends_on,
+    google_artifact_registry_repository.python-modules
+  ]
+}
+
+
+resource "google_project_iam_member" "cloud-build-iam" {
+  project = var.project_id
+  role    = "roles/cloudbuild.builds.builder"
+  member  = "serviceAccount:${data.google_project.cloudbuild_project.number}@cloudbuild.gserviceaccount.com"
+}
+
+
 resource "local_file" "requirements-file" {
   content  = file(var.requirements_filename)
   filename = "${path.module}/requirements.txt"
@@ -79,7 +106,8 @@ module "upload_modules" {
   create_cmd_body       = <<EOF
     builds submit --project=${var.project_id} \
     --config ${path.module}/cloudbuild.yaml . \
-    --substitutions=_REPOSITORY_ID=${var.repository_id},_DEFAULT_REGION=${var.location}
+    --substitutions=_REPOSITORY_ID=${var.repository_id},_DEFAULT_REGION=${var.location} \
+    --impersonate-service-account=${var.terraform_service_account}
 
 EOF
 
