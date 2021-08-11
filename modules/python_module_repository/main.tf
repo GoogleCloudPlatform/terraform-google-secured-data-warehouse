@@ -75,26 +75,11 @@ module "upload_modules" {
 
   skip_download = true
 
-  create_cmd_entrypoint = "pip3"
+  create_cmd_entrypoint = "gcloud"
   create_cmd_body       = <<EOF
-    install --no-cache-dir twine keyrings.google-artifactregistry-auth
-    mkdir -p ${local.temp_folder}
-    # Download modules
-    pip3 download --dest=${local.temp_folder} -r ${path.module}/requirements.txt --no-deps --no-binary=:all:
-    pip3 download --dest=${local.temp_folder} apache-beam==${local.apache_beam_version} --no-deps --no-binary=:all:
-    pip3 download --dest=${local.temp_folder} apache-beam==${local.apache_beam_version} --no-deps --only-binary=:all: \
-    --python-version=37 --implementation=cp --abi=cp37m --platform=manylinux1_x86_64
-    # Unzip Apache-beam modules
-    unzip -q ${local.temp_folder}/apache-beam-${local.apache_beam_version}.zip  -d ${local.temp_folder}
-    #Tar.gz Apache-beam modules
-    tar -C ${local.temp_folder}/  -czf /${local.temp_folder}/apache-beam-${local.apache_beam_version}.tar.gz apache-beam-${local.apache_beam_version}
-    # Remove temp data
-    rm -rf ${local.temp_folder}/apache-beam-${local.apache_beam_version}.zip ${local.temp_folder}/apache-beam-${local.apache_beam_version}
-    # Upload to private registry
-    for python_module in "${local.temp_folder}"/*
-    do
-     twine upload --repository-url ${local.python_repository_url} "$python_module" || true
-    done
+    builds submit --project=${var.project_id} \
+    --config cloudbuild.yaml . \
+    --substitutions=_REPOSITORY_ID=${var.repository_id},_DEFAULT_REGION=${var.location}
 
 EOF
 
