@@ -14,6 +14,8 @@
 
 project_id = attribute('project_id')
 dataflow_controller_service_account_email = attribute('dataflow_controller_service_account_email')
+templates_bucket_name = attribute('templates_bucket_name')
+
 
 control 'gcloud' do
   title 'Gcloud Resources'
@@ -195,5 +197,10 @@ control 'gcloud' do
     end
   end
 
+  describe command("gsutil ls gs://#{templates_bucket_name}/dataflow/flex_templates/regional_dlp_flex.json") do
+    its(:exit_status) { should eq 0 }
+    its(:stderr) { should eq "" }
+    its(:stdout) { should include "gs://#{templates_bucket_name}/dataflow/flex_templates/regional_dlp_flex.json" }
+  end
 
 end

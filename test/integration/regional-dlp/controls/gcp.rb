@@ -34,8 +34,4 @@ control 'gcp' do
     it { should exist }
   end
 
-  describe google_storage_bucket_object(bucket: templates_bucket_name,  object: 'dataflow/flex_templates/regional_dlp_flex.json') do
-    it { should exist }
-  end
-
 end
