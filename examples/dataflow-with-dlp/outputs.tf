@@ -44,11 +44,6 @@ output "bucket_name" {
   value       = module.dataflow-bucket.bucket.name
 }
 
-output "dlp_location" {
-  description = "The location of the DLP resources."
-  value       = local.dlp_location
-}
-
 output "template_id" {
   description = "The ID of the Cloud DLP de-identification template that is created."
   value       = google_data_loss_prevention_deidentify_template.de_identify_template.name

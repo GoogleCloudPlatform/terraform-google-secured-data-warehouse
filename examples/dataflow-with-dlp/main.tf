@@ -15,9 +15,7 @@
  */
 
 locals {
-  dlp_location = "global"
-  kms_roles    = toset(["roles/cloudkms.cryptoKeyEncrypter", "roles/cloudkms.cryptoKeyDecrypter"])
-
+  kms_roles = toset(["roles/cloudkms.cryptoKeyEncrypter", "roles/cloudkms.cryptoKeyDecrypter"])
 }
 
 resource "random_id" "random_suffix" {
@@ -56,16 +54,15 @@ EOF
   }
 }
 
-resource "google_kms_crypto_key_iam_binding" "dlp_encrypters_decrypters" {
-  for_each = local.kms_roles
-
+resource "google_kms_crypto_key_iam_member" "dlp_encrypters_decrypters" {
+  for_each      = local.kms_roles
   role          = each.key
   crypto_key_id = var.crypto_key
-  members       = ["serviceAccount:${var.dataflow_service_account}"]
+  member        = "serviceAccount:${var.dataflow_service_account}"
 }
 
 resource "google_data_loss_prevention_deidentify_template" "de_identify_template" {
-  parent       = "projects/${var.project_id}/locations/${local.dlp_location}"
+  parent       = "projects/${var.project_id}/locations/global"
   description  = "De-identifies sensitive content defined in the template with a KMS wrapped CMEK."
   display_name = "De-identification template using a KMS wrapped CMEK"
 

@@ -30,7 +30,6 @@ This example illustrates how to run a Dataflow job that uses the `de_identificat
 | df\_job\_id | The unique Id of the newly created Dataflow job |
 | df\_job\_name | The name of the newly created Dataflow job |
 | df\_job\_state | The state of the newly created Dataflow job |
-| dlp\_location | The location of the DLP resources. |
 | project\_id | The project's ID |
 | template\_id | The ID of the Cloud DLP de-identification template that is created. |
 
