@@ -31,17 +31,17 @@ output "high_policy_taxonomy_id" {
 
 output "member_policy_ssn_confidential" {
   description = "SA member for Social Security Number policy tag."
-  value       = google_data_catalog_policy_tag_iam_member.confidential_sa_ssn.member
+  value       = [for m in google_data_catalog_policy_tag_iam_member.confidential_sa_ssn : m.member]
 }
 
 output "member_policy_name_confidential" {
   description = "SA member for Person Name policy tag."
-  value       = google_data_catalog_policy_tag_iam_member.confidential_sa_name.member
+  value       = [for m in google_data_catalog_policy_tag_iam_member.confidential_sa_name : m.member]
 }
 
 output "member_policy_name_private" {
   description = "SA member for Person Name policy tag."
-  value       = google_data_catalog_policy_tag_iam_member.private_sa_name.member
+  value       = [for m in google_data_catalog_policy_tag_iam_member.private_sa_name : m.member]
 }
 
 output "taxonomy_name" {
