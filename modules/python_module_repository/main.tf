@@ -105,7 +105,7 @@ module "upload_modules" {
   create_cmd_entrypoint = "gcloud"
   create_cmd_body       = <<EOF
     builds submit --project=${var.project_id} \
-    --config ${path.module}/cloudbuild.yaml . \
+    --config ${path.module}/cloudbuild.yaml ${path.module} \
     --substitutions=_REPOSITORY_ID=${var.repository_id},_DEFAULT_REGION=${var.location} \
     --impersonate-service-account=${var.terraform_service_account}
 
