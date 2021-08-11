@@ -17,7 +17,7 @@
 
 output "dataflow_bucket_name" {
   description = "The name of the bucket created to store Dataflow temporary data."
-  value       = module.dataflow-bucket.bucket.name
+  value       = module.dataflow_bucket.bucket.name
 }
 
 output "cloud_build_logs_bucket_name" {

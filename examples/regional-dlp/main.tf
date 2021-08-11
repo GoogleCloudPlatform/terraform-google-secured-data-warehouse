@@ -72,7 +72,7 @@ module "de_identification_template_example" {
   crypto_key                = var.crypto_key
   wrapped_key               = var.wrapped_key
   dlp_location              = var.location
-  template_file             = "${path.module}/deidentification.tmpl"
+  template_file             = "${path.module}/templates/deidentification.tpl"
 
 }
 
@@ -90,9 +90,9 @@ module "flex_dlp_template" {
   read_access_members         = ["serviceAccount:${module.data_ingestion.dataflow_controller_service_account_email}"]
 
   template_files = {
-    code_file         = "${path.module}/pubsub_dlp_bigquery.py"
-    metadata_file     = "${path.module}/metadata.json"
-    requirements_file = "${path.module}/requirements.txt"
+    code_file         = "${path.module}/files/pubsub_dlp_bigquery.py"
+    metadata_file     = "${path.module}/files/metadata.json"
+    requirements_file = "${path.module}/files/requirements.txt"
   }
 
   module_depends_on = [
@@ -108,7 +108,7 @@ module "python_module_repository" {
   location                  = var.location
   repository_id             = local.python_repository_id
   terraform_service_account = var.terraform_service_account
-  requirements_filename     = "${path.module}/requirements.txt"
+  requirements_filename     = "${path.module}/files/requirements.txt"
   read_access_members       = ["serviceAccount:${module.data_ingestion.dataflow_controller_service_account_email}"]
 
   module_depends_on = [
@@ -116,7 +116,7 @@ module "python_module_repository" {
   ]
 }
 
-module "dataflow-bucket" {
+module "dataflow_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 2.1"
 
@@ -153,7 +153,7 @@ resource "google_dataflow_flex_template_job" "flex_job" {
     service_account_email          = module.data_ingestion.dataflow_controller_service_account_email
     subnetwork                     = module.data_ingestion.subnets_self_links[0]
     dataflow_kms_key               = module.data_ingestion.cmek_ingestion_crypto_key
-    temp_location                  = "${module.dataflow-bucket.bucket.url}/tmp/"
+    temp_location                  = "${module.dataflow_bucket.bucket.url}/tmp/"
     no_use_public_ips              = "true"
   }
 

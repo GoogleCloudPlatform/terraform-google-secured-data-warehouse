@@ -36,7 +36,7 @@ resource "null_resource" "module_depends_on" {
   }
 }
 
-resource "google_artifact_registry_repository" "python-modules" {
+resource "google_artifact_registry_repository" "python_modules" {
   provider = google-beta
   count    = var.create_repository ? 1 : 0
 
@@ -51,7 +51,7 @@ resource "google_artifact_registry_repository" "python-modules" {
   ]
 }
 
-resource "google_artifact_registry_repository_iam_member" "python-registry-iam" {
+resource "google_artifact_registry_repository_iam_member" "reader" {
   provider = google-beta
   count    = length(var.read_access_members)
 
@@ -63,11 +63,11 @@ resource "google_artifact_registry_repository_iam_member" "python-registry-iam" 
 
   depends_on = [
     null_resource.module_depends_on,
-    google_artifact_registry_repository.python-modules
+    google_artifact_registry_repository.python_modules
   ]
 }
 
-resource "google_artifact_registry_repository_iam_member" "python-registry-iam-write" {
+resource "google_artifact_registry_repository_iam_member" "writer" {
   provider = google-beta
 
   project    = var.project_id
@@ -78,19 +78,19 @@ resource "google_artifact_registry_repository_iam_member" "python-registry-iam-w
 
   depends_on = [
     null_resource.module_depends_on,
-    google_artifact_registry_repository.python-modules
+    google_artifact_registry_repository.python_modules
   ]
 }
 
 
-resource "google_project_iam_member" "cloud-build-iam" {
+resource "google_project_iam_member" "cloud_build_builder" {
   project = var.project_id
   role    = "roles/cloudbuild.builds.builder"
   member  = "serviceAccount:${data.google_project.cloudbuild_project.number}@cloudbuild.gserviceaccount.com"
 }
 
 
-resource "local_file" "requirements-file" {
+resource "local_file" "requirements_file" {
   content  = file(var.requirements_filename)
   filename = "${path.module}/requirements.txt"
 }
@@ -112,7 +112,7 @@ module "upload_modules" {
 EOF
 
   module_depends_on = [
-    google_artifact_registry_repository.python-modules
+    google_artifact_registry_repository.python_modules
   ]
 
 }
