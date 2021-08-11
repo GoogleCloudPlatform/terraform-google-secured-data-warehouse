@@ -129,6 +129,10 @@ module "dataflow-bucket" {
   encryption = {
     default_kms_key_name = module.data_ingestion.cmek_ingestion_crypto_key
   }
+
+  depends_on = [
+    time_sleep.wait_90_seconds_for_vpc_sc_propagation
+  ]
 }
 
 resource "google_dataflow_flex_template_job" "flex_job" {
