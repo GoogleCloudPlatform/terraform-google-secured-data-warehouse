@@ -28,6 +28,12 @@ data "google_project" "cloudbuild_project" {
   project_id = var.project_id
 }
 
+# This is a collateral effect of the workaround, using 'module_depends_on', for issue
+# https://github.com/terraform-google-modules/terraform-google-gcloud/issues/82
+# This module uses "terraform-google-gcloud" to run some commands that depends on each other.
+# If this module is called with a regular 'depends_on' it fails with the error from issue #82 on the "terraform-google-gcloud" modules
+# So the workaround, creating a custom 'module_depends_on', had to be replicated in this module too.
+# When issue #82 is fixed and the workaround removed, this can also be removed.
 resource "null_resource" "module_depends_on" {
   count = length(var.module_depends_on) > 0 ? 1 : 0
 

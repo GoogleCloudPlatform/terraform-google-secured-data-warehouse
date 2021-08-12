@@ -22,6 +22,12 @@ locals {
   code_file_md5           = filemd5(var.template_files.code_file)
 }
 
+# This is a collateral effect of the workaround, using 'module_depends_on', for issue
+# https://github.com/terraform-google-modules/terraform-google-gcloud/issues/82
+# This module uses "terraform-google-gcloud" to run some commands that depends on each other.
+# If this module is called with a regular 'depends_on' it fails with the error from issue #82 on the "terraform-google-gcloud" modules
+# So the workaround, creating a custom 'module_depends_on', had to be replicated in this module too.
+# When issue #82 is fixed and the workaround removed, this can also be removed.
 resource "null_resource" "module_depends_on" {
   count = length(var.module_depends_on) > 0 ? 1 : 0
 
@@ -197,7 +203,7 @@ module "flex_template_builder" {
       dataflow flex-template build ${local.template_gs_path} \
        --image "${local.flex_template_image_tag}" \
        --sdk-language "PYTHON" \
-       --metadata_file "${path.module}/metadata.json" \
+       --metadata-file "${path.module}/metadata.json" \
        --impersonate-service-account=${var.terraform_service_account}
 EOF
 
