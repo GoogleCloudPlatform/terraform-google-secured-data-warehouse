@@ -19,3 +19,5 @@ substitutions:
   _APACHE_BEAM_VERSION: '2.30.0' # default value
   _DEFAULT_REGION: 'us-central1' # default value
   _REPOSITORY_ID: 'python-modules' # default value
+options:
+  logging: CLOUD_LOGGING_ONLY

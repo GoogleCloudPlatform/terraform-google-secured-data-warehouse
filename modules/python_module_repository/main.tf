@@ -131,7 +131,6 @@ module "upload_modules" {
     --config ${path.module}/cloudbuild.yaml ${path.module} \
     --substitutions=_REPOSITORY_ID=${var.repository_id},_DEFAULT_REGION=${var.location} \
     --impersonate-service-account=${var.terraform_service_account}
-
 EOF
 
   module_depends_on = [
