@@ -21,7 +21,7 @@ variable "org_id" {
 
 variable "region" {
   type        = string
-  description = "The region in which the subnetwork will be created."
+  description = "The region in which subnetwork will be created and Pub/Sub message will be stored."
   default     = "us-central1"
 }
 

@@ -27,10 +27,10 @@ attributes:
     type: string
   - name: member_policy_ssn_confidential
     required: true
-    type: string
+    type: array
   - name: member_policy_name_confidential
     required: true
-    type: string
+    type: array
   - name: member_policy_name_private
     required: true
-    type: string
+    type: array

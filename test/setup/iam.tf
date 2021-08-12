@@ -46,8 +46,7 @@ locals {
     "roles/secretmanager.admin",
     "roles/cloudkms.cryptoKeyEncrypter",
     "roles/cloudscheduler.admin",
-    "roles/appengine.appCreator",
-    "roles/owner"
+    "roles/appengine.appCreator"
   ]
 }
 

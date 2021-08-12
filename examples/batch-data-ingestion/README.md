@@ -1,11 +1,11 @@
-# Dataflow with DLP de-identification
+# Batch Dataflow with DLP de-identification
 
-This example illustrates how to run a Dataflow job that uses the `de_identification_template` submodule with the `base-data-ingestion` submodule.
+This example illustrates how to run a Dataflow job that uses the `batch templates with DLP` submodule with the `base-data-ingestion` submodule.
 
-## Prerequisites
+## Requirements
 
-1. base-data-ingestion executed successfully.
-2. A `crypto_key` and `wrapped_key` pair.  Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location used for the `dlp_location`.
+1. A project previusly created, with [Google App Engine Application Enabled](https://cloud.google.com/scheduler/docs/quickstart#create_a_project_with_an_app_engine_app).
+1. A `crypto_key` and `wrapped_key` pair.  Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location used for the `dlp_location`.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
@@ -13,7 +13,9 @@ This example illustrates how to run a Dataflow job that uses the `de_identificat
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | bucket\_force\_destroy | When deleting a bucket, this boolean option will delete all contained objects. If you try to delete a bucket that contains objects, Terraform will fail that run. | `bool` | `false` | no |
+| bucket\_location | Dataflow temporary bucket location. | `string` | `"US"` | no |
 | crypto\_key | The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP. | `string` | n/a | yes |
+| data\_ingestion\_bucket | The bucket name where the files for ingestion is located. | `string` | n/a | yes |
 | dataflow\_service\_account | The Service Account email that will be used to identify the VMs in which the jobs are running | `string` | n/a | yes |
 | dataset\_id | Unique ID for the dataset being provisioned. | `string` | `"dts_test_int"` | no |
 | network\_self\_link | The network self link to which VMs will be assigned. | `string` | n/a | yes |
