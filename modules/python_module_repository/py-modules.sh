@@ -34,12 +34,17 @@ pip3 download --dest=./artifact_registry_rep apache-beam=="${apache_beam_version
 
 pip3 download --dest=./artifact_registry_rep apache-beam=="${apache_beam_version}" --no-deps --only-binary=:all: --python-version=37 --implementation=cp --abi=cp37m --platform=manylinux1_x86_64
 
+# This 'unzip' and 'tar -czf' steps are necessary because Artifact Registry does not support .zip files, only .tar.gz files
+# and Apache Beam sources are released as .zip files.
 unzip -q "./artifact_registry_rep/apache-beam-${apache_beam_version}.zip"  -d ./artifact_registry_rep
 
 tar -C ./artifact_registry_rep/  -czf "./artifact_registry_rep/apache-beam-${apache_beam_version}.tar.gz" "apache-beam-${apache_beam_version}"
 
 rm -rf "./artifact_registry_rep/apache-beam-${apache_beam_version}.zip" "./artifact_registry_rep/apache-beam-${apache_beam_version}"
 
+# this cannot be a direct upload of the whole ./artifact_registry_rep/ because Artifact Registry does not support the
+# twine command line option --skip-existing to continue uploading files if one already exists.
+# If a file already exist the upload fails, so we need the '|| true' to continua with the upload.
 for python_module in "./artifact_registry_rep"/*
 do
   twine upload --repository-url "${python_repository_url}" "$python_module" || true

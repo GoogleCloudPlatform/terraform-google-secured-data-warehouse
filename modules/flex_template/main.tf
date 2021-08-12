@@ -14,6 +14,16 @@
  * limitations under the License.
  */
 
+/**
+ * This module implements the creation of a Google Dataflow Python Flex Template based on the
+ * official guide: https://cloud.google.com/dataflow/docs/guides/templates/using-flex-templates#python
+ * and on an updated reference implementation for a streaming Python flex template
+ * https://github.com/GoogleCloudPlatform/python-docs-samples/tree/master/dataflow/flex-templates/streaming_beam
+ *
+ * This implementation uses Google Artifact registry instead of Google Container Registry.
+ * This implementation may change if the official recommendation changes.
+ */
+
 locals {
   flex_template_image_tag = "${var.location}-docker.pkg.dev/${var.project_id}/${var.repository_id}/${var.image_name}:${var.image_tag}"
   template_gs_path        = "${module.templates.bucket.url}/dataflow/flex_templates/${var.image_name}.json"
@@ -22,12 +32,15 @@ locals {
   code_file_md5           = filemd5(var.template_files.code_file)
 }
 
-# This is a collateral effect of the workaround, using 'module_depends_on', for issue
-# https://github.com/terraform-google-modules/terraform-google-gcloud/issues/82
-# This module uses "terraform-google-gcloud" to run some commands that depends on each other.
-# If this module is called with a regular 'depends_on' it fails with the error from issue #82 on the "terraform-google-gcloud" modules
-# So the workaround, creating a custom 'module_depends_on', had to be replicated in this module too.
-# When issue #82 is fixed and the workaround removed, this can also be removed.
+/**
+ * This is a collateral effect of the workaround, using 'module_depends_on', for issue
+ * https://github.com/terraform-google-modules/terraform-google-gcloud/issues/82
+ * This module uses "terraform-google-gcloud" to run some commands that depends on each other.
+ * If this module is called with a regular 'depends_on' it fails with the error from issue #82 on the "terraform-google-gcloud" modules
+ * So the workaround, creating a custom 'module_depends_on', had to be replicated in this module too.
+ * When issue #82 is fixed and the workaround removed, this can also be removed.
+ */
+
 resource "null_resource" "module_depends_on" {
   count = length(var.module_depends_on) > 0 ? 1 : 0
 

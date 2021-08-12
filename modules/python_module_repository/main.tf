@@ -14,6 +14,20 @@
  * limitations under the License.
  */
 
+/**
+ * This module creates and populates a private Python module registry using Google Artifact registry
+ * based in the official Quickstart Guide: https://cloud.google.com/artifact-registry/docs/python/quickstart.
+ *
+ * This private Python module registry is used when a Python flex template is deployed in Dataflow.
+ * The url of the private registry is configured in a Dataflow Flex template Dockerfile based on
+ * https://github.com/GoogleCloudPlatform/python-docs-samples/blob/master/dataflow/flex-templates/streaming_beam/Dockerfile
+ * in the flex template module setting pip’s command line options for https://pip.pypa.io/en/stable/cli/pip_install/#install-index-url
+ * the using env vars: https://pip.pypa.io/en/stable/topics/configuration/#environment-variables.
+ *
+ * This modules can be replaced in the Dataflow Flex template Dockerfile by another user private Python repo
+ * that can be accessed by the Dataflow workers from the restricted VPC Network.
+ */
+
 locals {
   python_repository_url = "https://${var.location}-python.pkg.dev/${var.project_id}/${var.repository_id}/"
   temp_folder           = "/tmp/artifact_registry_rep_${random_id.suffix.hex}"
@@ -28,12 +42,15 @@ data "google_project" "cloudbuild_project" {
   project_id = var.project_id
 }
 
-# This is a collateral effect of the workaround, using 'module_depends_on', for issue
-# https://github.com/terraform-google-modules/terraform-google-gcloud/issues/82
-# This module uses "terraform-google-gcloud" to run some commands that depends on each other.
-# If this module is called with a regular 'depends_on' it fails with the error from issue #82 on the "terraform-google-gcloud" modules
-# So the workaround, creating a custom 'module_depends_on', had to be replicated in this module too.
-# When issue #82 is fixed and the workaround removed, this can also be removed.
+/**
+ * This is a collateral effect of the workaround, using 'module_depends_on', for issue
+ * https://github.com/terraform-google-modules/terraform-google-gcloud/issues/82
+ * This module uses "terraform-google-gcloud" to run some commands that depends on each other.
+ * If this module is called with a regular 'depends_on' it fails with the error from issue #82 on the "terraform-google-gcloud" modules
+ * So the workaround, creating a custom 'module_depends_on', had to be replicated in this module too.
+ * When issue #82 is fixed and the workaround removed, this can also be removed.
+ */
+
 resource "null_resource" "module_depends_on" {
   count = length(var.module_depends_on) > 0 ? 1 : 0
 
