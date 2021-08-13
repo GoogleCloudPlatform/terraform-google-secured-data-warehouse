@@ -24,8 +24,16 @@ module "secured_data_warehouse" {
   source  = "terraform-google-modules/secured-data-warehouse/google"
   version = "~> 0.1"
 
-  project_id  = "<PROJECT ID>"
-  bucket_name = "gcs-test-bucket"
+  org_id = ORG_ID
+  project_id = PROJECT_ID
+  region = "us-central1"
+  terraform_service_account = TERRAFORM_SERVICE_ACCOUNT
+  vpc_name = VPC_NAME
+  subnet_ip = "10.0.32.0/21"
+  access_context_manager_policy_id = ACCESS_CONTEXT_MANAGER_POLICY_ID
+  bucket_name = DATA_INGESTION_BUCKET_NAME
+  dataset_id = DATASET_ID
+  cmek_keyring_name = CMEK_KEYRING_NAME
 }
 ```
 
@@ -34,14 +42,46 @@ module "secured_data_warehouse" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| bucket\_name | The name of the bucket to create. | `any` | n/a | yes |
-| project\_id | The project ID to deploy to. | `any` | n/a | yes |
+| access\_context\_manager\_policy\_id | The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format="value(name)"`. | `number` | n/a | yes |
+| bucket\_class | Bucket storage class. | `string` | `"STANDARD"` | no |
+| bucket\_lifecycle\_rules | List of lifecycle rules to configure. Format is the same as described in provider documentation https://www.terraform.io/docs/providers/google/r/storage_bucket.html#lifecycle_rule except condition.matches\_storage\_class should be a comma delimited string. | <pre>set(object({<br>    action    = map(string)<br>    condition = map(string)<br>  }))</pre> | <pre>[<br>  {<br>    "action": {<br>      "type": "Delete"<br>    },<br>    "condition": {<br>      "age": 30,<br>      "with_state": "ANY"<br>    }<br>  }<br>]</pre> | no |
+| bucket\_name | The main part of the name of the bucket to be created. | `string` | n/a | yes |
+| cmek\_keyring\_name | The Keyring name for the KMS Customer Managed Encryption Keys. | `string` | n/a | yes |
+| data\_governance\_project\_id | The ID of the project in which the data governance resources will be created. | `string` | n/a | yes |
+| dataset\_default\_table\_expiration\_ms | TTL of tables using the dataset in MS. The default value is almost 12 months. | `number` | `31536000000` | no |
+| dataset\_description | Dataset description. | `string` | `"Ingest dataset"` | no |
+| dataset\_id | Unique ID for the dataset being provisioned. | `string` | n/a | yes |
+| dataset\_name | Friendly name for the dataset being provisioned. | `string` | `"Ingest dataset"` | no |
+| location | The location for the KMS Customer Managed Encryption Keys, Bucket, and Bigquery dataset. This location can be a multiregion, if it is empty the region value will be used. | `string` | `""` | no |
+| org\_id | GCP Organization ID. | `string` | n/a | yes |
+| perimeter\_additional\_members | The list additional members to be added on perimeter access. Prefix of group: user: or serviceAccount: is required. | `list(string)` | `[]` | no |
+| project\_id | The ID of the project in which the service account will be created. | `string` | n/a | yes |
+| region | The region for the resources | `string` | `"us-central1"` | no |
+| subnet\_ip | The CDIR IP range of the subnetwork. | `string` | n/a | yes |
+| terraform\_service\_account | The email address of the service account that will run the Terraform code. | `string` | n/a | yes |
+| vpc\_name | The name of the network. | `string` | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| bucket\_name | n/a |
+| access\_level\_name | Access context manager access level name |
+| cmek\_bigquery\_crypto\_key | The Customer Managed Crypto Key for the BigQuery service. |
+| cmek\_ingestion\_crypto\_key | The Customer Managed Crypto Key for the Ingestion crypto boundary. |
+| cmek\_keyring\_full\_name | The Keyring full name for the KMS Customer Managed Encryption Keys. |
+| cmek\_keyring\_name | The Keyring name for the KMS Customer Managed Encryption Keys. |
+| data\_ingest\_bigquery\_dataset | The bigquery dataset created for data ingest pipeline. |
+| data\_ingest\_bucket\_names | The name list of the buckets created for data ingest pipeline. |
+| data\_ingest\_topic\_name | The topic created for data ingest pipeline. |
+| dataflow\_controller\_service\_account\_email | The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account |
+| network\_name | The name of the VPC being created |
+| network\_self\_link | The URI of the VPC being created |
+| pubsub\_writer\_service\_account\_email | The PubSub writer service account email. Should be used to write data to the PubSub topics the ingestion pipeline reads from. |
+| service\_perimeter\_name | Access context manager service perimeter name |
+| storage\_writer\_service\_account\_email | The Storage writer service account email. Should be used to write data to the buckets the ingestion pipeline reads from. |
+| subnets\_ips | The IPs and CIDRs of the subnets being created |
+| subnets\_names | The names of the subnets being created |
+| subnets\_self\_links | The self-links of subnets being created |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
