@@ -19,6 +19,7 @@ locals {
   python_repository_id        = "python-modules"
   flex_template_repository_id = "flex-templates"
   bq_schema                   = "book:STRING, author:STRING"
+
   perimeter_additional_members = distinct(
     concat(
       ["serviceAccount:${google_project_service_identity.cloudbuild_sa.email}"],
@@ -27,7 +28,7 @@ locals {
   )
 }
 
-resource "random_id" "random_suffix" {
+resource "random_id" "suffix" {
   byte_length = 4
 }
 
@@ -40,7 +41,7 @@ resource "google_project_service_identity" "cloudbuild_sa" {
 
 module "data_ingestion" {
   source                           = "../..//modules/base-data-ingestion"
-  bucket_name                      = "bkt-dlp-flex-ingest-${random_id.random_suffix.hex}"
+  bucket_name                      = "bkt-dlp-flex-ingest-${random_id.suffix.hex}"
   dataset_id                       = "dlp_flex_ingest"
   org_id                           = var.org_id
   project_id                       = var.project_id
@@ -57,10 +58,12 @@ module "data_ingestion" {
   cmek_keyring_name                = "dlp_flex_ingest"
 }
 
-resource "time_sleep" "wait_90_seconds_for_vpc_sc_propagation" {
-  depends_on = [module.data_ingestion]
+resource "time_sleep" "wait_for_vpc_sc_propagation" {
+  create_duration = "120s"
 
-  create_duration = "90s"
+  depends_on = [
+    module.data_ingestion
+  ]
 }
 
 module "de_identification_template_example" {
@@ -96,7 +99,7 @@ module "flex_dlp_template" {
   }
 
   module_depends_on = [
-    time_sleep.wait_90_seconds_for_vpc_sc_propagation
+    time_sleep.wait_for_vpc_sc_propagation
   ]
 
 }
@@ -112,7 +115,7 @@ module "python_module_repository" {
   read_access_members       = ["serviceAccount:${module.data_ingestion.dataflow_controller_service_account_email}"]
 
   module_depends_on = [
-    time_sleep.wait_90_seconds_for_vpc_sc_propagation
+    time_sleep.wait_for_vpc_sc_propagation
   ]
 }
 
@@ -121,7 +124,7 @@ module "dataflow_bucket" {
   version = "~> 2.1"
 
   project_id         = var.project_id
-  name               = "bkt-tmp-dataflow-${random_id.random_suffix.hex}"
+  name               = "bkt-tmp-dataflow-${random_id.suffix.hex}"
   location           = var.location
   force_destroy      = true
   bucket_policy_only = true
@@ -131,11 +134,11 @@ module "dataflow_bucket" {
   }
 
   depends_on = [
-    time_sleep.wait_90_seconds_for_vpc_sc_propagation
+    time_sleep.wait_for_vpc_sc_propagation
   ]
 }
 
-resource "google_dataflow_flex_template_job" "flex_job" {
+resource "google_dataflow_flex_template_job" "regional_dlp" {
   provider = google-beta
 
   project                 = var.project_id
@@ -158,7 +161,7 @@ resource "google_dataflow_flex_template_job" "flex_job" {
   }
 
   depends_on = [
-    time_sleep.wait_90_seconds_for_vpc_sc_propagation,
+    time_sleep.wait_for_vpc_sc_propagation,
     module.de_identification_template_example,
     module.flex_dlp_template,
     module.python_module_repository
