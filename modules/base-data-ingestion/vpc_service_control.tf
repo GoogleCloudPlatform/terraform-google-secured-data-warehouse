@@ -22,9 +22,9 @@ locals {
   ], var.perimeter_additional_members))
 }
 
-// vpc service controls
-module "vpc_service_controls" {
-  source = "../..//modules/vpc_service_controls"
+// vpc service controls network infrastructure
+module "dwh_networking" {
+  source = "../..//modules/dwh-networking"
 
   org_id                           = var.org_id
   project_id                       = var.project_id
