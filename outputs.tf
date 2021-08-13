@@ -31,86 +31,86 @@
  */
 
 output "dataflow_controller_service_account_email" {
-  value       = module.data_ingestion.dataflow_controller_service_account_email
   description = "The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account"
+  value       = module.data_ingestion.dataflow_controller_service_account_email
 }
 
 output "storage_writer_service_account_email" {
-  value       = module.data_ingestion.storage_writer_service_account_email
   description = "The Storage writer service account email. Should be used to write data to the buckets the ingestion pipeline reads from."
+  value       = module.data_ingestion.storage_writer_service_account_email
 }
 
 output "pubsub_writer_service_account_email" {
-  value       = module.data_ingestion.pubsub_writer_service_account_email
   description = "The PubSub writer service account email. Should be used to write data to the PubSub topics the ingestion pipeline reads from."
+  value       = module.data_ingestion.pubsub_writer_service_account_email
 }
 
 output "data_ingest_bucket_names" {
-  value       = module.data_ingestion.data_ingest_bucket_names
   description = "The name list of the buckets created for data ingest pipeline."
+  value       = module.data_ingestion.data_ingest_bucket_names
 }
 
 output "data_ingest_topic_name" {
-  value       = module.data_ingestion.data_ingest_topic_name
   description = "The topic created for data ingest pipeline."
+  value       = module.data_ingestion.data_ingest_topic_name
 }
 
 output "data_ingest_bigquery_dataset" {
-  value       = module.data_ingestion.data_ingest_bigquery_dataset
   description = "The bigquery dataset created for data ingest pipeline."
+  value       = module.data_ingestion.data_ingest_bigquery_dataset
 }
 
 output "network_name" {
-  value       = module.data_ingestion.network_name
   description = "The name of the VPC being created"
+  value       = module.data_ingestion.network_name
 }
 
 output "network_self_link" {
-  value       = module.data_ingestion.network_self_link
   description = "The URI of the VPC being created"
+  value       = module.data_ingestion.network_self_link
 }
 
 output "subnets_names" {
-  value       = module.data_ingestion.subnets_names
   description = "The names of the subnets being created"
+  value       = module.data_ingestion.subnets_names
 }
 
 output "subnets_ips" {
-  value       = module.data_ingestion.subnets_ips
   description = "The IPs and CIDRs of the subnets being created"
+  value       = module.data_ingestion.subnets_ips
 }
 
 output "subnets_self_links" {
-  value       = module.data_ingestion.subnets_self_links
   description = "The self-links of subnets being created"
+  value       = module.data_ingestion.subnets_self_links
 }
 
 output "access_level_name" {
-  value       = module.data_ingestion.access_level_name
   description = "Access context manager access level name "
+  value       = module.data_ingestion.access_level_name
 }
 
 output "service_perimeter_name" {
-  value       = module.data_ingestion.service_perimeter_name
   description = "Access context manager service perimeter name "
+  value       = module.data_ingestion.service_perimeter_name
 }
 
 output "cmek_keyring_full_name" {
-  value       = module.data_ingestion.cmek_keyring_full_name
   description = "The Keyring full name for the KMS Customer Managed Encryption Keys."
+  value       = module.data_ingestion.cmek_keyring_full_name
 }
 
 output "cmek_keyring_name" {
-  value       = module.data_ingestion.cmek_keyring_name
   description = "The Keyring name for the KMS Customer Managed Encryption Keys."
+  value       = module.data_ingestion.cmek_keyring_name
 }
 
 output "cmek_ingestion_crypto_key" {
-  value       = module.data_ingestion.cmek_ingestion_crypto_key
   description = "The Customer Managed Crypto Key for the Ingestion crypto boundary."
+  value       = module.data_ingestion.cmek_ingestion_crypto_key
 }
 
 output "cmek_bigquery_crypto_key" {
-  value       = module.data_ingestion.cmek_bigquery_crypto_key
   description = "The Customer Managed Crypto Key for the BigQuery service."
+  value       = module.data_ingestion.cmek_bigquery_crypto_key
 }
