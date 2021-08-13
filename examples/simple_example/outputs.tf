@@ -79,11 +79,6 @@ output "service_perimeter_name" {
   description = "Access context manager service perimeter name "
 }
 
-output "project_number" {
-  value       = module.secured_data_warehouse.project_number
-  description = "Project number included on perimeter"
-}
-
 output "cmek_keyring_full_name" {
   value       = module.secured_data_warehouse.cmek_keyring_full_name
   description = "The Keyring full name for the KMS Customer Managed Encryption Keys."

@@ -28,7 +28,6 @@ This example illustrates how to use the `secured-data-warehouse` module.
 | dataflow\_controller\_service\_account\_email | The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account |
 | network\_name | The name of the VPC being created |
 | network\_self\_link | The URI of the VPC being created |
-| project\_number | Project number included on perimeter |
 | pubsub\_writer\_service\_account\_email | The PubSub writer service account email. Should be used to write data to the PubSub topics the ingestion pipeline reads from. |
 | service\_perimeter\_name | Access context manager service perimeter name |
 | storage\_writer\_service\_account\_email | The Storage writer service account email. Should be used to write data to the buckets the ingestion pipeline reads from. |
