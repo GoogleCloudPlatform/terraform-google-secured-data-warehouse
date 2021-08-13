@@ -50,9 +50,9 @@ tar -C ./artifact_registry_rep/  -czf "./artifact_registry_rep/apache-beam-${apa
 # Remove temp apache beam dir and zip file
 rm -rf "./artifact_registry_rep/apache-beam-${apache_beam_version}.zip" "./artifact_registry_rep/apache-beam-${apache_beam_version}"
 
-# this cannot be a direct upload of the whole ./artifact_registry_rep/ because Artifact Registry does not support the
+# This step cannot be a direct upload of the whole ./artifact_registry_rep/ because Artifact Registry does not support the
 # twine command line option --skip-existing to continue uploading files if one already exists.
-# If a file already exist the upload fails, so we need the '|| true' to continua with the upload.
+# If a file already exists the upload fails, so we need the '|| true' to continue with the upload.
 for python_module in "./artifact_registry_rep"/*
 do
   twine upload --repository-url "${python_repository_url}" "$python_module" || true
