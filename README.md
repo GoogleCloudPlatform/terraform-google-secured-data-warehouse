@@ -24,16 +24,16 @@ module "secured_data_warehouse" {
   source  = "terraform-google-modules/secured-data-warehouse/google"
   version = "~> 0.1"
 
-  org_id = <org_id>
-  project_id = <project_id>
+  org_id = ORG_ID
+  project_id = PROJECT_ID
   region = "us-central1"
-  terraform_service_account = <terraform_service_account>
-  vpc_name = <vpc_name>
+  terraform_service_account = TERRAFORM_SERVICE_ACCOUNT
+  vpc_name = VPC_NAME
   subnet_ip = "10.0.32.0/21"
-  access_context_manager_policy_id = <access_context_manager_policy_id>
-  bucket_name = <bucket_name>
-  dataset_id = <dataset_id>
-  cmek_keyring_name = <cmek_keyring_name>
+  access_context_manager_policy_id = ACCESS_CONTEXT_MANAGER_POLICY_ID
+  bucket_name = DATA_INGESTION_BUCKET_NAME
+  dataset_id = DATASET_ID
+  cmek_keyring_name = CMEK_KEYRING_NAME
 }
 ```
 
