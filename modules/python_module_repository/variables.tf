@@ -26,14 +26,8 @@ variable "terraform_service_account" {
 
 variable "create_repository" {
   type        = bool
-  description = "If the repository should be created."
+  description = "When `true`, an Artifact Registry Python repository with the ID declared in `repository_id` will be created in the project declared in `project_id`. Set to `false` to reuse an existing Artifact Registry Python repository."
   default     = true
-}
-
-variable "location" {
-  description = "The location of Artifact registry. Run `gcloud artifacts locations list` to list available locations."
-  type        = string
-  default     = "us-central1"
 }
 
 variable "repository_id" {
@@ -46,6 +40,12 @@ variable "repository_description" {
   type        = string
   description = "Description of the Python modules repository."
   default     = "Repository for Python modules for Dataflow flex templates"
+}
+
+variable "location" {
+  description = "The location of Artifact Registry. Run `gcloud artifacts locations list` to list available locations."
+  type        = string
+  default     = "us-central1"
 }
 
 variable "read_access_members" {

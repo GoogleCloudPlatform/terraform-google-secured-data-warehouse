@@ -24,16 +24,10 @@ variable "terraform_service_account" {
   type        = string
 }
 
-variable "create_flex_repository" {
+variable "create_repository" {
   type        = bool
-  description = "If the flex template repository should be created."
+  description = "When `true`, an Artifact Registry Docker repository with the ID declared in `repository_id` will be created in the project declared in `project_id`. Set to `false` to reuse an existing Artifact Registry Docker repository."
   default     = true
-}
-
-variable "location" {
-  description = "The location of Artifact registry. Run `gcloud artifacts locations list` to list available locations."
-  type        = string
-  default     = "us-central1"
 }
 
 variable "repository_id" {
@@ -46,6 +40,12 @@ variable "repository_description" {
   type        = string
   description = "Description of the flex template repository."
   default     = "Repository for Dataflow flex templates"
+}
+
+variable "location" {
+  description = "The location of Artifact registry. Run `gcloud artifacts locations list` to list available locations."
+  type        = string
+  default     = "us-central1"
 }
 
 variable "image_name" {

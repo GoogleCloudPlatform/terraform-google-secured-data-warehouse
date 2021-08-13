@@ -113,7 +113,7 @@ resource "google_project_iam_member" "cloud_build_builder" {
 }
 
 
-resource "local_file" "requirements_file" {
+resource "local_file" "requirements_txt" {
   content  = file(var.requirements_filename)
   filename = "${path.module}/requirements.txt"
 }

@@ -26,7 +26,7 @@
 
 locals {
   flex_template_image_tag = "${var.location}-docker.pkg.dev/${var.project_id}/${var.repository_id}/${var.image_name}:${var.image_tag}"
-  template_gs_path        = "${module.templates.bucket.url}/dataflow/flex_templates/${var.image_name}.json"
+  template_gs_path        = "${module.templates_bucket.bucket.url}/dataflow/flex_templates/${var.image_name}.json"
   metadata_file_md5       = filemd5(var.template_files.metadata_file)
   requirements_file_md5   = filemd5(var.template_files.requirements_file)
   code_file_md5           = filemd5(var.template_files.code_file)
@@ -57,9 +57,9 @@ data "google_project" "cloudbuild_project" {
   project_id = var.project_id
 }
 
-resource "google_artifact_registry_repository" "flex_repository" {
+resource "google_artifact_registry_repository" "flex_templates" {
   provider = google-beta
-  count    = var.create_flex_repository ? 1 : 0
+  count    = var.create_repository ? 1 : 0
 
   project       = var.project_id
   location      = var.location
@@ -84,7 +84,7 @@ resource "google_artifact_registry_repository_iam_member" "reader" {
 
   depends_on = [
     null_resource.module_depends_on,
-    google_artifact_registry_repository.flex_repository
+    google_artifact_registry_repository.flex_templates
   ]
 }
 
@@ -99,7 +99,7 @@ resource "google_artifact_registry_repository_iam_member" "writer" {
 
   depends_on = [
     null_resource.module_depends_on,
-    google_artifact_registry_repository.flex_repository
+    google_artifact_registry_repository.flex_templates
   ]
 }
 
@@ -110,7 +110,7 @@ resource "google_project_iam_member" "cloud_build_builder" {
 }
 
 
-module "cloud_build_logs" {
+module "cloud_build_logs_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 2.1.0"
 
@@ -126,11 +126,11 @@ module "cloud_build_logs" {
 
   depends_on = [
     null_resource.module_depends_on,
-    google_artifact_registry_repository.flex_repository
+    google_artifact_registry_repository.flex_templates
   ]
 }
 
-module "templates" {
+module "templates_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 2.1.0"
 
@@ -149,7 +149,7 @@ module "templates" {
   ]
 }
 
-resource "local_file" "docker_file" {
+resource "local_file" "dockerfile" {
   content = templatefile(
     "${path.module}/templates/Dockerfile.tpl", {
       python_modules_private_repo = var.python_modules_private_repo
@@ -158,17 +158,17 @@ resource "local_file" "docker_file" {
   filename = "${path.module}/Dockerfile"
 }
 
-resource "local_file" "requirements_file" {
+resource "local_file" "requirements_txt" {
   content  = file(var.template_files.requirements_file)
   filename = "${path.module}/requirements.txt"
 }
 
-resource "local_file" "code_file" {
+resource "local_file" "python_code" {
   content  = file(var.template_files.code_file)
   filename = "${path.module}/flex_main.py"
 }
 
-resource "local_file" "metadata_file" {
+resource "local_file" "metadata_json" {
   content  = file(var.template_files.metadata_file)
   filename = "${path.module}/metadata.json"
 }
@@ -189,12 +189,12 @@ module "build_container_image" {
     builds submit \
     --tag="${local.flex_template_image_tag}" ${path.module} \
     --project=${var.project_id} \
-    --gcs-log-dir=${module.cloud_build_logs.bucket.url}/build-logs \
+    --gcs-log-dir=${module.cloud_build_logs_bucket.bucket.url}/build-logs \
     --impersonate-service-account=${var.terraform_service_account}
 EOF
 
   module_depends_on = [
-    module.cloud_build_logs
+    module.cloud_build_logs_bucket
   ]
 
 }

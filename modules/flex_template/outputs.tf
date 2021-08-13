@@ -26,10 +26,10 @@ output "flex_template_gs_path" {
 
 output "cloud_build_logs_bucket_name" {
   description = "The name of the bucket created to store the Cloud Build logs."
-  value       = module.cloud_build_logs.bucket.name
+  value       = module.cloud_build_logs_bucket.bucket.name
 }
 
 output "templates_bucket_name" {
   description = "The name of the bucket created to store the flex template."
-  value       = module.templates.bucket.name
+  value       = module.templates_bucket.bucket.name
 }
