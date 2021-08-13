@@ -18,28 +18,36 @@ set -e
 
 apache_beam_version=$1
 python_repository_url=$2
+python_version=$3
+implementation=$4
+application_binary_interface=$5
+platform=$6
 
 echo "apache_beam_version=${apache_beam_version}"
 echo "python_repository_url=${python_repository_url}"
+echo "python_version=${python_version}"
+echo "implementation=${implementation}"
+echo "application_binary_interface=${application_binary_interface}"
+echo "platform=${platform}"
 
+# Install dependencies
 apt install unzip
-
 pip3 install --no-cache-dir twine keyrings.google-artifactregistry-auth
 
+# Create temp dir for the Python modules
 mkdir -p artifact_registry_rep
 
+# Download Python modules
 pip3 download --dest=./artifact_registry_rep -r ./requirements.txt --no-deps --no-binary=:all:
-
 pip3 download --dest=./artifact_registry_rep apache-beam=="${apache_beam_version}" --no-deps --no-binary=:all:
-
-pip3 download --dest=./artifact_registry_rep apache-beam=="${apache_beam_version}" --no-deps --only-binary=:all: --python-version=37 --implementation=cp --abi=cp37m --platform=manylinux1_x86_64
+pip3 download --dest=./artifact_registry_rep apache-beam=="${apache_beam_version}" --no-deps --only-binary=:all: --python-version="${python_version}" --implementation="${implementation}" --abi="${application_binary_interface}" --platform="${platform}"
 
 # This 'unzip' and 'tar -czf' steps are necessary because Artifact Registry does not support .zip files, only .tar.gz files
 # and Apache Beam sources are released as .zip files.
 unzip -q "./artifact_registry_rep/apache-beam-${apache_beam_version}.zip"  -d ./artifact_registry_rep
-
 tar -C ./artifact_registry_rep/  -czf "./artifact_registry_rep/apache-beam-${apache_beam_version}.tar.gz" "apache-beam-${apache_beam_version}"
 
+# Remove temp apache beam dir and zip file
 rm -rf "./artifact_registry_rep/apache-beam-${apache_beam_version}.zip" "./artifact_registry_rep/apache-beam-${apache_beam_version}"
 
 # this cannot be a direct upload of the whole ./artifact_registry_rep/ because Artifact Registry does not support the
