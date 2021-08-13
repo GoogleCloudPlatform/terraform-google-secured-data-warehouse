@@ -38,28 +38,25 @@ def run(argv=None, save_main_session=True):
         '--bq_schema',
         required=True,
         help=(
-            'Output BigQuery table schema specified as: '
-            'member:TYPE, group:TYPE'))
+            'Output BigQuery table schema specified as string with format: '
+            'FIELD_1:STRING,FIELD_2:STRING,...'))
     parser.add_argument(
         '--dlp_project',
         required=True,
         help=(
-            'ID of the project that holds the DLP template'))
+            'ID of the project that holds the DLP template.'))
     parser.add_argument(
         '--dlp_location',
         required=False,
         help=(
-            'Location that holds the DLP template '))
+            'The Location of the DLP template resource.'))
     parser.add_argument(
         '--deidentification_template_name',
         required=True,
         help=(
-            'ID of the project that holds the DLP template'))
-    parser.add_argument(
-        '--inspection_template_name',
-        required=False,
-        help=(
-            'ID of the project that holds the DLP template'))
+            'Name of the DLP Structured De-identification Template '
+            'of the form "projects/<PROJECT>/locations/<LOCATION>'
+            '/deidentifyTemplates/<TEMPLATE_ID>"'))
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument(
         '--input_topic',
@@ -113,14 +110,13 @@ def run(argv=None, save_main_session=True):
 
         de_identified_messages = (
             messages
-            | 'convert  dict to table item' >>
+            | 'convert dict to table item' >>
             beam.Map(from_dict_to_table)
             | 'Call DLP de-identification' >>
             MaskDetectedDetails(
                 project=known_args.dlp_project,
                 location=known_args.dlp_location,
-                template_name=known_args.deidentification_template_name,
-                inspection_template_name=known_args.inspection_template_name
+                template_name=known_args.deidentification_template_name
             )
             | 'convert table item to dict' >>
             beam.Map(from_table_to_dict)
@@ -141,6 +137,13 @@ def normalize_data(data):
 
 
 def from_dict_to_table(item):
+    """
+    Converts a Python dict object to a DLP API v2 ContentItem of type Table
+    with a single row.
+    See:
+     - https://cloud.google.com/dlp/docs/reference/rest/v2/ContentItem#Table
+     - https://cloud.google.com/dlp/docs/inspecting-structured-text
+    """
     headers = []
     rows = []
     rows.append({"values": []})
@@ -152,6 +155,13 @@ def from_dict_to_table(item):
 
 
 def from_table_to_dict(table_item):
+    """
+    Converts a DLP API v2 ContentItem of type Table with a single row
+    to a Python dict object.
+    See:
+     - https://cloud.google.com/dlp/docs/reference/rest/v2/ContentItem#Table
+     - https://cloud.google.com/dlp/docs/inspecting-structured-text
+    """
     new_dict = {}
     row_zero = None
     for index, val in enumerate(table_item.table.headers):
@@ -169,8 +179,6 @@ class MaskDetectedDetails(PTransform):
             location="global",
             template_name=None,
             deidentification_config=None,
-            inspection_template_name=None,
-            inspection_config=None,
             timeout=None):
 
         self.config = {}

@@ -5,7 +5,7 @@
     {
       "name": "input_subscription",
       "label": "Input PubSub subscription.",
-      "helpText": "Name of the input PubSub subscription to consume from. Format is 'projects/<PROJECT>/subscriptions/<SUBSCRIPTION>.'",
+      "helpText": "Name of the input PubSub subscription to consume from. Format is 'projects/<PROJECT>/subscriptions/<SUBSCRIPTION>'. If provided, input_topic must be empty.",
       "isOptional": true,
       "regexes": [
         "projects/[^/]+/subscriptions/[a-zA-Z][-_.~+%a-zA-Z0-9]{2,}"
@@ -14,27 +14,24 @@
     {
       "name": "input_topic",
       "label": "Input PubSub Topic.",
-      "helpText": "Name of the input PubSub Topic to consume from. Format is 'projects/<PROJECT>/topics/<TOPIC>'",
+      "helpText": "Name of the input PubSub Topic to consume from. Format is 'projects/<PROJECT>/topics/<TOPIC>'. If provided, input_subscription must be empty. A temporary subscription will be created from the specified topic.",
       "isOptional": true,
       "regexes": [
         "projects/[^/]+/topics/[a-zA-Z][-_.~+%a-zA-Z0-9]{2,}"
       ]
     },
     {
-      "name": "inspection_template_name",
-      "label": "Inspection Template Name.",
-      "isOptional": true,
-      "helpText": "Name of the inspection template"
-    },
-    {
       "name": "deidentification_template_name",
-      "label": "De-identification Template Name.",
-      "helpText": "Name of the De-identification Template ."
+      "label": "DLP Structured De-identification Template Name.",
+      "helpText": "Name of the DLP Structured De-identification Template. Format is 'projects/<PROJECT>/locations/<LOCATION>/deidentifyTemplates/<TEMPLATE_ID>'",
+      "regexes": [
+        "projects/[^/]+/locations/[^/]+/deidentifyTemplates/[-_a-zA-Z0-9]+"
+      ]
     },
     {
       "name": "dlp_location",
       "label": "DLP Location.",
-      "helpText": "The Location of the DLP resources."
+      "helpText": "The Location of the DLP template resource."
     },
     {
       "name": "dlp_project",
@@ -44,7 +41,7 @@
     {
       "name": "bq_schema",
       "label": "BigQuery table schema.",
-      "helpText": "Output BigQuery table schema specified as a string"
+      "helpText": "Output BigQuery table schema specified as string with format: FIELD_1:STRING,FIELD_2:STRING,..."
     },
     {
       "name": "output_table",
