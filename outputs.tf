@@ -85,11 +85,6 @@ output "subnets_self_links" {
   description = "The self-links of subnets being created"
 }
 
-output "subnets_regions" {
-  value       = module.data_ingestion.subnets_regions
-  description = "The region where the subnets will be created"
-}
-
 output "access_level_name" {
   value       = module.data_ingestion.access_level_name
   description = "Access context manager access level name "
@@ -123,19 +118,4 @@ output "cmek_ingestion_crypto_key" {
 output "cmek_bigquery_crypto_key" {
   value       = module.data_ingestion.cmek_bigquery_crypto_key
   description = "The Customer Managed Crypto Key for the BigQuery service."
-}
-
-output "default_storage_sa" {
-  value       = module.data_ingestion.default_storage_sa
-  description = "The default Storage service account granted encrypt/decrypt permission on the KMS key."
-}
-
-output "default_pubsub_sa" {
-  value       = module.data_ingestion.default_pubsub_sa
-  description = "The default Pub/Sub service account granted encrypt/decrypt permission on the KMS key."
-}
-
-output "default_bigquery_sa" {
-  value       = module.data_ingestion.default_bigquery_sa
-  description = "The default Bigquery service account granted encrypt/decrypt permission on the KMS key."
 }

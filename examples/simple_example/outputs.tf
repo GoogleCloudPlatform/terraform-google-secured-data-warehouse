@@ -69,11 +69,6 @@ output "subnets_self_links" {
   description = "The self-links of subnets being created"
 }
 
-output "subnets_regions" {
-  value       = module.secured_data_warehouse.subnets_regions
-  description = "The region where the subnets will be created"
-}
-
 output "access_level_name" {
   value       = module.secured_data_warehouse.access_level_name
   description = "Access context manager access level name "
@@ -107,19 +102,4 @@ output "cmek_ingestion_crypto_key" {
 output "cmek_bigquery_crypto_key" {
   value       = module.secured_data_warehouse.cmek_bigquery_crypto_key
   description = "The Customer Managed Crypto Key for the BigQuery service."
-}
-
-output "default_storage_sa" {
-  value       = module.secured_data_warehouse.default_storage_sa
-  description = "The default Storage service account granted encrypt/decrypt permission on the KMS key."
-}
-
-output "default_pubsub_sa" {
-  value       = module.secured_data_warehouse.default_pubsub_sa
-  description = "The default Pub/Sub service account granted encrypt/decrypt permission on the KMS key."
-}
-
-output "default_bigquery_sa" {
-  value       = module.secured_data_warehouse.default_bigquery_sa
-  description = "The default Bigquery service account granted encrypt/decrypt permission on the KMS key."
 }
