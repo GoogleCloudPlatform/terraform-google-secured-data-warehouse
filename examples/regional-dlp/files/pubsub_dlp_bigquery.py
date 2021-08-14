@@ -62,7 +62,9 @@ def run(argv=None, save_main_session=True):
         '--input_topic',
         help=(
             'Input PubSub topic of the form '
-            '"projects/<PROJECT>/topics/<TOPIC>".'))
+            '"projects/<PROJECT>/topics/<TOPIC>".'
+            'A temporary subscription will be created from '
+            'the specified topic.'))
     group.add_argument(
         '--input_subscription',
         help=(
@@ -79,6 +81,10 @@ def run(argv=None, save_main_session=True):
     with beam.Pipeline(options=options) as p:
 
         # Read from PubSub into a PCollection.
+        # If input_subscription provided, it will be used.
+        # If input_subscription not provided, input_topic will be used.
+        # If input_topic provided, a temporary subscription will be created
+        # from the specified topic.
         if known_args.input_subscription:
             messages = (
                 p
@@ -131,6 +137,13 @@ def run(argv=None, save_main_session=True):
 
 
 def normalize_data(data):
+    """
+    The template reads from PubSub a json that can be a singel object
+    or a List of objects. This function used by a FlatMap transformation
+    normalize teh input in to individual objects.
+    See:
+     - https://beam.apache.org/documentation/transforms/python/elementwise/flatmap/
+    """  # noqa
     if isinstance(data, list):
         return data
     return [data]
