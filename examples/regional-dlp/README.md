@@ -1,27 +1,11 @@
-# Regional Python Flex Template
+# Regional Structured DLP Python Flex Template
 
 This example illustrates how to run a Flex Python Dataflow job. It uses:
 
 - The `base-data-ingestion` submodule to create the basic ingestion infrastructure,
-- The `de_identification_template` submodule to create the DLP template,
-- The `flex_template` submodule to build a fllex Python template,
+- The `de_identification_template` submodule to create the regional structured DLP template,
+- The `flex_template` submodule to build a regional structured DLP flex Python template,
 - The `python_module_repository` submodule to host a private Python Module repository
-
-## VirtualEnv
-
-We recommend running this example inside of a [Python virtual environment](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/) to avoid installing extra packages in your Python default environment.
-
-After installing virtual env by following the link above, create a new Python environment by running:
-
-```sh
-python3 -m venv /tmp/python_flex_template
-```
-
-Finally, activate it:
-
-```sh
-source /tmp/python_flex_template/bin/activate
-```
 
 ## Prerequisites
 
@@ -35,9 +19,6 @@ source /tmp/python_flex_template/bin/activate
 - [Terraform](https://www.terraform.io/downloads.html) 0.13.x
 - [terraform-provider-google](https://registry.terraform.io/providers/hashicorp/google/latest/docs/guides/provider_versions#google) plugin ~> v3.77.x
 - [terraform-provider-google beta](https://registry.terraform.io/providers/hashicorp/google/latest/docs/guides/provider_versions#google-beta) plugin ~> v3.77.x
-- [Python] ~> 3.7
-- [unzip]
-- [tar]
 
 ### Configured GCP project
 
