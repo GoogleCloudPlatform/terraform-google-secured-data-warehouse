@@ -19,6 +19,16 @@ output "project_id" {
   value       = var.project_id
 }
 
+output "df_job_network" {
+  value       = module.data_ingestion.network_self_link
+  description = "The URI of the VPC being created"
+}
+
+output "df_job_subnetwork" {
+  description = "The name of the subnetwork used for create Dataflow job."
+  value       = module.dataflow_with_dlp.subnets_self_links[0]
+}
+
 output "df_job_state" {
   description = "The state of the newly created Dataflow job"
   value       = module.dataflow_job.state
