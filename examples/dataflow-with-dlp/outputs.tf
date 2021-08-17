@@ -26,7 +26,7 @@ output "df_job_network" {
 
 output "df_job_subnetwork" {
   description = "The name of the subnetwork used for create Dataflow job."
-  value       = module.dataflow_with_dlp.subnets_self_links[0]
+  value       = module.data_ingestion.subnets_self_links[0]
 }
 
 output "df_job_state" {

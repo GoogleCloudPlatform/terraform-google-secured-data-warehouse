@@ -41,6 +41,7 @@ This example illustrates how to run a Dataflow job that uses the `de_identificat
 | controller\_service\_account | The Service Account email that will be used to identify the VMs in which the jobs are running |
 | df\_job\_id | The unique Id of the newly created Dataflow job |
 | df\_job\_name | The name of the newly created Dataflow job |
+| df\_job\_network | The URI of the VPC being created |
 | df\_job\_region | The region of the newly created Dataflow job. |
 | df\_job\_state | The state of the newly created Dataflow job |
 | df\_job\_subnetwork | The name of the subnetwork used for create Dataflow job. |
