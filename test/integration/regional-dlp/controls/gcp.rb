@@ -17,8 +17,6 @@ dataflow_bucket_name = attribute('dataflow_bucket_name')
 cloud_build_logs_bucket_name = attribute('cloud_build_logs_bucket_name')
 templates_bucket_name = attribute('templates_bucket_name')
 
-# listar todo os bucketes criados, vão ter que ser output
-
 control 'gcp' do
   title 'GCP Resources'
 
