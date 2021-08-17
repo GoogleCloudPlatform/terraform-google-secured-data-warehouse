@@ -109,27 +109,6 @@ resource "google_project_iam_member" "cloud_build_builder" {
   member  = "serviceAccount:${data.google_project.cloudbuild_project.number}@cloudbuild.gserviceaccount.com"
 }
 
-
-module "cloud_build_logs_bucket" {
-  source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
-  version = "~> 2.1.0"
-
-  project_id         = var.project_id
-  location           = var.location
-  name               = "bkt-${var.location}-${var.project_id}-cb-logs-${random_id.suffix.hex}"
-  bucket_policy_only = true
-  force_destroy      = true
-
-  encryption = {
-    default_kms_key_name = var.kms_key_name
-  }
-
-  depends_on = [
-    null_resource.module_depends_on,
-    google_artifact_registry_repository.flex_templates
-  ]
-}
-
 module "templates_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 2.1.0"
@@ -186,15 +165,14 @@ module "build_container_image" {
 
   create_cmd_entrypoint = "gcloud"
   create_cmd_body       = <<EOF
-    builds submit \
-    --tag="${local.flex_template_image_tag}" ${path.module} \
-    --project=${var.project_id} \
-    --gcs-log-dir=${module.cloud_build_logs_bucket.bucket.url}/build-logs \
+    builds submit --project=${var.project_id} \
+    --config ${path.module}/cloudbuild.yaml ${path.module} \
+    --substitutions=_FLEX_TEMPLATE_IMAGE_TAG=${local.flex_template_image_tag} \
     --impersonate-service-account=${var.terraform_service_account}
 EOF
 
   module_depends_on = [
-    module.cloud_build_logs_bucket
+    google_artifact_registry_repository_iam_member.writer
   ]
 
 }

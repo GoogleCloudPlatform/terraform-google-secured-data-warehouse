@@ -12,19 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-project_id = attribute('project_id')
-dataflow_bucket_name = attribute('dataflow_bucket_name')
-templates_bucket_name = attribute('templates_bucket_name')
-
-control 'gcp' do
-  title 'GCP Resources'
-
-  describe google_storage_bucket(name: dataflow_bucket_name) do
-    it { should exist }
-  end
-
-  describe google_storage_bucket(name: templates_bucket_name) do
-    it { should exist }
-  end
-
-end
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: [ 'build', '-t', '${_FLEX_TEMPLATE_IMAGE_TAG}', '.' ]
+images:
+- '${_FLEX_TEMPLATE_IMAGE_TAG}'
+substitutions:
+  _FLEX_TEMPLATE_IMAGE_TAG: 'us-central1-docker.pkg.dev/PROJECT_ID/flex-templates/regional_dlp_flex:0.1.0' # default value
+options:
+  logging: CLOUD_LOGGING_ONLY

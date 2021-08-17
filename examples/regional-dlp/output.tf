@@ -20,11 +20,6 @@ output "dataflow_bucket_name" {
   value       = module.dataflow_bucket.bucket.name
 }
 
-output "cloud_build_logs_bucket_name" {
-  description = "The name of the bucket created to store the Cloud Build logs."
-  value       = module.flex_dlp_template.cloud_build_logs_bucket_name
-}
-
 output "templates_bucket_name" {
   description = "The name of the bucket created to store the flex template."
   value       = module.flex_dlp_template.templates_bucket_name

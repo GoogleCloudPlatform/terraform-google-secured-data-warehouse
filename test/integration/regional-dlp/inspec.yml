@@ -30,9 +30,6 @@ attributes:
   - name: dataflow_bucket_name
     required: true
     type: string
-  - name: cloud_build_logs_bucket_name
-    required: true
-    type: string
   - name: templates_bucket_name
     required: true
     type: string
