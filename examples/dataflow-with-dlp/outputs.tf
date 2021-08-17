@@ -21,27 +21,37 @@ output "project_id" {
 
 output "df_job_state" {
   description = "The state of the newly created Dataflow job"
-  value       = module.dataflow-job.state
+  value       = module.dataflow_job.state
 }
 
 output "df_job_id" {
   description = "The unique Id of the newly created Dataflow job"
-  value       = module.dataflow-job.id
+  value       = module.dataflow_job.id
 }
 
 output "df_job_name" {
   description = "The name of the newly created Dataflow job"
-  value       = module.dataflow-job.name
+  value       = module.dataflow_job.name
+}
+
+output "df_job_region" {
+  description = "The region of the newly created Dataflow job."
+  value       = module.dataflow_job.name
 }
 
 output "controller_service_account" {
   description = "The Service Account email that will be used to identify the VMs in which the jobs are running"
-  value       = var.dataflow_service_account
+  value       = module.data_ingestion.dataflow_controller_service_account_email
 }
 
-output "bucket_name" {
+output "bucket_tmp_name" {
   description = "The name of the bucket"
-  value       = module.dataflow-bucket.bucket.name
+  value       = module.dataflow_tmp_bucket.bucket.name
+}
+
+output "bucket_ingestion_name" {
+  description = "The name of the bucket"
+  value       = module.data_ingestion.data_ingest_bucket_names[0]
 }
 
 output "dlp_location" {
