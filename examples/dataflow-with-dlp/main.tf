@@ -87,6 +87,7 @@ resource "null_resource" "download_sample_cc_into_gcs" {
 EOF
 
   }
+  depends_on = [time_sleep.wait_90_seconds_for_vpc_sc_propagation]
 }
 
 module "de_identification_template" {
@@ -99,6 +100,7 @@ module "de_identification_template" {
   dlp_location              = var.dlp_location
   template_file             = "${path.module}/deidentification.tmpl"
   dataflow_service_account  = module.data_ingestion.dataflow_controller_service_account_email
+  depends_on = [time_sleep.wait_90_seconds_for_vpc_sc_propagation]
 }
 
 module "dataflow_job" {
@@ -125,4 +127,5 @@ module "dataflow_job" {
     dlpProjectId           = var.project_id
     deidentifyTemplateName = "projects/${var.project_id}/locations/${var.dlp_location}/deidentifyTemplates/${module.de_identification_template.template_id}"
   }
+  depends_on = [time_sleep.wait_90_seconds_for_vpc_sc_propagation]
 }
