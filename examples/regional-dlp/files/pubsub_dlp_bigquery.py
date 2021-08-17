@@ -138,9 +138,9 @@ def run(argv=None, save_main_session=True):
 
 def normalize_data(data):
     """
-    The template reads from PubSub a json that can be a singel object
-    or a List of objects. This function used by a FlatMap transformation
-    normalize teh input in to individual objects.
+    The template reads a json from PubSub that can be a single object
+    or a List of objects. This function is used by a FlatMap transformation
+    to normalize the input in to individual objects.
     See:
      - https://beam.apache.org/documentation/transforms/python/elementwise/flatmap/
     """  # noqa
