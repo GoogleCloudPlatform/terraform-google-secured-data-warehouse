@@ -14,21 +14,19 @@
  * limitations under the License.
  */
 
-provider "google" {
-  version = "~> 3.67"
-}
 
-module "secured_data_warehouse" {
-  source                           = "../.."
+module "simple_example" {
+  source                           = "../../..//examples/simple_example"
   org_id                           = var.org_id
-  data_governance_project_id       = var.data_governance_project_id
+  data_governance_project_id       = var.project_id
   project_id                       = var.project_id
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
   region                           = var.region
-  bucket_name                      = "bucket_simple_exemple"
-  dataset_id                       = "dataset_simple_exemple"
-  vpc_name                         = "vpc-simple-exemple"
-  cmek_keyring_name                = "key_name_simple_exemple"
-  subnet_ip                        = "10.0.32.0/21"
+}
+
+resource "time_sleep" "wait_90_seconds_for_vpc_sc_propagation" {
+  depends_on = [module.simple_example]
+
+  create_duration = "90s"
 }
