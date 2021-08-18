@@ -109,6 +109,10 @@ module "de_identification_template_example" {
   dlp_location              = var.location
   template_file             = "${path.module}/templates/deidentification.tpl"
 
+  depends_on = [
+    google_project_service.apis_to_enable
+  ]
+
 }
 
 module "flex_dlp_template" {
@@ -131,7 +135,7 @@ module "flex_dlp_template" {
   }
 
   module_depends_on = [
-    time_sleep.wait_for_vpc_sc_propagation
+    google_project_service.apis_to_enable
   ]
 
 }
@@ -147,7 +151,7 @@ module "python_module_repository" {
   read_access_members       = ["serviceAccount:${module.data_ingestion.dataflow_controller_service_account_email}"]
 
   module_depends_on = [
-    time_sleep.wait_for_vpc_sc_propagation
+    google_project_service.apis_to_enable
   ]
 }
 
@@ -166,7 +170,7 @@ module "dataflow_bucket" {
   }
 
   depends_on = [
-    time_sleep.wait_for_vpc_sc_propagation
+    google_project_service.apis_to_enable
   ]
 }
 
@@ -193,7 +197,6 @@ resource "google_dataflow_flex_template_job" "regional_dlp" {
   }
 
   depends_on = [
-    time_sleep.wait_for_vpc_sc_propagation,
     module.de_identification_template_example,
     module.flex_dlp_template,
     module.python_module_repository
