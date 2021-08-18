@@ -24,6 +24,7 @@ module "simple_example" {
   access_context_manager_policy_id = var.access_context_manager_policy_id
 }
 
+//workaround due to propagation issues
 resource "time_sleep" "wait_90_seconds_for_vpc_sc_propagation" {
   depends_on = [module.simple_example]
 
