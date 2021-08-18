@@ -61,33 +61,33 @@ output "data_ingest_bigquery_dataset" {
 }
 
 output "network_name" {
-  value       = module.simple_example.network_name
   description = "The name of the VPC being created."
+  value       = module.simple_example.network_name
 }
 
 output "network_self_link" {
-  value       = module.simple_example.network_self_link
   description = "The URI of the VPC being created."
+  value       = module.simple_example.network_self_link
 }
 
 output "subnets_names" {
-  value       = module.simple_example.subnets_names
   description = "The names of the subnets being created."
+  value       = module.simple_example.subnets_names
 }
 
 output "subnets_ips" {
-  value       = module.simple_example.subnets_ips
   description = "The IPs and CIDRs of the subnets being created."
+  value       = module.simple_example.subnets_ips
 }
 
 output "access_level_name" {
-  value       = module.simple_example.access_level_name
   description = "Access context manager access level name."
+  value       = module.simple_example.access_level_name
 }
 
 output "service_perimeter_name" {
-  value       = module.simple_example.service_perimeter_name
   description = "Access context manager service perimeter name."
+  value       = module.simple_example.service_perimeter_name
 }
 
 output "cmek_location" {
