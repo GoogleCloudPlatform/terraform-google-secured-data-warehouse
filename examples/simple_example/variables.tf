@@ -20,7 +20,7 @@ variable "org_id" {
 }
 
 variable "region" {
-  description = "The region for the resources"
+  description = "The region for the resources."
   type        = string
   default     = "us-central1"
 }
