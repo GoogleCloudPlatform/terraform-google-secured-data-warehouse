@@ -20,7 +20,7 @@ service_perimeter_name = attribute('service_perimeter_name')
 service_perimeter_title = service_perimeter_name.split('/')[-1]
 access_level_name = attribute('access_level_name')
 organization_policy_name = attribute('organization_policy_name')
-cmek_location = attribute('cmek_location')
+cmek_location = 'us-central1'
 cmek_keyring_name = attribute('cmek_keyring_name')
 
 restricted_googleapis_cidr = '199.36.153.4/30'

@@ -22,7 +22,6 @@ module "simple_example" {
   project_id                       = var.project_id
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  region                           = var.region
 }
 
 resource "time_sleep" "wait_90_seconds_for_vpc_sc_propagation" {

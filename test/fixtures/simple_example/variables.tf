@@ -19,12 +19,6 @@ variable "org_id" {
   type        = string
 }
 
-variable "region" {
-  description = "The region for the resources."
-  type        = string
-  default     = "us-central1"
-}
-
 variable "terraform_service_account" {
   description = "The email address of the service account that will run the Terraform code."
   type        = string

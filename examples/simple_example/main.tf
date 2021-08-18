@@ -25,7 +25,6 @@ module "secured_data_warehouse" {
   project_id                       = var.project_id
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  region                           = var.region
   bucket_name                      = "bucket_simple_exemple"
   dataset_id                       = "dataset_simple_exemple"
   vpc_name                         = "vpc-simple-exemple"

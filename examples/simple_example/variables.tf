@@ -19,12 +19,6 @@ variable "org_id" {
   type        = string
 }
 
-variable "region" {
-  description = "The region for the resources."
-  type        = string
-  default     = "us-central1"
-}
-
 variable "data_governance_project_id" {
   description = "The ID of the project in which the data governance resources will be created."
   type        = string

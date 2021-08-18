@@ -90,11 +90,6 @@ output "service_perimeter_name" {
   value       = module.simple_example.service_perimeter_name
 }
 
-output "cmek_location" {
-  description = "The location for the KMS Customer Managed Encryption Keys."
-  value       = var.region
-}
-
 output "cmek_keyring_name" {
   description = "The Keyring name for the KMS Customer Managed Encryption Keys."
   value       = module.simple_example.cmek_keyring_name
