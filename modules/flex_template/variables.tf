@@ -81,12 +81,6 @@ variable "read_access_members" {
   default     = []
 }
 
-variable "module_depends_on" {
-  description = "List of modules or resources this module depends on."
-  type        = list
-  default     = []
-}
-
 variable "kms_key_name" {
   description = "ID of a Cloud KMS key that will be used for encryption."
   type        = string

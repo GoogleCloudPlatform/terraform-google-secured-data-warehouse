@@ -54,14 +54,6 @@ resource "google_project_service_identity" "cloudbuild_sa" {
  * When issue #82 is fixed and the workaround removed, this can also be removed.
  */
 
-resource "null_resource" "module_depends_on" {
-  count = length(var.module_depends_on) > 0 ? 1 : 0
-
-  triggers = {
-    value = length(var.module_depends_on)
-  }
-}
-
 resource "google_artifact_registry_repository" "python_modules" {
   provider = google-beta
   count    = var.create_repository ? 1 : 0
@@ -72,9 +64,6 @@ resource "google_artifact_registry_repository" "python_modules" {
   description   = var.repository_description
   format        = "PYTHON"
 
-  depends_on = [
-    null_resource.module_depends_on
-  ]
 }
 
 resource "google_artifact_registry_repository_iam_member" "reader" {
@@ -88,7 +77,6 @@ resource "google_artifact_registry_repository_iam_member" "reader" {
   member     = var.read_access_members[count.index]
 
   depends_on = [
-    null_resource.module_depends_on,
     google_artifact_registry_repository.python_modules
   ]
 }
@@ -103,7 +91,6 @@ resource "google_artifact_registry_repository_iam_member" "writer" {
   member     = "serviceAccount:${google_project_service_identity.cloudbuild_sa.email}"
 
   depends_on = [
-    null_resource.module_depends_on,
     google_artifact_registry_repository.python_modules
   ]
 }

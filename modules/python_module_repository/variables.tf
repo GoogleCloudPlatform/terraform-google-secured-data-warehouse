@@ -58,9 +58,3 @@ variable "requirements_filename" {
   type        = string
   description = "The requirements.txt file to fetch Python modules."
 }
-
-variable "module_depends_on" {
-  description = "List of modules or resources this module depends on."
-  type        = list
-  default     = []
-}

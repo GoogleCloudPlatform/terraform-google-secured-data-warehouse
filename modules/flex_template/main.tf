@@ -41,14 +41,6 @@ locals {
  * When issue #82 is fixed and the workaround removed, this can also be removed.
  */
 
-resource "null_resource" "module_depends_on" {
-  count = length(var.module_depends_on) > 0 ? 1 : 0
-
-  triggers = {
-    value = length(var.module_depends_on)
-  }
-}
-
 resource "random_id" "suffix" {
   byte_length = 2
 }
@@ -70,9 +62,6 @@ resource "google_artifact_registry_repository" "flex_templates" {
   description   = var.repository_description
   format        = "DOCKER"
 
-  depends_on = [
-    null_resource.module_depends_on
-  ]
 }
 
 resource "google_artifact_registry_repository_iam_member" "reader" {
@@ -86,7 +75,6 @@ resource "google_artifact_registry_repository_iam_member" "reader" {
   member     = var.read_access_members[count.index]
 
   depends_on = [
-    null_resource.module_depends_on,
     google_artifact_registry_repository.flex_templates
   ]
 }
@@ -101,7 +89,6 @@ resource "google_artifact_registry_repository_iam_member" "writer" {
   member     = "serviceAccount:${google_project_service_identity.cloudbuild_sa.email}"
 
   depends_on = [
-    null_resource.module_depends_on,
     google_artifact_registry_repository.flex_templates
   ]
 }
@@ -126,9 +113,6 @@ module "templates_bucket" {
     default_kms_key_name = var.kms_key_name
   }
 
-  depends_on = [
-    null_resource.module_depends_on
-  ]
 }
 
 resource "local_file" "dockerfile" {
