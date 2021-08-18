@@ -53,8 +53,11 @@ resource "random_id" "suffix" {
   byte_length = 2
 }
 
-data "google_project" "cloudbuild_project" {
-  project_id = var.project_id
+resource "google_project_service_identity" "cloudbuild_sa" {
+  provider = google-beta
+
+  project = var.project_id
+  service = "cloudbuild.googleapis.com"
 }
 
 resource "google_artifact_registry_repository" "flex_templates" {
@@ -95,7 +98,7 @@ resource "google_artifact_registry_repository_iam_member" "writer" {
   location   = var.location
   repository = var.repository_id
   role       = "roles/artifactregistry.writer"
-  member     = "serviceAccount:${data.google_project.cloudbuild_project.number}@cloudbuild.gserviceaccount.com"
+  member     = "serviceAccount:${google_project_service_identity.cloudbuild_sa.email}"
 
   depends_on = [
     null_resource.module_depends_on,
@@ -106,7 +109,7 @@ resource "google_artifact_registry_repository_iam_member" "writer" {
 resource "google_project_iam_member" "cloud_build_builder" {
   project = var.project_id
   role    = "roles/cloudbuild.builds.builder"
-  member  = "serviceAccount:${data.google_project.cloudbuild_project.number}@cloudbuild.gserviceaccount.com"
+  member  = "serviceAccount:${google_project_service_identity.cloudbuild_sa.email}"
 }
 
 module "templates_bucket" {
