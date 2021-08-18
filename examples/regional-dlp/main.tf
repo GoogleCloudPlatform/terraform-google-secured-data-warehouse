@@ -123,10 +123,6 @@ module "flex_dlp_template" {
     requirements_file = "${path.module}/files/requirements.txt"
   }
 
-  module_depends_on = [
-    google_project_service.apis_to_enable
-  ]
-
 }
 
 module "python_module_repository" {
@@ -139,9 +135,6 @@ module "python_module_repository" {
   requirements_filename     = "${path.module}/files/requirements.txt"
   read_access_members       = ["serviceAccount:${module.data_ingestion.dataflow_controller_service_account_email}"]
 
-  module_depends_on = [
-    google_project_service.apis_to_enable
-  ]
 }
 
 module "dataflow_bucket" {
@@ -158,9 +151,6 @@ module "dataflow_bucket" {
     default_kms_key_name = module.data_ingestion.cmek_ingestion_crypto_key
   }
 
-  depends_on = [
-    google_project_service.apis_to_enable
-  ]
 }
 
 resource "google_dataflow_flex_template_job" "regional_dlp" {
