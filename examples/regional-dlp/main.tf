@@ -90,14 +90,6 @@ module "data_ingestion" {
   ]
 }
 
-resource "time_sleep" "wait_for_vpc_sc_propagation" {
-  create_duration = "120s"
-
-  depends_on = [
-    module.data_ingestion
-  ]
-}
-
 module "de_identification_template_example" {
   source = "../..//modules/de_identification_template"
 
