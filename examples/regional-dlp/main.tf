@@ -52,8 +52,9 @@ resource "random_id" "suffix" {
 resource "google_project_service" "apis_to_enable" {
   for_each = toset(local.apis_to_enable)
 
-  project = var.project_id
-  service = each.key
+  project            = var.project_id
+  service            = each.key
+  disable_on_destroy = false
 }
 
 resource "google_project_service_identity" "cloudbuild_sa" {
