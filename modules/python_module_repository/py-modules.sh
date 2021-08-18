@@ -23,12 +23,16 @@ implementation=$4
 application_binary_interface=$5
 platform=$6
 
-echo "apache_beam_version=${apache_beam_version}"
-echo "python_repository_url=${python_repository_url}"
-echo "python_version=${python_version}"
-echo "implementation=${implementation}"
-echo "application_binary_interface=${application_binary_interface}"
-echo "platform=${platform}"
+if [ "$#" -lt 6 ]; then
+    >&2 echo "Not all expected arguments set."
+    echo "apache_beam_version=${apache_beam_version}"
+    echo "python_repository_url=${python_repository_url}"
+    echo "python_version=${python_version}"
+    echo "implementation=${implementation}"
+    echo "application_binary_interface=${application_binary_interface}"
+    echo "platform=${platform}"
+    exit 1
+fi
 
 # Install dependencies
 apt install unzip
