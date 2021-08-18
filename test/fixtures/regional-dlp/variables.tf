@@ -33,9 +33,3 @@ variable "access_context_manager_policy_id" {
   type        = number
   description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
 }
-
-
-
-
-
-
