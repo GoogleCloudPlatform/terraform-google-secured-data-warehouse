@@ -20,14 +20,14 @@ variable "org_id" {
 }
 
 variable "region" {
+  description = "The region for the resources."
   type        = string
-  description = "The region for the resources;"
   default     = "us-central1"
 }
 
 variable "location" {
-  type        = string
   description = "The location for the KMS Customer Managed Encryption Keys, Bucket, and Bigquery dataset. This location can be a multiregion, if it is empty the region value will be used."
+  type        = string
   default     = ""
 }
 
@@ -47,18 +47,18 @@ variable "data_governance_project_id" {
 }
 
 variable "vpc_name" {
-  type        = string
   description = "The name of the network."
+  type        = string
 }
 
 variable "subnet_ip" {
-  type        = string
   description = "The CDIR IP range of the subnetwork."
+  type        = string
 }
 
 variable "access_context_manager_policy_id" {
-  type        = number
   description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
+  type        = number
 }
 
 variable "perimeter_additional_members" {
@@ -79,11 +79,11 @@ variable "bucket_class" {
 }
 
 variable "bucket_lifecycle_rules" {
+  description = "List of lifecycle rules to configure. Format is the same as described in provider documentation https://www.terraform.io/docs/providers/google/r/storage_bucket.html#lifecycle_rule except condition.matches_storage_class should be a comma delimited string."
   type = set(object({
     action    = map(string)
     condition = map(string)
   }))
-  description = "List of lifecycle rules to configure. Format is the same as described in provider documentation https://www.terraform.io/docs/providers/google/r/storage_bucket.html#lifecycle_rule except condition.matches_storage_class should be a comma delimited string."
   default = [{
     action = {
       type = "Delete"
