@@ -101,10 +101,6 @@ module "de_identification_template_example" {
   dlp_location              = var.location
   template_file             = "${path.module}/templates/deidentification.tpl"
 
-  depends_on = [
-    google_project_service.apis_to_enable
-  ]
-
 }
 
 module "flex_dlp_template" {
