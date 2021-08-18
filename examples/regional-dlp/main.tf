@@ -1,4 +1,3 @@
-
 /**
  * Copyright 2021 Google LLC
  *
@@ -26,10 +25,35 @@ locals {
       var.perimeter_additional_members
     )
   )
+
+  apis_to_enable = [
+    "cloudresourcemanager.googleapis.com",
+    "compute.googleapis.com",
+    "storage-api.googleapis.com",
+    "serviceusage.googleapis.com",
+    "dns.googleapis.com",
+    "iam.googleapis.com",
+    "pubsub.googleapis.com",
+    "bigquery.googleapis.com",
+    "accesscontextmanager.googleapis.com",
+    "dlp.googleapis.com",
+    "cloudkms.googleapis.com",
+    "cloudbilling.googleapis.com",
+    "artifactregistry.googleapis.com",
+    "cloudbuild.googleapis.com",
+    "dataflow.googleapis.com"
+  ]
 }
 
 resource "random_id" "suffix" {
   byte_length = 4
+}
+
+resource "google_project_service" "apis_to_enable" {
+  for_each = toset(local.apis_to_enable)
+
+  project = var.project_id
+  service = each.key
 }
 
 resource "google_project_service_identity" "cloudbuild_sa" {
@@ -37,6 +61,10 @@ resource "google_project_service_identity" "cloudbuild_sa" {
 
   project = var.project_id
   service = "cloudbuild.googleapis.com"
+
+  depends_on = [
+    google_project_service.apis_to_enable
+  ]
 }
 
 module "data_ingestion" {
@@ -56,6 +84,10 @@ module "data_ingestion" {
   bucket_location                  = var.location
   cmek_location                    = var.location
   cmek_keyring_name                = "dlp_flex_ingest"
+
+  depends_on = [
+    google_project_service.apis_to_enable
+  ]
 }
 
 resource "time_sleep" "wait_for_vpc_sc_propagation" {
