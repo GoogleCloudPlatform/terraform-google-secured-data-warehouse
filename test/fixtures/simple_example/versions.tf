@@ -14,23 +14,6 @@
  * limitations under the License.
  */
 
-variable "project_id" {
-  description = "The project id for the secured data warehouse."
-  type        = string
-}
-
-variable "region" {
-  description = "The region in which the subnetwork resides."
-  type        = string
-}
-
-variable "trusted_subnetwork" {
-  description = "Subnetwork name that eligible resources can use."
-  type        = string
-}
-
-variable "trusted_locations" {
-  description = "This is a list of trusted regions where location-based GCP resources can be created. ie us-locations eu-locations"
-  type        = list(string)
-  default     = ["us-locations", "eu-locations"]
+terraform {
+  required_version = ">= 0.13"
 }

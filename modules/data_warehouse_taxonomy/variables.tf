@@ -39,8 +39,8 @@ variable "private_access_members" {
 }
 
 variable "project_roles" {
-  type        = list(string)
   description = "Common roles to apply to all service accounts in the project."
+  type        = list(string)
   default     = []
 }
 

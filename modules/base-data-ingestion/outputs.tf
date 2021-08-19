@@ -45,68 +45,68 @@ output "data_ingest_bigquery_dataset" {
 }
 
 output "network_name" {
-  value       = module.dwh_networking.network_name
   description = "The name of the VPC being created"
+  value       = module.dwh_networking.network_name
 }
 
 output "network_self_link" {
-  value       = module.dwh_networking.network_self_link
   description = "The URI of the VPC being created"
+  value       = module.dwh_networking.network_self_link
 }
 
 output "subnets_names" {
-  value       = module.dwh_networking.subnets_names
   description = "The names of the subnets being created"
+  value       = module.dwh_networking.subnets_names
 }
 
 output "subnets_ips" {
-  value       = module.dwh_networking.subnets_ips
   description = "The IPs and CIDRs of the subnets being created"
+  value       = module.dwh_networking.subnets_ips
 }
 
 output "subnets_self_links" {
-  value       = module.dwh_networking.subnets_self_links
   description = "The self-links of subnets being created"
+  value       = module.dwh_networking.subnets_self_links
 }
 
 output "subnets_regions" {
-  value       = module.dwh_networking.subnets_regions
   description = "The region where the subnets will be created"
+  value       = module.dwh_networking.subnets_regions
 }
 
 output "access_level_name" {
-  value       = module.dwh_networking.access_level_name
   description = "Access context manager access level name "
+  value       = module.dwh_networking.access_level_name
 }
 
 output "service_perimeter_name" {
-  value       = module.dwh_networking.service_perimeter_name
   description = "Access context manager service perimeter name "
+  value       = module.dwh_networking.service_perimeter_name
 }
 
 output "project_number" {
-  value       = module.dwh_networking.project_number
   description = "Project number included on perimeter"
+  value       = module.dwh_networking.project_number
 }
 
 output "cmek_keyring_full_name" {
-  value       = module.cmek.keyring
   description = "The Keyring full name for the KMS Customer Managed Encryption Keys."
+  value       = module.cmek.keyring
 }
 
 output "cmek_keyring_name" {
-  value       = module.cmek.keyring_name
   description = "The Keyring name for the KMS Customer Managed Encryption Keys."
+  value       = module.cmek.keyring_name
 }
 
 output "cmek_ingestion_crypto_key" {
-  value       = module.cmek.keys[local.ingestion_key_name]
   description = "The Customer Managed Crypto Key for the Ingestion crypto boundary."
+  value       = module.cmek.keys[local.ingestion_key_name]
 }
 
 output "cmek_bigquery_crypto_key" {
-  value       = module.cmek.keys[local.bigquery_key_name]
   description = "The Customer Managed Crypto Key for the BigQuery service."
+  value       = module.cmek.keys[local.bigquery_key_name]
 }
 
 output "default_storage_sa" {

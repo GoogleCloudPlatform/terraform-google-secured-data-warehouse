@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-variable "project_id" {
-  description = "The project id for the secured data warehouse."
-  type        = string
+
+module "simple_example" {
+  source                           = "../../..//examples/simple_example"
+  org_id                           = var.org_id
+  data_governance_project_id       = var.project_id
+  project_id                       = var.project_id
+  terraform_service_account        = var.terraform_service_account
+  access_context_manager_policy_id = var.access_context_manager_policy_id
 }
 
-variable "region" {
-  description = "The region in which the subnetwork resides."
-  type        = string
-}
+//workaround due to propagation issues
+resource "time_sleep" "wait_90_seconds_for_vpc_sc_propagation" {
+  depends_on = [module.simple_example]
 
-variable "trusted_subnetwork" {
-  description = "Subnetwork name that eligible resources can use."
-  type        = string
-}
-
-variable "trusted_locations" {
-  description = "This is a list of trusted regions where location-based GCP resources can be created. ie us-locations eu-locations"
-  type        = list(string)
-  default     = ["us-locations", "eu-locations"]
+  create_duration = "90s"
 }
