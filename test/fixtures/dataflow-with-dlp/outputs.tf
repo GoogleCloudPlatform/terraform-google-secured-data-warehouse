@@ -16,8 +16,8 @@
 
 
 output "project_id" {
-  value       = var.project_id
   description = "The project's ID."
+  value       = var.project_id
 }
 
 output "df_job_state" {

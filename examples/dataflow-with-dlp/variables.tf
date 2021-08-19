@@ -25,18 +25,18 @@ variable "terraform_service_account" {
 }
 
 variable "dataflow_service_account" {
-  type        = string
   description = "The Service Account email that will be used to identify the VMs in which the jobs are running"
+  type        = string
 }
 
 variable "subnetwork_self_link" {
-  type        = string
   description = "The subnetwork self link to which VMs will be assigned."
+  type        = string
 }
 
 variable "network_self_link" {
-  type        = string
   description = "The network self link to which VMs will be assigned."
+  type        = string
 }
 
 variable "crypto_key" {
