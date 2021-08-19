@@ -22,51 +22,6 @@ This example illustrates how to run a Flex Python Dataflow job. It uses:
 
 ### Configured GCP project
 
-#### Required APIs
-
-The existing project must have the following APIs enabled:
-
-- Access Context Manager API: `accesscontextmanager.googleapis.com`
-- Bigquery API: `bigquery.googleapis.com`
-- Cloud Billing API: `cloudbilling.googleapis.com`
-- Cloud DNS API: `dns.googleapis.com`
-- Cloud Pub/Sub API: `pubsub.googleapis.com`
-- Cloud Resource Manager API: `cloudresourcemanager.googleapis.com`
-- Cloud Storage API: `storage-api.googleapis.com`
-- Identity and Access Management (IAM) API: `iam.googleapis.com`
-- Service Usage API: `serviceusage.googleapis.com`
-- Cloud Data Loss Prevention (DLP) API: `dlp.googleapis.com`
-- Cloud Key Management Service (KMS) API: `cloudkms.googleapis.com`
-- Artifact Registry API: `artifactregistry.googleapis.com`
-- Cloud Build API: `cloudbuild.googleapis.com`
-- Compute Engine API: `compute.googleapis.com`
-- Google Cloud Dataflow API: `dataflow.googleapis.com`
-
-You can use the following command to enable all the APIs, just replace the <project-id> placeholder
-with your project id:
-
-```bash
-export project_id=<project-id>
-
-gcloud services enable \
-cloudresourcemanager.googleapis.com \
-compute.googleapis.com \
-storage-api.googleapis.com \
-serviceusage.googleapis.com \
-dns.googleapis.com \
-iam.googleapis.com \
-pubsub.googleapis.com \
-bigquery.googleapis.com \
-accesscontextmanager.googleapis.com \
-dlp.googleapis.com \
-cloudkms.googleapis.com \
-cloudbilling.googleapis.com \
-artifactregistry.googleapis.com \
-cloudbuild.googleapis.com \
-dataflow.googleapis.com \
---project ${project_id}
-```
-
 ### GCP user account
 
 A user to run this code impersonating a service account with the following IAM roles:
