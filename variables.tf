@@ -81,8 +81,8 @@ variable "bucket_class" {
 variable "bucket_lifecycle_rules" {
   description = "List of lifecycle rules to configure. Format is the same as described in provider documentation https://www.terraform.io/docs/providers/google/r/storage_bucket.html#lifecycle_rule except condition.matches_storage_class should be a comma delimited string."
   type = set(object({
-    action    = map(string)
-    condition = map(string)
+    action    = any
+    condition = any
   }))
   default = [{
     action = {
@@ -91,6 +91,7 @@ variable "bucket_lifecycle_rules" {
     condition = {
       age        = 30
       with_state = "ANY"
+      matches_storage_class = ["STANDARD"]
     }
   }]
 }
