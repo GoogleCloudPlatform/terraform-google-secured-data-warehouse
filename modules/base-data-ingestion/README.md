@@ -200,7 +200,7 @@ If your user does not have the necessary roles to run the commands above you can
 | dataset\_location | The regional location for the dataset only US and EU are allowed in module | `string` | `"US"` | no |
 | dataset\_name | Friendly name for the dataset being provisioned. | `string` | `"Ingest dataset"` | no |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
-| perimeter\_additional\_members | The list additional members to be added on perimeter access. Prefix of group: user: or serviceAccount: is required. | `list(string)` | `[]` | no |
+| perimeter\_members | The list of all members to be added on perimeter access. Prefix of group, user, or serviceAccount: is required. | `list(string)` | n/a | yes |
 | project\_id | The ID of the project in which the service account will be created. | `string` | n/a | yes |
 | region | The region in which subnetwork will be created and Pub/Sub message will be stored. | `string` | `"us-central1"` | no |
 | subnet\_ip | The CDIR IP range of the subnetwork. | `string` | n/a | yes |

@@ -24,11 +24,6 @@ variable "project_id" {
   type        = string
 }
 
-variable "terraform_service_account" {
-  description = "The email address of the service account that will run the Terraform code."
-  type        = string
-}
-
 variable "commom_suffix" {
   type        = string
   description = "A commom suffix to be used in the module."
@@ -50,10 +45,9 @@ variable "subnet_ip" {
   description = "The CDIR IP range of the subnetwork."
 }
 
-variable "perimeter_additional_members" {
-  description = "The list of additional members to be added on perimeter access. Prefix of group: user: or serviceAccount: is required."
+variable "perimeter_members" {
+  description = "The list of all members to be added on perimeter access. Prefix of group, user, or serviceAccount: is required."
   type        = list(string)
-  default     = []
 }
 
 variable "restricted_services" {
@@ -78,26 +72,3 @@ variable "access_level_regions" {
   default     = []
 }
 
-variable "access_level_require_screen_lock" {
-  description = "Condition - Whether or not screenlock is required for the DevicePolicy to be true."
-  type        = bool
-  default     = true
-}
-
-variable "access_level_require_corp_owned" {
-  description = "Condition - Whether the device needs to be company owned."
-  type        = bool
-  default     = true
-}
-
-variable "access_level_allowed_encryption_statuses" {
-  description = "Condition - A list of allowed encryption statuses. An empty list allows all statuses. For more information, see https://cloud.google.com/access-context-manager/docs/reference/rest/Shared.Types/DeviceEncryptionStatus."
-  type        = list(string)
-  default     = ["ENCRYPTED"]
-}
-
-variable "organization_has_mdm_license" {
-  description = "Whether the organization has an MDM license (see https://cloud.google.com/access-context-manager/docs/use-mobile-devices). Will allow require_screen_lock, require_corp_owned and allowed_encryption_statuses to be used on policy access level."
-  type        = bool
-  default     = false
-}
