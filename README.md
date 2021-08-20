@@ -54,7 +54,7 @@ module "secured_data_warehouse" {
 | dataset\_name | Friendly name for the dataset being provisioned. | `string` | `"Ingest dataset"` | no |
 | location | The location for the KMS Customer Managed Encryption Keys, Bucket, and Bigquery dataset. This location can be a multiregion, if it is empty the region value will be used. | `string` | `""` | no |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
-| perimeter\_additional\_members | The list additional members to be added on perimeter access. Prefix of group: user: or serviceAccount: is required. | `list(string)` | `[]` | no |
+| perimeter\_additional\_members | The list additional members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | `[]` | no |
 | project\_id | The ID of the project in which the service account will be created. | `string` | n/a | yes |
 | region | The region for the resources. | `string` | `"us-central1"` | no |
 | subnet\_ip | The CDIR IP range of the subnetwork. | `string` | n/a | yes |
