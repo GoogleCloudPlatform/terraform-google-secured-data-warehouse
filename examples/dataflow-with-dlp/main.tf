@@ -100,7 +100,7 @@ module "de_identification_template" {
   dlp_location              = var.dlp_location
   template_file             = "${path.module}/deidentification.tmpl"
   dataflow_service_account  = module.data_ingestion.dataflow_controller_service_account_email
-  depends_on = [time_sleep.wait_90_seconds_for_vpc_sc_propagation]
+  depends_on                = [time_sleep.wait_90_seconds_for_vpc_sc_propagation]
 }
 
 module "dataflow_job" {

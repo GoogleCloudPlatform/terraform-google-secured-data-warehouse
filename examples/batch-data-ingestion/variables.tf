@@ -58,8 +58,8 @@ variable "subnetwork_self_link" {
 }
 
 variable "network_self_link" {
-  type        = string
   description = "The network self link to which VMs will be assigned."
+  type        = string
 }
 
 variable "crypto_key" {

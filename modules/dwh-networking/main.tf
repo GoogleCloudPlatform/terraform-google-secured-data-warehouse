@@ -70,3 +70,12 @@ module "regular_service_perimeter" {
     module.access_level_policy.name
   ]
 }
+
+resource "time_sleep" "wait_for_vpc_sc_propagation" {
+  create_duration = "120s"
+
+  depends_on = [
+    module.access_level_policy,
+    module.regular_service_perimeter
+  ]
+}

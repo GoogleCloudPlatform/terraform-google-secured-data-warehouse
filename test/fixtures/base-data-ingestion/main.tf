@@ -32,6 +32,7 @@ module "data_ingestion" {
   cmek_keyring_name                = "${var.cmek_keyring_name}"
 }
 
+//workaround due to propagation issues
 resource "time_sleep" "wait_90_seconds_for_vpc_sc_propagation" {
   depends_on = [module.data_ingestion]
 
