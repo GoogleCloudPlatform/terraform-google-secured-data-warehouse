@@ -1,48 +1,27 @@
-# Data Ingestion pipeline module
+# Regional Structured DLP Python Flex Template
+
+This example illustrates how to run a Flex Python Dataflow job. It uses:
+
+- The `base-data-ingestion` submodule to create the basic ingestion infrastructure,
+- The `de_identification_template` submodule to create the regional structured DLP template,
+- The `flex_template` submodule to build a regional structured DLP flex Python template,
+- The `python_module_repository` submodule to host a private Python Module repository
+
+## Prerequisites
+
+1. A `crypto_key` and `wrapped_key` pair.  Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location used for the `location` variable.
+1. An Existing GCP Project
 
 ## Requirements
 
 ### Terraform plugins
 
 - [Terraform](https://www.terraform.io/downloads.html) 0.13.x
-- [terraform-provider-google](https://github.com/terraform-providers/terraform-provider-google) plugin ~> v3.30.x
+- [terraform-provider-google](https://registry.terraform.io/providers/hashicorp/google/latest/docs/guides/provider_versions#google) plugin ~> v3.77.x
+- [terraform-provider-google beta](https://registry.terraform.io/providers/hashicorp/google/latest/docs/guides/provider_versions#google-beta) plugin ~> v3.77.x
 
 ### Configured GCP project
 
-#### Required APIs
-
-The existing project must have the following APIs enabled:
-
-- Access Context Manager API: `accesscontextmanager.googleapis.com`
-- Bigquery API: `bigquery.googleapis.com`
-- Cloud Billing API: `cloudbilling.googleapis.com`
-- Cloud DNS API: `dns.googleapis.com`
-- Cloud Pub/Sub API: `pubsub.googleapis.com`
-- Cloud Resource Manager API: `cloudresourcemanager.googleapis.com`
-- Cloud Storage API: `storage-api.googleapis.com`
-- Identity and Access Management (IAM) API: `iam.googleapis.com`
-- Service Usage API: `serviceusage.googleapis.com`
-- Cloud Data Loss Prevention (DLP) API: `dlp.googleapis.com`
-- Cloud Key Management Service (KMS) API: `cloudkms.googleapis.com`
-
-You can use the following command to enable all the APIs, just replace the <project-id> placeholder
-with your project id:
-
-```bash
-export project_id=<project-id>
-
-gcloud services enable \
-cloudresourcemanager.googleapis.com \
-storage-api.googleapis.com \
-serviceusage.googleapis.com \
-dns.googleapis.com \
-iam.googleapis.com \
-pubsub.googleapis.com \
-bigquery.googleapis.com \
-accesscontextmanager.googleapis.com \
-cloudbilling.googleapis.com \
---project ${project_id}
-```
 ### GCP user account
 
 A user to run this code impersonating a service account with the following IAM roles:
@@ -80,9 +59,15 @@ The Service Account which will be used to invoke this module must have the follo
   - Delete Service Accounts: `roles/iam.serviceAccountDeleter`
   - Service Accounts Token Creator: `roles/iam.serviceAccountTokenCreator`
   - Security Reviewer: `roles/iam.securityReviewer`
-  - Compute Network Admin `roles/compute.networkAdmin`
-  - Compute Security Admin `roles/compute.securityAdmin`
-  - DNS Admin `roles/dns.admin`
+  - Compute Network Admin: `roles/compute.networkAdmin`
+  - Compute Security Admin: `roles/compute.securityAdmin`
+  - DNS Admin: `roles/dns.admin`
+  - Cloud Build Editor: `roles/cloudbuild.builds.editor`
+  - Artifact Registry Administrator: `roles/artifactregistry.admin`
+  - Cloud KMS Admin: `roles/cloudkms.admin`
+  - Dataflow Developer: `roles/dataflow.developer`
+  - DLP User: `roles/dlp.user`
+  - DLP De-identify Templates Editor: `roles/dlp.deidentifyTemplatesEditor`
 - Organization level
   - Billing User: `roles/billing.user`
   - Organization Policy Administrator: `roles/orgpolicy.policyAdmin`
@@ -165,6 +150,30 @@ gcloud projects add-iam-policy-binding ${project_id} \
 gcloud projects add-iam-policy-binding ${project_id} \
 --member="serviceAccount:${sa_email}" \
 --role="roles/browser"
+
+gcloud projects add-iam-policy-binding ${project_id} \
+--member="serviceAccount:${sa_email}" \
+--role="roles/cloudbuild.builds.editor"
+
+gcloud projects add-iam-policy-binding ${project_id} \
+--member="serviceAccount:${sa_email}" \
+--role="roles/artifactregistry.admin"
+
+gcloud projects add-iam-policy-binding ${project_id} \
+--member="serviceAccount:${sa_email}" \
+--role="roles/cloudkms.admin"
+
+gcloud projects add-iam-policy-binding ${project_id} \
+--member="serviceAccount:${sa_email}" \
+--role="roles/dataflow.developer"
+
+gcloud projects add-iam-policy-binding ${project_id} \
+--member="serviceAccount:${sa_email}" \
+--role="roles/dlp.deidentifyTemplatesEditor"
+
+gcloud projects add-iam-policy-binding ${project_id} \
+--member="serviceAccount:${sa_email}" \
+--role="roles/dlp.user"
 ```
 
 #### Set up Access Policy Context Policy
@@ -181,57 +190,27 @@ gcloud access-context-manager policies create \
 **Troubleshooting:**
 If your user does not have the necessary roles to run the commands above you can [impersonate](https://cloud.google.com/iam/docs/impersonating-service-accounts) the terraform service account that will be used in the deploy by appending `--impersonate-service-account=<sa-email>` to the commands to be run.
 
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | access\_context\_manager\_policy\_id | The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format="value(name)"`. | `number` | n/a | yes |
-| bucket\_class | Bucket storage class. | `string` | `"STANDARD"` | no |
-| bucket\_lifecycle\_rules | List of lifecycle rules to configure. Format is the same as described in provider documentation https://www.terraform.io/docs/providers/google/r/storage_bucket.html#lifecycle_rule except condition.matches\_storage\_class should be a comma delimited string. | <pre>set(object({<br>    action    = any<br>    condition = any<br>  }))</pre> | <pre>[<br>  {<br>    "action": {<br>      "type": "Delete"<br>    },<br>    "condition": {<br>      "age": 30,<br>      "matches_storage_class": [<br>        "STANDARD"<br>      ],<br>      "with_state": "ANY"<br>    }<br>  }<br>]</pre> | no |
-| bucket\_location | Bucket location. | `string` | `"US"` | no |
-| bucket\_name | The main part of the name of the bucket to be created. | `string` | n/a | yes |
-| cmek\_keyring\_name | The Keyring name for the KMS Customer Managed Encryption Keys. | `string` | n/a | yes |
-| cmek\_location | The location for the KMS Customer Managed Encryption Keys. | `string` | n/a | yes |
-| data\_governance\_project\_id | The ID of the project in which the data governance resources will be created. | `string` | n/a | yes |
-| dataset\_default\_table\_expiration\_ms | TTL of tables using the dataset in MS. The default value is almost 12 months. | `number` | `31536000000` | no |
-| dataset\_description | Dataset description. | `string` | `"Ingest dataset"` | no |
-| dataset\_id | Unique ID for the dataset being provisioned. | `string` | n/a | yes |
-| dataset\_location | The regional location for the dataset only US and EU are allowed in module | `string` | `"US"` | no |
-| dataset\_name | Friendly name for the dataset being provisioned. | `string` | `"Ingest dataset"` | no |
+| crypto\_key | The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP. | `string` | n/a | yes |
+| location | The location of Artifact registry. Run `gcloud artifacts locations list` to list available locations. | `string` | `"us-central1"` | no |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | perimeter\_additional\_members | The list additional members to be added on perimeter access. Prefix of group: user: or serviceAccount: is required. | `list(string)` | `[]` | no |
-| project\_id | The ID of the project in which the service account will be created. | `string` | n/a | yes |
-| region | The region in which subnetwork will be created and Pub/Sub message will be stored. | `string` | `"us-central1"` | no |
-| subnet\_ip | The CDIR IP range of the subnetwork. | `string` | n/a | yes |
-| terraform\_service\_account | The email address of the service account that will run the Terraform code. | `string` | n/a | yes |
-| vpc\_name | the name of the network. | `string` | n/a | yes |
+| project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
+| terraform\_service\_account | The email address of the service account that will run the Terraform config. | `string` | n/a | yes |
+| wrapped\_key | The base64 encoded data crypto key wrapped by KMS. | `string` | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| access\_level\_name | Access context manager access level name |
-| cmek\_bigquery\_crypto\_key | The Customer Managed Crypto Key for the BigQuery service. |
-| cmek\_ingestion\_crypto\_key | The Customer Managed Crypto Key for the Ingestion crypto boundary. |
-| cmek\_keyring\_full\_name | The Keyring full name for the KMS Customer Managed Encryption Keys. |
-| cmek\_keyring\_name | The Keyring name for the KMS Customer Managed Encryption Keys. |
-| data\_ingest\_bigquery\_dataset | The bigquery dataset created for data ingest pipeline. |
-| data\_ingest\_bucket\_names | The name list of the buckets created for data ingest pipeline. |
-| data\_ingest\_topic\_name | The topic created for data ingest pipeline. |
+| dataflow\_bucket\_name | The name of the bucket created to store Dataflow temporary data. |
 | dataflow\_controller\_service\_account\_email | The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account |
-| default\_bigquery\_sa | The default Bigquery service account granted encrypt/decrypt permission on the KMS key. |
-| default\_pubsub\_sa | The default Pub/Sub service account granted encrypt/decrypt permission on the KMS key. |
-| default\_storage\_sa | The default Storage service account granted encrypt/decrypt permission on the KMS key. |
-| network\_name | The name of the VPC being created |
-| network\_self\_link | The URI of the VPC being created |
-| project\_number | Project number included on perimeter |
-| pubsub\_writer\_service\_account\_email | The PubSub writer service account email. Should be used to write data to the PubSub topics the ingestion pipeline reads from. |
-| service\_perimeter\_name | Access context manager service perimeter name |
-| storage\_writer\_service\_account\_email | The Storage writer service account email. Should be used to write data to the buckets the ingestion pipeline reads from. |
-| subnets\_ips | The IPs and CIDRs of the subnets being created |
-| subnets\_names | The names of the subnets being created |
-| subnets\_regions | The region where the subnets will be created |
-| subnets\_self\_links | The self-links of subnets being created |
+| templates\_bucket\_name | The name of the bucket created to store the flex template. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

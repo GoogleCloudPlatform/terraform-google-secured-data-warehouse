@@ -17,12 +17,14 @@
 locals {
   storage_sa  = data.google_storage_project_service_account.gcs_account.email_address
   pubsub_sa   = google_project_service_identity.pubsub_sa.email
+  dataflow_sa = google_project_service_identity.dataflow_sa.email
+  compute_sa  = "service-${data.google_project.ingestion_project.number}@compute-system.iam.gserviceaccount.com"
   bigquery_sa = data.google_bigquery_default_service_account.bigquery_sa.email
 
   ingestion_key_name = "ingestion_kms_key"
   bigquery_key_name  = "bigquery_kms_key"
 
-  ingestion_key_encrypters_decrypters = "serviceAccount:${local.storage_sa},serviceAccount:${local.pubsub_sa}"
+  ingestion_key_encrypters_decrypters = "serviceAccount:${local.storage_sa},serviceAccount:${local.pubsub_sa},serviceAccount:${local.dataflow_sa},serviceAccount:${local.compute_sa}"
   bigquery_key_encrypters_decrypters  = "serviceAccount:${local.bigquery_sa}"
 
   keys = [
@@ -41,6 +43,10 @@ locals {
   ]
 }
 
+data "google_project" "ingestion_project" {
+  project_id = var.project_id
+}
+
 data "google_storage_project_service_account" "gcs_account" {
   project = var.project_id
 }
@@ -54,6 +60,13 @@ resource "google_project_service_identity" "pubsub_sa" {
 
   project = var.project_id
   service = "pubsub.googleapis.com"
+}
+
+resource "google_project_service_identity" "dataflow_sa" {
+  provider = google-beta
+
+  project = var.project_id
+  service = "dataflow.googleapis.com"
 }
 
 module "cmek" {

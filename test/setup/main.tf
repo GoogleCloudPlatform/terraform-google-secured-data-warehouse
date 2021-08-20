@@ -39,7 +39,10 @@ module "project" {
     "dataflow.googleapis.com",
     "dlp.googleapis.com",
     "cloudscheduler.googleapis.com",
-    "appengine.googleapis.com"
+    "appengine.googleapis.com",
+    "artifactregistry.googleapis.com",
+    "cloudbuild.googleapis.com",
+    "compute.googleapis.com"
   ]
 }
 
