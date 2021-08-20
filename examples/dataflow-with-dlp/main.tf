@@ -54,9 +54,13 @@ module "dataflow_tmp_bucket" {
     "enterprise_data_ingest_bucket" = "true"
   }
 }
-
 resource "random_id" "original_key" {
   byte_length = 16
+}
+
+resource "google_kms_secret_ciphertext" "wrapped_key" {
+  crypto_key = module.data_ingestion.cmek_ingestion_crypto_key
+  plaintext  = random_id.original_key.b64_std
 }
 
 resource "null_resource" "download_sample_cc_into_gcs" {
