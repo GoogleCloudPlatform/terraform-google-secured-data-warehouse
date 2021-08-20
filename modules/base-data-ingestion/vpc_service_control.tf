@@ -49,7 +49,6 @@ module "dwh_networking" {
   depends_on = [
     module.data_ingest_bucket,
     module.bigquery_dataset,
-    module.data_ingest_topic,
-    module.cmek
+    module.data_ingest_topic
   ]
 }
