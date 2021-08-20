@@ -71,43 +71,43 @@ output "data_ingest_bigquery_dataset_id" {
 }
 
 output "network_name" {
-  value       = module.data_ingestion.network_name
   description = "The name of the VPC being created."
+  value       = module.data_ingestion.network_name
 }
 
 output "network_self_link" {
-  value       = module.data_ingestion.network_self_link
   description = "The URI of the VPC being created."
+  value       = module.data_ingestion.network_self_link
 }
 
 output "subnets_names" {
-  value       = module.data_ingestion.subnets_names
   description = "The names of the subnets being created."
+  value       = module.data_ingestion.subnets_names
 }
 
 output "subnets_ips" {
-  value       = module.data_ingestion.subnets_ips
   description = "The IPs and CIDRs of the subnets being created."
+  value       = module.data_ingestion.subnets_ips
 }
 
 output "subnetwork_self_link" {
-  value       = module.data_ingestion.subnets_self_links[0]
   description = "The self-link of subnet being created."
+  value       = module.data_ingestion.subnets_self_links[0]
 }
 
 output "subnets_regions" {
-  value       = module.data_ingestion.subnets_regions
   description = "The region where the subnets will be created."
+  value       = module.data_ingestion.subnets_regions
 }
 
 output "access_level_name" {
-  value       = module.data_ingestion.access_level_name
   description = "Access context manager access level name."
+  value       = module.data_ingestion.access_level_name
 }
 
 output "service_perimeter_name" {
-  value       = module.data_ingestion.service_perimeter_name
   description = "Access context manager service perimeter name."
+  value       = module.data_ingestion.service_perimeter_name
 }
 
 output "perimeter_additional_members" {

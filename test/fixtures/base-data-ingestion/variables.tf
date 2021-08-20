@@ -20,8 +20,8 @@ variable "org_id" {
 }
 
 variable "region" {
-  type        = string
   description = "The region in which the subnetwork will be created."
+  type        = string
   default     = "us-central1"
 }
 
@@ -36,14 +36,14 @@ variable "project_id" {
 }
 
 variable "subnet_ip" {
-  type        = string
   description = "The CDIR IP range of the subnetwork."
+  type        = string
   default     = "10.0.32.0/21"
 }
 
 variable "access_context_manager_policy_id" {
-  type        = number
   description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
+  type        = number
 }
 
 variable "perimeter_additional_members" {

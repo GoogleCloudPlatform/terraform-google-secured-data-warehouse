@@ -20,18 +20,17 @@ resource "random_id" "suffix" {
 
 //storage ingest bucket
 module "data_ingest_bucket" {
-  source  = "terraform-google-modules/cloud-storage/google"
+  source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 2.0"
 
   project_id      = var.project_id
-  prefix          = "bkt-${random_id.suffix.hex}"
-  names           = [var.bucket_name]
+  name            = "bkt-${random_id.suffix.hex}-${var.bucket_name}"
   location        = var.bucket_location
   storage_class   = var.bucket_class
   lifecycle_rules = var.bucket_lifecycle_rules
 
-  encryption_key_names = {
-    (var.bucket_name) = module.cmek.keys[local.ingestion_key_name]
+  encryption = {
+    default_kms_key_name = module.cmek.keys[local.ingestion_key_name]
   }
 
   labels = {

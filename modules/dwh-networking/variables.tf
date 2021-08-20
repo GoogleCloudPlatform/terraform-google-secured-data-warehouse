@@ -25,24 +25,24 @@ variable "project_id" {
 }
 
 variable "commom_suffix" {
-  type        = string
   description = "A commom suffix to be used in the module."
+  type        = string
   default     = ""
 }
 
 variable "region" {
-  type        = string
   description = "The region in which the subnetwork will be created."
+  type        = string
 }
 
 variable "vpc_name" {
-  type        = string
   description = "The name of the network."
+  type        = string
 }
 
 variable "subnet_ip" {
-  type        = string
   description = "The CDIR IP range of the subnetwork."
+  type        = string
 }
 
 variable "perimeter_members" {
@@ -51,13 +51,13 @@ variable "perimeter_members" {
 }
 
 variable "restricted_services" {
-  type        = list(string)
   description = "The list of services to be restricted by VPC Service Controls."
+  type        = list(string)
 }
 
 variable "access_context_manager_policy_id" {
-  type        = number
   description = "The id of the default Access Context Manager policy (see https://cloud.google.com/access-context-manager/docs/overview). Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
+  type        = number
 }
 
 variable "access_level_ip_subnetworks" {

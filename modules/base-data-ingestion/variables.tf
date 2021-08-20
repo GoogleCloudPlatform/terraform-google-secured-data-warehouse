@@ -20,8 +20,8 @@ variable "org_id" {
 }
 
 variable "region" {
-  type        = string
   description = "The region in which subnetwork will be created and Pub/Sub message will be stored."
+  type        = string
   default     = "us-central1"
 }
 
@@ -41,18 +41,18 @@ variable "data_governance_project_id" {
 }
 
 variable "vpc_name" {
-  type        = string
   description = "the name of the network."
+  type        = string
 }
 
 variable "subnet_ip" {
-  type        = string
   description = "The CDIR IP range of the subnetwork."
+  type        = string
 }
 
 variable "access_context_manager_policy_id" {
-  type        = number
   description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
+  type        = number
 }
 
 variable "perimeter_members" {
@@ -78,18 +78,19 @@ variable "bucket_class" {
 }
 
 variable "bucket_lifecycle_rules" {
-  type = set(object({
-    action    = map(string)
-    condition = map(string)
-  }))
   description = "List of lifecycle rules to configure. Format is the same as described in provider documentation https://www.terraform.io/docs/providers/google/r/storage_bucket.html#lifecycle_rule except condition.matches_storage_class should be a comma delimited string."
+  type = set(object({
+    action    = any
+    condition = any
+  }))
   default = [{
     action = {
       type = "Delete"
     }
     condition = {
-      age        = 30
-      with_state = "ANY"
+      age                   = 30
+      with_state            = "ANY"
+      matches_storage_class = ["STANDARD"]
     }
   }]
 }
