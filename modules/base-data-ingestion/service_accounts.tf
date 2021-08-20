@@ -42,10 +42,6 @@ module "storage_writer_service_account" {
   project_id   = var.project_id
   names        = ["sa-storage-writer"]
   display_name = "Cloud Storage data writer service account"
-  project_roles = [
-    "${var.project_id}=>roles/storage.objectViewer",
-    "${var.project_id}=>roles/storage.objectCreator",
-  ]
 }
 
 //service account for Pub/sub
@@ -55,8 +51,4 @@ module "pubsub_writer_service_account" {
   project_id   = var.project_id
   names        = ["sa-pubsub-writer"]
   display_name = "Cloud PubSub data writer service account"
-  project_roles = [
-    "${var.project_id}=>roles/pubsub.publisher",
-    "${var.project_id}=>roles/pubsub.subscriber",
-  ]
 }
