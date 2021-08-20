@@ -33,7 +33,7 @@ module "data_ingestion" {
   perimeter_additional_members     = var.perimeter_additional_members
   subnet_ip                        = var.subnet_ip
   cmek_location                    = var.cmek_location
-  cmek_keyring_name                = "${var.cmek_keyring_name}_test_integration_4"
+  cmek_keyring_name                = var.cmek_keyring_name
 }
 
 resource "random_id" "random_suffix" {
@@ -55,21 +55,8 @@ module "dataflow_tmp_bucket" {
   }
 }
 
-resource "time_sleep" "wait_90_seconds_for_vpc_sc_propagation" {
-  depends_on = [module.data_ingestion]
-
-  create_duration = "90s"
-}
-
 resource "random_id" "original_key" {
   byte_length = 16
-}
-
-resource "google_kms_secret_ciphertext" "wrapped_key" {
-  crypto_key = module.data_ingestion.cmek_ingestion_crypto_key
-  plaintext  = random_id.original_key.b64_std
-
-  depends_on = [time_sleep.wait_90_seconds_for_vpc_sc_propagation]
 }
 
 resource "null_resource" "download_sample_cc_into_gcs" {
@@ -87,7 +74,6 @@ resource "null_resource" "download_sample_cc_into_gcs" {
 EOF
 
   }
-  depends_on = [time_sleep.wait_90_seconds_for_vpc_sc_propagation]
 }
 
 module "de_identification_template" {
@@ -100,7 +86,6 @@ module "de_identification_template" {
   dlp_location              = var.dlp_location
   template_file             = "${path.module}/deidentification.tmpl"
   dataflow_service_account  = module.data_ingestion.dataflow_controller_service_account_email
-  depends_on                = [time_sleep.wait_90_seconds_for_vpc_sc_propagation]
 }
 
 module "dataflow_job" {
@@ -127,5 +112,4 @@ module "dataflow_job" {
     dlpProjectId           = var.project_id
     deidentifyTemplateName = "projects/${var.project_id}/locations/${var.dlp_location}/deidentifyTemplates/${module.de_identification_template.template_id}"
   }
-  depends_on = [time_sleep.wait_90_seconds_for_vpc_sc_propagation]
 }
