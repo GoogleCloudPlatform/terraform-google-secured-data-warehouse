@@ -27,12 +27,14 @@ module "data_ingestion" {
   project_id                       = var.project_id
   data_governance_project_id       = var.project_id
   region                           = local.region
+  bucket_location                  = local.region
+  dataset_location                 = local.region
   terraform_service_account        = var.terraform_service_account
   vpc_name                         = "tst-network"
   access_context_manager_policy_id = var.access_context_manager_policy_id
   perimeter_additional_members     = var.perimeter_additional_members
   subnet_ip                        = "10.0.32.0/21"
-  cmek_location                    = "us"
+  cmek_location                    = local.region
   cmek_keyring_name                = "cmek_keyring"
 }
 
@@ -47,7 +49,7 @@ module "dataflow_tmp_bucket" {
 
   project_id    = var.project_id
   name          = "bkt-${random_id.random_suffix.hex}-tmp-dataflow"
-  location      = "US"
+  location      = local.region
   force_destroy = var.bucket_force_destroy
 
   labels = {
@@ -82,7 +84,7 @@ module "de_identification_template" {
   terraform_service_account = var.terraform_service_account
   crypto_key                = var.crypto_key
   wrapped_key               = var.wrapped_key
-  dlp_location              = "us"
+  dlp_location              = local.region
   template_file             = "${path.module}/deidentification.tmpl"
   dataflow_service_account  = module.data_ingestion.dataflow_controller_service_account_email
 }
@@ -109,6 +111,6 @@ module "dataflow_job" {
     datasetName            = local.dataset_id
     batchSize              = 1000
     dlpProjectId           = var.project_id
-    deidentifyTemplateName = "projects/${var.project_id}/locations/us/deidentifyTemplates/${module.de_identification_template.template_id}"
+    deidentifyTemplateName = "projects/${var.project_id}/locations/${local.region}/deidentifyTemplates/${module.de_identification_template.template_id}"
   }
 }
