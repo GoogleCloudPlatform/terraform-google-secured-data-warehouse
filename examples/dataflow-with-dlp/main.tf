@@ -36,7 +36,7 @@ module "data_ingestion" {
   subnet_ip                        = "10.0.32.0/21"
   cmek_location                    = local.region
   cmek_keyring_name                = "cmek_keyring"
-  force_destroy                    = var.bucket_force_destroy
+  bucket_force_destroy             = var.bucket_force_destroy
 }
 
 resource "random_id" "random_suffix" {
