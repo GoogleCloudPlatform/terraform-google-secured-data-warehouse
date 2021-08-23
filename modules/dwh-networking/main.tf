@@ -43,16 +43,10 @@ module "access_level_policy" {
   name        = local.access_policy_name
   description = "policy with all available options to configure"
 
-  members = distinct(concat([
-    "serviceAccount:${var.terraform_service_account}",
-  ], var.perimeter_additional_members))
+  members = var.perimeter_members
 
   ip_subnetworks = var.access_level_ip_subnetworks
   regions        = var.access_level_regions
-
-  require_screen_lock         = var.organization_has_mdm_license ? var.access_level_require_screen_lock : false
-  allowed_encryption_statuses = var.organization_has_mdm_license ? var.access_level_allowed_encryption_statuses : []
-  require_corp_owned          = var.organization_has_mdm_license ? var.access_level_require_corp_owned : false
 }
 
 module "regular_service_perimeter" {
