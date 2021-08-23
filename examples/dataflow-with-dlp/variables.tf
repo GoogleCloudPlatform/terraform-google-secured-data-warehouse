@@ -50,8 +50,7 @@ variable "bucket_force_destroy" {
   default     = false
 }
 
-variable "perimeter_additional_members" {
-  description = "The list additional members to be added on perimeter access. Prefix of group: user: or serviceAccount: is required."
+variable "perimeter_members" {
+  description = "The list of all members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required."
   type        = list(string)
-  default     = []
 }
