@@ -5,7 +5,7 @@ This example illustrates how to run a Dataflow job that uses the `de_identificat
 ## Prerequisites
 
 1. base-data-ingestion executed successfully.
-2. A `crypto_key` and `wrapped_key` pair.  Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location used for the `dlp_location`.
+2. A `crypto_key` and `wrapped_key` pair.  Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location where DLP, Storage and BigQuery are going to be created (`local.region`).
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
