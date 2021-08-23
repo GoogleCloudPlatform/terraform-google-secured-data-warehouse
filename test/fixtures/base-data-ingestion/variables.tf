@@ -47,7 +47,7 @@ variable "access_context_manager_policy_id" {
 }
 
 variable "perimeter_additional_members" {
-  description = "The list additional members to be added on perimeter access. Prefix of group: user: or serviceAccount: is required."
+  description = "The list additional members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required."
   type        = list(string)
   default     = []
 }

@@ -19,7 +19,7 @@ locals {
     "serviceAccount:${module.dataflow_controller_service_account.email}",
     "serviceAccount:${module.storage_writer_service_account.email}",
     "serviceAccount:${module.pubsub_writer_service_account.email}"
-  ], var.perimeter_additional_members))
+  ], var.perimeter_members))
 }
 
 // vpc service controls network infrastructure
@@ -28,12 +28,11 @@ module "dwh_networking" {
 
   org_id                           = var.org_id
   project_id                       = var.project_id
-  terraform_service_account        = var.terraform_service_account
   region                           = var.region
   vpc_name                         = var.vpc_name
   access_context_manager_policy_id = var.access_context_manager_policy_id
   subnet_ip                        = var.subnet_ip
-  perimeter_additional_members     = local.perimeter_members
+  perimeter_members                = local.perimeter_members
   commom_suffix                    = random_id.suffix.hex
 
   restricted_services = [

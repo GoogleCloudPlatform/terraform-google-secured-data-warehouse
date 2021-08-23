@@ -26,7 +26,7 @@ module "data_ingestion" {
   terraform_service_account        = var.terraform_service_account
   vpc_name                         = "tst-network"
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  perimeter_additional_members     = var.perimeter_additional_members
+  perimeter_members                = concat(["serviceAccount:${var.terraform_service_account}"], var.perimeter_additional_members)
   subnet_ip                        = var.subnet_ip
   cmek_location                    = var.cmek_location
   cmek_keyring_name                = "${var.cmek_keyring_name}"
