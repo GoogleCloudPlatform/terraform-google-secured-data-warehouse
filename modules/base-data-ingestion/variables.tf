@@ -78,6 +78,12 @@ variable "bucket_class" {
   default     = "STANDARD"
 }
 
+variable "bucket_force_destroy" {
+  type        = bool
+  description = "When deleting a bucket, this boolean option will delete all contained objects. If you try to delete a bucket that contains objects, Terraform will fail that run."
+  default     = false
+}
+
 variable "bucket_lifecycle_rules" {
   description = "List of lifecycle rules to configure. Format is the same as described in provider documentation https://www.terraform.io/docs/providers/google/r/storage_bucket.html#lifecycle_rule except condition.matches_storage_class should be a comma delimited string."
   type = set(object({

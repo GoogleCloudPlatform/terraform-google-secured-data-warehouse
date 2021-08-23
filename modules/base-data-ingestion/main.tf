@@ -28,6 +28,7 @@ module "data_ingest_bucket" {
   location        = var.bucket_location
   storage_class   = var.bucket_class
   lifecycle_rules = var.bucket_lifecycle_rules
+  force_destroy   = var.bucket_force_destroy
 
   encryption = {
     default_kms_key_name = module.cmek.keys[local.ingestion_key_name]
