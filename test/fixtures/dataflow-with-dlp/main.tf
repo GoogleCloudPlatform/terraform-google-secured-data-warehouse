@@ -14,6 +14,35 @@
  * limitations under the License.
  */
 
+locals {
+  kek_keyring  = "kek_keyring_${random_id.random_suffix.hex}"
+  kek_key_name = "kek_key_${random_id.random_suffix.hex}"
+  location     = "us-central1"
+}
+
+resource "random_id" "random_suffix" {
+  byte_length = 4
+}
+
+module "kek" {
+  source  = "terraform-google-modules/kms/google"
+  version = "~> 1.2"
+
+  project_id      = var.project_id
+  location        = local.location
+  keyring         = local.kek_keyring
+  keys            = [local.kek_key_name]
+  prevent_destroy = false
+}
+
+resource "random_id" "original_key" {
+  byte_length = 16
+}
+
+resource "google_kms_secret_ciphertext" "wrapped_key" {
+  crypto_key = module.kek.keys[local.kek_key_name]
+  plaintext  = random_id.original_key.b64_std
+}
 
 module "dataflow_with_dlp" {
   source                           = "../../../examples/dataflow-with-dlp"
@@ -22,4 +51,7 @@ module "dataflow_with_dlp" {
   access_context_manager_policy_id = var.access_context_manager_policy_id
   perimeter_additional_members     = var.perimeter_additional_members
   org_id                           = var.org_id
+  bucket_force_destroy             = true
+  crypto_key                       = module.kek.keys[local.kek_key_name]
+  wrapped_key                      = google_kms_secret_ciphertext.wrapped_key.ciphertext
 }

@@ -15,14 +15,14 @@
  */
 
 locals {
-  region = "us-central1"
-  zone   = "us-central1-a"
+  region     = "us-central1"
+  dataset_id = "dts_data_ingestion"
 }
 
 module "data_ingestion" {
   source                           = "../..//modules/base-data-ingestion"
-  bucket_name                      = var.bucket_name
-  dataset_id                       = var.dataset_id
+  bucket_name                      = "bkt-data-ingestion"
+  dataset_id                       = local.dataset_id
   org_id                           = var.org_id
   project_id                       = var.project_id
   data_governance_project_id       = var.project_id
@@ -31,9 +31,9 @@ module "data_ingestion" {
   vpc_name                         = "tst-network"
   access_context_manager_policy_id = var.access_context_manager_policy_id
   perimeter_additional_members     = var.perimeter_additional_members
-  subnet_ip                        = var.subnet_ip
-  cmek_location                    = var.cmek_location
-  cmek_keyring_name                = var.cmek_keyring_name
+  subnet_ip                        = "10.0.32.0/21"
+  cmek_location                    = "us"
+  cmek_keyring_name                = "cmek_keyring"
 }
 
 resource "random_id" "random_suffix" {
@@ -47,8 +47,8 @@ module "dataflow_tmp_bucket" {
 
   project_id    = var.project_id
   name          = "bkt-${random_id.random_suffix.hex}-tmp-dataflow"
-  location      = var.bucket_location
-  force_destroy = true
+  location      = "US"
+  force_destroy = var.bucket_force_destroy
 
   labels = {
     "enterprise_data_ingest_bucket" = "true"
@@ -56,11 +56,6 @@ module "dataflow_tmp_bucket" {
 }
 resource "random_id" "original_key" {
   byte_length = 16
-}
-
-resource "google_kms_secret_ciphertext" "wrapped_key" {
-  crypto_key = module.data_ingestion.cmek_ingestion_crypto_key
-  plaintext  = random_id.original_key.b64_std
 }
 
 resource "null_resource" "download_sample_cc_into_gcs" {
@@ -85,9 +80,9 @@ module "de_identification_template" {
 
   project_id                = var.project_id
   terraform_service_account = var.terraform_service_account
-  crypto_key                = module.data_ingestion.cmek_ingestion_crypto_key
-  wrapped_key               = google_kms_secret_ciphertext.wrapped_key.ciphertext
-  dlp_location              = var.dlp_location
+  crypto_key                = var.crypto_key
+  wrapped_key               = var.wrapped_key
+  dlp_location              = "us"
   template_file             = "${path.module}/deidentification.tmpl"
   dataflow_service_account  = module.data_ingestion.dataflow_controller_service_account_email
 }
@@ -100,20 +95,20 @@ module "dataflow_job" {
   name                  = "dlp_example_${null_resource.download_sample_cc_into_gcs.id}_${random_id.random_suffix.hex}"
   on_delete             = "cancel"
   region                = local.region
-  zone                  = local.zone
+  zone                  = "${local.region}-a"
   template_gcs_path     = "gs://dataflow-templates/latest/Stream_DLP_GCS_Text_to_BigQuery"
   temp_gcs_location     = module.dataflow_tmp_bucket.bucket.name
   service_account_email = module.data_ingestion.dataflow_controller_service_account_email
   network_self_link     = module.data_ingestion.network_self_link
   subnetwork_self_link  = module.data_ingestion.subnets_self_links[0]
-  ip_configuration      = var.ip_configuration
+  ip_configuration      = "WORKER_IP_PRIVATE"
   max_workers           = 5
 
   parameters = {
     inputFilePattern       = "gs://${module.data_ingestion.data_ingest_bucket_names[0]}/cc_records.csv"
-    datasetName            = var.dataset_id
+    datasetName            = local.dataset_id
     batchSize              = 1000
     dlpProjectId           = var.project_id
-    deidentifyTemplateName = "projects/${var.project_id}/locations/${var.dlp_location}/deidentifyTemplates/${module.de_identification_template.template_id}"
+    deidentifyTemplateName = "projects/${var.project_id}/locations/us/deidentifyTemplates/${module.de_identification_template.template_id}"
   }
 }
