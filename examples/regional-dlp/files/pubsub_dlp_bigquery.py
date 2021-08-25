@@ -19,9 +19,10 @@ import json
 import logging
 
 import apache_beam as beam
+import apache_beam.transforms.window as window
 from apache_beam.options.pipeline_options import (GoogleCloudOptions,
                                                   PipelineOptions)
-from apache_beam.transforms import DoFn, ParDo, PTransform
+from apache_beam.transforms import DoFn, ParDo, PTransform, BatchElements
 from apache_beam.utils.annotations import experimental
 
 
@@ -57,6 +58,18 @@ def run(argv=None, save_main_session=True):
             'Name of the DLP Structured De-identification Template '
             'of the form "projects/<PROJECT>/locations/<LOCATION>'
             '/deidentifyTemplates/<TEMPLATE_ID>"'))
+    parser.add_argument(
+        "--window_interval_sec",
+        default=30,
+        type=int,
+        help="Window interval in seconds for grouping incoming messages.",
+    )
+    parser.add_argument(
+        "--batch_size",
+        default=1000,
+        type=int,
+        help="Number of record to be sent in a batch in the call to DLP API.",
+    )
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument(
         '--input_topic',
@@ -98,6 +111,9 @@ def run(argv=None, save_main_session=True):
                 beam.Map(json.loads)
                 | 'Flatten lists' >>
                 beam.FlatMap(normalize_data)
+                | 'Apply window' >> beam.WindowInto(
+                    window.FixedWindows(known_args.window_interval_sec, 0)
+                )
             )
         else:
             messages = (
@@ -112,20 +128,27 @@ def run(argv=None, save_main_session=True):
                 beam.Map(json.loads)
                 | 'Flatten lists' >>
                 beam.FlatMap(normalize_data)
+                | 'Apply window' >> beam.WindowInto(
+                    window.FixedWindows(known_args.window_interval_sec, 0)
+                )
             )
 
         de_identified_messages = (
             messages
-            | 'convert dict to table item' >>
-            beam.Map(from_dict_to_table)
+            | "Batching" >> BatchElements(
+                min_batch_size=known_args.batch_size,
+                max_batch_size=known_args.batch_size
+            )
+            | 'Convert dicts to table' >>
+            beam.Map(from_list_dicts_to_table)
             | 'Call DLP de-identification' >>
             MaskDetectedDetails(
                 project=known_args.dlp_project,
                 location=known_args.dlp_location,
                 template_name=known_args.deidentification_template_name
             )
-            | 'convert table item to dict' >>
-            beam.Map(from_table_to_dict)
+            | 'Convert table to dicts' >>
+            beam.FlatMap(from_table_to_list_dict)
         )
 
         # Write to BigQuery.
@@ -149,25 +172,28 @@ def normalize_data(data):
     return [data]
 
 
-def from_dict_to_table(item):
+def from_list_dicts_to_table(list_item):
     """
-    Converts a Python dict object to a DLP API v2 ContentItem of type Table
-    with a single row.
+    Converts a Python list of dict object to a DLP API v2
+    ContentItem with value Table.
     See:
      - https://cloud.google.com/dlp/docs/reference/rest/v2/ContentItem#Table
      - https://cloud.google.com/dlp/docs/inspecting-structured-text
     """
     headers = []
     rows = []
-    rows.append({"values": []})
-    for key in item.keys():
+    for key in sorted(list_item[0]):
         headers.append({"name": key})
-        rows[0]["values"].append({"string_value": item[key]})
+    for item in list_item:
+        row = {"values": []}
+        for item_key in sorted(item):
+            row["values"].append({"string_value": item[item_key]})
+        rows.append(row)
     table_item = {"table": {"headers": headers, "rows": rows}}
     return table_item
 
 
-def from_table_to_dict(table_item):
+def from_table_to_list_dict(content_item):
     """
     Converts a DLP API v2 ContentItem of type Table with a single row
     to a Python dict object.
@@ -175,12 +201,13 @@ def from_table_to_dict(table_item):
      - https://cloud.google.com/dlp/docs/reference/rest/v2/ContentItem#Table
      - https://cloud.google.com/dlp/docs/inspecting-structured-text
     """
-    new_dict = {}
-    row_zero = None
-    for index, val in enumerate(table_item.table.headers):
-        row_zero = table_item.table.rows[0]
-        new_dict[val.name] = row_zero.values[index].string_value
-    return new_dict
+    result = []
+    for row in content_item.table.rows:
+        new_item = {}
+        for index, val in enumerate(content_item.table.headers):
+            new_item[val.name] = row.values[index].string_value
+        result.append(new_item)
+    return result
 
 
 @experimental()
@@ -245,10 +272,7 @@ class _DeidentifyFn(DoFn):
             self.client = dlp_v2.DlpServiceClient()
         self.params = {
             'timeout': self.timeout,
-            'parent': self.client.location_path(
-                self.project,
-                self.location
-            )
+            'parent': f"projects/{self.project}/locations/{self.location}"
         }
         self.params.update(self.config)
 
