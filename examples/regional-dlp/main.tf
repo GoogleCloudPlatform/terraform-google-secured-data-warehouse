@@ -77,7 +77,7 @@ module "data_ingestion" {
   data_governance_project_id       = var.project_id
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  perimeter_additional_members     = local.perimeter_additional_members
+  perimeter_members                = concat(["serviceAccount:${var.terraform_service_account}"], var.perimeter_additional_members)
   vpc_name                         = "dlp-flex-ingest"
   subnet_ip                        = "10.0.32.0/21"
   region                           = var.location

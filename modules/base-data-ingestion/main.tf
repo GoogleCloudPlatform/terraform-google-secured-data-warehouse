@@ -62,12 +62,6 @@ module "data_ingest_bucket" {
   labels = {
     "enterprise_data_ingest_bucket" = "true"
   }
-
-  # depends_on needed to wait for the KMS roles
-  # to be granted to the Storage Service Account.
-  depends_on = [
-    module.cmek
-  ]
 }
 
 //pub/sub ingest topic
@@ -79,11 +73,6 @@ module "data_ingest_topic" {
   topic                  = "tpc-data-ingest-${random_id.suffix.hex}"
   topic_kms_key_name     = module.cmek.keys[local.ingestion_key_name]
   message_storage_policy = { allowed_persistence_regions : [var.region] }
-  # depends_on needed to wait for the KMS roles
-  # to be granted to the PubSub Service Account.
-  depends_on = [
-    module.cmek
-  ]
 }
 
 //BigQuery dataset
@@ -103,10 +92,4 @@ module "bigquery_dataset" {
     purpose  = "ingest"
     billable = "true"
   }
-
-  # depends_on needed to wait for the KMS roles
-  # to be granted to the Bigquery Service Account.
-  depends_on = [
-    module.cmek
-  ]
 }

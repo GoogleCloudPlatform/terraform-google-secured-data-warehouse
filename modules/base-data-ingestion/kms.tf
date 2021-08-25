@@ -71,7 +71,7 @@ resource "google_project_service_identity" "dataflow_sa" {
 
 module "cmek" {
   source  = "terraform-google-modules/kms/google"
-  version = "~> 2.0"
+  version = "~> 2.0.1"
 
   project_id         = var.data_governance_project_id
   location           = var.cmek_location

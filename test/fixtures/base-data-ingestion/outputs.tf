@@ -111,7 +111,7 @@ output "service_perimeter_name" {
 }
 
 output "perimeter_additional_members" {
-  description = "The list additional members to be added on perimeter access. Prefix of group: user: or serviceAccount: is required."
+  description = "The list additional members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required."
   value       = var.perimeter_additional_members
 }
 
