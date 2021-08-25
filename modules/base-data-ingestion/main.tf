@@ -36,17 +36,6 @@ module "data_ingest_bucket" {
   labels = {
     "enterprise_data_ingest_bucket" = "true"
   }
-
-  iam_members = [
-    {
-      role   = "roles/storage.objectViewer"
-      member = "serviceAccount:${google_service_account.storage_service_account.email}"
-    },
-    {
-      role   = "roles/storage.objectCreator"
-      member = "serviceAccount:${google_service_account.storage_service_account.email}"
-    }
-  ]
 }
 
 //pub/sub ingest topic

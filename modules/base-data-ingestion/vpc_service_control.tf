@@ -17,7 +17,7 @@
 locals {
   perimeter_members = distinct(concat([
     "serviceAccount:${module.dataflow_controller_service_account.email}",
-    "serviceAccount:${google_service_account.storage_service_account.email}",
+    "serviceAccount:${google_service_account.storage_writer_service_account.email}",
     "serviceAccount:${google_service_account.pubsub_writer_service_account.email}"
   ], var.perimeter_members))
 }

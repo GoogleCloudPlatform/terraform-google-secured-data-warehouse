@@ -36,10 +36,22 @@ module "dataflow_controller_service_account" {
 }
 
 //service account for storage
-resource "google_service_account" "storage_service_account" {
+resource "google_service_account" "storage_writer_service_account" {
   project      = var.project_id
   account_id   = "sa-storage-writer"
   display_name = "Cloud Storage data writer service account"
+}
+
+resource "google_storage_bucket_iam_member" "objectViewer" {
+  bucket = module.data_ingest_bucket.bucket.name
+  role   = "roles/storage.objectViewer"
+  member = "serviceAccount:${google_service_account.storage_writer_service_account.email}"
+}
+
+resource "google_storage_bucket_iam_member" "objectCreator" {
+  bucket = module.data_ingest_bucket.bucket.name
+  role   = "roles/storage.objectCreator"
+  member = "serviceAccount:${google_service_account.storage_writer_service_account.email}"
 }
 
 //service account for Pub/sub
