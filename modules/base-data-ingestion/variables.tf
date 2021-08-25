@@ -95,6 +95,12 @@ variable "bucket_lifecycle_rules" {
   }]
 }
 
+variable "bucket_force_destroy" {
+  description = "When deleting a bucket, this boolean option will delete all contained objects. If you try to delete a bucket that contains objects, Terraform will fail that run."
+  type        = bool
+  default     = false
+}
+
 variable "dataset_id" {
   description = "Unique ID for the dataset being provisioned."
   type        = string

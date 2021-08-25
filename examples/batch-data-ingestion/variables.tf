@@ -19,51 +19,23 @@ variable "project_id" {
   type        = string
 }
 
-variable "bucket_location" {
-  description = "Dataflow temporary bucket location."
+variable "org_id" {
+  description = "GCP Organization ID."
   type        = string
-  default     = "US"
 }
 
-variable "data_ingestion_bucket" {
-  description = "The bucket name where the files for ingestion is located."
-  type        = string
+variable "perimeter_members" {
+  description = "The list of all members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required."
+  type        = list(string)
+}
+
+variable "access_context_manager_policy_id" {
+  description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
+  type        = number
 }
 
 variable "terraform_service_account" {
   description = "Service account email of the account to impersonate to run Terraform."
-  type        = string
-}
-
-variable "dataflow_service_account" {
-  description = "The Service Account email that will be used to identify the VMs in which the jobs are running"
-  type        = string
-}
-
-variable "dataset_id" {
-  description = "Unique ID for the dataset being provisioned."
-  type        = string
-  default     = "dts_test_int"
-}
-
-variable "table_name" {
-  description = "Unique ID for the table in dataset being provisioned."
-  type        = string
-  default     = "table_test_int"
-}
-
-variable "subnetwork_self_link" {
-  description = "The subnetwork self link to which VMs will be assigned."
-  type        = string
-}
-
-variable "network_self_link" {
-  description = "The network self link to which VMs will be assigned."
-  type        = string
-}
-
-variable "crypto_key" {
-  description = "The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP."
   type        = string
 }
 

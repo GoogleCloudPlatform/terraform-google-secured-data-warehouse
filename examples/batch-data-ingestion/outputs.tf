@@ -15,21 +15,37 @@
  */
 
 output "project_id" {
-  description = "The project's ID"
+  description = "The project's ID."
   value       = var.project_id
 }
 
 output "scheduler_id" {
-  description = "Cloud Scheduler Job id created"
+  description = "Cloud Scheduler Job id created."
   value       = google_cloud_scheduler_job.scheduler.id
 }
 
 output "controller_service_account" {
-  description = "The Service Account email that will be used to identify the VMs in which the jobs are running"
-  value       = var.dataflow_service_account
+  description = "The Service Account email that will be used to identify the VMs in which the jobs are running."
+  value       = module.data_ingestion.dataflow_controller_service_account_email
 }
 
-output "dataflow_bucket_name" {
-  description = "The name of the bucket"
-  value       = module.dataflow-tmp-bucket.bucket.name
+output "dataflow_temp_bucket_name" {
+  description = "The name of the dataflow temporary bucket."
+  value       = module.dataflow_tmp_bucket.bucket.name
 }
+
+output "df_job_region" {
+  description = "The region of the newly created Dataflow job."
+  value       = local.region
+}
+
+output "df_job_network" {
+  value       = module.data_ingestion.network_self_link
+  description = "The URI of the VPC being created."
+}
+
+output "df_job_subnetwork" {
+  description = "The name of the subnetwork used for create Dataflow job."
+  value       = module.data_ingestion.subnets_self_links[0]
+}
+

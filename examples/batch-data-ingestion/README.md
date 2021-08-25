@@ -12,25 +12,23 @@ This example illustrates how to run a Dataflow job that uses the `batch template
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| access\_context\_manager\_policy\_id | The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format="value(name)"`. | `number` | n/a | yes |
 | bucket\_force\_destroy | When deleting a bucket, this boolean option will delete all contained objects. If you try to delete a bucket that contains objects, Terraform will fail that run. | `bool` | `false` | no |
-| bucket\_location | Dataflow temporary bucket location. | `string` | `"US"` | no |
-| crypto\_key | The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP. | `string` | n/a | yes |
-| data\_ingestion\_bucket | The bucket name where the files for ingestion is located. | `string` | n/a | yes |
-| dataflow\_service\_account | The Service Account email that will be used to identify the VMs in which the jobs are running | `string` | n/a | yes |
-| dataset\_id | Unique ID for the dataset being provisioned. | `string` | `"dts_test_int"` | no |
-| network\_self\_link | The network self link to which VMs will be assigned. | `string` | n/a | yes |
+| org\_id | GCP Organization ID. | `string` | n/a | yes |
+| perimeter\_members | The list of all members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | n/a | yes |
 | project\_id | The ID of the project in which the service account will be created. | `string` | n/a | yes |
-| subnetwork\_self\_link | The subnetwork self link to which VMs will be assigned. | `string` | n/a | yes |
-| table\_name | Unique ID for the table in dataset being provisioned. | `string` | `"table_test_int"` | no |
 | terraform\_service\_account | Service account email of the account to impersonate to run Terraform. | `string` | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| controller\_service\_account | The Service Account email that will be used to identify the VMs in which the jobs are running |
-| dataflow\_bucket\_name | The name of the bucket |
-| project\_id | The project's ID |
-| scheduler\_id | Cloud Scheduler Job id created |
+| controller\_service\_account | The Service Account email that will be used to identify the VMs in which the jobs are running. |
+| dataflow\_temp\_bucket\_name | The name of the dataflow temporary bucket. |
+| df\_job\_network | The URI of the VPC being created. |
+| df\_job\_region | The region of the newly created Dataflow job. |
+| df\_job\_subnetwork | The name of the subnetwork used for create Dataflow job. |
+| project\_id | The project's ID. |
+| scheduler\_id | Cloud Scheduler Job id created. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

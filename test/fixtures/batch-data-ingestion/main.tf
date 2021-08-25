@@ -18,56 +18,13 @@ locals {
   region = "us-central1"
 }
 
-data "google_service_account" "dataflow_service_account" {
-  account_id = "sa-dataflow-controller"
-  project    = var.project_id
-}
 
-data "google_compute_network" "vpc_network" {
-  name    = "vpc-tst-network"
-  project = var.project_id
-}
-
-resource "random_id" "random_suffix" {
-  byte_length = 4
-}
-
-data "google_kms_key_ring" "kms" {
-  name     = "${var.cmek_keyring_name}"
-  location = var.cmek_location
-  project  = var.project_id
-}
-
-data "google_kms_crypto_key" "crypto_key" {
-  name     = "ingestion_kms_key"
-  key_ring = data.google_kms_key_ring.kms.self_link
-}
-
-//storage ingest bucket
-module "dataflow-ingestion-bucket" {
-  source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
-  version = "~> 2.1"
-
-  project_id    = var.project_id
-  name          = "bkt-${random_id.random_suffix.hex}-data-ingestion-dataflow"
-  location      = var.bucket_location
-  force_destroy = true
-  encryption    = { "default_kms_key_name" = data.google_kms_crypto_key.crypto_key.self_link }
-
-  labels = {
-    "enterprise_data_ingest_bucket" = "true"
-  }
-}
-
-module "batch-dataflow" {
-  source                    = "../../../examples/batch-data-ingestion"
-  project_id                = var.project_id
-  crypto_key                = data.google_kms_crypto_key.crypto_key.self_link
-  terraform_service_account = var.terraform_service_account
-  dataflow_service_account  = data.google_service_account.dataflow_service_account.email
-  network_self_link         = data.google_compute_network.vpc_network.id
-  subnetwork_self_link      = data.google_compute_network.vpc_network.subnetworks_self_links[0]
-  dataset_id                = "dts_test_int"
-  data_ingestion_bucket     = module.dataflow-ingestion-bucket.bucket.name
-  bucket_force_destroy      = true
+module "batch_dataflow" {
+  source                           = "../../../examples/batch-data-ingestion"
+  org_id                           = var.org_id
+  project_id                       = var.project_id
+  terraform_service_account        = var.terraform_service_account
+  access_context_manager_policy_id = var.access_context_manager_policy_id
+  perimeter_members                = ["serviceAccount:${var.terraform_service_account}"]
+  bucket_force_destroy             = true
 }

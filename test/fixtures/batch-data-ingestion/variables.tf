@@ -14,53 +14,22 @@
  * limitations under the License.
  */
 
-variable "ip_configuration" {
-  description = "The configuration for VM IPs. Options are 'WORKER_IP_PUBLIC' or 'WORKER_IP_PRIVATE'."
-  type        = string
-  default     = "WORKER_IP_PRIVATE"
-}
-
 variable "terraform_service_account" {
   description = "Service account email of the account to impersonate to run Terraform."
   type        = string
 }
 
 variable "project_id" {
-  description = "The ID of the project in which the service account will be created."
+  description = "The ID of the project in which the infrastructure will be created."
   type        = string
 }
 
-variable "bucket_location" {
-  description = "Bucket location."
+variable "org_id" {
+  description = "The ID of the organization in which the infrastructure will be created."
   type        = string
-  default     = "US"
 }
 
-variable "bucket_lifecycle_rules" {
-  description = "List of lifecycle rules to configure. Format is the same as described in provider documentation https://www.terraform.io/docs/providers/google/r/storage_bucket.html#lifecycle_rule except condition.matches_storage_class should be a comma delimited string."
-  type = set(object({
-    action    = map(string)
-    condition = map(string)
-  }))
-  default = [{
-    action = {
-      type = "Delete"
-    }
-    condition = {
-      age        = 30
-      with_state = "ANY"
-    }
-  }]
-}
-
-variable "cmek_location" {
-  description = "The location for the KMS Customer Managed Encryption Keys."
-  type        = string
-  default     = "us"
-}
-
-variable "cmek_keyring_name" {
-  description = "The Keyring name for the KMS Customer Managed Encryption Keys."
-  type        = string
-  default     = "cmek_keyring"
+variable "access_context_manager_policy_id" {
+  description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
+  type        = number
 }
