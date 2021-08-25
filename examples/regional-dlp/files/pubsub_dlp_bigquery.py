@@ -68,7 +68,7 @@ def run(argv=None, save_main_session=True):
         "--batch_size",
         default=1000,
         type=int,
-        help="Number of record to be sent in a batch in the call to DLP API.",
+        help="Number of records to be sent in a batch in the call to the DLP API.",
     )
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument(

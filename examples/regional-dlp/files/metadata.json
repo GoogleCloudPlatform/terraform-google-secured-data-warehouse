@@ -29,6 +29,18 @@
       ]
     },
     {
+      "name": "window_interval_sec",
+      "label": "Window interval in seconds.",
+      "helpText": "Window interval in seconds for grouping incoming messages.",
+      "isOptional": true
+    },
+    {
+      "name": "batch_size",
+      "label": "DLP batch size.",
+      "helpText": "Number of records to be sent in a batch in the call to the DLP API.",
+      "isOptional": true
+    },
+    {
       "name": "dlp_location",
       "label": "DLP Location.",
       "helpText": "The Location of the DLP template resource."
