@@ -40,11 +40,11 @@ module "data_ingest_bucket" {
   iam_members = [
     {
       role   = "roles/storage.objectViewer"
-      member = "serviceAccount:${google_service_account.storage_service_account}"
+      member = "serviceAccount:${google_service_account.storage_service_account.email}"
     },
     {
       role   = "roles/storage.objectCreator"
-      member = "serviceAccount:${google_service_account.storage_service_account}"
+      member = "serviceAccount:${google_service_account.storage_service_account.email}"
     }
   ]
 }
