@@ -39,7 +39,7 @@ module "data_ingest_bucket" {
 
   iam_members = [
     {
-      role   = "roles/storage.objectViewer",
+      role   = "roles/storage.objectViewer"
       member = "serviceAccount:${google_service_account.storage_service_account}"
     },
     {
