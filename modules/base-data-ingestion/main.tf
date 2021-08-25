@@ -18,32 +18,6 @@ resource "random_id" "suffix" {
   byte_length = 4
 }
 
-resource "google_storage_bucket_iam_member" "objectViewer" {
-  bucket = module.data_ingest_bucket.names_list[0]
-  role   = "roles/storage.objectViewer"
-  member = "serviceAccount:${module.storage_writer_service_account.email}"
-}
-
-resource "google_storage_bucket_iam_member" "objectCreator" {
-  bucket = module.data_ingest_bucket.names_list[0]
-  role   = "roles/storage.objectCreator"
-  member = "serviceAccount:${module.storage_writer_service_account.email}"
-}
-
-resource "google_pubsub_topic_iam_member" "publisher" {
-  project = var.data_governance_project_id
-  topic   = module.data_ingest_topic.topic
-  role    = "roles/pubsub.publisher"
-  member  = "serviceAccount:${module.pubsub_writer_service_account.email}"
-}
-
-resource "google_pubsub_topic_iam_member" "subscriber" {
-  project = var.data_governance_project_id
-  topic   = module.data_ingest_topic.topic
-  role    = "roles/pubsub.subscriber"
-  member  = "serviceAccount:${module.pubsub_writer_service_account.email}"
-}
-
 //storage ingest bucket
 module "data_ingest_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
@@ -62,6 +36,17 @@ module "data_ingest_bucket" {
   labels = {
     "enterprise_data_ingest_bucket" = "true"
   }
+
+  iam_members = [
+    {
+      role   = "roles/storage.objectViewer",
+      member = "serviceAccount:${google_service_account.storage_service_account}"
+    },
+    {
+      role   = "roles/storage.objectCreator"
+      member = "serviceAccount:${google_service_account.storage_service_account}"
+    }
+  ]
 }
 
 //pub/sub ingest topic
