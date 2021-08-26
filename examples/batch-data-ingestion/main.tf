@@ -23,6 +23,8 @@ locals {
   location            = "us-central1-a"
   schema_file         = "schema.json"
   transform_code_file = "transform.js"
+  dataset_id          = "dts_data_ingestion"
+  table_name          = "batch_flow_table"
   httpRequestTemplate = templatefile(
     "${path.module}/httpRequest.tmpl",
     {
@@ -40,9 +42,6 @@ locals {
       bigQueryLoadingTemporaryDirectory   = "gs://${module.dataflow_tmp_bucket.bucket.name}/tmp"
     }
   )
-
-  dataset_id = "dts_data_ingestion"
-  table_name = "batch_flow_table"
 }
 
 module "data_ingestion" {
