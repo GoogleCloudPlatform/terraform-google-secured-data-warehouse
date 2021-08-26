@@ -14,28 +14,13 @@
  * limitations under the License.
  */
 
-variable "project_id" {
-  description = "The ID of the project in which the service account will be created."
-  type        = string
-}
-
 variable "terraform_service_account" {
   description = "Service account email of the account to impersonate to run Terraform."
   type        = string
 }
 
-variable "dataflow_service_account" {
-  description = "The Service Account email that will be used to identify the VMs in which the jobs are running"
-  type        = string
-}
-
-variable "subnetwork_self_link" {
-  description = "The subnetwork self link to which VMs will be assigned."
-  type        = string
-}
-
-variable "network_self_link" {
-  description = "The network self link to which VMs will be assigned."
+variable "org_id" {
+  description = "GCP Organization ID."
   type        = string
 }
 
@@ -49,7 +34,23 @@ variable "wrapped_key" {
   type        = string
 }
 
-variable "dataset_id" {
-  description = "The id of dataset the will be used."
+variable "project_id" {
+  description = "The ID of the project in which the service account will be created."
   type        = string
+}
+
+variable "access_context_manager_policy_id" {
+  type        = number
+  description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
+}
+
+variable "bucket_force_destroy" {
+  type        = bool
+  description = "When deleting a bucket, this boolean option will delete all contained objects. If you try to delete a bucket that contains objects, Terraform will fail that run."
+  default     = false
+}
+
+variable "perimeter_members" {
+  description = "The list of all members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required."
+  type        = list(string)
 }

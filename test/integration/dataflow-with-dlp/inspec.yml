@@ -28,6 +28,9 @@ attributes:
   - name: df_job_subnetwork
     required: true
     type: string
-  - name: bucket_name
+  - name: bucket_tmp_name
+    required: true
+    type: string
+  - name: bucket_ingestion_name
     required: true
     type: string
