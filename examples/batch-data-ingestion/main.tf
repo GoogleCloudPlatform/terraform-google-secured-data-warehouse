@@ -75,7 +75,7 @@ module "dataflow_tmp_bucket" {
   name          = "bkt-${random_id.random_suffix.hex}-tmp-dataflow"
   location      = local.region
   force_destroy = var.bucket_force_destroy
-  encryption    = { "default_kms_key_name" = module.data_ingestion.cmek_bigquery_crypto_key }
+  encryption    = { "default_kms_key_name" = module.data_ingestion.cmek_ingestion_crypto_key }
 
   labels = {
     "enterprise_data_ingest_bucket" = "true"
