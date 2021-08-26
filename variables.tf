@@ -20,7 +20,7 @@ variable "org_id" {
 }
 
 variable "region" {
-  description = "The region for the resources."
+  description = "The region in which the resources will be deployed."
   type        = string
   default     = "us-central1"
 }
@@ -68,12 +68,12 @@ variable "perimeter_additional_members" {
 }
 
 variable "bucket_name" {
-  description = "The main part of the name of the bucket to be created."
+  description = "The main part of the name of the bucket being provisioned."
   type        = string
 }
 
 variable "bucket_class" {
-  description = "Bucket storage class."
+  description = "The storage class for the bucket being provisioned."
   type        = string
   default     = "STANDARD"
 }
@@ -120,6 +120,6 @@ variable "dataset_default_table_expiration_ms" {
 }
 
 variable "cmek_keyring_name" {
-  description = "The Keyring name for the KMS Customer Managed Encryption Keys."
+  description = "The Keyring name for the KMS Customer Managed Encryption Keys being provisioned."
   type        = string
 }
