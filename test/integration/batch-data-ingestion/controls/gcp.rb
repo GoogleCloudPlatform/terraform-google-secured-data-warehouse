@@ -13,7 +13,7 @@
 # limitations under the License.
 
 project_id = attribute('project_id')
-bucket_name = attribute('dataflow_bucket_name')
+bucket_name = attribute('dataflow_temp_bucket_name')
 
 control 'gcp' do
   title 'GCP Resources'
