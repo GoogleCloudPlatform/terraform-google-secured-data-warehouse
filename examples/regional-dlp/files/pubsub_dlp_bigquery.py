@@ -34,41 +34,56 @@ def run(argv=None, save_main_session=True):
         required=True,
         help=(
             'Output BigQuery table for results specified as: '
-            'PROJECT:DATASET.TABLE or DATASET.TABLE.'))
+            'PROJECT:DATASET.TABLE or DATASET.TABLE.'
+        )
+    )
     parser.add_argument(
         '--bq_schema',
         required=True,
         help=(
             'Output BigQuery table schema specified as string with format: '
-            'FIELD_1:STRING,FIELD_2:STRING,...'))
+            'FIELD_1:STRING,FIELD_2:STRING,...'
+        )
+    )
     parser.add_argument(
         '--dlp_project',
         required=True,
         help=(
-            'ID of the project that holds the DLP template.'))
+            'ID of the project that holds the DLP template.'
+        )
+    )
     parser.add_argument(
         '--dlp_location',
         required=False,
         help=(
-            'The Location of the DLP template resource.'))
+            'The Location of the DLP template resource.'
+        )
+    )
     parser.add_argument(
         '--deidentification_template_name',
         required=True,
         help=(
             'Name of the DLP Structured De-identification Template '
             'of the form "projects/<PROJECT>/locations/<LOCATION>'
-            '/deidentifyTemplates/<TEMPLATE_ID>"'))
+            '/deidentifyTemplates/<TEMPLATE_ID>"'
+        )
+    )
     parser.add_argument(
         "--window_interval_sec",
         default=30,
         type=int,
-        help="Window interval in seconds for grouping incoming messages.",
+        help=(
+            'Window interval in seconds for grouping incoming messages.'
+        )
     )
     parser.add_argument(
         "--batch_size",
         default=1000,
         type=int,
-        help="Number of records to be sent in a batch in the call to the DLP API.",
+        help=(
+            'Number of records to be sent in a batch in ',
+            'the call to the Data Loss Prevention (DLP) API.'
+        )
     )
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument(
@@ -77,12 +92,16 @@ def run(argv=None, save_main_session=True):
             'Input PubSub topic of the form '
             '"projects/<PROJECT>/topics/<TOPIC>".'
             'A temporary subscription will be created from '
-            'the specified topic.'))
+            'the specified topic.'
+        )
+    )
     group.add_argument(
         '--input_subscription',
         help=(
             'Input PubSub subscription of the form '
-            '"projects/<PROJECT>/subscriptions/<SUBSCRIPTION>."'))
+            '"projects/<PROJECT>/subscriptions/<SUBSCRIPTION>."'
+        )
+    )
     known_args, pipeline_args = parser.parse_known_args(argv)
 
     options = PipelineOptions(
@@ -272,7 +291,10 @@ class _DeidentifyFn(DoFn):
             self.client = dlp_v2.DlpServiceClient()
         self.params = {
             'timeout': self.timeout,
-            'parent': f"projects/{self.project}/locations/{self.location}"
+            'parent': "projects/{}/locations/{}".format(
+                self.project,
+                self.location
+            )
         }
         self.params.update(self.config)
 
