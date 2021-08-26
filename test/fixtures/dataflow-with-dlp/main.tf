@@ -15,33 +15,23 @@
  */
 
 locals {
-  keyring  = "keyring_kek_${random_id.random_suffix.hex}"
-  key_name = "key_name_kek_${random_id.random_suffix.hex}"
-  region   = "us-central1"
-}
-
-data "google_service_account" "dataflow_service_account" {
-  account_id = "sa-dataflow-controller"
-  project    = var.project_id
-}
-
-data "google_compute_network" "vpc_network" {
-  name    = "vpc-tst-network"
-  project = var.project_id
+  kek_keyring  = "kek_keyring_${random_id.random_suffix.hex}"
+  kek_key_name = "kek_key_${random_id.random_suffix.hex}"
+  location     = "us-central1"
 }
 
 resource "random_id" "random_suffix" {
   byte_length = 4
 }
 
-module "kms" {
+module "kek" {
   source  = "terraform-google-modules/kms/google"
   version = "~> 1.2"
 
   project_id      = var.project_id
-  location        = var.dlp_location
-  keyring         = local.keyring
-  keys            = [local.key_name]
+  location        = local.location
+  keyring         = local.kek_keyring
+  keys            = [local.kek_key_name]
   prevent_destroy = false
 }
 
@@ -50,18 +40,18 @@ resource "random_id" "original_key" {
 }
 
 resource "google_kms_secret_ciphertext" "wrapped_key" {
-  crypto_key = module.kms.keys[local.key_name]
+  crypto_key = module.kek.keys[local.kek_key_name]
   plaintext  = random_id.original_key.b64_std
 }
 
-module "dataflow-with-dlp" {
-  source                    = "../../../examples/dataflow-with-dlp"
-  project_id                = var.project_id
-  crypto_key                = module.kms.keys[local.key_name]
-  dataset_id                = "dts_test_int"
-  wrapped_key               = google_kms_secret_ciphertext.wrapped_key.ciphertext
-  terraform_service_account = var.terraform_service_account
-  dataflow_service_account  = data.google_service_account.dataflow_service_account.email
-  network_self_link         = data.google_compute_network.vpc_network.id
-  subnetwork_self_link      = data.google_compute_network.vpc_network.subnetworks_self_links[0]
+module "dataflow_with_dlp" {
+  source                           = "../../../examples/dataflow-with-dlp"
+  project_id                       = var.project_id
+  terraform_service_account        = var.terraform_service_account
+  access_context_manager_policy_id = var.access_context_manager_policy_id
+  perimeter_members                = concat(["serviceAccount:${var.terraform_service_account}"], var.perimeter_additional_members)
+  org_id                           = var.org_id
+  bucket_force_destroy             = true
+  crypto_key                       = module.kek.keys[local.kek_key_name]
+  wrapped_key                      = google_kms_secret_ciphertext.wrapped_key.ciphertext
 }

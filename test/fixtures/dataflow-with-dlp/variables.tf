@@ -14,14 +14,8 @@
  * limitations under the License.
  */
 
-variable "ip_configuration" {
-  description = "The configuration for VM IPs. Options are 'WORKER_IP_PUBLIC' or 'WORKER_IP_PRIVATE'."
-  type        = string
-  default     = "WORKER_IP_PRIVATE"
-}
-
-variable "terraform_service_account" {
-  description = "Service account email of the account to impersonate to run Terraform."
+variable "org_id" {
+  description = "GCP Organization ID."
   type        = string
 }
 
@@ -30,37 +24,18 @@ variable "project_id" {
   type        = string
 }
 
-variable "bucket_location" {
-  description = "Bucket location."
+variable "terraform_service_account" {
+  description = "Service account email of the account to impersonate to run Terraform."
   type        = string
-  default     = "US"
 }
 
-variable "bucket_force_destroy" {
-  description = "When deleting a bucket, this boolean option will delete all contained objects. If you try to delete a bucket that contains objects, Terraform will fail that run."
-  type        = bool
-  default     = false
+variable "access_context_manager_policy_id" {
+  type        = number
+  description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
 }
 
-variable "bucket_lifecycle_rules" {
-  description = "List of lifecycle rules to configure. Format is the same as described in provider documentation https://www.terraform.io/docs/providers/google/r/storage_bucket.html#lifecycle_rule except condition.matches_storage_class should be a comma delimited string."
-  type = set(object({
-    action    = map(string)
-    condition = map(string)
-  }))
-  default = [{
-    action = {
-      type = "Delete"
-    }
-    condition = {
-      age        = 30
-      with_state = "ANY"
-    }
-  }]
-}
-
-variable "dlp_location" {
-  description = "The location of DLP resources. See https://cloud.google.com/dlp/docs/locations. The 'global' KMS location is valid."
-  type        = string
-  default     = "global"
+variable "perimeter_additional_members" {
+  description = "The list additional members to be added on perimeter access. Prefix of group: user: or serviceAccount: is required."
+  type        = list(string)
+  default     = []
 }
