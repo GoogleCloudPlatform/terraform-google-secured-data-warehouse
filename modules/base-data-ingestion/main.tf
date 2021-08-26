@@ -18,7 +18,7 @@ resource "random_id" "suffix" {
   byte_length = 4
 }
 
-//storage ingest bucket
+//storage ingest bucket 
 module "data_ingest_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 2.0"
