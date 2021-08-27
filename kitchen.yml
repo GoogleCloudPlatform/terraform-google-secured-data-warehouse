@@ -15,7 +15,7 @@
 ---
 driver:
   name: terraform
-  command_timeout: 2700
+  command_timeout: 3600
   verify_version: false
 
 provisioner:
