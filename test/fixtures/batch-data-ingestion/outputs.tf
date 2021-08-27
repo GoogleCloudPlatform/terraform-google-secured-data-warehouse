@@ -21,31 +21,31 @@ output "project_id" {
 }
 
 output "scheduler_id" {
-  description = "Cloud Scheduler Job id created"
-  value       = module.batch-dataflow.scheduler_id
+  description = "Cloud Scheduler Job id created."
+  value       = module.batch_dataflow.scheduler_id
 }
 
 output "df_job_controller_service_account" {
   description = "The email of the service account used for create Dataflow job."
-  value       = data.google_service_account.dataflow_service_account.email
+  value       = module.batch_dataflow.controller_service_account
 }
 
 output "df_job_region" {
   description = "The region of the newly created Dataflow job."
-  value       = local.region
+  value       = module.batch_dataflow.df_job_region
 }
 
 output "df_job_network" {
   description = "The name of the network used for create Dataflow job."
-  value       = data.google_compute_network.vpc_network.id
+  value       = module.batch_dataflow.df_job_network
 }
 
 output "df_job_subnetwork" {
   description = "The name of the subnetwork used for create Dataflow job."
-  value       = data.google_compute_network.vpc_network.subnetworks_self_links[0]
+  value       = module.batch_dataflow.df_job_subnetwork
 }
 
-output "dataflow_bucket_name" {
-  description = "The name of the bucket."
-  value       = module.batch-dataflow.dataflow_bucket_name
+output "dataflow_temp_bucket_name" {
+  description = "The name of the dataflow temporary bucket."
+  value       = module.batch_dataflow.dataflow_temp_bucket_name
 }

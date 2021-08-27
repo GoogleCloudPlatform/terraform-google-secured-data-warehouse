@@ -23,35 +23,58 @@ locals {
   location            = "us-central1-a"
   schema_file         = "schema.json"
   transform_code_file = "transform.js"
+  dataset_id          = "dts_data_ingestion"
+  table_name          = "batch_flow_table"
   httpRequestTemplate = templatefile(
     "${path.module}/httpRequest.tmpl",
     {
       location                            = local.location,
-      network_self_link                   = var.network_self_link,
-      dataflow_service_account            = var.dataflow_service_account,
-      subnetwork_self_link                = var.subnetwork_self_link,
-      inputFilePattern                    = "gs://${var.data_ingestion_bucket}/cc_records.csv",
+      network_self_link                   = module.data_ingestion.network_self_link,
+      dataflow_service_account            = module.data_ingestion.dataflow_controller_service_account_email,
+      subnetwork_self_link                = module.data_ingestion.subnets_self_links[0],
+      inputFilePattern                    = "gs://${module.data_ingestion.data_ingest_bucket_names[0]}/cc_records.csv",
       project_id                          = var.project_id,
-      dataset_id                          = var.dataset_id,
-      table_name                          = var.table_name,
+      dataset_id                          = local.dataset_id,
+      table_name                          = local.table_name,
       javascriptTextTransformFunctionName = "transform",
-      JSONPath                            = "gs://${module.dataflow-tmp-bucket.bucket.name}/code/${local.schema_file}",
-      javascriptTextTransformGcsPath      = "gs://${module.dataflow-tmp-bucket.bucket.name}/code/${local.transform_code_file}",
-      bigQueryLoadingTemporaryDirectory   = "gs://${module.dataflow-tmp-bucket.bucket.name}/tmp"
+      JSONPath                            = "gs://${module.dataflow_tmp_bucket.bucket.name}/code/${local.schema_file}",
+      javascriptTextTransformGcsPath      = "gs://${module.dataflow_tmp_bucket.bucket.name}/code/${local.transform_code_file}",
+      bigQueryLoadingTemporaryDirectory   = "gs://${module.dataflow_tmp_bucket.bucket.name}/tmp"
     }
   )
 }
 
+module "data_ingestion" {
+  source                           = "../..//modules/base-data-ingestion"
+  bucket_name                      = "bkt-data-ingestion"
+  dataset_id                       = local.dataset_id
+  org_id                           = var.org_id
+  project_id                       = var.project_id
+  data_governance_project_id       = var.project_id
+  region                           = local.region
+  bucket_location                  = local.region
+  dataset_location                 = local.region
+  terraform_service_account        = var.terraform_service_account
+  vpc_name                         = "tst-network"
+  access_context_manager_policy_id = var.access_context_manager_policy_id
+  perimeter_members                = var.perimeter_members
+  subnet_ip                        = "10.0.32.0/21"
+  cmek_location                    = local.region
+  cmek_keyring_name                = "cmek_keyring_${random_id.random_suffix.hex}"
+  bucket_force_destroy             = var.bucket_force_destroy
+}
+
+
 //dataflow temp bucket
-module "dataflow-tmp-bucket" {
+module "dataflow_tmp_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 2.1"
 
   project_id    = var.project_id
   name          = "bkt-${random_id.random_suffix.hex}-tmp-dataflow"
-  location      = var.bucket_location
+  location      = local.region
   force_destroy = var.bucket_force_destroy
-  encryption    = { "default_kms_key_name" = var.crypto_key }
+  encryption    = { "default_kms_key_name" = module.data_ingestion.cmek_ingestion_crypto_key }
 
   labels = {
     "enterprise_data_ingest_bucket" = "true"
@@ -68,7 +91,7 @@ resource "null_resource" "download_sample_cc_into_gcs" {
     echo "Changing sample file encoding from ISO-8859-1 to UTF-8"
     iconv -f="ISO-8859-1" -t="UTF-8" cc_records.csv > temp_cc_records.csv
     mv temp_cc_records.csv cc_records.csv
-    gsutil cp cc_records.csv gs://${var.data_ingestion_bucket}
+    gsutil cp cc_records.csv gs://${module.data_ingestion.data_ingest_bucket_names[0]}
     rm cc_records.csv
 EOF
 
@@ -78,18 +101,18 @@ EOF
 resource "google_storage_bucket_object" "schema" {
   name   = "code/${local.schema_file}"
   source = "${path.module}/${local.schema_file}"
-  bucket = module.dataflow-tmp-bucket.bucket.name
+  bucket = module.dataflow_tmp_bucket.bucket.name
   depends_on = [
-    module.dataflow-tmp-bucket
+    module.dataflow_tmp_bucket
   ]
 }
 
 resource "google_storage_bucket_object" "transform_code" {
   name   = "code/${local.transform_code_file}"
   source = "${path.module}/${local.transform_code_file}"
-  bucket = module.dataflow-tmp-bucket.bucket.name
+  bucket = module.dataflow_tmp_bucket.bucket.name
   depends_on = [
-    module.dataflow-tmp-bucket
+    module.dataflow_tmp_bucket
   ]
 }
 
@@ -98,7 +121,7 @@ resource "google_cloud_scheduler_job" "scheduler" {
   schedule = "0 0 * * *"
   # This needs to be us-central1 even if App Engine is in us-central.
   # You will get a resource not found error if just using us-central.
-  region  = "us-central1"
+  region  = local.region
   project = var.project_id
 
   http_target {
