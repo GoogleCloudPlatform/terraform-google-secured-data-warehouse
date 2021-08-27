@@ -21,12 +21,12 @@ output "dataflow_controller_service_account_email" {
 
 output "storage_writer_service_account_email" {
   description = "The Storage writer service account email. Should be used to write data to the buckets the ingestion pipeline reads from."
-  value       = module.storage_writer_service_account.email
+  value       = google_service_account.storage_writer_service_account.email
 }
 
 output "pubsub_writer_service_account_email" {
   description = "The PubSub writer service account email. Should be used to write data to the PubSub topics the ingestion pipeline reads from."
-  value       = module.pubsub_writer_service_account.email
+  value       = google_service_account.pubsub_writer_service_account.email
 }
 
 output "data_ingest_bucket_names" {
