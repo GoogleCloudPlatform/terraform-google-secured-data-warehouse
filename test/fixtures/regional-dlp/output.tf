@@ -35,6 +35,6 @@ output "templates_bucket_name" {
 }
 
 output "dataflow_controller_service_account_email" {
-  description = "The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account"
+  description = "The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account."
   value       = module.regional_dlp_example.dataflow_controller_service_account_email
 }
