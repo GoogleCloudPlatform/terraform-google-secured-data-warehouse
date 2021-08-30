@@ -210,7 +210,7 @@ If your user does not have the necessary roles to run the commands above you can
 | Name | Description |
 |------|-------------|
 | dataflow\_bucket\_name | The name of the bucket created to store Dataflow temporary data. |
-| dataflow\_controller\_service\_account\_email | The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account |
+| dataflow\_controller\_service\_account\_email | The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
 | templates\_bucket\_name | The name of the bucket created to store the flex template. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
