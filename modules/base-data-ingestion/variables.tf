@@ -41,7 +41,7 @@ variable "data_governance_project_id" {
 }
 
 variable "vpc_name" {
-  description = "the name of the network."
+  description = "The name of the network."
   type        = string
 }
 
@@ -78,8 +78,8 @@ variable "bucket_class" {
 }
 
 variable "bucket_force_destroy" {
-  type        = bool
   description = "When deleting a bucket, this boolean option will delete all contained objects. If you try to delete a bucket that contains objects, Terraform will fail that run."
+  type        = bool
   default     = false
 }
 
@@ -119,7 +119,7 @@ variable "dataset_description" {
 }
 
 variable "dataset_location" {
-  description = "The regional location for the dataset only US and EU are allowed in module"
+  description = "The regional location for the dataset only US and EU are allowed in module."
   type        = string
   default     = "US"
 }

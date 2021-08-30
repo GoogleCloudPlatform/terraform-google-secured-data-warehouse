@@ -15,7 +15,7 @@
  */
 
 output "dataflow_controller_service_account_email" {
-  description = "The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account"
+  description = "The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account."
   value       = module.dataflow_controller_service_account.email
 }
 
@@ -45,47 +45,47 @@ output "data_ingest_bigquery_dataset" {
 }
 
 output "network_name" {
-  description = "The name of the VPC being created"
+  description = "The name of the VPC being created."
   value       = module.dwh_networking.network_name
 }
 
 output "network_self_link" {
-  description = "The URI of the VPC being created"
+  description = "The URI of the VPC being created."
   value       = module.dwh_networking.network_self_link
 }
 
 output "subnets_names" {
-  description = "The names of the subnets being created"
+  description = "The names of the subnets being created."
   value       = module.dwh_networking.subnets_names
 }
 
 output "subnets_ips" {
-  description = "The IPs and CIDRs of the subnets being created"
+  description = "The IPs and CIDRs of the subnets being created."
   value       = module.dwh_networking.subnets_ips
 }
 
 output "subnets_self_links" {
-  description = "The self-links of subnets being created"
+  description = "The self-links of subnets being created."
   value       = module.dwh_networking.subnets_self_links
 }
 
 output "subnets_regions" {
-  description = "The region where the subnets will be created"
+  description = "The region where the subnets will be created."
   value       = module.dwh_networking.subnets_regions
 }
 
 output "access_level_name" {
-  description = "Access context manager access level name "
+  description = "Access context manager access level name."
   value       = module.dwh_networking.access_level_name
 }
 
 output "service_perimeter_name" {
-  description = "Access context manager service perimeter name "
+  description = "Access context manager service perimeter name."
   value       = module.dwh_networking.service_perimeter_name
 }
 
 output "project_number" {
-  description = "Project number included on perimeter"
+  description = "Project number included on perimeter."
   value       = module.dwh_networking.project_number
 }
 

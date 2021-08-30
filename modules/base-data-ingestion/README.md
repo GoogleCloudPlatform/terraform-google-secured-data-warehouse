@@ -198,7 +198,7 @@ If your user does not have the necessary roles to run the commands above you can
 | dataset\_default\_table\_expiration\_ms | TTL of tables using the dataset in MS. The default value is almost 12 months. | `number` | `31536000000` | no |
 | dataset\_description | Dataset description. | `string` | `"Ingest dataset"` | no |
 | dataset\_id | Unique ID for the dataset being provisioned. | `string` | n/a | yes |
-| dataset\_location | The regional location for the dataset only US and EU are allowed in module | `string` | `"US"` | no |
+| dataset\_location | The regional location for the dataset only US and EU are allowed in module. | `string` | `"US"` | no |
 | dataset\_name | Friendly name for the dataset being provisioned. | `string` | `"Ingest dataset"` | no |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | perimeter\_members | The list additional members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | n/a | yes |
@@ -206,13 +206,13 @@ If your user does not have the necessary roles to run the commands above you can
 | region | The region in which subnetwork will be created and Pub/Sub message will be stored. | `string` | `"us-central1"` | no |
 | subnet\_ip | The CDIR IP range of the subnetwork. | `string` | n/a | yes |
 | terraform\_service\_account | The email address of the service account that will run the Terraform code. | `string` | n/a | yes |
-| vpc\_name | the name of the network. | `string` | n/a | yes |
+| vpc\_name | The name of the network. | `string` | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| access\_level\_name | Access context manager access level name |
+| access\_level\_name | Access context manager access level name. |
 | cmek\_bigquery\_crypto\_key | The Customer Managed Crypto Key for the BigQuery service. |
 | cmek\_ingestion\_crypto\_key | The Customer Managed Crypto Key for the Ingestion crypto boundary. |
 | cmek\_keyring\_full\_name | The Keyring full name for the KMS Customer Managed Encryption Keys. |
@@ -220,19 +220,19 @@ If your user does not have the necessary roles to run the commands above you can
 | data\_ingest\_bigquery\_dataset | The bigquery dataset created for data ingest pipeline. |
 | data\_ingest\_bucket\_names | The name list of the buckets created for data ingest pipeline. |
 | data\_ingest\_topic\_name | The topic created for data ingest pipeline. |
-| dataflow\_controller\_service\_account\_email | The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account |
+| dataflow\_controller\_service\_account\_email | The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
 | default\_bigquery\_sa | The default Bigquery service account granted encrypt/decrypt permission on the KMS key. |
 | default\_pubsub\_sa | The default Pub/Sub service account granted encrypt/decrypt permission on the KMS key. |
 | default\_storage\_sa | The default Storage service account granted encrypt/decrypt permission on the KMS key. |
-| network\_name | The name of the VPC being created |
-| network\_self\_link | The URI of the VPC being created |
-| project\_number | Project number included on perimeter |
+| network\_name | The name of the VPC being created. |
+| network\_self\_link | The URI of the VPC being created. |
+| project\_number | Project number included on perimeter. |
 | pubsub\_writer\_service\_account\_email | The PubSub writer service account email. Should be used to write data to the PubSub topics the ingestion pipeline reads from. |
-| service\_perimeter\_name | Access context manager service perimeter name |
+| service\_perimeter\_name | Access context manager service perimeter name. |
 | storage\_writer\_service\_account\_email | The Storage writer service account email. Should be used to write data to the buckets the ingestion pipeline reads from. |
-| subnets\_ips | The IPs and CIDRs of the subnets being created |
-| subnets\_names | The names of the subnets being created |
-| subnets\_regions | The region where the subnets will be created |
-| subnets\_self\_links | The self-links of subnets being created |
+| subnets\_ips | The IPs and CIDRs of the subnets being created. |
+| subnets\_names | The names of the subnets being created. |
+| subnets\_regions | The region where the subnets will be created. |
+| subnets\_self\_links | The self-links of subnets being created. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
