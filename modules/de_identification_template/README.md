@@ -63,7 +63,7 @@ A functional example for a Record Transformation is included under the
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | crypto\_key | The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP. | `string` | n/a | yes |
-| dataflow\_service\_account | The Service Account email that will be used to identify the VMs in which the jobs are running | `string` | n/a | yes |
+| dataflow\_service\_account | The Service Account email that will be used to identify the VMs in which the jobs are running. | `string` | n/a | yes |
 | dlp\_location | The location of DLP resources. See https://cloud.google.com/dlp/docs/locations. The 'global' KMS location is valid. | `string` | `"global"` | no |
 | project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
 | template\_description | A description for the DLP de-identification template. | `string` | `"De-identifies sensitive content defined in the template with a KMS wrapped CMEK."` | no |

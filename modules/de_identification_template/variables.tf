@@ -64,6 +64,6 @@ variable "template_description" {
 }
 
 variable "dataflow_service_account" {
-  description = "The Service Account email that will be used to identify the VMs in which the jobs are running"
+  description = "The Service Account email that will be used to identify the VMs in which the jobs are running."
   type        = string
 }
