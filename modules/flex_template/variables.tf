@@ -25,20 +25,20 @@ variable "terraform_service_account" {
 }
 
 variable "create_repository" {
-  type        = bool
   description = "When `true`, an Artifact Registry Docker repository with the ID declared in `repository_id` will be created in the project declared in `project_id`. Set to `false` to reuse an existing Artifact Registry Docker repository."
+  type        = bool
   default     = true
 }
 
 variable "repository_id" {
-  type        = string
   description = "ID of the flex template repository."
+  type        = string
   default     = "flex-templates"
 }
 
 variable "repository_description" {
-  type        = string
   description = "Description of the flex template repository."
+  type        = string
   default     = "Repository for Dataflow flex templates"
 }
 
@@ -49,17 +49,18 @@ variable "location" {
 }
 
 variable "image_name" {
-  type        = string
   description = "Name of the flex image."
+  type        = string
 }
 
 variable "image_tag" {
-  type        = string
   description = "The TAG of the image."
+  type        = string
   default     = "v1.0.0"
 }
 
 variable "template_files" {
+  description = "The files needed to create the template. See https://cloud.google.com/dataflow/docs/guides/templates/using-flex-templates#python."
   type = object(
     {
       metadata_file     = string,
@@ -67,17 +68,16 @@ variable "template_files" {
       code_file         = string
     }
   )
-  description = "The files needed to create the template. See https://cloud.google.com/dataflow/docs/guides/templates/using-flex-templates#python ."
 }
 
 variable "python_modules_private_repo" {
+  description = "The private Python modules repository. If using artifact registry should be in the format https://LOCATION-python.pkg.dev/PROJECT_ID/REPO_NAME/simple/."
   type        = string
-  description = "The private Python modules repository. If using artifact registry should be in the format https://LOCATION-python.pkg.dev/PROJECT_ID/REPO_NAME/simple/"
 }
 
 variable "read_access_members" {
-  type        = list
   description = "List of members in the standard GCP form: user:{email}, serviceAccount:{email}, group:{email} who will have read access to the repository."
+  type        = list
   default     = []
 }
 
