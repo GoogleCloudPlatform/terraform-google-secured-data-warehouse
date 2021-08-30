@@ -15,13 +15,13 @@
  */
 
 output "project_id" {
-  description = "The project's ID"
+  description = "The project's ID."
   value       = var.project_id
 }
 
 output "df_job_network" {
+  description = "The URI of the VPC being created."
   value       = module.data_ingestion.network_self_link
-  description = "The URI of the VPC being created"
 }
 
 output "df_job_subnetwork" {
@@ -30,17 +30,17 @@ output "df_job_subnetwork" {
 }
 
 output "df_job_state" {
-  description = "The state of the newly created Dataflow job"
+  description = "The state of the newly created Dataflow job."
   value       = module.dataflow_job.state
 }
 
 output "df_job_id" {
-  description = "The unique Id of the newly created Dataflow job"
+  description = "The unique Id of the newly created Dataflow job."
   value       = module.dataflow_job.id
 }
 
 output "df_job_name" {
-  description = "The name of the newly created Dataflow job"
+  description = "The name of the newly created Dataflow job."
   value       = module.dataflow_job.name
 }
 
@@ -50,17 +50,17 @@ output "df_job_region" {
 }
 
 output "controller_service_account" {
-  description = "The Service Account email that will be used to identify the VMs in which the jobs are running"
+  description = "The Service Account email that will be used to identify the VMs in which the jobs are running."
   value       = module.data_ingestion.dataflow_controller_service_account_email
 }
 
 output "bucket_tmp_name" {
-  description = "The name of the bucket"
+  description = "The name of the bucket."
   value       = module.dataflow_tmp_bucket.bucket.name
 }
 
 output "bucket_ingestion_name" {
-  description = "The name of the bucket"
+  description = "The name of the bucket."
   value       = module.data_ingestion.data_ingest_bucket_names[0]
 }
 
