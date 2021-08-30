@@ -60,7 +60,7 @@ variable "image_tag" {
 }
 
 variable "template_files" {
-  description = "The files needed to create the template. See https://cloud.google.com/dataflow/docs/guides/templates/using-flex-templates#python ."
+  description = "The files needed to create the template. See https://cloud.google.com/dataflow/docs/guides/templates/using-flex-templates#python."
   type = object(
     {
       metadata_file     = string,
@@ -71,7 +71,7 @@ variable "template_files" {
 }
 
 variable "python_modules_private_repo" {
-  description = "The private Python modules repository. If using artifact registry should be in the format https://LOCATION-python.pkg.dev/PROJECT_ID/REPO_NAME/simple/"
+  description = "The private Python modules repository. If using artifact registry should be in the format https://LOCATION-python.pkg.dev/PROJECT_ID/REPO_NAME/simple/."
   type        = string
 }
 
