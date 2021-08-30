@@ -68,7 +68,7 @@ variable "perimeter_additional_members" {
 }
 
 variable "bucket_name" {
-  description = "The main part of the name of the bucket being provisioned."
+  description = "The name of for the bucket being provisioned."
   type        = string
 }
 
