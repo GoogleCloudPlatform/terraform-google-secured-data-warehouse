@@ -83,7 +83,7 @@ variable "dataset_description" {
 }
 
 variable "dataset_location" {
-  description = "The regional location for the dataset only US and EU are allowed in module"
+  description = "The regional location for the dataset only US and EU are allowed in module."
   type        = string
   default     = "US"
 }
