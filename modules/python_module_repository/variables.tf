@@ -25,20 +25,20 @@ variable "terraform_service_account" {
 }
 
 variable "create_repository" {
-  type        = bool
   description = "When `true`, an Artifact Registry Python repository with the ID declared in `repository_id` will be created in the project declared in `project_id`. Set to `false` to reuse an existing Artifact Registry Python repository."
+  type        = bool
   default     = true
 }
 
 variable "repository_id" {
-  type        = string
   description = "ID of the Python modules repository."
+  type        = string
   default     = "python-modules"
 }
 
 variable "repository_description" {
-  type        = string
   description = "Description of the Python modules repository."
+  type        = string
   default     = "Repository for Python modules for Dataflow flex templates"
 }
 
@@ -49,12 +49,12 @@ variable "location" {
 }
 
 variable "read_access_members" {
-  type        = list
   description = "List of members in the standard GCP form: user:{email}, serviceAccount:{email}, group:{email} who will have read access to the repository."
+  type        = list
   default     = []
 }
 
 variable "requirements_filename" {
-  type        = string
   description = "The requirements.txt file to fetch Python modules."
+  type        = string
 }
