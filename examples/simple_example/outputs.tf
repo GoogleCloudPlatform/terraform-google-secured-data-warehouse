@@ -15,7 +15,7 @@
  */
 
 output "dataflow_controller_service_account_email" {
-  description = "The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account"
+  description = "The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account."
   value       = module.secured_data_warehouse.dataflow_controller_service_account_email
 }
 
@@ -45,37 +45,37 @@ output "data_ingest_bigquery_dataset" {
 }
 
 output "network_name" {
-  description = "The name of the VPC being created"
+  description = "The name of the VPC being created."
   value       = module.secured_data_warehouse.network_name
 }
 
 output "network_self_link" {
-  description = "The URI of the VPC being created"
+  description = "The URI of the VPC being created."
   value       = module.secured_data_warehouse.network_self_link
 }
 
 output "subnets_names" {
-  description = "The names of the subnets being created"
+  description = "The names of the subnets being created."
   value       = module.secured_data_warehouse.subnets_names
 }
 
 output "subnets_ips" {
-  description = "The IPs and CIDRs of the subnets being created"
+  description = "The IPs and CIDRs of the subnets being created."
   value       = module.secured_data_warehouse.subnets_ips
 }
 
 output "subnets_self_links" {
-  description = "The self-links of subnets being created"
+  description = "The self-links of subnets being created."
   value       = module.secured_data_warehouse.subnets_self_links
 }
 
 output "access_level_name" {
-  description = "Access context manager access level name "
+  description = "Access context manager access level name."
   value       = module.secured_data_warehouse.access_level_name
 }
 
 output "service_perimeter_name" {
-  description = "Access context manager service perimeter name "
+  description = "Access context manager service perimeter name."
   value       = module.secured_data_warehouse.service_perimeter_name
 }
 

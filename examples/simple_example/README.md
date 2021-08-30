@@ -17,7 +17,7 @@ This example illustrates how to use the `secured-data-warehouse` module.
 
 | Name | Description |
 |------|-------------|
-| access\_level\_name | Access context manager access level name |
+| access\_level\_name | Access context manager access level name. |
 | cmek\_bigquery\_crypto\_key | The Customer Managed Crypto Key for the BigQuery service. |
 | cmek\_ingestion\_crypto\_key | The Customer Managed Crypto Key for the Ingestion crypto boundary. |
 | cmek\_keyring\_full\_name | The Keyring full name for the KMS Customer Managed Encryption Keys. |
@@ -25,15 +25,15 @@ This example illustrates how to use the `secured-data-warehouse` module.
 | data\_ingest\_bigquery\_dataset | The bigquery dataset created for data ingest pipeline. |
 | data\_ingest\_bucket\_names | The name list of the buckets created for data ingest pipeline. |
 | data\_ingest\_topic\_name | The topic created for data ingest pipeline. |
-| dataflow\_controller\_service\_account\_email | The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account |
-| network\_name | The name of the VPC being created |
-| network\_self\_link | The URI of the VPC being created |
+| dataflow\_controller\_service\_account\_email | The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
+| network\_name | The name of the VPC being created. |
+| network\_self\_link | The URI of the VPC being created. |
 | pubsub\_writer\_service\_account\_email | The PubSub writer service account email. Should be used to write data to the PubSub topics the ingestion pipeline reads from. |
-| service\_perimeter\_name | Access context manager service perimeter name |
+| service\_perimeter\_name | Access context manager service perimeter name. |
 | storage\_writer\_service\_account\_email | The Storage writer service account email. Should be used to write data to the buckets the ingestion pipeline reads from. |
-| subnets\_ips | The IPs and CIDRs of the subnets being created |
-| subnets\_names | The names of the subnets being created |
-| subnets\_self\_links | The self-links of subnets being created |
+| subnets\_ips | The IPs and CIDRs of the subnets being created. |
+| subnets\_names | The names of the subnets being created. |
+| subnets\_self\_links | The self-links of subnets being created. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
