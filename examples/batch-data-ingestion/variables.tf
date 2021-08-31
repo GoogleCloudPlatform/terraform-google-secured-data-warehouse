@@ -19,6 +19,11 @@ variable "project_id" {
   type        = string
 }
 
+variable "data_governance_project_id" {
+  description = "The ID of the project in which the data governance resources will be created."
+  type        = string
+}
+
 variable "org_id" {
   description = "GCP Organization ID."
   type        = string

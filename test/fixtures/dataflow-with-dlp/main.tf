@@ -47,6 +47,7 @@ resource "google_kms_secret_ciphertext" "wrapped_key" {
 module "dataflow_with_dlp" {
   source                           = "../../../examples/dataflow-with-dlp"
   project_id                       = var.project_id
+  data_governance_project_id       = var.data_governance_project_id
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
   perimeter_members                = concat(["serviceAccount:${var.terraform_service_account}"], var.perimeter_additional_members)

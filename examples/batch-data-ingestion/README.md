@@ -13,6 +13,7 @@ This example illustrates how to run a Dataflow job that uses the `batch template
 |------|-------------|------|---------|:--------:|
 | access\_context\_manager\_policy\_id | The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format="value(name)"`. | `number` | n/a | yes |
 | bucket\_force\_destroy | When deleting a bucket, this boolean option will delete all contained objects. If you try to delete a bucket that contains objects, Terraform will fail that run. | `bool` | `false` | no |
+| data\_governance\_project\_id | The ID of the project in which the data governance resources will be created. | `string` | n/a | yes |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | perimeter\_members | The list of all members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | n/a | yes |
 | project\_id | The ID of the project in which the service account will be created. | `string` | n/a | yes |
@@ -27,7 +28,7 @@ This example illustrates how to run a Dataflow job that uses the `batch template
 | df\_job\_network | The URI of the VPC being created. |
 | df\_job\_region | The region of the newly created Dataflow job. |
 | df\_job\_subnetwork | The name of the subnetwork used for create Dataflow job. |
-| project\_id | The project's ID. |
+| project\_id | The data ingestion project's ID. |
 | scheduler\_id | Cloud Scheduler Job id created. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

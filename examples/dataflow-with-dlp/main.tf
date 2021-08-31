@@ -25,7 +25,7 @@ module "data_ingestion" {
   dataset_id                       = local.dataset_id
   org_id                           = var.org_id
   project_id                       = var.project_id
-  data_governance_project_id       = var.project_id
+  data_governance_project_id       = var.data_governance_project_id
   region                           = local.region
   bucket_location                  = local.region
   dataset_location                 = local.region

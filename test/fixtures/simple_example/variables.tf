@@ -29,6 +29,10 @@ variable "project_id" {
   type        = string
 }
 
+variable "data_governance_project_id" {
+  description = "The ID of the project in which the data governance resources will be created."
+  type        = string
+}
 variable "access_context_manager_policy_id" {
   description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
   type        = number

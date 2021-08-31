@@ -15,7 +15,7 @@
  */
 
 output "project_id" {
-  description = "The project's ID."
+  description = "The data ingestion project's ID."
   value       = var.project_id
 }
 
