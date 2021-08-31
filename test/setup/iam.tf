@@ -71,10 +71,18 @@ resource "google_service_account" "int_test" {
   display_name = "ci-account"
 }
 
-resource "google_project_iam_member" "int_test" {
+resource "google_project_iam_member" "int_data_ingestion_test" {
   for_each = toset(local.int_proj_required_roles)
 
   project = module.project.project_id
+  role    = each.value
+  member  = "serviceAccount:${google_service_account.int_test.email}"
+}
+
+resource "google_project_iam_member" "int_data_governance_test" {
+  for_each = toset(local.int_proj_required_roles)
+
+  project = module.data_governance_project.project_id
   role    = each.value
   member  = "serviceAccount:${google_service_account.int_test.email}"
 }
@@ -84,7 +92,7 @@ resource "google_service_account_key" "int_test" {
 }
 
 resource "time_sleep" "wait_90_seconds" {
-  depends_on = [google_project_iam_member.int_test, google_organization_iam_member.org_admins_group]
+  depends_on = [google_project_iam_member.int_data_ingestion_test, google_project_iam_member.int_data_governance_test, google_organization_iam_member.org_admins_group]
 
   create_duration = "90s"
 }
