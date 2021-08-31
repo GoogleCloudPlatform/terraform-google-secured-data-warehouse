@@ -50,7 +50,7 @@ module "data_governance_project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
 
-  name              = "ci-secured-dtw-data-governance"
+  name              = "ci-secured-dtw-data-gov"
   random_project_id = "true"
   org_id            = var.org_id
   folder_id         = var.folder_id
