@@ -25,10 +25,17 @@ from apache_beam.options.pipeline_options import (GoogleCloudOptions,
 from apache_beam.transforms import DoFn, ParDo, PTransform, BatchElements
 from apache_beam.utils.annotations import experimental
 
-
 def run(argv=None, save_main_session=True):
     """Build and run the pipeline."""
     parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '--input_table',
+        required=True,
+        help=(
+            'Input BigQuery table for results specified as: '
+            'PROJECT:DATASET.TABLE or DATASET.TABLE.'
+        )
+    )
     parser.add_argument(
         '--output_table',
         required=True,
@@ -49,7 +56,7 @@ def run(argv=None, save_main_session=True):
         '--dlp_project',
         required=True,
         help=(
-            'ID of the project that holds the DLP template.
+            'ID of the project that holds the DLP template.'
         )
     )
     parser.add_argument(
@@ -85,14 +92,6 @@ def run(argv=None, save_main_session=True):
             'the call to the Data Loss Prevention (DLP) API.'
         )
     )
-    group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument(
-        '--input_table',
-        help=(
-            'Input BigQuery table for results specified as: '
-            'PROJECT:DATASET.TABLE or DATASET.TABLE '
-        )
-    )
     known_args, pipeline_args = parser.parse_known_args(argv)
 
     options = PipelineOptions(
@@ -107,8 +106,12 @@ def run(argv=None, save_main_session=True):
         messages = (
             p
             | 'Read from BigQuery Table' >>
-            beam.io.WriteToBigQuery(
-                known_args.input_table,
+            beam.io.ReadFromBigQuery(
+                table=known_args.input_table
+            )
+            | 'Apply window' >> beam.WindowInto(
+                window.FixedWindows(known_args.window_interval_sec, 0)
+            )
         )
 
         re_identified_messages = (
@@ -130,7 +133,7 @@ def run(argv=None, save_main_session=True):
         )
 
         # Write to BigQuery.
-        de_identified_messages | 'Write to BQ' >> beam.io.WriteToBigQuery(
+        re_identified_messages | 'Write to BQ' >> beam.io.WriteToBigQuery(
             known_args.output_table,
             schema=known_args.bq_schema,
             create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED
