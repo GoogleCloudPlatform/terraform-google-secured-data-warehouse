@@ -48,6 +48,10 @@ module "dwh_networking" {
   depends_on = [
     module.data_ingest_bucket,
     module.bigquery_dataset,
-    module.data_ingest_topic
+    module.data_ingest_topic,
+    google_storage_bucket_iam_member.objectViewer,
+    google_storage_bucket_iam_member.objectCreator,
+    google_pubsub_topic_iam_member.publisher,
+    google_pubsub_topic_iam_member.subscriber
   ]
 }
