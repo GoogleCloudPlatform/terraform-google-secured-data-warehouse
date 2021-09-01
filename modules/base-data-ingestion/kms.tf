@@ -47,6 +47,10 @@ data "google_project" "ingestion_project" {
   project_id = var.project_id
 }
 
+data "google_project" "governance_project" {
+  project_id = var.data_governance_project_id
+}
+
 data "google_storage_project_service_account" "gcs_account" {
   project = var.project_id
 }

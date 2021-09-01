@@ -80,6 +80,10 @@ resource "null_resource" "download_sample_cc_into_gcs" {
 EOF
 
   }
+
+  depends_on = [
+    module.data_ingestion
+  ]
 }
 
 module "de_identification_template" {

@@ -24,6 +24,12 @@ variable "project_id" {
   type        = string
 }
 
+variable "resources" {
+  description = "A list of GCP resources that are inside of the service perimeter. Currently only projects are allowed."
+  type        = list(string)
+  default     = []
+}
+
 variable "commom_suffix" {
   description = "A commom suffix to be used in the module."
   type        = string

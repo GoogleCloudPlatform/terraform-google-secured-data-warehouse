@@ -57,7 +57,7 @@ module "regular_service_perimeter" {
   perimeter_name = local.perimeter_name
   description    = "perimeter for data warehouse projects"
 
-  resources           = [data.google_project.target_project.number]
+  resources           = var.resources
   restricted_services = var.restricted_services
 
   access_levels = [
