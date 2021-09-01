@@ -151,6 +151,9 @@ module "dataflow_bucket" {
     default_kms_key_name = module.data_ingestion.cmek_ingestion_crypto_key
   }
 
+  depends_on = [
+    module.data_ingestion
+  ]
 }
 
 resource "google_dataflow_flex_template_job" "regional_dlp" {

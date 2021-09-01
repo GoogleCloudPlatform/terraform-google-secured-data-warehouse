@@ -56,6 +56,10 @@ module "dataflow_tmp_bucket" {
   labels = {
     "enterprise_data_ingest_bucket" = "true"
   }
+
+  depends_on = [
+    module.data_ingestion
+  ]
 }
 resource "random_id" "original_key" {
   byte_length = 16
