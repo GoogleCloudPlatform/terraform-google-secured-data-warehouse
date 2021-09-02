@@ -49,6 +49,20 @@ module "dwh_networking" {
   # when the VPC-SC is created but perimeter member
   # not yet propagated.
   depends_on = [
+    null_resource.forces_wait_propagation
+  ]
+}
+
+resource "null_resource" "forces_wait_propagation" {
+  provisioner "local-exec" {
+    command = "echo \"\""
+  }
+
+  provisioner "local-exec" {
+    when    = destroy
+    command = "sleep 90;"
+  }
+  depends_on = [
     module.data_ingest_bucket,
     module.bigquery_dataset,
     module.data_ingest_topic,
