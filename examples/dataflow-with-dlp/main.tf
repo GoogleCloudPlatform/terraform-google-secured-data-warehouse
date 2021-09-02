@@ -96,6 +96,10 @@ module "de_identification_template" {
   dlp_location              = local.region
   template_file             = "${path.module}/deidentification.tmpl"
   dataflow_service_account  = module.data_ingestion.dataflow_controller_service_account_email
+
+  depends_on = [
+    module.data_ingestion.access_level_name
+  ]
 }
 
 module "dataflow_job" {
@@ -122,4 +126,8 @@ module "dataflow_job" {
     dlpProjectId           = var.project_id
     deidentifyTemplateName = "projects/${var.project_id}/locations/${local.region}/deidentifyTemplates/${module.de_identification_template.template_id}"
   }
+
+  depends_on = [
+    module.data_ingestion.access_level_name
+  ]
 }
