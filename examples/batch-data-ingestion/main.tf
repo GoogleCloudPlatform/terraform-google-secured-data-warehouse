@@ -80,7 +80,7 @@ module "dataflow_tmp_bucket" {
     "enterprise_data_ingest_bucket" = "true"
   }
   depends_on = [
-    module.data_ingestion
+    module.data_ingestion.access_level_name
   ]
 }
 

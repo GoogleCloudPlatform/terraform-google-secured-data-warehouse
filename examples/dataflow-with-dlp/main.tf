@@ -58,7 +58,7 @@ module "dataflow_tmp_bucket" {
   }
 
   depends_on = [
-    module.data_ingestion
+    module.data_ingestion.access_level_name
   ]
 }
 resource "random_id" "original_key" {
@@ -82,7 +82,7 @@ EOF
   }
 
   depends_on = [
-    module.data_ingestion
+    module.data_ingestion.access_level_name
   ]
 }
 
