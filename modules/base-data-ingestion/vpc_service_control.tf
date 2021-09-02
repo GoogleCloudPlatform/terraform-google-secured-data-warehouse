@@ -40,7 +40,9 @@ module "dwh_networking" {
     "storage.googleapis.com",
     "bigquery.googleapis.com",
     "dataflow.googleapis.com",
-    "pubsub.googleapis.com"
+    "pubsub.googleapis.com",
+    "cloudkms.googleapis.com",
+    "dlp.googleapis.com"
   ]
 
   # depends_on needed to prevent intermittent errors
@@ -50,6 +52,8 @@ module "dwh_networking" {
     module.data_ingest_bucket,
     module.bigquery_dataset,
     module.data_ingest_topic,
+    module.dataflow_controller_service_account,
+    module.cmek,
     google_storage_bucket_iam_member.objectViewer,
     google_storage_bucket_iam_member.objectCreator,
     google_pubsub_topic_iam_member.publisher,
