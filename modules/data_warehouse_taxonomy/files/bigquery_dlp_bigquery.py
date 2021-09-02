@@ -15,7 +15,6 @@
 from __future__ import absolute_import
 
 import argparse
-import json
 import logging
 
 import apache_beam as beam
@@ -24,6 +23,7 @@ from apache_beam.options.pipeline_options import (GoogleCloudOptions,
                                                   PipelineOptions)
 from apache_beam.transforms import DoFn, ParDo, PTransform, BatchElements
 from apache_beam.utils.annotations import experimental
+
 
 def run(argv=None, save_main_session=True):
     """Build and run the pipeline."""
