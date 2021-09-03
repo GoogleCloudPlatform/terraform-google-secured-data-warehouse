@@ -56,22 +56,4 @@ module "regional_dlp_example" {
   crypto_key  = module.kek.keys[local.kek_key_name]
   wrapped_key = google_kms_secret_ciphertext.wrapped_key.ciphertext
   #bucket_force_destroy      = true
-  depends_on = [
-    null_resource.forces_wait_propagation
-  ]
-}
-
-resource "null_resource" "forces_wait_propagation" {
-  provisioner "local-exec" {
-    command = "echo \"\""
-  }
-
-  provisioner "local-exec" {
-    when    = destroy
-    command = "sleep 120;"
-  }
-  depends_on = [
-    module.kek,
-    google_kms_secret_ciphertext.wrapped_key
-  ]
 }
