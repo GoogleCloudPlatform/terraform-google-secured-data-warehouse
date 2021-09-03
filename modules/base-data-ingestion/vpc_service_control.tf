@@ -40,9 +40,9 @@ module "dwh_networking" {
     "storage.googleapis.com",
     "bigquery.googleapis.com",
     "dataflow.googleapis.com",
-    "pubsub.googleapis.com",
-    "cloudkms.googleapis.com",
-    "dlp.googleapis.com"
+    "pubsub.googleapis.com"
+    # "cloudkms.googleapis.com",
+    # "dlp.googleapis.com"
   ]
 
   # depends_on needed to prevent intermittent errors
