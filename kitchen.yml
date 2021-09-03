@@ -114,3 +114,7 @@ suites:
           backend: gcp
           controls:
             - gcp
+        - name: simple_example gcloud
+          backend: local
+          controls:
+            - gcloud
