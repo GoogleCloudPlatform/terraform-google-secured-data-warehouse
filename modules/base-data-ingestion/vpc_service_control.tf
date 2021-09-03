@@ -40,8 +40,8 @@ module "dwh_networking" {
     "storage.googleapis.com",
     "bigquery.googleapis.com",
     "dataflow.googleapis.com",
-    "pubsub.googleapis.com"
-    # "cloudkms.googleapis.com",
+    "pubsub.googleapis.com",
+    "cloudkms.googleapis.com"
     # "dlp.googleapis.com"
   ]
 
