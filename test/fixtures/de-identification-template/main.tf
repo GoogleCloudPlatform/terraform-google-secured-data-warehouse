@@ -49,22 +49,4 @@ module "de_identification_template" {
   wrapped_key               = google_kms_secret_ciphertext.wrapped_key.ciphertext
   dlp_location              = var.dlp_location
   template_file             = "${path.module}/deidentification.tmpl"
-  depends_on = [
-    null_resource.forces_wait_propagation
-  ]
-}
-
-resource "null_resource" "forces_wait_propagation" {
-  provisioner "local-exec" {
-    command = "echo \"\""
-  }
-
-  provisioner "local-exec" {
-    when    = destroy
-    command = "sleep 120;"
-  }
-  depends_on = [
-    module.kms,
-    google_kms_secret_ciphertext.wrapped_key
-  ]
 }
