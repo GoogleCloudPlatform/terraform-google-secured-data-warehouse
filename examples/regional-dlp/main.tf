@@ -123,6 +123,9 @@ module "flex_dlp_template" {
     requirements_file = "${path.module}/files/requirements.txt"
   }
 
+  depends_on = [
+    module.data_ingestion.access_level_name
+  ]
 }
 
 module "python_module_repository" {
@@ -135,6 +138,9 @@ module "python_module_repository" {
   requirements_filename     = "${path.module}/files/requirements.txt"
   read_access_members       = ["serviceAccount:${module.data_ingestion.dataflow_controller_service_account_email}"]
 
+  depends_on = [
+    module.data_ingestion.access_level_name
+  ]
 }
 
 module "dataflow_bucket" {

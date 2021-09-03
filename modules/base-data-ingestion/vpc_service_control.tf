@@ -60,7 +60,7 @@ resource "null_resource" "forces_wait_propagation" {
 
   provisioner "local-exec" {
     when    = destroy
-    command = "sleep 90;"
+    command = "sleep 120;"
   }
   depends_on = [
     module.data_ingest_bucket,
