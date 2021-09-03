@@ -48,6 +48,6 @@ module "org_policies" {
   source             = "./modules/org_policies"
   project_id         = var.project_id
   region             = local.region
-  trusted_subnetwork = module.data_ingestion.subnets_names
+  trusted_subnetwork = module.data_ingestion.subnets_names[0]
   trusted_locations  = var.trusted_locations
 }
