@@ -39,15 +39,38 @@ module "dwh_networking" {
     "storage.googleapis.com",
     "bigquery.googleapis.com",
     "dataflow.googleapis.com",
-    "pubsub.googleapis.com"
+    "pubsub.googleapis.com",
+    "cloudkms.googleapis.com"
   ]
 
   # depends_on needed to prevent intermittent errors
   # when the VPC-SC is created but perimeter member
   # not yet propagated.
   depends_on = [
-    module.data_ingest_bucket,
-    module.bigquery_dataset,
-    module.data_ingest_topic
+    null_resource.forces_wait_propagation
   ]
 }
+
+resource "null_resource" "forces_wait_propagation" {
+  provisioner "local-exec" {
+    command = "echo \"\""
+  }
+
+  provisioner "local-exec" {
+    when    = destroy
+    command = "sleep 120;"
+  }
+
+  depends_on = [
+    module.data_ingest_bucket,
+    module.bigquery_dataset,
+    module.data_ingest_topic,
+    module.dataflow_controller_service_account,
+    module.cmek,
+    google_storage_bucket_iam_member.objectViewer,
+    google_storage_bucket_iam_member.objectCreator,
+    google_pubsub_topic_iam_member.publisher,
+    google_pubsub_topic_iam_member.subscriber
+  ]
+}
+
