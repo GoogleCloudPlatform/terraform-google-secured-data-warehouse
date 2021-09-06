@@ -20,6 +20,11 @@ output "project_id" {
   value       = var.project_id
 }
 
+output "data_governance_project_id" {
+  description = "The data_governance_project_id used to create infra."
+  value       = var.data_governance_project_id
+}
+
 output "org_id" {
   description = "The organization used to create infra."
   value       = var.org_id
