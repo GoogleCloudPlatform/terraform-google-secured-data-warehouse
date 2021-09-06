@@ -71,6 +71,8 @@ resource "null_resource" "forces_wait_propagation" {
     google_storage_bucket_iam_member.objectViewer,
     google_storage_bucket_iam_member.objectCreator,
     google_pubsub_topic_iam_member.publisher,
-    google_pubsub_topic_iam_member.subscriber
+    google_pubsub_topic_iam_member.subscriber,
+    data.google_bigquery_default_service_account.bigquery_sa,
+    data.google_storage_project_service_account.gcs_account
   ]
 }
