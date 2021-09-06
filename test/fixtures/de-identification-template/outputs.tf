@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-output "project_id" {
+output "data_governance_project_id" {
   description = "The project_id used to create infra."
-  value       = var.project_id
+  value       = var.data_governance_project_id
 }
 
 output "de_identification_template_dlp_location" {

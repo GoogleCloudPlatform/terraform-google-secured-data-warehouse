@@ -94,7 +94,7 @@ module "data_ingestion" {
 module "de_identification_template_example" {
   source = "../..//modules/de_identification_template"
 
-  project_id                = var.project_id
+  project_id                = var.data_governance_project_id
   terraform_service_account = var.terraform_service_account
   dataflow_service_account  = module.data_ingestion.dataflow_controller_service_account_email
   crypto_key                = var.crypto_key
@@ -164,7 +164,7 @@ resource "google_dataflow_flex_template_job" "regional_dlp" {
 
   parameters = {
     input_topic                    = "projects/${var.project_id}/topics/${module.data_ingestion.data_ingest_topic_name}"
-    deidentification_template_name = "projects/${var.project_id}/locations/${var.location}/deidentifyTemplates/${module.de_identification_template_example.template_id}"
+    deidentification_template_name = "projects/${var.data_governance_project_id}/locations/${var.location}/deidentifyTemplates/${module.de_identification_template_example.template_id}"
     dlp_location                   = var.location
     dlp_project                    = var.project_id
     bq_schema                      = local.bq_schema

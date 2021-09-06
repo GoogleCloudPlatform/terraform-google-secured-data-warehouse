@@ -4,7 +4,7 @@ depends:
     git: https://github.com/inspec/inspec-gcp.git
     tag: v1.8.8
 attributes:
-  - name: project_id
+  - name: data_governance_project_id
     required: true
     type: string
   - name: terraform_service_account

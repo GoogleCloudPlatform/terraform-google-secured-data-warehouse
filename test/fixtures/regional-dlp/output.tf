@@ -15,8 +15,13 @@
  */
 
 output "project_id" {
-  description = "The project_id used to create infra."
+  description = "The project_id used to create data ingestion infra."
   value       = var.project_id
+}
+
+output "data_governance_project_id" {
+  description = "The project_id used to create data governance infra."
+  value       = var.data_governance_project_id
 }
 
 output "terraform_service_account" {
