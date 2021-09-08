@@ -18,6 +18,10 @@ provider "google" {
   version = "~> 3.67"
 }
 
+resource "random_id" "random_suffix" {
+  byte_length = 4
+}
+
 module "secured_data_warehouse" {
   source                           = "../.."
   org_id                           = var.org_id
@@ -28,6 +32,6 @@ module "secured_data_warehouse" {
   bucket_name                      = "bucket_simple_exemple"
   dataset_id                       = "dataset_simple_exemple"
   vpc_name                         = "vpc-simple-exemple"
-  cmek_keyring_name                = "key_name_simple_exemple"
+  cmek_keyring_name                = "key_name_simple_exemple_${random_id.random_suffix.hex}"
   subnet_ip                        = "10.0.32.0/21"
 }
