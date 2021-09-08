@@ -104,16 +104,6 @@ suites:
           backend: local
           controls:
             - gcloud
-  - name: org-policies
-    driver:
-      root_module_directory: test/fixtures/org-policies/
-    verifier:
-      color: false
-      systems:
-        - name: org_policies gcloud
-          backend: local
-          controls:
-            - gcloud
   - name: simple_example
     driver:
       root_module_directory: test/fixtures/simple_example/
@@ -124,3 +114,7 @@ suites:
           backend: gcp
           controls:
             - gcp
+        - name: simple_example gcloud
+          backend: local
+          controls:
+            - gcloud
