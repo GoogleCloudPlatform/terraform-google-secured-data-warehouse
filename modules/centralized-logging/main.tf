@@ -48,7 +48,6 @@ module "bucket" {
   project_id    = var.logging_project_id
   location      = var.bucket_logging_location
   force_destroy = true
-  
   encryption = {
     default_kms_key_name = var.kms_key_name
   }
@@ -63,7 +62,6 @@ module "log_export" {
   for_each               = toset(var.projects_ids)
   source                 = "terraform-google-modules/log-export/google"
   version                = "~> 7.1.0"
-  
   destination_uri        = local.destination_uri
   filter                 = var.sink_filter
   log_sink_name          = "${local.bucket_name}_${each.key}_logsink"

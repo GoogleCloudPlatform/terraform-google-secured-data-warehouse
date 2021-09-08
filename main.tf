@@ -15,9 +15,9 @@
  */
 
 locals {
-  region         = lower(var.region)
-  location       = var.location == "" ? lower(var.region) : lower(var.location)
-  cmek_location  = local.location == "eu" ? "europe" : local.location
+  region          = lower(var.region)
+  location        = var.location == "" ? lower(var.region) : lower(var.location)
+  cmek_location   = local.location == "eu" ? "europe" : local.location
   projects_to_log = [var.project_id, var.data_governance_project_id]
 }
 
@@ -48,7 +48,6 @@ module "data_ingestion" {
 module "centralized_logging" {
   source                  = "./modules/centralized-logging"
   count                   = var.enable_centralized_logging ? 1 : 0
-  
   projects_ids            = local.projects_to_log
   sink_filter             = var.sink_filter
   logging_project_id      = var.data_governance_project_id

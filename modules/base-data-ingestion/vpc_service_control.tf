@@ -64,7 +64,7 @@ resource "null_resource" "forces_wait_propagation" {
     command = "sleep 120;"
   }
 
-depends_on = [
+  depends_on = [
     module.data_ingest_bucket,
     module.bigquery_dataset,
     module.data_ingest_topic,

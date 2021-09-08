@@ -13,11 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-provider "google" {
-  version = "~> 3.67"
-}
-
 resource "random_id" "random_suffix" {
   byte_length = 4
 }
