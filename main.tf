@@ -18,6 +18,7 @@ locals {
   region        = lower(var.region)
   location      = var.location == "" ? lower(var.region) : lower(var.location)
   cmek_location = local.location == "eu" ? "europe" : local.location
+  projects_ids  = [var.project_id, var.data_governance_project_id]
 }
 
 module "data_ingestion" {
@@ -46,7 +47,8 @@ module "data_ingestion" {
 
 module "org_policies" {
   source             = "./modules/org_policies"
-  project_id         = var.project_id
+  for_each           = toset(local.projects_ids)
+  project_id         = each.key
   region             = local.region
   trusted_subnetwork = module.data_ingestion.subnets_names[0]
   trusted_locations  = var.trusted_locations
