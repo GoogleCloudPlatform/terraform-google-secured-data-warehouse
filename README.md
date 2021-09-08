@@ -45,6 +45,7 @@ module "secured_data_warehouse" {
 | access\_context\_manager\_policy\_id | The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format="value(name)"`. | `number` | n/a | yes |
 | bucket\_class | The storage class for the bucket being provisioned. | `string` | `"STANDARD"` | no |
 | bucket\_lifecycle\_rules | List of lifecycle rules to configure. Format is the same as described in provider documentation https://www.terraform.io/docs/providers/google/r/storage_bucket.html#lifecycle_rule except condition.matches\_storage\_class should be a comma delimited string. | <pre>set(object({<br>    action    = any<br>    condition = any<br>  }))</pre> | <pre>[<br>  {<br>    "action": {<br>      "type": "Delete"<br>    },<br>    "condition": {<br>      "age": 30,<br>      "matches_storage_class": [<br>        "STANDARD"<br>      ],<br>      "with_state": "ANY"<br>    }<br>  }<br>]</pre> | no |
+| bucket\_logging\_name | The name of the bucket that will store the logs. | `string` | `""` | no |
 | bucket\_name | The name of for the bucket being provisioned. | `string` | n/a | yes |
 | cmek\_keyring\_name | The Keyring name for the KMS Customer Managed Encryption Keys being provisioned. | `string` | n/a | yes |
 | data\_governance\_project\_id | The ID of the project in which the data governance resources will be created. | `string` | n/a | yes |
@@ -57,6 +58,8 @@ module "secured_data_warehouse" {
 | perimeter\_additional\_members | The list additional members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | `[]` | no |
 | project\_id | The ID of the project in which the service account will be created. | `string` | n/a | yes |
 | region | The region in which the resources will be deployed. | `string` | `"us-central1"` | no |
+| set\_logging | The module will create a centralized logging infrastructure, set false if you already have a solution for this. | `bool` | `true` | no |
+| sink\_filter | The filter to apply when exporting logs. Only log entries that match the filter are exported. Default is '' which exports all logs. | `string` | `""` | no |
 | subnet\_ip | The CDIR IP range of the subnetwork. | `string` | n/a | yes |
 | terraform\_service\_account | The email address of the service account that will run the Terraform code. | `string` | n/a | yes |
 | vpc\_name | The name of the network. | `string` | n/a | yes |

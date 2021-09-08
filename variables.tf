@@ -123,3 +123,21 @@ variable "cmek_keyring_name" {
   description = "The Keyring name for the KMS Customer Managed Encryption Keys being provisioned."
   type        = string
 }
+
+variable "enable_centralized_logging" {
+  description = "If true a centralized logging infrastructure will be created. Set to false if you have a centralized logging in place."
+  type        = bool
+  default     = true
+}
+
+variable "sink_filter" {
+  description = "The filter to apply when exporting logs. Only log entries that match the filter are exported. Default is '' which exports all logs."
+  type        = string
+  default     = ""
+}
+
+variable "bucket_logging_prefix" {
+  description = "The preflix name of the bucket that will store the logs."
+  type        = string
+  default     = "bkt-dwh-logging"
+}

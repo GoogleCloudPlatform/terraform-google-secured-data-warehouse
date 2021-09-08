@@ -62,14 +62,14 @@ resource "google_service_account" "pubsub_writer_service_account" {
 }
 
 resource "google_pubsub_topic_iam_member" "publisher" {
-  project = var.data_governance_project_id
+  project = var.project_id
   topic   = module.data_ingest_topic.topic
   role    = "roles/pubsub.publisher"
   member  = "serviceAccount:${google_service_account.pubsub_writer_service_account.email}"
 }
 
 resource "google_pubsub_topic_iam_member" "subscriber" {
-  project = var.data_governance_project_id
+  project = var.project_id
   topic   = module.data_ingest_topic.topic
   role    = "roles/pubsub.subscriber"
   member  = "serviceAccount:${google_service_account.pubsub_writer_service_account.email}"

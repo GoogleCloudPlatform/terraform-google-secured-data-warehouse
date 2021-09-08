@@ -44,10 +44,13 @@ module "data_ingest_topic" {
   source  = "terraform-google-modules/pubsub/google"
   version = "~> 2.0"
 
-  project_id             = var.project_id
-  topic                  = "tpc-data-ingest-${random_id.suffix.hex}"
-  topic_kms_key_name     = module.cmek.keys[local.ingestion_key_name]
-  message_storage_policy = { allowed_persistence_regions : [var.region] }
+  project_id         = var.project_id
+  topic              = "tpc-data-ingest-${random_id.suffix.hex}"
+  topic_kms_key_name = module.cmek.keys[local.ingestion_key_name]
+
+  message_storage_policy = {
+    allowed_persistence_regions : [var.region]
+  }
 }
 
 //BigQuery dataset

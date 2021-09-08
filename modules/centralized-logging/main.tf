@@ -17,47 +17,45 @@
 locals {
   destination_uri = "storage.googleapis.com/${module.bucket.bucket.name}"
   storage_sa      = data.google_storage_project_service_account.gcs_account.email_address
+  bucket_name     = "${var.bucket_logging_prefix}-${random_id.random_suffix.hex}"
+}
 
-  encrypters = [
-    "serviceAccount:${local.storage_sa}"
-  ]
-
-  decrypters = [
-    "serviceAccount:${local.storage_sa}"
-  ]
+resource "random_id" "random_suffix" {
+  byte_length = 4
 }
 
 data "google_storage_project_service_account" "gcs_account" {
   project = var.logging_project_id
 }
 
-resource "google_kms_crypto_key_iam_binding" "decrypters" {
+resource "google_kms_crypto_key_iam_member" "decrypters" {
   role          = "roles/cloudkms.cryptoKeyDecrypter"
   crypto_key_id = var.kms_key_name
-  members       = local.decrypters
+  member        = "serviceAccount:${local.storage_sa}"
 }
 
-resource "google_kms_crypto_key_iam_binding" "encrypters" {
+resource "google_kms_crypto_key_iam_member" "encrypters" {
   role          = "roles/cloudkms.cryptoKeyEncrypter"
   crypto_key_id = var.kms_key_name
-  members       = local.encrypters
+  member        = "serviceAccount:${local.storage_sa}"
 }
 
 module "bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 2.1"
 
-  name       = var.bucket_logging_name
-  project_id = var.logging_project_id
-  location   = var.bucket_logging_location
-
+  name          = local.bucket_name
+  project_id    = var.logging_project_id
+  location      = var.bucket_logging_location
+  force_destroy = true
+  
   encryption = {
     default_kms_key_name = var.kms_key_name
   }
 
   depends_on = [
-    google_kms_crypto_key_iam_binding.decrypters,
-    google_kms_crypto_key_iam_binding.encrypters
+    google_kms_crypto_key_iam_member.decrypters,
+    google_kms_crypto_key_iam_member.encrypters
   ]
 }
 
@@ -68,7 +66,7 @@ module "log_export" {
   
   destination_uri        = local.destination_uri
   filter                 = var.sink_filter
-  log_sink_name          = "${var.bucket_logging_name}_${each.key}_logsink"
+  log_sink_name          = "${local.bucket_name}_${each.key}_logsink"
   parent_resource_id     = each.key
   parent_resource_type   = "project"
   unique_writer_identity = true
@@ -76,7 +74,7 @@ module "log_export" {
 
 resource "google_storage_bucket_iam_member" "storage_sink_member" {
   for_each = module.log_export
-  bucket   = var.bucket_logging_name
+  bucket   = local.bucket_name
   role     = "roles/storage.objectCreator"
   member   = "${each.value.writer_identity}"
 }

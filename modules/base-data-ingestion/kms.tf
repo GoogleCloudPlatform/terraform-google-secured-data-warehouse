@@ -41,6 +41,8 @@ locals {
     local.ingestion_key_encrypters_decrypters,
     local.bigquery_key_encrypters_decrypters
   ]
+
+  wait_for_cmek_grants_propagation = module.cmek.keys[local.ingestion_key_name]
 }
 
 data "google_project" "ingestion_project" {

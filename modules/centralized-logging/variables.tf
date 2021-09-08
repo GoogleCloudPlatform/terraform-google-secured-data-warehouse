@@ -26,17 +26,17 @@ variable "sink_filter" {
 }
 
 variable "logging_project_id" {
-  description = "The name of the bucket that will store the logs"
+  description = "The ID of the project in which the data governance resources will be created."
   type        = string
 }
 
-variable "bucket_logging_name" {
-  description = "The location of the bucket that will store the logs."
+variable "bucket_logging_prefix" {
+  description = "The prefix name of the bucket that will store the logs."
   type        = string
 }
 
 variable "bucket_logging_location" {
-  description = "The ID of the project in which the data governance resources will be created."
+  description = "The location of the bucket that will store the logs."
   type        = string
 }
 
