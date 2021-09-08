@@ -195,6 +195,7 @@ If your user does not have the necessary roles to run the commands above you can
 | cmek\_keyring\_name | The Keyring name for the KMS Customer Managed Encryption Keys. | `string` | n/a | yes |
 | cmek\_location | The location for the KMS Customer Managed Encryption Keys. | `string` | n/a | yes |
 | data\_governance\_project\_id | The ID of the project in which the data governance resources will be created. | `string` | n/a | yes |
+| datalake\_project\_id | The ID of the project in which the Bigquery will be created. | `string` | n/a | yes |
 | dataset\_default\_table\_expiration\_ms | TTL of tables using the dataset in MS. The default value is almost 12 months. | `number` | `31536000000` | no |
 | dataset\_description | Dataset description. | `string` | `"Ingest dataset"` | no |
 | dataset\_id | Unique ID for the dataset being provisioned. | `string` | n/a | yes |

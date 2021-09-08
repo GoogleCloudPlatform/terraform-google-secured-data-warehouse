@@ -16,6 +16,7 @@ This example illustrates how to run a Dataflow job that uses the `de_identificat
 | bucket\_force\_destroy | When deleting a bucket, this boolean option will delete all contained objects. If you try to delete a bucket that contains objects, Terraform will fail that run. | `bool` | `false` | no |
 | crypto\_key | The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP. | `string` | n/a | yes |
 | data\_governance\_project\_id | The ID of the project in which the data governance resources will be created. | `string` | n/a | yes |
+| datalake\_project\_id | The ID of the project in which the Bigquery will be created. | `string` | n/a | yes |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | perimeter\_members | The list of all members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | n/a | yes |
 | project\_id | The ID of the project in which the service account will be created. | `string` | n/a | yes |

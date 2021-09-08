@@ -26,6 +26,7 @@ module "data_ingestion" {
   org_id                           = var.org_id
   project_id                       = var.project_id
   data_governance_project_id       = var.data_governance_project_id
+  datalake_project_id              = var.datalake_project_id
   region                           = local.region
   bucket_location                  = local.region
   dataset_location                 = local.region
@@ -119,7 +120,7 @@ module "dataflow_job" {
     inputFilePattern       = "gs://${module.data_ingestion.data_ingest_bucket_names[0]}/cc_records.csv"
     datasetName            = local.dataset_id
     batchSize              = 1000
-    dlpProjectId           = var.project_id
+    dlpProjectId           = var.data_governance_project_id
     deidentifyTemplateName = "projects/${var.data_governance_project_id}/locations/${local.region}/deidentifyTemplates/${module.de_identification_template.template_id}"
   }
 

@@ -50,6 +50,7 @@ module "regional_dlp_example" {
   org_id                           = var.org_id
   project_id                       = var.project_id
   data_governance_project_id       = var.data_governance_project_id
+  datalake_project_id              = var.datalake_project_id
   location                         = local.location
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id

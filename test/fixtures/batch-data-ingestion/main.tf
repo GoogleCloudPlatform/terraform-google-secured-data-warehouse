@@ -24,6 +24,7 @@ module "batch_dataflow" {
   org_id                           = var.org_id
   project_id                       = var.project_id
   data_governance_project_id       = var.data_governance_project_id
+  datalake_project_id              = var.datalake_project_id
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
   perimeter_members                = ["serviceAccount:${var.terraform_service_account}"]

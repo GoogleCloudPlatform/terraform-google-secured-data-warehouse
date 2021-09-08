@@ -75,6 +75,7 @@ module "data_ingestion" {
   org_id                           = var.org_id
   project_id                       = var.project_id
   data_governance_project_id       = var.data_governance_project_id
+  datalake_project_id              = var.datalake_project_id
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
   perimeter_members                = concat(["serviceAccount:${var.terraform_service_account}"], var.perimeter_additional_members)
@@ -166,9 +167,9 @@ resource "google_dataflow_flex_template_job" "regional_dlp" {
     input_topic                    = "projects/${var.project_id}/topics/${module.data_ingestion.data_ingest_topic_name}"
     deidentification_template_name = "projects/${var.data_governance_project_id}/locations/${var.location}/deidentifyTemplates/${module.de_identification_template_example.template_id}"
     dlp_location                   = var.location
-    dlp_project                    = var.project_id
+    dlp_project                    = var.data_governance_project_id
     bq_schema                      = local.bq_schema
-    output_table                   = "${var.project_id}:${module.data_ingestion.data_ingest_bigquery_dataset.dataset_id}.classical_books"
+    output_table                   = "${var.datalake_project_id}:${module.data_ingestion.data_ingest_bigquery_dataset.dataset_id}.classical_books"
     service_account_email          = module.data_ingestion.dataflow_controller_service_account_email
     subnetwork                     = module.data_ingestion.subnets_self_links[0]
     dataflow_kms_key               = module.data_ingestion.cmek_ingestion_crypto_key

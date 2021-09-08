@@ -34,7 +34,7 @@ module "dwh_networking" {
   subnet_ip                        = var.subnet_ip
   perimeter_members                = local.perimeter_members
   commom_suffix                    = random_id.suffix.hex
-  resources                        = [data.google_project.ingestion_project.number, data.google_project.governance_project.number]
+  resources                        = [data.google_project.ingestion_project.number, data.google_project.governance_project.number, data.google_project.datalake_project.number]
 
   restricted_services = [
     "storage.googleapis.com",

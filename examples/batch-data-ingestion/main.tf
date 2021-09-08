@@ -33,7 +33,7 @@ locals {
       dataflow_service_account            = module.data_ingestion.dataflow_controller_service_account_email,
       subnetwork_self_link                = module.data_ingestion.subnets_self_links[0],
       inputFilePattern                    = "gs://${module.data_ingestion.data_ingest_bucket_names[0]}/cc_records.csv",
-      project_id                          = var.project_id,
+      bigquery_project_id                 = var.datalake_project_id,
       dataset_id                          = local.dataset_id,
       table_name                          = local.table_name,
       javascriptTextTransformFunctionName = "transform",
@@ -51,6 +51,7 @@ module "data_ingestion" {
   org_id                           = var.org_id
   project_id                       = var.project_id
   data_governance_project_id       = var.data_governance_project_id
+  datalake_project_id              = var.datalake_project_id
   region                           = local.region
   bucket_location                  = local.region
   dataset_location                 = local.region

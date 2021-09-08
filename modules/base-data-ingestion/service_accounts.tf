@@ -24,7 +24,7 @@ module "dataflow_controller_service_account" {
   display_name = "Cloud Dataflow controller service account"
   project_roles = [
     "${var.project_id}=>roles/pubsub.subscriber",
-    "${var.project_id}=>roles/bigquery.admin",
+    "${var.datalake_project_id}=>roles/bigquery.admin",
     "${var.project_id}=>roles/cloudkms.admin",
     "${var.project_id}=>roles/cloudkms.cryptoKeyDecrypter",
     "${var.project_id}=>roles/dlp.admin",

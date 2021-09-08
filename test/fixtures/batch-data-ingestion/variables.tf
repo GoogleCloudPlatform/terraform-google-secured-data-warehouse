@@ -29,6 +29,11 @@ variable "data_governance_project_id" {
   type        = string
 }
 
+variable "datalake_project_id" {
+  description = "The ID of the project in which the Bigquery will be created."
+  type        = string
+}
+
 variable "org_id" {
   description = "The ID of the organization in which the infrastructure will be created."
   type        = string
