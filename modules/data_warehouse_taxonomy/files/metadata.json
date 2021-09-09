@@ -1,6 +1,6 @@
 {
-  "name": "Streaming beam Python structured DLP flex template",
-  "description": "Streaming beam Python structured DLP flex template with support for global and regional resources.",
+  "name": "Streaming BiqQuery data through DLP to reidentify data flex template",
+  "description": "Python flex template for streaming BiqQuery data through regional DLP to reidentify the data.",
   "parameters": [
     {
       "name": "input_table",
@@ -10,7 +10,7 @@
     {
       "name": "deidentification_template_name",
       "label": "DLP Structured De-identification Template Name.",
-      "helpText": "Name of the DLP Structured De-identification Template. Format is 'projects/<PROJECT>/locations/<LOCATION>/deidentifyTemplates/<TEMPLATE_ID>'",
+      "helpText": "Name of the DLP Structured De-identification Template that was used to deidentify data in the BiqQuery source. Format is 'projects/<PROJECT>/locations/<LOCATION>/deidentifyTemplates/<TEMPLATE_ID>'",
       "regexes": [
         "projects/[^/]+/locations/[^/]+/deidentifyTemplates/[-_a-zA-Z0-9]+"
       ]
@@ -45,7 +45,7 @@
     {
       "name": "output_table",
       "label": "BigQuery output table name.",
-      "helpText": "Output BigQuery table for results specified as: PROJECT:DATASET.TABLE or DATASET.TABLE."
+      "helpText": "Output BigQuery table with reidentified data as: PROJECT:DATASET.TABLE or DATASET.TABLE."
     }
   ]
 }
