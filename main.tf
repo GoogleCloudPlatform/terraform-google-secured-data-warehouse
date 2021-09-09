@@ -55,3 +55,12 @@ module "centralized_logging" {
   bucket_logging_location = local.location
   kms_key_name            = module.data_ingestion.cmek_ingestion_crypto_key
 }
+
+module "org_policies" {
+  source             = "./modules/org_policies"
+  for_each           = toset(local.projects_ids)
+  project_id         = each.key
+  region             = local.region
+  trusted_subnetwork = module.data_ingestion.subnets_names[0]
+  trusted_locations  = var.trusted_locations
+}
