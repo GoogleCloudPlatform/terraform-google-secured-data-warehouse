@@ -15,7 +15,7 @@
  */
 
 variable "projects_ids" {
-  description = "The project IDs that will be export the logs."
+  description = "Export logs from the specified list of project IDs."
   type        = list(string)
 }
 
@@ -31,16 +31,16 @@ variable "logging_project_id" {
 }
 
 variable "bucket_logging_prefix" {
-  description = "The prefix name of the bucket that will store the logs."
+  description = "The prefix added to the name of the logging bucket that will store the logs."
   type        = string
 }
 
 variable "bucket_logging_location" {
-  description = "The location of the bucket that will store the logs."
+  description = "A valid location for the bucket that will store the logs."
   type        = string
 }
 
 variable "kms_key_name" {
-  description = "The kms key that will be used to encrypt the bucket."
+  description = "The full resource uri name for kms key that will be used to encrypt the bucket."
   type        = string
 }
