@@ -52,3 +52,9 @@ attributes:
   - name: cmek_keyring_name
     required: true
     type: string
+  - name: logging_sinks
+    required: true
+    type: array
+  - name: logging_bucket_name
+    required: true
+    type: string

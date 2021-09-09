@@ -16,5 +16,12 @@
 
 output "sinks" {
   description = "The list of sink that were created."
-  value       = module.log_export
+  value = toset([
+    for value in module.log_export : value
+  ])
+}
+
+output "bucket_name" {
+  description = "The name of the bucket that will store the exported logs."
+  value       = module.logging_bucket.bucket.name
 }

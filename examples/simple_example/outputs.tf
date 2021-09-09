@@ -98,3 +98,13 @@ output "cmek_bigquery_crypto_key" {
   description = "The Customer Managed Crypto Key for the BigQuery service."
   value       = module.secured_data_warehouse.cmek_bigquery_crypto_key
 }
+
+output "logging_sinks" {
+  description = "The list of sink that were created."
+  value       = module.secured_data_warehouse.logging_sinks
+}
+
+output "logging_bucket_name" {
+  description = "The name of the bucket that will store the exported logs."
+  value       = module.secured_data_warehouse.logging_bucket_name
+}

@@ -77,6 +77,8 @@ module "secured_data_warehouse" {
 | data\_ingest\_bucket\_names | The name list of the buckets created for data ingest pipeline. |
 | data\_ingest\_topic\_name | The topic created for data ingest pipeline. |
 | dataflow\_controller\_service\_account\_email | The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
+| logging\_bucket\_name | The name of the bucket that will store the exported logs. |
+| logging\_sinks | The list of sink that were created. |
 | network\_name | The name of the VPC being created. |
 | network\_self\_link | The URI of the VPC being created. |
 | pubsub\_writer\_service\_account\_email | The PubSub writer service account email. Should be used to write data to the PubSub topics the ingestion pipeline reads from. |

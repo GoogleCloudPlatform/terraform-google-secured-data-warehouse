@@ -114,3 +114,13 @@ output "cmek_bigquery_crypto_key" {
   description = "The Customer Managed Crypto Key for the BigQuery service."
   value       = module.data_ingestion.cmek_bigquery_crypto_key
 }
+
+output "logging_sinks" {
+  description = "The list of sink that were created."
+  value       = module.centralized_logging[0].sinks
+}
+
+output "logging_bucket_name" {
+  description = "The name of the bucket that will store the exported logs."
+  value       = module.centralized_logging[0].bucket_name
+}

@@ -22,6 +22,9 @@ access_level_name = attribute('access_level_name')
 organization_policy_name = attribute('organization_policy_name')
 cmek_location = 'us-central1'
 cmek_keyring_name = attribute('cmek_keyring_name')
+logging_sinks = attribute('logging_sinks')
+logging_bucket_name = attribute('logging_bucket_name')
+
 
 restricted_googleapis_cidr = '199.36.153.4/30'
 private_googleapis_cidr = '199.36.153.8/30'
@@ -232,4 +235,24 @@ control 'gcp' do
       it { should exist }
     end
   end
+
+  describe google_storage_bucket(
+    name: logging_bucket_name
+  ) do
+    it { should exist }
+  end
+
+  @logging_sinks.each do |logging_sink|
+    describe google_logging_project_sink(
+      project: logging_sink['parent_resource_id'],
+      name: logging_sink['log_sink_resource_name']
+    ) do
+      it { should exist }
+      its('filter') do
+        should be_nil
+      end
+      its('destination') { should cmp "storage.googleapis.com/#{logging_bucket_name}" }
+    end
+  end
+
 end

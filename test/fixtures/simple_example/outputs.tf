@@ -99,3 +99,13 @@ output "cmek_keyring_full_name" {
   description = "The Keyring full name for the KMS Customer Managed Encryption Keys."
   value       = module.simple_example.cmek_keyring_full_name
 }
+
+output "logging_sinks" {
+  description = "The list of sink that were created."
+  value       = module.simple_example.logging_sinks
+}
+
+output "logging_bucket_name" {
+  description = "The name of the bucket that will store the exported logs."
+  value       = module.simple_example.logging_bucket_name
+}

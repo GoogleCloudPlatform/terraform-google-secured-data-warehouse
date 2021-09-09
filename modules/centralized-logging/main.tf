@@ -15,7 +15,7 @@
  */
 
 locals {
-  destination_uri = "storage.googleapis.com/${module.bucket.bucket.name}"
+  destination_uri = "storage.googleapis.com/${module.logging_bucket.bucket.name}"
   storage_sa      = data.google_storage_project_service_account.gcs_account.email_address
   bucket_name     = "${var.bucket_logging_prefix}-${random_id.random_suffix.hex}"
 }
@@ -40,7 +40,7 @@ resource "google_kms_crypto_key_iam_member" "encrypters" {
   member        = "serviceAccount:${local.storage_sa}"
 }
 
-module "bucket" {
+module "logging_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 2.1"
 
@@ -64,7 +64,7 @@ module "log_export" {
   version                = "~> 7.1.0"
   destination_uri        = local.destination_uri
   filter                 = var.sink_filter
-  log_sink_name          = "${local.bucket_name}_${each.key}_logsink"
+  log_sink_name          = "sk-dwh-logging-bkt"
   parent_resource_id     = each.key
   parent_resource_type   = "project"
   unique_writer_identity = true
@@ -74,5 +74,5 @@ resource "google_storage_bucket_iam_member" "storage_sink_member" {
   for_each = module.log_export
   bucket   = local.bucket_name
   role     = "roles/storage.objectCreator"
-  member   = "${each.value.writer_identity}"
+  member   = each.value.writer_identity
 }
