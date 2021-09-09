@@ -199,7 +199,7 @@ class UnmaskDetectedDetails(PTransform):
             project=None,
             location="global",
             template_name=None,
-            deidentification_config=None,
+            reidentification_config=None,
             timeout=None):
 
         self.config = {}
@@ -210,7 +210,7 @@ class UnmaskDetectedDetails(PTransform):
         if template_name is not None:
             self.config['reidentify_template_name'] = template_name
         else:
-            self.config['reidentify_config'] = deidentification_config
+            self.config['reidentify_config'] = reidentification_config
 
     def expand(self, pcoll):
         if self.project is None:
