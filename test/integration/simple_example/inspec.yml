@@ -10,6 +10,9 @@ attributes:
   - name: data_governance_project_id
     required: true
     type: string
+  - name: datalake_project_id
+    required: true
+    type: string
   - name: access_level_name
     required: true
     type: string

@@ -24,6 +24,11 @@ output "data_governance_project_id" {
   value       = var.data_governance_project_id
 }
 
+output "datalake_project_id" {
+  description = "The datalake_project_id used to create bigquery."
+  value       = var.datalake_project_id
+}
+
 output "terraform_service_account" {
   description = "The email address of the service account that will run the Terraform code."
   value       = var.terraform_service_account

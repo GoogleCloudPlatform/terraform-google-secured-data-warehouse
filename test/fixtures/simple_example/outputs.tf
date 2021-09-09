@@ -25,6 +25,11 @@ output "data_governance_project_id" {
   value       = var.data_governance_project_id
 }
 
+output "datalake_project_id" {
+  description = "The datalake_project_id used to create bigquery."
+  value       = var.datalake_project_id
+}
+
 output "org_id" {
   description = "The organization used to create infra."
   value       = var.org_id

@@ -17,6 +17,7 @@ data_ingest_topic_name = attribute('data_ingest_topic_name')
 network_name = attribute('network_name')
 project_id = attribute('project_id')
 data_governance_project_id = attribute('data_governance_project_id')
+datalake_project_id = attribute('datalake_project_id')
 service_perimeter_name = attribute('service_perimeter_name')
 service_perimeter_title = service_perimeter_name.split('/')[-1]
 access_level_name = attribute('access_level_name')
