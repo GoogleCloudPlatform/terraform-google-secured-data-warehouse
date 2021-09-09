@@ -21,8 +21,7 @@ locals {
     "roles/resourcemanager.organizationAdmin",
     "roles/vpcaccess.admin",
     "roles/compute.xpnAdmin",
-    "roles/billing.user",
-    "oles/storage.objectCreator"
+    "roles/billing.user"
   ]
 
   int_proj_required_roles = [
