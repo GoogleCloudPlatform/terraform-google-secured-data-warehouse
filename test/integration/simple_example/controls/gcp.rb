@@ -242,7 +242,7 @@ control 'gcp' do
     it { should exist }
   end
 
-  @logging_sinks.each do |logging_sink|
+  logging_sinks.each do |logging_sink|
     describe google_logging_project_sink(
       project: logging_sink['parent_resource_id'],
       name: logging_sink['log_sink_resource_name']
