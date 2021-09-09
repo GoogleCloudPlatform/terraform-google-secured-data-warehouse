@@ -48,7 +48,8 @@ locals {
     "roles/cloudscheduler.admin",
     "roles/artifactregistry.admin",
     "roles/cloudbuild.builds.editor",
-    "roles/appengine.appCreator"
+    "roles/appengine.appCreator",
+    "roles/logging.configWriter"
   ]
 }
 
