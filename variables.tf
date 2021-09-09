@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
+variable "trusted_locations" {
+  description = "This is a list of trusted regions where location-based GCP resources can be created. ie us-locations eu-locations."
+  type        = list(string)
+  default     = ["us-locations", "eu-locations"]
+}
+
 variable "org_id" {
   description = "GCP Organization ID."
   type        = string
