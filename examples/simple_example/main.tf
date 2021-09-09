@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- resource "random_id" "random_suffix" {
+resource "random_id" "random_suffix" {
   byte_length = 4
 }
 
