@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 
-variable "project_id" {
-  description = "Project where the dataset and table are created."
+variable "data_governance_project_id" {
+  description = "The ID of the project in which the data governance resources will be created."
+  type        = string
+}
+
+variable "datalake_project_id" {
+  description = "The ID of the project in which the Bigquery will be created."
   type        = string
 }

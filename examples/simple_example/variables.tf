@@ -29,6 +29,11 @@ variable "project_id" {
   type        = string
 }
 
+variable "datalake_project_id" {
+  description = "The ID of the project in which the Bigquery will be created."
+  type        = string
+}
+
 variable "terraform_service_account" {
   description = "The email address of the service account that will run the Terraform code."
   type        = string

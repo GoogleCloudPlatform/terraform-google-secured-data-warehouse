@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-project_id = attribute('project_id')
+project_id = attribute('data_governance_project_id')
 de_identification_template_dlp_location = attribute('de_identification_template_dlp_location')
 de_identification_template_crypto_key = attribute('de_identification_template_crypto_key')
 de_identification_template_wrapped_key = attribute('de_identification_template_wrapped_key')
@@ -36,28 +36,27 @@ control 'gcloud' do
     end
 
     describe "de-identification Template #{de_identification_template_template_id}" do
-
       it 'should exist' do
         expect(data).to_not be_empty
       end
 
       it { expect(data).to include('name' => "projects/#{project_id}/locations/#{de_identification_template_dlp_location}/deidentifyTemplates/#{de_identification_template_template_id}") }
-      it { expect(data).to include('displayName' => "#{template_display_name}") }
-      it { expect(data).to include('description' => "#{template_description}") }
+      it { expect(data).to include('displayName' => template_display_name.to_s) }
+      it { expect(data).to include('description' => template_description.to_s) }
 
-      it { expect(data["deidentifyConfig"]["recordTransformations"]["fieldTransformations"]).to include(including(
-          "primitiveTransformation" => including(
-            "cryptoReplaceFfxFpeConfig" => including(
-              "cryptoKey" => including(
-                "kmsWrapped" => including(
-                  "cryptoKeyName" => "#{de_identification_template_crypto_key}",
-                  "wrappedKey"=> "#{de_identification_template_wrapped_key}"
-                )
-              )
-            )
-          )
-        )
-      )
+      it {
+        expect(data['deidentifyConfig']['recordTransformations']['fieldTransformations']).to include(including(
+                                                                                                       'primitiveTransformation' => including(
+                                                                                                         'cryptoReplaceFfxFpeConfig' => including(
+                                                                                                           'cryptoKey' => including(
+                                                                                                             'kmsWrapped' => including(
+                                                                                                               'cryptoKeyName' => de_identification_template_crypto_key.to_s,
+                                                                                                               'wrappedKey' => de_identification_template_wrapped_key.to_s
+                                                                                                             )
+                                                                                                           )
+                                                                                                         )
+                                                                                                       )
+                                                                                                     ))
       }
     end
   end
