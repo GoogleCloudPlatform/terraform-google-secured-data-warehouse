@@ -108,3 +108,8 @@ output "logging_bucket_name" {
   description = "The name of the bucket that will store the exported logs."
   value       = module.secured_data_warehouse.logging_bucket_name
 }
+
+output "sink_projects_logging" {
+  description = "The list of the project that the sink were created."
+  value       = module.secured_data_warehouse.sink_projects_logging
+}

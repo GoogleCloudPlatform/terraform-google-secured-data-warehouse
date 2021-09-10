@@ -58,3 +58,6 @@ attributes:
   - name: logging_bucket_name
     required: true
     type: string
+  - name: sink_projects_logging
+    required: true
+    type: string

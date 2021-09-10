@@ -25,3 +25,8 @@ output "bucket_name" {
   description = "The name of the bucket that will store the exported logs."
   value       = module.logging_bucket.bucket.name
 }
+
+output "sink_projects" {
+  description = "The list of the project that the sink were created."
+  value       = local.parent_resource_ids
+}

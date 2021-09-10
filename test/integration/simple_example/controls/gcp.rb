@@ -24,6 +24,7 @@ cmek_location = 'us-central1'
 cmek_keyring_name = attribute('cmek_keyring_name')
 logging_sinks = attribute('logging_sinks')
 logging_bucket_name = attribute('logging_bucket_name')
+sink_projects_logging = attribute('sink_projects_logging')
 
 
 restricted_googleapis_cidr = '199.36.153.4/30'
@@ -242,10 +243,10 @@ control 'gcp' do
     it { should exist }
   end
 
-  logging_sinks.each do |logging_sink|
+  sink_projects_logging.each do |sink_projects_logging|
     describe google_logging_project_sink(
-      project: "projects/#{logging_sink['parent_resource_id']}",
-      name: logging_sink['log_sink_resource_name']
+      project: "projects/#{sink_projects_logging}",
+      name: 'sk-dwh-logging-bkt'
     ) do
       it { should exist }
       its('filter') do

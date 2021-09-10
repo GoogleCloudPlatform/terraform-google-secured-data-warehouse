@@ -109,3 +109,9 @@ output "logging_bucket_name" {
   description = "The name of the bucket that will store the exported logs."
   value       = module.simple_example.logging_bucket_name
 }
+
+output "sink_projects_logging" {
+  description = "The list of the project that the sink were created."
+  value       = module.simple_example.sink_projects_logging
+}
+

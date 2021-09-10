@@ -18,6 +18,10 @@ locals {
   destination_uri = "storage.googleapis.com/${module.logging_bucket.bucket.name}"
   storage_sa      = data.google_storage_project_service_account.gcs_account.email_address
   bucket_name     = "${var.bucket_logging_prefix}-${random_id.random_suffix.hex}"
+  log_exports = toset([
+    for value in module.log_export : value
+  ])
+  parent_resource_ids = [for parent_resource_id in local.log_exports[*].parent_resource_id : parent_resource_id]
 }
 
 resource "random_id" "random_suffix" {

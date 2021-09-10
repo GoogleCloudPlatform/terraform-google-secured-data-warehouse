@@ -124,3 +124,8 @@ output "logging_bucket_name" {
   description = "The name of the bucket that will store the exported logs."
   value       = module.centralized_logging[0].bucket_name
 }
+
+output "sink_projects_logging" {
+  description = "The list of the project that the sink were created."
+  value       = module.centralized_logging[0].sink_projects
+}
