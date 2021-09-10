@@ -19,6 +19,10 @@ locals {
   dataset_id = "dts_data_ingestion"
 }
 
+resource "random_id" "random_suffix" {
+  byte_length = 4
+}
+
 module "data_ingestion" {
   source                           = "../.."
   org_id                           = var.org_id
@@ -30,12 +34,8 @@ module "data_ingestion" {
   bucket_name                      = "bucket_simple_exemple"
   dataset_id                       = local.dataset_id
   vpc_name                         = "vpc-simple-exemple"
-  cmek_keyring_name                = "key_name_simple_exemple"
+  cmek_keyring_name                = "key_name_simple_exemple_${random_id.random_suffix.hex}"
   subnet_ip                        = "10.0.32.0/21"
-}
-
-resource "random_id" "random_suffix" {
-  byte_length = 4
 }
 
 //dataflow temp bucket
