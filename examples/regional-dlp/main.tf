@@ -69,27 +69,18 @@ resource "google_project_service_identity" "cloudbuild_sa" {
 }
 
 module "data_ingestion" {
-  source                           = "../..//modules/base-data-ingestion"
-  bucket_name                      = "bkt-dlp-flex-ingest-${random_id.suffix.hex}"
-  dataset_id                       = "dlp_flex_ingest"
+  source                           = "../.."
   org_id                           = var.org_id
-  project_id                       = var.project_id
   data_governance_project_id       = var.data_governance_project_id
   datalake_project_id              = var.datalake_project_id
+  project_id                       = var.project_id
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  perimeter_members                = concat(["serviceAccount:${var.terraform_service_account}"], var.perimeter_additional_members)
-  vpc_name                         = "dlp-flex-ingest"
+  bucket_name                      = "bucket_simple_exemple"
+  dataset_id                       = "dataset_simple_exemple"
+  vpc_name                         = "vpc-simple-exemple"
+  cmek_keyring_name                = "key_name_simple_exemple"
   subnet_ip                        = "10.0.32.0/21"
-  region                           = var.location
-  dataset_location                 = var.location
-  bucket_location                  = var.location
-  cmek_location                    = var.location
-  cmek_keyring_name                = "dlp_flex_ingest"
-
-  depends_on = [
-    google_project_service.apis_to_enable
-  ]
 }
 
 module "de_identification_template_example" {

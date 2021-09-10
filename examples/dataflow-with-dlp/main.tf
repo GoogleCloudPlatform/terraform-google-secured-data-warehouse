@@ -20,24 +20,18 @@ locals {
 }
 
 module "data_ingestion" {
-  source                           = "../..//modules/base-data-ingestion"
-  bucket_name                      = "bkt-data-ingestion"
-  dataset_id                       = local.dataset_id
+  source                           = "../.."
   org_id                           = var.org_id
-  project_id                       = var.project_id
   data_governance_project_id       = var.data_governance_project_id
   datalake_project_id              = var.datalake_project_id
-  region                           = local.region
-  bucket_location                  = local.region
-  dataset_location                 = local.region
+  project_id                       = var.project_id
   terraform_service_account        = var.terraform_service_account
-  vpc_name                         = "tst-network"
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  perimeter_members                = var.perimeter_members
+  bucket_name                      = "bucket_simple_exemple"
+  dataset_id                       = "dataset_simple_exemple"
+  vpc_name                         = "vpc-simple-exemple"
+  cmek_keyring_name                = "key_name_simple_exemple"
   subnet_ip                        = "10.0.32.0/21"
-  cmek_location                    = local.region
-  cmek_keyring_name                = "cmek_keyring"
-  bucket_force_destroy             = var.bucket_force_destroy
 }
 
 resource "random_id" "random_suffix" {
