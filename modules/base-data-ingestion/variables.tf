@@ -45,26 +45,6 @@ variable "datalake_project_id" {
   type        = string
 }
 
-variable "vpc_name" {
-  description = "The name of the network."
-  type        = string
-}
-
-variable "subnet_ip" {
-  description = "The CDIR IP range of the subnetwork."
-  type        = string
-}
-
-variable "access_context_manager_policy_id" {
-  description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
-  type        = number
-}
-
-variable "perimeter_members" {
-  description = "The list additional members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required."
-  type        = list(string)
-}
-
 variable "bucket_name" {
   description = "The main part of the name of the bucket to be created."
   type        = string

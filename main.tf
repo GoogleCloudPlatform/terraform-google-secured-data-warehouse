@@ -59,15 +59,11 @@ module "data_ingestion" {
   data_governance_project_id          = var.data_governance_project_id
   datalake_project_id                 = var.datalake_project_id
   terraform_service_account           = var.terraform_service_account
-  vpc_name                            = var.vpc_name
-  access_context_manager_policy_id    = var.access_context_manager_policy_id
-  perimeter_members                   = concat(["serviceAccount:${var.terraform_service_account}"], var.perimeter_additional_members)
   cmek_location                       = local.cmek_location
   region                              = local.region
   dataset_location                    = local.location
   bucket_location                     = local.location
   cmek_keyring_name                   = var.cmek_keyring_name
-  subnet_ip                           = var.subnet_ip
 }
 
 // A3 - DATA WAREHOUSE INGESTION - END
