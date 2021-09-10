@@ -251,7 +251,7 @@ control 'gcp' do
       its('filter') do
         should be_nil
       end
-      its('destination') { should cmp "storage.googleapis.com/#{logging_bucket_name}" }
+      its('destination') { should eq "storage.googleapis.com/#{logging_bucket_name}" }
     end
   end
 
