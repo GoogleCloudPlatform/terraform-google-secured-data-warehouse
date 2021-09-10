@@ -29,6 +29,16 @@ variable "project_id" {
   type        = string
 }
 
+variable "data_governance_project_id" {
+  description = "The ID of the project in which the data governance resources will be created."
+  type        = string
+}
+
+variable "datalake_project_id" {
+  description = "The ID of the project in which the Bigquery will be created."
+  type        = string
+}
+
 variable "terraform_service_account" {
   description = "The email address of the service account that will run the Terraform config."
   type        = string

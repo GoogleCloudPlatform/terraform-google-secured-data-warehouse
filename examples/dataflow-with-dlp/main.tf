@@ -25,7 +25,8 @@ module "data_ingestion" {
   dataset_id                       = local.dataset_id
   org_id                           = var.org_id
   project_id                       = var.project_id
-  data_governance_project_id       = var.project_id
+  data_governance_project_id       = var.data_governance_project_id
+  datalake_project_id              = var.datalake_project_id
   region                           = local.region
   bucket_location                  = local.region
   dataset_location                 = local.region
@@ -56,6 +57,10 @@ module "dataflow_tmp_bucket" {
   labels = {
     "enterprise_data_ingest_bucket" = "true"
   }
+
+  depends_on = [
+    module.data_ingestion.access_level_name
+  ]
 }
 resource "random_id" "original_key" {
   byte_length = 16
@@ -76,12 +81,16 @@ resource "null_resource" "download_sample_cc_into_gcs" {
 EOF
 
   }
+
+  depends_on = [
+    module.data_ingestion.access_level_name
+  ]
 }
 
 module "de_identification_template" {
   source = "../..//modules/de_identification_template"
 
-  project_id                = var.project_id
+  project_id                = var.data_governance_project_id
   terraform_service_account = var.terraform_service_account
   crypto_key                = var.crypto_key
   wrapped_key               = var.wrapped_key
@@ -111,7 +120,11 @@ module "dataflow_job" {
     inputFilePattern       = "gs://${module.data_ingestion.data_ingest_bucket_names[0]}/cc_records.csv"
     datasetName            = local.dataset_id
     batchSize              = 1000
-    dlpProjectId           = var.project_id
-    deidentifyTemplateName = "projects/${var.project_id}/locations/${local.region}/deidentifyTemplates/${module.de_identification_template.template_id}"
+    dlpProjectId           = var.data_governance_project_id
+    deidentifyTemplateName = "projects/${var.data_governance_project_id}/locations/${local.region}/deidentifyTemplates/${module.de_identification_template.template_id}"
   }
+
+  depends_on = [
+    module.data_ingestion.access_level_name
+  ]
 }

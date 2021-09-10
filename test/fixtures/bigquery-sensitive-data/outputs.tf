@@ -46,12 +46,12 @@ output "member_policy_name_private" {
 
 output "bigquery_project_id" {
   description = "Project where bigquery and table were created."
-  value       = var.project_id
+  value       = var.datalake_project_id
 }
 
 output "taxonomy_project_id" {
   description = "Project where taxonomy was created."
-  value       = var.project_id
+  value       = var.data_governance_project_id
 }
 
 output "taxonomy_name" {

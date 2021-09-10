@@ -24,7 +24,7 @@ module "dataflow_controller_service_account" {
   display_name = "Cloud Dataflow controller service account"
   project_roles = [
     "${var.project_id}=>roles/pubsub.subscriber",
-    "${var.project_id}=>roles/bigquery.admin",
+    "${var.datalake_project_id}=>roles/bigquery.admin",
     "${var.project_id}=>roles/cloudkms.admin",
     "${var.project_id}=>roles/cloudkms.cryptoKeyDecrypter",
     "${var.project_id}=>roles/dlp.admin",
@@ -63,14 +63,14 @@ resource "google_service_account" "pubsub_writer_service_account" {
 
 resource "google_pubsub_topic_iam_member" "publisher" {
   project = var.project_id
-  topic   = module.data_ingest_topic.topic
+  topic   = module.data_ingest_topic.id
   role    = "roles/pubsub.publisher"
   member  = "serviceAccount:${google_service_account.pubsub_writer_service_account.email}"
 }
 
 resource "google_pubsub_topic_iam_member" "subscriber" {
   project = var.project_id
-  topic   = module.data_ingest_topic.topic
+  topic   = module.data_ingest_topic.id
   role    = "roles/pubsub.subscriber"
   member  = "serviceAccount:${google_service_account.pubsub_writer_service_account.email}"
 }

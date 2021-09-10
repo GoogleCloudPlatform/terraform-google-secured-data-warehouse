@@ -34,6 +34,7 @@ module "dwh_networking" {
   subnet_ip                        = var.subnet_ip
   perimeter_members                = local.perimeter_members
   commom_suffix                    = random_id.suffix.hex
+  resources                        = [data.google_project.ingestion_project.number, data.google_project.governance_project.number, data.google_project.datalake_project.number]
 
   restricted_services = [
     "storage.googleapis.com",
@@ -41,6 +42,7 @@ module "dwh_networking" {
     "dataflow.googleapis.com",
     "pubsub.googleapis.com",
     "cloudkms.googleapis.com"
+    # "dlp.googleapis.com"
   ]
 
   # depends_on needed to prevent intermittent errors
@@ -71,7 +73,7 @@ resource "null_resource" "forces_wait_propagation" {
     google_storage_bucket_iam_member.objectCreator,
     google_pubsub_topic_iam_member.publisher,
     google_pubsub_topic_iam_member.subscriber,
-    data.google_storage_project_service_account.gcs_account,
-    data.google_bigquery_default_service_account.bigquery_sa
+    data.google_bigquery_default_service_account.bigquery_sa,
+    data.google_storage_project_service_account.gcs_account
   ]
 }

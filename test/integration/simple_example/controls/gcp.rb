@@ -16,6 +16,8 @@ data_ingest_bucket_names = attribute('data_ingest_bucket_names')
 data_ingest_topic_name = attribute('data_ingest_topic_name')
 network_name = attribute('network_name')
 project_id = attribute('project_id')
+data_governance_project_id = attribute('data_governance_project_id')
+datalake_project_id = attribute('datalake_project_id')
 service_perimeter_name = attribute('service_perimeter_name')
 service_perimeter_title = service_perimeter_name.split('/')[-1]
 access_level_name = attribute('access_level_name')
@@ -121,14 +123,14 @@ control 'gcp' do
     end
   end
 
-  describe google_kms_key_ring(project: project_id, location: cmek_location, name: cmek_keyring_name) do
+  describe google_kms_key_ring(project: data_governance_project_id, location: cmek_location, name: cmek_keyring_name) do
     it { should exist }
     its('key_ring_name') { should eq cmek_keyring_name }
     its('key_ring_url') { should match cmek_keyring_name }
   end
 
   describe google_kms_crypto_key(
-    project: project_id,
+    project: data_governance_project_id,
     location: cmek_location,
     key_ring_name: cmek_keyring_name,
     name: 'ingestion_kms_key'
@@ -140,7 +142,7 @@ control 'gcp' do
   end
 
   describe google_kms_crypto_key_iam_binding(
-    project: project_id,
+    project: data_governance_project_id,
     location: cmek_location,
     key_ring_name: cmek_keyring_name,
     crypto_key_name: 'ingestion_kms_key',
@@ -150,7 +152,7 @@ control 'gcp' do
   end
 
   describe google_kms_crypto_key_iam_binding(
-    project: project_id,
+    project: data_governance_project_id,
     location: cmek_location,
     key_ring_name: cmek_keyring_name,
     crypto_key_name: 'ingestion_kms_key',
@@ -160,7 +162,7 @@ control 'gcp' do
   end
 
   describe google_kms_crypto_key(
-    project: project_id,
+    project: data_governance_project_id,
     location: cmek_location,
     key_ring_name: cmek_keyring_name,
     name: 'bigquery_kms_key'
@@ -172,7 +174,7 @@ control 'gcp' do
   end
 
   describe google_kms_crypto_key_iam_binding(
-    project: project_id,
+    project: data_governance_project_id,
     location: cmek_location,
     key_ring_name: cmek_keyring_name,
     crypto_key_name: 'bigquery_kms_key',
@@ -182,7 +184,7 @@ control 'gcp' do
   end
 
   describe google_kms_crypto_key_iam_binding(
-    project: project_id,
+    project: data_governance_project_id,
     location: cmek_location,
     key_ring_name: cmek_keyring_name,
     crypto_key_name: 'bigquery_kms_key',
@@ -200,7 +202,7 @@ control 'gcp' do
   end
 
   google_kms_crypto_key_iam_policy(
-    project: project_id,
+    project: data_governance_project_id,
     location: cmek_location,
     key_ring_name: cmek_keyring_name,
     crypto_key_name: 'ingestion_kms_key'
@@ -208,7 +210,7 @@ control 'gcp' do
     next unless other_kms_roles.include?(iam_binding_role)
 
     describe google_kms_crypto_key_iam_binding(
-      project: project_id,
+      project: data_governance_project_id,
       location: cmek_location,
       key_ring_name: cmek_keyring_name,
       crypto_key_name: 'ingestion_kms_key',
@@ -219,7 +221,7 @@ control 'gcp' do
   end
 
   google_kms_crypto_key_iam_policy(
-    project: project_id,
+    project: data_governance_project_id,
     location: cmek_location,
     key_ring_name: cmek_keyring_name,
     crypto_key_name: 'bigquery_kms_key'
@@ -227,7 +229,7 @@ control 'gcp' do
     next unless other_kms_roles.include?(iam_binding_role)
 
     describe google_kms_crypto_key_iam_binding(
-      project: project_id,
+      project: data_governance_project_id,
       location: cmek_location,
       key_ring_name: cmek_keyring_name,
       crypto_key_name: 'bigquery_kms_key',
