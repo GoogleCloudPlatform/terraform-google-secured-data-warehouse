@@ -245,7 +245,7 @@ control 'gcp' do
 
   sink_projects_logging.each do |sink_project|
     describe google_logging_project_sink(
-      project: "projects/#{sink_projects_logging}",
+      project: sink_project,
       name: 'sk-dwh-logging-bkt'
     ) do
       it { should exist }
