@@ -60,4 +60,4 @@ attributes:
     type: string
   - name: sink_projects_logging
     required: true
-    type: string
+    type: array
