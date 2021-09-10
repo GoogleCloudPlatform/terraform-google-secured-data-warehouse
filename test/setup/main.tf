@@ -62,19 +62,10 @@ module "data_governance_project" {
     "storage-api.googleapis.com",
     "serviceusage.googleapis.com",
     "iam.googleapis.com",
-    "dns.googleapis.com",
-    "pubsub.googleapis.com",
-    "bigquery.googleapis.com",
     "accesscontextmanager.googleapis.com",
     "cloudbilling.googleapis.com",
     "cloudkms.googleapis.com",
-    "dataflow.googleapis.com",
-    "dlp.googleapis.com",
-    "cloudscheduler.googleapis.com",
-    "appengine.googleapis.com",
-    "artifactregistry.googleapis.com",
-    "cloudbuild.googleapis.com",
-    "compute.googleapis.com"
+    "dlp.googleapis.com"
   ]
 }
 
@@ -99,19 +90,12 @@ module "datalake_project" {
     "storage-api.googleapis.com",
     "serviceusage.googleapis.com",
     "iam.googleapis.com",
-    "dns.googleapis.com",
-    "pubsub.googleapis.com",
     "bigquery.googleapis.com",
     "accesscontextmanager.googleapis.com",
     "cloudbilling.googleapis.com",
     "cloudkms.googleapis.com",
     "dataflow.googleapis.com",
-    "dlp.googleapis.com",
-    "cloudscheduler.googleapis.com",
-    "appengine.googleapis.com",
-    "artifactregistry.googleapis.com",
-    "cloudbuild.googleapis.com",
-    "compute.googleapis.com"
+    "dlp.googleapis.com"
   ]
 }
 
