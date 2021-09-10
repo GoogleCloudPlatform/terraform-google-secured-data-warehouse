@@ -18,7 +18,7 @@ locals {
   region        = lower(var.region)
   location      = var.location == "" ? lower(var.region) : lower(var.location)
   cmek_location = local.location == "eu" ? "europe" : local.location
-  projects_ids  = [var.project_id, var.data_governance_project_id]
+  projects_ids  = [var.project_id, var.data_governance_project_id, var.datalake_project_id]
 }
 
 module "data_ingestion" {
