@@ -21,6 +21,20 @@ locals {
   projects_ids  = [var.project_id, var.data_governance_project_id]
 }
 
+// A1 - DATA WAREHOUSE NETWORK - START
+
+// A1 - DATA WAREHOUSE NETWORK - END
+
+
+
+// A2 - DATA WAREHOUSE GOVERNANCE - START
+
+// A2 - DATA WAREHOUSE GOVERNANCE - END
+
+
+
+// A3 - DATA WAREHOUSE INGESTION - START
+
 module "data_ingestion" {
   source                              = "./modules/base-data-ingestion"
   dataset_default_table_expiration_ms = var.dataset_default_table_expiration_ms
@@ -46,6 +60,18 @@ module "data_ingestion" {
   subnet_ip                           = var.subnet_ip
 }
 
+// A3 - DATA WAREHOUSE INGESTION - END
+
+
+
+// A4 - DATA WAREHOUSE SENSITIVE DATA - START
+
+// A4 - DATA WAREHOUSE SENSITIVE DATA - END
+
+
+
+// A5 - DATA WAREHOUSE ORG POLICY - START
+
 module "org_policies" {
   source             = "./modules/org_policies"
   for_each           = toset(local.projects_ids)
@@ -54,3 +80,18 @@ module "org_policies" {
   trusted_subnetwork = module.data_ingestion.subnets_names[0]
   trusted_locations  = var.trusted_locations
 }
+
+// A5 - DATA WAREHOUSE ORG POLICY - END
+
+
+
+
+// A6 - DATA WAREHOUSE LOGGING - STAR
+
+// A6 - DATA WAREHOUSE LOGGING - END
+
+
+
+// A7 - DATA WAREHOUSE VPC-SC - START
+
+// A7 - DATA WAREHOUSE VPC-SC - END
