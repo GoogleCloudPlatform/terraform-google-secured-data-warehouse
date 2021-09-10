@@ -7,7 +7,7 @@ This example illustrates how to use the `bigquery_sensitive_data` submodule.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| bigquery\_project\_id | Project where the dataset and table are created. | `string` | n/a | yes |
+| privileged\_project\_id | Project where the privileged datasets and tables are created. | `string` | n/a | yes |
 | taxonomy\_project\_id | Project where the taxonomy is created. | `string` | n/a | yes |
 
 ## Outputs
