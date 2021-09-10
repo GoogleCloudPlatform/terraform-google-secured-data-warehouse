@@ -213,7 +213,6 @@ If your user does not have the necessary roles to run the commands above you can
 
 | Name | Description |
 |------|-------------|
-| access\_level\_name | Access context manager access level name. |
 | cmek\_bigquery\_crypto\_key | The Customer Managed Crypto Key for the BigQuery service. |
 | cmek\_ingestion\_crypto\_key | The Customer Managed Crypto Key for the Ingestion crypto boundary. |
 | cmek\_keyring\_full\_name | The Keyring full name for the KMS Customer Managed Encryption Keys. |
@@ -225,15 +224,7 @@ If your user does not have the necessary roles to run the commands above you can
 | default\_bigquery\_sa | The default Bigquery service account granted encrypt/decrypt permission on the KMS key. |
 | default\_pubsub\_sa | The default Pub/Sub service account granted encrypt/decrypt permission on the KMS key. |
 | default\_storage\_sa | The default Storage service account granted encrypt/decrypt permission on the KMS key. |
-| network\_name | The name of the VPC being created. |
-| network\_self\_link | The URI of the VPC being created. |
-| project\_number | Project number included on perimeter. |
 | pubsub\_writer\_service\_account\_email | The PubSub writer service account email. Should be used to write data to the PubSub topics the ingestion pipeline reads from. |
-| service\_perimeter\_name | Access context manager service perimeter name. |
 | storage\_writer\_service\_account\_email | The Storage writer service account email. Should be used to write data to the buckets the ingestion pipeline reads from. |
-| subnets\_ips | The IPs and CIDRs of the subnets being created. |
-| subnets\_names | The names of the subnets being created. |
-| subnets\_regions | The region where the subnets will be created. |
-| subnets\_self\_links | The self-links of subnets being created. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

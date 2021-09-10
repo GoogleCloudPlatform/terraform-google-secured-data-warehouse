@@ -17,7 +17,7 @@
 
 resource "google_compute_firewall" "allow_ingress_dataflow_workers" {
   name      = "fw-e-shared-private-0-i-a-dataflow-tcp-12345-12346"
-  network   = module.dwh_networking.network_self_link
+  network   = module.network.network_self_link
   project   = var.project_id
   direction = "INGRESS"
   priority  = 0
@@ -36,7 +36,7 @@ resource "google_compute_firewall" "allow_ingress_dataflow_workers" {
 
 resource "google_compute_firewall" "allow_egress_dataflow_workers" {
   name      = "fw-e-shared-private-0-e-a-dataflow-tcp-12345-12346"
-  network   = module.dwh_networking.network_self_link
+  network   = module.network.network_self_link
   project   = var.project_id
   direction = "EGRESS"
   priority  = 0

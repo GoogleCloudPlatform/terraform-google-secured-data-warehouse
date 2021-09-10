@@ -44,51 +44,6 @@ output "data_ingest_bigquery_dataset" {
   value       = module.bigquery_dataset.bigquery_dataset
 }
 
-output "network_name" {
-  description = "The name of the VPC being created."
-  value       = module.dwh_networking.network_name
-}
-
-output "network_self_link" {
-  description = "The URI of the VPC being created."
-  value       = module.dwh_networking.network_self_link
-}
-
-output "subnets_names" {
-  description = "The names of the subnets being created."
-  value       = module.dwh_networking.subnets_names
-}
-
-output "subnets_ips" {
-  description = "The IPs and CIDRs of the subnets being created."
-  value       = module.dwh_networking.subnets_ips
-}
-
-output "subnets_self_links" {
-  description = "The self-links of subnets being created."
-  value       = module.dwh_networking.subnets_self_links
-}
-
-output "subnets_regions" {
-  description = "The region where the subnets will be created."
-  value       = module.dwh_networking.subnets_regions
-}
-
-output "access_level_name" {
-  description = "Access context manager access level name."
-  value       = module.dwh_networking.access_level_name
-}
-
-output "service_perimeter_name" {
-  description = "Access context manager service perimeter name."
-  value       = module.dwh_networking.service_perimeter_name
-}
-
-output "project_number" {
-  description = "Project number included on perimeter."
-  value       = module.dwh_networking.project_number
-}
-
 output "cmek_keyring_full_name" {
   description = "The Keyring full name for the KMS Customer Managed Encryption Keys."
   value       = module.cmek.keyring

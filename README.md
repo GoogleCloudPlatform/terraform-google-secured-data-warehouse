@@ -83,6 +83,7 @@ module "secured_data_warehouse" {
 | storage\_writer\_service\_account\_email | The Storage writer service account email. Should be used to write data to the buckets the ingestion pipeline reads from. |
 | subnets\_ips | The IPs and CIDRs of the subnets being created. |
 | subnets\_names | The names of the subnets being created. |
+| subnets\_regions | The region where the subnets will be created. |
 | subnets\_self\_links | The self-links of subnets being created. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

@@ -14,22 +14,20 @@
  * limitations under the License.
  */
 
-variable "project_id" {
-  description = "The ID of the project in which the service account will be created."
-  type        = string
+output "access_level_name" {
+  description = "The access level name for the Access Context Manager."
+  value       = module.access_level_policy.name
+
+  depends_on = [
+    time_sleep.wait_for_vpc_sc_propagation
+  ]
 }
 
-variable "region" {
-  description = "The region in which the subnetwork will be created."
-  type        = string
-}
+output "service_perimeter_name" {
+  description = "The service perimeter name for the Access Context Manager."
+  value       = local.regular_service_perimeter_name
 
-variable "vpc_name" {
-  description = "The name of the network."
-  type        = string
-}
-
-variable "subnet_ip" {
-  description = "The CDIR IP range of the subnetwork."
-  type        = string
+  depends_on = [
+    time_sleep.wait_for_vpc_sc_propagation
+  ]
 }

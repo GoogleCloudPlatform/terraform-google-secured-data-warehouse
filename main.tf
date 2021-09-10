@@ -23,6 +23,16 @@ locals {
 
 // A1 - DATA WAREHOUSE NETWORK - START
 
+module "dwh_networking" {
+  source = ".//modules/dwh-networking"
+
+  # org_id     = var.org_id
+  project_id = var.project_id
+  region     = var.region
+  vpc_name   = var.vpc_name
+  subnet_ip  = var.subnet_ip
+}
+
 // A1 - DATA WAREHOUSE NETWORK - END
 
 
@@ -77,7 +87,7 @@ module "org_policies" {
   for_each           = toset(local.projects_ids)
   project_id         = each.key
   region             = local.region
-  trusted_subnetwork = module.data_ingestion.subnets_names[0]
+  trusted_subnetwork = module.dwh_networking.subnets_names[0]
   trusted_locations  = var.trusted_locations
 }
 
@@ -93,5 +103,74 @@ module "org_policies" {
 
 
 // A7 - DATA WAREHOUSE VPC-SC - START
+
+locals {
+  perimeter_members = distinct(concat([
+    "serviceAccount:${module.data_ingestion.dataflow_controller_service_account_email}",
+    "serviceAccount:${module.data_ingestion.storage_writer_service_account_email}",
+    "serviceAccount:${module.data_ingestion.pubsub_writer_service_account_email}",
+    "serviceAccount:${var.terraform_service_account}"
+  ], var.perimeter_additional_members))
+}
+
+data "google_project" "ingestion_project" {
+  project_id = var.project_id
+}
+
+data "google_project" "governance_project" {
+  project_id = var.data_governance_project_id
+}
+
+data "google_project" "datalake_project" {
+  project_id = var.datalake_project_id
+}
+
+resource "random_id" "suffix" {
+  byte_length = 4
+}
+
+module "data_ingestion_vpc_sc" {
+  source                           = ".//modules/dwh_vpc_sc"
+  org_id                           = var.org_id
+  project_id                       = var.project_id
+  access_context_manager_policy_id = var.access_context_manager_policy_id
+  commom_suffix                    = random_id.suffix.hex
+  resources                        = [data.google_project.ingestion_project.number, data.google_project.governance_project.number, data.google_project.datalake_project.number]
+  perimeter_members                = local.perimeter_members
+  restricted_services = [
+    "storage.googleapis.com",
+    "bigquery.googleapis.com",
+    "dataflow.googleapis.com",
+    "pubsub.googleapis.com",
+    "cloudkms.googleapis.com"
+    # "dlp.googleapis.com"
+  ]
+
+  # depends_on needed to prevent intermittent errors
+  # when the VPC-SC is created but perimeter member
+  # not yet propagated.
+  depends_on = [
+    null_resource.forces_wait_propagation
+  ]
+}
+
+
+
+resource "null_resource" "forces_wait_propagation" {
+  provisioner "local-exec" {
+    command = "echo \"\""
+  }
+
+  provisioner "local-exec" {
+    when    = destroy
+    command = "sleep 120;"
+  }
+
+  depends_on = [
+    module.data_ingestion,
+    module.org_policies,
+    module.dwh_networking
+  ]
+}
 
 // A7 - DATA WAREHOUSE VPC-SC - END
