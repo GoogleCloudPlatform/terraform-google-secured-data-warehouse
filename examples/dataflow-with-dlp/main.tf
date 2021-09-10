@@ -28,7 +28,7 @@ module "data_ingestion" {
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
   bucket_name                      = "bucket_simple_exemple"
-  dataset_id                       = "dataset_simple_exemple"
+  dataset_id                       = local.dataset_id
   vpc_name                         = "vpc-simple-exemple"
   cmek_keyring_name                = "key_name_simple_exemple"
   subnet_ip                        = "10.0.32.0/21"
@@ -84,7 +84,7 @@ EOF
 module "de_identification_template" {
   source = "../..//modules/de_identification_template"
 
-  project_id                = var.data_governance_project_id
+  project_id                = var.project_id
   terraform_service_account = var.terraform_service_account
   crypto_key                = var.crypto_key
   wrapped_key               = var.wrapped_key
@@ -114,8 +114,8 @@ module "dataflow_job" {
     inputFilePattern       = "gs://${module.data_ingestion.data_ingest_bucket_names[0]}/cc_records.csv"
     datasetName            = local.dataset_id
     batchSize              = 1000
-    dlpProjectId           = var.data_governance_project_id
-    deidentifyTemplateName = "projects/${var.data_governance_project_id}/locations/${local.region}/deidentifyTemplates/${module.de_identification_template.template_id}"
+    dlpProjectId           = var.project_id
+    deidentifyTemplateName = "projects/${var.project_id}/locations/${local.region}/deidentifyTemplates/${module.de_identification_template.template_id}"
   }
 
   depends_on = [

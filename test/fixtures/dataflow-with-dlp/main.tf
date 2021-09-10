@@ -51,7 +51,6 @@ module "dataflow_with_dlp" {
   datalake_project_id              = var.datalake_project_id
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  perimeter_members                = concat(["serviceAccount:${var.terraform_service_account}"], var.perimeter_additional_members)
   org_id                           = var.org_id
   bucket_force_destroy             = true
   crypto_key                       = module.kek.keys[local.kek_key_name]
