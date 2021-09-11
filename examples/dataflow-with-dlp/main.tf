@@ -36,6 +36,7 @@ module "data_ingestion" {
   vpc_name                         = "vpc-simple-exemple"
   cmek_keyring_name                = "key_name_simple_exemple_${random_id.random_suffix.hex}"
   subnet_ip                        = "10.0.32.0/21"
+  bucket_force_destroy             = var.bucket_force_destroy
 }
 
 //dataflow temp bucket

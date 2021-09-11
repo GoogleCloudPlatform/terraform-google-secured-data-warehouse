@@ -81,6 +81,7 @@ module "data_ingestion" {
   vpc_name                         = "vpc-simple-exemple"
   cmek_keyring_name                = "key_name_simple_exemple"
   subnet_ip                        = "10.0.32.0/21"
+  bucket_force_destroy             = var.bucket_force_destroy
 }
 
 module "de_identification_template_example" {
