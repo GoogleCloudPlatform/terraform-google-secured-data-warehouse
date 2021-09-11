@@ -46,7 +46,3 @@ output "org_id" {
 output "billing_account" {
   value = var.billing_account
 }
-
-output "group_email" {
-  value = var.group_email
-}
