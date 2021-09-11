@@ -76,11 +76,12 @@ module "data_ingestion" {
   project_id                       = var.project_id
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  bucket_name                      = "bucket_simple_exemple"
-  dataset_id                       = "dataset_simple_exemple"
-  vpc_name                         = "vpc-simple-exemple"
-  cmek_keyring_name                = "key_name_simple_exemple"
+  bucket_name                      = "bkt-dlp-flex-ingest-${random_id.suffix.hex}"
+  dataset_id                       = "dlp_flex_ingest"
+  vpc_name                         = "dlp-flex-ingest"
+  cmek_keyring_name                = "dlp_flex_ingest-${random_id.suffix.hex}"
   subnet_ip                        = "10.0.32.0/21"
+  region                           = var.location
   bucket_force_destroy             = var.bucket_force_destroy
 }
 
