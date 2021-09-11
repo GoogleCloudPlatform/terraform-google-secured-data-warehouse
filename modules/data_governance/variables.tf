@@ -26,7 +26,7 @@ variable "kms_keys" {
 
 variable "kms_keys_encrypters_decripters_members" {
   description = "The encrypters and decripters for each key. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required."
-  type        = map(string, list(string))
+  type        = map(list(string))
 }
 
 variable "data_governance_project_id" {
