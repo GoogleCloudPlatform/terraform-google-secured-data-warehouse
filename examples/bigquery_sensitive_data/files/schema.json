@@ -1,0 +1,17 @@
+[
+  {
+  "name": "name",
+  "mode": "NULLABLE",
+  "type": "STRING"
+  },
+  {
+  "name": "gender",
+  "mode": "NULLABLE",
+  "type": "STRING"
+  },
+  {
+  "name": "social_security_number",
+  "mode": "NULLABLE",
+  "type": "STRING"
+  }
+]
