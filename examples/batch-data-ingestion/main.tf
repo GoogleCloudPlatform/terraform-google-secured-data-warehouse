@@ -52,11 +52,16 @@ module "data_ingestion" {
   project_id                       = var.project_id
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  bucket_name                      = "bucket_simple_exemple"
-  dataset_id                       = "dataset_simple_exemple"
-  vpc_name                         = "vpc-simple-exemple"
-  cmek_keyring_name                = "key_name_simple_exemple"
-  subnet_ip                        = "10.0.32.0/21"
+  perimeter_additional_members     = var.perimeter_members
+
+  bucket_name          = "bkt-data-ingestion"
+  location             = local.region
+  vpc_name             = "tst-network"
+  subnet_ip            = "10.0.32.0/21"
+  region               = local.region
+  dataset_id           = local.dataset_id
+  cmek_keyring_name    = "cmek_keyring_${random_id.random_suffix.hex}"
+  bucket_force_destroy = var.bucket_force_destroy
 }
 
 

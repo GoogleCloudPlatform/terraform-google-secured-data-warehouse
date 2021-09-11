@@ -64,6 +64,7 @@ module "data_ingestion" {
   dataset_location                    = local.location
   bucket_location                     = local.location
   cmek_keyring_name                   = var.cmek_keyring_name
+  bucket_force_destroy                = var.bucket_force_destroy
 }
 
 // A3 - DATA WAREHOUSE INGESTION - END
