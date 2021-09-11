@@ -54,6 +54,11 @@ variable "privileged_project_id" {
   type        = string
 }
 
+variable "non_sensitive_project_id" {
+  description = "Project with the de-identified dataset and table."
+  type        = string
+}
+
 variable "dataset_id" {
   description = "The dataset ID to deploy to data warehouse."
   type        = string
@@ -71,5 +76,15 @@ variable "location" {
 
 variable "taxonomy_name" {
   description = "The taxonomy display name."
+  type        = string
+}
+
+variable "cmek_location" {
+  description = "The location for the KMS Customer Managed Encryption Keys."
+  type        = string
+}
+
+variable "cmek_keyring_name" {
+  description = "The Keyring name for the KMS Customer Managed Encryption Keys."
   type        = string
 }
