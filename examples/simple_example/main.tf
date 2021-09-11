@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 
-provider "google" {
-  version = "~> 3.67"
-}
-
 module "secured_data_warehouse" {
   source                           = "../.."
   org_id                           = var.org_id
