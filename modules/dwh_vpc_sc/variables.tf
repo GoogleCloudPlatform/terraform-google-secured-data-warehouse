@@ -36,6 +36,11 @@ variable "commom_suffix" {
   default     = ""
 }
 
+variable "commom_name" {
+  description = "A commom name to be used in the creation of the resources of the module."
+  type        = string
+}
+
 variable "perimeter_members" {
   description = "The list additional members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required."
   type        = list(string)

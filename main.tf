@@ -131,8 +131,9 @@ module "data_ingestion_vpc_sc" {
   org_id                           = var.org_id
   project_id                       = var.project_id
   access_context_manager_policy_id = var.access_context_manager_policy_id
+  commom_name                      = "data_ingestion"
   commom_suffix                    = random_id.suffix.hex
-  resources                        = [data.google_project.ingestion_project.number, data.google_project.governance_project.number, data.google_project.datalake_project.number]
+  resources                        = [data.google_project.ingestion_project.number, data.google_project.datalake_project.number]
   perimeter_members                = local.perimeter_members
   restricted_services = [
     "storage.googleapis.com",
@@ -141,6 +142,32 @@ module "data_ingestion_vpc_sc" {
     "pubsub.googleapis.com",
     "cloudkms.googleapis.com"
     # "dlp.googleapis.com"
+  ]
+
+  # depends_on needed to prevent intermittent errors
+  # when the VPC-SC is created but perimeter member
+  # not yet propagated.
+  depends_on = [
+    null_resource.forces_wait_propagation
+  ]
+}
+
+module "data_governance_vpc_sc" {
+  source                           = ".//modules/dwh_vpc_sc"
+  org_id                           = var.org_id
+  project_id                       = var.data_governance_project_id
+  access_context_manager_policy_id = var.access_context_manager_policy_id
+  commom_name                      = "data_governance"
+  commom_suffix                    = random_id.suffix.hex
+  resources                        = [data.google_project.governance_project.number]
+  perimeter_members                = local.perimeter_members
+  restricted_services = [
+    "storage.googleapis.com",
+    "bigquery.googleapis.com",
+    "dataflow.googleapis.com",
+    "pubsub.googleapis.com",
+    "cloudkms.googleapis.com",
+    "dlp.googleapis.com"
   ]
 
   # depends_on needed to prevent intermittent errors

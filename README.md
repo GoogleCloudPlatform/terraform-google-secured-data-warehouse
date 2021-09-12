@@ -73,6 +73,8 @@ module "secured_data_warehouse" {
 | cmek\_ingestion\_crypto\_key | The Customer Managed Crypto Key for the Ingestion crypto boundary. |
 | cmek\_keyring\_full\_name | The Keyring full name for the KMS Customer Managed Encryption Keys. |
 | cmek\_keyring\_name | The Keyring name for the KMS Customer Managed Encryption Keys. |
+| data\_governance\_access\_level\_name | Access context manager access level name. |
+| data\_governance\_service\_perimeter\_name | Access context manager service perimeter name. |
 | data\_ingest\_bigquery\_dataset | The bigquery dataset created for data ingest pipeline. |
 | data\_ingest\_bucket\_names | The name list of the buckets created for data ingest pipeline. |
 | data\_ingest\_topic\_name | The topic created for data ingest pipeline. |

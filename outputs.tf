@@ -101,6 +101,16 @@ output "service_perimeter_name" {
   value       = module.data_ingestion_vpc_sc.service_perimeter_name
 }
 
+output "data_governance_access_level_name" {
+  description = "Access context manager access level name."
+  value       = module.data_governance_vpc_sc.access_level_name
+}
+
+output "data_governance_service_perimeter_name" {
+  description = "Access context manager service perimeter name."
+  value       = module.data_governance_vpc_sc.service_perimeter_name
+}
+
 output "cmek_keyring_full_name" {
   description = "The Keyring full name for the KMS Customer Managed Encryption Keys."
   value       = module.data_ingestion.cmek_keyring_full_name
