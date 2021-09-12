@@ -30,14 +30,14 @@ variable "resources" {
   default     = []
 }
 
-variable "commom_suffix" {
-  description = "A commom suffix to be used in the module."
+variable "common_suffix" {
+  description = "A common suffix to be used in the module."
   type        = string
   default     = ""
 }
 
-variable "commom_name" {
-  description = "A commom name to be used in the creation of the resources of the module."
+variable "common_name" {
+  description = "A common name to be used in the creation of the resources of the module."
   type        = string
 }
 
