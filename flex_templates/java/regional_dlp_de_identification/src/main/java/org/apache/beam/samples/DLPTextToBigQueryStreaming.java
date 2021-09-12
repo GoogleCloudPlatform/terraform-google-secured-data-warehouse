@@ -131,8 +131,9 @@ import org.slf4j.LoggerFactory;
  * --gcs-location=${PIPELINE_FOLDER}/template \
  * --zone=us-east1-d \
  * --parameters \
- * "inputFilePattern=gs://<bucketName>/<fileName>.csv, batchSize=15,datasetName=<BQDatasetId>,
- *  dlpProjectId=<projectId>,
+ * "inputFilePattern=gs://<bucketName>/<fileName>.csv, batchSize=15,
+ *  datasetName=<BQDatasetId>, bqProjectId=<BQProjectId>,
+ *  dlpProjectId=<DLPProjectId>, dlpLocation=<DLPLocation>,
  *  deidentifyTemplateName=projects/{projectId}/deidentifyTemplates/{deIdTemplateId}
  * </pre>
  */
@@ -295,7 +296,10 @@ public class DLPTextToBigQueryStreaming {
                         options.getInspectTemplateName())))
 
             // 6) Convert DLP Table Rows to BQ Table Row
-            .apply("Process Tokenized Data", ParDo.of(new TableRowProcessorDoFn()));
+            .apply(
+                "Process Tokenized Data",
+                ParDo.of(
+                    new TableRowProcessorDoFn()));
 
     // 7) Create dynamic table and insert successfully converted records into BQ.
     bqDataMap.apply(

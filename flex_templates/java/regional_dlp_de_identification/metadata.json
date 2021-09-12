@@ -1,6 +1,6 @@
 {
-  "name": "Streaming beam Python structured DLP flex template",
-  "description": "Streaming beam Python structured DLP flex template with support for global and regional resources.",
+  "name": "Streaming beam Java Regional structured DLP flex template",
+  "description": "Streaming beam Java structured DLP flex template with support for global and regional resources.",
   "parameters": [
     {
       "name": "inputFilePattern",
@@ -18,12 +18,13 @@
     {
       "name": "batchSize",
       "label": "DLP batch size.",
-      "helpText": "Number of records to be sent in a batch in the call to the DLP API."
+      "helpText": "Number of records to be sent in a batch in the call to the DLP API. Default value is 100.",
+      "isOptional": true
     },
     {
       "name": "dlpLocation",
       "label": "DLP Location.",
-      "helpText": "The Location of the DLP template resource.",
+      "helpText": "The Location of the DLP template resource. Default value is global.",
       "isOptional": true
     },
     {
