@@ -171,6 +171,7 @@ resource "null_resource" "forces_wait_propagation" {
     module.data_ingestion,
     module.org_policies,
     module.dwh_networking,
+    module.dwh_networking_privileged,
     module.data_governance
   ]
 }
