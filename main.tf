@@ -126,6 +126,23 @@ resource "random_id" "suffix" {
   byte_length = 4
 }
 
+resource "null_resource" "forces_wait_propagation" {
+  provisioner "local-exec" {
+    command = "echo \"\""
+  }
+
+  provisioner "local-exec" {
+    when    = destroy
+    command = "sleep 180;"
+  }
+
+  depends_on = [
+    module.data_ingestion,
+    module.org_policies,
+    module.dwh_networking
+  ]
+}
+
 module "data_ingestion_vpc_sc" {
   source                           = ".//modules/dwh_vpc_sc"
   org_id                           = var.org_id
@@ -178,22 +195,22 @@ module "data_governance_vpc_sc" {
   ]
 }
 
+module "vpc_sc_bridge_ingestion_governance" {
+  source  = "terraform-google-modules/vpc-service-controls/google//modules/bridge_service_perimeter"
+  version = "~> 3.0"
 
+  policy         = var.access_context_manager_policy_id
+  perimeter_name = "vpc_sc_bridge_ingestion_governance_${random_id.suffix.hex}"
+  description    = "VPC-SC bridge between data ingestion and data governance"
 
-resource "null_resource" "forces_wait_propagation" {
-  provisioner "local-exec" {
-    command = "echo \"\""
-  }
-
-  provisioner "local-exec" {
-    when    = destroy
-    command = "sleep 180;"
-  }
+  resources = [
+    data.google_project.ingestion_project.number,
+    data.google_project.governance_project.number,
+    data.google_project.datalake_project.number
+  ]
 
   depends_on = [
-    module.data_ingestion,
-    module.org_policies,
-    module.dwh_networking
+    null_resource.forces_wait_propagation
   ]
 }
 
