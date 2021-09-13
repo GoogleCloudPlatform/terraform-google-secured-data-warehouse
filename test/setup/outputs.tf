@@ -26,6 +26,10 @@ output "datalake_project_id" {
   value = module.datalake_project.project_id
 }
 
+output "privileged_data_project_id" {
+  value = module.privileged_data_project.project_id
+}
+
 output "sa_key" {
   value     = google_service_account_key.int_test.private_key
   sensitive = true
