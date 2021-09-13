@@ -166,7 +166,7 @@ resource "null_resource" "forces_wait_propagation" {
 
   provisioner "local-exec" {
     when    = destroy
-    command = "sleep 180;"
+    command = "sleep 240;"
   }
 
   depends_on = [
