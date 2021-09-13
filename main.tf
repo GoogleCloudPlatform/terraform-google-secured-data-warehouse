@@ -54,6 +54,7 @@ module "data_governance" {
   terraform_service_account  = var.terraform_service_account
   data_ingestion_project_id  = var.data_ingestion_project_id
   data_governance_project_id = var.data_governance_project_id
+  privileged_data_project_id = var.privileged_data_project_id
   datalake_project_id        = var.datalake_project_id
   cmek_location              = local.cmek_location
   cmek_keyring_name          = var.cmek_keyring_name

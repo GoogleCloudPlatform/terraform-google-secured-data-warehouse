@@ -21,29 +21,33 @@ locals {
   compute_sa  = "service-${data.google_project.ingestion_project.number}@compute-system.iam.gserviceaccount.com"
   bigquery_sa = data.google_bigquery_default_service_account.bigquery_sa.email
 
+  privileged_bigquery_sa = data.google_bigquery_default_service_account.privileged_bigquery_sa
+
   ingestion_key_name = "ingestion_kms_key"
   bigquery_key_name  = "bigquery_kms_key"
 
   privileged_key_name = "privileged_kms_key"
 
-  ingestion_key_encrypters_decrypters = "serviceAccount:${local.storage_sa},serviceAccount:${local.pubsub_sa},serviceAccount:${local.dataflow_sa},serviceAccount:${local.compute_sa}"
-  bigquery_key_encrypters_decrypters  = "serviceAccount:${local.bigquery_sa}"
-  # privileged_key_encrypters_decrypters = "serviceAccount:${local.bigquery_sa}"
+  ingestion_key_encrypters_decrypters  = "serviceAccount:${local.storage_sa},serviceAccount:${local.pubsub_sa},serviceAccount:${local.dataflow_sa},serviceAccount:${local.compute_sa}"
+  bigquery_key_encrypters_decrypters   = "serviceAccount:${local.bigquery_sa}"
+  privileged_key_encrypters_decrypters = "serviceAccount:${local.privileged_bigquery_sa}"
 
   keys = [
     local.ingestion_key_name,
-    local.bigquery_key_name
-    # local.privileged_key_name
+    local.bigquery_key_name,
+    local.privileged_key_name
   ]
 
   encrypters = [
     local.ingestion_key_encrypters_decrypters,
-    local.bigquery_key_encrypters_decrypters
+    local.bigquery_key_encrypters_decrypters,
+    local.privileged_key_encrypters_decrypters
   ]
 
   decrypters = [
     local.ingestion_key_encrypters_decrypters,
-    local.bigquery_key_encrypters_decrypters
+    local.bigquery_key_encrypters_decrypters,
+    local.privileged_key_encrypters_decrypters
   ]
 }
 
@@ -65,6 +69,10 @@ data "google_storage_project_service_account" "gcs_account" {
 
 data "google_bigquery_default_service_account" "bigquery_sa" {
   project = var.datalake_project_id
+}
+
+data "google_bigquery_default_service_account" "privileged_bigquery_sa" {
+  project = var.privileged_data_project_id
 }
 
 resource "google_project_service_identity" "pubsub_sa" {

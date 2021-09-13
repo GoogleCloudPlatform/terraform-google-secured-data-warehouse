@@ -34,6 +34,11 @@ variable "datalake_project_id" {
   type        = string
 }
 
+variable "privileged_data_project_id" {
+  description = "Project where the privileged datasets and tables are created."
+  type        = string
+}
+
 variable "cmek_location" {
   description = "The location for the KMS Customer Managed Encryption Keys."
   type        = string
