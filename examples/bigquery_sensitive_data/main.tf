@@ -32,5 +32,5 @@ module "bigquery_sensitive_data" {
   dataset_id               = local.dataset_id
   location                 = local.location
   cmek_location            = "us-east1"
-  cmek_keyring_name        = "cmek_keyring_name_4"
+  cmek_keyring_name        = "cmek_keyring_name_${random_id.suffix.hex}"
 }

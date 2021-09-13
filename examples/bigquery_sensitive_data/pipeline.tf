@@ -26,42 +26,12 @@ locals {
   bq_schema = "name:STRING, gender:STRING, social_security_number:STRING"
 }
 
-
 resource "google_project_service_identity" "cloudbuild_sa" {
   provider = google-beta
 
   project = var.privileged_project_id
   service = "cloudbuild.googleapis.com"
-
-  depends_on = [
-  ]
 }
-
-# Create an input table if needed
-#
-# module "bigquery_nonsensitive_data" {
-#   source  = "terraform-google-modules/bigquery/google"
-#   version = "~> 5.0.0"
-
-#   dataset_id                 = local.non_sensitive_dataset_id
-#   description                = "Dataset for BigQuery Non Sensitive Data"
-#   project_id                 = var.non_sensitive_project_id
-#   location                   = local.location
-#   delete_contents_on_destroy = var.delete_contents_on_destroy
-
-#   tables = [
-#     {
-#       table_id = "sample_deid_data",
-#       schema   = templatefile("${path.module}/files/schema.json", {}),
-
-#       time_partitioning  = null,
-#       range_partitioning = null,
-#       expiration_time    = null,
-#       clustering         = null,
-#       labels             = null,
-#     }
-#   ]
-# }
 
 module "de_identification_template_example" {
   source = "../..//modules/de_identification_template"
@@ -129,9 +99,6 @@ resource "google_dataflow_flex_template_job" "regional_dlp" {
   name                    = "dataflow-flex-regional-dlp-job"
   container_spec_gcs_path = module.flex_dlp_template.flex_template_gs_path
   region                  = local.location
-
-  # input_table = "non-pii-t1:non_sensitive_dataset.sample_deid_data"
-  # output_table = "elo-bp-test1:secured_dataset.sample_data"
 
   parameters = {
     input_table                    = "${var.non_sensitive_project_id}:${local.non_sensitive_dataset_id}.sample_deid_data"
