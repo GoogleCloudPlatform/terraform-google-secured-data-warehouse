@@ -33,4 +33,5 @@ module "bigquery_sensitive_data" {
   location                   = local.location
   cmek_location              = local.location
   cmek_keyring_name          = "cmek_keyring_name_${random_id.suffix.hex}"
+  delete_contents_on_destroy = var.delete_contents_on_destroy
 }
