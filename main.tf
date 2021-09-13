@@ -210,7 +210,9 @@ module "vpc_sc_bridge_ingestion_governance" {
   ]
 
   depends_on = [
-    null_resource.forces_wait_propagation
+    null_resource.forces_wait_propagation,
+    module.data_governance_vpc_sc,
+    module.data_ingestion_vpc_sc
   ]
 }
 
