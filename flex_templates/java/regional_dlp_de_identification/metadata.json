@@ -1,0 +1,46 @@
+{
+  "name": "Streaming beam Java Regional structured DLP flex template",
+  "description": "Streaming beam Java structured DLP flex template with support for global and regional resources.",
+  "parameters": [
+    {
+      "name": "inputFilePattern",
+      "label": "Input File Pattern.",
+      "helpText": "Format gs://<bucketName>/<fileName>.csv ."
+    },
+    {
+      "name": "deidentifyTemplateName",
+      "label": "DLP Structured De-identification Template Name.",
+      "helpText": "Name of the DLP Structured De-identification Template. Format is 'projects/<PROJECT>/locations/<LOCATION>/deidentifyTemplates/<TEMPLATE_ID>'",
+      "regexes": [
+        "projects/[^/]+/locations/[^/]+/deidentifyTemplates/[-_a-zA-Z0-9]+"
+      ]
+    },
+    {
+      "name": "batchSize",
+      "label": "DLP batch size.",
+      "helpText": "Number of records to be sent in a batch in the call to the DLP API. Default value is 100.",
+      "isOptional": true
+    },
+    {
+      "name": "dlpLocation",
+      "label": "DLP Location.",
+      "helpText": "The Location of the DLP template resource. Default value is global.",
+      "isOptional": true
+    },
+    {
+      "name": "dlpProjectId",
+      "label": "DLP Project ID.",
+      "helpText": "ID of the project that holds the DLP template."
+    },
+    {
+      "name": "bqProjectId",
+      "label": "BigQuery Project ID.",
+      "helpText": "ID of the project for Output BigQuery."
+    },
+    {
+      "name": "datasetName",
+      "label": "Dataset Name.",
+      "helpText": "Output BigQuery dataset name."
+    }
+  ]
+}

@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-variable "org_id" {
-  description = "The numeric organization id"
+variable "project_id" {
+  description = "The ID of the project in which to provision resources."
+  type        = string
 }
 
-variable "folder_id" {
-  description = "The folder to deploy in"
+variable "repository_id" {
+  description = "ID of the flex template repository."
+  type        = string
+  default     = "flex-templates"
 }
 
-variable "billing_account" {
-  description = "The billing account id associated with the project, e.g. XXXXXX-YYYYYY-ZZZZZZ"
+variable "location" {
+  description = "The location of Artifact registry. Run `gcloud artifacts locations list` to list available locations."
+  type        = string
+  default     = "us-central1"
 }

@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-variable "org_id" {
-  description = "The numeric organization id"
+
+output "flex_template_bucket_name" {
+  description = "The name of the bucket created to store the flex template."
+  value       = google_storage_bucket.templates_bucket.name
 }
 
-variable "folder_id" {
-  description = "The folder to deploy in"
+output "flex_template_repository_name" {
+  description = "The name of the flex template artifact registry repository."
+  value       = google_artifact_registry_repository.flex_templates.name
 }
 
-variable "billing_account" {
-  description = "The billing account id associated with the project, e.g. XXXXXX-YYYYYY-ZZZZZZ"
+output "flex_template_repository_url" {
+  description = "URL of the flex template artifact registry repository."
+  value       = local.repository_url
 }
