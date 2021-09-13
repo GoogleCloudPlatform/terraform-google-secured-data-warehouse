@@ -31,7 +31,7 @@ module "data_ingestion" {
   project_id                       = var.project_id
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  bucket_name                      = "bkt-data-ingestion"
+  bucket_name                      = "data-ingestion"
   dataset_id                       = local.dataset_id
   vpc_name                         = "tst-network"
   cmek_keyring_name                = "cmek_keyring_${random_id.random_suffix.hex}"

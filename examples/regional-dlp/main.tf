@@ -85,6 +85,14 @@ module "data_ingestion" {
   bucket_force_destroy             = var.bucket_force_destroy
 }
 
+resource "time_sleep" "wait_for_vpc_sc_propagation" {
+  create_duration = "180s"
+
+  depends_on = [
+    module.data_ingestion
+  ]
+}
+
 module "de_identification_template_example" {
   source = "../..//modules/de_identification_template"
 
@@ -96,6 +104,9 @@ module "de_identification_template_example" {
   dlp_location              = var.location
   template_file             = "${path.module}/templates/deidentification.tpl"
 
+  depends_on = [
+    time_sleep.wait_for_vpc_sc_propagation
+  ]
 }
 
 module "flex_dlp_template" {
