@@ -64,6 +64,14 @@ module "data_ingestion" {
   bucket_force_destroy = var.bucket_force_destroy
 }
 
+resource "time_sleep" "wait_for_vpc_sc_propagation" {
+  create_duration = "180s"
+
+  depends_on = [
+    module.data_ingestion
+  ]
+}
+
 
 //dataflow temp bucket
 module "dataflow_tmp_bucket" {
@@ -79,8 +87,10 @@ module "dataflow_tmp_bucket" {
   labels = {
     "enterprise_data_ingest_bucket" = "true"
   }
+
   depends_on = [
-    module.data_ingestion.access_level_name
+    module.data_ingestion.access_level_name,
+    time_sleep.wait_for_vpc_sc_propagation
   ]
 }
 

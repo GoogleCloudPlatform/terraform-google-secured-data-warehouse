@@ -31,12 +31,20 @@ module "data_ingestion" {
   project_id                       = var.project_id
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  bucket_name                      = "bucket_simple_exemple"
+  bucket_name                      = "bkt-data-ingestion"
   dataset_id                       = local.dataset_id
-  vpc_name                         = "vpc-simple-exemple"
-  cmek_keyring_name                = "key_name_simple_exemple_${random_id.random_suffix.hex}"
+  vpc_name                         = "tst-network"
+  cmek_keyring_name                = "cmek_keyring_${random_id.random_suffix.hex}"
   subnet_ip                        = "10.0.32.0/21"
   bucket_force_destroy             = var.bucket_force_destroy
+}
+
+resource "time_sleep" "wait_for_vpc_sc_propagation" {
+  create_duration = "180s"
+
+  depends_on = [
+    module.data_ingestion
+  ]
 }
 
 //dataflow temp bucket
@@ -54,7 +62,8 @@ module "dataflow_tmp_bucket" {
   }
 
   depends_on = [
-    module.data_ingestion.access_level_name
+    module.data_ingestion.access_level_name,
+    time_sleep.wait_for_vpc_sc_propagation
   ]
 }
 resource "random_id" "original_key" {
@@ -78,7 +87,8 @@ EOF
   }
 
   depends_on = [
-    module.data_ingestion.access_level_name
+    module.data_ingestion.access_level_name,
+    time_sleep.wait_for_vpc_sc_propagation
   ]
 }
 
@@ -92,6 +102,10 @@ module "de_identification_template" {
   dlp_location              = local.region
   template_file             = "${path.module}/deidentification.tmpl"
   dataflow_service_account  = module.data_ingestion.dataflow_controller_service_account_email
+
+  depends_on = [
+    time_sleep.wait_for_vpc_sc_propagation
+  ]
 }
 
 module "dataflow_job" {
