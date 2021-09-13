@@ -115,9 +115,6 @@ resource "google_dataflow_flex_template_job" "regional_dlp" {
   }
 
   depends_on = [
-    module.de_identification_template_example,
-    module.flex_dlp_template,
     module.python_module_repository,
-    module.bigquery_sensitive_data
   ]
 }

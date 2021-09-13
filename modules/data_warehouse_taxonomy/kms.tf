@@ -68,7 +68,7 @@ module "cmek" {
   project_id         = var.taxonomy_project_id
   location           = var.cmek_location
   keyring            = var.cmek_keyring_name
-  prevent_destroy    = false
+  prevent_destroy    = true
   keys               = local.keys
   set_encrypters_for = local.keys
   set_decrypters_for = local.keys

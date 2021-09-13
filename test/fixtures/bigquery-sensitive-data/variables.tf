@@ -29,26 +29,6 @@ variable "datalake_project_id" {
   type        = string
 }
 
-variable "subnetwork" {
-  description = "The subnetwork used for dataflow."
-  type        = string
-}
-
-variable "non_sensitive_dataset_id" {
-  description = "The dataset ID de-identified by the template."
-  type        = string
-}
-
-variable "crypto_key" {
-  description = "The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP."
-  type        = string
-}
-
-variable "wrapped_key" {
-  description = "The base64 encoded data crypto key wrapped by KMS."
-  type        = string
-}
-
 variable "terraform_service_account" {
   description = "The email address of the service account that will run the Terraform config."
   type        = string
