@@ -156,7 +156,8 @@ resource "null_resource" "forces_wait_propagation" {
   depends_on = [
     module.data_ingestion,
     module.org_policies,
-    module.dwh_networking
+    module.dwh_networking,
+    module.data_governance
   ]
 }
 
