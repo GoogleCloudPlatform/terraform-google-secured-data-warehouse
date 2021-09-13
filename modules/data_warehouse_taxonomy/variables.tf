@@ -49,8 +49,8 @@ variable "taxonomy_project_id" {
   type        = string
 }
 
-variable "bigquery_project_id" {
-  description = "Project where the dataset and table are created."
+variable "privileged_project_id" {
+  description = "Project where the privileged datasets and tables are created."
   type        = string
 }
 
