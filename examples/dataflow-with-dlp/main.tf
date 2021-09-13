@@ -28,7 +28,7 @@ module "data_ingestion" {
   org_id                           = var.org_id
   data_governance_project_id       = var.data_governance_project_id
   datalake_project_id              = var.datalake_project_id
-  project_id                       = var.project_id
+  data_ingestion_project_id        = var.data_ingestion_project_id
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
   bucket_name                      = "data-ingestion"
@@ -52,7 +52,7 @@ module "dataflow_tmp_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 2.1"
 
-  project_id    = var.project_id
+  project_id    = var.data_ingestion_project_id
   name          = "bkt-${random_id.random_suffix.hex}-tmp-dataflow"
   location      = local.region
   force_destroy = var.bucket_force_destroy
@@ -95,7 +95,7 @@ EOF
 module "de_identification_template" {
   source = "../..//modules/de_identification_template"
 
-  project_id                = var.project_id
+  project_id                = var.data_ingestion_project_id
   terraform_service_account = var.terraform_service_account
   crypto_key                = var.crypto_key
   wrapped_key               = var.wrapped_key
@@ -112,7 +112,7 @@ module "dataflow_job" {
   source  = "terraform-google-modules/dataflow/google"
   version = "2.0.0"
 
-  project_id            = var.project_id
+  project_id            = var.data_ingestion_project_id
   name                  = "dlp_example_${null_resource.download_sample_cc_into_gcs.id}_${random_id.random_suffix.hex}"
   on_delete             = "cancel"
   region                = local.region
@@ -129,8 +129,8 @@ module "dataflow_job" {
     inputFilePattern       = "gs://${module.data_ingestion.data_ingest_bucket_names[0]}/cc_records.csv"
     datasetName            = local.dataset_id
     batchSize              = 1000
-    dlpProjectId           = var.project_id
-    deidentifyTemplateName = "projects/${var.project_id}/locations/${local.region}/deidentifyTemplates/${module.de_identification_template.template_id}"
+    dlpProjectId           = var.data_ingestion_project_id
+    deidentifyTemplateName = "projects/${var.data_ingestion_project_id}/locations/${local.region}/deidentifyTemplates/${module.de_identification_template.template_id}"
   }
 
   depends_on = [

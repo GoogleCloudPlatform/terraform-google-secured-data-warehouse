@@ -24,12 +24,16 @@ locals {
   ingestion_key_name = "ingestion_kms_key"
   bigquery_key_name  = "bigquery_kms_key"
 
+  privileged_key_name = "privileged_kms_key"
+
   ingestion_key_encrypters_decrypters = "serviceAccount:${local.storage_sa},serviceAccount:${local.pubsub_sa},serviceAccount:${local.dataflow_sa},serviceAccount:${local.compute_sa}"
   bigquery_key_encrypters_decrypters  = "serviceAccount:${local.bigquery_sa}"
+  # privileged_key_encrypters_decrypters = "serviceAccount:${local.bigquery_sa}"
 
   keys = [
     local.ingestion_key_name,
-    local.bigquery_key_name
+    local.bigquery_key_name,
+    local.privileged_key_name
   ]
 
   encrypters = [
@@ -44,7 +48,7 @@ locals {
 }
 
 data "google_project" "ingestion_project" {
-  project_id = var.project_id
+  project_id = var.data_ingestion_project_id
 }
 
 data "google_project" "governance_project" {
@@ -56,7 +60,7 @@ data "google_project" "datalake_project" {
 }
 
 data "google_storage_project_service_account" "gcs_account" {
-  project = var.project_id
+  project = var.data_ingestion_project_id
 }
 
 data "google_bigquery_default_service_account" "bigquery_sa" {
@@ -66,14 +70,14 @@ data "google_bigquery_default_service_account" "bigquery_sa" {
 resource "google_project_service_identity" "pubsub_sa" {
   provider = google-beta
 
-  project = var.project_id
+  project = var.data_ingestion_project_id
   service = "pubsub.googleapis.com"
 }
 
 resource "google_project_service_identity" "dataflow_sa" {
   provider = google-beta
 
-  project = var.project_id
+  project = var.data_ingestion_project_id
   service = "dataflow.googleapis.com"
 }
 

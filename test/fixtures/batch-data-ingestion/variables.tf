@@ -19,8 +19,8 @@ variable "terraform_service_account" {
   type        = string
 }
 
-variable "project_id" {
-  description = "The ID of the project in which the infrastructure will be created."
+variable "data_ingestion_project_id" {
+  description = "The ID of the project in which the data ingestion resources will be created."
   type        = string
 }
 

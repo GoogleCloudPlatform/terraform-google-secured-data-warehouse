@@ -33,3 +33,8 @@ output "cmek_bigquery_crypto_key" {
   description = "The Customer Managed Crypto Key for the BigQuery service."
   value       = module.cmek.keys[local.bigquery_key_name]
 }
+
+output "cmek_privileged_crypto_key" {
+  description = "The Customer Managed Crypto Key for the Privileged service."
+  value       = module.cmek.keys[local.privileged_key_name]
+}

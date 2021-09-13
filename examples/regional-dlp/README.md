@@ -200,11 +200,11 @@ If your user does not have the necessary roles to run the commands above you can
 | bucket\_force\_destroy | When deleting a bucket, this boolean option will delete all contained objects. If you try to delete a bucket that contains objects, Terraform will fail that run. | `bool` | `false` | no |
 | crypto\_key | The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP. | `string` | n/a | yes |
 | data\_governance\_project\_id | The ID of the project in which the data governance resources will be created. | `string` | n/a | yes |
+| data\_ingestion\_project\_id | The ID of the project in which the data ingestion resources will be created. | `string` | n/a | yes |
 | datalake\_project\_id | The ID of the project in which the Bigquery will be created. | `string` | n/a | yes |
 | location | The location of Artifact registry. Run `gcloud artifacts locations list` to list available locations. | `string` | `"us-central1"` | no |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | perimeter\_additional\_members | The list additional members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | `[]` | no |
-| project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
 | terraform\_service\_account | The email address of the service account that will run the Terraform config. | `string` | n/a | yes |
 | wrapped\_key | The base64 encoded data crypto key wrapped by KMS. | `string` | n/a | yes |
 

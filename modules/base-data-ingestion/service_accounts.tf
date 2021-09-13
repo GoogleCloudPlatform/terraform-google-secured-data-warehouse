@@ -19,25 +19,25 @@
 module "dataflow_controller_service_account" {
   source       = "terraform-google-modules/service-accounts/google"
   version      = "~> 3.0"
-  project_id   = var.project_id
+  project_id   = var.data_ingestion_project_id
   names        = ["sa-dataflow-controller"]
   display_name = "Cloud Dataflow controller service account"
   project_roles = [
-    "${var.project_id}=>roles/pubsub.subscriber",
+    "${var.data_ingestion_project_id}=>roles/pubsub.subscriber",
     "${var.datalake_project_id}=>roles/bigquery.admin",
-    "${var.project_id}=>roles/cloudkms.admin",
-    "${var.project_id}=>roles/cloudkms.cryptoKeyDecrypter",
-    "${var.project_id}=>roles/dlp.admin",
-    "${var.project_id}=>roles/storage.admin",
-    "${var.project_id}=>roles/dataflow.serviceAgent",
-    "${var.project_id}=>roles/dataflow.worker",
-    "${var.project_id}=>roles/compute.viewer",
+    "${var.data_ingestion_project_id}=>roles/cloudkms.admin",
+    "${var.data_ingestion_project_id}=>roles/cloudkms.cryptoKeyDecrypter",
+    "${var.data_ingestion_project_id}=>roles/dlp.admin",
+    "${var.data_ingestion_project_id}=>roles/storage.admin",
+    "${var.data_ingestion_project_id}=>roles/dataflow.serviceAgent",
+    "${var.data_ingestion_project_id}=>roles/dataflow.worker",
+    "${var.data_ingestion_project_id}=>roles/compute.viewer",
   ]
 }
 
 //service account for storage
 resource "google_service_account" "storage_writer_service_account" {
-  project      = var.project_id
+  project      = var.data_ingestion_project_id
   account_id   = "sa-storage-writer"
   display_name = "Cloud Storage data writer service account"
 }
@@ -56,20 +56,20 @@ resource "google_storage_bucket_iam_member" "objectCreator" {
 
 //service account for Pub/sub
 resource "google_service_account" "pubsub_writer_service_account" {
-  project      = var.project_id
+  project      = var.data_ingestion_project_id
   account_id   = "sa-pubsub-writer"
   display_name = "Cloud PubSub data writer service account"
 }
 
 resource "google_pubsub_topic_iam_member" "publisher" {
-  project = var.project_id
+  project = var.data_ingestion_project_id
   topic   = module.data_ingest_topic.id
   role    = "roles/pubsub.publisher"
   member  = "serviceAccount:${google_service_account.pubsub_writer_service_account.email}"
 }
 
 resource "google_pubsub_topic_iam_member" "subscriber" {
-  project = var.project_id
+  project = var.data_ingestion_project_id
   topic   = module.data_ingest_topic.id
   role    = "roles/pubsub.subscriber"
   member  = "serviceAccount:${google_service_account.pubsub_writer_service_account.email}"

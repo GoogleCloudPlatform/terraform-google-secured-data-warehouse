@@ -48,7 +48,7 @@ module "regional_dlp_example" {
   source = "../../../examples/regional-dlp"
 
   org_id                           = var.org_id
-  project_id                       = var.project_id
+  data_ingestion_project_id        = var.data_ingestion_project_id
   data_governance_project_id       = var.data_governance_project_id
   datalake_project_id              = var.datalake_project_id
   location                         = local.location

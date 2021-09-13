@@ -24,8 +24,8 @@ variable "access_context_manager_policy_id" {
   type        = number
 }
 
-variable "project_id" {
-  description = "The ID of the project in which to provision resources."
+variable "data_ingestion_project_id" {
+  description = "The ID of the project in which the data ingestion resources will be created."
   type        = string
 }
 

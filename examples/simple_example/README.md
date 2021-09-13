@@ -9,9 +9,9 @@ This example illustrates how to use the `secured-data-warehouse` module.
 |------|-------------|------|---------|:--------:|
 | access\_context\_manager\_policy\_id | The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format="value(name)"`. | `number` | n/a | yes |
 | data\_governance\_project\_id | The ID of the project in which the data governance resources will be created. | `string` | n/a | yes |
+| data\_ingestion\_project\_id | The ID of the project in which the data ingestion resources will be created. | `string` | n/a | yes |
 | datalake\_project\_id | The ID of the project in which the Bigquery will be created. | `string` | n/a | yes |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
-| project\_id | The ID of the project in which the service account will be created. | `string` | n/a | yes |
 | terraform\_service\_account | The email address of the service account that will run the Terraform code. | `string` | n/a | yes |
 
 ## Outputs

@@ -19,18 +19,8 @@ variable "terraform_service_account" {
   type        = string
 }
 
-variable "kms_keys" {
-  description = "The KMS keys that are going to be created."
-  type        = list(string)
-}
-
-variable "kms_keys_encrypters_decripters_members" {
-  description = "The encrypters and decripters for each key. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required."
-  type        = map(list(string))
-}
-
-variable "project_id" {
-  description = "The ID of the project in which the service account will be created."
+variable "data_ingestion_project_id" {
+  description = "The ID of the project in which the data ingestion resources will be created."
   type        = string
 }
 

@@ -49,6 +49,7 @@ module "secured_data_warehouse" {
 | bucket\_name | The name of for the bucket being provisioned. | `string` | n/a | yes |
 | cmek\_keyring\_name | The Keyring name for the KMS Customer Managed Encryption Keys being provisioned. | `string` | n/a | yes |
 | data\_governance\_project\_id | The ID of the project in which the data governance resources will be created. | `string` | n/a | yes |
+| data\_ingestion\_project\_id | The ID of the project in which the data ingestion resources will be created | `string` | n/a | yes |
 | datalake\_project\_id | The ID of the project in which the Bigquery will be created. | `string` | n/a | yes |
 | dataset\_default\_table\_expiration\_ms | TTL of tables using the dataset in MS. The default value is almost 12 months. | `number` | `31536000000` | no |
 | dataset\_description | Dataset description. | `string` | `"Ingest dataset"` | no |
@@ -57,7 +58,6 @@ module "secured_data_warehouse" {
 | location | The location for the KMS Customer Managed Encryption Keys, Bucket, and Bigquery dataset. This location can be a multiregion, if it is empty the region value will be used. | `string` | `""` | no |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | perimeter\_additional\_members | The list additional members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | `[]` | no |
-| project\_id | The ID of the project in which the service account will be created. | `string` | n/a | yes |
 | region | The region in which the resources will be deployed. | `string` | `"us-central1"` | no |
 | subnet\_ip | The CDIR IP range of the subnetwork. | `string` | n/a | yes |
 | terraform\_service\_account | The email address of the service account that will run the Terraform code. | `string` | n/a | yes |

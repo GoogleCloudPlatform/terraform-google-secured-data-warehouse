@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-output "project_id" {
+output "data_ingestion_project_id" {
   value = module.project.project_id
 }
 
