@@ -23,14 +23,14 @@ resource "random_id" "suffix" {
 }
 
 module "bigquery_sensitive_data" {
-  source                   = "../..//modules/data_warehouse_taxonomy"
-  taxonomy_project_id      = var.taxonomy_project_id
-  privileged_project_id    = var.privileged_project_id
-  non_sensitive_project_id = var.non_sensitive_project_id
-  taxonomy_name            = "secured_taxonomy"
-  table_id                 = "sample_data"
-  dataset_id               = local.dataset_id
-  location                 = local.location
-  cmek_location            = "us-east1"
-  cmek_keyring_name        = "cmek_keyring_name_${random_id.suffix.hex}"
+  source                     = "../..//modules/data_warehouse_taxonomy"
+  taxonomy_project_id        = var.taxonomy_project_id
+  privileged_data_project_id = var.privileged_data_project_id
+  non_sensitive_project_id   = var.non_sensitive_project_id
+  taxonomy_name              = "secured_taxonomy"
+  table_id                   = "sample_data"
+  dataset_id                 = local.dataset_id
+  location                   = local.location
+  cmek_location              = "us-east1"
+  cmek_keyring_name          = "cmek_keyring_name_${random_id.suffix.hex}"
 }

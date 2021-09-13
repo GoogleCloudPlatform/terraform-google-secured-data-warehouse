@@ -43,21 +43,21 @@ locals {
 }
 
 data "google_project" "reid_project" {
-  project_id = var.privileged_project_id
+  project_id = var.privileged_data_project_id
 }
 
 data "google_storage_project_service_account" "gcs_account" {
-  project = var.privileged_project_id
+  project = var.privileged_data_project_id
 }
 
 data "google_bigquery_default_service_account" "bigquery_sa" {
-  project = var.privileged_project_id
+  project = var.privileged_data_project_id
 }
 
 resource "google_project_service_identity" "dataflow_sa" {
   provider = google-beta
 
-  project = var.privileged_project_id
+  project = var.privileged_data_project_id
   service = "dataflow.googleapis.com"
 }
 

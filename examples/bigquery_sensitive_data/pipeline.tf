@@ -29,7 +29,7 @@ locals {
 resource "google_project_service_identity" "cloudbuild_sa" {
   provider = google-beta
 
-  project = var.privileged_project_id
+  project = var.privileged_data_project_id
   service = "cloudbuild.googleapis.com"
 }
 
@@ -48,10 +48,10 @@ module "de_identification_template_example" {
 module "flex_dlp_template" {
   source = "../..//modules/flex_template"
 
-  project_id                  = var.privileged_project_id
+  project_id                  = var.privileged_data_project_id
   location                    = local.location
   repository_id               = local.flex_template_repository_id
-  python_modules_private_repo = "https://${local.location}-python.pkg.dev/${var.privileged_project_id}/${local.python_repository_id}/simple/"
+  python_modules_private_repo = "https://${local.location}-python.pkg.dev/${var.privileged_data_project_id}/${local.python_repository_id}/simple/"
   terraform_service_account   = var.terraform_service_account
   image_name                  = "regional_dlp_flex"
   image_tag                   = "0.1.0"
@@ -68,7 +68,7 @@ module "flex_dlp_template" {
 module "python_module_repository" {
   source = "../..//modules/python_module_repository"
 
-  project_id                = var.privileged_project_id
+  project_id                = var.privileged_data_project_id
   location                  = local.location
   repository_id             = local.python_repository_id
   terraform_service_account = var.terraform_service_account
@@ -81,7 +81,7 @@ module "dataflow_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 2.1"
 
-  project_id         = var.privileged_project_id
+  project_id         = var.privileged_data_project_id
   name               = "bkt-tmp-dataflow-${random_id.suffix.hex}"
   location           = local.location
   force_destroy      = true
@@ -95,7 +95,7 @@ module "dataflow_bucket" {
 resource "google_dataflow_flex_template_job" "regional_dlp" {
   provider = google-beta
 
-  project                 = var.privileged_project_id
+  project                 = var.privileged_data_project_id
   name                    = "dataflow-flex-regional-dlp-job"
   container_spec_gcs_path = module.flex_dlp_template.flex_template_gs_path
   region                  = local.location
@@ -106,7 +106,7 @@ resource "google_dataflow_flex_template_job" "regional_dlp" {
     dlp_location                   = local.dlp_location
     dlp_project                    = var.taxonomy_project_id
     bq_schema                      = local.bq_schema
-    output_table                   = "${var.privileged_project_id}:${local.dataset_id}.sample_data"
+    output_table                   = "${var.privileged_data_project_id}:${local.dataset_id}.sample_data"
     service_account_email          = module.bigquery_sensitive_data.dataflow_controller_service_account_email
     subnetwork                     = var.subnetwork
     dataflow_kms_key               = module.bigquery_sensitive_data.cmek_ingestion_crypto_key

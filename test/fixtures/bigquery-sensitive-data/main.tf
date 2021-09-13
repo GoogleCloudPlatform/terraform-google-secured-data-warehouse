@@ -47,7 +47,7 @@ resource "google_kms_secret_ciphertext" "wrapped_key" {
 module "test_vpc_module" {
   source       = "terraform-google-modules/network/google"
   version      = "~> 3.2.0"
-  project_id   = var.privileged_project_id
+  project_id   = var.privileged_data_project_id
   network_name = "sdw-test-network"
   mtu          = 1460
 
@@ -61,12 +61,12 @@ module "test_vpc_module" {
 }
 
 module "bigquery_sensitive_data" {
-  source                    = "../../..//examples/bigquery_sensitive_data"
-  non_sensitive_project_id  = var.datalake_project_id
-  taxonomy_project_id       = var.data_governance_project_id
-  privileged_project_id     = var.privileged_project_id
-  subnetwork                = module.test_vpc_module.subnets_self_links[0]
-  crypto_key                = module.kek.keys[local.kek_key_name]
-  wrapped_key               = google_kms_secret_ciphertext.wrapped_key.ciphertext
-  terraform_service_account = var.terraform_service_account
+  source                     = "../../..//examples/bigquery_sensitive_data"
+  non_sensitive_project_id   = var.datalake_project_id
+  taxonomy_project_id        = var.data_governance_project_id
+  privileged_data_project_id = var.privileged_data_project_id
+  subnetwork                 = module.test_vpc_module.subnets_self_links[0]
+  crypto_key                 = module.kek.keys[local.kek_key_name]
+  wrapped_key                = google_kms_secret_ciphertext.wrapped_key.ciphertext
+  terraform_service_account  = var.terraform_service_account
 }

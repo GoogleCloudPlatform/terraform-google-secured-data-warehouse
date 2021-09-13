@@ -37,7 +37,7 @@ Functional examples are included in the [examples](./examples/bigquery_sensitive
 | location | Default region to create resources where applicable. | `string` | n/a | yes |
 | non\_sensitive\_project\_id | Project with the de-identified dataset and table. | `string` | n/a | yes |
 | private\_access\_members | List of members in the standard GCP form: user:{email}, serviceAccount:{email}, group:{email} who will have access to private information in BigQuery. | `list(string)` | `[]` | no |
-| privileged\_project\_id | Project where the privileged datasets and tables are created. | `string` | n/a | yes |
+| privileged\_data\_project\_id | Project where the privileged datasets and tables are created. | `string` | n/a | yes |
 | project\_roles | Common roles to apply to all service accounts in the project. | `list(string)` | `[]` | no |
 | table\_id | The table ID to deploy to data warehouse. | `string` | n/a | yes |
 | taxonomy\_name | The taxonomy display name. | `string` | n/a | yes |
