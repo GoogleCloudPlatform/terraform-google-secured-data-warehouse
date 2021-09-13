@@ -95,6 +95,14 @@ resource "google_project_iam_member" "int_datalake_test" {
   member  = "serviceAccount:${google_service_account.int_test.email}"
 }
 
+resource "google_project_iam_member" "int_privilege_data_test" {
+  for_each = toset(local.int_proj_required_roles)
+
+  project = module.privileged_data_project.project_id
+  role    = each.value
+  member  = "serviceAccount:${google_service_account.int_test.email}"
+}
+
 resource "google_service_account_key" "int_test" {
   service_account_id = google_service_account.int_test.id
 }
