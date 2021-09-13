@@ -19,7 +19,7 @@ variable "data_governance_project_id" {
   type        = string
 }
 
-variable "privileged_project_id" {
+variable "privileged_data_project_id" {
   description = "Project where the privileged datasets and tables are created."
   type        = string
 }
