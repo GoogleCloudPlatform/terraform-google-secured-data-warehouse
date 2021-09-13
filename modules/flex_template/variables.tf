@@ -77,7 +77,7 @@ variable "python_modules_private_repo" {
 
 variable "read_access_members" {
   description = "List of members in the standard GCP form: user:{email}, serviceAccount:{email}, group:{email} who will have read access to the repository."
-  type        = list
+  type        = list(any)
   default     = []
 }
 

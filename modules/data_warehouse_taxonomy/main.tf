@@ -36,15 +36,15 @@ module "service_accounts" {
   description  = "Service accounts for BigQuery Sensitive Data"
 
   project_roles = [
-    "${var.bigquery_project_id}=>roles/bigquery.dataViewer",
-    "${var.bigquery_project_id}=>roles/datacatalog.viewer",
+    "${var.privileged_project_id}=>roles/bigquery.dataViewer",
+    "${var.privileged_project_id}=>roles/datacatalog.viewer",
   ]
 }
 
 module "project-iam-bindings" {
   source   = "terraform-google-modules/iam/google//modules/projects_iam"
   version  = "7.2.0"
-  projects = [var.bigquery_project_id]
+  projects = [var.privileged_project_id]
   mode     = "additive"
 
   bindings = {
@@ -56,11 +56,11 @@ module "project-iam-bindings" {
 
 module "bigquery_sensitive_data" {
   source  = "terraform-google-modules/bigquery/google"
-  version = "~> 5.1.0"
+  version = "~> 5.0.0"
 
   dataset_id                 = var.dataset_id
   description                = "Dataset for BigQuery Sensitive Data"
-  project_id                 = var.bigquery_project_id
+  project_id                 = var.privileged_project_id
   location                   = var.location
   delete_contents_on_destroy = var.delete_contents_on_destroy
 

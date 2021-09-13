@@ -15,7 +15,7 @@
  */
 
 module "bigquery_sensitive_data" {
-  source              = "../../..//examples/bigquery_sensitive_data"
-  bigquery_project_id = var.datalake_project_id
-  taxonomy_project_id = var.data_governance_project_id
+  source                = "../../..//examples/bigquery_sensitive_data"
+  privileged_project_id = var.privileged_data_project_id
+  taxonomy_project_id   = var.data_governance_project_id
 }

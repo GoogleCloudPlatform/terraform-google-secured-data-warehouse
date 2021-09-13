@@ -14,12 +14,18 @@
  * limitations under the License.
  */
 
-module "bigquery_sensitive_data" {
-  source                = "../..//modules/data_warehouse_taxonomy"
-  taxonomy_project_id   = var.taxonomy_project_id
-  privileged_project_id = var.privileged_project_id
-  taxonomy_name         = "secured_taxonomy"
-  table_id              = "sample_data"
-  dataset_id            = "secured_dataset"
-  location              = "us-east1"
+
+output "flex_template_bucket_name" {
+  description = "The name of the bucket created to store the flex template."
+  value       = google_storage_bucket.templates_bucket.name
+}
+
+output "flex_template_repository_name" {
+  description = "The name of the flex template artifact registry repository."
+  value       = google_artifact_registry_repository.flex_templates.name
+}
+
+output "flex_template_repository_url" {
+  description = "URL of the flex template artifact registry repository."
+  value       = local.repository_url
 }

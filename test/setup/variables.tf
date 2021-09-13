@@ -25,7 +25,3 @@ variable "folder_id" {
 variable "billing_account" {
   description = "The billing account id associated with the project, e.g. XXXXXX-YYYYYY-ZZZZZZ"
 }
-
-variable "group_email" {
-  description = "The group that will be assigned permissions for testing."
-}

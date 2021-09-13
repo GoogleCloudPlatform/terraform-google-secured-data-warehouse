@@ -15,7 +15,7 @@
     {
       "name": "social_security_number",
       "mode": "NULLABLE",
-      "type": "INTEGER",
+      "type": "STRING",
       "policyTags": {
         "names": ["${pt_ssn}"]
       }

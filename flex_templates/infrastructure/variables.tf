@@ -14,12 +14,19 @@
  * limitations under the License.
  */
 
-module "bigquery_sensitive_data" {
-  source                = "../..//modules/data_warehouse_taxonomy"
-  taxonomy_project_id   = var.taxonomy_project_id
-  privileged_project_id = var.privileged_project_id
-  taxonomy_name         = "secured_taxonomy"
-  table_id              = "sample_data"
-  dataset_id            = "secured_dataset"
-  location              = "us-east1"
+variable "project_id" {
+  description = "The ID of the project in which to provision resources."
+  type        = string
+}
+
+variable "repository_id" {
+  description = "ID of the flex template repository."
+  type        = string
+  default     = "flex-templates"
+}
+
+variable "location" {
+  description = "The location of Artifact registry. Run `gcloud artifacts locations list` to list available locations."
+  type        = string
+  default     = "us-central1"
 }
