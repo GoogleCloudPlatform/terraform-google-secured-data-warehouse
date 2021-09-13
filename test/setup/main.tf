@@ -119,6 +119,9 @@ module "privileged_data_project" {
     "cloudbilling.googleapis.com",
     "cloudkms.googleapis.com",
     "dataflow.googleapis.com",
-    "dlp.googleapis.com"
+    "dlp.googleapis.com",
+    "datacatalog.googleapis.com",
+    "dns.googleapis.com",
+    "compute.googleapis.com"
   ]
 }
