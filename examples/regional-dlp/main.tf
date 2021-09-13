@@ -155,7 +155,8 @@ module "dataflow_bucket" {
   }
 
   depends_on = [
-    module.data_ingestion.access_level_name
+    module.data_ingestion.access_level_name,
+    time_sleep.wait_for_vpc_sc_propagation
   ]
 }
 
