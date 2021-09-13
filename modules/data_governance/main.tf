@@ -32,8 +32,8 @@ locals {
 
   keys = [
     local.ingestion_key_name,
-    local.bigquery_key_name,
-    local.privileged_key_name
+    local.bigquery_key_name
+    # local.privileged_key_name
   ]
 
   encrypters = [
