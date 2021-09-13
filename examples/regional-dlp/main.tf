@@ -127,6 +127,11 @@ module "flex_dlp_template" {
     metadata_file     = "${path.module}/files/metadata.json"
     requirements_file = "${path.module}/files/requirements.txt"
   }
+
+  depends_on = [
+    module.data_ingestion.access_level_name,
+    time_sleep.wait_for_vpc_sc_propagation
+  ]
 }
 
 module "python_module_repository" {
@@ -138,6 +143,11 @@ module "python_module_repository" {
   terraform_service_account = var.terraform_service_account
   requirements_filename     = "${path.module}/files/requirements.txt"
   read_access_members       = ["serviceAccount:${module.data_ingestion.dataflow_controller_service_account_email}"]
+
+  depends_on = [
+    module.data_ingestion.access_level_name,
+    time_sleep.wait_for_vpc_sc_propagation
+  ]
 }
 
 module "dataflow_bucket" {
