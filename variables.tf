@@ -57,6 +57,11 @@ variable "datalake_project_id" {
   type        = string
 }
 
+variable "privileged_data_project_id" {
+  description = "Project where the privileged datasets and tables are created."
+  type        = string
+}
+
 variable "vpc_name" {
   description = "The name of the network."
   type        = string

@@ -99,3 +99,26 @@ module "datalake_project" {
   ]
 }
 
+module "privileged_data_project" {
+  source  = "terraform-google-modules/project-factory/google"
+  version = "~> 10.0"
+
+  name              = "ci-secured-dtw-privileged"
+  random_project_id = "true"
+  org_id            = var.org_id
+  folder_id         = var.folder_id
+  billing_account   = var.billing_account
+
+  activate_apis = [
+    "cloudresourcemanager.googleapis.com",
+    "storage-api.googleapis.com",
+    "serviceusage.googleapis.com",
+    "iam.googleapis.com",
+    "bigquery.googleapis.com",
+    "accesscontextmanager.googleapis.com",
+    "cloudbilling.googleapis.com",
+    "cloudkms.googleapis.com",
+    "dataflow.googleapis.com",
+    "dlp.googleapis.com"
+  ]
+}

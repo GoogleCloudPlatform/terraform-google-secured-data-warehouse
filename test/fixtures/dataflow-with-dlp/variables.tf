@@ -34,6 +34,11 @@ variable "datalake_project_id" {
   type        = string
 }
 
+variable "privileged_data_project_id" {
+  description = "Project where the privileged datasets and tables are created."
+  type        = string
+}
+
 variable "terraform_service_account" {
   description = "Service account email of the account to impersonate to run Terraform."
   type        = string

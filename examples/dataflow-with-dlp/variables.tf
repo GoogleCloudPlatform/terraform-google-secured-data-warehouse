@@ -49,6 +49,11 @@ variable "datalake_project_id" {
   type        = string
 }
 
+variable "privileged_data_project_id" {
+  description = "Project where the privileged datasets and tables are created."
+  type        = string
+}
+
 variable "access_context_manager_policy_id" {
   description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
   type        = number
