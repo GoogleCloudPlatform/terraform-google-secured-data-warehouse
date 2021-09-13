@@ -21,7 +21,7 @@ locals {
   compute_sa  = "service-${data.google_project.ingestion_project.number}@compute-system.iam.gserviceaccount.com"
   bigquery_sa = data.google_bigquery_default_service_account.bigquery_sa.email
 
-  privileged_bigquery_sa = data.google_bigquery_default_service_account.privileged_bigquery_sa
+  privileged_bigquery_sa = data.google_bigquery_default_service_account.privileged_bigquery_sa.email
 
   ingestion_key_name = "ingestion_kms_key"
   bigquery_key_name  = "bigquery_kms_key"
