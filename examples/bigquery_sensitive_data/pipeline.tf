@@ -55,7 +55,7 @@ module "flex_dlp_template" {
   terraform_service_account   = var.terraform_service_account
   image_name                  = "regional_dlp_flex"
   image_tag                   = "0.1.0"
-  kms_key_name                = module.bigquery_sensitive_data.cmek_ingestion_crypto_key
+  kms_key_name                = module.bigquery_sensitive_data.cmek_reidentification_crypto_key
   read_access_members         = ["serviceAccount:${module.bigquery_sensitive_data.dataflow_controller_service_account_email}"]
 
   template_files = {
@@ -88,7 +88,7 @@ module "dataflow_bucket" {
   bucket_policy_only = true
 
   encryption = {
-    default_kms_key_name = module.bigquery_sensitive_data.cmek_ingestion_crypto_key
+    default_kms_key_name = module.bigquery_sensitive_data.cmek_reidentification_crypto_key
   }
 }
 
@@ -109,7 +109,7 @@ resource "google_dataflow_flex_template_job" "regional_dlp" {
     output_table                   = "${var.privileged_data_project_id}:${local.dataset_id}.sample_data"
     service_account_email          = module.bigquery_sensitive_data.dataflow_controller_service_account_email
     subnetwork                     = var.subnetwork
-    dataflow_kms_key               = module.bigquery_sensitive_data.cmek_ingestion_crypto_key
+    dataflow_kms_key               = module.bigquery_sensitive_data.cmek_reidentification_crypto_key
     temp_location                  = "${module.dataflow_bucket.bucket.url}/tmp/"
     no_use_public_ips              = "true"
   }

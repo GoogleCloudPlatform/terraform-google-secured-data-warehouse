@@ -20,24 +20,24 @@ locals {
   compute_sa  = "service-${data.google_project.reid_project.number}@compute-system.iam.gserviceaccount.com"
   bigquery_sa = data.google_bigquery_default_service_account.bigquery_sa.email
 
-  ingestion_key_name = "ingestion_kms_key"
-  bigquery_key_name  = "bigquery_kms_key"
+  reidentification_key_name = "reidentification_kms_key_${random_id.suffix.hex}"
+  bigquery_key_name         = "bigquery_kms_key_${random_id.suffix.hex}"
 
-  ingestion_key_encrypters_decrypters = "serviceAccount:${local.storage_sa},serviceAccount:${local.dataflow_sa},serviceAccount:${local.compute_sa}"
-  bigquery_key_encrypters_decrypters  = "serviceAccount:${local.bigquery_sa}"
+  reidentification_key_encrypters_decrypters = "serviceAccount:${local.storage_sa},serviceAccount:${local.dataflow_sa},serviceAccount:${local.compute_sa}"
+  bigquery_key_encrypters_decrypters         = "serviceAccount:${local.bigquery_sa}"
 
   keys = [
-    local.ingestion_key_name,
+    local.reidentification_key_name,
     local.bigquery_key_name
   ]
 
   encrypters = [
-    local.ingestion_key_encrypters_decrypters,
+    local.reidentification_key_encrypters_decrypters,
     local.bigquery_key_encrypters_decrypters
   ]
 
   decrypters = [
-    local.ingestion_key_encrypters_decrypters,
+    local.reidentification_key_encrypters_decrypters,
     local.bigquery_key_encrypters_decrypters
   ]
 }
@@ -65,13 +65,14 @@ module "cmek" {
   source  = "terraform-google-modules/kms/google"
   version = "~> 2.0.1"
 
-  project_id         = var.taxonomy_project_id
-  location           = var.cmek_location
-  keyring            = var.cmek_keyring_name
-  prevent_destroy    = !var.delete_contents_on_destroy
-  keys               = local.keys
-  set_encrypters_for = local.keys
-  set_decrypters_for = local.keys
-  encrypters         = local.encrypters
-  decrypters         = local.decrypters
+  project_id          = var.taxonomy_project_id
+  location            = var.cmek_location
+  keyring             = var.cmek_keyring_name
+  key_rotation_period = "2592000s" # 30d
+  prevent_destroy     = !var.delete_contents_on_destroy
+  keys                = local.keys
+  set_encrypters_for  = local.keys
+  set_decrypters_for  = local.keys
+  encrypters          = local.encrypters
+  decrypters          = local.decrypters
 }

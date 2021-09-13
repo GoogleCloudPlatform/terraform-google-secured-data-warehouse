@@ -15,7 +15,7 @@
  */
 
 resource "random_id" "suffix" {
-  byte_length = 8
+  byte_length = 4
 }
 
 locals {
@@ -58,11 +58,13 @@ module "bigquery_sensitive_data" {
   source  = "terraform-google-modules/bigquery/google"
   version = "~> 5.0.0"
 
-  dataset_id                 = var.dataset_id
-  description                = "Dataset for BigQuery Sensitive Data"
-  project_id                 = var.privileged_data_project_id
-  location                   = var.location
-  delete_contents_on_destroy = var.delete_contents_on_destroy
+  dataset_id                  = var.dataset_id
+  description                 = "Dataset for BigQuery Sensitive Data"
+  project_id                  = var.privileged_data_project_id
+  location                    = var.location
+  delete_contents_on_destroy  = var.delete_contents_on_destroy
+  encryption_key              = module.cmek.keys[local.bigquery_key_name]
+  default_table_expiration_ms = var.dataset_default_table_expiration_ms
 
   tables = [
     {
