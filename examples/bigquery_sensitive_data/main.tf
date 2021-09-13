@@ -22,4 +22,6 @@ module "bigquery_sensitive_data" {
   table_id              = "sample_data"
   dataset_id            = "secured_dataset"
   location              = "us-east1"
+
+  delete_contents_on_destroy = true
 }
