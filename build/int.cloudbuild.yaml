@@ -21,106 +21,86 @@ steps:
   - 'TF_VAR_org_id=$_ORG_ID'
   - 'TF_VAR_folder_id=$_FOLDER_ID'
   - 'TF_VAR_billing_account=$_BILLING_ACCOUNT'
-# - id: create-simple-example
-#   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-#   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && sleep 90 && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do create simple-example']
-#   env:
-#   - 'TF_VAR_org_id=$_ORG_ID'
-# - id: converge-simple-example
-#   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-#   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do converge simple-example']
-#   env:
-#   - 'TF_VAR_org_id=$_ORG_ID'
-# - id: verify-simple-example
-#   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-#   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do verify simple-example']
-#   env:
-#   - 'TF_VAR_org_id=$_ORG_ID'
-# - id: destroy-simple-example
-#   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-#   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do destroy simple-example']
-#   env:
-#   - 'TF_VAR_org_id=$_ORG_ID'
-# - id: create-de-identification-template
-#   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-#   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && sleep 90 && kitchen_do create de-identification-template']
-#   env:
-#   - 'TF_VAR_org_id=$_ORG_ID'
-# - id: converge-de-identification-template
-#   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-#   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && kitchen_do converge de-identification-template']
-#   env:
-#   - 'TF_VAR_org_id=$_ORG_ID'
-# - id: verify-de-identification-template
-#   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-#   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && kitchen_do verify de-identification-template']
-#   env:
-#   - 'TF_VAR_org_id=$_ORG_ID'
-# - id: destroy-de-identification-template
-#   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-#   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && kitchen_do destroy de-identification-template']
-#   env:
-#   - 'TF_VAR_org_id=$_ORG_ID'
-# - id: create-batch-data-ingestion
-#   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-#   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && sleep 90 && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do create batch-data-ingestion']
-#   env:
-#   - 'TF_VAR_org_id=$_ORG_ID'
-# - id: converge-batch-data-ingestion
-#   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-#   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do converge batch-data-ingestion']
-#   env:
-#   - 'TF_VAR_org_id=$_ORG_ID'
-# - id: verify-batch-data-ingestion
-#   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-#   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do verify batch-data-ingestion']
-#   env:
-#   - 'TF_VAR_org_id=$_ORG_ID'
-# - id: destroy-batch-data-ingestion
-#   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-#   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do destroy batch-data-ingestion']
-#   env:
-#   - 'TF_VAR_org_id=$_ORG_ID'
-# - id: create-dataflow-with-dlp
-#   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-#   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && sleep 90 && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do create dataflow-with-dlp']
-#   env:
-#   - 'TF_VAR_org_id=$_ORG_ID'
-# - id: converge-dataflow-with-dlp
-#   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-#   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do converge dataflow-with-dlp']
-#   env:
-#   - 'TF_VAR_org_id=$_ORG_ID'
-# - id: verify-dataflow-with-dlp
-#   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-#   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do verify dataflow-with-dlp']
-#   env:
-#   - 'TF_VAR_org_id=$_ORG_ID'
-# - id: destroy-dataflow-with-dlp
-#   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-#   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do destroy dataflow-with-dlp']
-#   env:
-#   - 'TF_VAR_org_id=$_ORG_ID'
-# - id: create-bigquery-sensitive-data
-#   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-#   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && sleep 90 && source ./test/ensure_access_policy.sh && sleep 90 && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do create bigquery-sensitive-data']
-#   env:
-#   - 'TF_VAR_org_id=$_ORG_ID'
-# - id: converge-bigquery-sensitive-data
-#   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-#   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do converge bigquery-sensitive-data']
-#   env:
-#   - 'TF_VAR_org_id=$_ORG_ID'
-# - id: verify-bigquery-sensitive-data
-#   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-#   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do verify bigquery-sensitive-data']
-#   env:
-#   - 'TF_VAR_org_id=$_ORG_ID'
-# - id: destroy-bigquery-sensitive-data
-#   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-#   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do destroy bigquery-sensitive-data']
-#   env:
-#   - 'TF_VAR_org_id=$_ORG_ID'
+- id: create-simple-example
+  name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && sleep 90 && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do create simple-example']
+  env:
+  - 'TF_VAR_org_id=$_ORG_ID'
+- id: converge-simple-example
+  name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do converge simple-example']
+  env:
+  - 'TF_VAR_org_id=$_ORG_ID'
+- id: verify-simple-example
+  name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do verify simple-example']
+  env:
+  - 'TF_VAR_org_id=$_ORG_ID'
+- id: destroy-simple-example
+  name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do destroy simple-example']
+  env:
+  - 'TF_VAR_org_id=$_ORG_ID'
+- id: create-de-identification-template
+  name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && sleep 90 && kitchen_do create de-identification-template']
+  env:
+  - 'TF_VAR_org_id=$_ORG_ID'
+- id: converge-de-identification-template
+  name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && kitchen_do converge de-identification-template']
+  env:
+  - 'TF_VAR_org_id=$_ORG_ID'
+- id: verify-de-identification-template
+  name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && kitchen_do verify de-identification-template']
+  env:
+  - 'TF_VAR_org_id=$_ORG_ID'
+- id: destroy-de-identification-template
+  name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && kitchen_do destroy de-identification-template']
+  env:
+  - 'TF_VAR_org_id=$_ORG_ID'
+- id: create-batch-data-ingestion
+  name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && sleep 90 && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do create batch-data-ingestion']
+  env:
+  - 'TF_VAR_org_id=$_ORG_ID'
+- id: converge-batch-data-ingestion
+  name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do converge batch-data-ingestion']
+  env:
+  - 'TF_VAR_org_id=$_ORG_ID'
+- id: verify-batch-data-ingestion
+  name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do verify batch-data-ingestion']
+  env:
+  - 'TF_VAR_org_id=$_ORG_ID'
+- id: destroy-batch-data-ingestion
+  name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do destroy batch-data-ingestion']
+  env:
+  - 'TF_VAR_org_id=$_ORG_ID'
+- id: create-dataflow-with-dlp
+  name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && sleep 90 && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do create dataflow-with-dlp']
+  env:
+  - 'TF_VAR_org_id=$_ORG_ID'
+- id: converge-dataflow-with-dlp
+  name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do converge dataflow-with-dlp']
+  env:
+  - 'TF_VAR_org_id=$_ORG_ID'
+- id: verify-dataflow-with-dlp
+  name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do verify dataflow-with-dlp']
+  env:
+  - 'TF_VAR_org_id=$_ORG_ID'
+- id: destroy-dataflow-with-dlp
+  name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do destroy dataflow-with-dlp']
+  env:
+  - 'TF_VAR_org_id=$_ORG_ID'
 - id: create-regional-dlp
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && sleep 90 && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do create regional-dlp']
@@ -141,10 +121,29 @@ steps:
   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do destroy regional-dlp']
   env:
   - 'TF_VAR_org_id=$_ORG_ID'
+- id: create-bigquery-sensitive-data
+  name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && sleep 90 && source ./test/ensure_access_policy.sh && sleep 90 && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do create bigquery-sensitive-data']
+  env:
+  - 'TF_VAR_org_id=$_ORG_ID'
+- id: converge-bigquery-sensitive-data
+  name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do converge bigquery-sensitive-data']
+  env:
+  - 'TF_VAR_org_id=$_ORG_ID'
+- id: verify-bigquery-sensitive-data
+  name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do verify bigquery-sensitive-data']
+  env:
+  - 'TF_VAR_org_id=$_ORG_ID'
+- id: destroy-bigquery-sensitive-data
+  name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do destroy bigquery-sensitive-data']
+  env:
+  - 'TF_VAR_org_id=$_ORG_ID'
 tags:
 - 'ci'
 - 'integration'
 substitutions:
   _DOCKER_IMAGE_DEVELOPER_TOOLS: 'cft/developer-tools'
   _DOCKER_TAG_VERSION_DEVELOPER_TOOLS: '0.13'
-
