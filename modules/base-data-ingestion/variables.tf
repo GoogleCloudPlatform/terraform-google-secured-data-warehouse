@@ -30,18 +30,18 @@ variable "terraform_service_account" {
   type        = string
 }
 
-variable "project_id" {
-  description = "The ID of the project in which the service account will be created."
-  type        = string
-}
-
-variable "data_governance_project_id" {
-  description = "The ID of the project in which the data governance resources will be created."
+variable "data_ingestion_project_id" {
+  description = "The ID of the project in which the data ingestion resources will be created."
   type        = string
 }
 
 variable "datalake_project_id" {
   description = "The ID of the project in which the Bigquery will be created."
+  type        = string
+}
+
+variable "data_governance_project_id" {
+  description = "The ID of the project in which the KMS and DLP are created."
   type        = string
 }
 
@@ -115,12 +115,12 @@ variable "dataset_default_table_expiration_ms" {
   default     = 31536000000
 }
 
-variable "cmek_location" {
-  description = "The location for the KMS Customer Managed Encryption Keys."
+variable "bigquery_encryption_key" {
+  description = "Self-link of the encryption key to be used by Bigquery."
   type        = string
 }
 
-variable "cmek_keyring_name" {
-  description = "The Keyring name for the KMS Customer Managed Encryption Keys."
+variable "ingestion_encryption_key" {
+  description = "Self-link of the encryption key to be used by Pub/Sub and Storage."
   type        = string
 }

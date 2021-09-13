@@ -52,7 +52,7 @@ resource "random_id" "suffix" {
 resource "google_project_service" "apis_to_enable" {
   for_each = toset(local.apis_to_enable)
 
-  project            = var.project_id
+  project            = var.data_ingestion_project_id
   service            = each.key
   disable_on_destroy = false
 }
@@ -60,7 +60,7 @@ resource "google_project_service" "apis_to_enable" {
 resource "google_project_service_identity" "cloudbuild_sa" {
   provider = google-beta
 
-  project = var.project_id
+  project = var.data_ingestion_project_id
   service = "cloudbuild.googleapis.com"
 
   depends_on = [
@@ -74,7 +74,7 @@ module "data_ingestion" {
   data_governance_project_id       = var.data_governance_project_id
   privileged_data_project_id       = var.privileged_data_project_id
   datalake_project_id              = var.datalake_project_id
-  project_id                       = var.project_id
+  data_ingestion_project_id        = var.data_ingestion_project_id
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
   bucket_name                      = "bkt-dlp-flex-ingest-${random_id.suffix.hex}"
@@ -113,10 +113,10 @@ module "de_identification_template_example" {
 module "flex_dlp_template" {
   source = "../..//modules/flex_template"
 
-  project_id                  = var.project_id
+  project_id                  = var.data_ingestion_project_id
   location                    = var.location
   repository_id               = local.flex_template_repository_id
-  python_modules_private_repo = "https://${var.location}-python.pkg.dev/${var.project_id}/${local.python_repository_id}/simple/"
+  python_modules_private_repo = "https://${var.location}-python.pkg.dev/${var.data_ingestion_project_id}/${local.python_repository_id}/simple/"
   terraform_service_account   = var.terraform_service_account
   image_name                  = "regional_dlp_flex"
   image_tag                   = "0.1.0"
@@ -138,7 +138,7 @@ module "flex_dlp_template" {
 module "python_module_repository" {
   source = "../..//modules/python_module_repository"
 
-  project_id                = var.project_id
+  project_id                = var.data_ingestion_project_id
   location                  = var.location
   repository_id             = local.python_repository_id
   terraform_service_account = var.terraform_service_account
@@ -155,7 +155,7 @@ module "dataflow_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 2.1"
 
-  project_id         = var.project_id
+  project_id         = var.data_ingestion_project_id
   name               = "bkt-tmp-dataflow-${random_id.suffix.hex}"
   location           = var.location
   force_destroy      = true
@@ -174,13 +174,13 @@ module "dataflow_bucket" {
 resource "google_dataflow_flex_template_job" "regional_dlp" {
   provider = google-beta
 
-  project                 = var.project_id
+  project                 = var.data_ingestion_project_id
   name                    = "dataflow-flex-regional-dlp-job"
   container_spec_gcs_path = module.flex_dlp_template.flex_template_gs_path
   region                  = var.location
 
   parameters = {
-    input_topic                    = "projects/${var.project_id}/topics/${module.data_ingestion.data_ingest_topic_name}"
+    input_topic                    = "projects/${var.data_ingestion_project_id}/topics/${module.data_ingestion.data_ingest_topic_name}"
     deidentification_template_name = "projects/${var.data_governance_project_id}/locations/${var.location}/deidentifyTemplates/${module.de_identification_template_example.template_id}"
     dlp_location                   = var.location
     dlp_project                    = var.data_governance_project_id

@@ -16,7 +16,7 @@
 
 output "project_id" {
   description = "The project_id used to create data ingestion infra."
-  value       = var.project_id
+  value       = var.data_ingestion_project_id
 }
 
 output "data_governance_project_id" {

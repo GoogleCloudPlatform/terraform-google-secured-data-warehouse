@@ -18,7 +18,7 @@ locals {
   region        = lower(var.region)
   location      = var.location == "" ? lower(var.region) : lower(var.location)
   cmek_location = local.location == "eu" ? "europe" : local.location
-  projects_ids  = [var.project_id, var.data_governance_project_id, var.datalake_project_id]
+  projects_ids  = [var.data_ingestion_project_id, var.data_governance_project_id, var.datalake_project_id]
 }
 
 // A1 - DATA WAREHOUSE NETWORK - START
@@ -27,7 +27,7 @@ module "dwh_networking" {
   source = ".//modules/dwh-networking"
 
   # org_id     = var.org_id
-  project_id = var.project_id
+  project_id = var.data_ingestion_project_id
   region     = var.region
   vpc_name   = var.vpc_name
   subnet_ip  = var.subnet_ip
@@ -49,6 +49,16 @@ module "dwh_networking_privileged" {
 
 // A2 - DATA WAREHOUSE GOVERNANCE - START
 
+module "data_governance" {
+  source                     = "./modules/data_governance"
+  terraform_service_account  = var.terraform_service_account
+  data_ingestion_project_id  = var.data_ingestion_project_id
+  data_governance_project_id = var.data_governance_project_id
+  datalake_project_id        = var.datalake_project_id
+  cmek_location              = local.cmek_location
+  cmek_keyring_name          = var.cmek_keyring_name
+}
+
 // A2 - DATA WAREHOUSE GOVERNANCE - END
 
 
@@ -65,16 +75,15 @@ module "data_ingestion" {
   dataset_name                        = var.dataset_name
   dataset_description                 = var.dataset_description
   org_id                              = var.org_id
-  project_id                          = var.project_id
-  data_governance_project_id          = var.data_governance_project_id
+  data_ingestion_project_id           = var.data_ingestion_project_id
   datalake_project_id                 = var.datalake_project_id
+  data_governance_project_id          = var.data_governance_project_id
   terraform_service_account           = var.terraform_service_account
-  cmek_location                       = local.cmek_location
   region                              = local.region
   dataset_location                    = local.location
   bucket_location                     = local.location
-  cmek_keyring_name                   = var.cmek_keyring_name
-  bucket_force_destroy                = var.bucket_force_destroy
+  ingestion_encryption_key            = module.data_governance.cmek_ingestion_crypto_key
+  bigquery_encryption_key             = module.data_governance.cmek_bigquery_crypto_key
 }
 
 // A3 - DATA WAREHOUSE INGESTION - END
@@ -124,12 +133,12 @@ locals {
 resource "google_project_service_identity" "cloudbuild_sa" {
   provider = google-beta
 
-  project = var.project_id
+  project = var.data_ingestion_project_id
   service = "cloudbuild.googleapis.com"
 }
 
 data "google_project" "ingestion_project" {
-  project_id = var.project_id
+  project_id = var.data_ingestion_project_id
 }
 
 data "google_project" "governance_project" {
@@ -168,7 +177,7 @@ resource "null_resource" "forces_wait_propagation" {
 module "data_ingestion_vpc_sc" {
   source                           = ".//modules/dwh_vpc_sc"
   org_id                           = var.org_id
-  project_id                       = var.project_id
+  project_id                       = var.data_ingestion_project_id
   access_context_manager_policy_id = var.access_context_manager_policy_id
   common_name                      = "data_ingestion"
   common_suffix                    = random_id.suffix.hex

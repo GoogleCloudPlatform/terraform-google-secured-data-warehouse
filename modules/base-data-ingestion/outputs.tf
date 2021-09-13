@@ -43,38 +43,3 @@ output "data_ingest_bigquery_dataset" {
   description = "The bigquery dataset created for data ingest pipeline."
   value       = module.bigquery_dataset.bigquery_dataset
 }
-
-output "cmek_keyring_full_name" {
-  description = "The Keyring full name for the KMS Customer Managed Encryption Keys."
-  value       = module.cmek.keyring
-}
-
-output "cmek_keyring_name" {
-  description = "The Keyring name for the KMS Customer Managed Encryption Keys."
-  value       = module.cmek.keyring_name
-}
-
-output "cmek_ingestion_crypto_key" {
-  description = "The Customer Managed Crypto Key for the Ingestion crypto boundary."
-  value       = module.cmek.keys[local.ingestion_key_name]
-}
-
-output "cmek_bigquery_crypto_key" {
-  description = "The Customer Managed Crypto Key for the BigQuery service."
-  value       = module.cmek.keys[local.bigquery_key_name]
-}
-
-output "default_storage_sa" {
-  description = "The default Storage service account granted encrypt/decrypt permission on the KMS key."
-  value       = local.storage_sa
-}
-
-output "default_pubsub_sa" {
-  description = "The default Pub/Sub service account granted encrypt/decrypt permission on the KMS key."
-  value       = local.pubsub_sa
-}
-
-output "default_bigquery_sa" {
-  description = "The default Bigquery service account granted encrypt/decrypt permission on the KMS key."
-  value       = local.bigquery_sa
-}

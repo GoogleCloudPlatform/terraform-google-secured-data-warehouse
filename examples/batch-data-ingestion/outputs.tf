@@ -16,7 +16,7 @@
 
 output "project_id" {
   description = "The data ingestion project's ID."
-  value       = var.project_id
+  value       = var.data_ingestion_project_id
 }
 
 output "scheduler_id" {
@@ -48,4 +48,3 @@ output "df_job_subnetwork" {
   description = "The name of the subnetwork used for create Dataflow job."
   value       = module.data_ingestion.subnets_self_links[0]
 }
-

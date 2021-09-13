@@ -113,20 +113,20 @@ output "data_governance_service_perimeter_name" {
 
 output "cmek_keyring_full_name" {
   description = "The Keyring full name for the KMS Customer Managed Encryption Keys."
-  value       = module.data_ingestion.cmek_keyring_full_name
+  value       = module.data_governance.cmek_keyring_full_name
 }
 
 output "cmek_keyring_name" {
   description = "The Keyring name for the KMS Customer Managed Encryption Keys."
-  value       = module.data_ingestion.cmek_keyring_name
+  value       = module.data_governance.cmek_keyring_name
 }
 
 output "cmek_ingestion_crypto_key" {
   description = "The Customer Managed Crypto Key for the Ingestion crypto boundary."
-  value       = module.data_ingestion.cmek_ingestion_crypto_key
+  value       = module.data_governance.cmek_ingestion_crypto_key
 }
 
 output "cmek_bigquery_crypto_key" {
   description = "The Customer Managed Crypto Key for the BigQuery service."
-  value       = module.data_ingestion.cmek_bigquery_crypto_key
+  value       = module.data_governance.cmek_bigquery_crypto_key
 }
