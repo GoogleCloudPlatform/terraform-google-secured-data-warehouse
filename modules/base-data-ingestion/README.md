@@ -192,6 +192,7 @@ If your user does not have the necessary roles to run the commands above you can
 | bucket\_lifecycle\_rules | List of lifecycle rules to configure. Format is the same as described in provider documentation https://www.terraform.io/docs/providers/google/r/storage_bucket.html#lifecycle_rule except condition.matches\_storage\_class should be a comma delimited string. | <pre>set(object({<br>    action    = any<br>    condition = any<br>  }))</pre> | <pre>[<br>  {<br>    "action": {<br>      "type": "Delete"<br>    },<br>    "condition": {<br>      "age": 30,<br>      "matches_storage_class": [<br>        "STANDARD"<br>      ],<br>      "with_state": "ANY"<br>    }<br>  }<br>]</pre> | no |
 | bucket\_location | Bucket location. | `string` | `"US"` | no |
 | bucket\_name | The main part of the name of the bucket to be created. | `string` | n/a | yes |
+| data\_governance\_project\_id | The ID of the project in which the KMS and DLP are created. | `string` | n/a | yes |
 | data\_ingestion\_project\_id | The ID of the project in which the data ingestion resources will be created. | `string` | n/a | yes |
 | datalake\_project\_id | The ID of the project in which the Bigquery will be created. | `string` | n/a | yes |
 | dataset\_default\_table\_expiration\_ms | TTL of tables using the dataset in MS. The default value is almost 12 months. | `number` | `31536000000` | no |

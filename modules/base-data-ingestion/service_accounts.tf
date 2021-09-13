@@ -25,9 +25,9 @@ module "dataflow_controller_service_account" {
   project_roles = [
     "${var.data_ingestion_project_id}=>roles/pubsub.subscriber",
     "${var.datalake_project_id}=>roles/bigquery.admin",
-    "${var.data_ingestion_project_id}=>roles/cloudkms.admin",
-    "${var.data_ingestion_project_id}=>roles/cloudkms.cryptoKeyDecrypter",
-    "${var.data_ingestion_project_id}=>roles/dlp.admin",
+    "${var.data_governance_project_id}=>roles/cloudkms.admin",
+    "${var.data_governance_project_id}=>roles/cloudkms.cryptoKeyDecrypter",
+    "${var.data_governance_project_id}=>roles/dlp.admin",
     "${var.data_ingestion_project_id}=>roles/storage.admin",
     "${var.data_ingestion_project_id}=>roles/dataflow.serviceAgent",
     "${var.data_ingestion_project_id}=>roles/dataflow.worker",

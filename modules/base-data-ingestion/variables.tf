@@ -40,6 +40,11 @@ variable "datalake_project_id" {
   type        = string
 }
 
+variable "data_governance_project_id" {
+  description = "The ID of the project in which the KMS and DLP are created."
+  type        = string
+}
+
 variable "bucket_name" {
   description = "The main part of the name of the bucket to be created."
   type        = string
