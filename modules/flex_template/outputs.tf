@@ -17,14 +17,26 @@
 output "flex_template_image_tag" {
   description = "The Flex Template image TAG created."
   value       = local.flex_template_image_tag
+
+  depends_on = [
+    null_resource.flex_template_builder
+  ]
 }
 
 output "flex_template_gs_path" {
   description = "Google Cloud Storage path to the flex template."
   value       = local.template_gs_path
+
+  depends_on = [
+    null_resource.flex_template_builder
+  ]
 }
 
 output "templates_bucket_name" {
   description = "The name of the bucket created to store the flex template."
   value       = module.templates_bucket.bucket.name
+
+  depends_on = [
+    null_resource.flex_template_builder
+  ]
 }
