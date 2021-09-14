@@ -56,14 +56,13 @@ module "project-iam-bindings" {
 
 module "bigquery_sensitive_data" {
   source  = "terraform-google-modules/bigquery/google"
-  version = "~> 5.0.0"
+  version = "~> 5.2.0"
 
   dataset_id                 = var.dataset_id
   description                = "Dataset for BigQuery Sensitive Data"
   project_id                 = var.privileged_project_id
   location                   = var.location
   delete_contents_on_destroy = var.delete_contents_on_destroy
-  deletion_protection        = false
 
   tables = [
     {
