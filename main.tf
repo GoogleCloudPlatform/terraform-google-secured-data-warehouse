@@ -338,4 +338,14 @@ module "vpc_sc_bridge_privileged_ingestion" {
   ]
 }
 
+resource "time_sleep" "wait_for_bridge_propagation" {
+  create_duration = "240s"
+
+  depends_on = [
+    module.vpc_sc_bridge_privileged_ingestion,
+    module.vpc_sc_bridge_privileged_governance,
+    module.vpc_sc_bridge_ingestion_governance
+  ]
+}
+
 // A7 - DATA WAREHOUSE VPC-SC - END
