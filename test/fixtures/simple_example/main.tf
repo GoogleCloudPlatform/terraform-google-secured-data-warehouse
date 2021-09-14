@@ -27,8 +27,11 @@ module "simple_example" {
 }
 
 //workaround due to propagation issues
-resource "time_sleep" "wait_90_seconds_for_vpc_sc_propagation" {
-  depends_on = [module.simple_example]
+resource "time_sleep" "wait_for_vpc_sc_propagation" {
 
-  create_duration = "90s"
+  create_duration = "240s"
+
+  depends_on = [
+    module.simple_example
+  ]
 }
