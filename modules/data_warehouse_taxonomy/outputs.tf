@@ -64,9 +64,9 @@ output "cmek_keyring_name" {
   value       = module.cmek.keyring_name
 }
 
-output "cmek_ingestion_crypto_key" {
-  description = "The Customer Managed Crypto Key for the Ingestion crypto boundary."
-  value       = module.cmek.keys[local.ingestion_key_name]
+output "cmek_reidentification_crypto_key" {
+  description = "The Customer Managed Crypto Key for the reidentification crypto boundary."
+  value       = module.cmek.keys[local.reidentification_key_name]
 }
 
 output "cmek_bigquery_crypto_key" {
