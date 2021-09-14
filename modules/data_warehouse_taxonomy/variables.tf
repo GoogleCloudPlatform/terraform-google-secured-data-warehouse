@@ -17,7 +17,7 @@
 variable "delete_contents_on_destroy" {
   description = "(Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present."
   type        = bool
-  default     = null
+  default     = false
 }
 
 variable "dataset_labels" {
@@ -49,8 +49,13 @@ variable "taxonomy_project_id" {
   type        = string
 }
 
-variable "privileged_project_id" {
+variable "privileged_data_project_id" {
   description = "Project where the privileged datasets and tables are created."
+  type        = string
+}
+
+variable "non_sensitive_project_id" {
+  description = "Project with the de-identified dataset and table."
   type        = string
 }
 
@@ -71,5 +76,15 @@ variable "location" {
 
 variable "taxonomy_name" {
   description = "The taxonomy display name."
+  type        = string
+}
+
+variable "cmek_location" {
+  description = "The location for the KMS Customer Managed Encryption Keys."
+  type        = string
+}
+
+variable "cmek_keyring_name" {
+  description = "The Keyring name for the KMS Customer Managed Encryption Keys."
   type        = string
 }

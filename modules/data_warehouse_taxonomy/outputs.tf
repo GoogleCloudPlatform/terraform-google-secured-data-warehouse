@@ -48,3 +48,28 @@ output "taxonomy_name" {
   description = "The taxonomy display name."
   value       = google_data_catalog_taxonomy.secure_taxonomy.display_name
 }
+
+output "dataflow_controller_service_account_email" {
+  description = "The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account."
+  value       = module.dataflow_controller_service_account.email
+}
+
+output "cmek_keyring_full_name" {
+  description = "The Keyring full name for the KMS Customer Managed Encryption Keys."
+  value       = module.cmek.keyring
+}
+
+output "cmek_keyring_name" {
+  description = "The Keyring name for the KMS Customer Managed Encryption Keys."
+  value       = module.cmek.keyring_name
+}
+
+output "cmek_ingestion_crypto_key" {
+  description = "The Customer Managed Crypto Key for the Ingestion crypto boundary."
+  value       = module.cmek.keys[local.ingestion_key_name]
+}
+
+output "cmek_bigquery_crypto_key" {
+  description = "The Customer Managed Crypto Key for the BigQuery service."
+  value       = module.cmek.keys[local.bigquery_key_name]
+}

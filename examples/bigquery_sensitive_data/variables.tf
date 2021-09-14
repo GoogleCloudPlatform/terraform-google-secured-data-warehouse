@@ -19,7 +19,38 @@ variable "taxonomy_project_id" {
   type        = string
 }
 
-variable "privileged_project_id" {
+variable "privileged_data_project_id" {
   description = "Project where the privileged datasets and tables are created."
   type        = string
+}
+
+variable "non_sensitive_project_id" {
+  description = "Project with the de-identified dataset and table."
+  type        = string
+}
+
+variable "crypto_key" {
+  description = "The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP."
+  type        = string
+}
+
+variable "wrapped_key" {
+  description = "The base64 encoded data crypto key wrapped by KMS."
+  type        = string
+}
+
+variable "subnetwork" {
+  description = "The subnetwork used for dataflow."
+  type        = string
+}
+
+variable "terraform_service_account" {
+  description = "The email address of the service account that will run the Terraform config."
+  type        = string
+}
+
+variable "delete_contents_on_destroy" {
+  description = "(Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present."
+  type        = bool
+  default     = null
 }
