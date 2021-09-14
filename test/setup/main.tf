@@ -95,8 +95,7 @@ module "datalake_project" {
     "cloudbilling.googleapis.com",
     "cloudkms.googleapis.com",
     "dataflow.googleapis.com",
-    "dlp.googleapis.com",
-    "cloudbuild.googleapis.com"
+    "dlp.googleapis.com"
   ]
 }
 
@@ -124,6 +123,7 @@ module "privileged_data_project" {
     "datacatalog.googleapis.com",
     "dns.googleapis.com",
     "compute.googleapis.com",
-    "artifactregistry.googleapis.com"
+    "artifactregistry.googleapis.com",
+    "cloudbuild.googleapis.com"
   ]
 }
