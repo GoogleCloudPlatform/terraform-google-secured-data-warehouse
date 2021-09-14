@@ -103,6 +103,12 @@ resource "null_resource" "download_sample_cc_into_gcs" {
 EOF
 
   }
+
+  depends_on = [
+    module.data_ingestion.data_ingestion_access_level_name,
+    module.data_ingestion.data_governance_access_level_name,
+    module.data_ingestion.privileged_access_level_name
+  ]
 }
 
 resource "google_storage_bucket_object" "schema" {

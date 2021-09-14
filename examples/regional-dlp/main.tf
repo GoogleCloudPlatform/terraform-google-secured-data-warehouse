@@ -194,6 +194,8 @@ resource "google_dataflow_flex_template_job" "regional_dlp" {
     module.de_identification_template_example,
     module.flex_dlp_template,
     module.python_module_repository,
-    module.data_ingestion.access_level_name
+    module.data_ingestion.data_ingestion_access_level_name,
+    module.data_ingestion.data_governance_access_level_name,
+    module.data_ingestion.privileged_access_level_name
   ]
 }
