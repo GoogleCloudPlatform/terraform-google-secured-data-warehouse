@@ -23,3 +23,13 @@ variable "privileged_data_project_id" {
   description = "Project where the privileged datasets and tables are created."
   type        = string
 }
+
+variable "datalake_project_id" {
+  description = "The project ID of the BigQuery source that has de-identified data."
+  type        = string
+}
+
+variable "terraform_service_account" {
+  description = "The email address of the service account that will run the Terraform config."
+  type        = string
+}
