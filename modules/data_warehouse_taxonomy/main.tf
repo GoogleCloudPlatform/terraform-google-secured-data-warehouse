@@ -63,6 +63,7 @@ module "bigquery_sensitive_data" {
   project_id                 = var.privileged_project_id
   location                   = var.location
   delete_contents_on_destroy = var.delete_contents_on_destroy
+  deletion_protection        = false
 
   tables = [
     {
