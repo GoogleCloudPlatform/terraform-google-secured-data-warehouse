@@ -95,7 +95,8 @@ module "datalake_project" {
     "cloudbilling.googleapis.com",
     "cloudkms.googleapis.com",
     "dataflow.googleapis.com",
-    "dlp.googleapis.com"
+    "dlp.googleapis.com",
+    "cloudbuild.googleapis.com"
   ]
 }
 
