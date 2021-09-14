@@ -129,6 +129,20 @@ resource "google_storage_bucket_object" "transform_code" {
   ]
 }
 
+
+//Scheduler controller service account
+module "scheduler_controller_service_account" {
+  source       = "terraform-google-modules/service-accounts/google"
+  version      = "~> 3.0"
+  project_id   = var.data_ingestion_project_id
+  names        = ["sa-scheduler-controller"]
+  display_name = "Cloud Scheduler controller service account"
+  project_roles = [
+    "${var.data_ingestion_project_id}=>roles/dataflow.developer",
+    "${var.data_ingestion_project_id}=>roles/compute.viewer",
+  ]
+}
+
 resource "google_cloud_scheduler_job" "scheduler" {
   name     = "scheduler-demo"
   schedule = "0 0 * * *"
@@ -145,7 +159,7 @@ resource "google_cloud_scheduler_job" "scheduler" {
     }
     uri = "https://dataflow.googleapis.com/v1b3/projects/${var.data_ingestion_project_id}/locations/${local.region}/templates"
     oauth_token {
-      service_account_email = var.terraform_service_account
+      service_account_email = module.scheduler_controller_service_account.email
     }
 
     # need to encode the string
