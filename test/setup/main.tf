@@ -122,6 +122,7 @@ module "privileged_data_project" {
     "dlp.googleapis.com",
     "datacatalog.googleapis.com",
     "dns.googleapis.com",
-    "compute.googleapis.com"
+    "compute.googleapis.com",
+    "artifactregistry.googleapis.com"
   ]
 }
