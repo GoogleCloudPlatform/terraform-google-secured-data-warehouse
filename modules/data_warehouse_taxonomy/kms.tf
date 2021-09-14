@@ -68,7 +68,7 @@ module "cmek" {
   project_id          = var.taxonomy_project_id
   location            = var.cmek_location
   keyring             = var.cmek_keyring_name
-  key_rotation_period = "2592000s" # 30d
+  key_rotation_period = var.key_rotation_period_seconds
   prevent_destroy     = !var.delete_contents_on_destroy
   keys                = local.keys
   set_encrypters_for  = local.keys
