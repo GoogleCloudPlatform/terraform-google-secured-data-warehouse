@@ -88,3 +88,15 @@ variable "cmek_keyring_name" {
   description = "The Keyring name for the KMS Customer Managed Encryption Keys."
   type        = string
 }
+
+variable "dataset_default_table_expiration_ms" {
+  description = "TTL of tables using the dataset in MS. The default value is 30 days."
+  type        = number
+  default     = 2592000000
+}
+
+variable "key_rotation_period_seconds" {
+  description = "Rotation period for keys. The default value is 30 days."
+  type        = string
+  default     = "2592000s"
+}
