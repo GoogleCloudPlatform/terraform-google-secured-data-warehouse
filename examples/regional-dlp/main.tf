@@ -86,14 +86,6 @@ module "data_ingestion" {
   bucket_force_destroy             = var.bucket_force_destroy
 }
 
-resource "time_sleep" "wait_for_vpc_sc_propagation" {
-  create_duration = "180s"
-
-  depends_on = [
-    module.data_ingestion
-  ]
-}
-
 module "de_identification_template_example" {
   source = "../..//modules/de_identification_template"
 
@@ -106,7 +98,9 @@ module "de_identification_template_example" {
   template_file             = "${path.module}/templates/deidentification.tpl"
 
   depends_on = [
-    time_sleep.wait_for_vpc_sc_propagation
+    module.data_ingestion.data_ingestion_access_level_name,
+    module.data_ingestion.data_governance_access_level_name,
+    module.data_ingestion.privileged_access_level_name
   ]
 }
 
@@ -130,8 +124,9 @@ module "flex_dlp_template" {
   }
 
   depends_on = [
-    module.data_ingestion.access_level_name,
-    time_sleep.wait_for_vpc_sc_propagation
+    module.data_ingestion.data_ingestion_access_level_name,
+    module.data_ingestion.data_governance_access_level_name,
+    module.data_ingestion.privileged_access_level_name
   ]
 }
 
@@ -146,8 +141,9 @@ module "python_module_repository" {
   read_access_members       = ["serviceAccount:${module.data_ingestion.dataflow_controller_service_account_email}"]
 
   depends_on = [
-    module.data_ingestion.access_level_name,
-    time_sleep.wait_for_vpc_sc_propagation
+    module.data_ingestion.data_ingestion_access_level_name,
+    module.data_ingestion.data_governance_access_level_name,
+    module.data_ingestion.privileged_access_level_name
   ]
 }
 
@@ -166,8 +162,9 @@ module "dataflow_bucket" {
   }
 
   depends_on = [
-    module.data_ingestion.access_level_name,
-    time_sleep.wait_for_vpc_sc_propagation
+    module.data_ingestion.data_ingestion_access_level_name,
+    module.data_ingestion.data_governance_access_level_name,
+    module.data_ingestion.privileged_access_level_name
   ]
 }
 

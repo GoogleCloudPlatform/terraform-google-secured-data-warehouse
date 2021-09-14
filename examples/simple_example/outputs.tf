@@ -69,14 +69,14 @@ output "subnets_self_links" {
   value       = module.secured_data_warehouse.subnets_self_links
 }
 
-output "access_level_name" {
+output "data_ingestion_access_level_name" {
   description = "Access context manager access level name."
-  value       = module.secured_data_warehouse.access_level_name
+  value       = module.secured_data_warehouse.data_ingestion_access_level_name
 }
 
-output "service_perimeter_name" {
+output "data_ingestion_service_perimeter_name" {
   description = "Access context manager service perimeter name."
-  value       = module.secured_data_warehouse.service_perimeter_name
+  value       = module.secured_data_warehouse.data_ingestion_service_perimeter_name
 }
 
 output "cmek_keyring_full_name" {

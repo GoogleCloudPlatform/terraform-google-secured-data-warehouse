@@ -92,12 +92,12 @@ output "subnets_ips" {
 
 output "access_level_name" {
   description = "Access context manager access level name."
-  value       = module.simple_example.access_level_name
+  value       = module.simple_example.data_ingestion_access_level_name
 }
 
 output "service_perimeter_name" {
   description = "Access context manager service perimeter name."
-  value       = module.simple_example.service_perimeter_name
+  value       = module.simple_example.data_ingestion_service_perimeter_name
 }
 
 output "cmek_keyring_name" {

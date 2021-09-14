@@ -40,14 +40,6 @@ module "data_ingestion" {
   bucket_force_destroy             = var.bucket_force_destroy
 }
 
-resource "time_sleep" "wait_for_vpc_sc_propagation" {
-  create_duration = "180s"
-
-  depends_on = [
-    module.data_ingestion
-  ]
-}
-
 //dataflow temp bucket
 module "dataflow_tmp_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
@@ -63,8 +55,9 @@ module "dataflow_tmp_bucket" {
   }
 
   depends_on = [
-    module.data_ingestion.access_level_name,
-    time_sleep.wait_for_vpc_sc_propagation
+    module.data_ingestion.data_ingestion_access_level_name,
+    module.data_ingestion.data_governance_access_level_name,
+    module.data_ingestion.privileged_access_level_name
   ]
 }
 resource "random_id" "original_key" {
@@ -88,8 +81,9 @@ EOF
   }
 
   depends_on = [
-    module.data_ingestion.access_level_name,
-    time_sleep.wait_for_vpc_sc_propagation
+    module.data_ingestion.data_ingestion_access_level_name,
+    module.data_ingestion.data_governance_access_level_name,
+    module.data_ingestion.privileged_access_level_name
   ]
 }
 
@@ -105,7 +99,9 @@ module "de_identification_template" {
   dataflow_service_account  = module.data_ingestion.dataflow_controller_service_account_email
 
   depends_on = [
-    time_sleep.wait_for_vpc_sc_propagation
+    module.data_ingestion.data_ingestion_access_level_name,
+    module.data_ingestion.data_governance_access_level_name,
+    module.data_ingestion.privileged_access_level_name
   ]
 }
 

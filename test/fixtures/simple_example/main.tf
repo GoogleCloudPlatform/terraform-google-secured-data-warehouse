@@ -25,13 +25,3 @@ module "simple_example" {
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
 }
-
-//workaround due to propagation issues
-resource "time_sleep" "wait_for_vpc_sc_propagation" {
-
-  create_duration = "240s"
-
-  depends_on = [
-    module.simple_example
-  ]
-}

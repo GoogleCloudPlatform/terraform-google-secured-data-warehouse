@@ -91,12 +91,12 @@ output "subnets_regions" {
   value       = module.dwh_networking.subnets_regions
 }
 
-output "access_level_name" {
+output "data_ingestion_access_level_name" {
   description = "Access context manager access level name."
   value       = module.data_ingestion_vpc_sc.access_level_name
 }
 
-output "service_perimeter_name" {
+output "data_ingestion_service_perimeter_name" {
   description = "Access context manager service perimeter name."
   value       = module.data_ingestion_vpc_sc.service_perimeter_name
 }
@@ -109,6 +109,16 @@ output "data_governance_access_level_name" {
 output "data_governance_service_perimeter_name" {
   description = "Access context manager service perimeter name."
   value       = module.data_governance_vpc_sc.service_perimeter_name
+}
+
+output "privileged_access_level_name" {
+  description = "Access context manager access level name."
+  value       = module.privileged_data_vpc_sc.access_level_name
+}
+
+output "privileged_service_perimeter_name" {
+  description = "Access context manager service perimeter name."
+  value       = module.privileged_data_vpc_sc.service_perimeter_name
 }
 
 output "cmek_keyring_full_name" {
