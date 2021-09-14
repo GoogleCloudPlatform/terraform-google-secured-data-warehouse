@@ -192,8 +192,15 @@ module "data_ingestion_vpc_sc" {
     "bigquery.googleapis.com",
     "dataflow.googleapis.com",
     "pubsub.googleapis.com",
-    "cloudkms.googleapis.com"
-    # "dlp.googleapis.com"
+    "cloudkms.googleapis.com",
+    "dlp.googleapis.com",
+    "compute.googleapis.com",
+    "datacatalog.googleapis.com",
+    "secretmanager.googleapis.com",
+    "cloudasset.googleapis.com",
+    "cloudfunctions.googleapis.com",
+    "monitoring.googleapis.com",
+    "logging.googleapis.com"
   ]
 
   # depends_on needed to prevent intermittent errors
@@ -219,7 +226,14 @@ module "data_governance_vpc_sc" {
     "dataflow.googleapis.com",
     "pubsub.googleapis.com",
     "cloudkms.googleapis.com",
-    "dlp.googleapis.com"
+    "dlp.googleapis.com",
+    "compute.googleapis.com",
+    "datacatalog.googleapis.com",
+    "secretmanager.googleapis.com",
+    "cloudasset.googleapis.com",
+    "cloudfunctions.googleapis.com",
+    "monitoring.googleapis.com",
+    "logging.googleapis.com"
   ]
 
   # depends_on needed to prevent intermittent errors
@@ -244,8 +258,15 @@ module "privileged_data_vpc_sc" {
     "bigquery.googleapis.com",
     "dataflow.googleapis.com",
     "pubsub.googleapis.com",
-    "cloudkms.googleapis.com"
-    # "dlp.googleapis.com"
+    "cloudkms.googleapis.com",
+    "dlp.googleapis.com",
+    "compute.googleapis.com",
+    "datacatalog.googleapis.com",
+    "secretmanager.googleapis.com",
+    "cloudasset.googleapis.com",
+    "cloudfunctions.googleapis.com",
+    "monitoring.googleapis.com",
+    "logging.googleapis.com"
   ]
 
   # depends_on needed to prevent intermittent errors
