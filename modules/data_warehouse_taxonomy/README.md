@@ -28,8 +28,7 @@ Functional examples are included in the [examples](./examples/bigquery_sensitive
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| cmek\_keyring\_name | The Keyring name for the KMS Customer Managed Encryption Keys. | `string` | n/a | yes |
-| cmek\_location | The location for the KMS Customer Managed Encryption Keys. | `string` | n/a | yes |
+| cmek\_confidential\_bigquery\_crypto\_key | The Customer Managed Crypto Key for the confidential BigQuery service. | `string` | n/a | yes |
 | confidential\_access\_members | List of members in the standard GCP form: user:{email}, serviceAccount:{email}, group:{email} who will have access to confidential information in BigQuery. | `list(string)` | `[]` | no |
 | dataset\_default\_table\_expiration\_ms | TTL of tables using the dataset in MS. The default value is 30 days. | `number` | `2592000000` | no |
 | dataset\_id | The dataset ID to deploy to data warehouse. | `string` | n/a | yes |
@@ -49,11 +48,7 @@ Functional examples are included in the [examples](./examples/bigquery_sensitive
 
 | Name | Description |
 |------|-------------|
-| cmek\_bigquery\_crypto\_key | The Customer Managed Crypto Key for the BigQuery service. |
-| cmek\_keyring\_full\_name | The Keyring full name for the KMS Customer Managed Encryption Keys. |
-| cmek\_keyring\_name | The Keyring name for the KMS Customer Managed Encryption Keys. |
-| cmek\_reidentification\_crypto\_key | The Customer Managed Crypto Key for the reidentification crypto boundary. |
-| dataflow\_controller\_service\_account\_email | The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
+| confidential\_dataflow\_controller\_service\_account\_email | The confidential Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
 | emails\_list | The service account email addresses by name. |
 | high\_policy\_taxonomy\_id | Content for Policy Tag ID in high policy. |
 | medium\_policy\_taxonomy\_id | Content for Policy Tag ID in medium policy. |

@@ -79,13 +79,8 @@ variable "taxonomy_name" {
   type        = string
 }
 
-variable "cmek_location" {
-  description = "The location for the KMS Customer Managed Encryption Keys."
-  type        = string
-}
-
-variable "cmek_keyring_name" {
-  description = "The Keyring name for the KMS Customer Managed Encryption Keys."
+variable "cmek_confidential_bigquery_crypto_key" {
+  description = "The Customer Managed Crypto Key for the confidential BigQuery service."
   type        = string
 }
 

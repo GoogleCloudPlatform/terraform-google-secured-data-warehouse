@@ -50,14 +50,17 @@ module "dwh_networking_privileged" {
 // A2 - DATA WAREHOUSE GOVERNANCE - START
 
 module "data_governance" {
-  source                     = "./modules/data_governance"
-  terraform_service_account  = var.terraform_service_account
-  data_ingestion_project_id  = var.data_ingestion_project_id
-  data_governance_project_id = var.data_governance_project_id
-  privileged_data_project_id = var.privileged_data_project_id
-  datalake_project_id        = var.datalake_project_id
-  cmek_location              = local.cmek_location
-  cmek_keyring_name          = var.cmek_keyring_name
+  source = "./modules/data_governance"
+
+  terraform_service_account   = var.terraform_service_account
+  data_ingestion_project_id   = var.data_ingestion_project_id
+  data_governance_project_id  = var.data_governance_project_id
+  privileged_data_project_id  = var.privileged_data_project_id
+  datalake_project_id         = var.datalake_project_id
+  cmek_location               = local.cmek_location
+  cmek_keyring_name           = var.cmek_keyring_name
+  key_rotation_period_seconds = var.key_rotation_period_seconds
+  delete_contents_on_destroy  = var.delete_contents_on_destroy
 }
 
 // A2 - DATA WAREHOUSE GOVERNANCE - END
@@ -67,7 +70,8 @@ module "data_governance" {
 // A3 - DATA WAREHOUSE INGESTION - START
 
 module "data_ingestion" {
-  source                              = "./modules/base-data-ingestion"
+  source = "./modules/base-data-ingestion"
+
   dataset_default_table_expiration_ms = var.dataset_default_table_expiration_ms
   bucket_name                         = var.bucket_name
   bucket_class                        = var.bucket_class
@@ -94,6 +98,20 @@ module "data_ingestion" {
 
 // A4 - DATA WAREHOUSE SENSITIVE DATA - START
 
+module "bigquery_sensitive_data" {
+  source = "./modules/data_warehouse_taxonomy"
+
+  taxonomy_project_id                   = var.data_governance_project_id
+  privileged_data_project_id            = var.privileged_data_project_id
+  non_sensitive_project_id              = var.datalake_project_id
+  taxonomy_name                         = var.taxonomy_name
+  table_id                              = var.confidential_table_id
+  dataset_id                            = var.confidential_dataset_id
+  location                              = local.location
+  cmek_confidential_bigquery_crypto_key = module.data_governance.cmek_confidential_bigquery_crypto_key
+  delete_contents_on_destroy            = var.delete_contents_on_destroy
+}
+
 // A4 - DATA WAREHOUSE SENSITIVE DATA - END
 
 
@@ -101,7 +119,8 @@ module "data_ingestion" {
 // A5 - DATA WAREHOUSE ORG POLICY - START
 
 module "org_policies" {
-  source             = "./modules/org_policies"
+  source = "./modules/org_policies"
+
   for_each           = toset(local.projects_ids)
   project_id         = each.key
   region             = local.region
@@ -179,7 +198,8 @@ resource "null_resource" "forces_wait_propagation" {
 }
 
 module "data_ingestion_vpc_sc" {
-  source                           = ".//modules/dwh_vpc_sc"
+  source = ".//modules/dwh_vpc_sc"
+
   org_id                           = var.org_id
   project_id                       = var.data_ingestion_project_id
   access_context_manager_policy_id = var.access_context_manager_policy_id
@@ -212,7 +232,8 @@ module "data_ingestion_vpc_sc" {
 }
 
 module "data_governance_vpc_sc" {
-  source                           = ".//modules/dwh_vpc_sc"
+  source = ".//modules/dwh_vpc_sc"
+
   org_id                           = var.org_id
   project_id                       = var.data_governance_project_id
   access_context_manager_policy_id = var.access_context_manager_policy_id
@@ -245,7 +266,8 @@ module "data_governance_vpc_sc" {
 }
 
 module "privileged_data_vpc_sc" {
-  source                           = ".//modules/dwh_vpc_sc"
+  source = ".//modules/dwh_vpc_sc"
+
   org_id                           = var.org_id
   project_id                       = var.privileged_data_project_id
   access_context_manager_policy_id = var.access_context_manager_policy_id

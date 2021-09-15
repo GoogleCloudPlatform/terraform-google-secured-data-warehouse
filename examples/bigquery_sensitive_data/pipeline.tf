@@ -36,9 +36,9 @@ resource "google_project_service_identity" "cloudbuild_sa" {
 module "de_identification_template_example" {
   source = "../..//modules/de_identification_template"
 
-  project_id                = var.taxonomy_project_id
+  project_id                = var.data_governance_project_id
   terraform_service_account = var.terraform_service_account
-  dataflow_service_account  = module.bigquery_sensitive_data.dataflow_controller_service_account_email
+  dataflow_service_account  = module.secured_data_warehouse.confidential_dataflow_controller_service_account_email
   crypto_key                = var.crypto_key
   wrapped_key               = var.wrapped_key
   dlp_location              = local.dlp_location #TODO this location is really dependant on the location of the CMEK key
@@ -55,8 +55,8 @@ module "flex_dlp_template" {
   terraform_service_account   = var.terraform_service_account
   image_name                  = "regional_dlp_flex"
   image_tag                   = "0.1.0"
-  kms_key_name                = module.bigquery_sensitive_data.cmek_reidentification_crypto_key
-  read_access_members         = ["serviceAccount:${module.bigquery_sensitive_data.dataflow_controller_service_account_email}"]
+  kms_key_name                = module.secured_data_warehouse.cmek_reidentification_crypto_key
+  read_access_members         = ["serviceAccount:${module.secured_data_warehouse.confidential_dataflow_controller_service_account_email}"]
 
   template_files = {
     code_file         = "${path.module}/files/bigquery_dlp_bigquery.py"
@@ -73,7 +73,7 @@ module "python_module_repository" {
   repository_id             = local.python_repository_id
   terraform_service_account = var.terraform_service_account
   requirements_filename     = "${path.module}/files/requirements.txt"
-  read_access_members       = ["serviceAccount:${module.bigquery_sensitive_data.dataflow_controller_service_account_email}"]
+  read_access_members       = ["serviceAccount:${module.secured_data_warehouse.confidential_dataflow_controller_service_account_email}"]
 
 }
 
@@ -88,7 +88,7 @@ module "dataflow_bucket" {
   bucket_policy_only = true
 
   encryption = {
-    default_kms_key_name = module.bigquery_sensitive_data.cmek_reidentification_crypto_key
+    default_kms_key_name = module.secured_data_warehouse.cmek_reidentification_crypto_key
   }
 }
 
@@ -102,14 +102,14 @@ resource "google_dataflow_flex_template_job" "regional_dlp" {
 
   parameters = {
     input_table                    = "${var.non_sensitive_project_id}:${local.non_sensitive_dataset_id}.sample_deid_data"
-    deidentification_template_name = "projects/${var.taxonomy_project_id}/locations/${local.dlp_location}/deidentifyTemplates/${module.de_identification_template_example.template_id}"
+    deidentification_template_name = "projects/${var.data_governance_project_id}/locations/${local.dlp_location}/deidentifyTemplates/${module.de_identification_template_example.template_id}"
     dlp_location                   = local.dlp_location
-    dlp_project                    = var.taxonomy_project_id
+    dlp_project                    = var.data_governance_project_id
     bq_schema                      = local.bq_schema
     output_table                   = "${var.privileged_data_project_id}:${local.dataset_id}.sample_data"
-    service_account_email          = module.bigquery_sensitive_data.dataflow_controller_service_account_email
-    subnetwork                     = var.subnetwork
-    dataflow_kms_key               = module.bigquery_sensitive_data.cmek_reidentification_crypto_key
+    service_account_email          = module.secured_data_warehouse.confidential_dataflow_controller_service_account_email
+    subnetwork                     = module.secured_data_warehouse.confidential_subnets_self_links[0]
+    dataflow_kms_key               = module.secured_data_warehouse.cmek_reidentification_crypto_key
     temp_location                  = "${module.dataflow_bucket.bucket.url}/tmp/"
     no_use_public_ips              = "true"
   }

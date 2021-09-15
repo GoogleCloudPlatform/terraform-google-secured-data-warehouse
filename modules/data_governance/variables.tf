@@ -48,3 +48,15 @@ variable "cmek_keyring_name" {
   description = "The Keyring name for the KMS Customer Managed Encryption Keys."
   type        = string
 }
+
+variable "delete_contents_on_destroy" {
+  description = "(Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present."
+  type        = bool
+  default     = false
+}
+
+variable "key_rotation_period_seconds" {
+  description = "Rotation period for keys. The default value is 30 days."
+  type        = string
+  default     = "2592000s"
+}

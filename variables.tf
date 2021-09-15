@@ -118,6 +118,30 @@ variable "bucket_force_destroy" {
   default     = false
 }
 
+variable "confidential_dataset_id" {
+  description = "Unique ID for the confidential dataset being provisioned."
+  type        = string
+  default     = "secured_dataset"
+}
+
+variable "confidential_dataset_name" {
+  description = "Friendly name for the confidential dataset being provisioned."
+  type        = string
+  default     = "Confidential dataset"
+}
+
+variable "confidential_dataset_default_table_expiration_ms" {
+  description = "TTL of tables using the dataset in MS. The default value is 30 days."
+  type        = number
+  default     = 2592000000
+}
+
+variable "confidential_table_id" {
+  description = "The confidential table ID to deploy to data warehouse."
+  type        = string
+  default     = "sample_data"
+}
+
 variable "dataset_id" {
   description = "Unique ID for the dataset being provisioned."
   type        = string
@@ -144,4 +168,34 @@ variable "dataset_default_table_expiration_ms" {
 variable "cmek_keyring_name" {
   description = "The Keyring name for the KMS Customer Managed Encryption Keys being provisioned."
   type        = string
+}
+
+variable "taxonomy_name" {
+  description = "The taxonomy display name."
+  type        = string
+  default     = "secured_taxonomy"
+}
+
+variable "confidential_access_members" {
+  description = "List of members in the standard GCP form: user:{email}, serviceAccount:{email}, group:{email} who will have access to confidential information in BigQuery."
+  type        = list(string)
+  default     = []
+}
+
+variable "private_access_members" {
+  description = "List of members in the standard GCP form: user:{email}, serviceAccount:{email}, group:{email} who will have access to private information in BigQuery."
+  type        = list(string)
+  default     = []
+}
+
+variable "key_rotation_period_seconds" {
+  description = "Rotation period for keys. The default value is 30 days."
+  type        = string
+  default     = "2592000s"
+}
+
+variable "delete_contents_on_destroy" {
+  description = "(Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present."
+  type        = bool
+  default     = false
 }

@@ -14,8 +14,23 @@
  * limitations under the License.
  */
 
-variable "taxonomy_project_id" {
-  description = "Project where the taxonomy is created."
+variable "org_id" {
+  description = "GCP Organization ID."
+  type        = string
+}
+
+variable "access_context_manager_policy_id" {
+  description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
+  type        = number
+}
+
+variable "data_governance_project_id" {
+  description = "The ID of the project in which the data governance resources will be created."
+  type        = string
+}
+
+variable "data_ingestion_project_id" {
+  description = "The ID of the project in which the data ingestion resources will be created."
   type        = string
 }
 
@@ -39,11 +54,6 @@ variable "wrapped_key" {
   type        = string
 }
 
-variable "subnetwork" {
-  description = "The subnetwork used for dataflow."
-  type        = string
-}
-
 variable "terraform_service_account" {
   description = "The email address of the service account that will run the Terraform config."
   type        = string
@@ -53,4 +63,10 @@ variable "delete_contents_on_destroy" {
   description = "(Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present."
   type        = bool
   default     = false
+}
+
+variable "perimeter_members" {
+  description = "The list of all members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required."
+  type        = list(string)
+  default     = []
 }
