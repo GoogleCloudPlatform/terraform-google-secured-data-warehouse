@@ -90,7 +90,7 @@ EOF
 module "de_identification_template" {
   source = "../..//modules/de_identification_template"
 
-  project_id                = var.data_ingestion_project_id
+  project_id                = var.data_governance_project_id
   terraform_service_account = var.terraform_service_account
   crypto_key                = var.crypto_key
   wrapped_key               = var.wrapped_key
@@ -127,7 +127,7 @@ module "dataflow_job" {
     datasetName            = local.dataset_id
     batchSize              = 1000
     dlpProjectId           = var.data_ingestion_project_id
-    deidentifyTemplateName = "projects/${var.data_ingestion_project_id}/locations/${local.region}/deidentifyTemplates/${module.de_identification_template.template_id}"
+    deidentifyTemplateName = "projects/${var.data_governance_project_id}/locations/${local.region}/deidentifyTemplates/${module.de_identification_template.template_id}"
   }
 
   depends_on = [
