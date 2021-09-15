@@ -17,7 +17,7 @@
 locals {
   kek_keyring  = "kek_keyring_${random_id.random_suffix.hex}"
   kek_key_name = "kek_key_${random_id.random_suffix.hex}"
-  location     = "us-east1"
+  location     = "us-central1"
 }
 
 resource "random_id" "random_suffix" {

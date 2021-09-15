@@ -18,7 +18,6 @@ locals {
   python_repository_id        = "python-modules"
   flex_template_repository_id = "flex-templates"
   non_sensitive_dataset_id    = "non_sensitive_dataset"
-  dlp_location                = "us"
 
   # script for user:
   # assume schema is a json template with the correct variable
@@ -41,7 +40,7 @@ module "de_identification_template_example" {
   dataflow_service_account  = module.secured_data_warehouse.confidential_dataflow_controller_service_account_email
   crypto_key                = var.crypto_key
   wrapped_key               = var.wrapped_key
-  dlp_location              = local.dlp_location #TODO this location is really dependant on the location of the CMEK key
+  dlp_location              = local.location
   template_file             = "${path.module}/templates/deidentification.tpl"
 }
 
@@ -102,8 +101,8 @@ resource "google_dataflow_flex_template_job" "regional_dlp" {
 
   parameters = {
     input_table                    = "${var.non_sensitive_project_id}:${local.non_sensitive_dataset_id}.sample_deid_data"
-    deidentification_template_name = "projects/${var.data_governance_project_id}/locations/${local.dlp_location}/deidentifyTemplates/${module.de_identification_template_example.template_id}"
-    dlp_location                   = local.dlp_location
+    deidentification_template_name = "projects/${var.data_governance_project_id}/locations/${local.location}/deidentifyTemplates/${module.de_identification_template_example.template_id}"
+    dlp_location                   = local.location
     dlp_project                    = var.data_governance_project_id
     bq_schema                      = local.bq_schema
     output_table                   = "${var.privileged_data_project_id}:${local.dataset_id}.sample_data"
