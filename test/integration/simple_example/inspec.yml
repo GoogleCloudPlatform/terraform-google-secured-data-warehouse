@@ -72,3 +72,15 @@ attributes:
   - name: cmek_keyring_name
     required: true
     type: string
+  - name: cmek_ingestion_crypto_key_name
+    required: true
+    type: string
+  - name: cmek_bigquery_crypto_key_name
+    required: true
+    type: string
+  - name: cmek_reidentification_crypto_key_name
+    required: true
+    type: string
+  - name: cmek_confidential_bigquery_crypto_key_name
+    required: true
+    type: string

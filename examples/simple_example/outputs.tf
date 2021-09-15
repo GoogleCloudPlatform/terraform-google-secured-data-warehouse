@@ -98,3 +98,23 @@ output "cmek_bigquery_crypto_key" {
   description = "The Customer Managed Crypto Key for the BigQuery service."
   value       = module.secured_data_warehouse.cmek_bigquery_crypto_key
 }
+
+output "cmek_ingestion_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the Ingestion crypto boundary."
+  value       = module.secured_data_warehouse.cmek_ingestion_crypto_key_name
+}
+
+output "cmek_bigquery_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the BigQuery service."
+  value       = module.secured_data_warehouse.cmek_bigquery_crypto_key_name
+}
+
+output "cmek_reidentification_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the reidentification crypto boundary."
+  value       = module.secured_data_warehouse.cmek_reidentification_crypto_key_name
+}
+
+output "cmek_confidential_bigquery_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the confidential BigQuery service."
+  value       = module.secured_data_warehouse.cmek_confidential_bigquery_crypto_key_name
+}

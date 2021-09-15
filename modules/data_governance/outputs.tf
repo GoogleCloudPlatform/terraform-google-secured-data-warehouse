@@ -44,3 +44,22 @@ output "cmek_confidential_bigquery_crypto_key" {
   value       = module.cmek.keys[local.confidential_bigquery_key_name]
 }
 
+output "cmek_ingestion_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the Ingestion crypto boundary."
+  value       = local.ingestion_key_name
+}
+
+output "cmek_bigquery_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the BigQuery service."
+  value       = local.bigquery_key_name
+}
+
+output "cmek_reidentification_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the reidentification crypto boundary."
+  value       = local.reidentification_key_name
+}
+
+output "cmek_confidential_bigquery_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the confidential BigQuery service."
+  value       = local.confidential_bigquery_key_name
+}

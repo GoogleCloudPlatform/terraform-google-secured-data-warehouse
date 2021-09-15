@@ -252,6 +252,42 @@ output "cmek_confidential_bigquery_crypto_key" {
   ]
 }
 
+output "cmek_ingestion_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the Ingestion crypto boundary."
+  value       = module.data_governance.cmek_ingestion_crypto_key_name
+
+  depends_on = [
+    time_sleep.wait_for_bridge_propagation
+  ]
+}
+
+output "cmek_bigquery_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the BigQuery service."
+  value       = module.data_governance.cmek_bigquery_crypto_key_name
+
+  depends_on = [
+    time_sleep.wait_for_bridge_propagation
+  ]
+}
+
+output "cmek_reidentification_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the reidentification crypto boundary."
+  value       = module.data_governance.cmek_reidentification_crypto_key_name
+
+  depends_on = [
+    time_sleep.wait_for_bridge_propagation
+  ]
+}
+
+output "cmek_confidential_bigquery_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the confidential BigQuery service."
+  value       = module.data_governance.cmek_confidential_bigquery_crypto_key_name
+
+  depends_on = [
+    time_sleep.wait_for_bridge_propagation
+  ]
+}
+
 output "emails_list" {
   description = "The service account email addresses by name."
   value       = module.bigquery_sensitive_data.emails_list
