@@ -30,7 +30,7 @@ locals {
   bigquery_key_name  = "bigquery_kms_key_${random_id.suffix.hex}"
 
   reidentification_key_name      = "reidentification_kms_key_${random_id.suffix.hex}"
-  confidential_bigquery_key_name = "bigquery_kms_key_${random_id.suffix.hex}"
+  confidential_bigquery_key_name = "confidential_bigquery_kms_key_${random_id.suffix.hex}"
 
 
   ingestion_key_encrypters_decrypters = "serviceAccount:${local.storage_sa},serviceAccount:${local.pubsub_sa},serviceAccount:${local.dataflow_sa},serviceAccount:${local.compute_sa}"
