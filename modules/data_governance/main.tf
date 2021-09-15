@@ -21,10 +21,10 @@ locals {
   compute_sa  = "service-${data.google_project.ingestion_project.number}@compute-system.iam.gserviceaccount.com"
   bigquery_sa = data.google_bigquery_default_service_account.bigquery_sa.email
 
-  confidential_storage_sa  = data.google_storage_project_service_account.gcs_account.email_address
-  confidential_dataflow_sa = google_project_service_identity.dataflow_sa.email
+  confidential_storage_sa  = data.google_storage_project_service_account.confidential_gcs_account.email_address
+  confidential_dataflow_sa = google_project_service_identity.confidential_dataflow_sa.email
   confidential_compute_sa  = "service-${data.google_project.reid_project.number}@compute-system.iam.gserviceaccount.com"
-  confidential_bigquery_sa = data.google_bigquery_default_service_account.bigquery_sa.email
+  confidential_bigquery_sa = data.google_bigquery_default_service_account.confidential_bigquery_sa.email
 
   ingestion_key_name = "ingestion_kms_key_${random_id.suffix.hex}"
   bigquery_key_name  = "bigquery_kms_key_${random_id.suffix.hex}"
@@ -84,10 +84,6 @@ data "google_storage_project_service_account" "gcs_account" {
 
 data "google_bigquery_default_service_account" "bigquery_sa" {
   project = var.datalake_project_id
-}
-
-data "google_bigquery_default_service_account" "privileged_bigquery_sa" {
-  project = var.privileged_data_project_id
 }
 
 resource "google_project_service_identity" "pubsub_sa" {
