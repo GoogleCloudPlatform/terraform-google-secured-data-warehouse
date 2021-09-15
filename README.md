@@ -50,7 +50,6 @@ module "secured_data_warehouse" {
 | confidential\_access\_members | List of members in the standard GCP form: user:{email}, serviceAccount:{email}, group:{email} who will have access to confidential information in BigQuery. | `list(string)` | `[]` | no |
 | confidential\_dataset\_default\_table\_expiration\_ms | TTL of tables using the dataset in MS. The default value is 30 days. | `number` | `2592000000` | no |
 | confidential\_dataset\_id | Unique ID for the confidential dataset being provisioned. | `string` | `"secured_dataset"` | no |
-| confidential\_dataset\_name | Friendly name for the confidential dataset being provisioned. | `string` | `"Confidential dataset"` | no |
 | confidential\_table\_id | The confidential table ID to deploy to data warehouse. | `string` | `"sample_data"` | no |
 | data\_governance\_project\_id | The ID of the project in which the data governance resources will be created. | `string` | n/a | yes |
 | data\_ingestion\_project\_id | The ID of the project in which the data ingestion resources will be created | `string` | n/a | yes |

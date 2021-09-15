@@ -118,12 +118,6 @@ variable "confidential_dataset_id" {
   default     = "secured_dataset"
 }
 
-variable "confidential_dataset_name" {
-  description = "Friendly name for the confidential dataset being provisioned."
-  type        = string
-  default     = "Confidential dataset"
-}
-
 variable "confidential_dataset_default_table_expiration_ms" {
   description = "TTL of tables using the dataset in MS. The default value is 30 days."
   type        = number
