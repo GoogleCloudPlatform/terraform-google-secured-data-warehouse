@@ -84,6 +84,7 @@ module "data_ingestion" {
   subnet_ip                        = "10.0.32.0/21"
   region                           = var.location
   bucket_force_destroy             = var.bucket_force_destroy
+  perimeter_additional_members     = var.perimeter_additional_members
 }
 
 module "de_identification_template_example" {

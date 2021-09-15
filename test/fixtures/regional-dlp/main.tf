@@ -59,4 +59,6 @@ module "regional_dlp_example" {
 
   crypto_key  = module.kek.keys[local.kek_key_name]
   wrapped_key = google_kms_secret_ciphertext.wrapped_key.ciphertext
+
+  perimeter_additional_members = var.perimeter_additional_members
 }
