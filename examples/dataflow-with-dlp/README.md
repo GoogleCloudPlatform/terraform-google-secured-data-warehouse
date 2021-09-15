@@ -13,11 +13,11 @@ This example illustrates how to run a Dataflow job that uses the `de_identificat
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | access\_context\_manager\_policy\_id | The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format="value(name)"`. | `number` | n/a | yes |
-| bucket\_force\_destroy | When deleting a bucket, this boolean option will delete all contained objects. If you try to delete a bucket that contains objects, Terraform will fail that run. | `bool` | `false` | no |
 | crypto\_key | The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP. | `string` | n/a | yes |
 | data\_governance\_project\_id | The ID of the project in which the data governance resources will be created. | `string` | n/a | yes |
 | data\_ingestion\_project\_id | The ID of the project in which the data ingestion resources will be created. | `string` | n/a | yes |
 | datalake\_project\_id | The ID of the project in which the Bigquery will be created. | `string` | n/a | yes |
+| delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `false` | no |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | privileged\_data\_project\_id | Project where the privileged datasets and tables are created. | `string` | n/a | yes |
 | terraform\_service\_account | Service account email of the account to impersonate to run Terraform. | `string` | n/a | yes |

@@ -28,7 +28,7 @@ module "data_ingest_bucket" {
   location        = var.bucket_location
   storage_class   = var.bucket_class
   lifecycle_rules = var.bucket_lifecycle_rules
-  force_destroy   = var.bucket_force_destroy
+  force_destroy   = var.delete_contents_on_destroy
 
   encryption = {
     default_kms_key_name = var.ingestion_encryption_key

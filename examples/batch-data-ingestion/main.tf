@@ -54,15 +54,14 @@ module "data_ingestion" {
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
   perimeter_additional_members     = var.perimeter_members
-
-  bucket_name          = "bkt-data-ingestion"
-  location             = local.region
-  vpc_name             = "tst-network"
-  subnet_ip            = "10.0.32.0/21"
-  region               = local.region
-  dataset_id           = local.dataset_id
-  cmek_keyring_name    = "cmek_keyring_${random_id.random_suffix.hex}"
-  bucket_force_destroy = var.bucket_force_destroy
+  bucket_name                      = "bkt-data-ingestion"
+  location                         = local.region
+  vpc_name                         = "tst-network"
+  subnet_ip                        = "10.0.32.0/21"
+  region                           = local.region
+  dataset_id                       = local.dataset_id
+  cmek_keyring_name                = "cmek_keyring_${random_id.random_suffix.hex}"
+  delete_contents_on_destroy       = var.delete_contents_on_destroy
 }
 
 
@@ -74,7 +73,7 @@ module "dataflow_tmp_bucket" {
   project_id    = var.data_ingestion_project_id
   name          = "bkt-${random_id.random_suffix.hex}-tmp-dataflow"
   location      = local.region
-  force_destroy = var.bucket_force_destroy
+  force_destroy = var.delete_contents_on_destroy
   encryption    = { "default_kms_key_name" = module.data_ingestion.cmek_ingestion_crypto_key }
 
   labels = {

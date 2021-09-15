@@ -24,4 +24,5 @@ module "simple_example" {
   data_ingestion_project_id        = var.data_ingestion_project_id
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
+  delete_contents_on_destroy       = true
 }

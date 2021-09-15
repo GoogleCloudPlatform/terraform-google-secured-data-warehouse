@@ -76,7 +76,7 @@ module "data_ingestion" {
   bucket_name                         = var.bucket_name
   bucket_class                        = var.bucket_class
   bucket_lifecycle_rules              = var.bucket_lifecycle_rules
-  bucket_force_destroy                = var.bucket_force_destroy
+  delete_contents_on_destroy          = var.delete_contents_on_destroy
   dataset_id                          = var.dataset_id
   dataset_name                        = var.dataset_name
   dataset_description                 = var.dataset_description

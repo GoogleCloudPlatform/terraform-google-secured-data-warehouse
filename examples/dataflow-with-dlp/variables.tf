@@ -59,8 +59,9 @@ variable "access_context_manager_policy_id" {
   type        = number
 }
 
-variable "bucket_force_destroy" {
-  description = "When deleting a bucket, this boolean option will delete all contained objects. If you try to delete a bucket that contains objects, Terraform will fail that run."
+variable "delete_contents_on_destroy" {
+  description = "(Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present."
   type        = bool
   default     = false
 }
+

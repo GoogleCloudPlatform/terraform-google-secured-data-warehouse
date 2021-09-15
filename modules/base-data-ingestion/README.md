@@ -188,7 +188,6 @@ If your user does not have the necessary roles to run the commands above you can
 |------|-------------|------|---------|:--------:|
 | bigquery\_encryption\_key | Self-link of the encryption key to be used by Bigquery. | `string` | n/a | yes |
 | bucket\_class | Bucket storage class. | `string` | `"STANDARD"` | no |
-| bucket\_force\_destroy | When deleting a bucket, this boolean option will delete all contained objects. If you try to delete a bucket that contains objects, Terraform will fail that run. | `bool` | `false` | no |
 | bucket\_lifecycle\_rules | List of lifecycle rules to configure. Format is the same as described in provider documentation https://www.terraform.io/docs/providers/google/r/storage_bucket.html#lifecycle_rule except condition.matches\_storage\_class should be a comma delimited string. | <pre>set(object({<br>    action    = any<br>    condition = any<br>  }))</pre> | <pre>[<br>  {<br>    "action": {<br>      "type": "Delete"<br>    },<br>    "condition": {<br>      "age": 30,<br>      "matches_storage_class": [<br>        "STANDARD"<br>      ],<br>      "with_state": "ANY"<br>    }<br>  }<br>]</pre> | no |
 | bucket\_location | Bucket location. | `string` | `"US"` | no |
 | bucket\_name | The main part of the name of the bucket to be created. | `string` | n/a | yes |
@@ -200,6 +199,7 @@ If your user does not have the necessary roles to run the commands above you can
 | dataset\_id | Unique ID for the dataset being provisioned. | `string` | n/a | yes |
 | dataset\_location | The regional location for the dataset only US and EU are allowed in module. | `string` | `"US"` | no |
 | dataset\_name | Friendly name for the dataset being provisioned. | `string` | `"Ingest dataset"` | no |
+| delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `false` | no |
 | ingestion\_encryption\_key | Self-link of the encryption key to be used by Pub/Sub and Storage. | `string` | n/a | yes |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | region | The region in which subnetwork will be created and Pub/Sub message will be stored. | `string` | `"us-central1"` | no |

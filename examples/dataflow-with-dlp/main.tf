@@ -37,7 +37,7 @@ module "data_ingestion" {
   vpc_name                         = "tst-network"
   cmek_keyring_name                = "cmek_keyring_${random_id.random_suffix.hex}"
   subnet_ip                        = "10.0.32.0/21"
-  bucket_force_destroy             = var.bucket_force_destroy
+  delete_contents_on_destroy       = var.delete_contents_on_destroy
 }
 
 //dataflow temp bucket
@@ -48,7 +48,7 @@ module "dataflow_tmp_bucket" {
   project_id    = var.data_ingestion_project_id
   name          = "bkt-${random_id.random_suffix.hex}-tmp-dataflow"
   location      = local.region
-  force_destroy = var.bucket_force_destroy
+  force_destroy = var.delete_contents_on_destroy
 
   labels = {
     "enterprise_data_ingest_bucket" = "true"

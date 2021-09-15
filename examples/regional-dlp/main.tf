@@ -83,7 +83,7 @@ module "data_ingestion" {
   cmek_keyring_name                = "dlp_flex_ingest-${random_id.suffix.hex}"
   subnet_ip                        = "10.0.32.0/21"
   region                           = var.location
-  bucket_force_destroy             = var.bucket_force_destroy
+  delete_contents_on_destroy       = var.delete_contents_on_destroy
   perimeter_additional_members     = var.perimeter_additional_members
 }
 

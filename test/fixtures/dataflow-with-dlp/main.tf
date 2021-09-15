@@ -53,7 +53,7 @@ module "dataflow_with_dlp" {
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
   org_id                           = var.org_id
-  bucket_force_destroy             = true
+  delete_contents_on_destroy       = true
   crypto_key                       = module.kek.keys[local.kek_key_name]
   wrapped_key                      = google_kms_secret_ciphertext.wrapped_key.ciphertext
 }

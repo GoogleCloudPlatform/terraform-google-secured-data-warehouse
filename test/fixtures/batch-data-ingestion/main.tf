@@ -29,5 +29,5 @@ module "batch_dataflow" {
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
   perimeter_members                = ["serviceAccount:${var.terraform_service_account}"]
-  bucket_force_destroy             = true
+  delete_contents_on_destroy       = true
 }
