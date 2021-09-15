@@ -30,6 +30,10 @@ output "privileged_data_project_id" {
   value = module.privileged_data_project.project_id
 }
 
+output "ext_flex_template_project_id" {
+  value = module.ext_flex_template_project.project_id
+}
+
 output "sa_key" {
   value     = google_service_account_key.int_test.private_key
   sensitive = true

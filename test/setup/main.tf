@@ -127,3 +127,26 @@ module "privileged_data_project" {
     "cloudbuild.googleapis.com"
   ]
 }
+
+module "ext_flex_template_project" {
+  source  = "terraform-google-modules/project-factory/google"
+  version = "~> 10.0"
+
+  name              = "ci-secured-dtw-ext-flx"
+  random_project_id = "true"
+  org_id            = var.org_id
+  folder_id         = var.folder_id
+  billing_account   = var.billing_account
+
+  activate_apis = [
+    "cloudresourcemanager.googleapis.com",
+    "storage-api.googleapis.com",
+    "serviceusage.googleapis.com",
+    "iam.googleapis.com",
+    "cloudbilling.googleapis.com",
+    "cloudkms.googleapis.com",
+    "dlp.googleapis.com",
+    "artifactregistry.googleapis.com",
+    "cloudbuild.googleapis.com"
+  ]
+}
