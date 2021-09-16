@@ -37,6 +37,26 @@ module "secured_data_warehouse" {
 }
 ```
 
+```hcl
+module "secured_data_warehouse" {
+  source  = "terraform-google-modules/secured-data-warehouse/google"
+  version = "~> 0.1"
+
+  org_id                           = ORG_ID
+  data_governance_project_id       = DATA_GOVERNANCE_PROJECT_ID
+  privileged_data_project_id       = PRIVILEGED_DATA_PROJECT_ID
+  datalake_project_id              = DATALAKE_PROJECT_ID
+  data_ingestion_project_id        = DATA_INGESTION_PROJECT_ID
+  terraform_service_account        = TERRAFORM_SERVICE_ACCOUNT
+  access_context_manager_policy_id = ACCESS_CONTEXT_MANAGER_POLICY_ID
+  bucket_name                      = DATA_INGESTION_BUCKET_NAME
+  dataset_id                       = DATASET_ID
+  vpc_name                         = VPC_NAME
+  cmek_keyring_name                = CMEK_KEYRING_NAME
+  subnet_ip                        = "10.0.32.0/21"
+}
+```
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
 

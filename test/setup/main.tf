@@ -128,7 +128,7 @@ module "privileged_data_project" {
   ]
 }
 
-module "ext_flex_template_project" {
+module "ext_artifact_registry_project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
 

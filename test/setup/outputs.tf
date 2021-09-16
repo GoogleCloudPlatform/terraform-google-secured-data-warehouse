@@ -30,8 +30,8 @@ output "privileged_data_project_id" {
   value = module.privileged_data_project.project_id
 }
 
-output "ext_flex_template_project_id" {
-  value = module.ext_flex_template_project.project_id
+output "ext_artifact_registry_project_id" {
+  value = module.ext_artifact_registry_project.project_id
 }
 
 output "sa_key" {
@@ -40,11 +40,11 @@ output "sa_key" {
 }
 
 output "terraform_service_account" {
-  value = google_service_account.int_test.email
+  value = google_service_account.int_ci_service_account.email
 }
 
 output "org_project_creators" {
-  value = ["serviceAccount:${google_service_account.int_test.email}"]
+  value = ["serviceAccount:${google_service_account.int_ci_service_account.email}"]
 }
 
 output "org_id" {

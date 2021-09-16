@@ -27,32 +27,6 @@ locals {
   ]
 }
 
-// A1 - DATA WAREHOUSE NETWORK - START
-
-module "dwh_networking" {
-  source = ".//modules/dwh-networking"
-
-  # org_id     = var.org_id
-  project_id = var.data_ingestion_project_id
-  region     = var.region
-  vpc_name   = var.vpc_name
-  subnet_ip  = var.subnet_ip
-}
-
-module "dwh_networking_privileged" {
-  source = ".//modules/dwh-networking"
-
-  # org_id     = var.org_id
-  project_id = var.privileged_data_project_id
-  region     = var.region
-  vpc_name   = var.vpc_name
-  subnet_ip  = var.subnet_ip
-}
-
-// A1 - DATA WAREHOUSE NETWORK - END
-
-
-
 // A2 - DATA WAREHOUSE GOVERNANCE - START
 
 module "data_governance" {
@@ -70,8 +44,6 @@ module "data_governance" {
 }
 
 // A2 - DATA WAREHOUSE GOVERNANCE - END
-
-
 
 // A3 - DATA WAREHOUSE INGESTION - START
 
@@ -100,8 +72,6 @@ module "data_ingestion" {
 
 // A3 - DATA WAREHOUSE INGESTION - END
 
-
-
 // A4 - DATA WAREHOUSE SENSITIVE DATA - START
 
 module "bigquery_sensitive_data" {
@@ -120,8 +90,6 @@ module "bigquery_sensitive_data" {
 
 // A4 - DATA WAREHOUSE SENSITIVE DATA - END
 
-
-
 // A5 - DATA WAREHOUSE ORG POLICY - START
 
 module "org_policies" {
@@ -136,246 +104,6 @@ module "org_policies" {
 
 // A5 - DATA WAREHOUSE ORG POLICY - END
 
-
-
-
 // A6 - DATA WAREHOUSE LOGGING - STAR
 
 // A6 - DATA WAREHOUSE LOGGING - END
-
-
-
-// A7 - DATA WAREHOUSE VPC-SC - START
-
-locals {
-  perimeter_members = distinct(concat([
-    "serviceAccount:${module.data_ingestion.dataflow_controller_service_account_email}",
-    "serviceAccount:${module.data_ingestion.storage_writer_service_account_email}",
-    "serviceAccount:${module.data_ingestion.pubsub_writer_service_account_email}",
-    "serviceAccount:${google_project_service_identity.data_ingestion_cloudbuild_sa.email}",
-    "serviceAccount:${var.terraform_service_account}"
-  ], var.perimeter_additional_members))
-}
-
-resource "google_project_service_identity" "data_ingestion_cloudbuild_sa" {
-  provider = google-beta
-
-  project = var.data_ingestion_project_id
-  service = "cloudbuild.googleapis.com"
-}
-
-data "google_project" "ingestion_project" {
-  project_id = var.data_ingestion_project_id
-}
-
-data "google_project" "governance_project" {
-  project_id = var.data_governance_project_id
-}
-
-data "google_project" "datalake_project" {
-  project_id = var.datalake_project_id
-}
-
-data "google_project" "privileged_project" {
-  project_id = var.privileged_data_project_id
-}
-
-resource "random_id" "suffix" {
-  byte_length = 4
-}
-
-// It's necessary to use the forces_wait_propagation to guarantee the resources that use this VPC do not have issues related to the propagation.
-// See: https://cloud.google.com/vpc-service-controls/docs/manage-service-perimeters#update.
-resource "null_resource" "forces_wait_propagation" {
-  provisioner "local-exec" {
-    command = "echo \"\""
-  }
-
-  provisioner "local-exec" {
-    when    = destroy
-    command = "sleep 240;"
-  }
-
-  depends_on = [
-    module.data_ingestion,
-    module.org_policies,
-    module.dwh_networking,
-    module.dwh_networking_privileged,
-    module.data_governance
-  ]
-}
-
-module "data_ingestion_vpc_sc" {
-  source = ".//modules/dwh_vpc_sc"
-
-  org_id                           = var.org_id
-  project_id                       = var.data_ingestion_project_id
-  access_context_manager_policy_id = var.access_context_manager_policy_id
-  common_name                      = "data_ingestion"
-  common_suffix                    = random_id.suffix.hex
-  resources                        = [data.google_project.ingestion_project.number, data.google_project.datalake_project.number]
-  perimeter_members                = local.perimeter_members
-  restricted_services = [
-    "bigquery.googleapis.com",
-    "cloudasset.googleapis.com",
-    "cloudfunctions.googleapis.com",
-    "cloudkms.googleapis.com",
-    "compute.googleapis.com",
-    "datacatalog.googleapis.com",
-    "dataflow.googleapis.com",
-    "dlp.googleapis.com",
-    "logging.googleapis.com",
-    "monitoring.googleapis.com",
-    "pubsub.googleapis.com",
-    "secretmanager.googleapis.com",
-    "storage.googleapis.com"
-  ]
-
-  # depends_on needed to prevent intermittent errors
-  # when the VPC-SC is created but perimeter member
-  # not yet propagated.
-  depends_on = [
-    null_resource.forces_wait_propagation
-  ]
-}
-
-module "data_governance_vpc_sc" {
-  source = ".//modules/dwh_vpc_sc"
-
-  org_id                           = var.org_id
-  project_id                       = var.data_governance_project_id
-  access_context_manager_policy_id = var.access_context_manager_policy_id
-  common_name                      = "data_governance"
-  common_suffix                    = random_id.suffix.hex
-  resources                        = [data.google_project.governance_project.number]
-  perimeter_members                = local.perimeter_members
-  restricted_services = [
-    "bigquery.googleapis.com",
-    "cloudasset.googleapis.com",
-    "cloudfunctions.googleapis.com",
-    "cloudkms.googleapis.com",
-    "compute.googleapis.com",
-    "datacatalog.googleapis.com",
-    "dataflow.googleapis.com",
-    "dlp.googleapis.com",
-    "logging.googleapis.com",
-    "monitoring.googleapis.com",
-    "pubsub.googleapis.com",
-    "secretmanager.googleapis.com",
-    "storage.googleapis.com"
-  ]
-
-  # depends_on needed to prevent intermittent errors
-  # when the VPC-SC is created but perimeter member
-  # not yet propagated.
-  depends_on = [
-    null_resource.forces_wait_propagation
-  ]
-}
-
-module "privileged_data_vpc_sc" {
-  source = ".//modules/dwh_vpc_sc"
-
-  org_id                           = var.org_id
-  project_id                       = var.privileged_data_project_id
-  access_context_manager_policy_id = var.access_context_manager_policy_id
-  common_name                      = "privileged_data"
-  common_suffix                    = random_id.suffix.hex
-  resources                        = [data.google_project.privileged_project.number]
-  perimeter_members                = local.perimeter_members
-  restricted_services = [
-    "bigquery.googleapis.com",
-    "cloudasset.googleapis.com",
-    "cloudfunctions.googleapis.com",
-    "cloudkms.googleapis.com",
-    "compute.googleapis.com",
-    "datacatalog.googleapis.com",
-    "dataflow.googleapis.com",
-    "dlp.googleapis.com",
-    "logging.googleapis.com",
-    "monitoring.googleapis.com",
-    "pubsub.googleapis.com",
-    "secretmanager.googleapis.com",
-    "storage.googleapis.com"
-  ]
-
-  # depends_on needed to prevent intermittent errors
-  # when the VPC-SC is created but perimeter member
-  # not yet propagated.
-  depends_on = [
-    null_resource.forces_wait_propagation
-  ]
-}
-
-module "vpc_sc_bridge_ingestion_governance" {
-  source  = "terraform-google-modules/vpc-service-controls/google//modules/bridge_service_perimeter"
-  version = "~> 3.0"
-
-  policy         = var.access_context_manager_policy_id
-  perimeter_name = "vpc_sc_bridge_ingestion_governance_${random_id.suffix.hex}"
-  description    = "VPC-SC bridge between data ingestion and data governance"
-
-  resources = [
-    data.google_project.ingestion_project.number,
-    data.google_project.governance_project.number,
-    data.google_project.datalake_project.number
-  ]
-
-  depends_on = [
-    null_resource.forces_wait_propagation,
-    module.data_governance_vpc_sc,
-    module.data_ingestion_vpc_sc
-  ]
-}
-
-module "vpc_sc_bridge_privileged_governance" {
-  source  = "terraform-google-modules/vpc-service-controls/google//modules/bridge_service_perimeter"
-  version = "~> 3.0"
-
-  policy         = var.access_context_manager_policy_id
-  perimeter_name = "vpc_sc_bridge_privileged_governance_${random_id.suffix.hex}"
-  description    = "VPC-SC bridge between privileged data and data governance"
-
-  resources = [
-    data.google_project.privileged_project.number,
-    data.google_project.governance_project.number
-  ]
-
-  depends_on = [
-    null_resource.forces_wait_propagation,
-    module.privileged_data_vpc_sc,
-    module.data_governance_vpc_sc
-  ]
-}
-
-module "vpc_sc_bridge_privileged_ingestion" {
-  source  = "terraform-google-modules/vpc-service-controls/google//modules/bridge_service_perimeter"
-  version = "~> 3.0"
-
-  policy         = var.access_context_manager_policy_id
-  perimeter_name = "vpc_sc_bridge_privileged_ingestion_${random_id.suffix.hex}"
-  description    = "VPC-SC bridge between privileged data and data ingestion"
-
-  resources = [
-    data.google_project.privileged_project.number,
-    data.google_project.datalake_project.number
-  ]
-
-  depends_on = [
-    null_resource.forces_wait_propagation,
-    module.privileged_data_vpc_sc,
-    module.data_ingestion_vpc_sc
-  ]
-}
-
-resource "time_sleep" "wait_for_bridge_propagation" {
-  create_duration = "240s"
-
-  depends_on = [
-    module.vpc_sc_bridge_privileged_ingestion,
-    module.vpc_sc_bridge_privileged_governance,
-    module.vpc_sc_bridge_ingestion_governance
-  ]
-}
-
-// A7 - DATA WAREHOUSE VPC-SC - END
