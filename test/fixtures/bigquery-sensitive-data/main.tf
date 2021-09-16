@@ -15,9 +15,11 @@
  */
 
 locals {
-  kek_keyring  = "kek_keyring_${random_id.random_suffix.hex}"
-  kek_key_name = "kek_key_${random_id.random_suffix.hex}"
-  location     = "us-east1"
+  kek_keyring   = "kek_keyring_${random_id.random_suffix.hex}"
+  kek_key_name  = "kek_key_${random_id.random_suffix.hex}"
+  flex_key_name = "flex_key_${random_id.random_suffix.hex}"
+
+  location = "us-east1"
 }
 
 resource "random_id" "random_suffix" {
@@ -31,7 +33,7 @@ module "kek" {
   project_id      = var.data_governance_project_id
   location        = local.location
   keyring         = local.kek_keyring
-  keys            = [local.kek_key_name]
+  keys            = [local.kek_key_name, local.flex_key_name]
   prevent_destroy = false
 }
 
@@ -60,11 +62,13 @@ module "test_vpc_module" {
   ]
 }
 
+
 module "bigquery_sensitive_data" {
   source                     = "../../..//examples/bigquery_sensitive_data"
   non_sensitive_project_id   = var.datalake_project_id
   taxonomy_project_id        = var.data_governance_project_id
   privileged_data_project_id = var.privileged_data_project_id
+  flex_template_gs_path      = "" # skip running dataflow workload for test
   subnetwork                 = module.test_vpc_module.subnets_self_links[0]
   crypto_key                 = module.kek.keys[local.kek_key_name]
   wrapped_key                = google_kms_secret_ciphertext.wrapped_key.ciphertext

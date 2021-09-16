@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.google.cloud.blueprints.datawarehouse;
 
 import com.google.api.services.bigquery.model.TableRow;
@@ -27,7 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @AutoValue
-@SuppressWarnings({"deprecation", "serial"})
+@SuppressWarnings("serial")
 public abstract class BigQueryReadTransform
     extends PTransform<PBegin, PCollection<KV<String, TableRow>>> {
   public static final Logger LOG = LoggerFactory.getLogger(BigQueryReadTransform.class);

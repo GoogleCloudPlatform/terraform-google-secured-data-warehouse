@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.google.cloud.blueprints.datawarehouse;
 
 import com.google.auto.value.AutoValue;
@@ -73,19 +74,35 @@ public abstract class DLPReidentifyText
 
   public static final Integer DLP_PAYLOAD_LIMIT_BYTES = 524000;
 
-  /** @return Template name for data reidentification. */
+  /**
+   * Reidentify template.
+   *
+   * @return Template name for data reidentification.
+  **/
   @Nullable
   public abstract String getReidentifyTemplateName();
 
-  /** @return Configuration object for reidentification. If present, supersedes the template. */
+  /**
+   * Reidentify configuration.
+   * Prefer using template.
+   *
+   * @return Configuration object for reidentification. If present, supersedes the template.
+  **/
   @Nullable
   public abstract DeidentifyConfig getReidentifyConfig();
 
-  /** @return Delimiter to be used when splitting values from input strings into columns. */
+  /**
+   * Hold column separator.  Default is ","
+   * @return Delimiter to be used when splitting values from input strings into columns.
+  **/
   @Nullable
   public abstract Character getColumnDelimiter();
 
-  /** @return List of column names if the input KV value is a delimited row. */
+  /**
+   * Stores a list of headers for each column.
+   *
+   * @return List of column names if the input KV value is a delimited row.
+  **/
   @Nullable
   public abstract PCollectionView<List<String>> getHeaderColumns();
 
@@ -204,8 +221,9 @@ public abstract class DLPReidentifyText
 
     @Setup
     public void setup() throws IOException {
-      requestBuilder = ReidentifyContentRequest.newBuilder().setParent(LocationName.of(this.projectId,this.dlpLocation).toString());
-      LOG.warn("elo DLP location {}", LocationName.of(this.projectId,this.dlpLocation).toString());
+      requestBuilder = ReidentifyContentRequest.newBuilder()
+        .setParent(LocationName.of(this.projectId,this.dlpLocation).toString());
+      LOG.debug("DLP location {}", LocationName.of(this.projectId,this.dlpLocation).toString());
 
       if (reidentifyConfig != null) {
         requestBuilder.setReidentifyConfig(reidentifyConfig);
@@ -222,6 +240,8 @@ public abstract class DLPReidentifyText
     }
 
     /**
+     * Send text to DLP for reidentification.
+     * 
      * @param projectId ID of GCP project that should be used for deidentification.
      * @param inspectTemplateName Template name for inspection. Optional.
      * @param reidentifyTemplateName Template name for reidentification. Either this or

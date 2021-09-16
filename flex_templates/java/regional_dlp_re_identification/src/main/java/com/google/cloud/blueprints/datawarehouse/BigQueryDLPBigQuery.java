@@ -18,7 +18,6 @@ package com.google.cloud.blueprints.datawarehouse;
 
 import com.google.api.services.bigquery.model.TableRow;
 import java.util.List;
-import org.apache.beam.runners.dataflow.options.DataflowWorkerLoggingOptions;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.PipelineResult;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
@@ -52,41 +51,16 @@ public class BigQueryDLPBigQuery {
    * pipeline and invoke {@code result.waitUntilFinish()} on the {@link PipelineResult}
    *
    * @param args The command-line arguments to the pipeline.
-   */
+   *
+  **/
   public static void main(String[] args) {
 
-    // @TODO re-add try-catch later
-    // try (?){
     BigQueryReidentifyPipelineOptions options =
-          PipelineOptionsFactory.fromArgs(args)
-              .as(BigQueryReidentifyPipelineOptions.class);
+        PipelineOptionsFactory.fromArgs(args)
+            .as(BigQueryReidentifyPipelineOptions.class);
 
-    //TODO figure out logging
-    //Boolean verboseLogging = getPropertiesBool(prop, "verbose.logging", "false");
-    //   Boolean verboseLogging = true;
-    //   if (verboseLogging) {
-    //     DataflowWorkerLoggingOptions loggingOptions =
-    //         options.as(DataflowWorkerLoggingOptions.class);
-
-    //     // Overrides logger for package.
-    //     DataflowWorkerLoggingOptions.WorkerLogLevelOverrides workerLogger =
-    //         new DataflowWorkerLoggingOptions.WorkerLogLevelOverrides();
-
-    //     // Set debug level for the pipeline class
-    //     loggingOptions.setWorkerLogLevelOverrides(
-    //         workerLogger.addOverrideForPackage(
-    //             Package.getPackage(PIPELINE_PACKAGE_NAME),
-    //             DataflowWorkerLoggingOptions.Level.DEBUG));
-    //   }
-
-      run(options);
-
-    // @TODO add back try-catch
-    // } catch (IOException ex) {
-    //   ex.printStackTrace();
-    // }
+    run(options);
   }
-
 
   /**
    * Runs the pipeline with the supplied options.
@@ -110,55 +84,61 @@ public class BigQueryDLPBigQuery {
     */
 
     PCollection<KV<String, TableRow>> record =
-    p.apply(
-        "ReadFromBQ",
-        BigQueryReadTransform.newBuilder()
+        p.apply(
+          "ReadFromBQ",
+          BigQueryReadTransform.newBuilder()
             .setTableRef(options.getInputBigQueryTable())
             .build());
 
     PCollectionView<List<String>> selectedColumns =
-        record
-            .apply(
-                "GlobalWindow",
-                Window.<KV<String, TableRow>>into(new GlobalWindows())
-                    .triggering(
-                        Repeatedly.forever(AfterProcessingTime.pastFirstElementInPane()))
-                    .discardingFiredPanes())
-            .apply(
-                "GroupByTableName",
-                GroupByKey.create())
-            .apply(
-                "GetHeader",
-                ParDo.of(new BigQueryTableHeaderDoFn())
-            )
-            .apply(
-                "ViewAsList",
-                View.asList()
-            );
+        record.apply(
+          "GlobalWindow",
+          Window.<KV<String, TableRow>>into(new GlobalWindows())
+            .triggering(
+                Repeatedly.forever(AfterProcessingTime.pastFirstElementInPane()))
+            .discardingFiredPanes()
+        )
+        .apply(
+          "GroupByTableName",
+          GroupByKey.create()
+        )
+        .apply(
+          "GetHeader",
+          ParDo.of(new BigQueryTableHeaderDoFn())
+        )
+        .apply(
+          "ViewAsList",
+          View.asList()
+        );
 
     PCollection<KV<String, TableRow>> reidData =
-        record
-            .apply("ConvertTableRow", ParDo.of(new MergeBigQueryRowToDlpRow()))
-            .apply( "DLPTransform",
-            DLPTransform.newBuilder()
-                .setBatchSize(options.getBatchSize())
-                .setDeidTemplateName(options.getDeidentifyTemplateName())
-                .setProjectId(options.getDlpProjectId())
-                .setDlpLocation(options.getDlpLocation())
-                .setHeader(selectedColumns)
-                .setColumnDelimiter(options.getColumnDelimiter())
-                .build())
+        record.apply(
+          "ConvertTableRow",
+          ParDo.of(new MergeBigQueryRowToDlpRow())
+        )
+        .apply(
+          "DLPTransform",
+          DLPTransform.newBuilder()
+            .setBatchSize(options.getBatchSize())
+            .setDeidTemplateName(options.getDeidentifyTemplateName())
+            .setProjectId(options.getDlpProjectId())
+            .setDlpLocation(options.getDlpLocation())
+            .setHeader(selectedColumns)
+            .setColumnDelimiter(options.getColumnDelimiter())
+            .build()
+        )
         .get(Util.reidSuccess);
 
     // BQ insert
     reidData.apply(
         "BigQueryInsert",
         BigQueryDynamicWriteTransform.newBuilder()
-            .setDatasetId(options.getOutputBigQueryDataset())
-            .setProjectId(options.getProject())
-            .build());
+          .setDatasetId(options.getOutputBigQueryDataset())
+          .setProjectId(options.getProject())
+          .build()
+    );
 
-      return p.run();
+    return p.run();
   }
 
 }

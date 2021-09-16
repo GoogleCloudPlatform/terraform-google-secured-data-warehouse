@@ -9,6 +9,7 @@ This example illustrates how to use the `bigquery_sensitive_data` submodule.
 |------|-------------|------|---------|:--------:|
 | crypto\_key | The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP. | `string` | n/a | yes |
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `false` | no |
+| flex\_template\_gs\_path | The Google Cloud Storage gs path to the JSON file built flex template that supports DLP re-identification. | `string` | n/a | yes |
 | non\_sensitive\_project\_id | Project with the de-identified dataset and table. | `string` | n/a | yes |
 | privileged\_data\_project\_id | Project where the privileged datasets and tables are created. | `string` | n/a | yes |
 | subnetwork | The subnetwork used for dataflow. | `string` | n/a | yes |

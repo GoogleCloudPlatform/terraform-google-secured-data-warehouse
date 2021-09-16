@@ -42,8 +42,7 @@ public interface BigQueryReidentifyPipelineOptions extends DataflowPipelineOptio
 
   void setOutputBigQueryDataset(String value);
 
-  @Description(
-    "DLP Deidentify Template to be used for API request. "
+  @Description("DLP Deidentify Template to be used for API request. "
         + "Should match the de-identification table used to de-id the input table. "
         + "(e.g.projects/{project_id}/deidentifyTemplates/{deIdTemplateId}")
   @Required
@@ -51,8 +50,7 @@ public interface BigQueryReidentifyPipelineOptions extends DataflowPipelineOptio
 
   void setDeidentifyTemplateName(String value);
 
-  @Description(
-    "DLP API has a limit for payload size of 524KB /api call. "
+  @Description("DLP API has a limit for payload size of 524KB /api call. "
         + "That's why dataflow process will need to chunk it. User will have to decide "
         + "on how they would like to batch the request depending on number of rows "
         + "and how big each row is.")
@@ -62,14 +60,14 @@ public interface BigQueryReidentifyPipelineOptions extends DataflowPipelineOptio
   void setBatchSize(Integer value);
 
   @Description("Privileged data project id to be used for Big Query output")
-  String getPrivilegedDataProjectId();
   @Required
+  String getPrivilegedDataProjectId();
 
   void setPrivilegedDataProjectId(String value);
 
   @Description("Project id to be used for DLP Tokenization")
-  String getDlpProjectId();
   @Required
+  String getDlpProjectId();
 
   void setDlpProjectId(String value);
 
