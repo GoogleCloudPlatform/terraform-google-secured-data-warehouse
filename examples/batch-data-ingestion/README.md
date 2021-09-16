@@ -26,7 +26,7 @@ This example illustrates how to run a Dataflow job that uses the `batch template
 | Name | Description |
 |------|-------------|
 | controller\_service\_account | The Service Account email that will be used to identify the VMs in which the jobs are running. |
-| dataflow\_temp\_bucket\_name | The name of the dataflow buckettemporary bucket. |
+| dataflow\_temp\_bucket\_name | The name of the dataflow temporary bucket. |
 | df\_job\_network | The URI of the VPC being created. |
 | df\_job\_region | The region of the newly created Dataflow job. |
 | df\_job\_subnetwork | The name of the subnetwork used for create Dataflow job. |
