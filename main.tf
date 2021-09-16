@@ -184,6 +184,8 @@ resource "random_id" "suffix" {
   byte_length = 4
 }
 
+// It's necessary to use the forces_wait_propagation to guarantee the resources that use this VPC do not have issues related to the propagation.
+// See: https://cloud.google.com/vpc-service-controls/docs/manage-service-perimeters#update.
 resource "null_resource" "forces_wait_propagation" {
   provisioner "local-exec" {
     command = "echo \"\""
