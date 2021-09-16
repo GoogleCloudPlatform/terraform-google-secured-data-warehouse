@@ -216,19 +216,19 @@ module "data_ingestion_vpc_sc" {
   resources                        = [data.google_project.ingestion_project.number, data.google_project.datalake_project.number]
   perimeter_members                = local.perimeter_members
   restricted_services = [
-    "storage.googleapis.com",
     "bigquery.googleapis.com",
-    "dataflow.googleapis.com",
-    "pubsub.googleapis.com",
-    "cloudkms.googleapis.com",
-    "dlp.googleapis.com",
-    "compute.googleapis.com",
-    "datacatalog.googleapis.com",
-    "secretmanager.googleapis.com",
     "cloudasset.googleapis.com",
     "cloudfunctions.googleapis.com",
+    "cloudkms.googleapis.com",
+    "compute.googleapis.com",
+    "datacatalog.googleapis.com",
+    "dataflow.googleapis.com",
+    "dlp.googleapis.com",
+    "logging.googleapis.com",
     "monitoring.googleapis.com",
-    "logging.googleapis.com"
+    "pubsub.googleapis.com",
+    "secretmanager.googleapis.com",
+    "storage.googleapis.com"
   ]
 
   # depends_on needed to prevent intermittent errors
@@ -250,19 +250,19 @@ module "data_governance_vpc_sc" {
   resources                        = [data.google_project.governance_project.number]
   perimeter_members                = local.perimeter_members
   restricted_services = [
-    "storage.googleapis.com",
     "bigquery.googleapis.com",
-    "dataflow.googleapis.com",
-    "pubsub.googleapis.com",
-    "cloudkms.googleapis.com",
-    "dlp.googleapis.com",
-    "compute.googleapis.com",
-    "datacatalog.googleapis.com",
-    "secretmanager.googleapis.com",
     "cloudasset.googleapis.com",
     "cloudfunctions.googleapis.com",
+    "cloudkms.googleapis.com",
+    "compute.googleapis.com",
+    "datacatalog.googleapis.com",
+    "dataflow.googleapis.com",
+    "dlp.googleapis.com",
+    "logging.googleapis.com",
     "monitoring.googleapis.com",
-    "logging.googleapis.com"
+    "pubsub.googleapis.com",
+    "secretmanager.googleapis.com",
+    "storage.googleapis.com"
   ]
 
   # depends_on needed to prevent intermittent errors
@@ -284,19 +284,19 @@ module "privileged_data_vpc_sc" {
   resources                        = [data.google_project.privileged_project.number]
   perimeter_members                = local.perimeter_members
   restricted_services = [
-    "storage.googleapis.com",
     "bigquery.googleapis.com",
-    "dataflow.googleapis.com",
-    "pubsub.googleapis.com",
-    "cloudkms.googleapis.com",
-    "dlp.googleapis.com",
-    "compute.googleapis.com",
-    "datacatalog.googleapis.com",
-    "secretmanager.googleapis.com",
     "cloudasset.googleapis.com",
     "cloudfunctions.googleapis.com",
+    "cloudkms.googleapis.com",
+    "compute.googleapis.com",
+    "datacatalog.googleapis.com",
+    "dataflow.googleapis.com",
+    "dlp.googleapis.com",
+    "logging.googleapis.com",
     "monitoring.googleapis.com",
-    "logging.googleapis.com"
+    "pubsub.googleapis.com",
+    "secretmanager.googleapis.com",
+    "storage.googleapis.com"
   ]
 
   # depends_on needed to prevent intermittent errors
