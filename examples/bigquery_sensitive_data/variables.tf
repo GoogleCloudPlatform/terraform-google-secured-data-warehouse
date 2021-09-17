@@ -34,6 +34,16 @@ variable "data_ingestion_project_id" {
   type        = string
 }
 
+variable "network_self_link" {
+  description = "The URI of the network where Dataflow is going to be deployed."
+  type        = string
+}
+
+variable "subnetwork_self_link" {
+  description = "The URI of the subnetwork where Dataflow is going to be deployed."
+  type        = string
+}
+
 variable "privileged_data_project_id" {
   description = "Project where the privileged datasets and tables are created."
   type        = string

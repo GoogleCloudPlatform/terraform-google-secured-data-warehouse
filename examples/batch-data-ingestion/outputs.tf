@@ -41,10 +41,10 @@ output "df_job_region" {
 
 output "df_job_network" {
   description = "The URI of the VPC being created."
-  value       = module.data_ingestion.network_self_link
+  value       = var.network_self_link
 }
 
 output "df_job_subnetwork" {
   description = "The name of the subnetwork used for create Dataflow job."
-  value       = module.data_ingestion.subnets_self_links[0]
+  value       = var.subnetwork_self_link
 }

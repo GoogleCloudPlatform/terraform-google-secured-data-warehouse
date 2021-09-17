@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-module "project" {
+module "data_ingestion_project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
 
@@ -70,7 +70,7 @@ module "data_governance_project" {
 }
 
 resource "google_app_engine_application" "app" {
-  project     = module.project.project_id
+  project     = module.data_ingestion_project.project_id
   location_id = "us-central"
 }
 

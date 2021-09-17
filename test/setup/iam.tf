@@ -66,7 +66,7 @@ resource "google_billing_account_iam_member" "tf_billing_user" {
 }
 
 resource "google_service_account" "int_ci_service_account" {
-  project      = module.project.project_id
+  project      = module.data_ingestion_project.project_id
   account_id   = "ci-account"
   display_name = "ci-account"
 }
@@ -75,7 +75,7 @@ resource "google_service_account" "int_ci_service_account" {
 resource "google_project_iam_member" "int_permission_data_ingestion_test" {
   for_each = toset(local.int_proj_required_roles)
 
-  project = module.project.project_id
+  project = module.data_ingestion_project.project_id
   role    = each.value
   member  = "serviceAccount:${google_service_account.int_ci_service_account.email}"
 }

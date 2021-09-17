@@ -67,8 +67,6 @@ resource "time_sleep" "forces_wait_propagation" {
   depends_on = [
     module.data_ingestion,
     module.org_policies,
-    module.dwh_networking,
-    module.dwh_networking_privileged,
     module.data_governance
   ]
 }

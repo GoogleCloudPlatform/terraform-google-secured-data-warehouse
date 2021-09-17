@@ -48,3 +48,13 @@ variable "terraform_service_account" {
   description = "The email address of the service account that will run the Terraform config."
   type        = string
 }
+
+variable "privileged_network_self_link" {
+  description = "The URI of the network where Dataflow is going to be deployed."
+  type        = string
+}
+
+variable "privileged_subnets_self_link" {
+  description = "The URI of the subnetwork where Dataflow is going to be deployed."
+  type        = string
+}

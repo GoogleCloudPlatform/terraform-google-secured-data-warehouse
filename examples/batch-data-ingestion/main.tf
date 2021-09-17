@@ -29,9 +29,9 @@ locals {
     "${path.module}/httpRequest.tmpl",
     {
       location                            = local.location,
-      network_self_link                   = module.data_ingestion.network_self_link,
+      network_self_link                   = var.network_self_link,
       dataflow_service_account            = module.data_ingestion.dataflow_controller_service_account_email,
-      subnetwork_self_link                = module.data_ingestion.subnets_self_links[0],
+      subnetwork_self_link                = var.subnetwork_self_link,
       inputFilePattern                    = "gs://${module.data_ingestion.data_ingest_bucket_names[0]}/cc_records.csv",
       bigquery_project_id                 = var.datalake_project_id,
       dataset_id                          = local.dataset_id,
@@ -56,8 +56,6 @@ module "data_ingestion" {
   perimeter_additional_members     = var.perimeter_members
   bucket_name                      = "bkt-data-ingestion"
   location                         = local.region
-  vpc_name                         = "tst-network"
-  subnet_ip                        = "10.0.32.0/21"
   region                           = local.region
   dataset_id                       = local.dataset_id
   cmek_keyring_name                = "cmek_keyring_${random_id.random_suffix.hex}"

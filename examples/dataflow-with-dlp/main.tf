@@ -34,9 +34,7 @@ module "data_ingestion" {
   access_context_manager_policy_id = var.access_context_manager_policy_id
   bucket_name                      = "data-ingestion"
   dataset_id                       = local.dataset_id
-  vpc_name                         = "tst-network"
   cmek_keyring_name                = "cmek_keyring_${random_id.random_suffix.hex}"
-  subnet_ip                        = "10.0.32.0/21"
   delete_contents_on_destroy       = var.delete_contents_on_destroy
 }
 
@@ -117,8 +115,8 @@ module "dataflow_job" {
   template_gcs_path     = "gs://dataflow-templates/latest/Stream_DLP_GCS_Text_to_BigQuery"
   temp_gcs_location     = module.dataflow_tmp_bucket.bucket.name
   service_account_email = module.data_ingestion.dataflow_controller_service_account_email
-  network_self_link     = module.data_ingestion.network_self_link
-  subnetwork_self_link  = module.data_ingestion.subnets_self_links[0]
+  network_self_link     = var.network_self_link
+  subnetwork_self_link  = var.subnetwork_self_link
   ip_configuration      = "WORKER_IP_PRIVATE"
   max_workers           = 5
 
