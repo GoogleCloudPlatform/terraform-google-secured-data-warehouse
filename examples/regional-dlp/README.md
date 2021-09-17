@@ -11,6 +11,21 @@ This example illustrates how to run a Flex Python Dataflow job. It uses:
 
 1. A `crypto_key` and `wrapped_key` pair.  Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location used for the `location` variable.
 1. An Existing GCP Project
+1. A network and subnetwork in the data ingestion project.
+
+### Firewall rules
+
+- All the egress should be denied
+- Allow only Restricted API Egress by TPC at 443 port
+- Allow only Private API Egress by TPC at 443 port
+- Allow ingress Dataflow workers by TPC at ports 12345 and 12346
+- Allow egress Dataflow workers     by TPC at ports 12345 and 12346
+### DNS configurations
+
+- Restricted Google APIs
+- Private Google APIs
+- Restricted gcr.io
+- Restricted Artifact Registry
 
 ## Requirements
 

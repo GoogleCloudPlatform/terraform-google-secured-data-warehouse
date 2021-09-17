@@ -5,6 +5,21 @@ This example illustrates how to run a Dataflow job that uses the `batch template
 ## Requirements
 
 1. A project previusly created, with [Google App Engine Application Enabled](https://cloud.google.com/scheduler/docs/quickstart#create_a_project_with_an_app_engine_app).
+1 A network and subnetwork in the data ingestion project.
+
+### Firewall rules
+
+- All the egress should be denied
+- Allow only Restricted API Egress by TPC at 443 port
+- Allow only Private API Egress by TPC at 443 port
+- Allow ingress Dataflow workers by TPC at ports 12345 and 12346
+- Allow egress Dataflow workers     by TPC at ports 12345 and 12346
+### DNS configurations
+
+- Restricted Google APIs
+- Private Google APIs
+- Restricted gcr.io
+- Restricted Artifact Registry
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs

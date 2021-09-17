@@ -2,6 +2,25 @@
 
 This example illustrates how to use the `bigquery_sensitive_data` submodule.
 
+## Requirements
+
+You need to create network and subnetwork in the privileged project.
+
+### Firewall rules
+
+- All the egress should be denied
+- Allow only Restricted API Egress by TPC at 443 port
+- Allow only Private API Egress by TPC at 443 port
+- Allow ingress Dataflow workers by TPC at ports 12345 and 12346
+- Allow egress Dataflow workers     by TPC at ports 12345 and 12346
+### DNS configuration
+
+- Restricted Google APIs
+- Private Google APIs
+- Restricted gcr.io
+- Restricted Artifact Registry
+
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
 
