@@ -17,7 +17,7 @@
 
 output "project_id" {
   description = "The project_id used to create infra."
-  value       = var.project_id
+  value       = var.data_ingestion_project_id
 }
 
 output "data_governance_project_id" {
@@ -92,12 +92,12 @@ output "subnets_ips" {
 
 output "access_level_name" {
   description = "Access context manager access level name."
-  value       = module.simple_example.access_level_name
+  value       = module.simple_example.data_ingestion_access_level_name
 }
 
 output "service_perimeter_name" {
   description = "Access context manager service perimeter name."
-  value       = module.simple_example.service_perimeter_name
+  value       = module.simple_example.data_ingestion_service_perimeter_name
 }
 
 output "cmek_keyring_name" {
@@ -108,4 +108,24 @@ output "cmek_keyring_name" {
 output "cmek_keyring_full_name" {
   description = "The Keyring full name for the KMS Customer Managed Encryption Keys."
   value       = module.simple_example.cmek_keyring_full_name
+}
+
+output "cmek_ingestion_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the Ingestion crypto boundary."
+  value       = module.simple_example.cmek_ingestion_crypto_key_name
+}
+
+output "cmek_bigquery_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the BigQuery service."
+  value       = module.simple_example.cmek_bigquery_crypto_key_name
+}
+
+output "cmek_reidentification_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the reidentification crypto boundary."
+  value       = module.simple_example.cmek_reidentification_crypto_key_name
+}
+
+output "cmek_confidential_bigquery_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the confidential BigQuery service."
+  value       = module.simple_example.cmek_confidential_bigquery_crypto_key_name
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-output "project_id" {
+output "data_ingestion_project_id" {
   value = module.project.project_id
 }
 
@@ -30,17 +30,21 @@ output "privileged_data_project_id" {
   value = module.privileged_data_project.project_id
 }
 
+output "ext_artifact_registry_project_id" {
+  value = module.ext_artifact_registry_project.project_id
+}
+
 output "sa_key" {
   value     = google_service_account_key.int_test.private_key
   sensitive = true
 }
 
 output "terraform_service_account" {
-  value = google_service_account.int_test.email
+  value = google_service_account.int_ci_service_account.email
 }
 
 output "org_project_creators" {
-  value = ["serviceAccount:${google_service_account.int_test.email}"]
+  value = ["serviceAccount:${google_service_account.int_ci_service_account.email}"]
 }
 
 output "org_id" {

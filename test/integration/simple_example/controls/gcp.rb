@@ -24,6 +24,9 @@ access_level_name = attribute('access_level_name')
 organization_policy_name = attribute('organization_policy_name')
 cmek_location = 'us-central1'
 cmek_keyring_name = attribute('cmek_keyring_name')
+cmek_ingestion_crypto_key_name = attribute('cmek_ingestion_crypto_key_name')
+cmek_bigquery_crypto_key_name = attribute('cmek_bigquery_crypto_key_name')
+
 
 restricted_googleapis_cidr = '199.36.153.4/30'
 private_googleapis_cidr = '199.36.153.8/30'
@@ -129,10 +132,10 @@ control 'gcp' do
     project: data_governance_project_id,
     location: cmek_location,
     key_ring_name: cmek_keyring_name,
-    name: 'ingestion_kms_key'
+    name: cmek_ingestion_crypto_key_name
   ) do
     it { should exist }
-    its('crypto_key_name') { should cmp 'ingestion_kms_key' }
+    its('crypto_key_name') { should cmp cmek_ingestion_crypto_key_name }
     its('primary_state') { should eq 'ENABLED' }
     its('purpose') { should eq 'ENCRYPT_DECRYPT' }
   end
@@ -141,7 +144,7 @@ control 'gcp' do
     project: data_governance_project_id,
     location: cmek_location,
     key_ring_name: cmek_keyring_name,
-    crypto_key_name: 'ingestion_kms_key',
+    crypto_key_name: cmek_ingestion_crypto_key_name,
     role: 'roles/cloudkms.cryptoKeyDecrypter'
   ) do
     it { should exist }
@@ -151,7 +154,7 @@ control 'gcp' do
     project: data_governance_project_id,
     location: cmek_location,
     key_ring_name: cmek_keyring_name,
-    crypto_key_name: 'ingestion_kms_key',
+    crypto_key_name: cmek_ingestion_crypto_key_name,
     role: 'roles/cloudkms.cryptoKeyEncrypter'
   ) do
     it { should exist }
@@ -161,10 +164,10 @@ control 'gcp' do
     project: data_governance_project_id,
     location: cmek_location,
     key_ring_name: cmek_keyring_name,
-    name: 'bigquery_kms_key'
+    name: cmek_bigquery_crypto_key_name
   ) do
     it { should exist }
-    its('crypto_key_name') { should cmp 'bigquery_kms_key' }
+    its('crypto_key_name') { should cmp cmek_bigquery_crypto_key_name }
     its('primary_state') { should eq 'ENABLED' }
     its('purpose') { should eq 'ENCRYPT_DECRYPT' }
   end
@@ -173,7 +176,7 @@ control 'gcp' do
     project: data_governance_project_id,
     location: cmek_location,
     key_ring_name: cmek_keyring_name,
-    crypto_key_name: 'bigquery_kms_key',
+    crypto_key_name: cmek_bigquery_crypto_key_name,
     role: 'roles/cloudkms.cryptoKeyDecrypter'
   ) do
     it { should exist }
@@ -183,7 +186,7 @@ control 'gcp' do
     project: data_governance_project_id,
     location: cmek_location,
     key_ring_name: cmek_keyring_name,
-    crypto_key_name: 'bigquery_kms_key',
+    crypto_key_name: cmek_bigquery_crypto_key_name,
     role: 'roles/cloudkms.cryptoKeyEncrypter'
   ) do
     it { should exist }
@@ -201,7 +204,7 @@ control 'gcp' do
     project: data_governance_project_id,
     location: cmek_location,
     key_ring_name: cmek_keyring_name,
-    crypto_key_name: 'ingestion_kms_key'
+    crypto_key_name: cmek_ingestion_crypto_key_name
   ).iam_binding_roles.each do |iam_binding_role|
     next unless other_kms_roles.include?(iam_binding_role)
 
@@ -209,7 +212,7 @@ control 'gcp' do
       project: data_governance_project_id,
       location: cmek_location,
       key_ring_name: cmek_keyring_name,
-      crypto_key_name: 'ingestion_kms_key',
+      crypto_key_name: cmek_ingestion_crypto_key_name,
       role: iam_binding_role
     ) do
       it { should exist }
@@ -220,7 +223,7 @@ control 'gcp' do
     project: data_governance_project_id,
     location: cmek_location,
     key_ring_name: cmek_keyring_name,
-    crypto_key_name: 'bigquery_kms_key'
+    crypto_key_name: cmek_bigquery_crypto_key_name
   ).iam_binding_roles.each do |iam_binding_role|
     next unless other_kms_roles.include?(iam_binding_role)
 
@@ -228,7 +231,7 @@ control 'gcp' do
       project: data_governance_project_id,
       location: cmek_location,
       key_ring_name: cmek_keyring_name,
-      crypto_key_name: 'bigquery_kms_key',
+      crypto_key_name: cmek_bigquery_crypto_key_name,
       role: iam_binding_role
     ) do
       it { should exist }

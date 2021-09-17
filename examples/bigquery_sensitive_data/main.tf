@@ -15,23 +15,33 @@
  */
 
 locals {
-  location   = "us-east1"
-  dataset_id = "secured_dataset"
+  location                = "us-central1"
+  dataset_id              = "non_sensitive_dataset"
+  confidential_dataset_id = "secured_dataset"
 }
 resource "random_id" "suffix" {
   byte_length = 4
 }
 
-module "bigquery_sensitive_data" {
-  source                     = "../..//modules/data_warehouse_taxonomy"
-  taxonomy_project_id        = var.taxonomy_project_id
-  privileged_data_project_id = var.privileged_data_project_id
-  non_sensitive_project_id   = var.non_sensitive_project_id
-  taxonomy_name              = "secured_taxonomy"
-  table_id                   = "sample_data"
-  dataset_id                 = local.dataset_id
-  location                   = local.location
-  cmek_location              = local.location
-  cmek_keyring_name          = "cmek_keyring_name_${random_id.suffix.hex}"
-  delete_contents_on_destroy = var.delete_contents_on_destroy
+module "secured_data_warehouse" {
+  source                           = "../.."
+  org_id                           = var.org_id
+  taxonomy_name                    = "secured_taxonomy"
+  data_governance_project_id       = var.data_governance_project_id
+  privileged_data_project_id       = var.privileged_data_project_id
+  datalake_project_id              = var.non_sensitive_project_id
+  data_ingestion_project_id        = var.data_ingestion_project_id
+  terraform_service_account        = var.terraform_service_account
+  access_context_manager_policy_id = var.access_context_manager_policy_id
+  perimeter_additional_members     = var.perimeter_members
+  bucket_name                      = "bkt-data-ingestion"
+  location                         = local.location
+  vpc_name                         = "tst-network"
+  subnet_ip                        = "10.0.32.0/21"
+  region                           = local.location
+  dataset_id                       = local.dataset_id
+  confidential_dataset_id          = local.confidential_dataset_id
+  confidential_table_id            = "sample_data"
+  cmek_keyring_name                = "cmek_keyring_${random_id.suffix.hex}"
+  delete_contents_on_destroy       = var.delete_contents_on_destroy
 }

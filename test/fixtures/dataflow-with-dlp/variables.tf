@@ -19,8 +19,8 @@ variable "org_id" {
   type        = string
 }
 
-variable "project_id" {
-  description = "The ID of the project in which the service account will be created."
+variable "data_ingestion_project_id" {
+  description = "The ID of the project in which the data ingestion resources will be created."
   type        = string
 }
 
@@ -31,6 +31,11 @@ variable "data_governance_project_id" {
 
 variable "datalake_project_id" {
   description = "The ID of the project in which the Bigquery will be created."
+  type        = string
+}
+
+variable "privileged_data_project_id" {
+  description = "Project where the privileged datasets and tables are created."
   type        = string
 }
 

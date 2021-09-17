@@ -14,29 +14,20 @@
  * limitations under the License.
  */
 
-output "flex_template_image_tag" {
-  description = "The Flex Template image TAG created."
-  value       = local.flex_template_image_tag
+output "access_level_name" {
+  description = "The access level name for the Access Context Manager."
+  value       = module.access_level_policy.name
 
   depends_on = [
-    null_resource.flex_template_builder
+    time_sleep.wait_for_vpc_sc_propagation
   ]
 }
 
-output "flex_template_gs_path" {
-  description = "Google Cloud Storage path to the flex template."
-  value       = local.template_gs_path
+output "service_perimeter_name" {
+  description = "The service perimeter name for the Access Context Manager."
+  value       = local.regular_service_perimeter_name
 
   depends_on = [
-    null_resource.flex_template_builder
-  ]
-}
-
-output "templates_bucket_name" {
-  description = "The name of the bucket created to store the flex template."
-  value       = module.templates_bucket.bucket.name
-
-  depends_on = [
-    null_resource.flex_template_builder
+    time_sleep.wait_for_vpc_sc_propagation
   ]
 }

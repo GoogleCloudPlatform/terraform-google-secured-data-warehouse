@@ -14,15 +14,21 @@
  * limitations under the License.
  */
 
+module "dwh_networking" {
+  source = ".//modules/dwh-networking"
 
-module "simple_example" {
-  source                           = "../../..//examples/simple_example"
-  org_id                           = var.org_id
-  data_governance_project_id       = var.data_governance_project_id
-  privileged_data_project_id       = var.privileged_data_project_id
-  datalake_project_id              = var.datalake_project_id
-  data_ingestion_project_id        = var.data_ingestion_project_id
-  terraform_service_account        = var.terraform_service_account
-  access_context_manager_policy_id = var.access_context_manager_policy_id
-  delete_contents_on_destroy       = true
+  project_id = var.data_ingestion_project_id
+  region     = var.region
+  vpc_name   = var.vpc_name
+  subnet_ip  = var.subnet_ip
+}
+
+module "dwh_networking_privileged" {
+  source = ".//modules/dwh-networking"
+
+  # org_id     = var.org_id
+  project_id = var.privileged_data_project_id
+  region     = var.region
+  vpc_name   = var.vpc_name
+  subnet_ip  = var.subnet_ip
 }

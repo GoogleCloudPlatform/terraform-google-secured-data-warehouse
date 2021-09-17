@@ -45,15 +45,6 @@ resource "google_project_service_identity" "cloudbuild_sa" {
   service = "cloudbuild.googleapis.com"
 }
 
-/**
- * This is a collateral effect of the workaround, using 'module_depends_on', for issue
- * https://github.com/terraform-google-modules/terraform-google-gcloud/issues/82
- * This module uses "terraform-google-gcloud" to run some commands that depends on each other.
- * If this module is called with a regular 'depends_on' it fails with the error from issue #82 on the "terraform-google-gcloud" modules
- * So the workaround, creating a custom 'module_depends_on', had to be replicated in this module too.
- * When issue #82 is fixed and the workaround removed, this can also be removed.
- */
-
 resource "google_artifact_registry_repository" "python_modules" {
   provider = google-beta
   count    = var.create_repository ? 1 : 0
@@ -108,23 +99,27 @@ resource "local_file" "requirements_txt" {
   filename = "${path.module}/requirements.txt"
 }
 
+resource "null_resource" "upload_modules" {
 
-module "upload_modules" {
-  source  = "terraform-google-modules/gcloud/google"
-  version = "~> 3.0"
+  triggers = {
+    repository_id             = var.repository_id
+    project_id                = var.project_id
+    location                  = var.location
+    terraform_service_account = var.terraform_service_account
+  }
 
-  skip_download = true
-
-  create_cmd_entrypoint = "gcloud"
-  create_cmd_body       = <<EOF
-    builds submit --project=${var.project_id} \
-    --config ${path.module}/cloudbuild.yaml ${path.module} \
-    --substitutions=_REPOSITORY_ID=${var.repository_id},_DEFAULT_REGION=${var.location} \
-    --impersonate-service-account=${var.terraform_service_account}
+  provisioner "local-exec" {
+    when    = create
+    command = <<EOF
+     gcloud builds submit --project=${var.project_id} \
+     --config ${path.module}/cloudbuild.yaml ${path.module} \
+     --substitutions=_REPOSITORY_ID=${var.repository_id},_DEFAULT_REGION=${var.location} \
+     --impersonate-service-account=${var.terraform_service_account}
 EOF
 
-  module_depends_on = [
+  }
+
+  depends_on = [
     google_artifact_registry_repository.python_modules
   ]
-
 }

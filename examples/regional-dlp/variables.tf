@@ -24,8 +24,8 @@ variable "access_context_manager_policy_id" {
   type        = number
 }
 
-variable "project_id" {
-  description = "The ID of the project in which to provision resources."
+variable "data_ingestion_project_id" {
+  description = "The ID of the project in which the data ingestion resources will be created."
   type        = string
 }
 
@@ -36,6 +36,11 @@ variable "data_governance_project_id" {
 
 variable "datalake_project_id" {
   description = "The ID of the project in which the Bigquery will be created."
+  type        = string
+}
+
+variable "privileged_data_project_id" {
+  description = "Project where the privileged datasets and tables are created."
   type        = string
 }
 
@@ -64,4 +69,10 @@ variable "crypto_key" {
 variable "wrapped_key" {
   description = "The base64 encoded data crypto key wrapped by KMS."
   type        = string
+}
+
+variable "delete_contents_on_destroy" {
+  description = "(Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present."
+  type        = bool
+  default     = false
 }

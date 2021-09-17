@@ -15,11 +15,11 @@
  */
 
 locals {
-  suffix                         = var.commom_suffix != "" ? var.commom_suffix : random_id.suffix.hex
+  suffix                         = var.common_suffix != "" ? var.common_suffix : random_id.suffix.hex
   actual_policy                  = var.access_context_manager_policy_id != "" ? var.access_context_manager_policy_id : google_access_context_manager_access_policy.access_policy[0].name
-  perimeter_name                 = "regular_perimeter_data_warehouse_${local.suffix}"
+  perimeter_name                 = "rp_dwh_${var.common_name}_${local.suffix}"
   regular_service_perimeter_name = "accessPolicies/${local.actual_policy}/servicePerimeters/${local.perimeter_name}"
-  access_policy_name             = "enterprise_data_warehouse_policy_${local.suffix}"
+  access_policy_name             = "ac_dwh_${var.common_name}_${local.suffix}"
 }
 
 resource "google_access_context_manager_access_policy" "access_policy" {
@@ -66,7 +66,7 @@ module "regular_service_perimeter" {
 }
 
 resource "time_sleep" "wait_for_vpc_sc_propagation" {
-  create_duration = "120s"
+  create_duration = "240s"
 
   depends_on = [
     module.access_level_policy,

@@ -14,26 +14,9 @@
  * limitations under the License.
  */
 
-variable "org_id" {
-  description = "The GCP Organization ID."
-  type        = string
-}
-
 variable "project_id" {
   description = "The ID of the project in which the service account will be created."
   type        = string
-}
-
-variable "resources" {
-  description = "A list of GCP resources that are inside of the service perimeter. Currently only projects are allowed."
-  type        = list(string)
-  default     = []
-}
-
-variable "commom_suffix" {
-  description = "A commom suffix to be used in the module."
-  type        = string
-  default     = ""
 }
 
 variable "region" {
@@ -50,31 +33,3 @@ variable "subnet_ip" {
   description = "The CDIR IP range of the subnetwork."
   type        = string
 }
-
-variable "perimeter_members" {
-  description = "The list additional members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required."
-  type        = list(string)
-}
-
-variable "restricted_services" {
-  description = "The list of services to be restricted by VPC Service Controls."
-  type        = list(string)
-}
-
-variable "access_context_manager_policy_id" {
-  description = "The id of the default Access Context Manager policy (see https://cloud.google.com/access-context-manager/docs/overview). Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
-  type        = number
-}
-
-variable "access_level_ip_subnetworks" {
-  description = "Condition - A list of CIDR block IP subnetwork specification. May be IPv4 or IPv6. Note that for a CIDR IP address block, the specified IP address portion must be properly truncated (that is, all the host bits must be zero) or the input is considered malformed. For example, \"192.0.2.0/24\" is accepted but \"192.0.2.1/24\" is not. Similarly, for IPv6, \"2001:db8::/32\" is accepted whereas \"2001:db8::1/32\" is not. The originating IP of a request must be in one of the listed subnets in order for this Condition to be true. If empty, all IP addresses are allowed."
-  type        = list(string)
-  default     = []
-}
-
-variable "access_level_regions" {
-  description = "Condition - The request must originate from one of the provided countries or regions. Format: A valid ISO 3166-1 alpha-2 code."
-  type        = list(string)
-  default     = []
-}
-

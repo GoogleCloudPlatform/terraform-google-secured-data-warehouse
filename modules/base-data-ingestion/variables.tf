@@ -30,13 +30,8 @@ variable "terraform_service_account" {
   type        = string
 }
 
-variable "project_id" {
-  description = "The ID of the project in which the service account will be created."
-  type        = string
-}
-
-variable "data_governance_project_id" {
-  description = "The ID of the project in which the data governance resources will be created."
+variable "data_ingestion_project_id" {
+  description = "The ID of the project in which the data ingestion resources will be created."
   type        = string
 }
 
@@ -45,24 +40,9 @@ variable "datalake_project_id" {
   type        = string
 }
 
-variable "vpc_name" {
-  description = "The name of the network."
+variable "data_governance_project_id" {
+  description = "The ID of the project in which the KMS and DLP are created."
   type        = string
-}
-
-variable "subnet_ip" {
-  description = "The CDIR IP range of the subnetwork."
-  type        = string
-}
-
-variable "access_context_manager_policy_id" {
-  description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
-  type        = number
-}
-
-variable "perimeter_members" {
-  description = "The list additional members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required."
-  type        = list(string)
 }
 
 variable "bucket_name" {
@@ -82,8 +62,8 @@ variable "bucket_class" {
   default     = "STANDARD"
 }
 
-variable "bucket_force_destroy" {
-  description = "When deleting a bucket, this boolean option will delete all contained objects. If you try to delete a bucket that contains objects, Terraform will fail that run."
+variable "delete_contents_on_destroy" {
+  description = "(Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present."
   type        = bool
   default     = false
 }
@@ -135,12 +115,12 @@ variable "dataset_default_table_expiration_ms" {
   default     = 31536000000
 }
 
-variable "cmek_location" {
-  description = "The location for the KMS Customer Managed Encryption Keys."
+variable "bigquery_encryption_key" {
+  description = "Self-link of the encryption key to be used by Bigquery."
   type        = string
 }
 
-variable "cmek_keyring_name" {
-  description = "The Keyring name for the KMS Customer Managed Encryption Keys."
+variable "ingestion_encryption_key" {
+  description = "Self-link of the encryption key to be used by Pub/Sub and Storage."
   type        = string
 }

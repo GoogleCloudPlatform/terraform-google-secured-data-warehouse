@@ -69,14 +69,14 @@ output "subnets_self_links" {
   value       = module.secured_data_warehouse.subnets_self_links
 }
 
-output "access_level_name" {
+output "data_ingestion_access_level_name" {
   description = "Access context manager access level name."
-  value       = module.secured_data_warehouse.access_level_name
+  value       = module.secured_data_warehouse.data_ingestion_access_level_name
 }
 
-output "service_perimeter_name" {
+output "data_ingestion_service_perimeter_name" {
   description = "Access context manager service perimeter name."
-  value       = module.secured_data_warehouse.service_perimeter_name
+  value       = module.secured_data_warehouse.data_ingestion_service_perimeter_name
 }
 
 output "cmek_keyring_full_name" {
@@ -97,4 +97,24 @@ output "cmek_ingestion_crypto_key" {
 output "cmek_bigquery_crypto_key" {
   description = "The Customer Managed Crypto Key for the BigQuery service."
   value       = module.secured_data_warehouse.cmek_bigquery_crypto_key
+}
+
+output "cmek_ingestion_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the Ingestion crypto boundary."
+  value       = module.secured_data_warehouse.cmek_ingestion_crypto_key_name
+}
+
+output "cmek_bigquery_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the BigQuery service."
+  value       = module.secured_data_warehouse.cmek_bigquery_crypto_key_name
+}
+
+output "cmek_reidentification_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the reidentification crypto boundary."
+  value       = module.secured_data_warehouse.cmek_reidentification_crypto_key_name
+}
+
+output "cmek_confidential_bigquery_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the confidential BigQuery service."
+  value       = module.secured_data_warehouse.cmek_confidential_bigquery_crypto_key_name
 }

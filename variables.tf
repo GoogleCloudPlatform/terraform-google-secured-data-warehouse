@@ -42,8 +42,8 @@ variable "terraform_service_account" {
   type        = string
 }
 
-variable "project_id" {
-  description = "The ID of the project in which the service account will be created."
+variable "data_ingestion_project_id" {
+  description = "The ID of the project in which the data ingestion resources will be created"
   type        = string
 }
 
@@ -54,6 +54,11 @@ variable "data_governance_project_id" {
 
 variable "datalake_project_id" {
   description = "The ID of the project in which the Bigquery will be created."
+  type        = string
+}
+
+variable "privileged_data_project_id" {
+  description = "Project where the privileged datasets and tables are created."
   type        = string
 }
 
@@ -107,6 +112,24 @@ variable "bucket_lifecycle_rules" {
   }]
 }
 
+variable "confidential_dataset_id" {
+  description = "Unique ID for the confidential dataset being provisioned."
+  type        = string
+  default     = "secured_dataset"
+}
+
+variable "confidential_dataset_default_table_expiration_ms" {
+  description = "TTL of tables using the dataset in MS. The default value is 30 days."
+  type        = number
+  default     = 2592000000
+}
+
+variable "confidential_table_id" {
+  description = "The confidential table ID to deploy to data warehouse."
+  type        = string
+  default     = "sample_data"
+}
+
 variable "dataset_id" {
   description = "Unique ID for the dataset being provisioned."
   type        = string
@@ -133,4 +156,34 @@ variable "dataset_default_table_expiration_ms" {
 variable "cmek_keyring_name" {
   description = "The Keyring name for the KMS Customer Managed Encryption Keys being provisioned."
   type        = string
+}
+
+variable "taxonomy_name" {
+  description = "The taxonomy display name."
+  type        = string
+  default     = "secured_taxonomy"
+}
+
+variable "confidential_access_members" {
+  description = "List of members in the standard GCP form: user:{email}, serviceAccount:{email}, group:{email} who will have access to confidential information in BigQuery."
+  type        = list(string)
+  default     = []
+}
+
+variable "private_access_members" {
+  description = "List of members in the standard GCP form: user:{email}, serviceAccount:{email}, group:{email} who will have access to private information in BigQuery."
+  type        = list(string)
+  default     = []
+}
+
+variable "key_rotation_period_seconds" {
+  description = "Rotation period for keys. The default value is 30 days."
+  type        = string
+  default     = "2592000s"
+}
+
+variable "delete_contents_on_destroy" {
+  description = "(Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present."
+  type        = bool
+  default     = false
 }

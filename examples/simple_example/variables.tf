@@ -24,13 +24,18 @@ variable "data_governance_project_id" {
   type        = string
 }
 
-variable "project_id" {
-  description = "The ID of the project in which the service account will be created."
+variable "data_ingestion_project_id" {
+  description = "The ID of the project in which the data ingestion resources will be created."
   type        = string
 }
 
 variable "datalake_project_id" {
   description = "The ID of the project in which the Bigquery will be created."
+  type        = string
+}
+
+variable "privileged_data_project_id" {
+  description = "Project where the privileged datasets and tables are created."
   type        = string
 }
 
@@ -42,4 +47,10 @@ variable "terraform_service_account" {
 variable "access_context_manager_policy_id" {
   description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
   type        = number
+}
+
+variable "delete_contents_on_destroy" {
+  description = "(Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present."
+  type        = bool
+  default     = false
 }

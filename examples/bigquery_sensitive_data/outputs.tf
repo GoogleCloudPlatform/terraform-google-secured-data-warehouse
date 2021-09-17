@@ -16,35 +16,35 @@
 
 output "emails_list" {
   description = "The service account email addresses by name."
-  value       = module.bigquery_sensitive_data.emails_list
+  value       = module.secured_data_warehouse.emails_list
 }
 
 output "person_name_policy_tag" {
   description = "Content for Policy Tag ID in medium policy."
-  value       = module.bigquery_sensitive_data.medium_policy_taxonomy_id
+  value       = module.secured_data_warehouse.medium_policy_taxonomy_id
 }
 
 output "social_security_number_policy_tag" {
   description = "Content for Policy Tag ID in high policy."
-  value       = module.bigquery_sensitive_data.high_policy_taxonomy_id
+  value       = module.secured_data_warehouse.high_policy_taxonomy_id
 }
 
 output "member_policy_ssn_confidential" {
   description = "SA member for Social Security Number policy tag confidential."
-  value       = module.bigquery_sensitive_data.member_policy_ssn_confidential
+  value       = module.secured_data_warehouse.member_policy_ssn_confidential
 }
 
 output "member_policy_name_confidential" {
   description = "SA member for Person Name policy tag confidential."
-  value       = module.bigquery_sensitive_data.member_policy_name_confidential
+  value       = module.secured_data_warehouse.member_policy_name_confidential
 }
 
 output "member_policy_name_private" {
   description = "SA member for Person Name policy tag private."
-  value       = module.bigquery_sensitive_data.member_policy_name_private
+  value       = module.secured_data_warehouse.member_policy_name_private
 }
 
 output "taxonomy_name" {
   description = "The taxonomy display name."
-  value       = module.bigquery_sensitive_data.taxonomy_name
+  value       = module.secured_data_warehouse.taxonomy_name
 }

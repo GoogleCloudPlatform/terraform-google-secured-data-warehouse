@@ -17,7 +17,7 @@
 locals {
   kek_keyring  = "kek_keyring_${random_id.random_suffix.hex}"
   kek_key_name = "kek_key_${random_id.random_suffix.hex}"
-  location     = "us-east1"
+  location     = "us-central1"
 }
 
 resource "random_id" "random_suffix" {
@@ -44,30 +44,17 @@ resource "google_kms_secret_ciphertext" "wrapped_key" {
   plaintext  = random_id.original_key.b64_std
 }
 
-module "test_vpc_module" {
-  source       = "terraform-google-modules/network/google"
-  version      = "~> 3.2.0"
-  project_id   = var.privileged_data_project_id
-  network_name = "sdw-test-network"
-  mtu          = 1460
-
-  subnets = [
-    {
-      subnet_name   = "sdw-subnet-01"
-      subnet_ip     = "10.10.10.0/24"
-      subnet_region = "us-east1"
-    }
-  ]
-}
-
 module "bigquery_sensitive_data" {
-  source                     = "../../..//examples/bigquery_sensitive_data"
-  non_sensitive_project_id   = var.datalake_project_id
-  taxonomy_project_id        = var.data_governance_project_id
-  privileged_data_project_id = var.privileged_data_project_id
-  subnetwork                 = module.test_vpc_module.subnets_self_links[0]
-  crypto_key                 = module.kek.keys[local.kek_key_name]
-  wrapped_key                = google_kms_secret_ciphertext.wrapped_key.ciphertext
-  terraform_service_account  = var.terraform_service_account
-  delete_contents_on_destroy = true
+  source = "../../..//examples/bigquery_sensitive_data"
+
+  org_id                           = var.org_id
+  access_context_manager_policy_id = var.access_context_manager_policy_id
+  non_sensitive_project_id         = var.datalake_project_id
+  data_ingestion_project_id        = var.data_ingestion_project_id
+  data_governance_project_id       = var.data_governance_project_id
+  privileged_data_project_id       = var.privileged_data_project_id
+  crypto_key                       = module.kek.keys[local.kek_key_name]
+  wrapped_key                      = google_kms_secret_ciphertext.wrapped_key.ciphertext
+  terraform_service_account        = var.terraform_service_account
+  delete_contents_on_destroy       = true
 }

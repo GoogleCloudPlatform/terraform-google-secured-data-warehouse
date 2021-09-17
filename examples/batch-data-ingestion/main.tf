@@ -45,24 +45,23 @@ locals {
 }
 
 module "data_ingestion" {
-  source                           = "../..//modules/base-data-ingestion"
-  bucket_name                      = "bkt-data-ingestion"
-  dataset_id                       = local.dataset_id
+  source                           = "../.."
   org_id                           = var.org_id
-  project_id                       = var.project_id
   data_governance_project_id       = var.data_governance_project_id
+  privileged_data_project_id       = var.privileged_data_project_id
   datalake_project_id              = var.datalake_project_id
-  region                           = local.region
-  bucket_location                  = local.region
-  dataset_location                 = local.region
+  data_ingestion_project_id        = var.data_ingestion_project_id
   terraform_service_account        = var.terraform_service_account
-  vpc_name                         = "tst-network"
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  perimeter_members                = var.perimeter_members
+  perimeter_additional_members     = var.perimeter_members
+  bucket_name                      = "bkt-data-ingestion"
+  location                         = local.region
+  vpc_name                         = "tst-network"
   subnet_ip                        = "10.0.32.0/21"
-  cmek_location                    = local.region
+  region                           = local.region
+  dataset_id                       = local.dataset_id
   cmek_keyring_name                = "cmek_keyring_${random_id.random_suffix.hex}"
-  bucket_force_destroy             = var.bucket_force_destroy
+  delete_contents_on_destroy       = var.delete_contents_on_destroy
 }
 
 
@@ -71,17 +70,20 @@ module "dataflow_tmp_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 2.1"
 
-  project_id    = var.project_id
+  project_id    = var.data_ingestion_project_id
   name          = "bkt-${random_id.random_suffix.hex}-tmp-dataflow"
   location      = local.region
-  force_destroy = var.bucket_force_destroy
+  force_destroy = var.delete_contents_on_destroy
   encryption    = { "default_kms_key_name" = module.data_ingestion.cmek_ingestion_crypto_key }
 
   labels = {
     "enterprise_data_ingest_bucket" = "true"
   }
+
   depends_on = [
-    module.data_ingestion.access_level_name
+    module.data_ingestion.data_ingestion_access_level_name,
+    module.data_ingestion.data_governance_access_level_name,
+    module.data_ingestion.privileged_access_level_name
   ]
 }
 
@@ -100,6 +102,12 @@ resource "null_resource" "download_sample_cc_into_gcs" {
 EOF
 
   }
+
+  depends_on = [
+    module.data_ingestion.data_ingestion_access_level_name,
+    module.data_ingestion.data_governance_access_level_name,
+    module.data_ingestion.privileged_access_level_name
+  ]
 }
 
 resource "google_storage_bucket_object" "schema" {
@@ -120,13 +128,27 @@ resource "google_storage_bucket_object" "transform_code" {
   ]
 }
 
+
+//Scheduler controller service account
+module "scheduler_controller_service_account" {
+  source       = "terraform-google-modules/service-accounts/google"
+  version      = "~> 3.0"
+  project_id   = var.data_ingestion_project_id
+  names        = ["sa-scheduler-controller"]
+  display_name = "Cloud Scheduler controller service account"
+  project_roles = [
+    "${var.data_ingestion_project_id}=>roles/dataflow.developer",
+    "${var.data_ingestion_project_id}=>roles/compute.viewer",
+  ]
+}
+
 resource "google_cloud_scheduler_job" "scheduler" {
   name     = "scheduler-demo"
   schedule = "0 0 * * *"
   # This needs to be us-central1 even if App Engine is in us-central.
   # You will get a resource not found error if just using us-central.
   region  = local.region
-  project = var.project_id
+  project = var.data_ingestion_project_id
 
   http_target {
     http_method = "POST"
@@ -134,9 +156,9 @@ resource "google_cloud_scheduler_job" "scheduler" {
       "Accept"       = "application/json"
       "Content-Type" = "application/json"
     }
-    uri = "https://dataflow.googleapis.com/v1b3/projects/${var.project_id}/locations/${local.region}/templates"
+    uri = "https://dataflow.googleapis.com/v1b3/projects/${var.data_ingestion_project_id}/locations/${local.region}/templates"
     oauth_token {
-      service_account_email = var.terraform_service_account
+      service_account_email = module.scheduler_controller_service_account.email
     }
 
     # need to encode the string

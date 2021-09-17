@@ -32,15 +32,6 @@ locals {
   code_file_md5           = filemd5(var.template_files.code_file)
 }
 
-/**
- * This is a collateral effect of the workaround, using 'module_depends_on', for issue
- * https://github.com/terraform-google-modules/terraform-google-gcloud/issues/82
- * This module uses "terraform-google-gcloud" to run some commands that depends on each other.
- * If this module is called with a regular 'depends_on' it fails with the error from issue #82 on the "terraform-google-gcloud" modules
- * So the workaround, creating a custom 'module_depends_on', had to be replicated in this module too.
- * When issue #82 is fixed and the workaround removed, this can also be removed.
- */
-
 resource "random_id" "suffix" {
   byte_length = 2
 }
@@ -139,54 +130,56 @@ resource "local_file" "metadata_json" {
   filename = "${path.module}/metadata.json"
 }
 
-module "build_container_image" {
-  source  = "terraform-google-modules/gcloud/google"
-  version = "~> 3.0"
+resource "null_resource" "build_container_image" {
 
-  skip_download = true
-
-  create_cmd_triggers = {
-    requirements_file_md5 = local.requirements_file_md5
-    code_file_md5         = local.code_file_md5
+  triggers = {
+    project_id                = var.project_id
+    terraform_service_account = var.terraform_service_account
+    requirements_file_md5     = local.requirements_file_md5
+    code_file_md5             = local.code_file_md5
+    flex_template_image_tag   = local.flex_template_image_tag
   }
 
-  create_cmd_entrypoint = "gcloud"
-  create_cmd_body       = <<EOF
-    builds submit --project=${var.project_id} \
-    --config ${path.module}/cloudbuild.yaml ${path.module} \
-    --substitutions=_FLEX_TEMPLATE_IMAGE_TAG=${local.flex_template_image_tag} \
-    --impersonate-service-account=${var.terraform_service_account}
+  provisioner "local-exec" {
+    when    = create
+    command = <<EOF
+      gcloud builds submit --project=${var.project_id} \
+      --config ${path.module}/cloudbuild.yaml ${path.module} \
+      --substitutions=_FLEX_TEMPLATE_IMAGE_TAG=${local.flex_template_image_tag} \
+      --impersonate-service-account=${var.terraform_service_account}
 EOF
 
-  module_depends_on = [
-    google_artifact_registry_repository_iam_member.writer
-  ]
-
-}
-
-module "flex_template_builder" {
-  source  = "terraform-google-modules/gcloud/google"
-  version = "~> 3.0"
-
-  skip_download = true
-
-  create_cmd_triggers = {
-    metadata_file_md5     = local.metadata_file_md5
-    requirements_file_md5 = local.requirements_file_md5
-    code_file_md5         = local.code_file_md5
   }
 
-  create_cmd_entrypoint = "gcloud"
-  create_cmd_body       = <<EOF
-      dataflow flex-template build ${local.template_gs_path} \
+  depends_on = [
+    google_artifact_registry_repository_iam_member.writer
+  ]
+}
+
+resource "null_resource" "flex_template_builder" {
+
+  triggers = {
+    project_id                = var.project_id
+    terraform_service_account = var.terraform_service_account
+    metadata_file_md5         = local.metadata_file_md5
+    requirements_file_md5     = local.requirements_file_md5
+    code_file_md5             = local.code_file_md5
+    flex_template_image_tag   = local.flex_template_image_tag
+  }
+
+  provisioner "local-exec" {
+    when    = create
+    command = <<EOF
+      gcloud dataflow flex-template build ${local.template_gs_path} \
        --image "${local.flex_template_image_tag}" \
        --sdk-language "PYTHON" \
        --metadata-file "${path.module}/metadata.json" \
        --impersonate-service-account=${var.terraform_service_account}
 EOF
 
-  module_depends_on = [
-    module.build_container_image
-  ]
+  }
 
+  depends_on = [
+    null_resource.build_container_image
+  ]
 }

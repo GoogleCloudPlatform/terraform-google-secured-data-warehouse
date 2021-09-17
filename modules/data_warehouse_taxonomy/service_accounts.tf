@@ -39,6 +39,8 @@ module "dataflow_controller_service_account" {
     "${var.taxonomy_project_id}=>roles/dlp.admin",
     "${var.taxonomy_project_id}=>roles/dlp.deidentifyTemplatesEditor",
     "${var.taxonomy_project_id}=>roles/dlp.user",
+    "${var.taxonomy_project_id}=>roles/cloudkms.admin",
+    "${var.taxonomy_project_id}=>roles/cloudkms.cryptoKeyDecrypter"
   ]
 }
 

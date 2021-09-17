@@ -19,29 +19,25 @@ locals {
   dataset_id = "dts_data_ingestion"
 }
 
-module "data_ingestion" {
-  source                           = "../..//modules/base-data-ingestion"
-  bucket_name                      = "bkt-data-ingestion"
-  dataset_id                       = local.dataset_id
-  org_id                           = var.org_id
-  project_id                       = var.project_id
-  data_governance_project_id       = var.data_governance_project_id
-  datalake_project_id              = var.datalake_project_id
-  region                           = local.region
-  bucket_location                  = local.region
-  dataset_location                 = local.region
-  terraform_service_account        = var.terraform_service_account
-  vpc_name                         = "tst-network"
-  access_context_manager_policy_id = var.access_context_manager_policy_id
-  perimeter_members                = var.perimeter_members
-  subnet_ip                        = "10.0.32.0/21"
-  cmek_location                    = local.region
-  cmek_keyring_name                = "cmek_keyring"
-  bucket_force_destroy             = var.bucket_force_destroy
-}
-
 resource "random_id" "random_suffix" {
   byte_length = 4
+}
+
+module "data_ingestion" {
+  source                           = "../.."
+  org_id                           = var.org_id
+  data_governance_project_id       = var.data_governance_project_id
+  privileged_data_project_id       = var.privileged_data_project_id
+  datalake_project_id              = var.datalake_project_id
+  data_ingestion_project_id        = var.data_ingestion_project_id
+  terraform_service_account        = var.terraform_service_account
+  access_context_manager_policy_id = var.access_context_manager_policy_id
+  bucket_name                      = "data-ingestion"
+  dataset_id                       = local.dataset_id
+  vpc_name                         = "tst-network"
+  cmek_keyring_name                = "cmek_keyring_${random_id.random_suffix.hex}"
+  subnet_ip                        = "10.0.32.0/21"
+  delete_contents_on_destroy       = var.delete_contents_on_destroy
 }
 
 //dataflow temp bucket
@@ -49,17 +45,19 @@ module "dataflow_tmp_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 2.1"
 
-  project_id    = var.project_id
+  project_id    = var.data_ingestion_project_id
   name          = "bkt-${random_id.random_suffix.hex}-tmp-dataflow"
   location      = local.region
-  force_destroy = var.bucket_force_destroy
+  force_destroy = var.delete_contents_on_destroy
 
   labels = {
     "enterprise_data_ingest_bucket" = "true"
   }
 
   depends_on = [
-    module.data_ingestion.access_level_name
+    module.data_ingestion.data_ingestion_access_level_name,
+    module.data_ingestion.data_governance_access_level_name,
+    module.data_ingestion.privileged_access_level_name
   ]
 }
 resource "random_id" "original_key" {
@@ -83,7 +81,9 @@ EOF
   }
 
   depends_on = [
-    module.data_ingestion.access_level_name
+    module.data_ingestion.data_ingestion_access_level_name,
+    module.data_ingestion.data_governance_access_level_name,
+    module.data_ingestion.privileged_access_level_name
   ]
 }
 
@@ -97,13 +97,19 @@ module "de_identification_template" {
   dlp_location              = local.region
   template_file             = "${path.module}/deidentification.tmpl"
   dataflow_service_account  = module.data_ingestion.dataflow_controller_service_account_email
+
+  depends_on = [
+    module.data_ingestion.data_ingestion_access_level_name,
+    module.data_ingestion.data_governance_access_level_name,
+    module.data_ingestion.privileged_access_level_name
+  ]
 }
 
 module "dataflow_job" {
   source  = "terraform-google-modules/dataflow/google"
   version = "2.0.0"
 
-  project_id            = var.project_id
+  project_id            = var.data_ingestion_project_id
   name                  = "dlp_example_${null_resource.download_sample_cc_into_gcs.id}_${random_id.random_suffix.hex}"
   on_delete             = "cancel"
   region                = local.region
@@ -120,7 +126,7 @@ module "dataflow_job" {
     inputFilePattern       = "gs://${module.data_ingestion.data_ingest_bucket_names[0]}/cc_records.csv"
     datasetName            = local.dataset_id
     batchSize              = 1000
-    dlpProjectId           = var.data_governance_project_id
+    dlpProjectId           = var.data_ingestion_project_id
     deidentifyTemplateName = "projects/${var.data_governance_project_id}/locations/${local.region}/deidentifyTemplates/${module.de_identification_template.template_id}"
   }
 

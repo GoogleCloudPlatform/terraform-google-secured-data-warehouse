@@ -63,7 +63,7 @@ module "bigquery_sensitive_data" {
   project_id                  = var.privileged_data_project_id
   location                    = var.location
   delete_contents_on_destroy  = var.delete_contents_on_destroy
-  encryption_key              = module.cmek.keys[local.bigquery_key_name]
+  encryption_key              = var.cmek_confidential_bigquery_crypto_key
   default_table_expiration_ms = var.dataset_default_table_expiration_ms
 
   tables = [

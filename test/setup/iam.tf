@@ -56,62 +56,72 @@ resource "google_organization_iam_member" "org_admins_group" {
   for_each = toset(local.int_org_required_roles)
   org_id   = var.org_id
   role     = each.value
-  member   = "serviceAccount:${google_service_account.int_test.email}"
+  member   = "serviceAccount:${google_service_account.int_ci_service_account.email}"
 }
 
 resource "google_billing_account_iam_member" "tf_billing_user" {
   billing_account_id = var.billing_account
   role               = "roles/billing.admin"
-  member             = "serviceAccount:${google_service_account.int_test.email}"
+  member             = "serviceAccount:${google_service_account.int_ci_service_account.email}"
 }
 
-resource "google_service_account" "int_test" {
+resource "google_service_account" "int_ci_service_account" {
   project      = module.project.project_id
   account_id   = "ci-account"
   display_name = "ci-account"
 }
 
-resource "google_project_iam_member" "int_data_ingestion_test" {
+//
+resource "google_project_iam_member" "int_permission_data_ingestion_test" {
   for_each = toset(local.int_proj_required_roles)
 
   project = module.project.project_id
   role    = each.value
-  member  = "serviceAccount:${google_service_account.int_test.email}"
+  member  = "serviceAccount:${google_service_account.int_ci_service_account.email}"
 }
 
-resource "google_project_iam_member" "int_data_governance_test" {
+resource "google_project_iam_member" "int_permission_data_governance_test" {
   for_each = toset(local.int_proj_required_roles)
 
   project = module.data_governance_project.project_id
   role    = each.value
-  member  = "serviceAccount:${google_service_account.int_test.email}"
+  member  = "serviceAccount:${google_service_account.int_ci_service_account.email}"
 }
 
-resource "google_project_iam_member" "int_datalake_test" {
+resource "google_project_iam_member" "int_permission_datalake_test" {
   for_each = toset(local.int_proj_required_roles)
 
   project = module.datalake_project.project_id
   role    = each.value
-  member  = "serviceAccount:${google_service_account.int_test.email}"
+  member  = "serviceAccount:${google_service_account.int_ci_service_account.email}"
 }
 
-resource "google_project_iam_member" "int_privilege_data_test" {
+resource "google_project_iam_member" "int_permission_privilege_data_test" {
   for_each = toset(local.int_proj_required_roles)
 
   project = module.privileged_data_project.project_id
   role    = each.value
-  member  = "serviceAccount:${google_service_account.int_test.email}"
+  member  = "serviceAccount:${google_service_account.int_ci_service_account.email}"
+}
+
+resource "google_project_iam_member" "int_permission_artifact_registry_test" {
+  for_each = toset(local.int_proj_required_roles)
+
+  project = module.ext_artifact_registry_project.project_id
+  role    = each.value
+  member  = "serviceAccount:${google_service_account.int_ci_service_account.email}"
 }
 
 resource "google_service_account_key" "int_test" {
-  service_account_id = google_service_account.int_test.id
+  service_account_id = google_service_account.int_ci_service_account.id
 }
 
 resource "time_sleep" "wait_90_seconds" {
   depends_on = [
-    google_project_iam_member.int_data_ingestion_test,
-    google_project_iam_member.int_data_governance_test,
-    google_project_iam_member.int_datalake_test,
+    google_project_iam_member.int_permission_data_ingestion_test,
+    google_project_iam_member.int_permission_data_governance_test,
+    google_project_iam_member.int_permission_datalake_test,
+    google_project_iam_member.int_permission_privilege_data_test,
     google_organization_iam_member.org_admins_group
   ]
 
