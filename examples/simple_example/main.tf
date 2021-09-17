@@ -25,8 +25,8 @@ module "secured_data_warehouse" {
   access_context_manager_policy_id = var.access_context_manager_policy_id
   bucket_name                      = "bucket_simple_exemple"
   dataset_id                       = "dataset_simple_exemple"
-  vpc_name                         = "vpc-simple-exemple"
-  cmek_keyring_name                = "key_name_simple_exemple"
-  subnet_ip                        = "10.0.32.0/21"
-  delete_contents_on_destroy       = var.delete_contents_on_destroy
+  #vpc_name                         = "vpc-simple-exemple"
+  cmek_keyring_name          = "key_name_simple_exemple"
+  subnet_ip                  = "10.0.32.0/21"
+  delete_contents_on_destroy = var.delete_contents_on_destroy
 }

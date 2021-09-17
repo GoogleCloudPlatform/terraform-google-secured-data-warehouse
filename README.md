@@ -90,7 +90,8 @@ module "secured_data_warehouse" {
 | taxonomy\_name | The taxonomy display name. | `string` | `"secured_taxonomy"` | no |
 | terraform\_service\_account | The email address of the service account that will run the Terraform code. | `string` | n/a | yes |
 | trusted\_locations | This is a list of trusted regions where location-based GCP resources can be created. ie us-locations eu-locations. | `list(string)` | <pre>[<br>  "us-locations",<br>  "eu-locations"<br>]</pre> | no |
-| vpc\_name | The name of the network. | `string` | n/a | yes |
+| vpc\_ingestion\_network\_name | The name of the ingestion network. | `string` | `"ingestion-network"` | no |
+| vpc\_reidentify\_network\_name | The name of the reidentify network. | `string` | `"reidentify-network"` | no |
 
 ## Outputs
 

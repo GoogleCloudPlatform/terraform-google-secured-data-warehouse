@@ -36,12 +36,12 @@ module "secured_data_warehouse" {
   perimeter_additional_members     = var.perimeter_members
   bucket_name                      = "bkt-data-ingestion"
   location                         = local.location
-  vpc_name                         = "tst-network"
-  subnet_ip                        = "10.0.32.0/21"
-  region                           = local.location
-  dataset_id                       = local.dataset_id
-  confidential_dataset_id          = local.confidential_dataset_id
-  confidential_table_id            = "sample_data"
-  cmek_keyring_name                = "cmek_keyring_${random_id.suffix.hex}"
-  delete_contents_on_destroy       = var.delete_contents_on_destroy
+  #vpc_name                         = "tst-network"
+  subnet_ip                  = "10.0.32.0/21"
+  region                     = local.location
+  dataset_id                 = local.dataset_id
+  confidential_dataset_id    = local.confidential_dataset_id
+  confidential_table_id      = "sample_data"
+  cmek_keyring_name          = "cmek_keyring_${random_id.suffix.hex}"
+  delete_contents_on_destroy = var.delete_contents_on_destroy
 }

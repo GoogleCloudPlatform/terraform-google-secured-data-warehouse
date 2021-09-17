@@ -56,12 +56,12 @@ module "data_ingestion" {
   perimeter_additional_members     = var.perimeter_members
   bucket_name                      = "bkt-data-ingestion"
   location                         = local.region
-  vpc_name                         = "tst-network"
-  subnet_ip                        = "10.0.32.0/21"
-  region                           = local.region
-  dataset_id                       = local.dataset_id
-  cmek_keyring_name                = "cmek_keyring_${random_id.random_suffix.hex}"
-  delete_contents_on_destroy       = var.delete_contents_on_destroy
+  #vpc_name                         = "tst-network"
+  subnet_ip                  = "10.0.32.0/21"
+  region                     = local.region
+  dataset_id                 = local.dataset_id
+  cmek_keyring_name          = "cmek_keyring_${random_id.random_suffix.hex}"
+  delete_contents_on_destroy = var.delete_contents_on_destroy
 }
 
 

@@ -79,12 +79,12 @@ module "data_ingestion" {
   access_context_manager_policy_id = var.access_context_manager_policy_id
   bucket_name                      = "bkt-dlp-flex-ingest-${random_id.suffix.hex}"
   dataset_id                       = "dlp_flex_ingest"
-  vpc_name                         = "dlp-flex-ingest"
-  cmek_keyring_name                = "dlp_flex_ingest-${random_id.suffix.hex}"
-  subnet_ip                        = "10.0.32.0/21"
-  region                           = var.location
-  delete_contents_on_destroy       = var.delete_contents_on_destroy
-  perimeter_additional_members     = var.perimeter_additional_members
+  #vpc_name                         = "dlp-flex-ingest"
+  cmek_keyring_name            = "dlp_flex_ingest-${random_id.suffix.hex}"
+  subnet_ip                    = "10.0.32.0/21"
+  region                       = var.location
+  delete_contents_on_destroy   = var.delete_contents_on_destroy
+  perimeter_additional_members = var.perimeter_additional_members
 }
 
 module "de_identification_template_example" {

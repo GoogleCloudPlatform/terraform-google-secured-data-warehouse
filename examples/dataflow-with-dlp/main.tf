@@ -34,10 +34,10 @@ module "data_ingestion" {
   access_context_manager_policy_id = var.access_context_manager_policy_id
   bucket_name                      = "data-ingestion"
   dataset_id                       = local.dataset_id
-  vpc_name                         = "tst-network"
-  cmek_keyring_name                = "cmek_keyring_${random_id.random_suffix.hex}"
-  subnet_ip                        = "10.0.32.0/21"
-  delete_contents_on_destroy       = var.delete_contents_on_destroy
+  #vpc_name                         = "tst-network"
+  cmek_keyring_name          = "cmek_keyring_${random_id.random_suffix.hex}"
+  subnet_ip                  = "10.0.32.0/21"
+  delete_contents_on_destroy = var.delete_contents_on_destroy
 }
 
 //dataflow temp bucket
