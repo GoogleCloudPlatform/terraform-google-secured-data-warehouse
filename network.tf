@@ -19,16 +19,15 @@ module "dwh_networking" {
 
   project_id = var.data_ingestion_project_id
   region     = var.region
-  vpc_name   = var.vpc_name
+  vpc_name   = var.vpc_ingestion_network_name
   subnet_ip  = var.subnet_ip
 }
 
 module "dwh_networking_privileged" {
   source = ".//modules/dwh-networking"
 
-  # org_id     = var.org_id
   project_id = var.privileged_data_project_id
   region     = var.region
-  vpc_name   = var.vpc_name
+  vpc_name   = var.vpc_reidentify_network_name
   subnet_ip  = var.subnet_ip
 }

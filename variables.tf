@@ -62,9 +62,16 @@ variable "privileged_data_project_id" {
   type        = string
 }
 
-variable "vpc_name" {
-  description = "The name of the network."
+variable "vpc_reidentify_network_name" {
+  description = "The name of the reidentify network."
   type        = string
+  default     = "reidentify-network"
+}
+
+variable "vpc_ingestion_network_name" {
+  description = "The name of the ingestion network."
+  type        = string
+  default     = "ingestion-network"
 }
 
 variable "subnet_ip" {
