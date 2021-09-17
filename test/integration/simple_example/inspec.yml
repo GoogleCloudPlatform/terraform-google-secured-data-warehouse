@@ -48,17 +48,6 @@ attributes:
   - name: data_ingest_topic_name
     required: true
     type: string
-  - name: network_name
-    required: true
-    type: string
-  - name: network_self_link
-    required: true
-    type: string
-  - name: subnets_names
-    required: true
-    type: array
-  - name: subnets_ips
-    required: true
     type: array
   - name: access_level_name
     required: true

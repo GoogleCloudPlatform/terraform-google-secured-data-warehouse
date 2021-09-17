@@ -70,26 +70,6 @@ output "data_ingest_bigquery_dataset" {
   value       = module.simple_example.data_ingest_bigquery_dataset
 }
 
-output "network_name" {
-  description = "The name of the VPC being created."
-  value       = module.simple_example.network_name
-}
-
-output "network_self_link" {
-  description = "The URI of the VPC being created."
-  value       = module.simple_example.network_self_link
-}
-
-output "subnets_names" {
-  description = "The names of the subnets being created."
-  value       = module.simple_example.subnets_names
-}
-
-output "subnets_ips" {
-  description = "The IPs and CIDRs of the subnets being created."
-  value       = module.simple_example.subnets_ips
-}
-
 output "access_level_name" {
   description = "Access context manager access level name."
   value       = module.simple_example.data_ingestion_access_level_name
