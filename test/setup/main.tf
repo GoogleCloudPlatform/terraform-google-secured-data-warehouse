@@ -147,6 +147,7 @@ module "ext_artifact_registry_project" {
     "cloudkms.googleapis.com",
     "dlp.googleapis.com",
     "artifactregistry.googleapis.com",
-    "cloudbuild.googleapis.com"
+    "cloudbuild.googleapis.com",
+    "compute.googleapis.com"
   ]
 }
