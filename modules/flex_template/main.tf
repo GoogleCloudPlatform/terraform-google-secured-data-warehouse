@@ -96,7 +96,7 @@ module "templates_bucket" {
 
   project_id         = var.project_id
   location           = var.location
-  name               = "bkt-${var.location}-${var.project_id}-tpl-${random_id.suffix.hex}"
+  name               = "bkt-${var.project_id}-tpl-${random_id.suffix.hex}"
   bucket_policy_only = true
   force_destroy      = true
 

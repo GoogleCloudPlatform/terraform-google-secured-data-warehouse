@@ -71,7 +71,7 @@ module "dataflow_tmp_bucket" {
   version = "~> 2.1"
 
   project_id    = var.data_ingestion_project_id
-  name          = "bkt-${random_id.random_suffix.hex}-tmp-dataflow"
+  name          = "bkt-${var.data_ingestion_project_id}-tmp-dataflow-${random_id.random_suffix.hex}"
   location      = local.region
   force_destroy = var.delete_contents_on_destroy
   encryption    = { "default_kms_key_name" = module.data_ingestion.cmek_ingestion_crypto_key }

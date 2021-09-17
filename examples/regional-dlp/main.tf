@@ -153,7 +153,7 @@ module "dataflow_bucket" {
   version = "~> 2.1"
 
   project_id         = var.data_ingestion_project_id
-  name               = "bkt-tmp-dataflow-${random_id.suffix.hex}"
+  name               = "bkt-${var.data_ingestion_project_id}-tmp-dataflow-${random_id.suffix.hex}"
   location           = var.location
   force_destroy      = true
   bucket_policy_only = true
