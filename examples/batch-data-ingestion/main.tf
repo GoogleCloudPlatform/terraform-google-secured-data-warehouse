@@ -58,7 +58,7 @@ module "data_ingestion" {
   location                         = local.region
   subnet_ip                        = "10.0.32.0/21"
   region                           = local.region
-  dataset_id                       = local.data
+  dataset_id                       = local.dataset_id
   cmek_keyring_name                = "cmek_keyring_${random_id.random_suffix.hex}"
   delete_contents_on_destroy       = var.delete_contents_on_destroy
 }
