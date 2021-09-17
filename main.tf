@@ -99,6 +99,11 @@ module "org_policies" {
   project_id        = each.key
   region            = local.region
   trusted_locations = var.trusted_locations
+
+  depends_on = [
+    module.data_ingestion,
+    module.bigquery_sensitive_data
+  ]
 }
 
 // A5 - DATA WAREHOUSE ORG POLICY - END
