@@ -48,7 +48,6 @@ attributes:
   - name: data_ingest_topic_name
     required: true
     type: string
-    type: array
   - name: access_level_name
     required: true
     type: string
