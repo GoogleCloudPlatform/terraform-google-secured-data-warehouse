@@ -61,8 +61,7 @@ resource "null_resource" "java_de_identification_flex_template" {
        --project=${local.project_id} \
        --config ${path.module}/../../flex_templates/java/regional_dlp_de_identification/cloudbuild.yaml \
        ${path.module}/../../flex_templates/java/regional_dlp_de_identification \
-       --substitutions="_PROJECT=${local.project_id},_FLEX_TEMPLATE_IMAGE_TAG=${local.java_de_identify_flex_template_image_tag},_TEMPLATE_GS_PATH=${local.java_de_identify_template_gs_path}" \
-       --impersonate-service-account=${google_service_account.int_ci_service_account.email}
+       --substitutions="_PROJECT=${local.project_id},_FLEX_TEMPLATE_IMAGE_TAG=${local.java_de_identify_flex_template_image_tag},_TEMPLATE_GS_PATH=${local.java_de_identify_template_gs_path}"
 EOF
 
   }
@@ -88,8 +87,7 @@ resource "null_resource" "python_de_identification_flex_template" {
        --project=${local.project_id} \
        --config ${path.module}/../../flex_templates/python/regional_dlp_de_identification/cloudbuild.yaml \
        ${path.module}/../../flex_templates/python/regional_dlp_de_identification \
-       --substitutions="_PROJECT=${local.project_id},_FLEX_TEMPLATE_IMAGE_TAG=${local.python_de_identify_flex_template_image_tag},_PIP_INDEX_URL=${local.pip_index_url},_TEMPLATE_GS_PATH=${local.python_de_identify_template_gs_path}" \
-       --impersonate-service-account=${google_service_account.int_ci_service_account.email}
+       --substitutions="_PROJECT=${local.project_id},_FLEX_TEMPLATE_IMAGE_TAG=${local.python_de_identify_flex_template_image_tag},_PIP_INDEX_URL=${local.pip_index_url},_TEMPLATE_GS_PATH=${local.python_de_identify_template_gs_path}"
 EOF
 
   }
@@ -115,8 +113,7 @@ resource "null_resource" "python_re_identification_flex_template" {
        --project=${local.project_id} \
        --config ${path.module}/../../flex_templates/python/regional_dlp_re_identification/cloudbuild.yaml \
        ${path.module}/../../flex_templates/python/regional_dlp_re_identification \
-       --substitutions="_PROJECT=${local.project_id},_FLEX_TEMPLATE_IMAGE_TAG=${local.python_re_identify_flex_template_image_tag},_PIP_INDEX_URL=${local.pip_index_url},_TEMPLATE_GS_PATH=${local.python_re_identify_template_gs_path}" \
-       --impersonate-service-account=${google_service_account.int_ci_service_account.email}
+       --substitutions="_PROJECT=${local.project_id},_FLEX_TEMPLATE_IMAGE_TAG=${local.python_re_identify_flex_template_image_tag},_PIP_INDEX_URL=${local.pip_index_url},_TEMPLATE_GS_PATH=${local.python_re_identify_template_gs_path}"
 EOF
 
   }
@@ -141,8 +138,7 @@ resource "null_resource" "upload_modules" {
      gcloud builds submit --project=${local.project_id} \
      --config ${path.module}/../../flex_templates/python/modules/cloudbuild.yaml \
      ${path.module}/../../flex_templates/python/modules \
-     --substitutions=_REPOSITORY_ID=${local.python_repository_id},_DEFAULT_REGION=${local.location} \
-     --impersonate-service-account=${google_service_account.int_ci_service_account.email}
+     --substitutions=_REPOSITORY_ID=${local.python_repository_id},_DEFAULT_REGION=${local.location}
 EOF
 
   }
