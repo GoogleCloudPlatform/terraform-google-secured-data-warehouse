@@ -17,7 +17,7 @@
 locals {
   region          = "us-central1"
   dataset_id      = "dts_data_ingestion"
-  enable_dataflow = var.de_identify_template_gs_path != "" ? 1 : 0
+  enable_dataflow = var.de_identify_template_gs_path != ""
 }
 
 resource "random_id" "random_suffix" {

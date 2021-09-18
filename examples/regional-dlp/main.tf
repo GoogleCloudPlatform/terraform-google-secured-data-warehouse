@@ -16,7 +16,7 @@
 
 locals {
   bq_schema       = "book:STRING, author:STRING"
-  enable_dataflow = var.flex_template_gs_path != "" ? 1 : 0
+  enable_dataflow = var.flex_template_gs_path != ""
 }
 
 resource "random_id" "suffix" {

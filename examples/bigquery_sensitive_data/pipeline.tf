@@ -22,7 +22,7 @@ locals {
   # cat schema.json | jq -j  '.[] | "\(.name):\(.type),"'
   bq_schema = "name:STRING, gender:STRING, social_security_number:STRING"
 
-  enable_dataflow = var.flex_template_gs_path != "" ? 1 : 0
+  enable_dataflow = var.flex_template_gs_path != ""
 }
 
 module "de_identification_template_example" {
