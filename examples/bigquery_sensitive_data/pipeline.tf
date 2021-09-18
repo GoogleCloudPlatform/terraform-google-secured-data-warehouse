@@ -42,7 +42,7 @@ resource "google_dataflow_flex_template_job" "regional_dlp" {
   count    = local.enable_dataflow ? 1 : 0
 
   project                 = var.privileged_data_project_id
-  name                    = "dataflow-flex-regional-dlp-job"
+  name                    = "regional-flex-python-bq-dlp-bq"
   container_spec_gcs_path = var.flex_template_gs_path
   region                  = local.location
 

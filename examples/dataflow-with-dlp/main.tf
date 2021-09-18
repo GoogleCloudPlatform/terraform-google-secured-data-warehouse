@@ -92,7 +92,7 @@ resource "google_dataflow_flex_template_job" "regional_dlp" {
   count    = local.enable_dataflow ? 1 : 0
 
   project                 = var.data_ingestion_project_id
-  name                    = "dlp_example_${null_resource.download_sample_cc_into_gcs.id}_${random_id.random_suffix.hex}"
+  name                    = "regional-flex-java-gcs-dlp-bq"
   container_spec_gcs_path = var.de_identify_template_gs_path
   region                  = local.region
 
