@@ -71,6 +71,14 @@ output "python_de_identify_template_gs_path" {
   ]
 }
 
+output "python_re_identify_template_gs_path" {
+  value = local.python_re_identify_template_gs_path
+
+  depends_on = [
+    null_resource.python_re_identification_flex_template
+  ]
+}
+
 output "sdx_project_number" {
   description = "The Project Number to configure Secure data exchange with egress rule for the dataflow templates."
   value       = module.external_flex_template_project.project_number
