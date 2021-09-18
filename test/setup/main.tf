@@ -39,6 +39,7 @@ module "project" {
     "dataflow.googleapis.com",
     "dlp.googleapis.com",
     "cloudscheduler.googleapis.com",
+    "cloudbuild.googleapis.com",
     "appengine.googleapis.com",
     "artifactregistry.googleapis.com",
     "compute.googleapis.com"
@@ -122,6 +123,7 @@ module "privileged_data_project" {
     "datacatalog.googleapis.com",
     "dns.googleapis.com",
     "compute.googleapis.com",
+    "cloudbuild.googleapis.com",
     "artifactregistry.googleapis.com"
   ]
 }

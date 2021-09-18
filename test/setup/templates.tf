@@ -24,10 +24,10 @@ locals {
   java_de_identify_flex_template_image_tag   = "${local.location}-docker.pkg.dev/${local.project_id}/${local.docker_repository_id}/samples/regional-txt-dlp-bq-streaming:latest"
   java_de_identify_template_gs_path          = "gs://${local.bucket_name}/flex-template-samples/regional-txt-dlp-bq-streaming.json"
   pip_index_url                              = "https://${local.location}-python.pkg.dev/${local.project_id}/${local.python_repository_id}/simple/"
-  python_de_identify_flex_template_image_tag = "${local.location}-docker.pkg.dev/${local.project_id}/${local.python_repository_id}/samples/regional-python-dlp-flex:latest"
+  python_de_identify_flex_template_image_tag = "${local.location}-docker.pkg.dev/${local.project_id}/${local.docker_repository_id}/samples/regional-python-dlp-flex:latest"
   python_de_identify_template_gs_path        = "gs://${local.bucket_name}/flex-template-samples/regional-python-dlp-flex.json"
 
-  python_re_identify_flex_template_image_tag = "${local.location}-docker.pkg.dev/${local.project_id}/${local.python_repository_id}/samples/regional_bq_dlp_bq_flex:latest"
+  python_re_identify_flex_template_image_tag = "${local.location}-docker.pkg.dev/${local.project_id}/${local.docker_repository_id}/samples/regional_bq_dlp_bq_flex:latest"
   python_re_identify_template_gs_path        = "gs://${local.bucket_name}/flex-template-samples/regional_bq_dlp_bq_flex.json"
 
 }
@@ -50,6 +50,8 @@ resource "null_resource" "java_de_identification_flex_template" {
   triggers = {
     project_id                = local.project_id
     terraform_service_account = google_service_account.int_ci_service_account.email
+    template_image_tag        = local.java_de_identify_flex_template_image_tag
+    template_gs_path          = local.java_de_identify_template_gs_path
   }
 
   provisioner "local-exec" {
@@ -59,7 +61,7 @@ resource "null_resource" "java_de_identification_flex_template" {
        --project=${local.project_id} \
        --config ${path.module}/../../flex_templates/java/regional_dlp_de_identification/cloudbuild.yaml \
        ${path.module}/../../flex_templates/java/regional_dlp_de_identification \
-       --substitutions="_PROJECT=${local.project_id},_FLEX_TEMPLATE_IMAGE_TAG=${local.python_de_identify_flex_template_image_tag},_TEMPLATE_GS_PATH=${local.python_de_identify_template_gs_path}" \
+       --substitutions="_PROJECT=${local.project_id},_FLEX_TEMPLATE_IMAGE_TAG=${local.java_de_identify_flex_template_image_tag},_TEMPLATE_GS_PATH=${local.java_de_identify_template_gs_path}" \
        --impersonate-service-account=${google_service_account.int_ci_service_account.email}
 EOF
 
@@ -75,6 +77,8 @@ resource "null_resource" "python_de_identification_flex_template" {
   triggers = {
     project_id                = local.project_id
     terraform_service_account = google_service_account.int_ci_service_account.email
+    template_image_tag        = local.python_de_identify_flex_template_image_tag
+    template_gs_path          = local.python_de_identify_template_gs_path
   }
 
   provisioner "local-exec" {
@@ -100,6 +104,8 @@ resource "null_resource" "python_re_identification_flex_template" {
   triggers = {
     project_id                = local.project_id
     terraform_service_account = google_service_account.int_ci_service_account.email
+    template_image_tag        = local.python_re_identify_flex_template_image_tag
+    template_gs_path          = local.python_re_identify_template_gs_path
   }
 
   provisioner "local-exec" {
@@ -109,7 +115,7 @@ resource "null_resource" "python_re_identification_flex_template" {
        --project=${local.project_id} \
        --config ${path.module}/../../flex_templates/python/regional_dlp_re_identification/cloudbuild.yaml \
        ${path.module}/../../flex_templates/python/regional_dlp_re_identification \
-       --substitutions="_PROJECT=${local.project_id},_FLEX_TEMPLATE_IMAGE_TAG=${local.python_de_identify_flex_template_image_tag},_PIP_INDEX_URL=${local.pip_index_url},_TEMPLATE_GS_PATH=${local.python_de_identify_template_gs_path}" \
+       --substitutions="_PROJECT=${local.project_id},_FLEX_TEMPLATE_IMAGE_TAG=${local.python_re_identify_flex_template_image_tag},_PIP_INDEX_URL=${local.pip_index_url},_TEMPLATE_GS_PATH=${local.python_re_identify_template_gs_path}" \
        --impersonate-service-account=${google_service_account.int_ci_service_account.email}
 EOF
 

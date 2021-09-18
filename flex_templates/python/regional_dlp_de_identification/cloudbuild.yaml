@@ -25,7 +25,7 @@ steps:
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: 'gcloud'
   args: [
-    'dataflow', 'flex-template', 'build', '${_TEMPLATE_GS_PATH}
+    'dataflow', 'flex-template', 'build', '${_TEMPLATE_GS_PATH}',
     '--image', '${_FLEX_TEMPLATE_IMAGE_TAG}',
     '--sdk-language', 'PYTHON',
     '--project', '${_PROJECT}',
