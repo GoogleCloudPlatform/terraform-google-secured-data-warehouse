@@ -57,5 +57,6 @@ module "bigquery_sensitive_data" {
   crypto_key                       = module.kek.keys[local.kek_key_name]
   wrapped_key                      = google_kms_secret_ciphertext.wrapped_key.ciphertext
   terraform_service_account        = var.terraform_service_account
+  flex_template_gs_path            = var.python_re_identify_template_gs_path
   delete_contents_on_destroy       = true
 }

@@ -53,3 +53,9 @@ variable "terraform_service_account" {
   description = "The email address of the service account that will run the Terraform config."
   type        = string
 }
+
+variable "python_re_identify_template_gs_path" {
+  description = "The Google Cloud Storage gs path to the JSON file built flex template that supports DLP re-identification."
+  type        = string
+  default     = ""
+}
