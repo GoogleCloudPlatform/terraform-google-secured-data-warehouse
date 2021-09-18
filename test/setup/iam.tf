@@ -107,7 +107,7 @@ resource "google_project_iam_member" "int_permission_privilege_data_test" {
 resource "google_project_iam_member" "int_permission_artifact_registry_test" {
   for_each = toset(local.int_proj_required_roles)
 
-  project = module.ext_artifact_registry_project.project_id
+  project = module.external_flex_template_project.project_id
   role    = each.value
   member  = "serviceAccount:${google_service_account.int_ci_service_account.email}"
 }

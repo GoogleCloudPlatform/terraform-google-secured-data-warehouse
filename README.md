@@ -106,12 +106,14 @@ module "secured_data_warehouse" {
 | cmek\_keyring\_name | The Keyring name for the KMS Customer Managed Encryption Keys. |
 | cmek\_reidentification\_crypto\_key | The Customer Managed Crypto Key for the Privileged crypto boundary. |
 | cmek\_reidentification\_crypto\_key\_name | The Customer Managed Crypto Key name for the reidentification crypto boundary. |
+| confidential\_data\_dataflow\_bucket\_name | The name of the bucket created for dataflow in the confidential data pipeline. |
 | confidential\_dataflow\_controller\_service\_account\_email | The confidential Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
 | confidential\_subnets\_self\_links | The self-links of confidential subnets being created. |
 | data\_governance\_access\_level\_name | Access context manager access level name. |
 | data\_governance\_service\_perimeter\_name | Access context manager service perimeter name. |
 | data\_ingest\_bigquery\_dataset | The bigquery dataset created for data ingest pipeline. |
 | data\_ingest\_bucket\_names | The name list of the buckets created for data ingest pipeline. |
+| data\_ingest\_dataflow\_bucket\_name | The name of the bucket created for dataflow in the data ingest pipeline. |
 | data\_ingest\_topic\_name | The topic created for data ingest pipeline. |
 | data\_ingestion\_access\_level\_name | Access context manager access level name. |
 | data\_ingestion\_service\_perimeter\_name | Access context manager service perimeter name. |

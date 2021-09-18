@@ -62,7 +62,6 @@ The Service Account which will be used to invoke this module must have the follo
   - Compute Network Admin: `roles/compute.networkAdmin`
   - Compute Security Admin: `roles/compute.securityAdmin`
   - DNS Admin: `roles/dns.admin`
-  - Cloud Build Editor: `roles/cloudbuild.builds.editor`
   - Artifact Registry Administrator: `roles/artifactregistry.admin`
   - Cloud KMS Admin: `roles/cloudkms.admin`
   - Dataflow Developer: `roles/dataflow.developer`
@@ -153,10 +152,6 @@ gcloud projects add-iam-policy-binding ${project_id} \
 
 gcloud projects add-iam-policy-binding ${project_id} \
 --member="serviceAccount:${sa_email}" \
---role="roles/cloudbuild.builds.editor"
-
-gcloud projects add-iam-policy-binding ${project_id} \
---member="serviceAccount:${sa_email}" \
 --role="roles/artifactregistry.admin"
 
 gcloud projects add-iam-policy-binding ${project_id} \
@@ -202,6 +197,7 @@ If your user does not have the necessary roles to run the commands above you can
 | data\_ingestion\_project\_id | The ID of the project in which the data ingestion resources will be created. | `string` | n/a | yes |
 | datalake\_project\_id | The ID of the project in which the Bigquery will be created. | `string` | n/a | yes |
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `false` | no |
+| flex\_template\_gs\_path | The Google Cloud Storage gs path to the JSON file built flex template that supports DLP de-identification. | `string` | `""` | no |
 | location | The location of Artifact registry. Run `gcloud artifacts locations list` to list available locations. | `string` | `"us-central1"` | no |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | perimeter\_additional\_members | The list additional members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | `[]` | no |
@@ -213,8 +209,6 @@ If your user does not have the necessary roles to run the commands above you can
 
 | Name | Description |
 |------|-------------|
-| dataflow\_bucket\_name | The name of the bucket created to store Dataflow temporary data. |
-| dataflow\_controller\_service\_account\_email | The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
-| templates\_bucket\_name | The name of the bucket created to store the flex template. |
+| template\_full\_path | The full path of DLP de-identification template. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

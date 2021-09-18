@@ -18,27 +18,6 @@ depends:
     git: https://github.com/inspec/inspec-gcp.git
     tag: v1.8.8
 attributes:
-  - name: data_governance_project_id
+  - name: template_full_path
     required: true
     type: string
-  - name: project_id
-    required: true
-    type: string
-  - name: terraform_service_account
-    required: true
-    type: string
-  - name: dataflow_controller_service_account_email
-    required: true
-    type: string
-  - name: dataflow_bucket_name
-    required: true
-    type: string
-  - name: templates_bucket_name
-    required: true
-    type: string
-  - name: data_ingest_topic_name
-    required: true
-    type: string
-  - name: subnets_self_links
-    required: true
-    type: array

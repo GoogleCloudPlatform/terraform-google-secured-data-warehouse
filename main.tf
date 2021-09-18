@@ -85,6 +85,7 @@ module "bigquery_sensitive_data" {
   dataset_id                            = var.confidential_dataset_id
   location                              = local.location
   cmek_confidential_bigquery_crypto_key = module.data_governance.cmek_confidential_bigquery_crypto_key
+  cmek_reidentification_crypto_key      = module.data_governance.cmek_reidentification_crypto_key
   delete_contents_on_destroy            = var.delete_contents_on_destroy
 }
 

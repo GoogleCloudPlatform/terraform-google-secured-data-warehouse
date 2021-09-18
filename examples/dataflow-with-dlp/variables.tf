@@ -65,3 +65,8 @@ variable "delete_contents_on_destroy" {
   default     = false
 }
 
+variable "de_identify_template_gs_path" {
+  description = "The Google Cloud Storage gs path to the JSON file built flex template that supports DLP de-identification."
+  type        = string
+  default     = ""
+}

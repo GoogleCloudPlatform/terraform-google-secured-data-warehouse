@@ -19,7 +19,6 @@ locals {
     "serviceAccount:${module.data_ingestion.dataflow_controller_service_account_email}",
     "serviceAccount:${module.data_ingestion.storage_writer_service_account_email}",
     "serviceAccount:${module.data_ingestion.pubsub_writer_service_account_email}",
-    "serviceAccount:${google_project_service_identity.data_ingestion_cloudbuild_sa.email}",
     "serviceAccount:${var.terraform_service_account}"
   ], var.perimeter_additional_members))
 
@@ -30,13 +29,6 @@ locals {
   perimeter_members_privileged = distinct(concat([
     "serviceAccount:${var.terraform_service_account}"
   ], var.perimeter_additional_members))
-}
-
-resource "google_project_service_identity" "data_ingestion_cloudbuild_sa" {
-  provider = google-beta
-
-  project = var.data_ingestion_project_id
-  service = "cloudbuild.googleapis.com"
 }
 
 data "google_project" "ingestion_project" {

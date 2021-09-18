@@ -21,17 +21,17 @@ output "data_governance_project_id" {
 
 output "de_identification_template_dlp_location" {
   description = "The location of the DLP resources."
-  value       = module.de_identification_template.dlp_location
+  value       = var.dlp_location
 }
 
 output "de_identification_template_crypto_key" {
   description = "The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP."
-  value       = module.de_identification_template.crypto_key
+  value       = module.kms.keys[local.key_name]
 }
 
 output "de_identification_template_wrapped_key" {
   description = "The base64 encoded data crypto key wrapped by KMS."
-  value       = module.de_identification_template.wrapped_key
+  value       = google_kms_secret_ciphertext.wrapped_key.ciphertext
 }
 
 output "de_identification_template_template_id" {
@@ -41,10 +41,10 @@ output "de_identification_template_template_id" {
 
 output "template_display_name" {
   description = "Display name of the DLP de-identification template."
-  value       = module.de_identification_template.template_display_name
+  value       = local.template_display_name
 }
 
 output "template_description" {
   description = "Description of the DLP de-identification template."
-  value       = module.de_identification_template.template_description
+  value       = local.template_description
 }

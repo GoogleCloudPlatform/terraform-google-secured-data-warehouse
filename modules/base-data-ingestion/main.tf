@@ -39,6 +39,27 @@ module "data_ingest_bucket" {
   }
 }
 
+module "dataflow_bucket" {
+  source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
+  version = "~> 2.0"
+
+  project_id    = var.data_ingestion_project_id
+  name          = "bkt-${var.data_ingestion_project_id}-tmp-dataflow-${random_id.suffix.hex}"
+  location      = var.bucket_location
+  storage_class = "STANDARD"
+  force_destroy = var.delete_contents_on_destroy
+
+
+  encryption = {
+    default_kms_key_name = var.ingestion_encryption_key
+  }
+
+  labels = {
+    "dataflow_data_ingest_bucket" = "true"
+  }
+
+}
+
 //pub/sub ingest topic
 module "data_ingest_topic" {
   source  = "terraform-google-modules/pubsub/google"

@@ -13,15 +13,10 @@
 # limitations under the License.
 
 project_id = attribute('project_id')
-bucket_tmp_name = attribute('bucket_tmp_name')
 bucket_ingestion_name = attribute('bucket_ingestion_name')
 
 control 'gcp' do
   title 'GCP Resources'
-
-  describe google_storage_bucket(name: bucket_tmp_name) do
-    it { should exist }
-  end
 
   describe google_storage_bucket(name: bucket_ingestion_name) do
     it { should exist }

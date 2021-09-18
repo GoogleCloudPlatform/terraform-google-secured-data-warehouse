@@ -17,6 +17,7 @@ This example illustrates how to run a Dataflow job that uses the `de_identificat
 | data\_governance\_project\_id | The ID of the project in which the data governance resources will be created. | `string` | n/a | yes |
 | data\_ingestion\_project\_id | The ID of the project in which the data ingestion resources will be created. | `string` | n/a | yes |
 | datalake\_project\_id | The ID of the project in which the Bigquery will be created. | `string` | n/a | yes |
+| de\_identify\_template\_gs\_path | The Google Cloud Storage gs path to the JSON file built flex template that supports DLP de-identification. | `string` | `""` | no |
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `false` | no |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | privileged\_data\_project\_id | Project where the privileged datasets and tables are created. | `string` | n/a | yes |
@@ -28,13 +29,8 @@ This example illustrates how to run a Dataflow job that uses the `de_identificat
 | Name | Description |
 |------|-------------|
 | bucket\_ingestion\_name | The name of the bucket. |
-| bucket\_tmp\_name | The name of the bucket. |
 | controller\_service\_account | The Service Account email that will be used to identify the VMs in which the jobs are running. |
-| df\_job\_id | The unique Id of the newly created Dataflow job. |
-| df\_job\_name | The name of the newly created Dataflow job. |
 | df\_job\_network | The URI of the VPC being created. |
-| df\_job\_region | The region of the newly created Dataflow job. |
-| df\_job\_state | The state of the newly created Dataflow job. |
 | df\_job\_subnetwork | The name of the subnetwork used for create Dataflow job. |
 | dlp\_location | The location of the DLP resources. |
 | project\_id | The project's ID. |

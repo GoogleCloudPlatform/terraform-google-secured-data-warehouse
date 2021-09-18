@@ -41,7 +41,6 @@ module "project" {
     "cloudscheduler.googleapis.com",
     "appengine.googleapis.com",
     "artifactregistry.googleapis.com",
-    "cloudbuild.googleapis.com",
     "compute.googleapis.com"
   ]
 }
@@ -123,12 +122,11 @@ module "privileged_data_project" {
     "datacatalog.googleapis.com",
     "dns.googleapis.com",
     "compute.googleapis.com",
-    "artifactregistry.googleapis.com",
-    "cloudbuild.googleapis.com"
+    "artifactregistry.googleapis.com"
   ]
 }
 
-module "ext_artifact_registry_project" {
+module "external_flex_template_project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
 

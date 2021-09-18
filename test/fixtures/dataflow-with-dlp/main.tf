@@ -56,4 +56,5 @@ module "dataflow_with_dlp" {
   delete_contents_on_destroy       = true
   crypto_key                       = module.kek.keys[local.kek_key_name]
   wrapped_key                      = google_kms_secret_ciphertext.wrapped_key.ciphertext
+  de_identify_template_gs_path     = var.de_identify_template_gs_path
 }

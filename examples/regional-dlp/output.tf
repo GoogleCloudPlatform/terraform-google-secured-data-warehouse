@@ -14,17 +14,8 @@
  * limitations under the License.
  */
 
-output "dataflow_bucket_name" {
-  description = "The name of the bucket created to store Dataflow temporary data."
-  value       = module.dataflow_bucket.bucket.name
-}
 
-output "templates_bucket_name" {
-  description = "The name of the bucket created to store the flex template."
-  value       = module.flex_dlp_template.templates_bucket_name
-}
-
-output "dataflow_controller_service_account_email" {
-  description = "The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account."
-  value       = module.data_ingestion.dataflow_controller_service_account_email
+output "template_full_path" {
+  description = "The full path of DLP de-identification template."
+  value       = module.de_identification_template_example.template_full_path
 }

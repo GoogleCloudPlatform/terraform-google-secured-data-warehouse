@@ -30,8 +30,8 @@ output "privileged_data_project_id" {
   value = module.privileged_data_project.project_id
 }
 
-output "ext_artifact_registry_project_id" {
-  value = module.ext_artifact_registry_project.project_id
+output "external_flex_template_project_id" {
+  value = module.external_flex_template_project.project_id
 }
 
 output "sa_key" {
@@ -53,4 +53,12 @@ output "org_id" {
 
 output "billing_account" {
   value = var.billing_account
+}
+
+output "de_identify_template_gs_path" {
+  value = local.de_identify_template_gs_path
+
+  depends_on = [
+    null_resource.de_identification_flex_template
+  ]
 }

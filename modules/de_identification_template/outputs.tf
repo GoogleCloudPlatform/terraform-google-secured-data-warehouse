@@ -14,45 +14,9 @@
  * limitations under the License.
  */
 
-output "template_display_name" {
-  description = "The display name of the DLP de-identification template."
-  value       = var.template_display_name
-
-  depends_on = [
-    null_resource.de_identify_template
-  ]
-}
-
-output "template_description" {
-  description = "The description of the DLP de-identification template."
-  value       = var.template_description
-
-  depends_on = [
-    null_resource.de_identify_template
-  ]
-}
-
-output "dlp_location" {
-  description = "The location of the DLP resources."
-  value       = var.dlp_location
-
-  depends_on = [
-    null_resource.de_identify_template
-  ]
-}
-
-output "crypto_key" {
-  description = "The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP."
-  value       = var.crypto_key
-
-  depends_on = [
-    null_resource.de_identify_template
-  ]
-}
-
-output "wrapped_key" {
-  description = "The base64 encoded data crypto key wrapped by KMS."
-  value       = var.wrapped_key
+output "template_full_path" {
+  description = "The full path of DLP de-identification template."
+  value       = local.template_full_path
 
   depends_on = [
     null_resource.de_identify_template

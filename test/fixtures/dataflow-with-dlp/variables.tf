@@ -54,3 +54,9 @@ variable "perimeter_additional_members" {
   type        = list(string)
   default     = []
 }
+
+variable "de_identify_template_gs_path" {
+  description = "The Google Cloud Storage gs path to the JSON file built flex template that supports DLP de-identification."
+  type        = string
+  default     = ""
+}

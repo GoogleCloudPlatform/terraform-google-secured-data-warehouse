@@ -15,8 +15,10 @@
  */
 
 locals {
-  keyring  = "keyring_kek"
-  key_name = "key_name_kek"
+  keyring               = "keyring_kek"
+  key_name              = "key_name_kek"
+  template_display_name = "De-identification template using a KMS wrapped CMEK"
+  template_description  = "De-identifies sensitive content defined in the template with a KMS wrapped CMEK."
 }
 
 module "kms" {
@@ -43,6 +45,8 @@ module "de_identification_template" {
   source = "../../..//modules/de_identification_template"
 
   project_id                = var.data_governance_project_id
+  template_display_name     = local.template_display_name
+  template_description      = local.template_description
   terraform_service_account = var.terraform_service_account
   dataflow_service_account  = var.terraform_service_account
   crypto_key                = module.kms.keys[local.key_name]

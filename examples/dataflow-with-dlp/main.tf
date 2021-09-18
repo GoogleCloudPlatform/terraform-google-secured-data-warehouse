@@ -15,8 +15,9 @@
  */
 
 locals {
-  region     = "us-central1"
-  dataset_id = "dts_data_ingestion"
+  region          = "us-central1"
+  dataset_id      = "dts_data_ingestion"
+  enable_dataflow = var.de_identify_template_gs_path != "" ? 1 : 0
 }
 
 resource "random_id" "random_suffix" {
@@ -40,26 +41,6 @@ module "data_ingestion" {
   delete_contents_on_destroy       = var.delete_contents_on_destroy
 }
 
-//dataflow temp bucket
-module "dataflow_tmp_bucket" {
-  source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
-  version = "~> 2.1"
-
-  project_id    = var.data_ingestion_project_id
-  name          = "bkt-${random_id.random_suffix.hex}-tmp-dataflow"
-  location      = local.region
-  force_destroy = var.delete_contents_on_destroy
-
-  labels = {
-    "enterprise_data_ingest_bucket" = "true"
-  }
-
-  depends_on = [
-    module.data_ingestion.data_ingestion_access_level_name,
-    module.data_ingestion.data_governance_access_level_name,
-    module.data_ingestion.privileged_access_level_name
-  ]
-}
 resource "random_id" "original_key" {
   byte_length = 16
 }
@@ -105,32 +86,29 @@ module "de_identification_template" {
   ]
 }
 
-module "dataflow_job" {
-  source  = "terraform-google-modules/dataflow/google"
-  version = "2.0.0"
+resource "google_dataflow_flex_template_job" "regional_dlp" {
+  provider = google-beta
+  count    = local.enable_dataflow ? 1 : 0
 
-  project_id            = var.data_ingestion_project_id
-  name                  = "dlp_example_${null_resource.download_sample_cc_into_gcs.id}_${random_id.random_suffix.hex}"
-  on_delete             = "cancel"
-  region                = local.region
-  zone                  = "${local.region}-a"
-  template_gcs_path     = "gs://dataflow-templates/latest/Stream_DLP_GCS_Text_to_BigQuery"
-  temp_gcs_location     = module.dataflow_tmp_bucket.bucket.name
-  service_account_email = module.data_ingestion.dataflow_controller_service_account_email
-  network_self_link     = module.data_ingestion.network_self_link
-  subnetwork_self_link  = module.data_ingestion.subnets_self_links[0]
-  ip_configuration      = "WORKER_IP_PRIVATE"
-  max_workers           = 5
+  project                 = var.data_ingestion_project_id
+  name                    = "dlp_example_${null_resource.download_sample_cc_into_gcs.id}_${random_id.random_suffix.hex}"
+  container_spec_gcs_path = var.de_identify_template_gs_path
+  region                  = local.region
 
   parameters = {
     inputFilePattern       = "gs://${module.data_ingestion.data_ingest_bucket_names[0]}/cc_records.csv"
+    bqProjectId            = var.datalake_project_id
     datasetName            = local.dataset_id
     batchSize              = 1000
-    dlpProjectId           = var.data_ingestion_project_id
-    deidentifyTemplateName = "projects/${var.data_governance_project_id}/locations/${local.region}/deidentifyTemplates/${module.de_identification_template.template_id}"
+    dlpProjectId           = var.data_governance_project_id
+    dlpLocation            = local.region
+    deidentifyTemplateName = module.de_identification_template.template_full_path
+    serviceAccount         = module.data_ingestion.dataflow_controller_service_account_email
+    subnetwork             = module.data_ingestion.subnets_self_links[0]
+    dataflowKmsKey         = module.data_ingestion.cmek_ingestion_crypto_key
+    tempLocation           = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/tmp/"
+    stagingLocation        = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/staging/"
+    maxNumWorkers          = 5
+    usePublicIps           = "false"
   }
-
-  depends_on = [
-    module.data_ingestion.access_level_name
-  ]
 }

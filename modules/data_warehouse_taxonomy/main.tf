@@ -53,6 +53,26 @@ module "project-iam-bindings" {
   }
 }
 
+module "dataflow_bucket" {
+  source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
+  version = "~> 2.0"
+
+  project_id    = var.privileged_data_project_id
+  name          = "bkt-${var.privileged_data_project_id}-tmp-dataflow-${random_id.suffix.hex}"
+  location      = var.location
+  storage_class = "STANDARD"
+  force_destroy = var.delete_contents_on_destroy
+
+
+  encryption = {
+    default_kms_key_name = var.cmek_reidentification_crypto_key
+  }
+
+  labels = {
+    "dataflow_data_ingest_bucket" = "true"
+  }
+
+}
 
 module "bigquery_sensitive_data" {
   source  = "terraform-google-modules/bigquery/google"
