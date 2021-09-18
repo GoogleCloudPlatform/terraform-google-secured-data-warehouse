@@ -25,7 +25,12 @@ output "flex_template_repository_name" {
   value       = google_artifact_registry_repository.flex_templates.name
 }
 
-output "flex_template_repository_url" {
-  description = "URL of the flex template artifact registry repository."
-  value       = local.repository_url
+output "docker_flex_template_repository_url" {
+  description = "URL of the docker flex template artifact registry repository."
+  value       = local.docker_repository_url
+}
+
+output "python_flex_template_repository_url" {
+  description = "URL of the docker flex template artifact registry repository."
+  value       = local.python_repository_url
 }

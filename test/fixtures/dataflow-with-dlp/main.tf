@@ -50,11 +50,12 @@ module "dataflow_with_dlp" {
   data_governance_project_id       = var.data_governance_project_id
   datalake_project_id              = var.datalake_project_id
   privileged_data_project_id       = var.privileged_data_project_id
+  sdx_project_number               = var.sdx_project_number
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
   org_id                           = var.org_id
   delete_contents_on_destroy       = true
   crypto_key                       = module.kek.keys[local.kek_key_name]
   wrapped_key                      = google_kms_secret_ciphertext.wrapped_key.ciphertext
-  de_identify_template_gs_path     = var.de_identify_template_gs_path
+  de_identify_template_gs_path     = var.java_de_identify_template_gs_path
 }

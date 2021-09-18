@@ -86,6 +86,7 @@ module "secured_data_warehouse" {
 | private\_access\_members | List of members in the standard GCP form: user:{email}, serviceAccount:{email}, group:{email} who will have access to private information in BigQuery. | `list(string)` | `[]` | no |
 | privileged\_data\_project\_id | Project where the privileged datasets and tables are created. | `string` | n/a | yes |
 | region | The region in which the resources will be deployed. | `string` | `"us-central1"` | no |
+| sdx\_project\_number | The Project Number to configure Secure data exchange with egress rule for the dataflow templates. | `string` | n/a | yes |
 | subnet\_ip | The CDIR IP range of the subnetwork. | `string` | n/a | yes |
 | taxonomy\_name | The taxonomy display name. | `string` | `"secured_taxonomy"` | no |
 | terraform\_service\_account | The email address of the service account that will run the Terraform code. | `string` | n/a | yes |

@@ -39,6 +39,11 @@ variable "privileged_data_project_id" {
   type        = string
 }
 
+variable "sdx_project_number" {
+  description = "The Project Number to configure Secure data exchange with egress rule for the dataflow templates."
+  type        = string
+}
+
 variable "terraform_service_account" {
   description = "Service account email of the account to impersonate to run Terraform."
   type        = string
@@ -55,7 +60,7 @@ variable "perimeter_additional_members" {
   default     = []
 }
 
-variable "de_identify_template_gs_path" {
+variable "java_de_identify_template_gs_path" {
   description = "The Google Cloud Storage gs path to the JSON file built flex template that supports DLP de-identification."
   type        = string
   default     = ""

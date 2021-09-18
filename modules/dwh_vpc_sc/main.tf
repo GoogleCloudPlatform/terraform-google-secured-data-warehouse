@@ -49,20 +49,43 @@ module "access_level_policy" {
   regions        = var.access_level_regions
 }
 
-module "regular_service_perimeter" {
-  source  = "terraform-google-modules/vpc-service-controls/google//modules/regular_service_perimeter"
-  version = "~> 3.0"
-
-  policy         = local.actual_policy
-  perimeter_name = local.perimeter_name
+resource "google_access_context_manager_service_perimeter" "regular_service_perimeter" {
+  provider       = google
+  parent         = "accessPolicies/${local.actual_policy}"
+  perimeter_type = "PERIMETER_TYPE_REGULAR"
+  name           = "accessPolicies/${local.actual_policy}/servicePerimeters/${local.perimeter_name}"
+  title          = local.perimeter_name
   description    = "perimeter for data warehouse projects"
 
-  resources           = var.resources
-  restricted_services = var.restricted_services
+  status {
+    restricted_services = var.restricted_services
+    resources           = formatlist("projects/%s", var.resources)
+    access_levels = formatlist(
+      "accessPolicies/${local.actual_policy}/accessLevels/%s",
+      [module.access_level_policy.name]
+    )
 
-  access_levels = [
-    module.access_level_policy.name
-  ]
+    dynamic "egress_policies" {
+      for_each = var.sdx_egress_rule
+      content {
+        egress_to {
+          operations {
+            service_name = "storage.googleapis.com"
+            method_selectors {
+              method = "google.storage.objects.get"
+            }
+          }
+          resources = ["projects/${sdx_egress_rule.value["sdx_project_number"]}"]
+        }
+        egress_from {
+          identity_type = "IDENTITY_TYPE_UNSPECIFIED"
+          identities    = ["serviceAccount:${sdx_egress_rule.value["sdx_service_account"]}"]
+        }
+      }
+    }
+
+
+  }
 }
 
 resource "time_sleep" "wait_for_vpc_sc_propagation" {
@@ -70,6 +93,6 @@ resource "time_sleep" "wait_for_vpc_sc_propagation" {
 
   depends_on = [
     module.access_level_policy,
-    module.regular_service_perimeter
+    google_access_context_manager_service_perimeter.regular_service_perimeter
   ]
 }

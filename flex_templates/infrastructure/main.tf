@@ -25,7 +25,8 @@ locals {
     "artifactregistry.googleapis.com",
     "cloudbuild.googleapis.com"
   ]
-  repository_url = "${var.location}-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.flex_templates.name}"
+  docker_repository_url = "${var.location}-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.flex_templates.name}"
+  python_repository_url = "${var.location}-python.pkg.dev/${var.project_id}/${google_artifact_registry_repository.python_modules.name}"
 }
 
 
@@ -57,22 +58,32 @@ resource "google_artifact_registry_repository" "flex_templates" {
 
   project       = var.project_id
   location      = var.location
-  repository_id = var.repository_id
+  repository_id = var.docker_repository_id
   description   = "DataFlow Flex Templates"
   format        = "DOCKER"
 
   depends_on = [
     google_project_service.apis_to_enable
   ]
+}
+
+resource "google_artifact_registry_repository" "python_modules" {
+  provider = google-beta
+
+  project       = var.project_id
+  location      = var.location
+  repository_id = var.python_repository_id
+  description   = "Repository for Python modules for Dataflow flex templates"
+  format        = "PYTHON"
 
 }
 
-resource "google_artifact_registry_repository_iam_member" "writer" {
+resource "google_artifact_registry_repository_iam_member" "docker_writer" {
   provider = google-beta
 
   project    = var.project_id
   location   = var.location
-  repository = var.repository_id
+  repository = var.docker_repository_id
   role       = "roles/artifactregistry.writer"
   member     = "serviceAccount:${google_project_service_identity.cloudbuild_sa.email}"
 
@@ -80,6 +91,21 @@ resource "google_artifact_registry_repository_iam_member" "writer" {
     google_artifact_registry_repository.flex_templates
   ]
 }
+
+resource "google_artifact_registry_repository_iam_member" "python_writer" {
+  provider = google-beta
+
+  project    = var.project_id
+  location   = var.location
+  repository = var.python_repository_id
+  role       = "roles/artifactregistry.writer"
+  member     = "serviceAccount:${google_project_service_identity.cloudbuild_sa.email}"
+
+  depends_on = [
+    google_artifact_registry_repository.flex_templates
+  ]
+}
+
 
 resource "google_project_iam_member" "cloud_build_builder" {
   project = var.project_id

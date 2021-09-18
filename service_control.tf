@@ -91,6 +91,13 @@ module "data_ingestion_vpc_sc" {
     "storage.googleapis.com"
   ]
 
+  sdx_egress_rule = [
+    {
+      "sdx_service_account" = var.terraform_service_account
+      "sdx_project_number"  = var.sdx_project_number
+    }
+  ]
+
   # depends_on needed to prevent intermittent errors
   # when the VPC-SC is created but perimeter member
   # not yet propagated.
@@ -157,6 +164,13 @@ module "privileged_data_vpc_sc" {
     "pubsub.googleapis.com",
     "secretmanager.googleapis.com",
     "storage.googleapis.com"
+  ]
+
+  sdx_egress_rule = [
+    {
+      "sdx_service_account" = var.terraform_service_account
+      "sdx_project_number"  = var.sdx_project_number
+    }
   ]
 
   # depends_on needed to prevent intermittent errors

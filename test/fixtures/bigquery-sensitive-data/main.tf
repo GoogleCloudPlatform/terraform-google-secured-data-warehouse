@@ -53,6 +53,7 @@ module "bigquery_sensitive_data" {
   data_ingestion_project_id        = var.data_ingestion_project_id
   data_governance_project_id       = var.data_governance_project_id
   privileged_data_project_id       = var.privileged_data_project_id
+  sdx_project_number               = var.sdx_project_number
   crypto_key                       = module.kek.keys[local.kek_key_name]
   wrapped_key                      = google_kms_secret_ciphertext.wrapped_key.ciphertext
   terraform_service_account        = var.terraform_service_account

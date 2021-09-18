@@ -21,8 +21,8 @@ steps:
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: 'gcloud'
   args: [
-    'dataflow', 'flex-template', 'build', 'gs://${_BUCKET}/flex-template-samples/regional-txt-dlp-bq-streaming.json',
-  '--image-gcr-path', '${_FLEX_REPO_URL}/samples/regional-txt-dlp-bq-streaming:latest',
+    'dataflow', 'flex-template', 'build', '${_TEMPLATE_GS_PATH}',
+  '--image-gcr-path', '${_FLEX_TEMPLATE_IMAGE_TAG}',
   '--sdk-language', 'JAVA',
   '--project', '${_PROJECT}',
   '--flex-template-base-image', 'JAVA11',
@@ -31,8 +31,8 @@ steps:
   '--env', 'FLEX_TEMPLATE_JAVA_MAIN_CLASS="org.apache.beam.samples.DLPTextToBigQueryStreaming"',
   ]
 substitutions:
-  _BUCKET: 'bkt-dsa-demo-2021-1714-java-flex'
-  _PROJECT: 'dsa-demo-2021-1714'
-  _FLEX_REPO_URL: 'us-central1-docker.pkg.dev/dsa-demo-2021-1714/flex-templates'
+  _PROJECT: 'PROJECT'
+  _FLEX_TEMPLATE_IMAGE_TAG: 'us-central1-docker.pkg.dev/PROJECT_ID/flex-templates/template:latest'
+  _TEMPLATE_GS_PATH: 'gs://BUCKET/template.json'
 options:
   logging: CLOUD_LOGGING_ONLY

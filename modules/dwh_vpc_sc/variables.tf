@@ -68,3 +68,8 @@ variable "access_level_regions" {
   default     = []
 }
 
+variable "sdx_egress_rule" {
+  description = "The Project Number to configure Secure data exchange with egress rule for the dataflow templates and The email address of the service account that will use Secure data exchange with egress rule."
+  type        = list(map(string))
+  default     = []
+}

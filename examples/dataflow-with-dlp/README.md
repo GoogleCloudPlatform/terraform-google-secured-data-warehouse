@@ -21,6 +21,7 @@ This example illustrates how to run a Dataflow job that uses the `de_identificat
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `false` | no |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | privileged\_data\_project\_id | Project where the privileged datasets and tables are created. | `string` | n/a | yes |
+| sdx\_project\_number | The Project Number to configure Secure data exchange with egress rule for the dataflow templates. | `string` | n/a | yes |
 | terraform\_service\_account | Service account email of the account to impersonate to run Terraform. | `string` | n/a | yes |
 | wrapped\_key | The base64 encoded data crypto key wrapped by KMS. | `string` | n/a | yes |
 

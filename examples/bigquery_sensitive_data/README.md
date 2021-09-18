@@ -17,6 +17,7 @@ This example illustrates how to use the `bigquery_sensitive_data` submodule.
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | perimeter\_members | The list of all members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | `[]` | no |
 | privileged\_data\_project\_id | Project where the privileged datasets and tables are created. | `string` | n/a | yes |
+| sdx\_project\_number | The Project Number to configure Secure data exchange with egress rule for the dataflow templates. | `string` | n/a | yes |
 | terraform\_service\_account | The email address of the service account that will run the Terraform config. | `string` | n/a | yes |
 | wrapped\_key | The base64 encoded data crypto key wrapped by KMS. | `string` | n/a | yes |
 

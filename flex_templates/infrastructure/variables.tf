@@ -19,10 +19,16 @@ variable "project_id" {
   type        = string
 }
 
-variable "repository_id" {
-  description = "ID of the flex template repository."
+variable "docker_repository_id" {
+  description = "ID of the docker flex template repository."
   type        = string
   default     = "flex-templates"
+}
+
+variable "python_repository_id" {
+  description = "ID of the Python repository."
+  type        = string
+  default     = "python-modules"
 }
 
 variable "location" {

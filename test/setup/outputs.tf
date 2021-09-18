@@ -55,10 +55,23 @@ output "billing_account" {
   value = var.billing_account
 }
 
-output "de_identify_template_gs_path" {
-  value = local.de_identify_template_gs_path
+output "java_de_identify_template_gs_path" {
+  value = local.java_de_identify_template_gs_path
 
   depends_on = [
-    null_resource.de_identification_flex_template
+    null_resource.java_de_identification_flex_template
   ]
+}
+
+output "python_de_identify_template_gs_path" {
+  value = local.python_de_identify_template_gs_path
+
+  depends_on = [
+    null_resource.python_de_identification_flex_template
+  ]
+}
+
+output "sdx_project_number" {
+  description = "The Project Number to configure Secure data exchange with egress rule for the dataflow templates."
+  value       = module.external_flex_template_project.project_number
 }

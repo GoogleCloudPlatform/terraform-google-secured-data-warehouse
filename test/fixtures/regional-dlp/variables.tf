@@ -44,6 +44,11 @@ variable "privileged_data_project_id" {
   type        = string
 }
 
+variable "sdx_project_number" {
+  description = "The Project Number to configure Secure data exchange with egress rule for the dataflow templates."
+  type        = string
+}
+
 variable "access_context_manager_policy_id" {
   description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
   type        = number
@@ -53,4 +58,10 @@ variable "perimeter_additional_members" {
   description = "The list additional members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required."
   type        = list(string)
   default     = []
+}
+
+variable "python_de_identify_template_gs_path" {
+  description = "The Google Cloud Storage gs path to the JSON file built flex template that supports DLP de-identification."
+  type        = string
+  default     = ""
 }
