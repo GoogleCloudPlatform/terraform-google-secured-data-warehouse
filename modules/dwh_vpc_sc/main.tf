@@ -75,11 +75,11 @@ resource "google_access_context_manager_service_perimeter" "regular_service_peri
               method = "google.storage.objects.get"
             }
           }
-          resources = ["projects/${sdx_egress_rule.value["sdx_project_number"]}"]
+          resources = ["projects/${egress_policies.value["sdx_project_number"]}"]
         }
         egress_from {
           identity_type = "IDENTITY_TYPE_UNSPECIFIED"
-          identities    = ["serviceAccount:${sdx_egress_rule.value["sdx_service_account"]}"]
+          identities    = ["serviceAccount:${egress_policies.value["sdx_service_account"]}"]
         }
       }
     }
