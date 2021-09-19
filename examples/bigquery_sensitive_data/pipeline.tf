@@ -59,7 +59,7 @@ resource "google_dataflow_flex_template_job" "regional_dlp" {
 
   parameters = {
     inputBigQueryTable      = "${var.non_sensitive_project_id}:${local.non_sensitive_dataset_id}.sample_deid_data"
-    outputBigQueryDataset   = "${local.dataset_id}"
+    outputBigQueryDataset   = local.dataset_id
     deidentifyTemplateName  = "projects/${var.taxonomy_project_id}/locations/${local.dlp_location}/deidentifyTemplates/${module.de_identification_template_example.template_id}"
     dlpLocation             = local.dlp_location
     dlpProjectId            = var.taxonomy_project_id
@@ -68,6 +68,7 @@ resource "google_dataflow_flex_template_job" "regional_dlp" {
     subnetwork              = var.subnetwork
     dataflowKmsKey          = module.bigquery_sensitive_data.cmek_reidentification_crypto_key
     tempLocation            = "${module.dataflow_bucket.bucket.url}/tmp/"
+    stagingLocation         = "${module.dataflow_bucket.bucket.url}/staging/"
     usePublicIps            = false
     enableStreamingEngine   = true
   }
