@@ -69,7 +69,7 @@ variable "access_level_regions" {
 }
 
 variable "sdx_egress_rule" {
-  description = "The Project Number to configure Secure data exchange with egress rule for the dataflow templates and The email address of the service account that will use Secure data exchange with egress rule."
+  description = "List of Egress rule configurations to allow Dataflow to fetch the Flex template in Cloud Storage in an external project, See: https://cloud.google.com/vpc-service-controls/docs/secure-data-exchange#allow_access_to_a_google_cloud_resource_outside_the_perimeter. The list should contain maps with two keys: `sdx_project_number`, the Project Number to configure Secure data exchange with the egress rule for the dataflow templates and `sdx_identity`, the email address of the Google Identity that will need to access the external flex template. format is `user:<USER_EMAIL>` or `serviceAccount:<SERVICE_ACCOUNT_EMAIL>` . This is the identity deploying the Dataflow job."
   type        = list(map(string))
   default     = []
 }

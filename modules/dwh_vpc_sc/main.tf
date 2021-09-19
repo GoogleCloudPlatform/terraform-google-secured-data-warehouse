@@ -49,6 +49,9 @@ module "access_level_policy" {
   regions        = var.access_level_regions
 }
 
+# We are using the terraform resource `google_access_context_manager_service_perimeter`
+# instead of the module "terraform-google-modules/vpc-service-controls/google/modules/regular_service_perimeter"
+# until ingress and egress rules are added to the module https://github.com/terraform-google-modules/terraform-google-vpc-service-controls/issues/53
 resource "google_access_context_manager_service_perimeter" "regular_service_perimeter" {
   provider       = google
   parent         = "accessPolicies/${local.actual_policy}"
@@ -65,6 +68,8 @@ resource "google_access_context_manager_service_perimeter" "regular_service_peri
       [module.access_level_policy.name]
     )
 
+    # Configure Egress rule to allow fetch of External Dataflow flex template jobs.
+    # Flex templates in public buckets don't need an egress rule.
     dynamic "egress_policies" {
       for_each = var.sdx_egress_rule
       content {
@@ -79,12 +84,10 @@ resource "google_access_context_manager_service_perimeter" "regular_service_peri
         }
         egress_from {
           identity_type = "IDENTITY_TYPE_UNSPECIFIED"
-          identities    = ["serviceAccount:${egress_policies.value["sdx_service_account"]}"]
+          identities    = [egress_policies.value["sdx_identity"]]
         }
       }
     }
-
-
   }
 }
 

@@ -91,8 +91,8 @@ module "data_ingestion_vpc_sc" {
 
   sdx_egress_rule = [
     {
-      "sdx_service_account" = var.terraform_service_account
-      "sdx_project_number"  = var.sdx_project_number
+      "sdx_identity"       = "serviceAccount:${var.terraform_service_account}"
+      "sdx_project_number" = var.sdx_project_number
     }
   ]
 
@@ -166,8 +166,8 @@ module "privileged_data_vpc_sc" {
 
   sdx_egress_rule = [
     {
-      "sdx_service_account" = var.terraform_service_account
-      "sdx_project_number"  = var.sdx_project_number
+      "sdx_identity"       = "serviceAccount:${var.terraform_service_account}"
+      "sdx_project_number" = var.sdx_project_number
     }
   ]
 
