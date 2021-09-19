@@ -17,7 +17,7 @@
 locals {
   non_sensitive_dataset_id = "non_sensitive_dataset"
   dlp_location             = "us"
-  enable_dataflow          = var.flex_template_gs_path != "" ? 1 : 0
+  enable_dataflow          = var.flex_template_gs_path != "" ? true : false
 }
 
 module "de_identification_template_example" {
