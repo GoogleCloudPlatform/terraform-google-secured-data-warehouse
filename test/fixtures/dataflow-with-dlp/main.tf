@@ -55,6 +55,8 @@ module "dataflow_with_dlp" {
   access_context_manager_policy_id = var.access_context_manager_policy_id
   org_id                           = var.org_id
   delete_contents_on_destroy       = true
+  network_self_link                = var.data_ingestion_network_self_link
+  subnetwork_self_link             = var.data_ingestion_subnets_self_link
   crypto_key                       = module.kek.keys[local.kek_key_name]
   wrapped_key                      = google_kms_secret_ciphertext.wrapped_key.ciphertext
   de_identify_template_gs_path     = var.java_de_identify_template_gs_path

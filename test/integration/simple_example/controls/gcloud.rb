@@ -17,13 +17,13 @@ project_id = attribute('project_id')
 boolean_policy_constraints = [
   'constraints/iam.disableServiceAccountCreation',
   'constraints/compute.requireOsLogin',
-  'constraints/compute.disableSerialPortLogging',
+  'constraints/compute.disableSerialPortLogging'
 ]
 
 list_policy_constraints = [
   'constraints/compute.restrictProtocolForwardingCreationForTypes',
-  'constraints/compute.restrictSharedVpcSubnetworks',
-  'constraints/gcp.resourceLocations',
+  # 'constraints/compute.restrictSharedVpcSubnetworks',
+  'constraints/gcp.resourceLocations'
 ]
 
 control 'gcloud' do
@@ -50,7 +50,7 @@ control 'gcloud' do
 
       describe "boolean org policy #{constraint}" do
         it 'should be enforced' do
-          expect(data["booleanPolicy"]["enforced"]).to eq true
+          expect(data['booleanPolicy']['enforced']).to eq true
         end
       end
     end
@@ -77,7 +77,7 @@ control 'gcloud' do
 
       describe "list org policy #{constraint}" do
         it 'should have allowedValues' do
-          expect(data["listPolicy"]["allowedValues"]).to_not be_empty
+          expect(data['listPolicy']['allowedValues']).to_not be_empty
         end
       end
     end

@@ -96,11 +96,15 @@ module "bigquery_sensitive_data" {
 module "org_policies" {
   source = "./modules/org_policies"
 
-  for_each           = toset(local.projects_ids)
-  project_id         = each.key
-  region             = local.region
-  trusted_subnetwork = module.dwh_networking.subnets_names[0]
-  trusted_locations  = var.trusted_locations
+  for_each          = toset(local.projects_ids)
+  project_id        = each.key
+  region            = local.region
+  trusted_locations = var.trusted_locations
+
+  depends_on = [
+    module.data_ingestion,
+    module.bigquery_sensitive_data
+  ]
 }
 
 // A5 - DATA WAREHOUSE ORG POLICY - END

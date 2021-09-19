@@ -35,9 +35,7 @@ module "data_ingestion" {
   access_context_manager_policy_id = var.access_context_manager_policy_id
   bucket_name                      = "bkt-dlp-flex-ingest-${random_id.suffix.hex}"
   dataset_id                       = "dlp_flex_ingest"
-  vpc_name                         = "dlp-flex-ingest"
   cmek_keyring_name                = "dlp_flex_ingest-${random_id.suffix.hex}"
-  subnet_ip                        = "10.0.32.0/21"
   region                           = var.location
   delete_contents_on_destroy       = var.delete_contents_on_destroy
   perimeter_additional_members     = var.perimeter_additional_members
@@ -78,7 +76,7 @@ resource "google_dataflow_flex_template_job" "regional_dlp" {
     bq_schema                      = local.bq_schema
     output_table                   = "${var.datalake_project_id}:${module.data_ingestion.data_ingest_bigquery_dataset.dataset_id}.classical_books"
     service_account_email          = module.data_ingestion.dataflow_controller_service_account_email
-    subnetwork                     = module.data_ingestion.subnets_self_links[0]
+    subnetwork                     = var.subnetwork_self_link
     dataflow_kms_key               = module.data_ingestion.cmek_ingestion_crypto_key
     temp_location                  = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/tmp/"
     staging_location               = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/staging/"

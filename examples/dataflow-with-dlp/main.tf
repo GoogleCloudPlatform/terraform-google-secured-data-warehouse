@@ -36,9 +36,7 @@ module "data_ingestion" {
   access_context_manager_policy_id = var.access_context_manager_policy_id
   bucket_name                      = "data-ingestion"
   dataset_id                       = local.dataset_id
-  vpc_name                         = "tst-network"
   cmek_keyring_name                = "cmek_keyring_${random_id.random_suffix.hex}"
-  subnet_ip                        = "10.0.32.0/21"
   delete_contents_on_destroy       = var.delete_contents_on_destroy
 }
 
@@ -105,7 +103,7 @@ resource "google_dataflow_flex_template_job" "regional_dlp" {
     dlpLocation            = local.region
     deidentifyTemplateName = module.de_identification_template.template_full_path
     serviceAccount         = module.data_ingestion.dataflow_controller_service_account_email
-    subnetwork             = module.data_ingestion.subnets_self_links[0]
+    subnetwork             = var.subnetwork_self_link
     dataflowKmsKey         = module.data_ingestion.cmek_ingestion_crypto_key
     tempLocation           = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/tmp/"
     stagingLocation        = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/staging/"

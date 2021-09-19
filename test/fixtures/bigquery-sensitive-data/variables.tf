@@ -59,3 +59,13 @@ variable "python_re_identify_template_gs_path" {
   type        = string
   default     = ""
 }
+
+variable "privileged_network_self_link" {
+  description = "The URI of the network where Dataflow is going to be deployed."
+  type        = string
+}
+
+variable "privileged_subnets_self_link" {
+  description = "The URI of the subnetwork where Dataflow is going to be deployed."
+  type        = string
+}

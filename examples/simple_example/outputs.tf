@@ -44,31 +44,6 @@ output "data_ingest_bigquery_dataset" {
   value       = module.secured_data_warehouse.data_ingest_bigquery_dataset
 }
 
-output "network_name" {
-  description = "The name of the VPC being created."
-  value       = module.secured_data_warehouse.network_name
-}
-
-output "network_self_link" {
-  description = "The URI of the VPC being created."
-  value       = module.secured_data_warehouse.network_self_link
-}
-
-output "subnets_names" {
-  description = "The names of the subnets being created."
-  value       = module.secured_data_warehouse.subnets_names
-}
-
-output "subnets_ips" {
-  description = "The IPs and CIDRs of the subnets being created."
-  value       = module.secured_data_warehouse.subnets_ips
-}
-
-output "subnets_self_links" {
-  description = "The self-links of subnets being created."
-  value       = module.secured_data_warehouse.subnets_self_links
-}
-
 output "data_ingestion_access_level_name" {
   description = "Access context manager access level name."
   value       = module.secured_data_warehouse.data_ingestion_access_level_name

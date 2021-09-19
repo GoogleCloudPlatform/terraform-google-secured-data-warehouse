@@ -87,11 +87,9 @@ module "secured_data_warehouse" {
 | privileged\_data\_project\_id | Project where the privileged datasets and tables are created. | `string` | n/a | yes |
 | region | The region in which the resources will be deployed. | `string` | `"us-central1"` | no |
 | sdx\_project\_number | The Project Number to configure Secure data exchange with egress rule for the dataflow templates. | `string` | n/a | yes |
-| subnet\_ip | The CDIR IP range of the subnetwork. | `string` | n/a | yes |
 | taxonomy\_name | The taxonomy display name. | `string` | `"secured_taxonomy"` | no |
 | terraform\_service\_account | The email address of the service account that will run the Terraform code. | `string` | n/a | yes |
 | trusted\_locations | This is a list of trusted regions where location-based GCP resources can be created. ie us-locations eu-locations. | `list(string)` | <pre>[<br>  "us-locations",<br>  "eu-locations"<br>]</pre> | no |
-| vpc\_name | The name of the network. | `string` | n/a | yes |
 
 ## Outputs
 
@@ -109,7 +107,6 @@ module "secured_data_warehouse" {
 | cmek\_reidentification\_crypto\_key\_name | The Customer Managed Crypto Key name for the reidentification crypto boundary. |
 | confidential\_data\_dataflow\_bucket\_name | The name of the bucket created for dataflow in the confidential data pipeline. |
 | confidential\_dataflow\_controller\_service\_account\_email | The confidential Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
-| confidential\_subnets\_self\_links | The self-links of confidential subnets being created. |
 | data\_governance\_access\_level\_name | Access context manager access level name. |
 | data\_governance\_service\_perimeter\_name | Access context manager service perimeter name. |
 | data\_ingest\_bigquery\_dataset | The bigquery dataset created for data ingest pipeline. |
@@ -125,16 +122,10 @@ module "secured_data_warehouse" {
 | member\_policy\_name\_confidential | SA member for Person Name policy tag. |
 | member\_policy\_name\_private | SA member for Person Name policy tag. |
 | member\_policy\_ssn\_confidential | SA member for Social Security Number policy tag. |
-| network\_name | The name of the VPC being created. |
-| network\_self\_link | The URI of the VPC being created. |
 | privileged\_access\_level\_name | Access context manager access level name. |
 | privileged\_service\_perimeter\_name | Access context manager service perimeter name. |
 | pubsub\_writer\_service\_account\_email | The PubSub writer service account email. Should be used to write data to the PubSub topics the ingestion pipeline reads from. |
 | storage\_writer\_service\_account\_email | The Storage writer service account email. Should be used to write data to the buckets the ingestion pipeline reads from. |
-| subnets\_ips | The IPs and CIDRs of the subnets being created. |
-| subnets\_names | The names of the subnets being created. |
-| subnets\_regions | The region where the subnets will be created. |
-| subnets\_self\_links | The self-links of subnets being created. |
 | taxonomy\_name | The taxonomy display name. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
