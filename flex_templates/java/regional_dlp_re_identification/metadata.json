@@ -10,7 +10,7 @@
     {
       "name": "outputBigQueryDataset",
       "label": "BigQuery output dataset name.",
-      "helpText": "Output BigQuery table with reidentified data as: PROJECT:DATASET"
+      "helpText": "Output BigQuery table with reidentified data as: DATASET"
     },
     {
       "name": "deidentifyTemplateName",

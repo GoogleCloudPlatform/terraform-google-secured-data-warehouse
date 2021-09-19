@@ -2,6 +2,8 @@
 
 ## Build the flex template with Cloud Build
 
+The java dataflow is inspired by the work captured by a DLP solution.  Learn more at [Migrate Sensitive Data in BigQuery Using Dataflow & Cloud DLP](https://github.com/GoogleCloudPlatform/dlp-dataflow-deidentification)
+
 Set the following environment variables based in the resources create in the infrastructure step:
 
 ```shell
@@ -37,7 +39,7 @@ steps:
 
 1.  Follow the instructions in [Using Flex Templates:Setting up your development environment](https://cloud.google.com/dataflow/docs/guides/templates/using-flex-templates#setting_up_your_development_environment) to configure your environment to build the images.
 2.  Build the flex template
-3.  make sure you have input BigQuery table avaialable with deidentified data (and corresponding DLP template)
+3.  make sure you have input BigQuery table available with deidentified data (and corresponding DLP template)
 4.  apply the `example/bigquery_sensitive_data`
 5.  run the dataflow job
 
@@ -66,8 +68,3 @@ gcloud dataflow flex-template run "regional-bq-dlp-bq-`date +%Y%m%d-%H%M%S`" \
     --disable-public-ips \
     --enable-streaming-engine
 ```
-
-## TODO
-- [ ] clean up POM file
-- [ ] add logging back in
-- [ ] fix null ptr exception with inspectionTemplates (and add that back in)
