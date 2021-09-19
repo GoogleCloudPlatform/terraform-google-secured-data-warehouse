@@ -241,7 +241,7 @@ public abstract class DLPReidentifyText
 
     /**
      * Send text to DLP for reidentification.
-     * 
+     *
      * @param projectId ID of GCP project that should be used for deidentification.
      * @param inspectTemplateName Template name for inspection. Optional.
      * @param reidentifyTemplateName Template name for reidentification. Either this or
