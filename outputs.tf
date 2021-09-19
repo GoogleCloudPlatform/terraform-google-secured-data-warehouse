@@ -84,66 +84,6 @@ output "data_ingest_bigquery_dataset" {
   ]
 }
 
-
-output "network_name" {
-  description = "The name of the VPC being created."
-  value       = module.dwh_networking.network_name
-}
-
-output "network_self_link" {
-  description = "The URI of the VPC being created."
-  value       = module.dwh_networking.network_self_link
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
-output "subnets_names" {
-  description = "The names of the subnets being created."
-  value       = module.dwh_networking.subnets_names
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
-output "subnets_ips" {
-  description = "The IPs and CIDRs of the subnets being created."
-  value       = module.dwh_networking.subnets_ips
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
-output "subnets_self_links" {
-  description = "The self-links of subnets being created."
-  value       = module.dwh_networking.subnets_self_links
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
-output "confidential_subnets_self_links" {
-  description = "The self-links of confidential subnets being created."
-  value       = module.dwh_networking_privileged.subnets_self_links
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
-output "subnets_regions" {
-  description = "The region where the subnets will be created."
-  value       = module.dwh_networking.subnets_regions
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
 output "data_ingestion_access_level_name" {
   description = "Access context manager access level name."
   value       = module.data_ingestion_vpc_sc.access_level_name

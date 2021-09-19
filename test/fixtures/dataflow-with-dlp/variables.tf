@@ -39,6 +39,16 @@ variable "privileged_data_project_id" {
   type        = string
 }
 
+variable "data_ingestion_network_self_link" {
+  description = "The URI of the network where Dataflow is going to be deployed."
+  type        = string
+}
+
+variable "data_ingestion_subnets_self_link" {
+  description = "The URI of the subnetwork where Dataflow is going to be deployed."
+  type        = string
+}
+
 variable "terraform_service_account" {
   description = "Service account email of the account to impersonate to run Terraform."
   type        = string

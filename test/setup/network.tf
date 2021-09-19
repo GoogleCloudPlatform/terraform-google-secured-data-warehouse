@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-module "dwh_networking" {
-  source = ".//modules/dwh-networking"
+module "dwh_networking_ingestion" {
+  source = "../../modules/dwh-networking"
 
-  project_id = var.data_ingestion_project_id
-  region     = var.region
-  vpc_name   = var.vpc_name
-  subnet_ip  = var.subnet_ip
+  project_id = module.data_ingestion_project.project_id
+  region     = "us-central1"
+  vpc_name   = "ingestion"
+  subnet_ip  = "10.0.32.0/21"
 }
 
 module "dwh_networking_privileged" {
-  source = ".//modules/dwh-networking"
+  source = "../../modules/dwh-networking"
 
   # org_id     = var.org_id
-  project_id = var.privileged_data_project_id
-  region     = var.region
-  vpc_name   = var.vpc_name
-  subnet_ip  = var.subnet_ip
+  project_id = module.privileged_data_project.project_id
+  region     = "us-central1"
+  vpc_name   = "reidentify"
+  subnet_ip  = "10.0.32.0/21"
 }

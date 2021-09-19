@@ -107,7 +107,7 @@ resource "google_dataflow_flex_template_job" "regional_dlp" {
     bq_schema                      = local.bq_schema
     output_table                   = "${var.privileged_data_project_id}:${local.dataset_id}.sample_data"
     service_account_email          = module.secured_data_warehouse.confidential_dataflow_controller_service_account_email
-    subnetwork                     = module.secured_data_warehouse.confidential_subnets_self_links[0]
+    subnetwork                     = var.subnetwork_self_link
     dataflow_kms_key               = module.secured_data_warehouse.cmek_reidentification_crypto_key
     temp_location                  = "${module.dataflow_bucket.bucket.url}/tmp/"
     no_use_public_ips              = "true"

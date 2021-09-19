@@ -11,6 +11,21 @@ This example illustrates how to run a Flex Python Dataflow job. It uses:
 
 1. A `crypto_key` and `wrapped_key` pair.  Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location used for the `location` variable.
 1. An Existing GCP Project
+1. A network and subnetwork in the data ingestion project.
+
+### Firewall rules
+
+- All the egress should be denied
+- Allow only Restricted API Egress by TPC at 443 port
+- Allow only Private API Egress by TPC at 443 port
+- Allow ingress Dataflow workers by TPC at ports 12345 and 12346
+- Allow egress Dataflow workers     by TPC at ports 12345 and 12346
+### DNS configurations
+
+- Restricted Google APIs
+- Private Google APIs
+- Restricted gcr.io
+- Restricted Artifact Registry
 
 ## Requirements
 
@@ -203,9 +218,11 @@ If your user does not have the necessary roles to run the commands above you can
 | datalake\_project\_id | The ID of the project in which the Bigquery will be created. | `string` | n/a | yes |
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `false` | no |
 | location | The location of Artifact registry. Run `gcloud artifacts locations list` to list available locations. | `string` | `"us-central1"` | no |
+| network\_self\_link | The URI of the network where Dataflow is going to be deployed. | `string` | n/a | yes |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | perimeter\_additional\_members | The list additional members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | `[]` | no |
 | privileged\_data\_project\_id | Project where the privileged datasets and tables are created. | `string` | n/a | yes |
+| subnetwork\_self\_link | The URI of the subnetwork where Dataflow is going to be deployed. | `string` | n/a | yes |
 | terraform\_service\_account | The email address of the service account that will run the Terraform config. | `string` | n/a | yes |
 | wrapped\_key | The base64 encoded data crypto key wrapped by KMS. | `string` | n/a | yes |
 

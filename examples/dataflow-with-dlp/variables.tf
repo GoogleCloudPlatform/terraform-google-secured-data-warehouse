@@ -59,9 +59,18 @@ variable "access_context_manager_policy_id" {
   type        = number
 }
 
+variable "network_self_link" {
+  description = "The URI of the network where Dataflow is going to be deployed."
+  type        = string
+}
+
+variable "subnetwork_self_link" {
+  description = "The URI of the subnetwork where Dataflow is going to be deployed."
+  type        = string
+}
+
 variable "delete_contents_on_destroy" {
   description = "(Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present."
   type        = bool
   default     = false
 }
-
