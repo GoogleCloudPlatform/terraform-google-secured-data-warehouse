@@ -1,6 +1,10 @@
 # Regional DLP de-identification Text to BigQuery (Streaming) flex template
 
-## Build the flex template with Cloud Build
+This template is based in the public [DLP Text to BigQuery (Streaming)](https://github.com/GoogleCloudPlatform/DataflowTemplates/blob/master/src/main/java/com/google/cloud/teleport/templates/DLPTextToBigQueryStreaming.java) template from the [Google Cloud Dataflow Template Pipelines](https://github.com/GoogleCloudPlatform/DataflowTemplates).
+
+This template has been adjusted to allow regional DLP API calls and to request a explicit project ID for the  BigQuery Dataset instead of using the DLP Project ID.
+
+## Build the flex template
 
 Set the following environment variables based in the resources create in the infrastructure step:
 
@@ -8,8 +12,11 @@ Set the following environment variables based in the resources create in the inf
 export LOCATION=<REPOSITORY-LOCATION>
 export PROJECT=<YOUR-PROJECT>
 export BUCKET=<YOUR-FLEX-TEMPLATE-BUCKET>
-export FLEX_REPO_URL=$LOCATION-docker.pkg.dev/$PROJECT/flex-templates
+export TEMPLATE_IMAGE_TAG="$LOCATION-docker.pkg.dev/$PROJECT/flex-templates/samples/regional-txt-dlp-bq-streaming:latest"
+export TEMPLATE_GS_PATH="gs://$BUCKET/flex-template-samples/regional-txt-dlp-bq-streaming.json"
 ```
+
+### Create the template with Cloud Build
 
 ```shell
 # build the flex template
@@ -17,7 +24,7 @@ export FLEX_REPO_URL=$LOCATION-docker.pkg.dev/$PROJECT/flex-templates
 gcloud beta builds submit \
  --project=$PROJECT \
  --config ./cloudbuild.yaml . \
- --substitutions="_BUCKET=$BUCKET,_PROJECT=$PROJECT,_FLEX_REPO_URL=$FLEX_REPO_URL"
+ --substitutions="_PROJECT=$PROJECT,_FLEX_TEMPLATE_IMAGE_TAG=$TEMPLATE_IMAGE_TAG,_TEMPLATE_GS_PATH=$TEMPLATE_GS_PATH"
  ```
 
 **Note:** It is possible to migrate the maven image used to a Artifact Registry in your organization.
@@ -33,17 +40,11 @@ steps:
   entrypoint: 'mvn'
 ```
 
-## Build the flex template manually
+### Manually Create the template
 
 Follow the instructions in [Using Flex Templates:Setting up your development environment](https://cloud.google.com/dataflow/docs/guides/templates/using-flex-templates#setting_up_your_development_environment) to configure your environment to build the images.
 
 After configuring your environment set the following environment variables based in the resources create in the infrastructure step:
-
-```shell
-export LOCATION=<REPOSITORY-LOCATION>
-export PROJECT=<YOUR-PROJECT>
-export BUCKET=<YOUR-FLEX-TEMPLATE-BUCKET>
-```
 
 Run Maven to create the uber-jar file:
 
@@ -54,12 +55,9 @@ Run Maven to create the uber-jar file:
 Build the Flex Image:
 
 ```shell
-export TEMPLATE_IMAGE="$LOCATION-docker.pkg.dev/$PROJECT/flex-templates/samples/regional-txt-dlp-bq-streaming:latest"
 
-export TEMPLATE_PATH="gs://$BUCKET/flex-template-samples/regional-txt-dlp-bq-streaming.json"
-
-gcloud dataflow flex-template build $TEMPLATE_PATH \
-  --image-gcr-path "$TEMPLATE_IMAGE" \
+gcloud dataflow flex-template build $TEMPLATE_GS_PATH \
+  --image-gcr-path "$TEMPLATE_IMAGE_TAG" \
   --sdk-language "JAVA" \
   --project=$PROJECT \
   --flex-template-base-image JAVA11 \

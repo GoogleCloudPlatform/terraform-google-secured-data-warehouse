@@ -1,16 +1,18 @@
 # Regional Structured DLP Python Flex Template
 
-This example illustrates how to run a Flex Python Dataflow job. It uses:
+This example illustrates how to run a Flex Python Dataflow job in the Secured data warehouse.
 
-- The `base-data-ingestion` submodule to create the basic ingestion infrastructure,
+It uses:
+
+- The [Secured data warehouse](../README.md) module to create the Secured data warehouse infrastructure,
 - The `de_identification_template` submodule to create the regional structured DLP template,
-- The `flex_template` submodule to build a regional structured DLP flex Python template,
-- The `python_module_repository` submodule to host a private Python Module repository
+- A Dataflow flex template to deploy the de-identification job.
 
 ## Prerequisites
 
 1. A `crypto_key` and `wrapped_key` pair.  Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location used for the `location` variable.
 1. An Existing GCP Project
+1. A pre-build Python Regional DLP De-identification template flex template. See [Flex templates](../../flex_templates/README.md).
 1. A network and subnetwork in the data ingestion project.
 
 ### Firewall rules
@@ -20,6 +22,7 @@ This example illustrates how to run a Flex Python Dataflow job. It uses:
 - Allow only Private API Egress by TPC at 443 port
 - Allow ingress Dataflow workers by TPC at ports 12345 and 12346
 - Allow egress Dataflow workers     by TPC at ports 12345 and 12346
+
 ### DNS configurations
 
 - Restricted Google APIs
