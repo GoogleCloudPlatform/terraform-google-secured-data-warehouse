@@ -182,3 +182,15 @@ variable "delete_contents_on_destroy" {
   type        = bool
   default     = false
 }
+
+variable "data_ingestion_dataflow_deployer_identities" {
+  description = "List of members in the standard GCP form: user:{email}, serviceAccount:{email} that will deploy Dataflow jobs in the Data Ingestion project. These identities will be added to the VPC-SC secure data exchange egress rules."
+  type        = list(string)
+  default     = []
+}
+
+variable "confidential_data_dataflow_deployer_identities" {
+  description = "List of members in the standard GCP form: user:{email}, serviceAccount:{email} that will deploy Dataflow jobs in the Confidential Data project. These identities will be added to the VPC-SC secure data exchange egress rules."
+  type        = list(string)
+  default     = []
+}

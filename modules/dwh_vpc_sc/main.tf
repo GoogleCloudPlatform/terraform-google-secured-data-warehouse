@@ -80,11 +80,10 @@ resource "google_access_context_manager_service_perimeter" "regular_service_peri
               method = "google.storage.objects.get"
             }
           }
-          resources = ["projects/${egress_policies.value["sdx_project_number"]}"]
+          resources = ["projects/${egress_policies.value.sdx_project_number}"]
         }
         egress_from {
-          identity_type = "IDENTITY_TYPE_UNSPECIFIED"
-          identities    = [egress_policies.value["sdx_identity"]]
+          identities = egress_policies.value.sdx_identities
         }
       }
     }
