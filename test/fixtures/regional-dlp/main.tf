@@ -47,19 +47,20 @@ resource "google_kms_secret_ciphertext" "wrapped_key" {
 module "regional_dlp_example" {
   source = "../../../examples/regional-dlp"
 
-  org_id                           = var.org_id
-  data_ingestion_project_id        = var.data_ingestion_project_id
-  data_governance_project_id       = var.data_governance_project_id
-  datalake_project_id              = var.datalake_project_id
-  privileged_data_project_id       = var.privileged_data_project_id
-  sdx_project_number               = var.sdx_project_number
-  location                         = local.location
-  terraform_service_account        = var.terraform_service_account
-  access_context_manager_policy_id = var.access_context_manager_policy_id
-  flex_template_gs_path            = var.python_de_identify_template_gs_path
-  network_self_link                = var.data_ingestion_network_self_link
-  subnetwork_self_link             = var.data_ingestion_subnets_self_link
-  delete_contents_on_destroy       = true
+  org_id                            = var.org_id
+  data_ingestion_project_id         = var.data_ingestion_project_id
+  data_governance_project_id        = var.data_governance_project_id
+  datalake_project_id               = var.datalake_project_id
+  privileged_data_project_id        = var.privileged_data_project_id
+  sdx_project_number                = var.sdx_project_number
+  external_flex_template_project_id = var.external_flex_template_project_id
+  location                          = local.location
+  terraform_service_account         = var.terraform_service_account
+  access_context_manager_policy_id  = var.access_context_manager_policy_id
+  flex_template_gs_path             = var.python_de_identify_template_gs_path
+  network_self_link                 = var.data_ingestion_network_self_link
+  subnetwork_self_link              = var.data_ingestion_subnets_self_link
+  delete_contents_on_destroy        = true
 
   crypto_key  = module.kek.keys[local.kek_key_name]
   wrapped_key = google_kms_secret_ciphertext.wrapped_key.ciphertext

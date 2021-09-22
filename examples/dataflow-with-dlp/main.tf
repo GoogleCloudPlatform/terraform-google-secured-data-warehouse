@@ -15,9 +15,8 @@
  */
 
 locals {
-  region          = "us-central1"
-  dataset_id      = "dts_data_ingestion"
-  enable_dataflow = var.de_identify_template_gs_path != ""
+  region     = "us-central1"
+  dataset_id = "dts_data_ingestion"
 }
 
 resource "random_id" "random_suffix" {
@@ -61,9 +60,7 @@ EOF
   }
 
   depends_on = [
-    module.data_ingestion.data_ingestion_access_level_name,
-    module.data_ingestion.data_governance_access_level_name,
-    module.data_ingestion.privileged_access_level_name
+    module.data_ingestion
   ]
 }
 
@@ -79,15 +76,26 @@ module "de_identification_template" {
   dataflow_service_account  = module.data_ingestion.dataflow_controller_service_account_email
 
   depends_on = [
-    module.data_ingestion.data_ingestion_access_level_name,
-    module.data_ingestion.data_governance_access_level_name,
-    module.data_ingestion.privileged_access_level_name
+    module.data_ingestion
+  ]
+}
+
+resource "google_artifact_registry_repository_iam_member" "docker_reader" {
+  provider = google-beta
+
+  project    = var.external_flex_template_project_id
+  location   = local.region
+  repository = "flex-templates"
+  role       = "roles/artifactregistry.reader"
+  member     = "serviceAccount:${module.data_ingestion.dataflow_controller_service_account_email}"
+
+  depends_on = [
+    module.data_ingestion
   ]
 }
 
 resource "google_dataflow_flex_template_job" "regional_dlp" {
   provider = google-beta
-  count    = local.enable_dataflow ? 1 : 0
 
   project                 = var.data_ingestion_project_id
   name                    = "regional-flex-java-gcs-dlp-bq"
@@ -110,4 +118,8 @@ resource "google_dataflow_flex_template_job" "regional_dlp" {
     maxNumWorkers          = 5
     usePublicIps           = "false"
   }
+
+  depends_on = [
+    google_artifact_registry_repository_iam_member.docker_reader
+  ]
 }

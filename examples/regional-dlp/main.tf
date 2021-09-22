@@ -15,8 +15,7 @@
  */
 
 locals {
-  bq_schema       = "book:STRING, author:STRING"
-  enable_dataflow = var.flex_template_gs_path != ""
+  bq_schema = "book:STRING, author:STRING"
 }
 
 resource "random_id" "suffix" {
@@ -53,15 +52,41 @@ module "de_identification_template_example" {
   template_file             = "${path.module}/templates/deidentification.tpl"
 
   depends_on = [
-    module.data_ingestion.data_ingestion_access_level_name,
-    module.data_ingestion.data_governance_access_level_name,
-    module.data_ingestion.privileged_access_level_name
+    module.data_ingestion
   ]
 }
 
+resource "google_artifact_registry_repository_iam_member" "docker_reader" {
+  provider = google-beta
+
+  project    = var.external_flex_template_project_id
+  location   = var.location
+  repository = "flex-templates"
+  role       = "roles/artifactregistry.reader"
+  member     = "serviceAccount:${module.data_ingestion.dataflow_controller_service_account_email}"
+
+  depends_on = [
+    module.data_ingestion
+  ]
+}
+
+resource "google_artifact_registry_repository_iam_member" "python_reader" {
+  provider = google-beta
+
+  project    = var.external_flex_template_project_id
+  location   = var.location
+  repository = "python-modules"
+  role       = "roles/artifactregistry.reader"
+  member     = "serviceAccount:${module.data_ingestion.dataflow_controller_service_account_email}"
+
+  depends_on = [
+    module.data_ingestion
+  ]
+}
+
+
 resource "google_dataflow_flex_template_job" "regional_dlp" {
   provider = google-beta
-  count    = local.enable_dataflow ? 1 : 0
 
   project                 = var.data_ingestion_project_id
   name                    = "regional-flex-python-pubsub-dlp-bq"
@@ -82,4 +107,9 @@ resource "google_dataflow_flex_template_job" "regional_dlp" {
     staging_location               = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/staging/"
     no_use_public_ips              = "true"
   }
+
+  depends_on = [
+    google_artifact_registry_repository_iam_member.docker_reader,
+    google_artifact_registry_repository_iam_member.python_reader
+  ]
 }

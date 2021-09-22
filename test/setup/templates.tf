@@ -33,7 +33,7 @@ locals {
 }
 
 module "external_flex_template_infrastructure" {
-  source = "../..//flex_templates/infrastructure"
+  source = "../..//flex_templates/template-artifact-storage"
 
   project_id           = local.project_id
   location             = local.location
