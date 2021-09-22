@@ -44,9 +44,25 @@ variable "datalake_project_id" {
   type        = string
 }
 
+variable "external_flex_template_project_id" {
+  description = "Project id of the external project that host the flex Dataflow templates."
+  type        = string
+}
+
+variable "sdx_project_number" {
+  description = "The Project Number to configure Secure data exchange with egress rule for the dataflow templates."
+  type        = string
+}
+
 variable "terraform_service_account" {
   description = "The email address of the service account that will run the Terraform config."
   type        = string
+}
+
+variable "python_re_identify_template_gs_path" {
+  description = "The Google Cloud Storage gs path to the JSON file built flex template that supports DLP re-identification."
+  type        = string
+  default     = ""
 }
 
 variable "privileged_network_self_link" {

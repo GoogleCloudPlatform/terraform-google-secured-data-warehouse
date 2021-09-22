@@ -14,18 +14,25 @@
  * limitations under the License.
  */
 
-
-output "flex_template_bucket_name" {
-  description = "The name of the bucket created to store the flex template."
-  value       = google_storage_bucket.templates_bucket.name
+variable "project_id" {
+  description = "The ID of the project in which to provision resources."
+  type        = string
 }
 
-output "flex_template_repository_name" {
-  description = "The name of the flex template artifact registry repository."
-  value       = google_artifact_registry_repository.flex_templates.name
+variable "docker_repository_id" {
+  description = "ID of the docker flex template repository."
+  type        = string
+  default     = "flex-templates"
 }
 
-output "flex_template_repository_url" {
-  description = "URL of the flex template artifact registry repository."
-  value       = local.repository_url
+variable "python_repository_id" {
+  description = "ID of the Python repository."
+  type        = string
+  default     = "python-modules"
+}
+
+variable "location" {
+  description = "The location of Artifact registry. Run `gcloud artifacts locations list` to list available locations."
+  type        = string
+  default     = "us-central1"
 }

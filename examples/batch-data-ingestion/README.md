@@ -1,6 +1,6 @@
 # Batch Dataflow with DLP de-identification
 
-This example illustrates how to run a Dataflow job that uses the `batch templates with DLP` submodule with the `base-data-ingestion` submodule.
+This example illustrates how to run a public Batch Dataflow job, [Cloud Storage Text to BigQuery](https://cloud.google.com/dataflow/docs/guides/templates/provided-batch#gcstexttobigquery), with The [Secured data warehouse](../README.md).
 
 ## Requirements
 
@@ -35,6 +35,7 @@ This example illustrates how to run a Dataflow job that uses the `batch template
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | perimeter\_members | The list of all members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | n/a | yes |
 | privileged\_data\_project\_id | Project where the privileged datasets and tables are created. | `string` | n/a | yes |
+| sdx\_project\_number | The Project Number to configure Secure data exchange with egress rule for the dataflow templates. | `string` | n/a | yes |
 | subnetwork\_self\_link | The URI of the subnetwork where Dataflow is going to be deployed. | `string` | n/a | yes |
 | terraform\_service\_account | Service account email of the account to impersonate to run Terraform. | `string` | n/a | yes |
 

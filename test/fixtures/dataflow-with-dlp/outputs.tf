@@ -20,29 +20,9 @@ output "project_id" {
   value       = var.data_ingestion_project_id
 }
 
-output "df_job_state" {
-  description = "The state of the newly created Dataflow job."
-  value       = module.dataflow_with_dlp.df_job_state
-}
-
-output "df_job_id" {
-  description = "The unique Id of the newly created Dataflow job."
-  value       = module.dataflow_with_dlp.df_job_id
-}
-
-output "df_job_name" {
-  description = "The name of the newly created Dataflow job."
-  value       = module.dataflow_with_dlp.df_job_name
-}
-
 output "df_job_controller_service_account" {
   description = "The email of the service account used for create Dataflow job."
   value       = module.dataflow_with_dlp.controller_service_account
-}
-
-output "df_job_region" {
-  description = "The region of the newly created Dataflow job."
-  value       = module.dataflow_with_dlp.df_job_region
 }
 
 output "df_job_network" {
@@ -53,11 +33,6 @@ output "df_job_network" {
 output "df_job_subnetwork" {
   description = "The name of the subnetwork used for create Dataflow job."
   value       = module.dataflow_with_dlp.df_job_subnetwork
-}
-
-output "bucket_tmp_name" {
-  description = "The name of the bucket."
-  value       = module.dataflow_with_dlp.bucket_tmp_name
 }
 
 output "bucket_ingestion_name" {

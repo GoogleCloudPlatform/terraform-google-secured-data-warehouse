@@ -21,6 +21,7 @@ module "secured_data_warehouse" {
   privileged_data_project_id       = var.privileged_data_project_id
   datalake_project_id              = var.datalake_project_id
   data_ingestion_project_id        = var.data_ingestion_project_id
+  sdx_project_number               = var.sdx_project_number
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
   bucket_name                      = "bucket_simple_example"

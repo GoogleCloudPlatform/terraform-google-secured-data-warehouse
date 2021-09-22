@@ -30,8 +30,8 @@ output "privileged_data_project_id" {
   value = module.privileged_data_project.project_id
 }
 
-output "ext_artifact_registry_project_id" {
-  value = module.ext_artifact_registry_project.project_id
+output "external_flex_template_project_id" {
+  value = module.external_flex_template_project.project_id
 }
 
 output "sa_key" {
@@ -53,6 +53,35 @@ output "org_id" {
 
 output "billing_account" {
   value = var.billing_account
+}
+
+output "java_de_identify_template_gs_path" {
+  value = local.java_de_identify_template_gs_path
+
+  depends_on = [
+    null_resource.java_de_identification_flex_template
+  ]
+}
+
+output "python_de_identify_template_gs_path" {
+  value = local.python_de_identify_template_gs_path
+
+  depends_on = [
+    null_resource.python_de_identification_flex_template
+  ]
+}
+
+output "python_re_identify_template_gs_path" {
+  value = local.python_re_identify_template_gs_path
+
+  depends_on = [
+    null_resource.python_re_identification_flex_template
+  ]
+}
+
+output "sdx_project_number" {
+  description = "The Project Number to configure Secure data exchange with egress rule for the dataflow templates."
+  value       = module.external_flex_template_project.project_number
 }
 
 output "data_ingestion_network_name" {

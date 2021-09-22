@@ -1,5 +1,0 @@
-# Ignore everything except for Python files and the requirements file.
-*
-!Dockerfile
-!*.py
-!requirements.txt

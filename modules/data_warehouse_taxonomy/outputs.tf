@@ -53,3 +53,9 @@ output "confidential_dataflow_controller_service_account_email" {
   description = "The confidential Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account."
   value       = module.dataflow_controller_service_account.email
 }
+
+output "confidential_data_dataflow_bucket_name" {
+  description = "The name of the bucket created for dataflow in the confidential data pipeline."
+  value       = module.dataflow_bucket.bucket.name
+
+}

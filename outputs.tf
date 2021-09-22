@@ -66,6 +66,24 @@ output "data_ingest_bucket_names" {
   ]
 }
 
+output "data_ingest_dataflow_bucket_name" {
+  description = "The name of the bucket created for dataflow in the data ingest pipeline."
+  value       = module.data_ingestion.data_ingest_dataflow_bucket_name
+
+  depends_on = [
+    time_sleep.wait_for_bridge_propagation
+  ]
+}
+
+output "confidential_data_dataflow_bucket_name" {
+  description = "The name of the bucket created for dataflow in the confidential data pipeline."
+  value       = module.bigquery_sensitive_data.confidential_data_dataflow_bucket_name
+
+  depends_on = [
+    time_sleep.wait_for_bridge_propagation
+  ]
+}
+
 output "data_ingest_topic_name" {
   description = "The topic created for data ingest pipeline."
   value       = module.data_ingestion.data_ingest_topic_name

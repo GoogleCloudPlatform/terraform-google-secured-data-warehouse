@@ -44,6 +44,16 @@ variable "privileged_data_project_id" {
   type        = string
 }
 
+variable "external_flex_template_project_id" {
+  description = "Project id of the external project that host the flex Dataflow templates."
+  type        = string
+}
+
+variable "sdx_project_number" {
+  description = "The Project Number to configure Secure data exchange with egress rule for the dataflow templates."
+  type        = string
+}
+
 variable "terraform_service_account" {
   description = "The email address of the service account that will run the Terraform config."
   type        = string
@@ -79,6 +89,12 @@ variable "crypto_key" {
 variable "wrapped_key" {
   description = "The base64 encoded data crypto key wrapped by KMS."
   type        = string
+}
+
+variable "flex_template_gs_path" {
+  description = "The Google Cloud Storage gs path to the JSON file built flex template that supports DLP de-identification."
+  type        = string
+  default     = ""
 }
 
 variable "delete_contents_on_destroy" {

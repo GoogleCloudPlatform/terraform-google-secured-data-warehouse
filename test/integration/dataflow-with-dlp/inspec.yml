@@ -21,30 +21,6 @@ attributes:
   - name: project_id
     required: true
     type: string
-  - name: df_job_state
-    required: true
-    type: string
-  - name: df_job_id
-    required: true
-    type: string
-  - name: df_job_name
-    required: true
-    type: string
-  - name: df_job_region
-    required: true
-    type: string
-  - name: df_job_controller_service_account
-    required: true
-    type: string
-  - name: df_job_network
-    required: true
-    type: string
-  - name: df_job_subnetwork
-    required: true
-    type: string
-  - name: bucket_tmp_name
-    required: true
-    type: string
   - name: bucket_ingestion_name
     required: true
     type: string

@@ -34,6 +34,11 @@ output "data_ingest_bucket_names" {
   value       = [module.data_ingest_bucket.bucket.name]
 }
 
+output "data_ingest_dataflow_bucket_name" {
+  description = "The name of the bucket created for dataflow in the data ingest pipeline."
+  value       = module.dataflow_bucket.bucket.name
+}
+
 output "data_ingest_topic_name" {
   description = "The topic created for data ingest pipeline."
   value       = module.data_ingest_topic.topic

@@ -1,19 +1,13 @@
 # Flex Templates Samples
 
-This is a Dataflow [Flex Template](https://cloud.google.com/dataflow/docs/guides/templates/using-flex-templates) sample that can be used to validate the flow of data in the Data Warehouse Secure Blueprint.
+These are Dataflow [Flex Template](https://cloud.google.com/dataflow/docs/guides/templates/using-flex-templates) samples that can be used to validate the flow of data in the Data Warehouse Secure Blueprint.
 
-In this sample folder we have
+In this folder we have:
 
-- A [terraform infrastructure script](./infrastructure) to create the Artifact Registry Repository and Google Cloud Storage Bucket to store the flex template.
-- The [source code](./java/regional_dlp_de_identification/src/main/java/org/apache/beam/samples/DLPTextToBigQueryStreaming.java) for a DLP de-identification Flex template that:
-  - Reads records from a CSV file uploaded to a Storage Bucket,
-  - Apply regional DLP de-identification transformation to the records,
-  - Write the de-identified records to BigQuery.
-- A [Cloud build file](./java/regional_dlp_de_identification/cloudbuild.yaml) to build the template.
-
-This template is based in the public [DLP Text to BigQuery (Streaming)](https://github.com/GoogleCloudPlatform/DataflowTemplates/blob/master/src/main/java/com/google/cloud/teleport/templates/DLPTextToBigQueryStreaming.java) template from the [Google Cloud Dataflow Template Pipelines](https://github.com/GoogleCloudPlatform/DataflowTemplates).
-
-This template has been adjusted to allow regional DLP API calls and to request a explicit project ID for the  BigQuery Dataset instead of using the DLP Project ID.
+- A [terraform infrastructure script](./template-artifact-storage) to create a pair of a Docker Artifact Registry Repository and a Google Cloud Storage Bucket to store the flex template and a Python Artifact Registry Repository to host modules needed by the Python flex template when tey are staged by dataflow.
+- A folder for [Java](./java/) code samples for de-identification and re-identification
+- A folder for [Python](./python/) code samples for de-identification and re-identification
+- In the Python folder we also have a [Cloud build file](./python/modules/cloudbuild.yaml) to populate the Python Artifact Registry Repository.
 
 The Data Warehouse Secure Blueprint main module [creates](../README.md#outputs) a user-managed Dataflow [controller service account](https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_worker_service_account).
 This service account is used to stage and run the Dataflow job.

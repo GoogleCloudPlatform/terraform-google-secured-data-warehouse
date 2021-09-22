@@ -84,6 +84,11 @@ variable "cmek_confidential_bigquery_crypto_key" {
   type        = string
 }
 
+variable "cmek_reidentification_crypto_key" {
+  description = "The Customer Managed Crypto Key for the reidentification crypto boundary."
+  type        = string
+}
+
 variable "dataset_default_table_expiration_ms" {
   description = "TTL of tables using the dataset in MS. The default value is 30 days."
   type        = number

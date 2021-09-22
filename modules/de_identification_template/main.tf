@@ -16,8 +16,10 @@
 
 
 locals {
-  kms_roles            = toset(["roles/cloudkms.cryptoKeyEncrypter", "roles/cloudkms.cryptoKeyDecrypter"])
-  template_id          = "${var.template_id_prefix}_${random_id.random_template_id_suffix.hex}"
+  kms_roles          = toset(["roles/cloudkms.cryptoKeyEncrypter", "roles/cloudkms.cryptoKeyDecrypter"])
+  template_id        = "${var.template_id_prefix}_${random_id.random_template_id_suffix.hex}"
+  template_full_path = "projects/${var.project_id}/locations/${var.dlp_location}/deidentifyTemplates/${local.template_id}"
+
   template_file_sha256 = filesha256(var.template_file)
 
   de_identification_template = templatefile(

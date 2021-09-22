@@ -62,6 +62,11 @@ variable "privileged_data_project_id" {
   type        = string
 }
 
+variable "sdx_project_number" {
+  description = "The Project Number to configure Secure data exchange with egress rule for the dataflow templates."
+  type        = string
+}
+
 variable "access_context_manager_policy_id" {
   description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
   type        = number
@@ -176,4 +181,16 @@ variable "delete_contents_on_destroy" {
   description = "(Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present."
   type        = bool
   default     = false
+}
+
+variable "data_ingestion_dataflow_deployer_identities" {
+  description = "List of members in the standard GCP form: user:{email}, serviceAccount:{email} that will deploy Dataflow jobs in the Data Ingestion project. These identities will be added to the VPC-SC secure data exchange egress rules."
+  type        = list(string)
+  default     = []
+}
+
+variable "confidential_data_dataflow_deployer_identities" {
+  description = "List of members in the standard GCP form: user:{email}, serviceAccount:{email} that will deploy Dataflow jobs in the Confidential Data project. These identities will be added to the VPC-SC secure data exchange egress rules."
+  type        = list(string)
+  default     = []
 }
