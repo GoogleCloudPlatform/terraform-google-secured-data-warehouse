@@ -90,9 +90,9 @@ variable "cmek_reidentification_crypto_key" {
 }
 
 variable "dataset_default_table_expiration_ms" {
-  description = "TTL of tables using the dataset in MS. The default value is 30 days."
+  description = "TTL of tables using the dataset in MS. The default value is null."
   type        = number
-  default     = 2592000000
+  default     = null
 }
 
 variable "key_rotation_period_seconds" {

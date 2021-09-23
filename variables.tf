@@ -114,9 +114,9 @@ variable "confidential_dataset_id" {
 }
 
 variable "confidential_dataset_default_table_expiration_ms" {
-  description = "TTL of tables using the dataset in MS. The default value is 30 days."
+  description = "TTL of tables using the dataset in MS. The default value is null."
   type        = number
-  default     = 2592000000
+  default     = null
 }
 
 variable "confidential_table_id" {
@@ -143,9 +143,9 @@ variable "dataset_description" {
 }
 
 variable "dataset_default_table_expiration_ms" {
-  description = "TTL of tables using the dataset in MS. The default value is almost 12 months."
+  description = "TTL of tables using the dataset in MS. The default value is null."
   type        = number
-  default     = 31536000000
+  default     = null
 }
 
 variable "cmek_keyring_name" {
