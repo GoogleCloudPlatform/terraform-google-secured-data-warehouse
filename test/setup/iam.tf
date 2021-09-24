@@ -58,13 +58,13 @@ locals {
     values(module.privileged_data_project)[*].project_id
   )
 
-  project_roles = {
+  project_roles = [
     for r in setproduct(local.projects, toset(local.int_proj_required_roles)) :
-    "${r[0]}-${r[1]}" => {
+    {
       project_id : r[0],
       role : r[1]
     }
-  }
+  ]
 }
 
 resource "google_service_account" "int_ci_service_account" {
@@ -91,10 +91,10 @@ resource "google_billing_account_iam_member" "tf_billing_user" {
 }
 
 resource "google_project_iam_member" "ci-account" {
-  for_each = local.project_roles
+  count = length(local.project_roles)
 
-  project = each.value.project_id
-  role    = each.value.role
+  project = local.project_roles[count.index].project_id
+  role    = local.project_roles[count.index].role
   member  = "serviceAccount:${google_service_account.int_ci_service_account.email}"
 }
 
