@@ -26,10 +26,15 @@ locals {
 }
 
 # ====================== Examples to project groups mapping ===============================
-# examples "batch-data-ingestion" e "bigquery_sensitive_data" are together in one group.
-# examples "regional-dlp" e "simple_example" are together in one group.
-# examples "dataflow-with-dlp" e de_identification_template"" are together in one group.
+# Examples "batch-data-ingestion" and "bigquery_sensitive_data" are together in one group.
+# Examples "regional-dlp" and "simple_example" are together in one group.
+# Examples "dataflow-with-dlp" and "de_identification_template" are together in one group.
+# See "build/int.cloudbuild.yaml" file for the build of these groups linked by "waitFor:"
 # =========================================================================================
+
+resource "random_id" "project_id_suffix" {
+  byte_length = 4
+}
 
 module "data_ingestion_project" {
   source  = "terraform-google-modules/project-factory/google"
@@ -37,7 +42,7 @@ module "data_ingestion_project" {
 
   for_each = local.project_groups
 
-  name              = "ci-secured-dtw-data-ing"
+  name              = "ci-sdw-data-ing-${random_id.project_id_suffix.hex}"
   random_project_id = "true"
   org_id            = var.org_id
   folder_id         = var.folder_id
@@ -78,7 +83,7 @@ module "data_governance_project" {
 
   for_each = local.project_groups
 
-  name              = "ci-secured-dtw-data-gov"
+  name              = "ci-sdw-data-gov-${random_id.project_id_suffix.hex}"
   random_project_id = "true"
   org_id            = var.org_id
   folder_id         = var.folder_id
@@ -103,7 +108,7 @@ module "datalake_project" {
 
   for_each = local.project_groups
 
-  name              = "ci-secured-dtw-datalake"
+  name              = "ci-sdw-datalake-${random_id.project_id_suffix.hex}"
   random_project_id = "true"
   org_id            = var.org_id
   folder_id         = var.folder_id
@@ -130,7 +135,7 @@ module "privileged_data_project" {
 
   for_each = local.project_groups
 
-  name              = "ci-secured-dtw-privileged"
+  name              = "ci-sdw-privileged-${random_id.project_id_suffix.hex}"
   random_project_id = "true"
   org_id            = var.org_id
   folder_id         = var.folder_id
@@ -159,7 +164,7 @@ module "external_flex_template_project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
 
-  name              = "ci-secured-dtw-ext-flx"
+  name              = "ci-sdw-ext-flx-${random_id.project_id_suffix.hex}"
   random_project_id = "true"
   org_id            = var.org_id
   folder_id         = var.folder_id
