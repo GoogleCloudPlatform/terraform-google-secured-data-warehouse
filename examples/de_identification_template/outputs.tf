@@ -18,7 +18,7 @@
 
 output "dlp_location" {
   description = "The location of the DLP resources."
-  value       = module.de_identification_template_example.dlp_location
+  value       = var.dlp_location
 }
 
 output "template_id" {

@@ -29,17 +29,17 @@ locals {
     "${path.module}/httpRequest.tmpl",
     {
       location                            = local.location,
-      network_self_link                   = module.data_ingestion.network_self_link,
+      network_self_link                   = var.network_self_link,
       dataflow_service_account            = module.data_ingestion.dataflow_controller_service_account_email,
-      subnetwork_self_link                = module.data_ingestion.subnets_self_links[0],
+      subnetwork_self_link                = var.subnetwork_self_link,
       inputFilePattern                    = "gs://${module.data_ingestion.data_ingest_bucket_names[0]}/cc_records.csv",
       bigquery_project_id                 = var.datalake_project_id,
       dataset_id                          = local.dataset_id,
       table_name                          = local.table_name,
       javascriptTextTransformFunctionName = "transform",
-      JSONPath                            = "gs://${module.dataflow_tmp_bucket.bucket.name}/code/${local.schema_file}",
-      javascriptTextTransformGcsPath      = "gs://${module.dataflow_tmp_bucket.bucket.name}/code/${local.transform_code_file}",
-      bigQueryLoadingTemporaryDirectory   = "gs://${module.dataflow_tmp_bucket.bucket.name}/tmp"
+      JSONPath                            = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/code/${local.schema_file}",
+      javascriptTextTransformGcsPath      = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/code/${local.transform_code_file}",
+      bigQueryLoadingTemporaryDirectory   = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/tmp"
     }
   )
 }
@@ -51,39 +51,16 @@ module "data_ingestion" {
   privileged_data_project_id       = var.privileged_data_project_id
   datalake_project_id              = var.datalake_project_id
   data_ingestion_project_id        = var.data_ingestion_project_id
+  sdx_project_number               = var.sdx_project_number
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
   perimeter_additional_members     = var.perimeter_members
   bucket_name                      = "bkt-data-ingestion"
   location                         = local.region
-  subnet_ip                        = "10.0.32.0/21"
   region                           = local.region
   dataset_id                       = local.dataset_id
   cmek_keyring_name                = "cmek_keyring_${random_id.random_suffix.hex}"
   delete_contents_on_destroy       = var.delete_contents_on_destroy
-}
-
-
-//dataflow temp bucket
-module "dataflow_tmp_bucket" {
-  source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
-  version = "~> 2.1"
-
-  project_id    = var.data_ingestion_project_id
-  name          = "bkt-${var.data_ingestion_project_id}-tmp-dataflow-${random_id.random_suffix.hex}"
-  location      = local.region
-  force_destroy = var.delete_contents_on_destroy
-  encryption    = { "default_kms_key_name" = module.data_ingestion.cmek_ingestion_crypto_key }
-
-  labels = {
-    "enterprise_data_ingest_bucket" = "true"
-  }
-
-  depends_on = [
-    module.data_ingestion.data_ingestion_access_level_name,
-    module.data_ingestion.data_governance_access_level_name,
-    module.data_ingestion.privileged_access_level_name
-  ]
 }
 
 resource "null_resource" "download_sample_cc_into_gcs" {
@@ -112,18 +89,24 @@ EOF
 resource "google_storage_bucket_object" "schema" {
   name   = "code/${local.schema_file}"
   source = "${path.module}/${local.schema_file}"
-  bucket = module.dataflow_tmp_bucket.bucket.name
+  bucket = module.data_ingestion.data_ingest_dataflow_bucket_name
+
   depends_on = [
-    module.dataflow_tmp_bucket
+    module.data_ingestion.data_ingestion_access_level_name,
+    module.data_ingestion.data_governance_access_level_name,
+    module.data_ingestion.privileged_access_level_name
   ]
 }
 
 resource "google_storage_bucket_object" "transform_code" {
   name   = "code/${local.transform_code_file}"
   source = "${path.module}/${local.transform_code_file}"
-  bucket = module.dataflow_tmp_bucket.bucket.name
+  bucket = module.data_ingestion.data_ingest_dataflow_bucket_name
+
   depends_on = [
-    module.dataflow_tmp_bucket
+    module.data_ingestion.data_ingestion_access_level_name,
+    module.data_ingestion.data_governance_access_level_name,
+    module.data_ingestion.privileged_access_level_name
   ]
 }
 

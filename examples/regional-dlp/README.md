@@ -1,16 +1,35 @@
 # Regional Structured DLP Python Flex Template
 
-This example illustrates how to run a Flex Python Dataflow job. It uses:
+This example illustrates how to run a Flex Python Dataflow job in the Secured data warehouse.
 
-- The `base-data-ingestion` submodule to create the basic ingestion infrastructure,
+It uses:
+
+- The [Secured data warehouse](../README.md) module to create the Secured data warehouse infrastructure,
 - The `de_identification_template` submodule to create the regional structured DLP template,
-- The `flex_template` submodule to build a regional structured DLP flex Python template,
-- The `python_module_repository` submodule to host a private Python Module repository
+- A Dataflow flex template to deploy the de-identification job.
 
 ## Prerequisites
 
 1. A `crypto_key` and `wrapped_key` pair.  Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location used for the `location` variable.
 1. An Existing GCP Project
+1. A pre-build Python Regional DLP De-identification flex template. See [Flex templates](../../flex_templates/README.md).
+1. The identity deploying the example must have permissions to grant role "roles/artifactregistry.reader" in the docker and python repos of the Flex templates.
+1. A network and subnetwork in the data ingestion project.
+
+### Firewall rules
+
+- All the egress should be denied
+- Allow only Restricted API Egress by TPC at 443 port
+- Allow only Private API Egress by TPC at 443 port
+- Allow ingress Dataflow workers by TPC at ports 12345 and 12346
+- Allow egress Dataflow workers     by TPC at ports 12345 and 12346
+
+### DNS configurations
+
+- Restricted Google APIs
+- Private Google APIs
+- Restricted gcr.io
+- Restricted Artifact Registry
 
 ## Requirements
 
@@ -62,7 +81,6 @@ The Service Account which will be used to invoke this module must have the follo
   - Compute Network Admin: `roles/compute.networkAdmin`
   - Compute Security Admin: `roles/compute.securityAdmin`
   - DNS Admin: `roles/dns.admin`
-  - Cloud Build Editor: `roles/cloudbuild.builds.editor`
   - Artifact Registry Administrator: `roles/artifactregistry.admin`
   - Cloud KMS Admin: `roles/cloudkms.admin`
   - Dataflow Developer: `roles/dataflow.developer`
@@ -153,10 +171,6 @@ gcloud projects add-iam-policy-binding ${project_id} \
 
 gcloud projects add-iam-policy-binding ${project_id} \
 --member="serviceAccount:${sa_email}" \
---role="roles/cloudbuild.builds.editor"
-
-gcloud projects add-iam-policy-binding ${project_id} \
---member="serviceAccount:${sa_email}" \
 --role="roles/artifactregistry.admin"
 
 gcloud projects add-iam-policy-binding ${project_id} \
@@ -202,10 +216,15 @@ If your user does not have the necessary roles to run the commands above you can
 | data\_ingestion\_project\_id | The ID of the project in which the data ingestion resources will be created. | `string` | n/a | yes |
 | datalake\_project\_id | The ID of the project in which the Bigquery will be created. | `string` | n/a | yes |
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `false` | no |
+| external\_flex\_template\_project\_id | Project id of the external project that host the flex Dataflow templates. | `string` | n/a | yes |
+| flex\_template\_gs\_path | The Google Cloud Storage gs path to the JSON file built flex template that supports DLP de-identification. | `string` | `""` | no |
 | location | The location of Artifact registry. Run `gcloud artifacts locations list` to list available locations. | `string` | `"us-central1"` | no |
+| network\_self\_link | The URI of the network where Dataflow is going to be deployed. | `string` | n/a | yes |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | perimeter\_additional\_members | The list additional members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | `[]` | no |
 | privileged\_data\_project\_id | Project where the privileged datasets and tables are created. | `string` | n/a | yes |
+| sdx\_project\_number | The Project Number to configure Secure data exchange with egress rule for the dataflow templates. | `string` | n/a | yes |
+| subnetwork\_self\_link | The URI of the subnetwork where Dataflow is going to be deployed. | `string` | n/a | yes |
 | terraform\_service\_account | The email address of the service account that will run the Terraform config. | `string` | n/a | yes |
 | wrapped\_key | The base64 encoded data crypto key wrapped by KMS. | `string` | n/a | yes |
 
@@ -213,8 +232,6 @@ If your user does not have the necessary roles to run the commands above you can
 
 | Name | Description |
 |------|-------------|
-| dataflow\_bucket\_name | The name of the bucket created to store Dataflow temporary data. |
-| dataflow\_controller\_service\_account\_email | The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
-| templates\_bucket\_name | The name of the bucket created to store the flex template. |
+| template\_full\_path | The full path of DLP de-identification template. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

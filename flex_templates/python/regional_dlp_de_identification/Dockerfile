@@ -14,8 +14,10 @@
 
 FROM gcr.io/dataflow-templates-base/python3-template-launcher-base
 
+ARG ARG_PIP_INDEX_URL=https://us-central1-python.pkg.dev/project-id/python-modules/simple/
+
 ENV FLEX_TEMPLATE_PYTHON_REQUIREMENTS_FILE="/template/requirements.txt"
-ENV FLEX_TEMPLATE_PYTHON_PY_FILE="/template/flex_main.py"
+ENV FLEX_TEMPLATE_PYTHON_PY_FILE="/template/pubsub_dlp_bigquery.py"
 
 COPY . /template
 
@@ -32,4 +34,4 @@ RUN apt-get update \
 
 # Since we already downloaded all the dependencies, there's no need to rebuild everything.
 ENV PIP_NO_DEPS=True
-ENV PIP_INDEX_URL=${python_modules_private_repo}
+ENV PIP_INDEX_URL=$ARG_PIP_INDEX_URL

@@ -81,7 +81,7 @@ def run(argv=None, save_main_session=True):
         default=1000,
         type=int,
         help=(
-            'Number of records to be sent in a batch in ',
+            'Number of records to be sent in a batch in '
             'the call to the Data Loss Prevention (DLP) API.'
         )
     )

@@ -85,6 +85,7 @@ module "bigquery_sensitive_data" {
   dataset_id                            = var.confidential_dataset_id
   location                              = local.location
   cmek_confidential_bigquery_crypto_key = module.data_governance.cmek_confidential_bigquery_crypto_key
+  cmek_reidentification_crypto_key      = module.data_governance.cmek_reidentification_crypto_key
   delete_contents_on_destroy            = var.delete_contents_on_destroy
 }
 
@@ -95,11 +96,15 @@ module "bigquery_sensitive_data" {
 module "org_policies" {
   source = "./modules/org_policies"
 
-  for_each           = toset(local.projects_ids)
-  project_id         = each.key
-  region             = local.region
-  trusted_subnetwork = module.dwh_networking.subnets_names[0]
-  trusted_locations  = var.trusted_locations
+  for_each          = toset(local.projects_ids)
+  project_id        = each.key
+  region            = local.region
+  trusted_locations = var.trusted_locations
+
+  depends_on = [
+    module.data_ingestion,
+    module.bigquery_sensitive_data
+  ]
 }
 
 // A5 - DATA WAREHOUSE ORG POLICY - END

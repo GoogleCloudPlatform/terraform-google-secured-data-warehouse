@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-module "project" {
+module "data_ingestion_project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
 
@@ -39,9 +39,9 @@ module "project" {
     "dataflow.googleapis.com",
     "dlp.googleapis.com",
     "cloudscheduler.googleapis.com",
+    "cloudbuild.googleapis.com",
     "appengine.googleapis.com",
     "artifactregistry.googleapis.com",
-    "cloudbuild.googleapis.com",
     "compute.googleapis.com"
   ]
 }
@@ -70,7 +70,7 @@ module "data_governance_project" {
 }
 
 resource "google_app_engine_application" "app" {
-  project     = module.project.project_id
+  project     = module.data_ingestion_project.project_id
   location_id = "us-central"
 }
 
@@ -123,12 +123,12 @@ module "privileged_data_project" {
     "datacatalog.googleapis.com",
     "dns.googleapis.com",
     "compute.googleapis.com",
-    "artifactregistry.googleapis.com",
-    "cloudbuild.googleapis.com"
+    "cloudbuild.googleapis.com",
+    "artifactregistry.googleapis.com"
   ]
 }
 
-module "ext_artifact_registry_project" {
+module "external_flex_template_project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
 
@@ -147,6 +147,7 @@ module "ext_artifact_registry_project" {
     "cloudkms.googleapis.com",
     "dlp.googleapis.com",
     "artifactregistry.googleapis.com",
-    "cloudbuild.googleapis.com"
+    "cloudbuild.googleapis.com",
+    "compute.googleapis.com"
   ]
 }

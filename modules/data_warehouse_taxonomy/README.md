@@ -29,8 +29,9 @@ Functional examples are included in the [examples](./examples/bigquery_sensitive
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | cmek\_confidential\_bigquery\_crypto\_key | The Customer Managed Crypto Key for the confidential BigQuery service. | `string` | n/a | yes |
+| cmek\_reidentification\_crypto\_key | The Customer Managed Crypto Key for the reidentification crypto boundary. | `string` | n/a | yes |
 | confidential\_access\_members | List of members in the standard GCP form: user:{email}, serviceAccount:{email}, group:{email} who will have access to confidential information in BigQuery. | `list(string)` | `[]` | no |
-| dataset\_default\_table\_expiration\_ms | TTL of tables using the dataset in MS. The default value is 30 days. | `number` | `2592000000` | no |
+| dataset\_default\_table\_expiration\_ms | TTL of tables using the dataset in MS. The default value is null. | `number` | `null` | no |
 | dataset\_id | The dataset ID to deploy to data warehouse. | `string` | n/a | yes |
 | dataset\_labels | Key value pairs in a map for dataset labels. | `map(string)` | `{}` | no |
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `false` | no |
@@ -48,6 +49,7 @@ Functional examples are included in the [examples](./examples/bigquery_sensitive
 
 | Name | Description |
 |------|-------------|
+| confidential\_data\_dataflow\_bucket\_name | The name of the bucket created for dataflow in the confidential data pipeline. |
 | confidential\_dataflow\_controller\_service\_account\_email | The confidential Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
 | emails\_list | The service account email addresses by name. |
 | high\_policy\_taxonomy\_id | Content for Policy Tag ID in high policy. |

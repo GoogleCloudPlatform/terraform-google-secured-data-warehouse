@@ -77,12 +77,8 @@ A functional example for a Record Transformation is included under the
 
 | Name | Description |
 |------|-------------|
-| crypto\_key | The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP. |
-| dlp\_location | The location of the DLP resources. |
-| template\_description | The description of the DLP de-identification template. |
-| template\_display\_name | The display name of the DLP de-identification template. |
+| template\_full\_path | The full path of DLP de-identification template. |
 | template\_id | The ID of the Cloud DLP de-identification template that is created. |
-| wrapped\_key | The base64 encoded data crypto key wrapped by KMS. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 

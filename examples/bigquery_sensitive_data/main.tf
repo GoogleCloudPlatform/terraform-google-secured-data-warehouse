@@ -31,12 +31,12 @@ module "secured_data_warehouse" {
   privileged_data_project_id       = var.privileged_data_project_id
   datalake_project_id              = var.non_sensitive_project_id
   data_ingestion_project_id        = var.data_ingestion_project_id
+  sdx_project_number               = var.sdx_project_number
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
   perimeter_additional_members     = var.perimeter_members
   bucket_name                      = "bkt-data-ingestion"
   location                         = local.location
-  subnet_ip                        = "10.0.32.0/21"
   region                           = local.location
   dataset_id                       = local.dataset_id
   confidential_dataset_id          = local.confidential_dataset_id

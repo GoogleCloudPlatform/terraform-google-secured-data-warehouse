@@ -66,6 +66,24 @@ output "data_ingest_bucket_names" {
   ]
 }
 
+output "data_ingest_dataflow_bucket_name" {
+  description = "The name of the bucket created for dataflow in the data ingest pipeline."
+  value       = module.data_ingestion.data_ingest_dataflow_bucket_name
+
+  depends_on = [
+    time_sleep.wait_for_bridge_propagation
+  ]
+}
+
+output "confidential_data_dataflow_bucket_name" {
+  description = "The name of the bucket created for dataflow in the confidential data pipeline."
+  value       = module.bigquery_sensitive_data.confidential_data_dataflow_bucket_name
+
+  depends_on = [
+    time_sleep.wait_for_bridge_propagation
+  ]
+}
+
 output "data_ingest_topic_name" {
   description = "The topic created for data ingest pipeline."
   value       = module.data_ingestion.data_ingest_topic_name
@@ -78,66 +96,6 @@ output "data_ingest_topic_name" {
 output "data_ingest_bigquery_dataset" {
   description = "The bigquery dataset created for data ingest pipeline."
   value       = module.data_ingestion.data_ingest_bigquery_dataset
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
-
-output "network_name" {
-  description = "The name of the VPC being created."
-  value       = module.dwh_networking.network_name
-}
-
-output "network_self_link" {
-  description = "The URI of the VPC being created."
-  value       = module.dwh_networking.network_self_link
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
-output "subnets_names" {
-  description = "The names of the subnets being created."
-  value       = module.dwh_networking.subnets_names
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
-output "subnets_ips" {
-  description = "The IPs and CIDRs of the subnets being created."
-  value       = module.dwh_networking.subnets_ips
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
-output "subnets_self_links" {
-  description = "The self-links of subnets being created."
-  value       = module.dwh_networking.subnets_self_links
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
-output "confidential_subnets_self_links" {
-  description = "The self-links of confidential subnets being created."
-  value       = module.dwh_networking_privileged.subnets_self_links
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
-output "subnets_regions" {
-  description = "The region where the subnets will be created."
-  value       = module.dwh_networking.subnets_regions
 
   depends_on = [
     time_sleep.wait_for_bridge_propagation

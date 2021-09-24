@@ -34,8 +34,23 @@ variable "privileged_data_project_id" {
   type        = string
 }
 
+variable "sdx_project_number" {
+  description = "The Project Number to configure Secure data exchange with egress rule for the dataflow templates."
+  type        = string
+}
+
 variable "org_id" {
   description = "GCP Organization ID."
+  type        = string
+}
+
+variable "network_self_link" {
+  description = "The URI of the network where Dataflow is going to be deployed."
+  type        = string
+}
+
+variable "subnetwork_self_link" {
+  description = "The URI of the subnetwork where Dataflow is going to be deployed."
   type        = string
 }
 

@@ -68,13 +68,15 @@ module "secured_data_warehouse" {
 | bucket\_name | The name of for the bucket being provisioned. | `string` | n/a | yes |
 | cmek\_keyring\_name | The Keyring name for the KMS Customer Managed Encryption Keys being provisioned. | `string` | n/a | yes |
 | confidential\_access\_members | List of members in the standard GCP form: user:{email}, serviceAccount:{email}, group:{email} who will have access to confidential information in BigQuery. | `list(string)` | `[]` | no |
-| confidential\_dataset\_default\_table\_expiration\_ms | TTL of tables using the dataset in MS. The default value is 30 days. | `number` | `2592000000` | no |
+| confidential\_data\_dataflow\_deployer\_identities | List of members in the standard GCP form: user:{email}, serviceAccount:{email} that will deploy Dataflow jobs in the Confidential Data project. These identities will be added to the VPC-SC secure data exchange egress rules. | `list(string)` | `[]` | no |
+| confidential\_dataset\_default\_table\_expiration\_ms | TTL of tables using the dataset in MS. The default value is null. | `number` | `null` | no |
 | confidential\_dataset\_id | Unique ID for the confidential dataset being provisioned. | `string` | `"secured_dataset"` | no |
 | confidential\_table\_id | The confidential table ID to deploy to data warehouse. | `string` | `"sample_data"` | no |
 | data\_governance\_project\_id | The ID of the project in which the data governance resources will be created. | `string` | n/a | yes |
+| data\_ingestion\_dataflow\_deployer\_identities | List of members in the standard GCP form: user:{email}, serviceAccount:{email} that will deploy Dataflow jobs in the Data Ingestion project. These identities will be added to the VPC-SC secure data exchange egress rules. | `list(string)` | `[]` | no |
 | data\_ingestion\_project\_id | The ID of the project in which the data ingestion resources will be created | `string` | n/a | yes |
 | datalake\_project\_id | The ID of the project in which the Bigquery will be created. | `string` | n/a | yes |
-| dataset\_default\_table\_expiration\_ms | TTL of tables using the dataset in MS. The default value is almost 12 months. | `number` | `31536000000` | no |
+| dataset\_default\_table\_expiration\_ms | TTL of tables using the dataset in MS. The default value is null. | `number` | `null` | no |
 | dataset\_description | Dataset description. | `string` | `"Ingest dataset"` | no |
 | dataset\_id | Unique ID for the dataset being provisioned. | `string` | n/a | yes |
 | dataset\_name | Friendly name for the dataset being provisioned. | `string` | `"Ingest dataset"` | no |
@@ -86,12 +88,10 @@ module "secured_data_warehouse" {
 | private\_access\_members | List of members in the standard GCP form: user:{email}, serviceAccount:{email}, group:{email} who will have access to private information in BigQuery. | `list(string)` | `[]` | no |
 | privileged\_data\_project\_id | Project where the privileged datasets and tables are created. | `string` | n/a | yes |
 | region | The region in which the resources will be deployed. | `string` | `"us-central1"` | no |
-| subnet\_ip | The CDIR IP range of the subnetwork. | `string` | n/a | yes |
+| sdx\_project\_number | The Project Number to configure Secure data exchange with egress rule for the dataflow templates. | `string` | n/a | yes |
 | taxonomy\_name | The taxonomy display name. | `string` | `"secured_taxonomy"` | no |
 | terraform\_service\_account | The email address of the service account that will run the Terraform code. | `string` | n/a | yes |
 | trusted\_locations | This is a list of trusted regions where location-based GCP resources can be created. ie us-locations eu-locations. | `list(string)` | <pre>[<br>  "us-locations",<br>  "eu-locations"<br>]</pre> | no |
-| vpc\_ingestion\_network\_name | The name of the ingestion network. | `string` | `"ingestion-network"` | no |
-| vpc\_reidentify\_network\_name | The name of the reidentify network. | `string` | `"reidentify-network"` | no |
 
 ## Outputs
 
@@ -107,12 +107,13 @@ module "secured_data_warehouse" {
 | cmek\_keyring\_name | The Keyring name for the KMS Customer Managed Encryption Keys. |
 | cmek\_reidentification\_crypto\_key | The Customer Managed Crypto Key for the Privileged crypto boundary. |
 | cmek\_reidentification\_crypto\_key\_name | The Customer Managed Crypto Key name for the reidentification crypto boundary. |
+| confidential\_data\_dataflow\_bucket\_name | The name of the bucket created for dataflow in the confidential data pipeline. |
 | confidential\_dataflow\_controller\_service\_account\_email | The confidential Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
-| confidential\_subnets\_self\_links | The self-links of confidential subnets being created. |
 | data\_governance\_access\_level\_name | Access context manager access level name. |
 | data\_governance\_service\_perimeter\_name | Access context manager service perimeter name. |
 | data\_ingest\_bigquery\_dataset | The bigquery dataset created for data ingest pipeline. |
 | data\_ingest\_bucket\_names | The name list of the buckets created for data ingest pipeline. |
+| data\_ingest\_dataflow\_bucket\_name | The name of the bucket created for dataflow in the data ingest pipeline. |
 | data\_ingest\_topic\_name | The topic created for data ingest pipeline. |
 | data\_ingestion\_access\_level\_name | Access context manager access level name. |
 | data\_ingestion\_service\_perimeter\_name | Access context manager service perimeter name. |
@@ -123,16 +124,10 @@ module "secured_data_warehouse" {
 | member\_policy\_name\_confidential | SA member for Person Name policy tag. |
 | member\_policy\_name\_private | SA member for Person Name policy tag. |
 | member\_policy\_ssn\_confidential | SA member for Social Security Number policy tag. |
-| network\_name | The name of the VPC being created. |
-| network\_self\_link | The URI of the VPC being created. |
 | privileged\_access\_level\_name | Access context manager access level name. |
 | privileged\_service\_perimeter\_name | Access context manager service perimeter name. |
 | pubsub\_writer\_service\_account\_email | The PubSub writer service account email. Should be used to write data to the PubSub topics the ingestion pipeline reads from. |
 | storage\_writer\_service\_account\_email | The Storage writer service account email. Should be used to write data to the buckets the ingestion pipeline reads from. |
-| subnets\_ips | The IPs and CIDRs of the subnets being created. |
-| subnets\_names | The names of the subnets being created. |
-| subnets\_regions | The region where the subnets will be created. |
-| subnets\_self\_links | The self-links of subnets being created. |
 | taxonomy\_name | The taxonomy display name. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

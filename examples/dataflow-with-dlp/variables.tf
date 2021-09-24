@@ -54,9 +54,29 @@ variable "privileged_data_project_id" {
   type        = string
 }
 
+variable "external_flex_template_project_id" {
+  description = "Project id of the external project that host the flex Dataflow templates."
+  type        = string
+}
+
+variable "sdx_project_number" {
+  description = "The Project Number to configure Secure data exchange with egress rule for the flex Dataflow templates."
+  type        = string
+}
+
 variable "access_context_manager_policy_id" {
   description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
   type        = number
+}
+
+variable "network_self_link" {
+  description = "The URI of the network where Dataflow is going to be deployed."
+  type        = string
+}
+
+variable "subnetwork_self_link" {
+  description = "The URI of the subnetwork where Dataflow is going to be deployed."
+  type        = string
 }
 
 variable "delete_contents_on_destroy" {
@@ -65,3 +85,8 @@ variable "delete_contents_on_destroy" {
   default     = false
 }
 
+variable "de_identify_template_gs_path" {
+  description = "The Google Cloud Storage gs path to the JSON file built flex template that supports DLP de-identification."
+  type        = string
+  default     = ""
+}

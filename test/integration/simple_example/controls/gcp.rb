@@ -14,7 +14,6 @@
 
 data_ingest_bucket_names = attribute('data_ingest_bucket_names')
 data_ingest_topic_name = attribute('data_ingest_topic_name')
-network_name = attribute('network_name')
 project_id = attribute('project_id')
 data_governance_project_id = attribute('data_governance_project_id')
 datalake_project_id = attribute('datalake_project_id')
@@ -26,7 +25,6 @@ cmek_location = 'us-central1'
 cmek_keyring_name = attribute('cmek_keyring_name')
 cmek_ingestion_crypto_key_name = attribute('cmek_ingestion_crypto_key_name')
 cmek_bigquery_crypto_key_name = attribute('cmek_bigquery_crypto_key_name')
-
 
 restricted_googleapis_cidr = '199.36.153.4/30'
 private_googleapis_cidr = '199.36.153.8/30'
@@ -52,10 +50,6 @@ control 'gcp' do
     end
   end
 
-  describe google_compute_network(name: network_name, project: project_id) do
-    it { should exist }
-  end
-
   describe google_pubsub_topic(project: project_id, name: data_ingest_topic_name) do
     it { should exist }
   end
@@ -74,52 +68,6 @@ control 'gcp' do
     end
 
     its('status.access_levels') { should include "accessPolicies/#{organization_policy_name}/accessLevels/#{access_level_name}" }
-  end
-
-  describe google_dns_managed_zone(
-    project: project_id,
-    zone: 'dz-e-shared-restricted-apis'
-  ) do
-    it { should exist }
-  end
-
-  describe google_compute_firewall(
-    project: project_id,
-    name: 'fw-e-shared-restricted-65535-e-d-all-all-all'
-  ) do
-    its('direction') { should cmp 'EGRESS' }
-    its('destination_ranges') { should eq ['0.0.0.0/0'] }
-    it 'denies all protocols' do
-      expect(subject.denied).to contain_exactly(
-        an_object_having_attributes(ip_protocol: 'all', ports: nil)
-      )
-    end
-  end
-
-  describe google_compute_firewall(
-    project: project_id,
-    name: 'fw-e-shared-restricted-65534-e-a-allow-google-apis-all-tcp-443'
-  ) do
-    its('direction') { should cmp 'EGRESS' }
-    its('destination_ranges') { should eq [restricted_googleapis_cidr] }
-    it 'allows TCP' do
-      expect(subject.allowed).to contain_exactly(
-        an_object_having_attributes(ip_protocol: 'tcp', ports: ['443'])
-      )
-    end
-  end
-
-  describe google_compute_firewall(
-    project: project_id,
-    name: 'fw-e-shared-private-65533-e-a-allow-google-apis-all-tcp-443'
-  ) do
-    its('direction') { should cmp 'EGRESS' }
-    its('destination_ranges') { should eq [private_googleapis_cidr] }
-    it 'allows TCP' do
-      expect(subject.allowed).to contain_exactly(
-        an_object_having_attributes(ip_protocol: 'tcp', ports: ['443'])
-      )
-    end
   end
 
   describe google_kms_key_ring(project: data_governance_project_id, location: cmek_location, name: cmek_keyring_name) do

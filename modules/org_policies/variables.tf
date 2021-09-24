@@ -27,6 +27,7 @@ variable "region" {
 variable "trusted_subnetwork" {
   description = "Subnetwork name that eligible resources can use."
   type        = string
+  default     = ""
 }
 
 variable "trusted_locations" {

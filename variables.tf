@@ -62,20 +62,8 @@ variable "privileged_data_project_id" {
   type        = string
 }
 
-variable "vpc_reidentify_network_name" {
-  description = "The name of the reidentify network."
-  type        = string
-  default     = "reidentify-network"
-}
-
-variable "vpc_ingestion_network_name" {
-  description = "The name of the ingestion network."
-  type        = string
-  default     = "ingestion-network"
-}
-
-variable "subnet_ip" {
-  description = "The CDIR IP range of the subnetwork."
+variable "sdx_project_number" {
+  description = "The Project Number to configure Secure data exchange with egress rule for the dataflow templates."
   type        = string
 }
 
@@ -126,9 +114,9 @@ variable "confidential_dataset_id" {
 }
 
 variable "confidential_dataset_default_table_expiration_ms" {
-  description = "TTL of tables using the dataset in MS. The default value is 30 days."
+  description = "TTL of tables using the dataset in MS. The default value is null."
   type        = number
-  default     = 2592000000
+  default     = null
 }
 
 variable "confidential_table_id" {
@@ -155,9 +143,9 @@ variable "dataset_description" {
 }
 
 variable "dataset_default_table_expiration_ms" {
-  description = "TTL of tables using the dataset in MS. The default value is almost 12 months."
+  description = "TTL of tables using the dataset in MS. The default value is null."
   type        = number
-  default     = 31536000000
+  default     = null
 }
 
 variable "cmek_keyring_name" {
@@ -193,4 +181,16 @@ variable "delete_contents_on_destroy" {
   description = "(Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present."
   type        = bool
   default     = false
+}
+
+variable "data_ingestion_dataflow_deployer_identities" {
+  description = "List of members in the standard GCP form: user:{email}, serviceAccount:{email} that will deploy Dataflow jobs in the Data Ingestion project. These identities will be added to the VPC-SC secure data exchange egress rules."
+  type        = list(string)
+  default     = []
+}
+
+variable "confidential_data_dataflow_deployer_identities" {
+  description = "List of members in the standard GCP form: user:{email}, serviceAccount:{email} that will deploy Dataflow jobs in the Confidential Data project. These identities will be added to the VPC-SC secure data exchange egress rules."
+  type        = list(string)
+  default     = []
 }

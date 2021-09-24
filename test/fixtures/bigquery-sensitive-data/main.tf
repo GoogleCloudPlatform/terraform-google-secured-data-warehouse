@@ -47,14 +47,19 @@ resource "google_kms_secret_ciphertext" "wrapped_key" {
 module "bigquery_sensitive_data" {
   source = "../../..//examples/bigquery_sensitive_data"
 
-  org_id                           = var.org_id
-  access_context_manager_policy_id = var.access_context_manager_policy_id
-  non_sensitive_project_id         = var.datalake_project_id
-  data_ingestion_project_id        = var.data_ingestion_project_id
-  data_governance_project_id       = var.data_governance_project_id
-  privileged_data_project_id       = var.privileged_data_project_id
-  crypto_key                       = module.kek.keys[local.kek_key_name]
-  wrapped_key                      = google_kms_secret_ciphertext.wrapped_key.ciphertext
-  terraform_service_account        = var.terraform_service_account
-  delete_contents_on_destroy       = true
+  org_id                            = var.org_id
+  access_context_manager_policy_id  = var.access_context_manager_policy_id
+  non_sensitive_project_id          = var.datalake_project_id
+  data_ingestion_project_id         = var.data_ingestion_project_id
+  data_governance_project_id        = var.data_governance_project_id
+  privileged_data_project_id        = var.privileged_data_project_id
+  sdx_project_number                = var.sdx_project_number
+  external_flex_template_project_id = var.external_flex_template_project_id
+  crypto_key                        = module.kek.keys[local.kek_key_name]
+  wrapped_key                       = google_kms_secret_ciphertext.wrapped_key.ciphertext
+  terraform_service_account         = var.terraform_service_account
+  flex_template_gs_path             = var.python_re_identify_template_gs_path
+  network_self_link                 = var.privileged_network_self_link
+  subnetwork_self_link              = var.privileged_subnets_self_link
+  delete_contents_on_destroy        = true
 }

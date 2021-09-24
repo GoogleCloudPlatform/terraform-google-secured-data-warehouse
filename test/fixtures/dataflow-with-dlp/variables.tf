@@ -39,6 +39,26 @@ variable "privileged_data_project_id" {
   type        = string
 }
 
+variable "external_flex_template_project_id" {
+  description = "Project id of the external project that host the flex Dataflow templates."
+  type        = string
+}
+
+variable "sdx_project_number" {
+  description = "The Project Number to configure Secure data exchange with egress rule for the dataflow templates."
+  type        = string
+}
+
+variable "data_ingestion_network_self_link" {
+  description = "The URI of the network where Dataflow is going to be deployed."
+  type        = string
+}
+
+variable "data_ingestion_subnets_self_link" {
+  description = "The URI of the subnetwork where Dataflow is going to be deployed."
+  type        = string
+}
+
 variable "terraform_service_account" {
   description = "Service account email of the account to impersonate to run Terraform."
   type        = string
@@ -53,4 +73,10 @@ variable "perimeter_additional_members" {
   description = "The list additional members to be added on perimeter access. Prefix of group: user: or serviceAccount: is required."
   type        = list(string)
   default     = []
+}
+
+variable "java_de_identify_template_gs_path" {
+  description = "The Google Cloud Storage gs path to the JSON file built flex template that supports DLP de-identification."
+  type        = string
+  default     = ""
 }

@@ -14,37 +14,7 @@
  * limitations under the License.
  */
 
-output "project_id" {
-  description = "The project_id used to create data ingestion infra."
-  value       = var.data_ingestion_project_id
-}
-
-output "data_governance_project_id" {
-  description = "The project_id used to create data governance infra."
-  value       = var.data_governance_project_id
-}
-
-output "datalake_project_id" {
-  description = "The datalake_project_id used to create bigquery."
-  value       = var.datalake_project_id
-}
-
-output "terraform_service_account" {
-  description = "The email address of the service account that will run the Terraform code."
-  value       = var.terraform_service_account
-}
-
-output "dataflow_bucket_name" {
-  description = "The name of the bucket created to store Dataflow temporary data."
-  value       = module.regional_dlp_example.dataflow_bucket_name
-}
-
-output "templates_bucket_name" {
-  description = "The name of the bucket created to store the flex template."
-  value       = module.regional_dlp_example.templates_bucket_name
-}
-
-output "dataflow_controller_service_account_email" {
-  description = "The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account."
-  value       = module.regional_dlp_example.dataflow_controller_service_account_email
+output "template_full_path" {
+  description = "The full path of DLP de-identification template."
+  value       = module.regional_dlp_example.template_full_path
 }

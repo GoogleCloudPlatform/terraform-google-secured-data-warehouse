@@ -39,6 +39,11 @@ variable "privileged_data_project_id" {
   type        = string
 }
 
+variable "sdx_project_number" {
+  description = "The Project Number to configure Secure data exchange with egress rule for the dataflow templates."
+  type        = string
+}
+
 variable "org_id" {
   description = "The ID of the organization in which the infrastructure will be created."
   type        = string
@@ -47,4 +52,14 @@ variable "org_id" {
 variable "access_context_manager_policy_id" {
   description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
   type        = number
+}
+
+variable "data_ingestion_network_self_link" {
+  description = "The URI of the network where Dataflow is going to be deployed."
+  type        = string
+}
+
+variable "data_ingestion_subnets_self_link" {
+  description = "The URI of the subnetwork where Dataflow is going to be deployed."
+  type        = string
 }
