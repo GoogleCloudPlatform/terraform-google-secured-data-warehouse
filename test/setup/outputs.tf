@@ -63,7 +63,7 @@ output "org_id" {
   value = var.org_id
 }
 
-output "billing_account_" {
+output "billing_account" {
   value = var.billing_account
 }
 
