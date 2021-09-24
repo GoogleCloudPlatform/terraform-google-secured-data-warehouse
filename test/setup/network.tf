@@ -14,37 +14,23 @@
  * limitations under the License.
  */
 
-module "dwh_networking_ingestion_1" {
+module "dwh_networking_ingestion" {
   source = "../../modules/dwh-networking"
 
-  project_id = module.data_ingestion_project_1.project_id
+  for_each = local.project_groups
+
+  project_id = module.data_ingestion_project[each.key].project_id
   region     = "us-central1"
   vpc_name   = "ingestion"
   subnet_ip  = "10.0.32.0/21"
 }
 
-module "dwh_networking_privileged_1" {
+module "dwh_networking_privileged" {
   source = "../../modules/dwh-networking"
 
-  project_id = module.privileged_data_project_1.project_id
-  region     = "us-central1"
-  vpc_name   = "reidentify"
-  subnet_ip  = "10.0.32.0/21"
-}
+  for_each = local.project_groups
 
-module "dwh_networking_ingestion_2" {
-  source = "../../modules/dwh-networking"
-
-  project_id = module.data_ingestion_project_2.project_id
-  region     = "us-central1"
-  vpc_name   = "ingestion"
-  subnet_ip  = "10.0.32.0/21"
-}
-
-module "dwh_networking_privileged_2" {
-  source = "../../modules/dwh-networking"
-
-  project_id = module.privileged_data_project_2.project_id
+  project_id = module.privileged_data_project[each.key].project_id
   region     = "us-central1"
   vpc_name   = "reidentify"
   subnet_ip  = "10.0.32.0/21"
