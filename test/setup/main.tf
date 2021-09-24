@@ -33,7 +33,7 @@ locals {
 # =========================================================================================
 
 resource "random_id" "project_id_suffix" {
-  byte_length = 4
+  byte_length = 3
 }
 
 module "data_ingestion_project" {
