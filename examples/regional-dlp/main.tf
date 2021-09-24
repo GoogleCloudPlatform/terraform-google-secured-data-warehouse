@@ -37,7 +37,6 @@ module "data_ingestion" {
   cmek_keyring_name                = "dlp_flex_ingest-${random_id.suffix.hex}"
   region                           = var.location
   delete_contents_on_destroy       = var.delete_contents_on_destroy
-  perimeter_additional_members     = var.perimeter_additional_members
 }
 
 module "de_identification_template_example" {

@@ -74,9 +74,3 @@ variable "privileged_subnets_self_link" {
   description = "The URI of the subnetwork where Dataflow is going to be deployed."
   type        = string
 }
-
-variable "perimeter_additional_members" {
-  description = "The list of the additional members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required."
-  type        = list(string)
-  default     = []
-}

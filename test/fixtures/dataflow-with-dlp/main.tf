@@ -61,5 +61,4 @@ module "dataflow_with_dlp" {
   crypto_key                        = module.kek.keys[local.kek_key_name]
   wrapped_key                       = google_kms_secret_ciphertext.wrapped_key.ciphertext
   de_identify_template_gs_path      = var.java_de_identify_template_gs_path
-  perimeter_additional_members      = var.perimeter_additional_members
 }

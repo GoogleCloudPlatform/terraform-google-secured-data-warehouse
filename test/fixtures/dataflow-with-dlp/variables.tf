@@ -69,12 +69,6 @@ variable "access_context_manager_policy_id" {
   type        = number
 }
 
-variable "perimeter_additional_members" {
-  description = "The list additional members to be added on perimeter access. Prefix of group: user: or serviceAccount: is required."
-  type        = list(string)
-  default     = []
-}
-
 variable "java_de_identify_template_gs_path" {
   description = "The Google Cloud Storage gs path to the JSON file built flex template that supports DLP de-identification."
   type        = string

@@ -54,7 +54,6 @@ module "data_ingestion" {
   sdx_project_number               = var.sdx_project_number
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  perimeter_additional_members     = var.perimeter_additional_members
   bucket_name                      = "bkt-data-ingestion"
   location                         = local.region
   region                           = local.region

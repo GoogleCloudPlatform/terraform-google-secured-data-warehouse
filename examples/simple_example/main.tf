@@ -28,5 +28,4 @@ module "secured_data_warehouse" {
   dataset_id                       = "dataset_simple_example"
   cmek_keyring_name                = "key_name_simple_example"
   delete_contents_on_destroy       = var.delete_contents_on_destroy
-  perimeter_additional_members     = var.perimeter_additional_members
 }

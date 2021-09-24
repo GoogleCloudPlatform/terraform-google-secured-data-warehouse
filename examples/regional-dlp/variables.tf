@@ -69,12 +69,6 @@ variable "subnetwork_self_link" {
   type        = string
 }
 
-variable "perimeter_additional_members" {
-  description = "The list additional members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required."
-  type        = list(string)
-  default     = []
-}
-
 variable "location" {
   description = "The location of Artifact registry. Run `gcloud artifacts locations list` to list available locations."
   type        = string

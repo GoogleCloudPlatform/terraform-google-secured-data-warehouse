@@ -38,7 +38,6 @@ This example illustrates how to run a Dataflow job that uses the `de_identificat
 | external\_flex\_template\_project\_id | Project id of the external project that host the flex Dataflow templates. | `string` | n/a | yes |
 | network\_self\_link | The URI of the network where Dataflow is going to be deployed. | `string` | n/a | yes |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
-| perimeter\_additional\_members | The list of the additional members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | `[]` | no |
 | privileged\_data\_project\_id | Project where the privileged datasets and tables are created. | `string` | n/a | yes |
 | sdx\_project\_number | The Project Number to configure Secure data exchange with egress rule for the flex Dataflow templates. | `string` | n/a | yes |
 | subnetwork\_self\_link | The URI of the subnetwork where Dataflow is going to be deployed. | `string` | n/a | yes |
