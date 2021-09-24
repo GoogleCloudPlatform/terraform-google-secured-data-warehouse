@@ -31,7 +31,7 @@ output "data_governance_project_id" {
 output "datalake_project_id" {
   value = [
     module.datalake_project_1.project_id,
-    module.datalake_project_1.project_id
+    module.datalake_project_2.project_id
   ]
 }
 
@@ -140,6 +140,6 @@ output "privileged_subnets_self_link" {
   description = "The self-links of confidential subnets being created."
   value = [
     module.dwh_networking_privileged_1.subnets_self_links[0],
-    module.dwh_networking_privileged_1.subnets_self_links[0]
+    module.dwh_networking_privileged_2.subnets_self_links[0]
   ]
 }
