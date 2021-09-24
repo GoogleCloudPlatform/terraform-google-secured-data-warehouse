@@ -110,9 +110,9 @@ variable "dataset_location" {
 }
 
 variable "dataset_default_table_expiration_ms" {
-  description = "TTL of tables using the dataset in MS. The default value is almost 12 months."
+  description = "TTL of tables using the dataset in MS. The default value is null."
   type        = number
-  default     = 31536000000
+  default     = null
 }
 
 variable "bigquery_encryption_key" {
