@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-module "data_ingestion_project" {
+module "data_ingestion_project_1" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
 
@@ -46,7 +46,7 @@ module "data_ingestion_project" {
   ]
 }
 
-module "data_governance_project" {
+module "data_governance_project_1" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
 
@@ -69,12 +69,12 @@ module "data_governance_project" {
   ]
 }
 
-resource "google_app_engine_application" "app" {
-  project     = module.data_ingestion_project.project_id
+resource "google_app_engine_application" "app_1" {
+  project     = module.data_ingestion_project_1.project_id
   location_id = "us-central"
 }
 
-module "datalake_project" {
+module "datalake_project_1" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
 
@@ -99,7 +99,7 @@ module "datalake_project" {
   ]
 }
 
-module "privileged_data_project" {
+module "privileged_data_project_1" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
 
@@ -127,6 +127,121 @@ module "privileged_data_project" {
     "artifactregistry.googleapis.com"
   ]
 }
+
+module "data_ingestion_project_2" {
+  source  = "terraform-google-modules/project-factory/google"
+  version = "~> 10.0"
+
+  name              = "ci-secured-dtw-data-ing"
+  random_project_id = "true"
+  org_id            = var.org_id
+  folder_id         = var.folder_id
+  billing_account   = var.billing_account
+
+  activate_apis = [
+    "datacatalog.googleapis.com",
+    "cloudresourcemanager.googleapis.com",
+    "storage-api.googleapis.com",
+    "serviceusage.googleapis.com",
+    "iam.googleapis.com",
+    "dns.googleapis.com",
+    "pubsub.googleapis.com",
+    "bigquery.googleapis.com",
+    "accesscontextmanager.googleapis.com",
+    "cloudbilling.googleapis.com",
+    "cloudkms.googleapis.com",
+    "dataflow.googleapis.com",
+    "dlp.googleapis.com",
+    "cloudscheduler.googleapis.com",
+    "cloudbuild.googleapis.com",
+    "appengine.googleapis.com",
+    "artifactregistry.googleapis.com",
+    "compute.googleapis.com"
+  ]
+}
+
+module "data_governance_project_2" {
+  source  = "terraform-google-modules/project-factory/google"
+  version = "~> 10.0"
+
+  name              = "ci-secured-dtw-data-gov"
+  random_project_id = "true"
+  org_id            = var.org_id
+  folder_id         = var.folder_id
+  billing_account   = var.billing_account
+
+  activate_apis = [
+    "datacatalog.googleapis.com",
+    "cloudresourcemanager.googleapis.com",
+    "storage-api.googleapis.com",
+    "serviceusage.googleapis.com",
+    "iam.googleapis.com",
+    "accesscontextmanager.googleapis.com",
+    "cloudbilling.googleapis.com",
+    "cloudkms.googleapis.com",
+    "dlp.googleapis.com"
+  ]
+}
+
+resource "google_app_engine_application" "app_2" {
+  project     = module.data_ingestion_project_2.project_id
+  location_id = "us-central"
+}
+
+module "datalake_project_2" {
+  source  = "terraform-google-modules/project-factory/google"
+  version = "~> 10.0"
+
+  name              = "ci-secured-dtw-datalake"
+  random_project_id = "true"
+  org_id            = var.org_id
+  folder_id         = var.folder_id
+  billing_account   = var.billing_account
+
+  activate_apis = [
+    "datacatalog.googleapis.com",
+    "cloudresourcemanager.googleapis.com",
+    "storage-api.googleapis.com",
+    "serviceusage.googleapis.com",
+    "iam.googleapis.com",
+    "bigquery.googleapis.com",
+    "accesscontextmanager.googleapis.com",
+    "cloudbilling.googleapis.com",
+    "cloudkms.googleapis.com",
+    "dataflow.googleapis.com",
+    "dlp.googleapis.com"
+  ]
+}
+
+module "privileged_data_project_2" {
+  source  = "terraform-google-modules/project-factory/google"
+  version = "~> 10.0"
+
+  name              = "ci-secured-dtw-privileged"
+  random_project_id = "true"
+  org_id            = var.org_id
+  folder_id         = var.folder_id
+  billing_account   = var.billing_account
+
+  activate_apis = [
+    "cloudresourcemanager.googleapis.com",
+    "storage-api.googleapis.com",
+    "serviceusage.googleapis.com",
+    "iam.googleapis.com",
+    "bigquery.googleapis.com",
+    "accesscontextmanager.googleapis.com",
+    "cloudbilling.googleapis.com",
+    "cloudkms.googleapis.com",
+    "dataflow.googleapis.com",
+    "dlp.googleapis.com",
+    "datacatalog.googleapis.com",
+    "dns.googleapis.com",
+    "compute.googleapis.com",
+    "cloudbuild.googleapis.com",
+    "artifactregistry.googleapis.com"
+  ]
+}
+
 
 module "external_flex_template_project" {
   source  = "terraform-google-modules/project-factory/google"
