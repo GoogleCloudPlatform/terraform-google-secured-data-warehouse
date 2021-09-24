@@ -53,3 +53,9 @@ variable "access_context_manager_policy_id" {
   description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
   type        = number
 }
+
+variable "perimeter_additional_members" {
+  description = "The list of the additional members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required."
+  type        = list(string)
+  default     = []
+}

@@ -61,5 +61,6 @@ module "bigquery_sensitive_data" {
   flex_template_gs_path             = var.python_re_identify_template_gs_path
   network_self_link                 = var.privileged_network_self_link
   subnetwork_self_link              = var.privileged_subnets_self_link
+  perimeter_additional_members      = var.perimeter_additional_members
   delete_contents_on_destroy        = true
 }

@@ -90,3 +90,9 @@ variable "de_identify_template_gs_path" {
   type        = string
   default     = ""
 }
+
+variable "perimeter_additional_members" {
+  description = "The list of the additional members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required."
+  type        = list(string)
+  default     = []
+}

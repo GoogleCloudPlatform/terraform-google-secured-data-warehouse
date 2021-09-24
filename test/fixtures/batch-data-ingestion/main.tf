@@ -31,6 +31,6 @@ module "batch_dataflow" {
   access_context_manager_policy_id = var.access_context_manager_policy_id
   network_self_link                = var.data_ingestion_network_self_link
   subnetwork_self_link             = var.data_ingestion_subnets_self_link
-  perimeter_members                = ["serviceAccount:${var.terraform_service_account}"]
+  perimeter_additional_members     = var.perimeter_additional_members
   delete_contents_on_destroy       = true
 }
