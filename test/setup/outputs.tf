@@ -63,6 +63,14 @@ output "java_de_identify_template_gs_path" {
   ]
 }
 
+output "java_re_identify_template_gs_path" {
+  value = local.java_re_identify_template_gs_path
+
+  depends_on = [
+    null_resource.java_re_identification_flex_template
+  ]
+}
+
 output "python_de_identify_template_gs_path" {
   value = local.python_de_identify_template_gs_path
 

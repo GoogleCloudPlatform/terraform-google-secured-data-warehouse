@@ -23,6 +23,8 @@ locals {
   bucket_name                                = module.external_flex_template_infrastructure.flex_template_bucket_name
   java_de_identify_flex_template_image_tag   = "${local.location}-docker.pkg.dev/${local.project_id}/${local.docker_repository_id}/samples/regional-txt-dlp-bq-streaming:latest"
   java_de_identify_template_gs_path          = "gs://${local.bucket_name}/flex-template-samples/regional-txt-dlp-bq-streaming.json"
+  java_re_identify_flex_template_image_tag   = "${local.location}-docker.pkg.dev/${local.project_id}/${local.docker_repository_id}/samples/regional-bq-dlp-bq-streaming:latest"
+  java_re_identify_template_gs_path          = "gs://${local.bucket_name}/flex-template-samples/regional-bq-dlp-bq-streaming.json"
   pip_index_url                              = "https://${local.location}-python.pkg.dev/${local.project_id}/${local.python_repository_id}/simple/"
   python_de_identify_flex_template_image_tag = "${local.location}-docker.pkg.dev/${local.project_id}/${local.docker_repository_id}/samples/regional-python-dlp-flex:latest"
   python_de_identify_template_gs_path        = "gs://${local.bucket_name}/flex-template-samples/regional-python-dlp-flex.json"
@@ -62,6 +64,32 @@ resource "null_resource" "java_de_identification_flex_template" {
        --config ${path.module}/../../flex_templates/java/regional_dlp_de_identification/cloudbuild.yaml \
        ${path.module}/../../flex_templates/java/regional_dlp_de_identification \
        --substitutions="_PROJECT=${local.project_id},_FLEX_TEMPLATE_IMAGE_TAG=${local.java_de_identify_flex_template_image_tag},_TEMPLATE_GS_PATH=${local.java_de_identify_template_gs_path}"
+EOF
+
+  }
+
+  depends_on = [
+    module.external_flex_template_infrastructure
+  ]
+}
+
+resource "null_resource" "java_re_identification_flex_template" {
+
+  triggers = {
+    project_id                = local.project_id
+    terraform_service_account = google_service_account.int_ci_service_account.email
+    template_image_tag        = local.java_re_identify_flex_template_image_tag
+    template_gs_path          = local.java_re_identify_template_gs_path
+  }
+
+  provisioner "local-exec" {
+    when    = create
+    command = <<EOF
+      gcloud builds submit \
+       --project=${local.project_id} \
+       --config ${path.module}/flex_templates/java/regional_dlp_re_identification/cloudbuild.yaml \
+       ${path.module}/flex_templates/java/regional_dlp_re_identification \
+       --substitutions="_PROJECT=${local.project_id},_FLEX_TEMPLATE_IMAGE_TAG=${local.java_re_identify_flex_template_image_tag},_TEMPLATE_GS_PATH=${local.java_re_identify_template_gs_path}"
 EOF
 
   }
