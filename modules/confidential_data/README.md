@@ -2,10 +2,9 @@
 
 This module creates:
 
-- A taxonomy and two policy tags that are split into two layers: confidential and private.
 - A BigQuery dataset.
-- A BigQuery table where policy tags will be applied.
-- Two service accounts that are bound to the policy tags.
+- A Bucket to be used as temporary and staging location for Dataflow jobs.
+- A Service account to be used as the dataflow controller service account.
 
 ## Usage
 
