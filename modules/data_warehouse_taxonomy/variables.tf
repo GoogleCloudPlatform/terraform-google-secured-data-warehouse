@@ -26,26 +26,8 @@ variable "dataset_labels" {
   default     = {}
 }
 
-variable "confidential_access_members" {
-  description = "List of members in the standard GCP form: user:{email}, serviceAccount:{email}, group:{email} who will have access to confidential information in BigQuery."
-  type        = list(string)
-  default     = []
-}
-
-variable "private_access_members" {
-  description = "List of members in the standard GCP form: user:{email}, serviceAccount:{email}, group:{email} who will have access to private information in BigQuery."
-  type        = list(string)
-  default     = []
-}
-
-variable "project_roles" {
-  description = "Common roles to apply to all service accounts in the project."
-  type        = list(string)
-  default     = []
-}
-
-variable "taxonomy_project_id" {
-  description = "Project where the taxonomy is going to be created."
+variable "data_governance_project_id" {
+  description = "The ID of the project in which the KMS, Datacatalog, and DLP resources are created."
   type        = string
 }
 
@@ -64,18 +46,8 @@ variable "dataset_id" {
   type        = string
 }
 
-variable "table_id" {
-  description = "The table ID to deploy to data warehouse."
-  type        = string
-}
-
 variable "location" {
   description = "Default region to create resources where applicable."
-  type        = string
-}
-
-variable "taxonomy_name" {
-  description = "The taxonomy display name."
   type        = string
 }
 

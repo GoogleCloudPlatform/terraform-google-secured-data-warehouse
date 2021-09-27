@@ -30,7 +30,7 @@ Functional examples are included in the [examples](./examples/bigquery_sensitive
 |------|-------------|------|---------|:--------:|
 | cmek\_confidential\_bigquery\_crypto\_key | The Customer Managed Crypto Key for the confidential BigQuery service. | `string` | n/a | yes |
 | cmek\_reidentification\_crypto\_key | The Customer Managed Crypto Key for the reidentification crypto boundary. | `string` | n/a | yes |
-| confidential\_access\_members | List of members in the standard GCP form: user:{email}, serviceAccount:{email}, group:{email} who will have access to confidential information in BigQuery. | `list(string)` | `[]` | no |
+| data\_governance\_project\_id | The ID of the project in which the KMS, Datacatalog, and DLP resources are created. | `string` | n/a | yes |
 | dataset\_default\_table\_expiration\_ms | TTL of tables using the dataset in MS. The default value is null. | `number` | `null` | no |
 | dataset\_id | The dataset ID to deploy to data warehouse. | `string` | n/a | yes |
 | dataset\_labels | Key value pairs in a map for dataset labels. | `map(string)` | `{}` | no |
@@ -38,12 +38,7 @@ Functional examples are included in the [examples](./examples/bigquery_sensitive
 | key\_rotation\_period\_seconds | Rotation period for keys. The default value is 30 days. | `string` | `"2592000s"` | no |
 | location | Default region to create resources where applicable. | `string` | n/a | yes |
 | non\_sensitive\_project\_id | Project with the de-identified dataset and table. | `string` | n/a | yes |
-| private\_access\_members | List of members in the standard GCP form: user:{email}, serviceAccount:{email}, group:{email} who will have access to private information in BigQuery. | `list(string)` | `[]` | no |
 | privileged\_data\_project\_id | Project where the privileged datasets and tables are created. | `string` | n/a | yes |
-| project\_roles | Common roles to apply to all service accounts in the project. | `list(string)` | `[]` | no |
-| table\_id | The table ID to deploy to data warehouse. | `string` | n/a | yes |
-| taxonomy\_name | The taxonomy display name. | `string` | n/a | yes |
-| taxonomy\_project\_id | Project where the taxonomy is going to be created. | `string` | n/a | yes |
 
 ## Outputs
 
@@ -51,13 +46,6 @@ Functional examples are included in the [examples](./examples/bigquery_sensitive
 |------|-------------|
 | confidential\_data\_dataflow\_bucket\_name | The name of the bucket created for dataflow in the confidential data pipeline. |
 | confidential\_dataflow\_controller\_service\_account\_email | The confidential Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
-| emails\_list | The service account email addresses by name. |
-| high\_policy\_taxonomy\_id | Content for Policy Tag ID in high policy. |
-| medium\_policy\_taxonomy\_id | Content for Policy Tag ID in medium policy. |
-| member\_policy\_name\_confidential | SA member for Person Name policy tag. |
-| member\_policy\_name\_private | SA member for Person Name policy tag. |
-| member\_policy\_ssn\_confidential | SA member for Social Security Number policy tag. |
-| taxonomy\_name | The taxonomy display name. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 

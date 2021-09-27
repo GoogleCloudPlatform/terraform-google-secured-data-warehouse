@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-taxonomy_project_id = attribute('taxonomy_project_id')
+data_governance_project_id = attribute('data_governance_project_id')
 social_security_number_policy_tag = attribute('social_security_number_policy_tag')
 person_name_policy_tag            = attribute('person_name_policy_tag')
 taxonomy_name                     = attribute('taxonomy_name')
@@ -101,13 +101,13 @@ control 'gcloud' do
     end
   end
 
-  describe command("gcloud data-catalog taxonomies list --location='us-central1' --project=#{taxonomy_project_id} --format=json") do
+  describe command("gcloud data-catalog taxonomies list --location='us-central1' --project=#{data_governance_project_id} --format=json") do
     its(:exit_status) { should eq 0 }
   end
 
   # # The test below depends of the fix from the bug https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/35
   #
-  #   describe command("bq show --schema  --headless --location='us-central1' --project_id=#{taxonomy_project_id} dtwh_dataset.sample_data") do
+  #   describe command("bq show --schema  --headless --location='us-central1' --project_id=#{data_governance_project_id} dtwh_dataset.sample_data") do
   #     its(:exit_status) { should eq 0 }
   #     its(:stderr) { should eq '' }
   #     let(:data) do

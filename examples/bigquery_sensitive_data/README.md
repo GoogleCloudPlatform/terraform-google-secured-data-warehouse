@@ -49,14 +49,6 @@ This example illustrates how to use the `bigquery_sensitive_data` submodule.
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
-| emails\_list | The service account email addresses by name. |
-| member\_policy\_name\_confidential | SA member for Person Name policy tag confidential. |
-| member\_policy\_name\_private | SA member for Person Name policy tag private. |
-| member\_policy\_ssn\_confidential | SA member for Social Security Number policy tag confidential. |
-| person\_name\_policy\_tag | Content for Policy Tag ID in medium policy. |
-| social\_security\_number\_policy\_tag | Content for Policy Tag ID in high policy. |
-| taxonomy\_name | The taxonomy display name. |
+No output.
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

@@ -246,65 +246,6 @@ output "cmek_confidential_bigquery_crypto_key_name" {
   ]
 }
 
-output "emails_list" {
-  description = "The service account email addresses by name."
-  value       = module.bigquery_sensitive_data.emails_list
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
-output "medium_policy_taxonomy_id" {
-  description = "Content for Policy Tag ID in medium policy."
-  value       = module.bigquery_sensitive_data.medium_policy_taxonomy_id
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
-output "high_policy_taxonomy_id" {
-  description = "Content for Policy Tag ID in high policy."
-  value       = module.bigquery_sensitive_data.high_policy_taxonomy_id
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
-output "member_policy_ssn_confidential" {
-  description = "SA member for Social Security Number policy tag."
-  value       = module.bigquery_sensitive_data.member_policy_ssn_confidential
-}
-
-output "member_policy_name_confidential" {
-  description = "SA member for Person Name policy tag."
-  value       = module.bigquery_sensitive_data.member_policy_name_confidential
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
-output "member_policy_name_private" {
-  description = "SA member for Person Name policy tag."
-  value       = module.bigquery_sensitive_data.member_policy_name_private
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
-output "taxonomy_name" {
-  description = "The taxonomy display name."
-  value       = module.bigquery_sensitive_data.taxonomy_name
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
 output "confidential_dataflow_controller_service_account_email" {
   description = "The confidential Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account."
   value       = module.bigquery_sensitive_data.confidential_dataflow_controller_service_account_email

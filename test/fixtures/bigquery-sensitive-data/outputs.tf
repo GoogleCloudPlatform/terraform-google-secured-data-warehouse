@@ -14,47 +14,12 @@
  * limitations under the License.
  */
 
-output "emails_list" {
-  description = "The service account email addresses by name."
-  value       = module.bigquery_sensitive_data.emails_list
-}
-
-output "person_name_policy_tag" {
-  description = "Content for Policy Tag ID in medium policy."
-  value       = module.bigquery_sensitive_data.person_name_policy_tag
-}
-
-output "social_security_number_policy_tag" {
-  description = "Content for Policy Tag ID in high policy."
-  value       = module.bigquery_sensitive_data.social_security_number_policy_tag
-}
-
-output "member_policy_ssn_confidential" {
-  description = "SA member for Social Security Number policy tag confidential."
-  value       = module.bigquery_sensitive_data.member_policy_ssn_confidential
-}
-
-output "member_policy_name_confidential" {
-  description = "SA member for Person Name policy tag confidential."
-  value       = module.bigquery_sensitive_data.member_policy_name_confidential
-}
-
-output "member_policy_name_private" {
-  description = "SA member for Person Name policy tag private."
-  value       = module.bigquery_sensitive_data.member_policy_name_private
-}
-
 output "bigquery_project_id" {
   description = "Project where bigquery and table were created."
   value       = var.privileged_data_project_id[0]
 }
 
-output "taxonomy_project_id" {
-  description = "Project where taxonomy was created."
+output "data_governance_project_id" {
+  description = "The ID of the project in which the KMS, Datacatalog, and DLP resources are created."
   value       = var.data_governance_project_id[0]
-}
-
-output "taxonomy_name" {
-  description = "The taxonomy display name."
-  value       = module.bigquery_sensitive_data.taxonomy_name
 }

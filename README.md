@@ -89,7 +89,6 @@ module "secured_data_warehouse" {
 | privileged\_data\_project\_id | Project where the privileged datasets and tables are created. | `string` | n/a | yes |
 | region | The region in which the resources will be deployed. | `string` | `"us-central1"` | no |
 | sdx\_project\_number | The Project Number to configure Secure data exchange with egress rule for the dataflow templates. | `string` | n/a | yes |
-| taxonomy\_name | The taxonomy display name. | `string` | `"secured_taxonomy"` | no |
 | terraform\_service\_account | The email address of the service account that will run the Terraform code. | `string` | n/a | yes |
 | trusted\_locations | This is a list of trusted regions where location-based GCP resources can be created. ie us-locations eu-locations. | `list(string)` | <pre>[<br>  "us-locations",<br>  "eu-locations"<br>]</pre> | no |
 
@@ -118,17 +117,10 @@ module "secured_data_warehouse" {
 | data\_ingestion\_access\_level\_name | Access context manager access level name. |
 | data\_ingestion\_service\_perimeter\_name | Access context manager service perimeter name. |
 | dataflow\_controller\_service\_account\_email | The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
-| emails\_list | The service account email addresses by name. |
-| high\_policy\_taxonomy\_id | Content for Policy Tag ID in high policy. |
-| medium\_policy\_taxonomy\_id | Content for Policy Tag ID in medium policy. |
-| member\_policy\_name\_confidential | SA member for Person Name policy tag. |
-| member\_policy\_name\_private | SA member for Person Name policy tag. |
-| member\_policy\_ssn\_confidential | SA member for Social Security Number policy tag. |
 | privileged\_access\_level\_name | Access context manager access level name. |
 | privileged\_service\_perimeter\_name | Access context manager service perimeter name. |
 | pubsub\_writer\_service\_account\_email | The PubSub writer service account email. Should be used to write data to the PubSub topics the ingestion pipeline reads from. |
 | storage\_writer\_service\_account\_email | The Storage writer service account email. Should be used to write data to the buckets the ingestion pipeline reads from. |
-| taxonomy\_name | The taxonomy display name. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 

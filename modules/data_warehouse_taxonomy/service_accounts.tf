@@ -35,12 +35,12 @@ module "dataflow_controller_service_account" {
     "${var.privileged_data_project_id}=>roles/serviceusage.serviceUsageConsumer",
     "${var.non_sensitive_project_id}=>roles/bigquery.admin",
     "${var.non_sensitive_project_id}=>roles/serviceusage.serviceUsageConsumer",
-    "${var.taxonomy_project_id}=>roles/serviceusage.serviceUsageConsumer",
-    "${var.taxonomy_project_id}=>roles/dlp.admin",
-    "${var.taxonomy_project_id}=>roles/dlp.deidentifyTemplatesEditor",
-    "${var.taxonomy_project_id}=>roles/dlp.user",
-    "${var.taxonomy_project_id}=>roles/cloudkms.admin",
-    "${var.taxonomy_project_id}=>roles/cloudkms.cryptoKeyDecrypter"
+    "${var.data_governance_project_id}=>roles/serviceusage.serviceUsageConsumer",
+    "${var.data_governance_project_id}=>roles/dlp.admin",
+    "${var.data_governance_project_id}=>roles/dlp.deidentifyTemplatesEditor",
+    "${var.data_governance_project_id}=>roles/dlp.user",
+    "${var.data_governance_project_id}=>roles/cloudkms.admin",
+    "${var.data_governance_project_id}=>roles/cloudkms.cryptoKeyDecrypter"
   ]
 }
 

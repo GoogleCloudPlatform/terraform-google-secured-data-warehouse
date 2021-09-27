@@ -153,12 +153,6 @@ variable "cmek_keyring_name" {
   type        = string
 }
 
-variable "taxonomy_name" {
-  description = "The taxonomy display name."
-  type        = string
-  default     = "secured_taxonomy"
-}
-
 variable "confidential_access_members" {
   description = "List of members in the standard GCP form: user:{email}, serviceAccount:{email}, group:{email} who will have access to confidential information in BigQuery."
   type        = list(string)

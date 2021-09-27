@@ -77,11 +77,9 @@ module "data_ingestion" {
 module "bigquery_sensitive_data" {
   source = "./modules/data_warehouse_taxonomy"
 
-  taxonomy_project_id                   = var.data_governance_project_id
+  data_governance_project_id            = var.data_governance_project_id
   privileged_data_project_id            = var.privileged_data_project_id
   non_sensitive_project_id              = var.datalake_project_id
-  taxonomy_name                         = var.taxonomy_name
-  table_id                              = var.confidential_table_id
   dataset_id                            = var.confidential_dataset_id
   location                              = local.location
   cmek_confidential_bigquery_crypto_key = module.data_governance.cmek_confidential_bigquery_crypto_key

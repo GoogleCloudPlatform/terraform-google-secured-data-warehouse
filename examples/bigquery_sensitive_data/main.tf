@@ -24,9 +24,9 @@ resource "random_id" "suffix" {
 }
 
 module "secured_data_warehouse" {
-  source                           = "../.."
+  source = "../.."
+
   org_id                           = var.org_id
-  taxonomy_name                    = "secured_taxonomy"
   data_governance_project_id       = var.data_governance_project_id
   privileged_data_project_id       = var.privileged_data_project_id
   datalake_project_id              = var.non_sensitive_project_id
@@ -40,7 +40,6 @@ module "secured_data_warehouse" {
   region                           = local.location
   dataset_id                       = local.dataset_id
   confidential_dataset_id          = local.confidential_dataset_id
-  confidential_table_id            = "sample_data"
   cmek_keyring_name                = "cmek_keyring_${random_id.suffix.hex}"
   delete_contents_on_destroy       = var.delete_contents_on_destroy
 }
