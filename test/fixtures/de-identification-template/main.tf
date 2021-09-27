@@ -25,7 +25,7 @@ module "kms" {
   source  = "terraform-google-modules/kms/google"
   version = "~> 1.2"
 
-  project_id      = var.data_governance_project_id
+  project_id      = var.data_governance_project_id[2]
   location        = var.dlp_location
   keyring         = local.keyring
   keys            = [local.key_name]
@@ -44,7 +44,7 @@ resource "google_kms_secret_ciphertext" "wrapped_key" {
 module "de_identification_template" {
   source = "../../..//modules/de_identification_template"
 
-  project_id                = var.data_governance_project_id
+  project_id                = var.data_governance_project_id[2]
   template_display_name     = local.template_display_name
   template_description      = local.template_description
   terraform_service_account = var.terraform_service_account

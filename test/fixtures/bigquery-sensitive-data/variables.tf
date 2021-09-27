@@ -26,22 +26,22 @@ variable "access_context_manager_policy_id" {
 
 variable "data_ingestion_project_id" {
   description = "The ID of the project in which the data ingestion resources will be created."
-  type        = string
+  type        = list(string)
 }
 
 variable "data_governance_project_id" {
   description = "The ID of the project in which the data governance resources will be created."
-  type        = string
+  type        = list(string)
 }
 
 variable "privileged_data_project_id" {
   description = "Project where the privileged datasets and tables are created."
-  type        = string
+  type        = list(string)
 }
 
 variable "datalake_project_id" {
   description = "The project ID of the BigQuery source that has de-identified data."
-  type        = string
+  type        = list(string)
 }
 
 variable "external_flex_template_project_id" {
@@ -67,10 +67,10 @@ variable "python_re_identify_template_gs_path" {
 
 variable "privileged_network_self_link" {
   description = "The URI of the network where Dataflow is going to be deployed."
-  type        = string
+  type        = list(string)
 }
 
 variable "privileged_subnets_self_link" {
   description = "The URI of the subnetwork where Dataflow is going to be deployed."
-  type        = string
+  type        = list(string)
 }

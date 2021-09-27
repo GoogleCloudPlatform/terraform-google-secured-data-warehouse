@@ -16,7 +16,7 @@
 
 variable "data_governance_project_id" {
   description = "The ID of the project in which the data governance resources will be created."
-  type        = string
+  type        = list(string)
 }
 
 variable "terraform_service_account" {
