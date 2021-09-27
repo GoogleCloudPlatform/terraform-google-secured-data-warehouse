@@ -25,12 +25,23 @@ locals {
   ])
 }
 
-# ====================== Examples to project groups mapping ===============================
+# ====================== Examples to project groups mapping ================================================
 # Examples "batch-data-ingestion" and "bigquery_sensitive_data" are together in one group.
 # Examples "regional-dlp" and "simple_example" are together in one group.
 # Examples "dataflow-with-dlp" and "de_identification_template" are together in one group.
+#
+# To add a new example, add it to one of the groups and try keep the number of examples that
+# deploy the main module to two in that group.
+# If that is not possible, try to refactor one of the examples to include your new case.
+# If that is not possible, follow these step to add a new group:
+#  1) Create a new project group and add it to the "project_groups" local,
+#  2) In "test/setup/iam.tf" create a new set of "google_project_iam_member" resources for the new group,
+#  3) In your new test fixture use the projects from the new group like "var.data_ingestion_project_id[3]",
+#  4) Update "build/int.cloudbuild.yaml" to create a new sequence of build steps for the new group. The
+#     initial step of the new groups must "waitFor:" the "prepare" step.
+#
 # See "build/int.cloudbuild.yaml" file for the build of these groups linked by "waitFor:"
-# =========================================================================================
+# ==========================================================================================================
 
 resource "random_id" "project_id_suffix" {
   byte_length = 3
