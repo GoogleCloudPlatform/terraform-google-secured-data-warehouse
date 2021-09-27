@@ -15,19 +15,19 @@
  */
 
 output "data_ingestion_project_id" {
-  value = module.data_ingestion_project.project_id
+  value = values(module.data_ingestion_project)[*].project_id
 }
 
 output "data_governance_project_id" {
-  value = module.data_governance_project.project_id
+  value = values(module.data_governance_project)[*].project_id
 }
 
 output "datalake_project_id" {
-  value = module.datalake_project.project_id
+  value = values(module.datalake_project)[*].project_id
 }
 
 output "privileged_data_project_id" {
-  value = module.privileged_data_project.project_id
+  value = values(module.privileged_data_project)[*].project_id
 }
 
 output "external_flex_template_project_id" {
@@ -86,30 +86,30 @@ output "sdx_project_number" {
 
 output "data_ingestion_network_name" {
   description = "The name of the data ingestion VPC being created."
-  value       = module.dwh_networking_ingestion.network_name
+  value       = values(module.dwh_networking_ingestion)[*].network_name
 }
 
 output "data_ingestion_network_self_link" {
   description = "The URI of the data ingestion VPC being created."
-  value       = module.dwh_networking_ingestion.network_self_link
+  value       = values(module.dwh_networking_ingestion)[*].network_self_link
 }
 
 output "data_ingestion_subnets_self_link" {
   description = "The self-links of data ingestion subnets being created."
-  value       = module.dwh_networking_ingestion.subnets_self_links[0]
+  value       = values(module.dwh_networking_ingestion)[*].subnets_self_links[0]
 }
 
 output "privileged_network_name" {
   description = "The name of the confidential VPC being created."
-  value       = module.dwh_networking_privileged.network_name
+  value       = values(module.dwh_networking_privileged)[*].network_name
 }
 
 output "privileged_network_self_link" {
   description = "The URI of the confidential VPC being created."
-  value       = module.dwh_networking_privileged.network_self_link
+  value       = values(module.dwh_networking_privileged)[*].network_self_link
 }
 
 output "privileged_subnets_self_link" {
   description = "The self-links of confidential subnets being created."
-  value       = module.dwh_networking_privileged.subnets_self_links[0]
+  value       = values(module.dwh_networking_privileged)[*].subnets_self_links[0]
 }
