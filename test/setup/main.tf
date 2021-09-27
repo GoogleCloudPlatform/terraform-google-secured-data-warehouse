@@ -71,7 +71,7 @@ module "data_governance_project" {
 
 resource "google_app_engine_application" "app" {
   project     = module.data_ingestion_project.project_id
-  location_id = "us-central"
+  location_id = "us-east4"
 }
 
 module "datalake_project" {
