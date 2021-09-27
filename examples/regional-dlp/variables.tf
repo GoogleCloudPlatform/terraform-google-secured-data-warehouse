@@ -78,7 +78,7 @@ variable "perimeter_additional_members" {
 variable "location" {
   description = "The location of Artifact registry. Run `gcloud artifacts locations list` to list available locations."
   type        = string
-  default     = "us-central1"
+  default     = "us-east4"
 }
 
 variable "crypto_key" {

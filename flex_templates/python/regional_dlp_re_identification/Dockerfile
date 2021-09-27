@@ -14,7 +14,7 @@
 
 FROM gcr.io/dataflow-templates-base/python3-template-launcher-base
 
-ARG ARG_PIP_INDEX_URL=https://us-central1-python.pkg.dev/project-id/python-modules/simple/
+ARG ARG_PIP_INDEX_URL=https://us-east4-python.pkg.dev/project-id/python-modules/simple/
 
 ENV FLEX_TEMPLATE_PYTHON_REQUIREMENTS_FILE="/template/requirements.txt"
 ENV FLEX_TEMPLATE_PYTHON_PY_FILE="/template/bigquery_dlp_bigquery.py"
