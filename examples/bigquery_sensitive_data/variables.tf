@@ -79,6 +79,11 @@ variable "terraform_service_account" {
   type        = string
 }
 
+variable "perimeter_additional_members" {
+  description = "The list of all members to be added on perimeter access, except the service accounts created by this module. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required."
+  type        = list(string)
+}
+
 variable "flex_template_gs_path" {
   description = "The Google Cloud Storage gs path to the JSON file built flex template that supports DLP re-identification."
   type        = string

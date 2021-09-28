@@ -60,6 +60,7 @@ module "data_ingestion" {
   dataset_id                       = local.dataset_id
   cmek_keyring_name                = "cmek_keyring_${random_id.random_suffix.hex}"
   delete_contents_on_destroy       = var.delete_contents_on_destroy
+  perimeter_additional_members     = var.perimeter_additional_members
 }
 
 resource "null_resource" "download_sample_cc_into_gcs" {

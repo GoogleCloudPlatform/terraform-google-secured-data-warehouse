@@ -62,4 +62,5 @@ module "bigquery_sensitive_data" {
   network_self_link                 = var.privileged_network_self_link[0]
   subnetwork_self_link              = var.privileged_subnets_self_link[0]
   delete_contents_on_destroy        = true
+  perimeter_additional_members      = []
 }

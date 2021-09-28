@@ -26,4 +26,5 @@ module "simple_example" {
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
   delete_contents_on_destroy       = true
+  perimeter_additional_members     = []
 }

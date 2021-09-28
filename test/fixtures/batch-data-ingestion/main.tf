@@ -32,4 +32,5 @@ module "batch_dataflow" {
   network_self_link                = var.data_ingestion_network_self_link[0]
   subnetwork_self_link             = var.data_ingestion_subnets_self_link[0]
   delete_contents_on_destroy       = true
+  perimeter_additional_members     = []
 }

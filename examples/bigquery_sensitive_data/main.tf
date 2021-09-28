@@ -42,4 +42,5 @@ module "secured_data_warehouse" {
   confidential_table_id            = "sample_data"
   cmek_keyring_name                = "cmek_keyring_${random_id.suffix.hex}"
   delete_contents_on_destroy       = var.delete_contents_on_destroy
+  perimeter_additional_members     = var.perimeter_additional_members
 }
