@@ -8,17 +8,27 @@
                     {
                         "fields": [
                             {
-                                "name": "name"
+                                "name": "Card Number"
+                            },
+                            {
+                                "name": "Card PIN"
+                            },
+                                                        {
+                                "name": "Card_Number"
+                            },
+                            {
+                                "name": "Card_PIN"
                             }
                         ],
                         "primitiveTransformation": {
-                            "cryptoDeterministicConfig": {
+                            "cryptoReplaceFfxFpeConfig": {
                                 "cryptoKey": {
                                     "kmsWrapped": {
                                         "cryptoKeyName": "${crypto_key}",
                                         "wrappedKey": "${wrapped_key}"
                                     }
                                 },
+                                "commonAlphabet": "ALPHA_NUMERIC"
                             }
                         }
                     }

@@ -111,7 +111,7 @@ module "secured_data_warehouse" {
 | data\_governance\_access\_level\_name | Access context manager access level name. |
 | data\_governance\_service\_perimeter\_name | Access context manager service perimeter name. |
 | data\_ingest\_bigquery\_dataset | The bigquery dataset created for data ingest pipeline. |
-| data\_ingest\_bucket\_names | The name list of the buckets created for data ingest pipeline. |
+| data\_ingest\_bucket\_name | The name of the bucket created for data ingest pipeline. |
 | data\_ingest\_dataflow\_bucket\_name | The name of the bucket created for dataflow in the data ingest pipeline. |
 | data\_ingest\_topic\_name | The topic created for data ingest pipeline. |
 | data\_ingestion\_access\_level\_name | Access context manager access level name. |

@@ -57,9 +57,9 @@ output "pubsub_writer_service_account_email" {
   ]
 }
 
-output "data_ingest_bucket_names" {
-  description = "The name list of the buckets created for data ingest pipeline."
-  value       = module.data_ingestion.data_ingest_bucket_names
+output "data_ingest_bucket_name" {
+  description = "The name of the bucket created for data ingest pipeline."
+  value       = module.data_ingestion.data_ingest_bucket_name
 
   depends_on = [
     time_sleep.wait_for_bridge_propagation

@@ -58,8 +58,9 @@ module "bigquery_sensitive_data" {
   crypto_key                        = module.kek.keys[local.kek_key_name]
   wrapped_key                       = google_kms_secret_ciphertext.wrapped_key.ciphertext
   terraform_service_account         = var.terraform_service_account
-  flex_template_gs_path             = var.python_re_identify_template_gs_path
-  network_self_link                 = var.privileged_network_self_link[0]
-  subnetwork_self_link              = var.privileged_subnets_self_link[0]
+  java_de_identify_template_gs_path = var.java_de_identify_template_gs_path
+  java_re_identify_template_gs_path = var.java_re_identify_template_gs_path
+  data_ingestion_subnets_self_link  = var.data_ingestion_subnets_self_link[0]
+  privileged_subnets_self_link      = var.privileged_subnets_self_link[0]
   delete_contents_on_destroy        = true
 }

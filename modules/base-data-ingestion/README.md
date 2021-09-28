@@ -210,7 +210,7 @@ If your user does not have the necessary roles to run the commands above you can
 | Name | Description |
 |------|-------------|
 | data\_ingest\_bigquery\_dataset | The bigquery dataset created for data ingest pipeline. |
-| data\_ingest\_bucket\_names | The name list of the buckets created for data ingest pipeline. |
+| data\_ingest\_bucket\_name | The name of the bucket created for data ingest pipeline. |
 | data\_ingest\_dataflow\_bucket\_name | The name of the bucket created for dataflow in the data ingest pipeline. |
 | data\_ingest\_topic\_name | The topic created for data ingest pipeline. |
 | dataflow\_controller\_service\_account\_email | The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |

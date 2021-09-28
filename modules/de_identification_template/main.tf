@@ -16,7 +16,6 @@
 
 
 locals {
-  kms_roles          = toset(["roles/cloudkms.cryptoKeyEncrypter", "roles/cloudkms.cryptoKeyDecrypter"])
   template_id        = "${var.template_id_prefix}_${random_id.random_template_id_suffix.hex}"
   template_full_path = "projects/${var.project_id}/locations/${var.dlp_location}/deidentifyTemplates/${local.template_id}"
 
@@ -44,12 +43,16 @@ resource "random_id" "random_template_id_suffix" {
   }
 }
 
-resource "google_kms_crypto_key_iam_binding" "dlp_encrypters_decrypters" {
-  for_each = local.kms_roles
-
-  role          = each.key
+resource "google_kms_crypto_key_iam_member" "dlp_decrypters" {
+  role          = "roles/cloudkms.cryptoKeyDecrypter"
   crypto_key_id = var.crypto_key
-  members       = ["serviceAccount:${var.dataflow_service_account}"]
+  member        = "serviceAccount:${var.dataflow_service_account}"
+}
+
+resource "google_kms_crypto_key_iam_member" "dlp_encrypters" {
+  role          = "roles/cloudkms.cryptoKeyEncrypter"
+  crypto_key_id = var.crypto_key
+  member        = "serviceAccount:${var.dataflow_service_account}"
 }
 
 resource "null_resource" "de_identify_template" {

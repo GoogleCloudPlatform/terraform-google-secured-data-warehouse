@@ -59,14 +59,20 @@ variable "terraform_service_account" {
   type        = string
 }
 
-variable "python_re_identify_template_gs_path" {
+variable "java_de_identify_template_gs_path" {
+  description = "The Google Cloud Storage gs path to the JSON file built flex template that supports DLP de-identification."
+  type        = string
+  default     = ""
+}
+
+variable "java_re_identify_template_gs_path" {
   description = "The Google Cloud Storage gs path to the JSON file built flex template that supports DLP re-identification."
   type        = string
   default     = ""
 }
 
-variable "privileged_network_self_link" {
-  description = "The URI of the network where Dataflow is going to be deployed."
+variable "data_ingestion_subnets_self_link" {
+  description = "The URI of the subnetwork where Dataflow is going to be deployed."
   type        = list(string)
 }
 

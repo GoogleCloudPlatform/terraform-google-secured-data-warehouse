@@ -30,7 +30,7 @@ This example illustrates how to use the `secured-data-warehouse` module.
 | cmek\_keyring\_name | The Keyring name for the KMS Customer Managed Encryption Keys. |
 | cmek\_reidentification\_crypto\_key\_name | The Customer Managed Crypto Key name for the reidentification crypto boundary. |
 | data\_ingest\_bigquery\_dataset | The bigquery dataset created for data ingest pipeline. |
-| data\_ingest\_bucket\_names | The name list of the buckets created for data ingest pipeline. |
+| data\_ingest\_bucket\_name | The name of the bucket created for data ingest pipeline. |
 | data\_ingest\_topic\_name | The topic created for data ingest pipeline. |
 | data\_ingestion\_access\_level\_name | Access context manager access level name. |
 | data\_ingestion\_service\_perimeter\_name | Access context manager service perimeter name. |

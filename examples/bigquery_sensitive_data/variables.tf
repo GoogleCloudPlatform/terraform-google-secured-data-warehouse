@@ -34,13 +34,13 @@ variable "data_ingestion_project_id" {
   type        = string
 }
 
-variable "network_self_link" {
-  description = "The URI of the network where Dataflow is going to be deployed."
+variable "privileged_subnets_self_link" {
+  description = "The URI of the subnetwork where Data Ingestion Dataflow is going to be deployed."
   type        = string
 }
 
-variable "subnetwork_self_link" {
-  description = "The URI of the subnetwork where Dataflow is going to be deployed."
+variable "data_ingestion_subnets_self_link" {
+  description = "The URI of the subnetwork where Data Ingestion Dataflow is going to be deployed."
   type        = string
 }
 
@@ -79,7 +79,13 @@ variable "terraform_service_account" {
   type        = string
 }
 
-variable "flex_template_gs_path" {
+variable "java_de_identify_template_gs_path" {
+  description = "The Google Cloud Storage gs path to the JSON file built flex template that supports DLP de-identification."
+  type        = string
+  default     = ""
+}
+
+variable "java_re_identify_template_gs_path" {
   description = "The Google Cloud Storage gs path to the JSON file built flex template that supports DLP re-identification."
   type        = string
   default     = ""
@@ -95,4 +101,10 @@ variable "perimeter_members" {
   description = "The list of all members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required."
   type        = list(string)
   default     = []
+}
+
+variable "taxonomy_name" {
+  description = "The taxonomy display name."
+  type        = string
+  default     = "secured_taxonomy"
 }

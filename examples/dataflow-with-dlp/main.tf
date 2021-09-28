@@ -53,7 +53,7 @@ resource "null_resource" "download_sample_cc_into_gcs" {
     echo "Changing sample file encoding from ISO-8859-1 to UTF-8"
     iconv -f="ISO-8859-1" -t="UTF-8" cc_records.csv > temp_cc_records.csv
     mv temp_cc_records.csv cc_records.csv
-    gsutil cp cc_records.csv gs://${module.data_ingestion.data_ingest_bucket_names[0]}
+    gsutil cp cc_records.csv gs://${module.data_ingestion.data_ingest_bucket_name}
     rm cc_records.csv
 EOF
 
@@ -103,7 +103,7 @@ resource "google_dataflow_flex_template_job" "regional_dlp" {
   region                  = local.region
 
   parameters = {
-    inputFilePattern       = "gs://${module.data_ingestion.data_ingest_bucket_names[0]}/cc_records.csv"
+    inputFilePattern       = "gs://${module.data_ingestion.data_ingest_bucket_name}/cc_records.csv"
     bqProjectId            = var.datalake_project_id
     datasetName            = local.dataset_id
     batchSize              = 1000

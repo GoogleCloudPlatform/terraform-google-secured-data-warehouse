@@ -32,7 +32,7 @@ locals {
       network_self_link                   = var.network_self_link,
       dataflow_service_account            = module.data_ingestion.dataflow_controller_service_account_email,
       subnetwork_self_link                = var.subnetwork_self_link,
-      inputFilePattern                    = "gs://${module.data_ingestion.data_ingest_bucket_names[0]}/cc_records.csv",
+      inputFilePattern                    = "gs://${module.data_ingestion.data_ingest_bucket_name}/cc_records.csv",
       bigquery_project_id                 = var.datalake_project_id,
       dataset_id                          = local.dataset_id,
       table_name                          = local.table_name,
@@ -73,7 +73,7 @@ resource "null_resource" "download_sample_cc_into_gcs" {
     echo "Changing sample file encoding from ISO-8859-1 to UTF-8"
     iconv -f="ISO-8859-1" -t="UTF-8" cc_records.csv > temp_cc_records.csv
     mv temp_cc_records.csv cc_records.csv
-    gsutil cp cc_records.csv gs://${module.data_ingestion.data_ingest_bucket_names[0]}
+    gsutil cp cc_records.csv gs://${module.data_ingestion.data_ingest_bucket_name}
     rm cc_records.csv
 EOF
 

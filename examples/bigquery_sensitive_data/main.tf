@@ -15,10 +15,15 @@
  */
 
 locals {
-  location                = "us-central1"
-  dataset_id              = "non_sensitive_dataset"
-  confidential_dataset_id = "secured_dataset"
+  region                   = "us-east4"
+  non_sensitive_dataset_id = "non_sensitive_dataset"
+  confidential_dataset_id  = "secured_dataset"
+  kek_keyring              = "kek_keyring_${random_id.suffix.hex}"
+  kek_key_name             = "kek_key_${random_id.suffix.hex}"
+  cc_file_name             = "cc_100_records.csv"
+
 }
+
 resource "random_id" "suffix" {
   byte_length = 4
 }
@@ -36,10 +41,118 @@ module "secured_data_warehouse" {
   access_context_manager_policy_id = var.access_context_manager_policy_id
   perimeter_additional_members     = var.perimeter_members
   bucket_name                      = "bkt-data-ingestion"
-  location                         = local.location
-  region                           = local.location
-  dataset_id                       = local.dataset_id
+  location                         = local.region
+  region                           = local.region
+  dataset_id                       = local.non_sensitive_dataset_id
   confidential_dataset_id          = local.confidential_dataset_id
   cmek_keyring_name                = "cmek_keyring_${random_id.suffix.hex}"
   delete_contents_on_destroy       = var.delete_contents_on_destroy
+}
+
+
+resource "google_storage_bucket_object" "cc_sample" {
+  name   = local.cc_file_name
+  source = "${path.module}/cc_files/${local.cc_file_name}"
+  bucket = module.secured_data_warehouse.data_ingest_bucket_name
+}
+
+module "de_identification_template" {
+  source = "../..//modules/de_identification_template"
+
+  project_id                = var.data_governance_project_id
+  terraform_service_account = var.terraform_service_account
+  crypto_key                = var.crypto_key
+  wrapped_key               = var.wrapped_key
+  dlp_location              = local.region
+  template_file             = "${path.module}/templates/deidentification.tmpl"
+  dataflow_service_account  = module.secured_data_warehouse.dataflow_controller_service_account_email # both accounts need
+}
+
+resource "google_artifact_registry_repository_iam_member" "docker_reader" {
+  provider = google-beta
+
+  project    = var.external_flex_template_project_id
+  location   = local.region
+  repository = "flex-templates"
+  role       = "roles/artifactregistry.reader"
+  member     = "serviceAccount:${module.secured_data_warehouse.dataflow_controller_service_account_email}"
+}
+
+resource "google_artifact_registry_repository_iam_member" "confidential_docker_reader" {
+  provider = google-beta
+
+  project    = var.external_flex_template_project_id
+  location   = local.region
+  repository = "flex-templates"
+  role       = "roles/artifactregistry.reader"
+  member     = "serviceAccount:${module.secured_data_warehouse.confidential_dataflow_controller_service_account_email}"
+}
+
+resource "google_dataflow_flex_template_job" "regional_dlp" {
+  provider = google-beta
+
+  project                 = var.data_ingestion_project_id
+  name                    = "regional-flex-java-gcs-dlp-bq"
+  container_spec_gcs_path = var.java_de_identify_template_gs_path
+  region                  = local.region
+
+  parameters = {
+    inputFilePattern       = "gs://${module.secured_data_warehouse.data_ingest_bucket_name}/${local.cc_file_name}"
+    bqProjectId            = var.non_sensitive_project_id
+    datasetName            = local.non_sensitive_dataset_id
+    batchSize              = 1000
+    dlpProjectId           = var.data_governance_project_id
+    dlpLocation            = local.region
+    deidentifyTemplateName = module.de_identification_template.template_full_path
+    serviceAccount         = module.secured_data_warehouse.dataflow_controller_service_account_email
+    subnetwork             = var.data_ingestion_subnets_self_link
+    dataflowKmsKey         = module.secured_data_warehouse.cmek_ingestion_crypto_key
+    tempLocation           = "gs://${module.secured_data_warehouse.data_ingest_dataflow_bucket_name}/tmp/"
+    stagingLocation        = "gs://${module.secured_data_warehouse.data_ingest_dataflow_bucket_name}/staging/"
+    maxNumWorkers          = 5
+    usePublicIps           = "false"
+  }
+
+  depends_on = [
+    google_artifact_registry_repository_iam_member.docker_reader
+  ]
+}
+
+resource "time_sleep" "wait_de_identify_job_execution" {
+  create_duration = "600s"
+
+  depends_on = [
+    google_dataflow_flex_template_job.regional_dlp
+  ]
+}
+
+resource "google_dataflow_flex_template_job" "regional_reid" {
+  provider = google-beta
+
+  #count                   = local.enable_dataflow ? 1 : 0
+  project                 = var.privileged_data_project_id
+  name                    = "dataflow-flex-regional-dlp-reid-job"
+  container_spec_gcs_path = var.java_re_identify_template_gs_path
+  region                  = local.region
+
+  parameters = {
+    inputBigQueryTable      = "${var.non_sensitive_project_id}:${local.non_sensitive_dataset_id}.${trimsuffix(local.cc_file_name, ".csv")}"
+    outputBigQueryDataset   = local.confidential_dataset_id
+    deidentifyTemplateName  = module.de_identification_template.template_full_path
+    dlpLocation             = local.region
+    dlpProjectId            = var.data_governance_project_id
+    privilegedDataProjectId = var.privileged_data_project_id
+    serviceAccount          = module.secured_data_warehouse.confidential_dataflow_controller_service_account_email
+    subnetwork              = var.privileged_subnets_self_link
+    dataflowKmsKey          = module.secured_data_warehouse.cmek_reidentification_crypto_key
+    tempLocation            = "gs://${module.secured_data_warehouse.confidential_data_dataflow_bucket_name}/tmp/"
+    stagingLocation         = "gs://${module.secured_data_warehouse.confidential_data_dataflow_bucket_name}/staging/"
+    usePublicIps            = false
+    enableStreamingEngine   = true
+  }
+
+  depends_on = [
+    module.bigquery_sensitive_data,
+    time_sleep.wait_de_identify_job_execution
+  ]
 }
