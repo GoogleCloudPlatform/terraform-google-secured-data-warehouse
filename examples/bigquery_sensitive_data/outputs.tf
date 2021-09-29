@@ -13,3 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+output "taxonomy_name" {
+  description = "The taxonomy display name."
+  value       = local.taxonomy_display_name
+}

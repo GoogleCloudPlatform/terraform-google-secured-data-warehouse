@@ -1,11 +1,19 @@
-# bigquery_sensitive_data Submodule Example
+# Bigquery Sensitive Data Example
 
-This example illustrates how to use the `bigquery_sensitive_data` submodule.
+This example illustrates how to run a Flex Java re-identification Dataflow job in the Secured data warehouse and
+how to use [Data Catalog policy tags](https://cloud.google.com/bigquery/docs/best-practices-policy-tags) to restrict access to sensitive columns in the re-identified table.
+
+It uses:
+
+- The [Secured data warehouse](../README.md) module to create the Secured data warehouse infrastructure,
+- The `de_identification_template` submodule to create the regional structured DLP template,
+- A Dataflow flex template to deploy the re-identification job.
+- A Dataflow flex template to deploy the de-identification job.
 
 ## Requirements
 
 1. A `crypto_key` and `wrapped_key` pair.  Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location used for the `location` variable.
-1. A pre-build Python Regional DLP Re-identification flex template. See [Flex templates](../../flex_templates/README.md).
+1. Pre-build Java Regional DLP De-identification and Re-identification flex templates. See [Flex templates](../../flex_templates/README.md).
 1. The identity deploying the example must have permissions to grant role "roles/artifactregistry.reader" in the docker and python repos of the Flex templates.
 1. You need to create network and subnetwork in the privileged project.
 
@@ -23,7 +31,6 @@ This example illustrates how to use the `bigquery_sensitive_data` submodule.
 - Private Google APIs
 - Restricted gcr.io
 - Restricted Artifact Registry
-
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
@@ -51,6 +58,8 @@ This example illustrates how to use the `bigquery_sensitive_data` submodule.
 
 ## Outputs
 
-No output.
+| Name | Description |
+|------|-------------|
+| taxonomy\_name | The taxonomy display name. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

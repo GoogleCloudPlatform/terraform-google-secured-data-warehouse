@@ -18,6 +18,7 @@ locals {
   region                   = "us-east4"
   non_sensitive_dataset_id = "non_sensitive_dataset"
   confidential_dataset_id  = "secured_dataset"
+  taxonomy_display_name    = "${var.taxonomy_name}-${random_id.suffix.hex}"
   confidential_table_id    = "${trimsuffix(local.cc_file_name, ".csv")}_re_id"
   kek_keyring              = "kek_keyring_${random_id.suffix.hex}"
   kek_key_name             = "kek_key_${random_id.suffix.hex}"

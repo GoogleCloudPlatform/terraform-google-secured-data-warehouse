@@ -18,7 +18,7 @@ resource "google_data_catalog_taxonomy" "secure_taxonomy" {
   provider               = google-beta
   project                = var.data_governance_project_id
   region                 = local.region
-  display_name           = "${var.taxonomy_name}-${random_id.suffix.hex}"
+  display_name           = local.taxonomy_display_name
   description            = "Taxonomy created for Sample Sensitive Data"
   activated_policy_types = ["FINE_GRAINED_ACCESS_CONTROL"]
 }

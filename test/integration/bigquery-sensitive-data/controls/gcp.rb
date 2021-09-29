@@ -12,19 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-names = attribute('emails_list')
 bigquery_project_id = attribute('bigquery_project_id')
 dataset_id = 'secured_dataset'
 
 control 'gcp' do
   title 'GCP Resources'
-
-  describe google_service_account(project: bigquery_project_id, name: names['terraform-confidential-sa']) do
-    it { should exist }
-  end
-  describe google_service_account(project: bigquery_project_id, name: names['terraform-private-sa']) do
-    it { should exist }
-  end
 
   describe google_bigquery_dataset(project: bigquery_project_id, name: dataset_id) do
     it { should exist }
