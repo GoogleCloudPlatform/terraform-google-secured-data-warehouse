@@ -54,11 +54,6 @@ variable "subnetwork_self_link" {
   type        = string
 }
 
-variable "perimeter_members" {
-  description = "The list of all members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required."
-  type        = list(string)
-}
-
 variable "access_context_manager_policy_id" {
   description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
   type        = number
@@ -67,6 +62,11 @@ variable "access_context_manager_policy_id" {
 variable "terraform_service_account" {
   description = "Service account email of the account to impersonate to run Terraform."
   type        = string
+}
+
+variable "perimeter_additional_members" {
+  description = "The list of all members to be added on perimeter access, except the service accounts created by this module. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required."
+  type        = list(string)
 }
 
 variable "delete_contents_on_destroy" {
