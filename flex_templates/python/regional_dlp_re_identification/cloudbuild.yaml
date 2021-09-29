@@ -34,8 +34,8 @@ steps:
 images: ['${_FLEX_TEMPLATE_IMAGE_TAG}']
 substitutions:
   _PROJECT: 'PROJECT'
-  _FLEX_TEMPLATE_IMAGE_TAG: 'us-central1-docker.pkg.dev/PROJECT_ID/flex-templates/samples/regional_dlp_flex:latest' # default value
+  _FLEX_TEMPLATE_IMAGE_TAG: 'us-east4-docker.pkg.dev/PROJECT_ID/flex-templates/samples/regional_dlp_flex:latest' # default value
   _TEMPLATE_GS_PATH: 'gs://BUCKET/flex-template-samples/regional_dlp_flex.json'
-  _PIP_INDEX_URL: 'https://us-central1-python.pkg.dev/PROJECT_ID/python-modules/simple/'
+  _PIP_INDEX_URL: 'https://us-east4-python.pkg.dev/PROJECT_ID/python-modules/simple/'
 options:
   logging: CLOUD_LOGGING_ONLY

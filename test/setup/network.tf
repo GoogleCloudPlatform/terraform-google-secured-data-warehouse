@@ -20,7 +20,7 @@ module "dwh_networking_ingestion" {
   for_each = local.project_groups
 
   project_id = module.data_ingestion_project[each.key].project_id
-  region     = "us-central1"
+  region     = "us-east4"
   vpc_name   = "ingestion"
   subnet_ip  = "10.0.32.0/21"
 }
@@ -31,7 +31,7 @@ module "dwh_networking_privileged" {
   for_each = local.project_groups
 
   project_id = module.privileged_data_project[each.key].project_id
-  region     = "us-central1"
+  region     = "us-east4"
   vpc_name   = "reidentify"
   subnet_ip  = "10.0.32.0/21"
 }

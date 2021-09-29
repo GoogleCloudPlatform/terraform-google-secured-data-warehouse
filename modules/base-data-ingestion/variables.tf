@@ -22,7 +22,7 @@ variable "org_id" {
 variable "region" {
   description = "The region in which subnetwork will be created and Pub/Sub message will be stored."
   type        = string
-  default     = "us-central1"
+  default     = "us-east4"
 }
 
 variable "terraform_service_account" {

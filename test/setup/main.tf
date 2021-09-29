@@ -85,7 +85,7 @@ resource "google_app_engine_application" "app" {
   for_each = module.data_ingestion_project
 
   project     = each.value.project_id
-  location_id = "us-central"
+  location_id = "us-east4"
 }
 
 module "data_governance_project" {

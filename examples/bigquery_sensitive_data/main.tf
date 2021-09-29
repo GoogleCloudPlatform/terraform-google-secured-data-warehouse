@@ -15,7 +15,7 @@
  */
 
 locals {
-  location                = "us-central1"
+  location                = "us-east4"
   dataset_id              = "non_sensitive_dataset"
   confidential_dataset_id = "secured_dataset"
 }
