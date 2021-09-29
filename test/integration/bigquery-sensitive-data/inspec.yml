@@ -33,15 +33,5 @@ attributes:
   - name: person_name_policy_tag
     required: true
     type: string
-  - name: social_security_number_policy_tag
-    required: true
-    type: string
-  - name: member_policy_ssn_confidential
-    required: true
-    type: array
-  - name: member_policy_name_confidential
-    required: true
-    type: array
-  - name: member_policy_name_private
-    required: true
-    type: array
+
+

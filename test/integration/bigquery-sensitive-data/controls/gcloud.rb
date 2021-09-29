@@ -13,97 +13,29 @@
 # limitations under the License.
 
 data_governance_project_id = attribute('data_governance_project_id')
-social_security_number_policy_tag = attribute('social_security_number_policy_tag')
-person_name_policy_tag            = attribute('person_name_policy_tag')
-taxonomy_name                     = attribute('taxonomy_name')
-member_policy_ssn_confidential    = attribute('member_policy_ssn_confidential')
-member_policy_name_confidential   = attribute('member_policy_name_confidential')
-member_policy_name_private        = attribute('member_policy_name_private')
+taxonomy_name              = attribute('taxonomy_name')
 
 control 'gcloud' do
   title 'Gcloud Resources'
 
-  describe command("gcloud data-catalog taxonomies policy-tags get-iam-policy #{social_security_number_policy_tag} --taxonomy='#{taxonomy_name}' --location='us-east4' --format=json") do
-    its(:exit_status) { should eq 0 }
-    its(:stderr) { should eq '' }
+    describe command("gcloud data-catalog taxonomies list --location='us-east4' --project=#{data_governance_project_id}  --filter=displayName=#{taxonomy_name} --format=json") do
+      its(:exit_status) { should eq 0 }
 
-    let(:data) do
-      if subject.exit_status.zero?
-        JSON.parse(subject.stdout)
-      else
-        {}
+      let(:data) do
+        if subject.exit_status.zero?
+          JSON.parse(subject.stdout)
+        else
+          {}
+        end
       end
-    end
 
-    member_policy_ssn_confidential.each do |member|
-      describe "Verifies SA social_security_number_policy_tag #{member}" do
+      describe "Taxonomy #{taxonomy_name}" do
         it 'should exist' do
-          expect(data).to_not be_empty
-        end
-
-        it "#{member} Confidential SA should have the right role on high policy tag" do
-          expect(data['bindings'][0]['members']).to include(member)
-          expect(data['bindings'][0]['role']).to eq 'roles/datacatalog.categoryFineGrainedReader'
+          expect(data[0]).to_not be_empty
         end
       end
+
     end
-  end
-
-  describe command("gcloud data-catalog taxonomies policy-tags get-iam-policy #{person_name_policy_tag} --taxonomy='#{taxonomy_name}' --location='us-east4' --format=json") do
-    its(:exit_status) { should eq 0 }
-    its(:stderr) { should eq '' }
-
-    let(:data) do
-      if subject.exit_status.zero?
-        JSON.parse(subject.stdout)
-      else
-        {}
-      end
-    end
-
-    member_policy_name_private.each do |member|
-      describe "Verifies SA person_name_policy_tag #{member}" do
-        it 'should exist' do
-          expect(data).to_not be_empty
-        end
-
-        it "#{member} Confidential SA should have the right role on medium policy" do
-          expect(data['bindings'][0]['members']).to include(member)
-          expect(data['bindings'][0]['role']).to eq 'roles/datacatalog.categoryFineGrainedReader'
-        end
-      end
-    end
-  end
-
-  describe command("gcloud data-catalog taxonomies policy-tags get-iam-policy #{person_name_policy_tag} --taxonomy='#{taxonomy_name}' --location='us-east4' --format=json") do
-    its(:exit_status) { should eq 0 }
-    its(:stderr) { should eq '' }
-
-    let(:data) do
-      if subject.exit_status.zero?
-        JSON.parse(subject.stdout)
-      else
-        {}
-      end
-    end
-
-    member_policy_name_confidential.each do |member|
-      describe "Verifies SA social_security_number_policy_tag #{member}" do
-        it 'should exist' do
-          expect(data).to_not be_empty
-        end
-
-        it "#{member_policy_name_private} Confidential SA should have the right role on medium policy" do
-          expect(data['bindings'][0]['members']).to include(member)
-          expect(data['bindings'][0]['role']).to eq 'roles/datacatalog.categoryFineGrainedReader'
-        end
-      end
-    end
-  end
-
-  describe command("gcloud data-catalog taxonomies list --location='us-east4' --project=#{data_governance_project_id} --format=json") do
-    its(:exit_status) { should eq 0 }
-  end
 
   # # The test below depends of the fix from the bug https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/35
   #
@@ -128,4 +60,6 @@ control 'gcloud' do
   #       )
   #     }
   #   end
+  end
 end
+

@@ -44,7 +44,7 @@ attributes:
     type: string
   - name: data_ingest_bucket_name
     required: true
-    type: array
+    type: string
   - name: data_ingest_topic_name
     required: true
     type: string
