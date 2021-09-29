@@ -154,6 +154,7 @@ resource "google_dataflow_flex_template_job" "regional_reid" {
   }
 
   depends_on = [
-    time_sleep.wait_de_identify_job_execution
+    time_sleep.wait_de_identify_job_execution,
+    google_bigquery_table.re_id
   ]
 }

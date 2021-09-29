@@ -21,6 +21,10 @@ resource "google_data_catalog_taxonomy" "secure_taxonomy" {
   display_name           = local.taxonomy_display_name
   description            = "Taxonomy created for Sample Sensitive Data"
   activated_policy_types = ["FINE_GRAINED_ACCESS_CONTROL"]
+
+  depends_on = [
+    module.secured_data_warehouse
+  ]
 }
 
 resource "google_data_catalog_policy_tag" "policy_tag_confidential" {
@@ -108,6 +112,10 @@ resource "google_bigquery_table" "re_id" {
       encryption_configuration # managed by the confidential dataset default_encryption_configuration.
     ]
   }
+
+  depends_on = [
+    module.secured_data_warehouse
+  ]
 }
 
 data "google_bigquery_default_service_account" "bq_sa" {
