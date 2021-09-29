@@ -18,6 +18,7 @@ locals {
   region                   = "us-east4"
   non_sensitive_dataset_id = "non_sensitive_dataset"
   confidential_dataset_id  = "secured_dataset"
+  confidential_table_id    = "${trimsuffix(local.cc_file_name, ".csv")}_re_id"
   kek_keyring              = "kek_keyring_${random_id.suffix.hex}"
   kek_key_name             = "kek_key_${random_id.suffix.hex}"
   cc_file_name             = "cc_100_records.csv"
@@ -152,7 +153,6 @@ resource "google_dataflow_flex_template_job" "regional_reid" {
   }
 
   depends_on = [
-    module.bigquery_sensitive_data,
     time_sleep.wait_de_identify_job_execution
   ]
 }

@@ -38,11 +38,20 @@ resource "google_data_catalog_policy_tag" "child_policy_tag_card_number" {
   parent_policy_tag = google_data_catalog_policy_tag.policy_tag_confidential.id
 }
 
+resource "google_data_catalog_policy_tag" "child_policy_tag_cvv" {
+  provider          = google-beta
+  taxonomy          = google_data_catalog_taxonomy.secure_taxonomy.id
+  display_name      = "CARD_VERIFICATION_VALUE"
+  description       = "A card verification value is 3 to 4 digits long. Used for card not present transactions."
+  parent_policy_tag = google_data_catalog_policy_tag.policy_tag_confidential.id
+}
+
 resource "google_data_catalog_policy_tag" "policy_tag_private" {
-  provider     = google-beta
-  taxonomy     = google_data_catalog_taxonomy.secure_taxonomy.id
-  display_name = "2_Private"
-  description  = "Data meant to be private. Likely to cause damage to enterprise"
+  provider          = google-beta
+  taxonomy          = google_data_catalog_taxonomy.secure_taxonomy.id
+  display_name      = "2_Private"
+  description       = "Data meant to be private. Likely to cause damage to enterprise"
+  parent_policy_tag = google_data_catalog_policy_tag.policy_tag_confidential.id
 }
 
 resource "google_data_catalog_policy_tag" "child_policy_tag_card_holder_name" {
@@ -53,11 +62,20 @@ resource "google_data_catalog_policy_tag" "child_policy_tag_card_holder_name" {
   parent_policy_tag = google_data_catalog_policy_tag.policy_tag_private.id
 }
 
+resource "google_data_catalog_policy_tag" "child_policy_tag_card_pin" {
+  provider          = google-beta
+  taxonomy          = google_data_catalog_taxonomy.secure_taxonomy.id
+  display_name      = "CREDIT_CARD_PIN"
+  description       = "Card personal identification number."
+  parent_policy_tag = google_data_catalog_policy_tag.policy_tag_private.id
+}
+
 resource "google_data_catalog_policy_tag" "policy_tag_sensitive" {
-  provider     = google-beta
-  taxonomy     = google_data_catalog_taxonomy.secure_taxonomy.id
-  display_name = "1_Sensitive"
-  description  = "Data not meant to be public."
+  provider          = google-beta
+  taxonomy          = google_data_catalog_taxonomy.secure_taxonomy.id
+  display_name      = "1_Sensitive"
+  description       = "Data not meant to be public."
+  parent_policy_tag = google_data_catalog_policy_tag.policy_tag_private.id
 }
 
 resource "google_data_catalog_policy_tag" "child_policy_tag_credit_limit" {
@@ -68,43 +86,12 @@ resource "google_data_catalog_policy_tag" "child_policy_tag_credit_limit" {
   parent_policy_tag = google_data_catalog_policy_tag.policy_tag_sensitive.id
 }
 
-
-module "bigquery_sensitive_data" {
-  source  = "terraform-google-modules/bigquery/google"
-  version = "~> 5.2.0"
-
-  dataset_id                  = local.confidential_dataset_id
-  description                 = "Dataset for BigQuery Sensitive Data"
-  project_id                  = var.privileged_data_project_id
-  location                    = local.region
-  delete_contents_on_destroy  = var.delete_contents_on_destroy
-  encryption_key              = module.secured_data_warehouse.cmek_confidential_bigquery_crypto_key
-  default_table_expiration_ms = 2592000000
-
-  tables = [
-    {
-      table_id = "${trimsuffix(local.cc_file_name, ".csv")}_re_id",
-      schema = templatefile("${path.module}/templates/schema.template",
-        {
-          pt_credit_limit = google_data_catalog_policy_tag.child_policy_tag_credit_limit.id,
-          pt_name         = google_data_catalog_policy_tag.child_policy_tag_card_holder_name.id,
-          pt_card_number  = google_data_catalog_policy_tag.child_policy_tag_card_number.id,
-      }),
-      time_partitioning  = null,
-      range_partitioning = null,
-      expiration_time    = null,
-      clustering         = null,
-      labels             = null,
-    }
-  ]
-}
-
 resource "google_bigquery_table" "re_id" {
   dataset_id      = local.confidential_dataset_id
   project         = var.privileged_data_project_id
-  table_id        = "${trimsuffix(local.cc_file_name, ".csv")}_re_id"
-  friendly_name   = "${trimsuffix(local.cc_file_name, ".csv")}_re_id"
-  expiration_time = 30 * 24 * 60 * 60 * 1000 # 30 days in ms. Validate if should be set.
+  table_id        = local.confidential_table_id
+  friendly_name   = local.confidential_table_id
+  expiration_time = 30 * 24 * 60 * 60 * 1000 # 30 days in ms.
 
 
   schema = templatefile("${path.module}/templates/schema.template",
@@ -112,17 +99,13 @@ resource "google_bigquery_table" "re_id" {
       pt_credit_limit = google_data_catalog_policy_tag.child_policy_tag_credit_limit.id,
       pt_name         = google_data_catalog_policy_tag.child_policy_tag_card_holder_name.id,
       pt_card_number  = google_data_catalog_policy_tag.child_policy_tag_card_number.id,
+      pt_cvv          = google_data_catalog_policy_tag.child_policy_tag_cvv.id,
+      pt_card_pin     = google_data_catalog_policy_tag.child_policy_tag_card_pin.id,
   })
 
-
-  encryption_configuration {
-    kms_key_name = module.secured_data_warehouse.cmek_confidential_bigquery_crypto_key
-  }
-
-  # https://github.com/terraform-google-modules/terraform-google-bigquery/blob/840ef4f10f3eac4c6cc34476108c3e2af7e50385/main.tf#L99
   lifecycle {
     ignore_changes = [
-      encryption_configuration # managed by google_bigquery_dataset.main.default_encryption_configuration
+      encryption_configuration # managed by the confidential dataset default_encryption_configuration.
     ]
   }
 }

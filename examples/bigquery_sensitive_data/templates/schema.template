@@ -33,7 +33,10 @@
   {
     "name": "CVVCVV2",
     "mode": "NULLABLE",
-    "type": "STRING"
+    "type": "STRING",
+    "policyTags": {
+      "names": ["${pt_cvv}"]
+    }
   },
   {
     "name": "Issue_Date",
@@ -53,7 +56,10 @@
   {
     "name": "Card_PIN",
     "mode": "NULLABLE",
-    "type": "STRING"
+    "type": "STRING",
+    "policyTags": {
+      "names": ["${pt_card_pin}"]
+    }
   },
   {
     "name": "Credit_Limit",

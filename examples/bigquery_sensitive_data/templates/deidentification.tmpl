@@ -11,27 +11,49 @@
                                 "name": "Card Number"
                             },
                             {
-                                "name": "Card PIN"
+                                "name": "Card Holder's Name"
                             },
-                                                        {
+                            {
+                                "name": "CVV/CVV2"
+                            },
+                            {
                                 "name": "Card_Number"
                             },
                             {
-                                "name": "Card_PIN"
+                                "name": "Card_Holders_Name"
+                            },
+                            {
+                                "name": "CVVCVV2"
                             }
                         ],
                         "primitiveTransformation": {
-                            "cryptoReplaceFfxFpeConfig": {
+                            "cryptoDeterministicConfig": {
                                 "cryptoKey": {
                                     "kmsWrapped": {
                                         "cryptoKeyName": "${crypto_key}",
                                         "wrappedKey": "${wrapped_key}"
                                     }
-                                },
-                                "commonAlphabet": "ALPHA_NUMERIC"
+                                }
                             }
                         }
-                    }
+                    },
+                    {
+                        "fields": [
+                            {
+                                "name": "Card PIN"
+                            }
+                        ],
+                        "primitiveTransformation": {
+                            "cryptoHashConfig": {
+                                "cryptoKey": {
+                                    "kmsWrapped": {
+                                        "cryptoKeyName": "${crypto_key}",
+                                        "wrappedKey": "${wrapped_key}"
+                                    }
+                                }
+                            }
+                        }
+                    },
                 ]
             }
         }
