@@ -26,12 +26,12 @@ gcloud beta builds submit \
 Follow the instructions in [Migrating containers from a third-party registry](https://cloud.google.com/artifact-registry/docs/docker/migrate-external-containers)
 to migrate the `maven:3.8.2-jdk-11` image.
 
-After migrating the image, update the cloudbuild.yaml file to used the image in the new repository, for example, for the artifact registry repository with name `migrated-images` in the `us-central1` location at project `your-project` use:
+After migrating the image, update the cloudbuild.yaml file to used the image in the new repository, for example, for the artifact registry repository with name `migrated-images` in the `us-east4` location at project `your-project` use:
 
 ```diff
 steps:
 - - name: 'maven:3.8.2-jdk-11'
-+ - name: 'us-central1-docker.pkg.dev/your-project/migrated-images/maven:3.8.2-jdk-11'
++ - name: 'us-east4-docker.pkg.dev/your-project/migrated-images/maven:3.8.2-jdk-11'
   entrypoint: 'mvn'
 ```
 

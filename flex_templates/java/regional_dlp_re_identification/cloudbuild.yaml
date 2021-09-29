@@ -32,7 +32,7 @@ steps:
   ]
 substitutions:
   _PROJECT: 'PROJECT'
-  _FLEX_TEMPLATE_IMAGE_TAG: 'us-central1-docker.pkg.dev/PROJECT_ID/flex-templates/template:latest'
+  _FLEX_TEMPLATE_IMAGE_TAG: 'us-east4-docker.pkg.dev/PROJECT_ID/flex-templates/template:latest'
   _TEMPLATE_GS_PATH: 'gs://BUCKET/template.json'
 options:
   logging: CLOUD_LOGGING_ONLY
