@@ -15,7 +15,7 @@
  */
 
 locals {
-  region     = "us-central1"
+  region     = "us-east4"
   dataset_id = "dts_data_ingestion"
 }
 

@@ -16,7 +16,7 @@
 
 
 locals {
-  location                                   = "us-central1"
+  location                                   = "us-east4"
   docker_repository_id                       = "flex-templates"
   python_repository_id                       = "python-modules"
   project_id                                 = module.external_flex_template_project.project_id

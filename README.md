@@ -26,7 +26,7 @@ module "secured_data_warehouse" {
 
   org_id = ORG_ID
   project_id = PROJECT_ID
-  region = "us-central1"
+  region = "us-east4"
   terraform_service_account = TERRAFORM_SERVICE_ACCOUNT
   vpc_name = VPC_NAME
   subnet_ip = "10.0.32.0/21"
@@ -87,7 +87,7 @@ module "secured_data_warehouse" {
 | perimeter\_additional\_members | The list additional members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | `[]` | no |
 | private\_access\_members | List of members in the standard GCP form: user:{email}, serviceAccount:{email}, group:{email} who will have access to private information in BigQuery. | `list(string)` | `[]` | no |
 | privileged\_data\_project\_id | Project where the privileged datasets and tables are created. | `string` | n/a | yes |
-| region | The region in which the resources will be deployed. | `string` | `"us-central1"` | no |
+| region | The region in which the resources will be deployed. | `string` | `"us-east4"` | no |
 | sdx\_project\_number | The Project Number to configure Secure data exchange with egress rule for the dataflow templates. | `string` | n/a | yes |
 | terraform\_service\_account | The email address of the service account that will run the Terraform code. | `string` | n/a | yes |
 | trusted\_locations | This is a list of trusted regions where location-based GCP resources can be created. ie us-locations eu-locations. | `list(string)` | <pre>[<br>  "us-locations",<br>  "eu-locations"<br>]</pre> | no |

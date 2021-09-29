@@ -202,7 +202,7 @@ If your user does not have the necessary roles to run the commands above you can
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `false` | no |
 | ingestion\_encryption\_key | Self-link of the encryption key to be used by Pub/Sub and Storage. | `string` | n/a | yes |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
-| region | The region in which subnetwork will be created and Pub/Sub message will be stored. | `string` | `"us-central1"` | no |
+| region | The region in which subnetwork will be created and Pub/Sub message will be stored. | `string` | `"us-east4"` | no |
 | terraform\_service\_account | The email address of the service account that will run the Terraform code. | `string` | n/a | yes |
 
 ## Outputs

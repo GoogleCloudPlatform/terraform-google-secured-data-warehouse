@@ -23,7 +23,7 @@ member_policy_name_private        = attribute('member_policy_name_private')
 control 'gcloud' do
   title 'Gcloud Resources'
 
-  describe command("gcloud data-catalog taxonomies policy-tags get-iam-policy #{social_security_number_policy_tag} --taxonomy='#{taxonomy_name}' --location='us-central1' --format=json") do
+  describe command("gcloud data-catalog taxonomies policy-tags get-iam-policy #{social_security_number_policy_tag} --taxonomy='#{taxonomy_name}' --location='us-east4' --format=json") do
     its(:exit_status) { should eq 0 }
     its(:stderr) { should eq '' }
 
@@ -49,7 +49,7 @@ control 'gcloud' do
     end
   end
 
-  describe command("gcloud data-catalog taxonomies policy-tags get-iam-policy #{person_name_policy_tag} --taxonomy='#{taxonomy_name}' --location='us-central1' --format=json") do
+  describe command("gcloud data-catalog taxonomies policy-tags get-iam-policy #{person_name_policy_tag} --taxonomy='#{taxonomy_name}' --location='us-east4' --format=json") do
     its(:exit_status) { should eq 0 }
     its(:stderr) { should eq '' }
 
@@ -75,7 +75,7 @@ control 'gcloud' do
     end
   end
 
-  describe command("gcloud data-catalog taxonomies policy-tags get-iam-policy #{person_name_policy_tag} --taxonomy='#{taxonomy_name}' --location='us-central1' --format=json") do
+  describe command("gcloud data-catalog taxonomies policy-tags get-iam-policy #{person_name_policy_tag} --taxonomy='#{taxonomy_name}' --location='us-east4' --format=json") do
     its(:exit_status) { should eq 0 }
     its(:stderr) { should eq '' }
 
@@ -101,13 +101,13 @@ control 'gcloud' do
     end
   end
 
-  describe command("gcloud data-catalog taxonomies list --location='us-central1' --project=#{data_governance_project_id} --format=json") do
+  describe command("gcloud data-catalog taxonomies list --location='us-east4' --project=#{data_governance_project_id} --format=json") do
     its(:exit_status) { should eq 0 }
   end
 
   # # The test below depends of the fix from the bug https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/35
   #
-  #   describe command("bq show --schema  --headless --location='us-central1' --project_id=#{data_governance_project_id} dtwh_dataset.sample_data") do
+  #   describe command("bq show --schema  --headless --location='us-east4' --project_id=#{data_governance_project_id} dtwh_dataset.sample_data") do
   #     its(:exit_status) { should eq 0 }
   #     its(:stderr) { should eq '' }
   #     let(:data) do
