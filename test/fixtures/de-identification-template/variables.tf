@@ -16,7 +16,7 @@
 
 variable "data_governance_project_id" {
   description = "The ID of the project in which the data governance resources will be created."
-  type        = string
+  type        = list(string)
 }
 
 variable "terraform_service_account" {
@@ -27,5 +27,5 @@ variable "terraform_service_account" {
 variable "dlp_location" {
   description = "The location of DLP resources. See https://cloud.google.com/dlp/docs/locations. The 'global' KMS location is valid."
   type        = string
-  default     = "us-central1"
+  default     = "us-east4"
 }

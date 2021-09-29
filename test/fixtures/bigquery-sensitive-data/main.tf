@@ -17,7 +17,7 @@
 locals {
   kek_keyring  = "kek_keyring_${random_id.random_suffix.hex}"
   kek_key_name = "kek_key_${random_id.random_suffix.hex}"
-  location     = "us-central1"
+  location     = "us-east4"
 }
 
 resource "random_id" "random_suffix" {
@@ -28,7 +28,7 @@ module "kek" {
   source  = "terraform-google-modules/kms/google"
   version = "~> 1.2"
 
-  project_id      = var.data_governance_project_id
+  project_id      = var.data_governance_project_id[0]
   location        = local.location
   keyring         = local.kek_keyring
   keys            = [local.kek_key_name]
@@ -49,17 +49,17 @@ module "bigquery_sensitive_data" {
 
   org_id                            = var.org_id
   access_context_manager_policy_id  = var.access_context_manager_policy_id
-  non_sensitive_project_id          = var.datalake_project_id
-  data_ingestion_project_id         = var.data_ingestion_project_id
-  data_governance_project_id        = var.data_governance_project_id
-  privileged_data_project_id        = var.privileged_data_project_id
+  non_sensitive_project_id          = var.datalake_project_id[0]
+  data_ingestion_project_id         = var.data_ingestion_project_id[0]
+  data_governance_project_id        = var.data_governance_project_id[0]
+  privileged_data_project_id        = var.privileged_data_project_id[0]
   sdx_project_number                = var.sdx_project_number
   external_flex_template_project_id = var.external_flex_template_project_id
   crypto_key                        = module.kek.keys[local.kek_key_name]
   wrapped_key                       = google_kms_secret_ciphertext.wrapped_key.ciphertext
   terraform_service_account         = var.terraform_service_account
   flex_template_gs_path             = var.python_re_identify_template_gs_path
-  network_self_link                 = var.privileged_network_self_link
-  subnetwork_self_link              = var.privileged_subnets_self_link
+  network_self_link                 = var.privileged_network_self_link[0]
+  subnetwork_self_link              = var.privileged_subnets_self_link[0]
   delete_contents_on_destroy        = true
 }

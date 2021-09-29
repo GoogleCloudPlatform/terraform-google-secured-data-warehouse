@@ -19,8 +19,8 @@ resource "random_id" "random_suffix" {
 }
 
 locals {
-  region              = "us-central1"
-  location            = "us-central1-a"
+  region              = "us-east4"
+  location            = "us-east4-a"
   schema_file         = "schema.json"
   transform_code_file = "transform.js"
   dataset_id          = "dts_data_ingestion"
@@ -127,7 +127,8 @@ module "scheduler_controller_service_account" {
 resource "google_cloud_scheduler_job" "scheduler" {
   name     = "scheduler-demo"
   schedule = "0 0 * * *"
-  # This needs to be us-central1 even if App Engine is in us-central.
+  # Scheduler need App Engine enabled in the project to run, in the same region where it going to be deployed.
+  # If you are using App Engine in us-central, you will need to use as region us-central1 for Scheduler.
   # You will get a resource not found error if just using us-central.
   region  = local.region
   project = var.data_ingestion_project_id

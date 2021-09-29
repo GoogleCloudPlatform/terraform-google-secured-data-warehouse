@@ -15,22 +15,22 @@
  */
 
 locals {
-  region = "us-central1"
+  region = "us-east4"
 }
 
 
 module "batch_dataflow" {
   source                           = "../../../examples/batch-data-ingestion"
   org_id                           = var.org_id
-  data_ingestion_project_id        = var.data_ingestion_project_id
-  data_governance_project_id       = var.data_governance_project_id
-  datalake_project_id              = var.datalake_project_id
-  privileged_data_project_id       = var.privileged_data_project_id
+  data_ingestion_project_id        = var.data_ingestion_project_id[0]
+  data_governance_project_id       = var.data_governance_project_id[0]
+  datalake_project_id              = var.datalake_project_id[0]
+  privileged_data_project_id       = var.privileged_data_project_id[0]
   sdx_project_number               = var.sdx_project_number
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  network_self_link                = var.data_ingestion_network_self_link
-  subnetwork_self_link             = var.data_ingestion_subnets_self_link
+  network_self_link                = var.data_ingestion_network_self_link[0]
+  subnetwork_self_link             = var.data_ingestion_subnets_self_link[0]
   perimeter_members                = ["serviceAccount:${var.terraform_service_account}"]
   delete_contents_on_destroy       = true
 }

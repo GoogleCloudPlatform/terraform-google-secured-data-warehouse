@@ -218,7 +218,7 @@ If your user does not have the necessary roles to run the commands above you can
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `false` | no |
 | external\_flex\_template\_project\_id | Project id of the external project that host the flex Dataflow templates. | `string` | n/a | yes |
 | flex\_template\_gs\_path | The Google Cloud Storage gs path to the JSON file built flex template that supports DLP de-identification. | `string` | `""` | no |
-| location | The location of Artifact registry. Run `gcloud artifacts locations list` to list available locations. | `string` | `"us-central1"` | no |
+| location | The location of Artifact registry. Run `gcloud artifacts locations list` to list available locations. | `string` | `"us-east4"` | no |
 | network\_self\_link | The URI of the network where Dataflow is going to be deployed. | `string` | n/a | yes |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | perimeter\_additional\_members | The list additional members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | `[]` | no |

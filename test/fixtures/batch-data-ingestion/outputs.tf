@@ -17,7 +17,7 @@
 
 output "project_id" {
   description = "The project's ID."
-  value       = var.data_ingestion_project_id
+  value       = var.data_ingestion_project_id[0]
 }
 
 output "scheduler_id" {
