@@ -53,7 +53,7 @@ module "secured_data_warehouse" {
 
 resource "google_storage_bucket_object" "cc_sample" {
   name   = local.cc_file_name
-  source = "${path.module}/cc_files/${local.cc_file_name}"
+  source = "${path.module}/files/cc_samples/${local.cc_file_name}"
   bucket = module.secured_data_warehouse.data_ingest_bucket_name
 }
 
