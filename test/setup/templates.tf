@@ -87,8 +87,8 @@ resource "null_resource" "java_re_identification_flex_template" {
     command = <<EOF
       gcloud builds submit \
        --project=${local.project_id} \
-       --config ${path.module}/flex_templates/java/regional_dlp_re_identification/cloudbuild.yaml \
-       ${path.module}/flex_templates/java/regional_dlp_re_identification \
+       --config ${path.module}/../../flex_templates/java/regional_dlp_re_identification/cloudbuild.yaml \
+       ${path.module}/../../flex_templates/java/regional_dlp_re_identification \
        --substitutions="_PROJECT=${local.project_id},_FLEX_TEMPLATE_IMAGE_TAG=${local.java_re_identify_flex_template_image_tag},_TEMPLATE_GS_PATH=${local.java_re_identify_template_gs_path}"
 EOF
 
