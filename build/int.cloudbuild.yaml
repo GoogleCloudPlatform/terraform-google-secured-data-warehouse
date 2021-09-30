@@ -16,7 +16,7 @@ timeout: 10800s
 steps:
 - id: prepare
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && prepare_environment && source_test_env && init_credentials']
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && prepare_environment']
   env:
   - 'TF_VAR_org_id=$_ORG_ID'
   - 'TF_VAR_folder_id=$_FOLDER_ID'
@@ -109,28 +109,28 @@ steps:
   waitFor:
     - prepare
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && sleep 90 && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && cd test/integration && RUN_STAGE=init go test -v -run TestBatchDataIngestion ./... -p 1']
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source_test_env && init_credentials && sleep 90 && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && cd test/integration && RUN_STAGE=init go test -v -run TestBatchDataIngestion ./... -p 1']
   env:
   - 'TF_VAR_org_id=$_ORG_ID'
 - id: converge-batch-data-ingestion
   waitFor:
     - create-batch-data-ingestion
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && cd test/integration && RUN_STAGE=apply go test -v -run TestBatchDataIngestion ./... -p 1 -timeout 0']
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source_test_env && init_credentials && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && cd test/integration && RUN_STAGE=apply go test -v -run TestBatchDataIngestion ./... -p 1 -timeout 0']
   env:
   - 'TF_VAR_org_id=$_ORG_ID'
 - id: verify-batch-data-ingestion
   waitFor:
     - converge-batch-data-ingestion
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && cd test/integration && RUN_STAGE=verify go test -v -run TestBatchDataIngestion ./... -p 1']
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source_test_env && init_credentials && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && cd test/integration && RUN_STAGE=verify go test -v -run TestBatchDataIngestion ./... -p 1']
   env:
   - 'TF_VAR_org_id=$_ORG_ID'
 - id: destroy-batch-data-ingestion
   waitFor:
     - verify-batch-data-ingestion
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && cd test/integration && RUN_STAGE=teardown go test -v -run TestBatchDataIngestion ./... -p 1']
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source_test_env && init_credentials && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && cd test/integration && RUN_STAGE=teardown go test -v -run TestBatchDataIngestion ./... -p 1']
   env:
   - 'TF_VAR_org_id=$_ORG_ID'
 # - id: create-simple-example
