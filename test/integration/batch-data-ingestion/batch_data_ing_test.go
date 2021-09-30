@@ -21,6 +21,7 @@ import (
 	"github.com/GoogleCloudPlatform/cloud-foundation-toolkit/infra/blueprint-test/pkg/gcloud"
 	"github.com/GoogleCloudPlatform/cloud-foundation-toolkit/infra/blueprint-test/pkg/tft"
 	"github.com/stretchr/testify/assert"
+	"github.com/tidwall/gjson"
 )
 
 func TestBatchDataIngestion(t *testing.T) {
@@ -43,13 +44,12 @@ func TestBatchDataIngestion(t *testing.T) {
 			fw := gcloud.Run(t, fmt.Sprintf("compute firewall-rules describe %s --project %s", ingressFWName, projectID))
 			assert.Equal(fwType, fw.Get("direction").String(), fmt.Sprintf("direction is %s", fwType))
 
-			fwAllowedPorts := fw.Get("allowed").Array()[0].Get("ports").Array()
-			assert.Equal(2, len(fwAllowedPorts), "only two ports are allowed")
-			assert.Equal("tcp", fw.Get("allowed").Array()[0].Get("IPProtocol").String(), "has tcp IPProtocol")
+			fwPortProtocol := fw.Get("allowed").Array()[0]
+			assert.Equal("tcp", fwPortProtocol.Get("IPProtocol").String(), "has tcp IPProtocol")
+
+			fwAllowedPorts := fwPortProtocol.Get("ports").Array()
 			expectedAllowedPorts := []string{"12345", "12346"}
-			for _, fwp := range fwAllowedPorts {
-				assert.Contains(expectedAllowedPorts, fwp.String(), fmt.Sprintf("allowed ports in %s", expectedAllowedPorts))
-			}
+			assert.ElementsMatch(expectedAllowedPorts, getResultStrSlice(fwAllowedPorts), "has only allowed ports")
 
 			if fwType == "INGRESS" {
 				assert.Equal(1, len(fw.Get("sourceRanges").Array()), "only one source range")
@@ -59,4 +59,13 @@ func TestBatchDataIngestion(t *testing.T) {
 	})
 
 	bdi.Test()
+}
+
+// getResultStrSlice parses results into a string slice
+func getResultStrSlice(rs []gjson.Result) []string {
+	s := make([]string, 0)
+	for _, r := range rs {
+		s = append(s, r.String())
+	}
+	return s
 }
