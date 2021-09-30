@@ -63,4 +63,5 @@ module "bigquery_sensitive_data" {
   data_ingestion_subnets_self_link  = var.data_ingestion_subnets_self_link[0]
   privileged_subnets_self_link      = var.privileged_subnets_self_link[0]
   delete_contents_on_destroy        = true
+  perimeter_additional_members      = []
 }

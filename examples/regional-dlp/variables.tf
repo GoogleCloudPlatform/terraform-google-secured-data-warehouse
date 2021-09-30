@@ -69,12 +69,6 @@ variable "subnetwork_self_link" {
   type        = string
 }
 
-variable "perimeter_additional_members" {
-  description = "The list additional members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required."
-  type        = list(string)
-  default     = []
-}
-
 variable "location" {
   description = "The location of Artifact registry. Run `gcloud artifacts locations list` to list available locations."
   type        = string
@@ -89,6 +83,11 @@ variable "crypto_key" {
 variable "wrapped_key" {
   description = "The base64 encoded data crypto key wrapped by KMS."
   type        = string
+}
+
+variable "perimeter_additional_members" {
+  description = "The list of all members to be added on perimeter access, except the service accounts created by this module. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required."
+  type        = list(string)
 }
 
 variable "flex_template_gs_path" {

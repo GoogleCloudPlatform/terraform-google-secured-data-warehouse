@@ -61,9 +61,8 @@ module "regional_dlp_example" {
   network_self_link                 = var.data_ingestion_network_self_link[1]
   subnetwork_self_link              = var.data_ingestion_subnets_self_link[1]
   delete_contents_on_destroy        = true
+  perimeter_additional_members      = []
 
   crypto_key  = module.kek.keys[local.kek_key_name]
   wrapped_key = google_kms_secret_ciphertext.wrapped_key.ciphertext
-
-  perimeter_additional_members = var.perimeter_additional_members
 }

@@ -41,7 +41,6 @@ module "secured_data_warehouse" {
   sdx_project_number               = var.sdx_project_number
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  perimeter_additional_members     = var.perimeter_members
   bucket_name                      = "bkt-data-ingestion"
   location                         = local.region
   region                           = local.region
@@ -49,6 +48,7 @@ module "secured_data_warehouse" {
   confidential_dataset_id          = local.confidential_dataset_id
   cmek_keyring_name                = "cmek_keyring_${random_id.suffix.hex}"
   delete_contents_on_destroy       = var.delete_contents_on_destroy
+  perimeter_additional_members     = var.perimeter_additional_members
 }
 
 
@@ -131,7 +131,6 @@ resource "time_sleep" "wait_de_identify_job_execution" {
 resource "google_dataflow_flex_template_job" "regional_reid" {
   provider = google-beta
 
-  #count                   = local.enable_dataflow ? 1 : 0
   project                 = var.privileged_data_project_id
   name                    = "dataflow-flex-regional-dlp-reid-job"
   container_spec_gcs_path = var.java_re_identify_template_gs_path

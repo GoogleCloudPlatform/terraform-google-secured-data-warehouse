@@ -91,16 +91,15 @@ variable "java_re_identify_template_gs_path" {
   default     = ""
 }
 
+variable "perimeter_additional_members" {
+  description = "The list of all members to be added on perimeter access, except the service accounts created by this module. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required."
+  type        = list(string)
+}
+
 variable "delete_contents_on_destroy" {
   description = "(Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present."
   type        = bool
   default     = false
-}
-
-variable "perimeter_members" {
-  description = "The list of all members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required."
-  type        = list(string)
-  default     = []
 }
 
 variable "taxonomy_name" {
