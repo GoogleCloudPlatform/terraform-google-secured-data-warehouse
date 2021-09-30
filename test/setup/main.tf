@@ -53,7 +53,7 @@ module "data_ingestion_project" {
 
   for_each = local.project_groups
 
-  name              = "ci-sdw-data-ing-${random_id.project_id_suffix.hex}"
+  name              = "ci-sdw-data-ing"
   random_project_id = "true"
   org_id            = var.org_id
   folder_id         = var.folder_id
