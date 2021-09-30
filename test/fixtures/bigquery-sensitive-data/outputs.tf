@@ -16,12 +16,12 @@
 
 output "bigquery_project_id" {
   description = "Project where bigquery and table were created."
-  value       = var.privileged_data_project_id[0]
+  value       = var.privileged_data_project_id[2]
 }
 
 output "data_governance_project_id" {
   description = "The ID of the project in which the KMS, Datacatalog, and DLP resources are created."
-  value       = var.data_governance_project_id[0]
+  value       = var.data_governance_project_id[2]
 }
 
 output "taxonomy_name" {

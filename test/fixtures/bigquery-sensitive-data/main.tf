@@ -28,7 +28,7 @@ module "kek" {
   source  = "terraform-google-modules/kms/google"
   version = "~> 1.2"
 
-  project_id      = var.data_governance_project_id[0]
+  project_id      = var.data_governance_project_id[2]
   location        = local.location
   keyring         = local.kek_keyring
   keys            = [local.kek_key_name]
@@ -49,10 +49,10 @@ module "bigquery_sensitive_data" {
 
   org_id                            = var.org_id
   access_context_manager_policy_id  = var.access_context_manager_policy_id
-  non_sensitive_project_id          = var.datalake_project_id[0]
-  data_ingestion_project_id         = var.data_ingestion_project_id[0]
-  data_governance_project_id        = var.data_governance_project_id[0]
-  privileged_data_project_id        = var.privileged_data_project_id[0]
+  non_sensitive_project_id          = var.datalake_project_id[2]
+  data_ingestion_project_id         = var.data_ingestion_project_id[2]
+  data_governance_project_id        = var.data_governance_project_id[2]
+  privileged_data_project_id        = var.privileged_data_project_id[2]
   sdx_project_number                = var.sdx_project_number
   external_flex_template_project_id = var.external_flex_template_project_id
   crypto_key                        = module.kek.keys[local.kek_key_name]
@@ -60,8 +60,8 @@ module "bigquery_sensitive_data" {
   terraform_service_account         = var.terraform_service_account
   java_de_identify_template_gs_path = var.java_de_identify_template_gs_path
   java_re_identify_template_gs_path = var.java_re_identify_template_gs_path
-  data_ingestion_subnets_self_link  = var.data_ingestion_subnets_self_link[0]
-  privileged_subnets_self_link      = var.privileged_subnets_self_link[0]
+  data_ingestion_subnets_self_link  = var.data_ingestion_subnets_self_link[2]
+  privileged_subnets_self_link      = var.privileged_subnets_self_link[2]
   delete_contents_on_destroy        = true
   perimeter_additional_members      = []
 }

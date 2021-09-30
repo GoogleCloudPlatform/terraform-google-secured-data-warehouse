@@ -28,7 +28,7 @@ module "kek" {
   source  = "terraform-google-modules/kms/google"
   version = "~> 1.2"
 
-  project_id      = var.data_governance_project_id[2]
+  project_id      = var.data_governance_project_id[0]
   location        = local.location
   keyring         = local.kek_keyring
   keys            = [local.kek_key_name]
@@ -46,18 +46,18 @@ resource "google_kms_secret_ciphertext" "wrapped_key" {
 
 module "dataflow_with_dlp" {
   source                            = "../../../examples/dataflow-with-dlp"
-  data_ingestion_project_id         = var.data_ingestion_project_id[2]
-  data_governance_project_id        = var.data_governance_project_id[2]
-  datalake_project_id               = var.datalake_project_id[2]
-  privileged_data_project_id        = var.privileged_data_project_id[2]
+  data_ingestion_project_id         = var.data_ingestion_project_id[0]
+  data_governance_project_id        = var.data_governance_project_id[0]
+  datalake_project_id               = var.datalake_project_id[0]
+  privileged_data_project_id        = var.privileged_data_project_id[0]
   sdx_project_number                = var.sdx_project_number
   external_flex_template_project_id = var.external_flex_template_project_id
   terraform_service_account         = var.terraform_service_account
   access_context_manager_policy_id  = var.access_context_manager_policy_id
   org_id                            = var.org_id
   delete_contents_on_destroy        = true
-  network_self_link                 = var.data_ingestion_network_self_link[2]
-  subnetwork_self_link              = var.data_ingestion_subnets_self_link[2]
+  network_self_link                 = var.data_ingestion_network_self_link[0]
+  subnetwork_self_link              = var.data_ingestion_subnets_self_link[0]
   crypto_key                        = module.kek.keys[local.kek_key_name]
   wrapped_key                       = google_kms_secret_ciphertext.wrapped_key.ciphertext
   de_identify_template_gs_path      = var.java_de_identify_template_gs_path
