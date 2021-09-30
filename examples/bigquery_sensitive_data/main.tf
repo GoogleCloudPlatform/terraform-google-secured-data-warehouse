@@ -66,8 +66,22 @@ module "de_identification_template" {
   crypto_key                = var.crypto_key
   wrapped_key               = var.wrapped_key
   dlp_location              = local.region
+  template_id_prefix        = "de_identification"
   template_file             = "${path.module}/templates/deidentification.tmpl"
-  dataflow_service_account  = module.secured_data_warehouse.dataflow_controller_service_account_email # both accounts need
+  dataflow_service_account  = module.secured_data_warehouse.dataflow_controller_service_account_email
+}
+
+module "re_identification_template" {
+  source = "../..//modules/de_identification_template"
+
+  project_id                = var.data_governance_project_id
+  terraform_service_account = var.terraform_service_account
+  crypto_key                = var.crypto_key
+  wrapped_key               = var.wrapped_key
+  dlp_location              = local.region
+  template_id_prefix        = "re_identification"
+  template_file             = "${path.module}/templates/reidentification.tmpl"
+  dataflow_service_account  = module.secured_data_warehouse.confidential_dataflow_controller_service_account_email
 }
 
 resource "google_artifact_registry_repository_iam_member" "docker_reader" {
@@ -90,7 +104,7 @@ resource "google_artifact_registry_repository_iam_member" "confidential_docker_r
   member     = "serviceAccount:${module.secured_data_warehouse.confidential_dataflow_controller_service_account_email}"
 }
 
-resource "google_dataflow_flex_template_job" "regional_dlp" {
+resource "google_dataflow_flex_template_job" "regional_deid" {
   provider = google-beta
 
   project                 = var.data_ingestion_project_id
@@ -124,7 +138,7 @@ resource "time_sleep" "wait_de_identify_job_execution" {
   create_duration = "600s"
 
   depends_on = [
-    google_dataflow_flex_template_job.regional_dlp
+    google_dataflow_flex_template_job.regional_deid
   ]
 }
 
@@ -139,7 +153,7 @@ resource "google_dataflow_flex_template_job" "regional_reid" {
   parameters = {
     inputBigQueryTable      = "${var.non_sensitive_project_id}:${local.non_sensitive_dataset_id}.${trimsuffix(local.cc_file_name, ".csv")}"
     outputBigQueryDataset   = local.confidential_dataset_id
-    deidentifyTemplateName  = module.de_identification_template.template_full_path
+    deidentifyTemplateName  = module.re_identification_template.template_full_path
     dlpLocation             = local.region
     dlpProjectId            = var.data_governance_project_id
     privilegedDataProjectId = var.privileged_data_project_id

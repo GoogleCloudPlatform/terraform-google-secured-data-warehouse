@@ -8,13 +8,13 @@
                     {
                         "fields": [
                             {
-                                "name": "Card Number"
+                                "name": "Card_Number"
                             },
                             {
-                                "name": "Card Holder'\''s Name"
+                                "name": "Card_Holders_Name"
                             },
                             {
-                                "name": "CVV/CVV2"
+                                "name": "CVVCVV2"
                             }
                         ],
                         "primitiveTransformation": {
@@ -27,24 +27,7 @@
                                 }
                             }
                         }
-                    },
-                    {
-                        "fields": [
-                            {
-                                "name": "Card PIN"
-                            }
-                        ],
-                        "primitiveTransformation": {
-                            "cryptoHashConfig": {
-                                "cryptoKey": {
-                                    "kmsWrapped": {
-                                        "cryptoKeyName": "${crypto_key}",
-                                        "wrappedKey": "${wrapped_key}"
-                                    }
-                                }
-                            }
-                        }
-                    },
+                    }
                 ]
             }
         }
