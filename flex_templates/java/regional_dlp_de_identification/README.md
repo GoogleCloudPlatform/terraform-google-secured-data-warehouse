@@ -62,6 +62,6 @@ gcloud dataflow flex-template build $TEMPLATE_GS_PATH \
   --project=$PROJECT \
   --flex-template-base-image JAVA11 \
   --metadata-file "./metadata.json" \
-  --jar "./target/regional-txt-dlp-bq-streaming-1.0.jar" \
+  --jar "./target/regional-txt-dlp-bq-streaming-1.0.0.jar" \
   --env FLEX_TEMPLATE_JAVA_MAIN_CLASS="org.apache.beam.samples.DLPTextToBigQueryStreaming"
 ```

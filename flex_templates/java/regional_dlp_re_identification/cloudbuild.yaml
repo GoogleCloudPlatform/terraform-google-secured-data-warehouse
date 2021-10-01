@@ -27,7 +27,7 @@ steps:
   '--project', '${_PROJECT}',
   '--flex-template-base-image', 'JAVA11',
   '--metadata-file', './metadata.json',
-  '--jar', './target/regional-bq-dlp-bq-streaming-1.0.jar',
+  '--jar', './target/regional-bq-dlp-bq-streaming-1.0.0.jar',
   '--env', 'FLEX_TEMPLATE_JAVA_MAIN_CLASS="com.google.cloud.blueprints.datawarehouse.BigQueryDLPBigQuery"',
   ]
 substitutions:

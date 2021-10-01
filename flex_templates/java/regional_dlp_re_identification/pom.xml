@@ -28,7 +28,7 @@
 
   <groupId>com.google.cloud.blueprints.datawarehouse</groupId>
   <artifactId>regional-bq-dlp-bq-streaming</artifactId>
-  <version>1.0</version>
+  <version>1.0.0</version>
 
   <properties>
     <maven.compiler.source>11</maven.compiler.source>
