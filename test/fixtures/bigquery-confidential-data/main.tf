@@ -52,7 +52,7 @@ module "bigquery_confidential_data" {
   non_sensitive_project_id          = var.datalake_project_id[2]
   data_ingestion_project_id         = var.data_ingestion_project_id[2]
   data_governance_project_id        = var.data_governance_project_id[2]
-  confidential_data_project_id        = var.confidential_data_project_id[2]
+  confidential_data_project_id      = var.confidential_data_project_id[2]
   sdx_project_number                = var.sdx_project_number
   external_flex_template_project_id = var.external_flex_template_project_id
   crypto_key                        = module.kek.keys[local.kek_key_name]
@@ -61,7 +61,7 @@ module "bigquery_confidential_data" {
   java_de_identify_template_gs_path = var.java_de_identify_template_gs_path
   java_re_identify_template_gs_path = var.java_re_identify_template_gs_path
   data_ingestion_subnets_self_link  = var.data_ingestion_subnets_self_link[2]
-  confidential_subnets_self_link      = var.confidential_subnets_self_link[2]
+  confidential_subnets_self_link    = var.confidential_subnets_self_link[2]
   delete_contents_on_destroy        = true
   perimeter_additional_members      = []
 }

@@ -35,7 +35,7 @@ module "secured_data_warehouse" {
 
   org_id                           = var.org_id
   data_governance_project_id       = var.data_governance_project_id
-  confidential_data_project_id       = var.confidential_data_project_id
+  confidential_data_project_id     = var.confidential_data_project_id
   datalake_project_id              = var.non_sensitive_project_id
   data_ingestion_project_id        = var.data_ingestion_project_id
   sdx_project_number               = var.sdx_project_number
@@ -151,19 +151,19 @@ resource "google_dataflow_flex_template_job" "regional_reid" {
   region                  = local.region
 
   parameters = {
-    inputBigQueryTable      = "${var.non_sensitive_project_id}:${local.non_sensitive_dataset_id}.${trimsuffix(local.cc_file_name, ".csv")}"
-    outputBigQueryDataset   = local.confidential_dataset_id
-    deidentifyTemplateName  = module.re_identification_template.template_full_path
-    dlpLocation             = local.region
-    dlpProjectId            = var.data_governance_project_id
+    inputBigQueryTable        = "${var.non_sensitive_project_id}:${local.non_sensitive_dataset_id}.${trimsuffix(local.cc_file_name, ".csv")}"
+    outputBigQueryDataset     = local.confidential_dataset_id
+    deidentifyTemplateName    = module.re_identification_template.template_full_path
+    dlpLocation               = local.region
+    dlpProjectId              = var.data_governance_project_id
     confidentialDataProjectId = var.confidential_data_project_id
-    serviceAccount          = module.secured_data_warehouse.confidential_dataflow_controller_service_account_email
-    subnetwork              = var.confidential_subnets_self_link
-    dataflowKmsKey          = module.secured_data_warehouse.cmek_reidentification_crypto_key
-    tempLocation            = "gs://${module.secured_data_warehouse.confidential_data_dataflow_bucket_name}/tmp/"
-    stagingLocation         = "gs://${module.secured_data_warehouse.confidential_data_dataflow_bucket_name}/staging/"
-    usePublicIps            = false
-    enableStreamingEngine   = true
+    serviceAccount            = module.secured_data_warehouse.confidential_dataflow_controller_service_account_email
+    subnetwork                = var.confidential_subnets_self_link
+    dataflowKmsKey            = module.secured_data_warehouse.cmek_reidentification_crypto_key
+    tempLocation              = "gs://${module.secured_data_warehouse.confidential_data_dataflow_bucket_name}/tmp/"
+    stagingLocation           = "gs://${module.secured_data_warehouse.confidential_data_dataflow_bucket_name}/staging/"
+    usePublicIps              = false
+    enableStreamingEngine     = true
   }
 
   depends_on = [

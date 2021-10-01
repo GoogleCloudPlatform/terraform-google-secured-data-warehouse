@@ -27,7 +27,7 @@ module "data_ingestion" {
   source                           = "../.."
   org_id                           = var.org_id
   data_governance_project_id       = var.data_governance_project_id
-  confidential_data_project_id       = var.confidential_data_project_id
+  confidential_data_project_id     = var.confidential_data_project_id
   datalake_project_id              = var.datalake_project_id
   data_ingestion_project_id        = var.data_ingestion_project_id
   sdx_project_number               = var.sdx_project_number
