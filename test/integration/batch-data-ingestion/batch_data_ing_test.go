@@ -30,7 +30,7 @@ func TestBatchDataIngestion(t *testing.T) {
 		bdi.DefaultVerify(assert)
 
 		projectID := bdi.GetStringOutput("project_id")
-		gcOpts := gcloud.WithCommonArgs([]string{"--project", projectID})
+		gcOpts := gcloud.WithCommonArgs([]string{"--project", projectID, "--format", "json"})
 
 		scheduler := gcloud.Run(t, fmt.Sprintf("scheduler jobs describe %s", bdi.GetStringOutput("scheduler_id")), gcOpts)
 		assert.Equal("ENABLED", scheduler.Get("state").String(), "should have current state ENABLED")
