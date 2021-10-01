@@ -15,7 +15,8 @@
  */
 
 resource "google_data_catalog_taxonomy" "secure_taxonomy" {
-  provider               = google-beta
+  provider = google-beta
+
   project                = var.data_governance_project_id
   region                 = local.region
   display_name           = local.taxonomy_display_name
@@ -28,14 +29,16 @@ resource "google_data_catalog_taxonomy" "secure_taxonomy" {
 }
 
 resource "google_data_catalog_policy_tag" "policy_tag_confidential" {
-  provider     = google-beta
+  provider = google-beta
+
   taxonomy     = google_data_catalog_taxonomy.secure_taxonomy.id
   display_name = "3_Confidential"
   description  = "Most sensitive data classification. Significant damage to enterprise"
 }
 
 resource "google_data_catalog_policy_tag" "child_policy_tag_card_number" {
-  provider          = google-beta
+  provider = google-beta
+
   taxonomy          = google_data_catalog_taxonomy.secure_taxonomy.id
   display_name      = "CREDIT_CARD_NUMBER"
   description       = "A credit card number is 12 to 19 digits long. They are used for payment transactions globally."
@@ -43,7 +46,8 @@ resource "google_data_catalog_policy_tag" "child_policy_tag_card_number" {
 }
 
 resource "google_data_catalog_policy_tag" "child_policy_tag_cvv" {
-  provider          = google-beta
+  provider = google-beta
+
   taxonomy          = google_data_catalog_taxonomy.secure_taxonomy.id
   display_name      = "CARD_VERIFICATION_VALUE"
   description       = "A card verification value is 3 to 4 digits long. Used for card not present transactions."
@@ -51,7 +55,8 @@ resource "google_data_catalog_policy_tag" "child_policy_tag_cvv" {
 }
 
 resource "google_data_catalog_policy_tag" "policy_tag_private" {
-  provider          = google-beta
+  provider = google-beta
+
   taxonomy          = google_data_catalog_taxonomy.secure_taxonomy.id
   display_name      = "2_Private"
   description       = "Data meant to be private. Likely to cause damage to enterprise"
@@ -59,7 +64,8 @@ resource "google_data_catalog_policy_tag" "policy_tag_private" {
 }
 
 resource "google_data_catalog_policy_tag" "child_policy_tag_card_holder_name" {
-  provider          = google-beta
+  provider = google-beta
+
   taxonomy          = google_data_catalog_taxonomy.secure_taxonomy.id
   display_name      = "PERSON_NAME"
   description       = "A full person name, which can include first names, middle names or initials, and last names."
@@ -67,15 +73,26 @@ resource "google_data_catalog_policy_tag" "child_policy_tag_card_holder_name" {
 }
 
 resource "google_data_catalog_policy_tag" "child_policy_tag_card_pin" {
-  provider          = google-beta
+  provider = google-beta
+
   taxonomy          = google_data_catalog_taxonomy.secure_taxonomy.id
   display_name      = "CREDIT_CARD_PIN"
   description       = "Card personal identification number."
   parent_policy_tag = google_data_catalog_policy_tag.policy_tag_private.id
 }
 
+resource "google_data_catalog_policy_tag" "child_policy_tag_card_expiry_date" {
+  provider = google-beta
+
+  taxonomy          = google_data_catalog_taxonomy.secure_taxonomy.id
+  display_name      = "CARD_EXPIRY_DATE"
+  description       = "Card expiry date."
+  parent_policy_tag = google_data_catalog_policy_tag.policy_tag_private.id
+}
+
 resource "google_data_catalog_policy_tag" "policy_tag_sensitive" {
-  provider          = google-beta
+  provider = google-beta
+
   taxonomy          = google_data_catalog_taxonomy.secure_taxonomy.id
   display_name      = "1_Sensitive"
   description       = "Data not meant to be public."
@@ -83,7 +100,8 @@ resource "google_data_catalog_policy_tag" "policy_tag_sensitive" {
 }
 
 resource "google_data_catalog_policy_tag" "child_policy_tag_credit_limit" {
-  provider          = google-beta
+  provider = google-beta
+
   taxonomy          = google_data_catalog_taxonomy.secure_taxonomy.id
   display_name      = "CREDIT_LIMIT"
   description       = "Credit allowed to individual."
@@ -105,6 +123,7 @@ resource "google_bigquery_table" "re_id" {
       pt_card_number  = google_data_catalog_policy_tag.child_policy_tag_card_number.id,
       pt_cvv          = google_data_catalog_policy_tag.child_policy_tag_cvv.id,
       pt_card_pin     = google_data_catalog_policy_tag.child_policy_tag_card_pin.id,
+      pt_expiry_date  = google_data_catalog_policy_tag.child_policy_tag_card_expiry_date.id,
   })
 
   lifecycle {
@@ -124,6 +143,8 @@ data "google_bigquery_default_service_account" "bq_sa" {
 
 resource "google_data_catalog_taxonomy_iam_binding" "confidential_bq_binding" {
   provider = google-beta
+
+  project  = var.data_governance_project_id
   taxonomy = google_data_catalog_taxonomy.secure_taxonomy.name
   role     = "roles/datacatalog.categoryFineGrainedReader"
   members = [

@@ -46,7 +46,10 @@
   {
     "name": "Expiry_Date",
     "mode": "NULLABLE",
-    "type": "STRING"
+    "type": "STRING",
+    "policyTags": {
+      "names": ["${pt_expiry_date}"]
+    }
   },
   {
     "name": "Billing_Date",
