@@ -50,11 +50,22 @@ module "secured_data_warehouse" {
   perimeter_additional_members     = var.perimeter_additional_members
 }
 
+resource "null_resource" "download_sample_cc_into_gcs" {
+  provisioner "local-exec" {
+    command = <<EOF
+    curl https://eforexcel.com/wp/wp-content/uploads/2017/07/100-CC-Records.zip > cc_records.zip
+    unzip cc_records.zip
+    rm cc_records.zip
+    mv 100\ CC\ Records.csv ${local.cc_file_name}
+    gsutil cp ${local.cc_file_name} gs://${module.secured_data_warehouse.data_ingest_bucket_name}
+    rm ${local.cc_file_name}
+EOF
 
-resource "google_storage_bucket_object" "cc_sample" {
-  name   = local.cc_file_name
-  source = "${path.module}/files/cc_samples/${local.cc_file_name}"
-  bucket = module.secured_data_warehouse.data_ingest_bucket_name
+  }
+
+  depends_on = [
+    module.secured_data_warehouse
+  ]
 }
 
 module "de_identification_template" {
@@ -129,7 +140,8 @@ resource "google_dataflow_flex_template_job" "regional_deid" {
   }
 
   depends_on = [
-    google_artifact_registry_repository_iam_member.docker_reader
+    google_artifact_registry_repository_iam_member.docker_reader,
+    null_resource.download_sample_cc_into_gcs
   ]
 }
 
