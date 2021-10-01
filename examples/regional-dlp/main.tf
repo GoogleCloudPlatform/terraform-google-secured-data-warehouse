@@ -32,7 +32,7 @@ module "data_ingestion" {
   sdx_project_number               = var.sdx_project_number
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  bucket_name                      = "bkt-dlp-flex-ingest-${random_id.suffix.hex}"
+  bucket_name                      = "dlp-flex-ingest"
   dataset_id                       = "dlp_flex_ingest"
   cmek_keyring_name                = "dlp_flex_ingest-${random_id.suffix.hex}"
   region                           = var.location

@@ -32,7 +32,6 @@ locals {
   reidentification_key_name      = "reidentification_kms_key_${random_id.suffix.hex}"
   confidential_bigquery_key_name = "confidential_bigquery_kms_key_${random_id.suffix.hex}"
 
-
   ingestion_key_encrypters_decrypters = "serviceAccount:${local.storage_sa},serviceAccount:${local.pubsub_sa},serviceAccount:${local.dataflow_sa},serviceAccount:${local.compute_sa}"
   bigquery_key_encrypters_decrypters  = "serviceAccount:${local.bigquery_sa}"
 
@@ -99,7 +98,6 @@ resource "google_project_service_identity" "dataflow_sa" {
   project = var.data_ingestion_project_id
   service = "dataflow.googleapis.com"
 }
-
 
 data "google_project" "reid_project" {
   project_id = var.privileged_data_project_id
