@@ -122,18 +122,18 @@ output "data_governance_service_perimeter_name" {
   ]
 }
 
-output "privileged_access_level_name" {
+output "confidential_access_level_name" {
   description = "Access context manager access level name."
-  value       = module.privileged_data_vpc_sc.access_level_name
+  value       = module.confidential_data_vpc_sc.access_level_name
 
   depends_on = [
     time_sleep.wait_for_bridge_propagation
   ]
 }
 
-output "privileged_service_perimeter_name" {
+output "confidential_service_perimeter_name" {
   description = "Access context manager service perimeter name."
-  value       = module.privileged_data_vpc_sc.service_perimeter_name
+  value       = module.confidential_data_vpc_sc.service_perimeter_name
 
   depends_on = [
     time_sleep.wait_for_bridge_propagation
@@ -177,7 +177,7 @@ output "cmek_bigquery_crypto_key" {
 }
 
 output "cmek_reidentification_crypto_key" {
-  description = "The Customer Managed Crypto Key for the Privileged crypto boundary."
+  description = "The Customer Managed Crypto Key for the Confidential crypto boundary."
   value       = module.data_governance.cmek_reidentification_crypto_key
 
   depends_on = [

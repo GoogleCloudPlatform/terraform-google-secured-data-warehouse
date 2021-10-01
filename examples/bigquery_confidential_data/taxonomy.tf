@@ -92,7 +92,7 @@ resource "google_data_catalog_policy_tag" "child_policy_tag_credit_limit" {
 
 resource "google_bigquery_table" "re_id" {
   dataset_id          = local.confidential_dataset_id
-  project             = var.privileged_data_project_id
+  project             = var.confidential_data_project_id
   table_id            = local.confidential_table_id
   friendly_name       = local.confidential_table_id
   deletion_protection = !var.delete_contents_on_destroy
@@ -119,7 +119,7 @@ resource "google_bigquery_table" "re_id" {
 }
 
 data "google_bigquery_default_service_account" "bq_sa" {
-  project = var.privileged_data_project_id
+  project = var.confidential_data_project_id
 }
 
 resource "google_data_catalog_taxonomy_iam_binding" "confidential_bq_binding" {

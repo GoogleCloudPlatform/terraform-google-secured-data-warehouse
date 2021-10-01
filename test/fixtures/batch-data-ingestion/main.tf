@@ -25,7 +25,7 @@ module "batch_dataflow" {
   data_ingestion_project_id        = var.data_ingestion_project_id[0]
   data_governance_project_id       = var.data_governance_project_id[0]
   datalake_project_id              = var.datalake_project_id[0]
-  privileged_data_project_id       = var.privileged_data_project_id[0]
+  confidential_data_project_id       = var.confidential_data_project_id[0]
   sdx_project_number               = var.sdx_project_number
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id

@@ -22,8 +22,8 @@ module "dataflow_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 2.0"
 
-  project_id    = var.privileged_data_project_id
-  name          = "bkt-${var.privileged_data_project_id}-tmp-dataflow-${random_id.suffix.hex}"
+  project_id    = var.confidential_data_project_id
+  name          = "bkt-${var.confidential_data_project_id}-tmp-dataflow-${random_id.suffix.hex}"
   location      = var.location
   storage_class = "STANDARD"
   force_destroy = var.delete_contents_on_destroy
@@ -45,7 +45,7 @@ module "bigquery_confidential_data" {
 
   dataset_id                  = var.dataset_id
   description                 = "Dataset for BigQuery Sensitive Data"
-  project_id                  = var.privileged_data_project_id
+  project_id                  = var.confidential_data_project_id
   location                    = var.location
   delete_contents_on_destroy  = var.delete_contents_on_destroy
   encryption_key              = var.cmek_confidential_bigquery_crypto_key

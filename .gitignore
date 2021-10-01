@@ -7,6 +7,9 @@
 # Python
 *.pyc
 
+# Java
+*.factorypath
+
 # Emacs save files
 *~
 \#*\#

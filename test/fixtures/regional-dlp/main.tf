@@ -51,7 +51,7 @@ module "regional_dlp_example" {
   data_ingestion_project_id         = var.data_ingestion_project_id[1]
   data_governance_project_id        = var.data_governance_project_id[1]
   datalake_project_id               = var.datalake_project_id[1]
-  privileged_data_project_id        = var.privileged_data_project_id[1]
+  confidential_data_project_id        = var.confidential_data_project_id[1]
   sdx_project_number                = var.sdx_project_number
   external_flex_template_project_id = var.external_flex_template_project_id
   location                          = local.location

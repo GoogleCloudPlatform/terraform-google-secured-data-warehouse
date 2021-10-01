@@ -31,9 +31,9 @@
       "helpText": "ID of the project that holds the DLP template."
     },
     {
-      "name": "privilegedDataProjectId",
+      "name": "confidentialDataProjectId",
       "label": "Project for output BigQuery that has privilege dadta.",
-      "helpText": "ID of the project that holds the privileged data in BigQuery."
+      "helpText": "ID of the project that holds the confidential data in BigQuery."
     },
     {
       "name": "batchSize",

@@ -102,21 +102,21 @@ resource "google_project_service_identity" "dataflow_sa" {
 
 
 data "google_project" "reid_project" {
-  project_id = var.privileged_data_project_id
+  project_id = var.confidential_data_project_id
 }
 
 data "google_storage_project_service_account" "confidential_gcs_account" {
-  project = var.privileged_data_project_id
+  project = var.confidential_data_project_id
 }
 
 data "google_bigquery_default_service_account" "confidential_bigquery_sa" {
-  project = var.privileged_data_project_id
+  project = var.confidential_data_project_id
 }
 
 resource "google_project_service_identity" "confidential_dataflow_sa" {
   provider = google-beta
 
-  project = var.privileged_data_project_id
+  project = var.confidential_data_project_id
   service = "dataflow.googleapis.com"
 }
 

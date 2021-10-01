@@ -48,7 +48,7 @@ module "data_ingestion" {
   source                           = "../.."
   org_id                           = var.org_id
   data_governance_project_id       = var.data_governance_project_id
-  privileged_data_project_id       = var.privileged_data_project_id
+  confidential_data_project_id       = var.confidential_data_project_id
   datalake_project_id              = var.datalake_project_id
   data_ingestion_project_id        = var.data_ingestion_project_id
   sdx_project_number               = var.sdx_project_number
@@ -82,7 +82,7 @@ EOF
   depends_on = [
     module.data_ingestion.data_ingestion_access_level_name,
     module.data_ingestion.data_governance_access_level_name,
-    module.data_ingestion.privileged_access_level_name
+    module.data_ingestion.confidential_access_level_name
   ]
 }
 
@@ -94,7 +94,7 @@ resource "google_storage_bucket_object" "schema" {
   depends_on = [
     module.data_ingestion.data_ingestion_access_level_name,
     module.data_ingestion.data_governance_access_level_name,
-    module.data_ingestion.privileged_access_level_name
+    module.data_ingestion.confidential_access_level_name
   ]
 }
 
@@ -106,7 +106,7 @@ resource "google_storage_bucket_object" "transform_code" {
   depends_on = [
     module.data_ingestion.data_ingestion_access_level_name,
     module.data_ingestion.data_governance_access_level_name,
-    module.data_ingestion.privileged_access_level_name
+    module.data_ingestion.confidential_access_level_name
   ]
 }
 

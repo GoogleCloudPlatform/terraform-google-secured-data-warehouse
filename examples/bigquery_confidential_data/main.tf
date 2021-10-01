@@ -35,7 +35,7 @@ module "secured_data_warehouse" {
 
   org_id                           = var.org_id
   data_governance_project_id       = var.data_governance_project_id
-  privileged_data_project_id       = var.privileged_data_project_id
+  confidential_data_project_id       = var.confidential_data_project_id
   datalake_project_id              = var.non_sensitive_project_id
   data_ingestion_project_id        = var.data_ingestion_project_id
   sdx_project_number               = var.sdx_project_number
@@ -145,7 +145,7 @@ resource "time_sleep" "wait_de_identify_job_execution" {
 resource "google_dataflow_flex_template_job" "regional_reid" {
   provider = google-beta
 
-  project                 = var.privileged_data_project_id
+  project                 = var.confidential_data_project_id
   name                    = "dataflow-flex-regional-dlp-reid-job"
   container_spec_gcs_path = var.java_re_identify_template_gs_path
   region                  = local.region
@@ -156,9 +156,9 @@ resource "google_dataflow_flex_template_job" "regional_reid" {
     deidentifyTemplateName  = module.re_identification_template.template_full_path
     dlpLocation             = local.region
     dlpProjectId            = var.data_governance_project_id
-    privilegedDataProjectId = var.privileged_data_project_id
+    confidentialDataProjectId = var.confidential_data_project_id
     serviceAccount          = module.secured_data_warehouse.confidential_dataflow_controller_service_account_email
-    subnetwork              = var.privileged_subnets_self_link
+    subnetwork              = var.confidential_subnets_self_link
     dataflowKmsKey          = module.secured_data_warehouse.cmek_reidentification_crypto_key
     tempLocation            = "gs://${module.secured_data_warehouse.confidential_data_dataflow_bucket_name}/tmp/"
     stagingLocation         = "gs://${module.secured_data_warehouse.confidential_data_dataflow_bucket_name}/staging/"

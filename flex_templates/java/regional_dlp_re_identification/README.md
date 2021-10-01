@@ -59,7 +59,7 @@ gcloud dataflow flex-template run "regional-bq-dlp-bq-`date +%Y%m%d-%H%M%S`" \
     --parameters deidentifyTemplateName="FULL_DEIDENTIFY_TEMPLATE_NAME" \
     --parameters dlpProjectId="DLP_PROJECT_ID" \
     --parameters dlpLocation="DLP_LOCATION" \
-    --parameters privilegedDataProjectId="PRIVILEGED_DATA_PROJECT_ID" \
+    --parameters confidentialDataProjectId="CONFIDENTIAL_DATA_PROJECT_ID" \
     --project=${PROJECT} \
     --service-account-email="DATAFLOW_SERVICE_ACCOUNT" \
     --network="NETWORK" \

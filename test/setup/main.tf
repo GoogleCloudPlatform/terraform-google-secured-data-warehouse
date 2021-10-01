@@ -140,13 +140,13 @@ module "datalake_project" {
   ]
 }
 
-module "privileged_data_project" {
+module "confidential_data_project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
 
   for_each = local.project_groups
 
-  name              = "ci-sdw-conf-${random_id.project_id_suffix.hex}"
+  name              = "ci-sdw-CONF-${random_id.project_id_suffix.hex}"
   random_project_id = "true"
   org_id            = var.org_id
   folder_id         = var.folder_id

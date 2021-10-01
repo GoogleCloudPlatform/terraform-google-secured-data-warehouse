@@ -15,7 +15,7 @@ It uses:
 1. A `crypto_key` and `wrapped_key` pair.  Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location used for the `location` variable.
 1. Pre-build Java Regional DLP De-identification and Re-identification flex templates. See [Flex templates](../../flex_templates/README.md).
 1. The identity deploying the example must have permissions to grant role "roles/artifactregistry.reader" in the docker and python repos of the Flex templates.
-1. You need to create network and subnetwork in the privileged project.
+1. You need to create network and subnetwork in the confidential project.
 
 ### Firewall rules
 
@@ -49,8 +49,8 @@ It uses:
 | non\_sensitive\_project\_id | Project with the de-identified dataset and table. | `string` | n/a | yes |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | perimeter\_additional\_members | The list of all members to be added on perimeter access, except the service accounts created by this module. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | n/a | yes |
-| privileged\_data\_project\_id | Project where the privileged datasets and tables are created. | `string` | n/a | yes |
-| privileged\_subnets\_self\_link | The URI of the subnetwork where Data Ingestion Dataflow is going to be deployed. | `string` | n/a | yes |
+| confidential\_data\_project\_id | Project where the confidential datasets and tables are created. | `string` | n/a | yes |
+| confidential\_subnets\_self\_link | The URI of the subnetwork where Data Ingestion Dataflow is going to be deployed. | `string` | n/a | yes |
 | sdx\_project\_number | The Project Number to configure Secure data exchange with egress rule for the flex Dataflow templates. | `string` | n/a | yes |
 | taxonomy\_name | The taxonomy display name. | `string` | `"secured_taxonomy"` | no |
 | terraform\_service\_account | The email address of the service account that will run the Terraform config. | `string` | n/a | yes |

@@ -99,10 +99,10 @@ resource "google_project_iam_member" "ci-account-governance-first" {
   member  = "serviceAccount:${google_service_account.int_ci_service_account.email}"
 }
 
-resource "google_project_iam_member" "ci-account-privileged-first" {
+resource "google_project_iam_member" "ci-account-confidential-first" {
   for_each = toset(local.int_proj_required_roles)
 
-  project = module.privileged_data_project[local.first_project_group].project_id
+  project = module.confidential_data_project[local.first_project_group].project_id
   role    = each.value
   member  = "serviceAccount:${google_service_account.int_ci_service_account.email}"
 }
@@ -131,10 +131,10 @@ resource "google_project_iam_member" "ci-account-governance-second" {
   member  = "serviceAccount:${google_service_account.int_ci_service_account.email}"
 }
 
-resource "google_project_iam_member" "ci-account-privileged-second" {
+resource "google_project_iam_member" "ci-account-confidential-second" {
   for_each = toset(local.int_proj_required_roles)
 
-  project = module.privileged_data_project[local.second_project_group].project_id
+  project = module.confidential_data_project[local.second_project_group].project_id
   role    = each.value
   member  = "serviceAccount:${google_service_account.int_ci_service_account.email}"
 }
@@ -163,10 +163,10 @@ resource "google_project_iam_member" "ci-account-governance-third" {
   member  = "serviceAccount:${google_service_account.int_ci_service_account.email}"
 }
 
-resource "google_project_iam_member" "ci-account-privileged-third" {
+resource "google_project_iam_member" "ci-account-confidential-third" {
   for_each = toset(local.int_proj_required_roles)
 
-  project = module.privileged_data_project[local.third_project_group].project_id
+  project = module.confidential_data_project[local.third_project_group].project_id
   role    = each.value
   member  = "serviceAccount:${google_service_account.int_ci_service_account.email}"
 }
@@ -184,15 +184,15 @@ resource "time_sleep" "wait_90_seconds" {
     google_project_iam_member.ci-account-ingestion-first,
     google_project_iam_member.ci-account-datalake-first,
     google_project_iam_member.ci-account-governance-first,
-    google_project_iam_member.ci-account-privileged-first,
+    google_project_iam_member.ci-account-confidential-first,
     google_project_iam_member.ci-account-ingestion-first,
     google_project_iam_member.ci-account-datalake-second,
     google_project_iam_member.ci-account-governance-second,
-    google_project_iam_member.ci-account-privileged-second,
+    google_project_iam_member.ci-account-confidential-second,
     google_project_iam_member.ci-account-ingestion-third,
     google_project_iam_member.ci-account-datalake-third,
     google_project_iam_member.ci-account-governance-third,
-    google_project_iam_member.ci-account-privileged-third,
+    google_project_iam_member.ci-account-confidential-third,
     google_project_iam_member.int_permission_artifact_registry_test,
     google_organization_iam_member.org_admins_group
   ]

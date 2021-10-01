@@ -59,11 +59,11 @@ public interface BigQueryReidentifyPipelineOptions extends DataflowPipelineOptio
 
   void setBatchSize(Integer value);
 
-  @Description("Privileged data project id to be used for Big Query output")
+  @Description("Confidential data project id to be used for Big Query output")
   @Required
-  String getPrivilegedDataProjectId();
+  String getConfidentialDataProjectId();
 
-  void setPrivilegedDataProjectId(String value);
+  void setConfidentialDataProjectId(String value);
 
   @Description("Project id to be used for DLP Tokenization")
   @Required

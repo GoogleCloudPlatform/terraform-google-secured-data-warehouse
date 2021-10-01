@@ -16,7 +16,7 @@
 
 output "bigquery_project_id" {
   description = "Project where bigquery and table were created."
-  value       = var.privileged_data_project_id[2]
+  value       = var.confidential_data_project_id[2]
 }
 
 output "data_governance_project_id" {
