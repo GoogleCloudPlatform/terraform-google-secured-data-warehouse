@@ -24,7 +24,7 @@ module "data_ingest_bucket" {
   version = "~> 2.0"
 
   project_id      = var.data_ingestion_project_id
-  name            = "bkt-${random_id.suffix.hex}-${var.bucket_name}"
+  name            = "bkt-${var.data_ingestion_project_id}-${var.bucket_name}-${random_id.suffix.hex}"
   location        = var.bucket_location
   storage_class   = var.bucket_class
   lifecycle_rules = var.bucket_lifecycle_rules

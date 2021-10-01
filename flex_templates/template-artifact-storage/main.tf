@@ -114,7 +114,7 @@ resource "google_project_iam_member" "cloud_build_builder" {
 }
 
 resource "google_storage_bucket" "templates_bucket" {
-  name     = "bkt-${var.location}-${var.project_id}-tpl-${random_id.suffix.hex}"
+  name     = "bkt-${var.project_id}-tpl-${random_id.suffix.hex}"
   location = var.location
   project  = var.project_id
 
