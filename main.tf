@@ -74,7 +74,7 @@ module "data_ingestion" {
 
 // A4 - DATA WAREHOUSE SENSITIVE DATA - START
 
-module "bigquery_sensitive_data" {
+module "bigquery_confidential_data" {
   source = "./modules/confidential_data"
 
   data_governance_project_id            = var.data_governance_project_id
@@ -101,7 +101,7 @@ module "org_policies" {
 
   depends_on = [
     module.data_ingestion,
-    module.bigquery_sensitive_data
+    module.bigquery_confidential_data
   ]
 }
 

@@ -77,37 +77,37 @@ steps:
   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do destroy batch-data-ingestion']
   env:
   - 'TF_VAR_org_id=$_ORG_ID'
-- id: create-bigquery-sensitive-data
+- id: create-bigquery-confidential-data
   waitFor:
     - prepare
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && sleep 90 && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do create bigquery-sensitive-data']
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && sleep 90 && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do create bigquery-confidential-data']
   env:
   - 'TF_VAR_org_id=$_ORG_ID'
-- id: converge-bigquery-sensitive-data
+- id: converge-bigquery-confidential-data
   waitFor:
-    - create-bigquery-sensitive-data
+    - create-bigquery-confidential-data
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do converge bigquery-sensitive-data']
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do converge bigquery-confidential-data']
   env:
   - 'TF_VAR_org_id=$_ORG_ID'
-- id: verify-bigquery-sensitive-data
+- id: verify-bigquery-confidential-data
   waitFor:
-    - converge-bigquery-sensitive-data
+    - converge-bigquery-confidential-data
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do verify bigquery-sensitive-data']
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do verify bigquery-confidential-data']
   env:
   - 'TF_VAR_org_id=$_ORG_ID'
-- id: destroy-bigquery-sensitive-data
+- id: destroy-bigquery-confidential-data
   waitFor:
-    - verify-bigquery-sensitive-data
+    - verify-bigquery-confidential-data
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do destroy bigquery-sensitive-data']
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source ./test/ensure_access_policy.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do destroy bigquery-confidential-data']
   env:
   - 'TF_VAR_org_id=$_ORG_ID'
 - id: create-de-identification-template
   waitFor:
-    - destroy-bigquery-sensitive-data
+    - destroy-bigquery-confidential-data
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && sleep 90 && kitchen_do create de-identification-template']
   env:

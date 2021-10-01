@@ -90,17 +90,17 @@ suites:
           backend: local
           controls:
             - gcloud
-  - name: bigquery-sensitive-data
+  - name: bigquery-confidential-data
     driver:
-      root_module_directory: test/fixtures/bigquery-sensitive-data/
+      root_module_directory: test/fixtures/bigquery-confidential-data/
     verifier:
       color: false
       systems:
-        - name: bigquery_sensitive_data gcp
+        - name: bigquery_confidential_data gcp
           backend: gcp
           controls:
             - gcp
-        - name: bigquery_sensitive_data gcloud
+        - name: bigquery_confidential_data gcloud
           backend: local
           controls:
             - gcloud

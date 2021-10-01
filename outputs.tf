@@ -61,7 +61,7 @@ output "data_ingest_dataflow_bucket_name" {
 
 output "confidential_data_dataflow_bucket_name" {
   description = "The name of the bucket created for dataflow in the confidential data pipeline."
-  value       = module.bigquery_sensitive_data.confidential_data_dataflow_bucket_name
+  value       = module.bigquery_confidential_data.confidential_data_dataflow_bucket_name
 
   depends_on = [
     time_sleep.wait_for_bridge_propagation
@@ -232,7 +232,7 @@ output "cmek_confidential_bigquery_crypto_key_name" {
 
 output "confidential_dataflow_controller_service_account_email" {
   description = "The confidential Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account."
-  value       = module.bigquery_sensitive_data.confidential_dataflow_controller_service_account_email
+  value       = module.bigquery_confidential_data.confidential_dataflow_controller_service_account_email
 
   depends_on = [
     time_sleep.wait_for_bridge_propagation

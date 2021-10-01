@@ -26,5 +26,5 @@ output "data_governance_project_id" {
 
 output "taxonomy_name" {
   description = "The taxonomy display name."
-  value       = module.bigquery_sensitive_data.taxonomy_name
+  value       = module.bigquery_confidential_data.taxonomy_name
 }

@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: bigquery-sensitive-data
+name: bigquery-confidential-data
 depends:
   - name: inspec-gcp
     git: https://github.com/inspec/inspec-gcp.git

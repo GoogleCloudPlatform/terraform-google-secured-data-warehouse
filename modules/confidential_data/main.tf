@@ -39,7 +39,7 @@ module "dataflow_bucket" {
 
 }
 
-module "bigquery_sensitive_data" {
+module "bigquery_confidential_data" {
   source  = "terraform-google-modules/bigquery/google"
   version = "~> 5.2.0"
 
