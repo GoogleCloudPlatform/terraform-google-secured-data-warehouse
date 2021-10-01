@@ -15,7 +15,7 @@
  */
 
 locals {
-  region                   = "us-east4"
+  location                 = "us-east4"
   non_sensitive_dataset_id = "non_sensitive_dataset"
   confidential_dataset_id  = "secured_dataset"
   taxonomy_display_name    = "${var.taxonomy_name}-${random_id.suffix.hex}"
@@ -42,8 +42,7 @@ module "secured_data_warehouse" {
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
   bucket_name                      = "bkt-data-ingestion"
-  location                         = local.region
-  region                           = local.region
+  location                         = local.location
   dataset_id                       = local.non_sensitive_dataset_id
   confidential_dataset_id          = local.confidential_dataset_id
   cmek_keyring_name                = "cmek_keyring_${random_id.suffix.hex}"
@@ -65,7 +64,7 @@ module "de_identification_template" {
   terraform_service_account = var.terraform_service_account
   crypto_key                = var.crypto_key
   wrapped_key               = var.wrapped_key
-  dlp_location              = local.region
+  dlp_location              = local.location
   template_id_prefix        = "de_identification"
   template_file             = "${path.module}/templates/deidentification.tmpl"
   dataflow_service_account  = module.secured_data_warehouse.dataflow_controller_service_account_email
@@ -78,7 +77,7 @@ module "re_identification_template" {
   terraform_service_account = var.terraform_service_account
   crypto_key                = var.crypto_key
   wrapped_key               = var.wrapped_key
-  dlp_location              = local.region
+  dlp_location              = local.location
   template_id_prefix        = "re_identification"
   template_file             = "${path.module}/templates/reidentification.tmpl"
   dataflow_service_account  = module.secured_data_warehouse.confidential_dataflow_controller_service_account_email
@@ -88,7 +87,7 @@ resource "google_artifact_registry_repository_iam_member" "docker_reader" {
   provider = google-beta
 
   project    = var.external_flex_template_project_id
-  location   = local.region
+  location   = local.location
   repository = "flex-templates"
   role       = "roles/artifactregistry.reader"
   member     = "serviceAccount:${module.secured_data_warehouse.dataflow_controller_service_account_email}"
@@ -98,7 +97,7 @@ resource "google_artifact_registry_repository_iam_member" "confidential_docker_r
   provider = google-beta
 
   project    = var.external_flex_template_project_id
-  location   = local.region
+  location   = local.location
   repository = "flex-templates"
   role       = "roles/artifactregistry.reader"
   member     = "serviceAccount:${module.secured_data_warehouse.confidential_dataflow_controller_service_account_email}"
@@ -110,7 +109,7 @@ resource "google_dataflow_flex_template_job" "regional_deid" {
   project                 = var.data_ingestion_project_id
   name                    = "regional-flex-java-gcs-dlp-bq"
   container_spec_gcs_path = var.java_de_identify_template_gs_path
-  region                  = local.region
+  region                  = local.location
 
   parameters = {
     inputFilePattern       = "gs://${module.secured_data_warehouse.data_ingest_bucket_name}/${local.cc_file_name}"
@@ -118,7 +117,7 @@ resource "google_dataflow_flex_template_job" "regional_deid" {
     datasetName            = local.non_sensitive_dataset_id
     batchSize              = 1000
     dlpProjectId           = var.data_governance_project_id
-    dlpLocation            = local.region
+    dlpLocation            = local.location
     deidentifyTemplateName = module.de_identification_template.template_full_path
     serviceAccount         = module.secured_data_warehouse.dataflow_controller_service_account_email
     subnetwork             = var.data_ingestion_subnets_self_link
@@ -148,13 +147,13 @@ resource "google_dataflow_flex_template_job" "regional_reid" {
   project                 = var.confidential_data_project_id
   name                    = "dataflow-flex-regional-dlp-reid-job"
   container_spec_gcs_path = var.java_re_identify_template_gs_path
-  region                  = local.region
+  region                  = local.location
 
   parameters = {
     inputBigQueryTable        = "${var.non_sensitive_project_id}:${local.non_sensitive_dataset_id}.${trimsuffix(local.cc_file_name, ".csv")}"
     outputBigQueryDataset     = local.confidential_dataset_id
     deidentifyTemplateName    = module.re_identification_template.template_full_path
-    dlpLocation               = local.region
+    dlpLocation               = local.location
     dlpProjectId              = var.data_governance_project_id
     confidentialDataProjectId = var.confidential_data_project_id
     serviceAccount            = module.secured_data_warehouse.confidential_dataflow_controller_service_account_email
