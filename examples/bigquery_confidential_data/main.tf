@@ -15,14 +15,14 @@
  */
 
 locals {
-  location                 = "us-east4"
-  non_sensitive_dataset_id = "non_sensitive_dataset"
-  confidential_dataset_id  = "secured_dataset"
-  taxonomy_display_name    = "${var.taxonomy_name}-${random_id.suffix.hex}"
-  confidential_table_id    = "${trimsuffix(local.cc_file_name, ".csv")}_re_id"
-  kek_keyring              = "kek_keyring_${random_id.suffix.hex}"
-  kek_key_name             = "kek_key_${random_id.suffix.hex}"
-  cc_file_name             = "cc_100_records.csv"
+  location                    = "us-east4"
+  non_confidential_dataset_id = "non_confidential_dataset"
+  confidential_dataset_id     = "secured_dataset"
+  taxonomy_display_name       = "${var.taxonomy_name}-${random_id.suffix.hex}"
+  confidential_table_id       = "${trimsuffix(local.cc_file_name, ".csv")}_re_id"
+  kek_keyring                 = "kek_keyring_${random_id.suffix.hex}"
+  kek_key_name                = "kek_key_${random_id.suffix.hex}"
+  cc_file_name                = "cc_100_records.csv"
 
 }
 
@@ -36,14 +36,14 @@ module "secured_data_warehouse" {
   org_id                           = var.org_id
   data_governance_project_id       = var.data_governance_project_id
   confidential_data_project_id     = var.confidential_data_project_id
-  datalake_project_id              = var.non_sensitive_project_id
+  datalake_project_id              = var.non_confidential_project_id
   data_ingestion_project_id        = var.data_ingestion_project_id
   sdx_project_number               = var.sdx_project_number
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
   bucket_name                      = "bkt-data-ingestion"
   location                         = local.location
-  dataset_id                       = local.non_sensitive_dataset_id
+  dataset_id                       = local.non_confidential_dataset_id
   confidential_dataset_id          = local.confidential_dataset_id
   cmek_keyring_name                = "cmek_keyring_${random_id.suffix.hex}"
   delete_contents_on_destroy       = var.delete_contents_on_destroy
@@ -113,8 +113,8 @@ resource "google_dataflow_flex_template_job" "regional_deid" {
 
   parameters = {
     inputFilePattern       = "gs://${module.secured_data_warehouse.data_ingest_bucket_name}/${local.cc_file_name}"
-    bqProjectId            = var.non_sensitive_project_id
-    datasetName            = local.non_sensitive_dataset_id
+    bqProjectId            = var.non_confidential_project_id
+    datasetName            = local.non_confidential_dataset_id
     batchSize              = 1000
     dlpProjectId           = var.data_governance_project_id
     dlpLocation            = local.location
@@ -150,7 +150,7 @@ resource "google_dataflow_flex_template_job" "regional_reid" {
   region                  = local.location
 
   parameters = {
-    inputBigQueryTable        = "${var.non_sensitive_project_id}:${local.non_sensitive_dataset_id}.${trimsuffix(local.cc_file_name, ".csv")}"
+    inputBigQueryTable        = "${var.non_confidential_project_id}:${local.non_confidential_dataset_id}.${trimsuffix(local.cc_file_name, ".csv")}"
     outputBigQueryDataset     = local.confidential_dataset_id
     deidentifyTemplateName    = module.re_identification_template.template_full_path
     dlpLocation               = local.location

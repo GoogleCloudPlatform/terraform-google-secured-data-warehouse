@@ -1,7 +1,7 @@
 # Bigquery Sensitive Data Example
 
 This example illustrates how to run a Flex Java re-identification Dataflow job in the Secured data warehouse and
-how to use [Data Catalog policy tags](https://cloud.google.com/bigquery/docs/best-practices-policy-tags) to restrict access to sensitive columns in the re-identified table.
+how to use [Data Catalog policy tags](https://cloud.google.com/bigquery/docs/best-practices-policy-tags) to restrict access to confidential columns in the re-identified table.
 
 It uses:
 
@@ -48,7 +48,7 @@ It uses:
 | external\_flex\_template\_project\_id | Project id of the external project that host the flex Dataflow templates. | `string` | n/a | yes |
 | java\_de\_identify\_template\_gs\_path | The Google Cloud Storage gs path to the JSON file built flex template that supports DLP de-identification. | `string` | `""` | no |
 | java\_re\_identify\_template\_gs\_path | The Google Cloud Storage gs path to the JSON file built flex template that supports DLP re-identification. | `string` | `""` | no |
-| non\_sensitive\_project\_id | Project with the de-identified dataset and table. | `string` | n/a | yes |
+| non\_confidential\_project\_id | Project with the de-identified dataset and table. | `string` | n/a | yes |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | perimeter\_additional\_members | The list of all members to be added on perimeter access, except the service accounts created by this module. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | n/a | yes |
 | sdx\_project\_number | The Project Number to configure Secure data exchange with egress rule for the flex Dataflow templates. | `string` | n/a | yes |

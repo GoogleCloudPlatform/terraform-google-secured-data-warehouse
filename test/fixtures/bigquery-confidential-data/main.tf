@@ -49,7 +49,7 @@ module "bigquery_confidential_data" {
 
   org_id                            = var.org_id
   access_context_manager_policy_id  = var.access_context_manager_policy_id
-  non_sensitive_project_id          = var.datalake_project_id[2]
+  non_confidential_project_id       = var.datalake_project_id[2]
   data_ingestion_project_id         = var.data_ingestion_project_id[2]
   data_governance_project_id        = var.data_governance_project_id[2]
   confidential_data_project_id      = var.confidential_data_project_id[2]
