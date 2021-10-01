@@ -30,18 +30,20 @@ func TestBatchDataIngestion(t *testing.T) {
 		bdi.DefaultVerify(assert)
 
 		projectID := bdi.GetStringOutput("project_id")
-		scheduler := gcloud.Run(t, fmt.Sprintf("scheduler jobs describe %s --project %s", bdi.GetStringOutput("scheduler_id"), projectID))
+		gcOpts := gcloud.WithCommonArgs([]string{"--project", projectID})
+
+		scheduler := gcloud.Run(t, fmt.Sprintf("scheduler jobs describe %s", bdi.GetStringOutput("scheduler_id")), gcOpts)
 		assert.Equal("ENABLED", scheduler.Get("state").String(), "should have current state ENABLED")
 		assert.NotEmpty(scheduler.Get("httpTarget").String(), "should have httpTarget not empty")
 
 		// alpha command to list buckets has --json instead of format=json
-		bucket := gcloud.Run(t, fmt.Sprintf("alpha storage ls --buckets gs://%s --project %s", bdi.GetStringOutput("dataflow_temp_bucket_name"), projectID), gcloud.WithCommonArgs([]string{"--json"}))
+		bucket := gcloud.Run(t, "alpha storage ls", gcloud.WithCommonArgs([]string{"--buckets", fmt.Sprintf("gs://%s", bdi.GetStringOutput("dataflow_temp_bucket_name")), "--json", "--project", projectID}))
 		assert.Equal(1, len(bucket.Array()), "only one matching bucket exists")
 
 		fwTypes := map[string]string{"INGRESS": "i", "EGRESS": "e"}
 		for fwType, s := range fwTypes {
 			ingressFWName := fmt.Sprintf("fw-e-shared-private-0-%s-a-dataflow-tcp-12345-12346", s)
-			fw := gcloud.Run(t, fmt.Sprintf("compute firewall-rules describe %s --project %s", ingressFWName, projectID))
+			fw := gcloud.Run(t, fmt.Sprintf("compute firewall-rules describe %s", ingressFWName), gcOpts)
 			assert.Equal(fwType, fw.Get("direction").String(), fmt.Sprintf("direction is %s", fwType))
 
 			fwPortProtocol := fw.Get("allowed").Array()[0]
