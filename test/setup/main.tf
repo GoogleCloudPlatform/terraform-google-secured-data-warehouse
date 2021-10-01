@@ -146,7 +146,7 @@ module "confidential_data_project" {
 
   for_each = local.project_groups
 
-  name              = "ci-sdw-CONF-${random_id.project_id_suffix.hex}"
+  name              = "ci-sdw-conf-${random_id.project_id_suffix.hex}"
   random_project_id = "true"
   org_id            = var.org_id
   folder_id         = var.folder_id
