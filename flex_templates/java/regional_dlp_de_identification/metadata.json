@@ -4,12 +4,12 @@
   "parameters": [
     {
       "name": "inputFilePattern",
-      "label": "Input File Pattern.",
+      "label": "Input file pattern.",
       "helpText": "Format gs://<bucketName>/<fileName>.csv ."
     },
     {
       "name": "deidentifyTemplateName",
-      "label": "DLP Structured De-identification Template Name.",
+      "label": "DLP structured de-identification template name.",
       "helpText": "Name of the DLP Structured De-identification Template. Format is 'projects/<PROJECT>/locations/<LOCATION>/deidentifyTemplates/<TEMPLATE_ID>'",
       "regexes": [
         "projects/[^/]+/locations/[^/]+/deidentifyTemplates/[-_a-zA-Z0-9]+"
@@ -23,23 +23,22 @@
     },
     {
       "name": "dlpLocation",
-      "label": "DLP Location.",
-      "helpText": "The Location of the DLP template resource. Default value is global.",
-      "isOptional": true
+      "label": "DLP location.",
+      "helpText": "The Location of the DLP template resource."
     },
     {
       "name": "dlpProjectId",
-      "label": "DLP Project ID.",
+      "label": "DLP project ID.",
       "helpText": "ID of the project that holds the DLP template."
     },
     {
       "name": "bqProjectId",
-      "label": "BigQuery Project ID.",
-      "helpText": "ID of the project for Output BigQuery."
+      "label": "BigQuery project ID.",
+      "helpText": "ID of the project for output BigQuery."
     },
     {
       "name": "datasetName",
-      "label": "Dataset Name.",
+      "label": "Dataset name.",
       "helpText": "Output BigQuery dataset name."
     }
   ]

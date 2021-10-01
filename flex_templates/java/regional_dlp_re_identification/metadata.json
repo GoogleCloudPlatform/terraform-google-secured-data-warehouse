@@ -14,25 +14,25 @@
     },
     {
       "name": "deidentifyTemplateName",
-      "label": "DLP Structured De-identification Template Name.",
-      "helpText": "Name of the DLP Structured De-identification Template that was used to deidentify data in the BiqQuery source. Format is 'projects/<PROJECT>/locations/<LOCATION>/deidentifyTemplates/<TEMPLATE_ID>'",
+      "label": "DLP structured de-identification template name.",
+      "helpText": "Name of the DLP structured de-identification template that was used to deidentify data in the BiqQuery source. Format is 'projects/<PROJECT>/locations/<LOCATION>/deidentifyTemplates/<TEMPLATE_ID>'",
       "regexes": [
         "projects/[^/]+/locations/[^/]+/deidentifyTemplates/[-_a-zA-Z0-9]+"
       ]
     },
     {
       "name": "dlpLocation",
-      "label": "DLP Location.",
-      "helpText": "The Location of the DLP template resource."
+      "label": "DLP location.",
+      "helpText": "The location of the DLP template resource."
     },
     {
       "name": "dlpProjectId",
-      "label": "DLP Project.",
+      "label": "DLP project.",
       "helpText": "ID of the project that holds the DLP template."
     },
     {
       "name": "confidentialDataProjectId",
-      "label": "Project for output BigQuery that has privilege dadta.",
+      "label": "Project for output BigQuery that has confidential data.",
       "helpText": "ID of the project that holds the confidential data in BigQuery."
     },
     {

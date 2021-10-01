@@ -369,7 +369,6 @@ public class DLPTextToBigQueryStreaming {
     void setDlpProjectId(ValueProvider<String> value);
 
     @Description("Location to be used for DLP Tokenization")
-    @Default.String("global")
     ValueProvider<String> getDlpLocation();
 
     void setDlpLocation(ValueProvider<String> value);

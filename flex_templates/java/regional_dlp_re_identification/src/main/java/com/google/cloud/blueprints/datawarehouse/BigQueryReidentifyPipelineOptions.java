@@ -50,15 +50,6 @@ public interface BigQueryReidentifyPipelineOptions extends DataflowPipelineOptio
 
   void setDeidentifyTemplateName(String value);
 
-  @Description("DLP API has a limit for payload size of 524KB /api call. "
-        + "That's why dataflow process will need to chunk it. User will have to decide "
-        + "on how they would like to batch the request depending on number of rows "
-        + "and how big each row is.")
-  @Default.Integer(100)
-  Integer getBatchSize();
-
-  void setBatchSize(Integer value);
-
   @Description("Confidential data project id to be used for Big Query output")
   @Required
   String getConfidentialDataProjectId();
@@ -72,10 +63,18 @@ public interface BigQueryReidentifyPipelineOptions extends DataflowPipelineOptio
   void setDlpProjectId(String value);
 
   @Description("Location to be used for DLP Tokenization")
-  @Default.String("global")
   String getDlpLocation();
 
   void setDlpLocation(String value);
+
+  @Description("DLP API has a limit for payload size of 524KB /api call. "
+  + "That's why dataflow process will need to chunk it. User will have to decide "
+  + "on how they would like to batch the request depending on number of rows "
+  + "and how big each row is.")
+  @Default.Integer(100)
+  Integer getBatchSize();
+
+  void setBatchSize(Integer value);
 
   @Description("Column delimiter")
   @Default.Character(',')
