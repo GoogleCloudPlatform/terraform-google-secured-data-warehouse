@@ -126,7 +126,7 @@ resource "google_dataflow_flex_template_job" "regional_deid" {
     tempLocation           = "gs://${module.secured_data_warehouse.data_ingest_dataflow_bucket_name}/tmp/"
     stagingLocation        = "gs://${module.secured_data_warehouse.data_ingest_dataflow_bucket_name}/staging/"
     maxNumWorkers          = 5
-    usePublicIps           = "false"
+    usePublicIps           = false
   }
 
   depends_on = [
