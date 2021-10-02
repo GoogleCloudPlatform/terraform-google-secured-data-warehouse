@@ -14,33 +14,47 @@
  * limitations under the License.
  */
 
+locals {
+  confidential_project_roles = [
+    "pubsub.subscriber",
+    "bigquery.admin",
+    "cloudkms.admin",
+    "cloudkms.cryptoKeyDecrypter",
+    "dlp.admin",
+    "dlp.deidentifyTemplatesEditor",
+    "dlp.user",
+    "storage.admin",
+    "dataflow.serviceAgent",
+    "dataflow.worker",
+    "compute.viewer",
+    "serviceusage.serviceUsageConsumer"
+  ]
+
+  governance_project_roles = [
+    "serviceusage.serviceUsageConsumer",
+    "dlp.admin",
+    "dlp.deidentifyTemplatesEditor",
+    "dlp.user",
+    "cloudkms.admin",
+    "cloudkms.cryptoKeyDecrypter"
+  ]
+
+  non_conf_project_roles = [
+    "bigquery.admin",
+    "serviceusage.serviceUsageConsumer"
+  ]
+}
+
 module "dataflow_controller_service_account" {
   source       = "terraform-google-modules/service-accounts/google"
   version      = "~> 3.0"
   project_id   = var.confidential_data_project_id
   names        = ["sa-dataflow-controller-reid"]
   display_name = "Cloud Dataflow controller service account"
-  project_roles = [
-    "${var.confidential_data_project_id}=>roles/pubsub.subscriber",
-    "${var.confidential_data_project_id}=>roles/bigquery.admin",
-    "${var.confidential_data_project_id}=>roles/cloudkms.admin",
-    "${var.confidential_data_project_id}=>roles/cloudkms.cryptoKeyDecrypter",
-    "${var.confidential_data_project_id}=>roles/dlp.admin",
-    "${var.confidential_data_project_id}=>roles/dlp.deidentifyTemplatesEditor",
-    "${var.confidential_data_project_id}=>roles/dlp.user",
-    "${var.confidential_data_project_id}=>roles/storage.admin",
-    "${var.confidential_data_project_id}=>roles/dataflow.serviceAgent",
-    "${var.confidential_data_project_id}=>roles/dataflow.worker",
-    "${var.confidential_data_project_id}=>roles/compute.viewer",
-    "${var.confidential_data_project_id}=>roles/serviceusage.serviceUsageConsumer",
-    "${var.non_confidential_project_id}=>roles/bigquery.admin",
-    "${var.non_confidential_project_id}=>roles/serviceusage.serviceUsageConsumer",
-    "${var.data_governance_project_id}=>roles/serviceusage.serviceUsageConsumer",
-    "${var.data_governance_project_id}=>roles/dlp.admin",
-    "${var.data_governance_project_id}=>roles/dlp.deidentifyTemplatesEditor",
-    "${var.data_governance_project_id}=>roles/dlp.user",
-    "${var.data_governance_project_id}=>roles/cloudkms.admin",
-    "${var.data_governance_project_id}=>roles/cloudkms.cryptoKeyDecrypter"
-  ]
+  project_roles = concat(
+    [for role in local.confidential_project_roles : "${var.confidential_data_project_id}=>roles/${role}"],
+    [for role in local.governance_project_roles : "${var.data_governance_project_id}=>roles/${role}"],
+    [for role in local.non_conf_project_roles : "${var.non_confidential_project_id}=>roles/${role}"]
+  )
 }
 
