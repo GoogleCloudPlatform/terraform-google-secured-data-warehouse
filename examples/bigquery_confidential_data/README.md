@@ -5,8 +5,8 @@ how to use [Data Catalog policy tags](https://cloud.google.com/bigquery/docs/bes
 
 It uses:
 
-- The [Secured data warehouse](../README.md) module to create the Secured data warehouse infrastructure,
-- The `de_identification_template` submodule to create the regional structured DLP template,
+- The [Secured data warehouse](../../README.md) module to create the Secured data warehouse infrastructure,
+- The [de_identification_template](../../modules/de_identification_template/README.md) submodule to create the regional structured DLP template,
 - A Dataflow flex template to deploy the re-identification job.
 - A Dataflow flex template to deploy the de-identification job.
 
@@ -46,8 +46,8 @@ It uses:
 | data\_ingestion\_subnets\_self\_link | The URI of the subnetwork where Data Ingestion Dataflow is going to be deployed. | `string` | n/a | yes |
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `false` | no |
 | external\_flex\_template\_project\_id | Project id of the external project that host the flex Dataflow templates. | `string` | n/a | yes |
-| java\_de\_identify\_template\_gs\_path | The Google Cloud Storage gs path to the JSON file built flex template that supports DLP de-identification. | `string` | `""` | no |
-| java\_re\_identify\_template\_gs\_path | The Google Cloud Storage gs path to the JSON file built flex template that supports DLP re-identification. | `string` | `""` | no |
+| java\_de\_identify\_template\_gs\_path | The Google Cloud Storage gs path to the JSON file built flex template that supports DLP de-identification. | `string` | n/a | yes |
+| java\_re\_identify\_template\_gs\_path | The Google Cloud Storage gs path to the JSON file built flex template that supports DLP re-identification. | `string` | n/a | yes |
 | non\_confidential\_project\_id | Project with the de-identified dataset and table. | `string` | n/a | yes |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | perimeter\_additional\_members | The list of all members to be added on perimeter access, except the service accounts created by this module. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | n/a | yes |

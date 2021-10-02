@@ -28,7 +28,6 @@ module "dataflow_bucket" {
   storage_class = "STANDARD"
   force_destroy = var.delete_contents_on_destroy
 
-
   encryption = {
     default_kms_key_name = var.cmek_reidentification_crypto_key
   }

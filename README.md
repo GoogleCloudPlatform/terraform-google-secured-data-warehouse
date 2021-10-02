@@ -44,7 +44,7 @@ module "secured_data_warehouse" {
 
   org_id                           = ORG_ID
   data_governance_project_id       = DATA_GOVERNANCE_PROJECT_ID
-  confidential_data_project_id       = CONFIDENTIAL_DATA_PROJECT_ID
+  confidential_data_project_id     = CONFIDENTIAL_DATA_PROJECT_ID
   datalake_project_id              = DATALAKE_PROJECT_ID
   data_ingestion_project_id        = DATA_INGESTION_PROJECT_ID
   terraform_service_account        = TERRAFORM_SERVICE_ACCOUNT

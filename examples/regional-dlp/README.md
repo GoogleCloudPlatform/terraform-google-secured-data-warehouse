@@ -4,8 +4,8 @@ This example illustrates how to run a Flex Python Dataflow job in the Secured da
 
 It uses:
 
-- The [Secured data warehouse](../README.md) module to create the Secured data warehouse infrastructure,
-- The `de_identification_template` submodule to create the regional structured DLP template,
+- The [Secured data warehouse](../../README.md) module to create the Secured data warehouse infrastructure,
+- The [de_identification_template](../../modules/de_identification_template/README.md) submodule to create the regional structured DLP template,
 - A Dataflow flex template to deploy the de-identification job.
 
 ## Prerequisites
