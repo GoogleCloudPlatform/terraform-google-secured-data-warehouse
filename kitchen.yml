@@ -66,20 +66,6 @@ suites:
           backend: local
           controls:
             - gcloud
-  - name: batch-data-ingestion
-    driver:
-      root_module_directory: test/fixtures/batch-data-ingestion/
-    verifier:
-      color: false
-      systems:
-        - name: batch-data-ingestion gcp
-          backend: gcp
-          controls:
-            - gcp
-        - name: batch-data-ingestion gcloud
-          backend: local
-          controls:
-            - gcloud
   - name: de-identification-template
     driver:
       root_module_directory: test/fixtures/de-identification-template/
