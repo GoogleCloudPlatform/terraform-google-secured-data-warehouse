@@ -14,22 +14,6 @@
  * limitations under the License.
  */
 
-/**
- * Copyright 2021 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 output "dataflow_controller_service_account_email" {
   description = "The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account."
   value       = module.data_ingestion.dataflow_controller_service_account_email
@@ -57,9 +41,9 @@ output "pubsub_writer_service_account_email" {
   ]
 }
 
-output "data_ingest_bucket_names" {
-  description = "The name list of the buckets created for data ingest pipeline."
-  value       = module.data_ingestion.data_ingest_bucket_names
+output "data_ingest_bucket_name" {
+  description = "The name of the bucket created for data ingest pipeline."
+  value       = module.data_ingestion.data_ingest_bucket_name
 
   depends_on = [
     time_sleep.wait_for_bridge_propagation
@@ -77,7 +61,7 @@ output "data_ingest_dataflow_bucket_name" {
 
 output "confidential_data_dataflow_bucket_name" {
   description = "The name of the bucket created for dataflow in the confidential data pipeline."
-  value       = module.bigquery_sensitive_data.confidential_data_dataflow_bucket_name
+  value       = module.bigquery_confidential_data.confidential_data_dataflow_bucket_name
 
   depends_on = [
     time_sleep.wait_for_bridge_propagation
@@ -138,18 +122,18 @@ output "data_governance_service_perimeter_name" {
   ]
 }
 
-output "privileged_access_level_name" {
+output "confidential_access_level_name" {
   description = "Access context manager access level name."
-  value       = module.privileged_data_vpc_sc.access_level_name
+  value       = module.confidential_data_vpc_sc.access_level_name
 
   depends_on = [
     time_sleep.wait_for_bridge_propagation
   ]
 }
 
-output "privileged_service_perimeter_name" {
+output "confidential_service_perimeter_name" {
   description = "Access context manager service perimeter name."
-  value       = module.privileged_data_vpc_sc.service_perimeter_name
+  value       = module.confidential_data_vpc_sc.service_perimeter_name
 
   depends_on = [
     time_sleep.wait_for_bridge_propagation
@@ -193,7 +177,7 @@ output "cmek_bigquery_crypto_key" {
 }
 
 output "cmek_reidentification_crypto_key" {
-  description = "The Customer Managed Crypto Key for the Privileged crypto boundary."
+  description = "The Customer Managed Crypto Key for the Confidential crypto boundary."
   value       = module.data_governance.cmek_reidentification_crypto_key
 
   depends_on = [
@@ -246,68 +230,9 @@ output "cmek_confidential_bigquery_crypto_key_name" {
   ]
 }
 
-output "emails_list" {
-  description = "The service account email addresses by name."
-  value       = module.bigquery_sensitive_data.emails_list
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
-output "medium_policy_taxonomy_id" {
-  description = "Content for Policy Tag ID in medium policy."
-  value       = module.bigquery_sensitive_data.medium_policy_taxonomy_id
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
-output "high_policy_taxonomy_id" {
-  description = "Content for Policy Tag ID in high policy."
-  value       = module.bigquery_sensitive_data.high_policy_taxonomy_id
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
-output "member_policy_ssn_confidential" {
-  description = "SA member for Social Security Number policy tag."
-  value       = module.bigquery_sensitive_data.member_policy_ssn_confidential
-}
-
-output "member_policy_name_confidential" {
-  description = "SA member for Person Name policy tag."
-  value       = module.bigquery_sensitive_data.member_policy_name_confidential
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
-output "member_policy_name_private" {
-  description = "SA member for Person Name policy tag."
-  value       = module.bigquery_sensitive_data.member_policy_name_private
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
-output "taxonomy_name" {
-  description = "The taxonomy display name."
-  value       = module.bigquery_sensitive_data.taxonomy_name
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
 output "confidential_dataflow_controller_service_account_email" {
   description = "The confidential Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account."
-  value       = module.bigquery_sensitive_data.confidential_dataflow_controller_service_account_email
+  value       = module.bigquery_confidential_data.confidential_dataflow_controller_service_account_email
 
   depends_on = [
     time_sleep.wait_for_bridge_propagation

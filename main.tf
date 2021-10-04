@@ -23,7 +23,7 @@ locals {
     var.data_ingestion_project_id,
     var.data_governance_project_id,
     var.datalake_project_id,
-    var.privileged_data_project_id
+    var.confidential_data_project_id
   ]
 }
 
@@ -32,15 +32,15 @@ locals {
 module "data_governance" {
   source = "./modules/data_governance"
 
-  terraform_service_account   = var.terraform_service_account
-  data_ingestion_project_id   = var.data_ingestion_project_id
-  data_governance_project_id  = var.data_governance_project_id
-  privileged_data_project_id  = var.privileged_data_project_id
-  datalake_project_id         = var.datalake_project_id
-  cmek_location               = local.cmek_location
-  cmek_keyring_name           = var.cmek_keyring_name
-  key_rotation_period_seconds = var.key_rotation_period_seconds
-  delete_contents_on_destroy  = var.delete_contents_on_destroy
+  terraform_service_account    = var.terraform_service_account
+  data_ingestion_project_id    = var.data_ingestion_project_id
+  data_governance_project_id   = var.data_governance_project_id
+  confidential_data_project_id = var.confidential_data_project_id
+  datalake_project_id          = var.datalake_project_id
+  cmek_location                = local.cmek_location
+  cmek_keyring_name            = var.cmek_keyring_name
+  key_rotation_period_seconds  = var.key_rotation_period_seconds
+  delete_contents_on_destroy   = var.delete_contents_on_destroy
 }
 
 // A2 - DATA WAREHOUSE GOVERNANCE - END
@@ -74,14 +74,12 @@ module "data_ingestion" {
 
 // A4 - DATA WAREHOUSE SENSITIVE DATA - START
 
-module "bigquery_sensitive_data" {
-  source = "./modules/data_warehouse_taxonomy"
+module "bigquery_confidential_data" {
+  source = "./modules/confidential_data"
 
-  taxonomy_project_id                   = var.data_governance_project_id
-  privileged_data_project_id            = var.privileged_data_project_id
-  non_sensitive_project_id              = var.datalake_project_id
-  taxonomy_name                         = var.taxonomy_name
-  table_id                              = var.confidential_table_id
+  data_governance_project_id            = var.data_governance_project_id
+  confidential_data_project_id          = var.confidential_data_project_id
+  non_confidential_project_id           = var.datalake_project_id
   dataset_id                            = var.confidential_dataset_id
   location                              = local.location
   cmek_confidential_bigquery_crypto_key = module.data_governance.cmek_confidential_bigquery_crypto_key
@@ -103,7 +101,7 @@ module "org_policies" {
 
   depends_on = [
     module.data_ingestion,
-    module.bigquery_sensitive_data
+    module.bigquery_confidential_data
   ]
 }
 

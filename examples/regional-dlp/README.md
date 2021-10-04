@@ -4,8 +4,8 @@ This example illustrates how to run a Flex Python Dataflow job in the Secured da
 
 It uses:
 
-- The [Secured data warehouse](../README.md) module to create the Secured data warehouse infrastructure,
-- The `de_identification_template` submodule to create the regional structured DLP template,
+- The [Secured data warehouse](../../README.md) module to create the Secured data warehouse infrastructure,
+- The [de_identification_template](../../modules/de_identification_template/README.md) submodule to create the regional structured DLP template,
 - A Dataflow flex template to deploy the de-identification job.
 
 ## Prerequisites
@@ -211,6 +211,7 @@ If your user does not have the necessary roles to run the commands above you can
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | access\_context\_manager\_policy\_id | The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format="value(name)"`. | `number` | n/a | yes |
+| confidential\_data\_project\_id | Project where the confidential datasets and tables are created. | `string` | n/a | yes |
 | crypto\_key | The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP. | `string` | n/a | yes |
 | data\_governance\_project\_id | The ID of the project in which the data governance resources will be created. | `string` | n/a | yes |
 | data\_ingestion\_project\_id | The ID of the project in which the data ingestion resources will be created. | `string` | n/a | yes |
@@ -222,7 +223,6 @@ If your user does not have the necessary roles to run the commands above you can
 | network\_self\_link | The URI of the network where Dataflow is going to be deployed. | `string` | n/a | yes |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | perimeter\_additional\_members | The list of all members to be added on perimeter access, except the service accounts created by this module. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | n/a | yes |
-| privileged\_data\_project\_id | Project where the privileged datasets and tables are created. | `string` | n/a | yes |
 | sdx\_project\_number | The Project Number to configure Secure data exchange with egress rule for the dataflow templates. | `string` | n/a | yes |
 | subnetwork\_self\_link | The URI of the subnetwork where Dataflow is going to be deployed. | `string` | n/a | yes |
 | terraform\_service\_account | The email address of the service account that will run the Terraform config. | `string` | n/a | yes |

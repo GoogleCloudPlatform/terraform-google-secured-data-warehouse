@@ -55,9 +55,9 @@ output "pubsub_writer_service_account_email" {
   value       = module.simple_example.pubsub_writer_service_account_email
 }
 
-output "data_ingest_bucket_names" {
-  description = "The name list of the buckets created for data ingest pipeline."
-  value       = module.simple_example.data_ingest_bucket_names
+output "data_ingest_bucket_name" {
+  description = "The name of the bucket created for data ingest pipeline."
+  value       = module.simple_example.data_ingest_bucket_name
 }
 
 output "data_ingest_topic_name" {

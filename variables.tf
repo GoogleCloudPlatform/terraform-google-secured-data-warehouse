@@ -57,8 +57,8 @@ variable "datalake_project_id" {
   type        = string
 }
 
-variable "privileged_data_project_id" {
-  description = "Project where the privileged datasets and tables are created."
+variable "confidential_data_project_id" {
+  description = "Project where the confidential datasets and tables are created."
   type        = string
 }
 
@@ -151,12 +151,6 @@ variable "dataset_default_table_expiration_ms" {
 variable "cmek_keyring_name" {
   description = "The Keyring name for the KMS Customer Managed Encryption Keys being provisioned."
   type        = string
-}
-
-variable "taxonomy_name" {
-  description = "The taxonomy display name."
-  type        = string
-  default     = "secured_taxonomy"
 }
 
 variable "confidential_access_members" {

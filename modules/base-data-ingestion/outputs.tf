@@ -29,9 +29,9 @@ output "pubsub_writer_service_account_email" {
   value       = google_service_account.pubsub_writer_service_account.email
 }
 
-output "data_ingest_bucket_names" {
-  description = "The name list of the buckets created for data ingest pipeline."
-  value       = [module.data_ingest_bucket.bucket.name]
+output "data_ingest_bucket_name" {
+  description = "The name of the bucket created for data ingest pipeline."
+  value       = module.data_ingest_bucket.bucket.name
 }
 
 output "data_ingest_dataflow_bucket_name" {

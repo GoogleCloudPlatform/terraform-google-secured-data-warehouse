@@ -42,9 +42,9 @@ attributes:
   - name: pubsub_writer_service_account_email
     required: true
     type: string
-  - name: data_ingest_bucket_names
+  - name: data_ingest_bucket_name
     required: true
-    type: array
+    type: string
   - name: data_ingest_topic_name
     required: true
     type: string

@@ -1,0 +1,77 @@
+[
+  {
+    "name": "Card_Type_Code",
+    "mode": "NULLABLE",
+    "type": "STRING"
+  },
+  {
+    "name": "Card_Type_Full_Name",
+    "mode": "NULLABLE",
+    "type": "STRING"
+  },
+  {
+    "name": "Issuing_Bank",
+    "mode": "NULLABLE",
+    "type": "STRING"
+  },
+  {
+    "name": "Card_Number",
+    "mode": "NULLABLE",
+    "type": "STRING",
+    "policyTags": {
+      "names": ["${pt_card_number}"]
+    }
+  },
+  {
+    "name": "Card_Holders_Name",
+    "mode": "NULLABLE",
+    "type": "STRING",
+    "policyTags": {
+      "names": ["${pt_name}"]
+    }
+  },
+  {
+    "name": "CVVCVV2",
+    "mode": "NULLABLE",
+    "type": "STRING",
+    "policyTags": {
+      "names": ["${pt_cvv}"]
+    }
+  },
+  {
+    "name": "Issue_Date",
+    "mode": "NULLABLE",
+    "type": "STRING"
+  },
+  {
+    "name": "Expiry_Date",
+    "mode": "NULLABLE",
+    "type": "STRING",
+    "policyTags": {
+      "names": ["${pt_expiry_date}"]
+    }
+  },
+  {
+    "name": "Billing_Date",
+    "mode": "NULLABLE",
+    "type": "STRING"
+  },
+  {
+    "name": "Card_PIN",
+    "mode": "NULLABLE",
+    "type": "STRING",
+    "policyTags": {
+      "names": ["${pt_card_pin}"]
+    }
+  },
+  {
+    "name": "Credit_Limit",
+    "mode": "NULLABLE",
+    "type": "STRING",
+    "policyTags": {
+      "names": ["${pt_credit_limit}"]
+    }
+  }
+]
+
+

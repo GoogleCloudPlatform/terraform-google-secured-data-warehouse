@@ -74,7 +74,7 @@ module "data_ingest_topic" {
 //BigQuery dataset
 module "bigquery_dataset" {
   source  = "terraform-google-modules/bigquery/google"
-  version = "~> 5.1"
+  version = "~> 5.2.0"
 
   project_id                  = var.datalake_project_id
   dataset_id                  = var.dataset_id
@@ -82,6 +82,7 @@ module "bigquery_dataset" {
   description                 = var.dataset_description
   location                    = var.dataset_location
   encryption_key              = var.bigquery_encryption_key
+  delete_contents_on_destroy  = var.delete_contents_on_destroy
   default_table_expiration_ms = var.dataset_default_table_expiration_ms
 
   dataset_labels = {

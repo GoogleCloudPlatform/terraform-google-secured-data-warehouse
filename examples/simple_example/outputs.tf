@@ -29,9 +29,9 @@ output "pubsub_writer_service_account_email" {
   value       = module.secured_data_warehouse.pubsub_writer_service_account_email
 }
 
-output "data_ingest_bucket_names" {
-  description = "The name list of the buckets created for data ingest pipeline."
-  value       = module.secured_data_warehouse.data_ingest_bucket_names
+output "data_ingest_bucket_name" {
+  description = "The name of the bucket created for data ingest pipeline."
+  value       = module.secured_data_warehouse.data_ingest_bucket_name
 }
 
 output "data_ingest_topic_name" {

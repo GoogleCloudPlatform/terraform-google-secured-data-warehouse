@@ -26,7 +26,7 @@ locals {
     "serviceAccount:${var.terraform_service_account}"
   ], var.perimeter_additional_members))
 
-  perimeter_members_privileged = distinct(concat([
+  perimeter_members_confidential = distinct(concat([
     "serviceAccount:${var.terraform_service_account}"
   ], var.perimeter_additional_members))
 }
@@ -43,8 +43,8 @@ data "google_project" "datalake_project" {
   project_id = var.datalake_project_id
 }
 
-data "google_project" "privileged_project" {
-  project_id = var.privileged_data_project_id
+data "google_project" "confidential_project" {
+  project_id = var.confidential_data_project_id
 }
 
 resource "random_id" "suffix" {
@@ -141,16 +141,16 @@ module "data_governance_vpc_sc" {
   ]
 }
 
-module "privileged_data_vpc_sc" {
+module "confidential_data_vpc_sc" {
   source = ".//modules/dwh_vpc_sc"
 
   org_id                           = var.org_id
-  project_id                       = var.privileged_data_project_id
+  project_id                       = var.confidential_data_project_id
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  common_name                      = "privileged_data"
+  common_name                      = "confidential_data"
   common_suffix                    = random_id.suffix.hex
-  resources                        = [data.google_project.privileged_project.number]
-  perimeter_members                = local.perimeter_members_privileged
+  resources                        = [data.google_project.confidential_project.number]
+  perimeter_members                = local.perimeter_members_confidential
   restricted_services = [
     "bigquery.googleapis.com",
     "cloudasset.googleapis.com",
@@ -206,42 +206,42 @@ module "vpc_sc_bridge_ingestion_governance" {
   ]
 }
 
-module "vpc_sc_bridge_privileged_governance" {
+module "vpc_sc_bridge_confidential_governance" {
   source  = "terraform-google-modules/vpc-service-controls/google//modules/bridge_service_perimeter"
   version = "~> 3.0"
 
   policy         = var.access_context_manager_policy_id
-  perimeter_name = "vpc_sc_bridge_privileged_governance_${random_id.suffix.hex}"
-  description    = "VPC-SC bridge between privileged data and data governance"
+  perimeter_name = "vpc_sc_bridge_confidential_governance_${random_id.suffix.hex}"
+  description    = "VPC-SC bridge between confidential data and data governance"
 
   resources = [
-    data.google_project.privileged_project.number,
+    data.google_project.confidential_project.number,
     data.google_project.governance_project.number
   ]
 
   depends_on = [
     time_sleep.forces_wait_propagation,
-    module.privileged_data_vpc_sc,
+    module.confidential_data_vpc_sc,
     module.data_governance_vpc_sc
   ]
 }
 
-module "vpc_sc_bridge_privileged_ingestion" {
+module "vpc_sc_bridge_confidential_ingestion" {
   source  = "terraform-google-modules/vpc-service-controls/google//modules/bridge_service_perimeter"
   version = "~> 3.0"
 
   policy         = var.access_context_manager_policy_id
-  perimeter_name = "vpc_sc_bridge_privileged_ingestion_${random_id.suffix.hex}"
-  description    = "VPC-SC bridge between privileged data and data ingestion"
+  perimeter_name = "vpc_sc_bridge_confidential_ingestion_${random_id.suffix.hex}"
+  description    = "VPC-SC bridge between confidential data and data ingestion"
 
   resources = [
-    data.google_project.privileged_project.number,
+    data.google_project.confidential_project.number,
     data.google_project.datalake_project.number
   ]
 
   depends_on = [
     time_sleep.forces_wait_propagation,
-    module.privileged_data_vpc_sc,
+    module.confidential_data_vpc_sc,
     module.data_ingestion_vpc_sc
   ]
 }
@@ -250,8 +250,8 @@ resource "time_sleep" "wait_for_bridge_propagation" {
   create_duration = "240s"
 
   depends_on = [
-    module.vpc_sc_bridge_privileged_ingestion,
-    module.vpc_sc_bridge_privileged_governance,
+    module.vpc_sc_bridge_confidential_ingestion,
+    module.vpc_sc_bridge_confidential_governance,
     module.vpc_sc_bridge_ingestion_governance
   ]
 }

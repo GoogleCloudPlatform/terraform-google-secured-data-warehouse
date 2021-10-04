@@ -1,0 +1,38 @@
+# Copyright 2021 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+steps:
+- name: 'maven:3.8.2-jdk-11'
+  entrypoint: 'mvn'
+  args: ['clean', 'package']
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  args: ['/bin/bash', '-c', 'ls -R ./target']
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: 'gcloud'
+  args: [
+    'dataflow', 'flex-template', 'build', '${_TEMPLATE_GS_PATH}',
+  '--image-gcr-path', '${_FLEX_TEMPLATE_IMAGE_TAG}',
+  '--sdk-language', 'JAVA',
+  '--project', '${_PROJECT}',
+  '--flex-template-base-image', 'JAVA11',
+  '--metadata-file', './metadata.json',
+  '--jar', './target/regional-bq-dlp-bq-streaming-1.0.0.jar',
+  '--env', 'FLEX_TEMPLATE_JAVA_MAIN_CLASS="com.google.cloud.blueprints.datawarehouse.BigQueryDLPBigQuery"',
+  ]
+substitutions:
+  _PROJECT: 'PROJECT'
+  _FLEX_TEMPLATE_IMAGE_TAG: 'us-east4-docker.pkg.dev/PROJECT_ID/flex-templates/template:latest'
+  _TEMPLATE_GS_PATH: 'gs://BUCKET/template.json'
+options:
+  logging: CLOUD_LOGGING_ONLY

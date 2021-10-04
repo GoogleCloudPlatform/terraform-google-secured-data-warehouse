@@ -26,9 +26,9 @@ locals {
 }
 
 # ====================== Examples to project groups mapping ================================================
-# Examples "batch-data-ingestion" and "bigquery_sensitive_data" are together in one group.
-# Examples "regional-dlp" and "simple_example" are together in one group.
-# Examples "dataflow-with-dlp" and "de_identification_template" are together in one group.
+# Examples "dataflow-with-dlp" and "batch-data-ingestion" are together in one group.
+# Examples "simple_example" and "regional-dlp" are together in one group.
+# Examples "bigquery_confidential_data" and "de_identification_template" are together in one group.
 #
 # To add a new example, add it to one of the groups and try keep the number of examples that
 # deploy the main module to two in that group.
@@ -140,13 +140,13 @@ module "datalake_project" {
   ]
 }
 
-module "privileged_data_project" {
+module "confidential_data_project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
 
   for_each = local.project_groups
 
-  name              = "ci-sdw-privileged-${random_id.project_id_suffix.hex}"
+  name              = "ci-sdw-conf-${random_id.project_id_suffix.hex}"
   random_project_id = "true"
   org_id            = var.org_id
   folder_id         = var.folder_id

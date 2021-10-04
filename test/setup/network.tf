@@ -25,12 +25,12 @@ module "dwh_networking_ingestion" {
   subnet_ip  = "10.0.32.0/21"
 }
 
-module "dwh_networking_privileged" {
+module "dwh_networking_confidential" {
   source = "../../modules/dwh-networking"
 
   for_each = local.project_groups
 
-  project_id = module.privileged_data_project[each.key].project_id
+  project_id = module.confidential_data_project[each.key].project_id
   region     = "us-east4"
   vpc_name   = "reidentify"
   subnet_ip  = "10.0.32.0/21"

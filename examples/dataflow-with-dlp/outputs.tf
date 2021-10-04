@@ -36,7 +36,7 @@ output "controller_service_account" {
 
 output "bucket_ingestion_name" {
   description = "The name of the bucket."
-  value       = module.data_ingestion.data_ingest_bucket_names[0]
+  value       = module.data_ingestion.data_ingest_bucket_name
 }
 
 output "dlp_location" {

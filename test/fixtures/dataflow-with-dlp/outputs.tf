@@ -17,7 +17,7 @@
 
 output "project_id" {
   description = "The project's ID."
-  value       = var.data_ingestion_project_id[2]
+  value       = var.data_ingestion_project_id[0]
 }
 
 output "df_job_controller_service_account" {

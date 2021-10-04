@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-data_ingest_bucket_names = attribute('data_ingest_bucket_names')
+data_ingest_bucket_name = attribute('data_ingest_bucket_name')
 data_ingest_topic_name = attribute('data_ingest_topic_name')
 project_id = attribute('project_id')
 data_governance_project_id = attribute('data_governance_project_id')
@@ -44,10 +44,8 @@ other_kms_roles = [
 control 'gcp' do
   title 'GCP Resources'
 
-  data_ingest_bucket_names.each do |bucket_name|
-    describe google_storage_bucket(name: bucket_name) do
-      it { should exist }
-    end
+  describe google_storage_bucket(name: data_ingest_bucket_name) do
+    it { should exist }
   end
 
   describe google_pubsub_topic(project: project_id, name: data_ingest_topic_name) do
