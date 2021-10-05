@@ -55,12 +55,10 @@ resource "null_resource" "download_sample_cc_into_gcs" {
     command = <<EOF
     curl https://eforexcel.com/wp/wp-content/uploads/2017/07/100-CC-Records.zip > cc_records.zip
     unzip cc_records.zip
-    rm cc_records.zip
-    mv 100\ CC\ Records.csv temp_cc_records.csv
     echo "Changing sample file encoding from ISO-8859-1 to UTF-8"
-    iconv -f="ISO-8859-1" -t="UTF-8" temp_cc_records.csv > ${local.cc_file_name}
+    iconv -f="ISO-8859-1" -t="UTF-8" 100\ CC\ Records.csv > ${local.cc_file_name}
     gsutil cp ${local.cc_file_name} gs://${module.secured_data_warehouse.data_ingest_bucket_name}
-    rm ${local.cc_file_name} temp_cc_records.csv
+    rm ${local.cc_file_name} 100\ CC\ Records.csv cc_records.zip
 EOF
 
   }
