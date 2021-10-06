@@ -35,8 +35,8 @@ set -e
 tf_example=$1
 base_dir=$(pwd)
 tmp_plan="${base_dir}/tmp_plan"
-export policy_file_path="${base_dir}/../../../policy-library"
-export path="${base_dir}/fixtures/${tf_example}"
+export policy_file_path="${base_dir}/policy-library"
+export path="${base_dir}/test/fixtures/${tf_example}"
 
 
 echo "*************** TERRAFORM VALIDATE ******************"
