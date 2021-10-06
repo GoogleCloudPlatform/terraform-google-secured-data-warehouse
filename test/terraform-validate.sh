@@ -59,7 +59,7 @@ if [ -z "$policy_file_path" ]; then
 else
     if [ -d "$path" ]; then
         cd "${setup}"
-        terraform output -json | jq -r 'keys[] as $k | "export TF_VAR_\($k)=\(.[$k].value)"'
+        $(terraform output -json | jq -r 'keys[] as $k | "export TF_VAR_\($k)=\(.[$k].value)"')
 
         cd "$path" || exit
 
