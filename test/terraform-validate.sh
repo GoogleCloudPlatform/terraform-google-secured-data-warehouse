@@ -37,6 +37,7 @@ base_dir=$(pwd)
 tmp_plan="${base_dir}/tmp_plan"
 export policy_file_path="${base_dir}/policy-library"
 export path="${base_dir}/test/fixtures/${tf_example}"
+export setup="${base_dir}/test/setup"
 
 
 echo "*************** TERRAFORM VALIDATE ******************"
@@ -56,8 +57,10 @@ if [ -z "$policy_file_path" ]; then
     echo "no policy repo found! Check the argument provided for policysource to this script."
     echo "https://github.com/GoogleCloudPlatform/terraform-validator/blob/main/docs/policy_library.md"
 else
-
     if [ -d "$path" ]; then
+        cd "${setup}"
+        terraform output -json | jq -r 'keys[] as $k | "export TF_VAR_\($k)=\(.[$k].value)"'
+
         cd "$path" || exit
 
         export GOOGLE_IMPERSONATE_SERVICE_ACCOUNT=${TF_VAR_terraform_service_account}
@@ -68,6 +71,7 @@ else
         terraform-validator validate "${tf_example}.json" --policy-path="${policy_file_path}" --project="${PROJECT_ID}" || exit 33
 
         cd "$base_dir" || exit
+        unset GOOGLE_IMPERSONATE_SERVICE_ACCOUNT
     else
       echo "ERROR:  ${path} does not exist"
     fi
