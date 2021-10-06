@@ -24,36 +24,20 @@ module "secured_data_warehouse" {
   source  = "terraform-google-modules/secured-data-warehouse/google"
   version = "~> 0.1"
 
-  org_id = ORG_ID
-  project_id = PROJECT_ID
-  region = "us-east4"
-  terraform_service_account = TERRAFORM_SERVICE_ACCOUNT
-  vpc_name = VPC_NAME
-  subnet_ip = "10.0.32.0/21"
-  access_context_manager_policy_id = ACCESS_CONTEXT_MANAGER_POLICY_ID
-  bucket_name = DATA_INGESTION_BUCKET_NAME
-  dataset_id = DATASET_ID
-  cmek_keyring_name = CMEK_KEYRING_NAME
-}
-```
-
-```hcl
-module "secured_data_warehouse" {
-  source  = "terraform-google-modules/secured-data-warehouse/google"
-  version = "~> 0.1"
-
   org_id                           = ORG_ID
   data_governance_project_id       = DATA_GOVERNANCE_PROJECT_ID
   confidential_data_project_id     = CONFIDENTIAL_DATA_PROJECT_ID
   datalake_project_id              = DATALAKE_PROJECT_ID
   data_ingestion_project_id        = DATA_INGESTION_PROJECT_ID
+  sdx_project_number               = EXTERNAL_TEMPLATE_PROJECT_NUMBER
   terraform_service_account        = TERRAFORM_SERVICE_ACCOUNT
   access_context_manager_policy_id = ACCESS_CONTEXT_MANAGER_POLICY_ID
   bucket_name                      = DATA_INGESTION_BUCKET_NAME
+  location                         = LOCATION
   dataset_id                       = DATASET_ID
-  vpc_name                         = VPC_NAME
+  confidential_dataset_id          = CONFIDENTIAL_DATASET_ID
   cmek_keyring_name                = CMEK_KEYRING_NAME
-  subnet_ip                        = "10.0.32.0/21"
+  delete_contents_on_destroy       = false
 }
 ```
 
@@ -72,7 +56,6 @@ module "secured_data_warehouse" {
 | confidential\_data\_project\_id | Project where the confidential datasets and tables are created. | `string` | n/a | yes |
 | confidential\_dataset\_default\_table\_expiration\_ms | TTL of tables using the dataset in MS. The default value is null. | `number` | `null` | no |
 | confidential\_dataset\_id | Unique ID for the confidential dataset being provisioned. | `string` | `"secured_dataset"` | no |
-| confidential\_table\_id | The confidential table ID to deploy to data warehouse. | `string` | `"sample_data"` | no |
 | data\_governance\_project\_id | The ID of the project in which the data governance resources will be created. | `string` | n/a | yes |
 | data\_ingestion\_dataflow\_deployer\_identities | List of members in the standard GCP form: user:{email}, serviceAccount:{email} that will deploy Dataflow jobs in the Data Ingestion project. These identities will be added to the VPC-SC secure data exchange egress rules. | `list(string)` | `[]` | no |
 | data\_ingestion\_project\_id | The ID of the project in which the data ingestion resources will be created | `string` | n/a | yes |
