@@ -62,6 +62,7 @@ override.tf.json
 **/Gemfile.lock
 # Plan files
 **/tmp_plan
+**/tmp-plan
 
 credentials.json
 **/.credentials/
@@ -73,3 +74,5 @@ demo/
 
 # File to populate env vars used by Docker test runs
 .envrc
+
+.pre-commit-config.yaml
