@@ -38,12 +38,6 @@ tmp_plan="${base_dir}/tmp_plan"
 export policy_file_path="${base_dir}/../../../policy-library"
 export path="${base_dir}/fixtures/${tf_example}"
 
-gsutil cp gs://terraform-validator/releases/v0.9.1/terraform-validator_linux_amd64-0.9.1.tar.gz .
-tar -xzvf terraform-validator_linux_amd64-0.9.1.tar.gz
-chmod 755 terraform-validator
-alias terraform-validator=./$(pwd)/terraform-validator
-
-
 
 echo "*************** TERRAFORM VALIDATE ******************"
 echo "      At example: ${tf_example}"
@@ -51,9 +45,14 @@ echo "      Using policy from: ${policy_file_path} "
 echo "*****************************************************"
 
 if ! command -v terraform-validator &> /dev/null; then
-    echo "terraform-validator not found!  Check path or visit"
-    echo "https://github.com/GoogleCloudPlatform/terraform-validator/blob/main/docs/install.md"
-elif [ -z "$policy_file_path" ]; then
+    gsutil cp gs://terraform-validator/releases/v0.9.1/terraform-validator_linux_amd64-0.9.1.tar.gz .
+    tar -xzvf terraform-validator_linux_amd64-0.9.1.tar.gz
+    chmod +X terraform-validator
+    mv terraform-validator /usr/bin/
+    rm terraform-validator_linux_amd64-0.9.1.tar.gz
+fi
+
+if [ -z "$policy_file_path" ]; then
     echo "no policy repo found! Check the argument provided for policysource to this script."
     echo "https://github.com/GoogleCloudPlatform/terraform-validator/blob/main/docs/policy_library.md"
 else
