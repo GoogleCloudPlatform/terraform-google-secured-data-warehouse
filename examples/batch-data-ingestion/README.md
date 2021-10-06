@@ -2,10 +2,16 @@
 
 This example illustrates how to run a public Batch Dataflow job, [Cloud Storage Text to BigQuery](https://cloud.google.com/dataflow/docs/guides/templates/provided-batch#gcstexttobigquery), with The [Secured data warehouse](../../README.md).
 
+It uses:
+
+- The [Secured data warehouse](../../README.md) module to create the Secured data warehouse infrastructure,
+- The public Google provided Dataflow template [Cloud Storage Text to BigQuery](https://cloud.google.com/dataflow/docs/guides/templates/provided-batch#cloud-storage-text-to-bigquery)
+- A Google Cloud Scheduler [job](https://cloud.google.com/scheduler/docs/creating#creating_jobs)
+
 ## Requirements
 
-1. A project previusly created, with [Google App Engine Application Enabled](https://cloud.google.com/scheduler/docs/quickstart#create_a_project_with_an_app_engine_app).
-1 A network and subnetwork in the data ingestion project.
+1. A project previously created, with [Google App Engine Application Enabled](https://cloud.google.com/scheduler/docs/quickstart#create_a_project_with_an_app_engine_app).
+1 A network and subnetwork in the data ingestion project [Configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access).
 
 ### Firewall rules
 
@@ -14,6 +20,7 @@ This example illustrates how to run a public Batch Dataflow job, [Cloud Storage 
 - Allow only Private API Egress by TPC at 443 port
 - Allow ingress Dataflow workers by TPC at ports 12345 and 12346
 - Allow egress Dataflow workers     by TPC at ports 12345 and 12346
+
 ### DNS configurations
 
 - Restricted Google APIs
