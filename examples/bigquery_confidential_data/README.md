@@ -15,8 +15,8 @@ It uses:
 1. A `crypto_key` and `wrapped_key` pair.  Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location used for the `location` variable.
 1. Pre-build Java Regional DLP De-identification and Re-identification flex templates. See [Flex templates](../../flex_templates/README.md).
 1. The identity deploying the example must have permissions to grant role "roles/artifactregistry.reader" in the docker and python repos of the Flex templates.
-1. You need to create network and subnetwork in the ingestion project [Configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access).
-1. You need to create network and subnetwork in the confidential project [Configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access).
+1. You need to create network and subnetwork in the ingestion project [configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access).
+1. You need to create network and subnetwork in the confidential project [configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access).
 
 ### Firewall rules
 

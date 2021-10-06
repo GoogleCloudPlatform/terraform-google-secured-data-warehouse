@@ -11,7 +11,7 @@ It uses:
 ## Requirements
 
 1. A project previously created, with [Google App Engine Application Enabled](https://cloud.google.com/scheduler/docs/quickstart#create_a_project_with_an_app_engine_app).
-1 A network and subnetwork in the data ingestion project [Configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access).
+1 A network and subnetwork in the data ingestion project [configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access).
 
 ### Firewall rules
 
