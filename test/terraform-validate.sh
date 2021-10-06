@@ -38,7 +38,7 @@ tmp_plan="${base_dir}/tmp_plan"
 export policy_file_path="${base_dir}/../../../policy-library"
 export path="${base_dir}/fixtures/${tf_example}"
 
-gsutil cp gs://terraform-validator/releases/v0.9.1/terraform-validator_windows_amd64-0.9.1.tar.gz .
+gsutil cp gs://terraform-validator/releases/v0.9.1/terraform-validator_linux_amd64-0.9.1.tar.gz .
 tar -xzvf terraform-validator_linux_amd64-0.9.1.tar.gz
 chmod 755 terraform-validator
 alias terraform-validator=./$(pwd)/terraform-validator
