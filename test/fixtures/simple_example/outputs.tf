@@ -17,17 +17,17 @@
 
 output "project_id" {
   description = "The project_id used to create infra."
-  value       = var.data_ingestion_project_id[1]
+  value       = var.data_ingestion_project_id[0]
 }
 
 output "data_governance_project_id" {
   description = "The data_governance_project_id used to create infra."
-  value       = var.data_governance_project_id[1]
+  value       = var.data_governance_project_id[0]
 }
 
 output "datalake_project_id" {
   description = "The datalake_project_id used to create bigquery."
-  value       = var.datalake_project_id[1]
+  value       = var.datalake_project_id[0]
 }
 
 output "org_id" {
