@@ -19,9 +19,9 @@ locals {
   second_project_group = "2"
   third_project_group  = "3"
   project_groups = toset([
-    local.first_project_group,
-    local.second_project_group,
-    local.third_project_group
+    local.first_project_group
+    # local.second_project_group,
+    # local.third_project_group
   ])
 }
 
