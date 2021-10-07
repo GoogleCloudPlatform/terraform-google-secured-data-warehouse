@@ -33,8 +33,8 @@
 set -e
 
 tf_example=$1
-base_dir=$(pwd)
-tmp_plan="${base_dir}/tmp_plan"
+export base_dir=$(pwd)
+export tmp_plan="${base_dir}/tmp_plan"
 export policy_file_path="${base_dir}/policy-library"
 export path="${base_dir}/test/fixtures/${tf_example}"
 export setup="${base_dir}/test/setup"
@@ -53,7 +53,7 @@ if ! command -v terraform-validator &> /dev/null; then
     rm terraform-validator_linux_amd64-0.9.1.tar.gz
 fi
 
-if [ -z "$tmp_plan" ]; then
+if [ ! -d "$tmp_plan" ]; then
     mkdir "$tmp_plan/" || exit 29
 fi
 
