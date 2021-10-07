@@ -43,6 +43,11 @@ variable "job_language" {
   description = "Language of the flex template code. Options are 'JAVA' or 'PYTHON'."
   type        = string
   default     = "JAVA"
+
+  validation {
+    condition     = var.job_language == "JAVA" || var.job_language == "PYTHON"
+    error_message = "Invalid job language. Options are 'JAVA' or 'PYTHON'."
+  }
 }
 
 variable "enable_streaming_engine" {
