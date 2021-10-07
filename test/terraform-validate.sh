@@ -54,7 +54,7 @@ if ! command -v terraform-validator &> /dev/null; then
 fi
 
 if [ -z "$tmp_plan" ]; then
-    mkdir "$tmp_plan"
+    mkdir "$tmp_plan/" || exit 29
 fi
 
 if [ -z "$policy_file_path" ]; then
@@ -65,7 +65,7 @@ else
         cd "${setup}"
         $(terraform output -json | jq -r 'keys[] as $k | "export TF_VAR_\($k)=\(.[$k].value)"')
 
-        cd "$path" || exit
+        cd "$path" || exit 30
 
         # gcloud config set auth/impersonate_service_account ${TF_VAR_terraform_service_account}
         # export GOOGLE_OAUTH_ACCESS_TOKEN=$(gcloud auth print-access-token)
