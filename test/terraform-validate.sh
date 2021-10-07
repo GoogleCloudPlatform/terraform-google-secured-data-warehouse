@@ -63,16 +63,16 @@ else
 
         cd "$path" || exit
 
-        gcloud config set auth/impersonate_service_account ${TF_VAR_terraform_service_account}
-        export GOOGLE_OAUTH_ACCESS_TOKEN=$(gcloud auth print-access-token)
-        export GOOGLE_IMPERSONATE_SERVICE_ACCOUNT=${TF_VAR_terraform_service_account}
+        # gcloud config set auth/impersonate_service_account ${TF_VAR_terraform_service_account}
+        # export GOOGLE_OAUTH_ACCESS_TOKEN=$(gcloud auth print-access-token)
+        # export GOOGLE_IMPERSONATE_SERVICE_ACCOUNT=${TF_VAR_terraform_service_account}
 
         terraform init -upgrade
         terraform plan -input=false -out "${tmp_plan}/${tf_example}.tfplan"  || exit 31
         terraform show -json "${tmp_plan}/${tf_example}.tfplan" > "${tf_example}.json" || exit 32
 
         terraform-validator validate "${tf_example}.json" --policy-path="${policy_file_path}" --project="${PROJECT_ID}" || exit 33
-        unset GOOGLE_IMPERSONATE_SERVICE_ACCOUNT
+        # unset GOOGLE_IMPERSONATE_SERVICE_ACCOUNT
 
         cd "$base_dir" || exit
     else
