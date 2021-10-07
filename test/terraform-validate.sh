@@ -53,6 +53,10 @@ if ! command -v terraform-validator &> /dev/null; then
     rm terraform-validator_linux_amd64-0.9.1.tar.gz
 fi
 
+if [ -z "$tmp_plan" ]; then
+    mkdir "$tmp_plan"
+fi
+
 if [ -z "$policy_file_path" ]; then
     echo "no policy repo found! Check the argument provided for policysource to this script."
     echo "https://github.com/GoogleCloudPlatform/terraform-validator/blob/main/docs/policy_library.md"
