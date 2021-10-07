@@ -85,9 +85,15 @@ variable "subnetwork_self_link" {
 }
 
 variable "use_public_ips" {
-  description = "If VMs should used public IPs."
+  description = "If VM instances should used public IPs."
   type        = string
   default     = false
+}
+
+variable "network_tags" {
+  description = "Network TAGs to be added to the VM instances."
+  type        = list(string)
+  default     = []
 }
 
 variable "kms_key_name" {
