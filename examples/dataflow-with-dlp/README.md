@@ -1,12 +1,18 @@
 # Dataflow with DLP de-identification
 
-This example illustrates how to run a Dataflow job that uses the `de_identification_template` submodule with the `base-data-ingestion` submodule.
+This example illustrates how to run a regional Dataflow job that uses the `de_identification_template` submodule with The [Secured data warehouse](../../README.md).
+
+It uses:
+
+- The [Secured data warehouse](../../README.md) module to create the Secured data warehouse infrastructure
+- The [de_identification_template](../../modules/de_identification_template/README.md) submodule to create the regional structured DLP template
+- A Dataflow flex template to deploy the de-identification job
 
 ## Prerequisites
 
 1. A `crypto_key` and `wrapped_key` pair.  Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location where DLP, Storage and BigQuery are going to be created (`local.region`).
 1. The identity deploying the example must have permissions to grant role "roles/artifactregistry.reader" in the docker repo of the Flex templates.
-1. A network and subnetwork in the data ingestion project.
+1. A network and subnetwork in the data ingestion project [configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access).
 
 ### Firewall rules
 
