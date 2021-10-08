@@ -33,7 +33,9 @@
 set -e
 
 tf_example=$1
-project=$2
+
+IFS=',' read -ra projects <<< "$TF_VAR_data_ingestion_project_id"
+export project=${projects[0]:2:-1}
 export base_dir=$(pwd)
 export tmp_plan="${base_dir}/tmp_plan"
 export policy_file_path="${base_dir}/policy-library"
@@ -44,6 +46,7 @@ export setup="${base_dir}/test/setup"
 echo "*************** TERRAFORM VALIDATE ******************"
 echo "      At example: ${tf_example}"
 echo "      Using policy from: ${policy_file_path} "
+echo "      at project: ${project}"
 echo "*****************************************************"
 
 if ! command -v terraform-validator &> /dev/null; then
@@ -66,13 +69,10 @@ else
 
         cd "$path" || exit 30
 
-        terraform init -upgrade
         terraform plan -input=false -out "${tmp_plan}/${tf_example}.tfplan"  || exit 31
         terraform show -json "${tmp_plan}/${tf_example}.tfplan" > "${tf_example}.json" || exit 32
 
-        # export GOOGLE_IMPERSONATE_SERVICE_ACCOUNT=${TF_VAR_terraform_service_account}
         terraform-validator validate "${tf_example}.json" --policy-path="${policy_file_path}" --project="${project}" || exit 33
-        # unset GOOGLE_IMPERSONATE_SERVICE_ACCOUNT
 
         cd "$base_dir" || exit
     else
