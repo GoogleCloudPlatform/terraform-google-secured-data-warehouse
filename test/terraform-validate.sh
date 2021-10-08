@@ -63,19 +63,16 @@ if [ -z "$policy_file_path" ]; then
     echo "https://github.com/GoogleCloudPlatform/terraform-validator/blob/main/docs/policy_library.md"
 else
     if [ -d "$path" ]; then
-        cd "${setup}"
-        $(terraform output -json | jq -r 'keys[] as $k | "export TF_VAR_\($k)=\(.[$k].value)"')
 
         cd "$path" || exit 30
-
 
         terraform init -upgrade
         terraform plan -input=false -out "${tmp_plan}/${tf_example}.tfplan"  || exit 31
         terraform show -json "${tmp_plan}/${tf_example}.tfplan" > "${tf_example}.json" || exit 32
 
-        export GOOGLE_IMPERSONATE_SERVICE_ACCOUNT=${TF_VAR_terraform_service_account}
+        # export GOOGLE_IMPERSONATE_SERVICE_ACCOUNT=${TF_VAR_terraform_service_account}
         terraform-validator validate "${tf_example}.json" --policy-path="${policy_file_path}" --project="${project}" || exit 33
-        unset GOOGLE_IMPERSONATE_SERVICE_ACCOUNT
+        # unset GOOGLE_IMPERSONATE_SERVICE_ACCOUNT
 
         cd "$base_dir" || exit
     else
