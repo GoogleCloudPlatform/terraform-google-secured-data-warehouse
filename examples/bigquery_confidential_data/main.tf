@@ -114,13 +114,19 @@ resource "google_artifact_registry_repository_iam_member" "confidential_docker_r
   member     = "serviceAccount:${module.secured_data_warehouse.confidential_dataflow_controller_service_account_email}"
 }
 
-resource "google_dataflow_flex_template_job" "regional_deid" {
-  provider = google-beta
+module "regional_deid" {
+  source = "../../modules/dataflow-flex-job"
 
-  project                 = var.data_ingestion_project_id
+  project_id              = var.data_ingestion_project_id
   name                    = "regional-flex-java-gcs-dlp-bq"
   container_spec_gcs_path = var.java_de_identify_template_gs_path
   region                  = local.location
+  service_account_email   = module.secured_data_warehouse.dataflow_controller_service_account_email
+  subnetwork_self_link    = var.data_ingestion_subnets_self_link
+  kms_key_name            = module.secured_data_warehouse.cmek_ingestion_crypto_key
+  temp_location           = "gs://${module.secured_data_warehouse.data_ingest_dataflow_bucket_name}/tmp/"
+  staging_location        = "gs://${module.secured_data_warehouse.data_ingest_dataflow_bucket_name}/staging/"
+  max_workers             = 5
 
   parameters = {
     inputFilePattern       = "gs://${module.secured_data_warehouse.data_ingest_bucket_name}/${local.cc_file_name}"
@@ -130,13 +136,6 @@ resource "google_dataflow_flex_template_job" "regional_deid" {
     dlpProjectId           = var.data_governance_project_id
     dlpLocation            = local.location
     deidentifyTemplateName = module.de_identification_template.template_full_path
-    serviceAccount         = module.secured_data_warehouse.dataflow_controller_service_account_email
-    subnetwork             = var.data_ingestion_subnets_self_link
-    dataflowKmsKey         = module.secured_data_warehouse.cmek_ingestion_crypto_key
-    tempLocation           = "gs://${module.secured_data_warehouse.data_ingest_dataflow_bucket_name}/tmp/"
-    stagingLocation        = "gs://${module.secured_data_warehouse.data_ingest_dataflow_bucket_name}/staging/"
-    maxNumWorkers          = 5
-    usePublicIps           = false
   }
 
   depends_on = [
@@ -149,17 +148,22 @@ resource "time_sleep" "wait_de_identify_job_execution" {
   create_duration = "600s"
 
   depends_on = [
-    google_dataflow_flex_template_job.regional_deid
+    module.regional_deid
   ]
 }
 
-resource "google_dataflow_flex_template_job" "regional_reid" {
-  provider = google-beta
+module "regional_reid" {
+  source = "../../modules/dataflow-flex-job"
 
-  project                 = var.confidential_data_project_id
+  project_id              = var.confidential_data_project_id
   name                    = "dataflow-flex-regional-dlp-reid-job"
   container_spec_gcs_path = var.java_re_identify_template_gs_path
   region                  = local.location
+  service_account_email   = module.secured_data_warehouse.confidential_dataflow_controller_service_account_email
+  subnetwork_self_link    = var.confidential_subnets_self_link
+  kms_key_name            = module.secured_data_warehouse.cmek_reidentification_crypto_key
+  temp_location           = "gs://${module.secured_data_warehouse.confidential_data_dataflow_bucket_name}/tmp/"
+  staging_location        = "gs://${module.secured_data_warehouse.confidential_data_dataflow_bucket_name}/staging/"
 
   parameters = {
     inputBigQueryTable        = "${var.non_confidential_project_id}:${local.non_confidential_dataset_id}.${trimsuffix(local.cc_file_name, ".csv")}"
@@ -168,13 +172,6 @@ resource "google_dataflow_flex_template_job" "regional_reid" {
     dlpLocation               = local.location
     dlpProjectId              = var.data_governance_project_id
     confidentialDataProjectId = var.confidential_data_project_id
-    serviceAccount            = module.secured_data_warehouse.confidential_dataflow_controller_service_account_email
-    subnetwork                = var.confidential_subnets_self_link
-    dataflowKmsKey            = module.secured_data_warehouse.cmek_reidentification_crypto_key
-    tempLocation              = "gs://${module.secured_data_warehouse.confidential_data_dataflow_bucket_name}/tmp/"
-    stagingLocation           = "gs://${module.secured_data_warehouse.confidential_data_dataflow_bucket_name}/staging/"
-    usePublicIps              = false
-    enableStreamingEngine     = true
   }
 
   depends_on = [

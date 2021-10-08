@@ -96,7 +96,7 @@ variable "use_public_ips" {
 }
 
 variable "network_tags" {
-  description = "Network TAGs to be added to the VM instances."
+  description = "Network TAGs to be added to the VM instances. Python flex template jobs are only able to set network tags for the launcher VM. For the harness VM it is necessary to configure your firewall rule to use the network tag 'dataflow'."
   type        = list(string)
   default     = []
 }
