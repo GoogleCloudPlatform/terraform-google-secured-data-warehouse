@@ -35,7 +35,7 @@ set -e
 tf_example=$1
 
 IFS=',' read -ra projects <<< "$TF_VAR_data_ingestion_project_id"
-export project=${projects[0]:2:-1}
+export project=${projects[0]:2:-2}
 export base_dir=$(pwd)
 export tmp_plan="${base_dir}/tmp_plan"
 export policy_file_path="${base_dir}/policy-library"
