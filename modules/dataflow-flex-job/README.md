@@ -51,11 +51,11 @@ module "dataflow-flex-job" {
 | max\_workers | The number of workers permitted to work on the job. More workers may improve processing speed at additional cost. | `number` | `1` | no |
 | name | The name of the dataflow flex job. | `string` | n/a | yes |
 | network\_tags | Network TAGs to be added to the VM instances. Python flex template jobs are only able to set network tags for the launcher VM. For the harness VM it is necessary to configure your firewall rule to use the network tag 'dataflow'. | `list(string)` | `[]` | no |
-| on\_delete | One of drain or cancel. Specifies behavior of deletion during terraform destroy. The default is cancel. | `string` | `"cancel"` | no |
+| on\_delete | One of drain or cancel. Specifies behavior of deletion during terraform destroy. The default is cancel. See https://cloud.google.com/dataflow/docs/guides/stopping-a-pipeline . | `string` | `"cancel"` | no |
 | parameters | Key/Value pairs to be passed to the Dataflow job (as used in the template). | `map(any)` | `{}` | no |
 | project\_id | The project in which the resource belongs. If it is not provided, the provider project is used. | `string` | n/a | yes |
 | region | The region in which the created job should run. | `string` | n/a | yes |
-| service\_account\_email | The Service Account email that will be used to identify the VMs in which the jobs are running | `string` | n/a | yes |
+| service\_account\_email | The Service Account email that will be used to identify the VMs in which the jobs are running. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#worker_service_account . | `string` | n/a | yes |
 | staging\_location | GCS path for staging code packages needed by workers. | `string` | n/a | yes |
 | subnetwork\_self\_link | The subnetwork self link to which VMs will be assigned. | `string` | n/a | yes |
 | temp\_location | GCS path for saving temporary workflow jobs. | `string` | n/a | yes |

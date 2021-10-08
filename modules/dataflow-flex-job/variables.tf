@@ -63,13 +63,13 @@ variable "parameters" {
 }
 
 variable "max_workers" {
-  description = " The number of workers permitted to work on the job. More workers may improve processing speed at additional cost."
+  description = "The number of workers permitted to work on the job. More workers may improve processing speed at additional cost."
   type        = number
   default     = 1
 }
 
 variable "on_delete" {
-  description = "One of drain or cancel. Specifies behavior of deletion during terraform destroy. The default is cancel."
+  description = "One of drain or cancel. Specifies behavior of deletion during terraform destroy. The default is cancel. See https://cloud.google.com/dataflow/docs/guides/stopping-a-pipeline ."
   type        = string
   default     = "cancel"
 }
@@ -80,7 +80,7 @@ variable "region" {
 }
 
 variable "service_account_email" {
-  description = "The Service Account email that will be used to identify the VMs in which the jobs are running"
+  description = "The Service Account email that will be used to identify the VMs in which the jobs are running. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#worker_service_account ."
   type        = string
 }
 
