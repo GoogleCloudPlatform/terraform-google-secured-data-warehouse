@@ -40,7 +40,7 @@ steps:
 1.  Follow the instructions in [Using Flex Templates:Setting up your development environment](https://cloud.google.com/dataflow/docs/guides/templates/using-flex-templates#setting_up_your_development_environment) to configure your environment to build the images.
 2.  Build the flex template
 3.  make sure you have input BigQuery table available with deidentified data (and corresponding DLP template)
-4.  apply the `example/bigquery_confidential_data`
+4.  apply the `example/bigquery-confidential-data`
 5.  run the dataflow job
 
 ```shell

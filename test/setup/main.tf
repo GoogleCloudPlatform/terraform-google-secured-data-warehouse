@@ -27,8 +27,8 @@ locals {
 
 # ====================== Examples to project groups mapping ================================================
 # Examples "dataflow-with-dlp" and "batch-data-ingestion" are together in one group.
-# Examples "simple_example" and "regional-dlp" are together in one group.
-# Examples "bigquery_confidential_data" and "de_identification_template" are together in one group.
+# Examples "simple-example" and "regional-dlp" are together in one group.
+# Examples "bigquery-confidential-data" and "de-identification-template" are together in one group.
 #
 # To add a new example, add it to one of the groups and try keep the number of examples that
 # deploy the main module to two in that group.

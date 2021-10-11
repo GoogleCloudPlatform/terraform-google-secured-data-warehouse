@@ -12,7 +12,7 @@ Basic usage of this module is as follows:
 
 ```hcl
 module "de_identification_template" {
-  source = "github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse//modules/de_identification_template"
+  source = "github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse//modules/de-identification-template"
 
   project_id                = "PROJECT_ID"
   terraform_service_account = "SERVICE_ACCOUNT_EMAIL"
@@ -47,7 +47,7 @@ You can substitute the following variables in the template file:
 - `template_id`: The template ID, composed by the variable `template_id_prefix` and a random suffix.
 
 See the Terraform [templatefile](https://www.terraform.io/docs/language/functions/templatefile.html) function documentation and
-the [sample template file](../../examples/de_identification_template/deidentification.tmpl) in the examples folder for details on how substitutions are handled.
+the [sample template file](../../examples/de-identification-template/deidentification.tmpl) in the examples folder for details on how substitutions are handled.
 
 Because you provide the de-identification template, you can choose the type of transformation:
 
@@ -55,7 +55,7 @@ Because you provide the de-identification template, you can choose the type of t
 - For structured data, use [Record Transformation](https://cloud.google.com/dlp/docs/reference/rest/v2/projects.deidentifyTemplates#DeidentifyTemplate.RecordTransformations) for structured data.
 
 A functional example for a Record Transformation is included under the
-[examples/de_identification_template](./examples/de_identification_template/) directory.
+[examples/de-identification-template](./examples/de-identification-template/) directory.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs

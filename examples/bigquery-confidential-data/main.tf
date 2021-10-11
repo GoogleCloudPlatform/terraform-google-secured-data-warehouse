@@ -69,7 +69,7 @@ EOF
 }
 
 module "de_identification_template" {
-  source = "../..//modules/de_identification_template"
+  source = "../..//modules/de-identification-template"
 
   project_id                = var.data_governance_project_id
   terraform_service_account = var.terraform_service_account
@@ -82,7 +82,7 @@ module "de_identification_template" {
 }
 
 module "re_identification_template" {
-  source = "../..//modules/de_identification_template"
+  source = "../..//modules/de-identification-template"
 
   project_id                = var.data_governance_project_id
   terraform_service_account = var.terraform_service_account
