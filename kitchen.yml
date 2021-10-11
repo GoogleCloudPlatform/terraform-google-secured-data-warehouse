@@ -90,7 +90,7 @@ suites:
           backend: local
           controls:
             - gcloud
-  - name: simple_example
+  - name: simple-example
     driver:
       root_module_directory: test/fixtures/simple-example/
     verifier:
