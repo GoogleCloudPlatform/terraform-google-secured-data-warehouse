@@ -23,14 +23,11 @@ module "dataflow-flex-job" {
   region                  = "us-east4"
   name                    = "dataflow-flex-job-00001"
   container_spec_gcs_path = "gs://<path-to-template>"
-  job_language            = "JAVA"
-  on_delete               = "cancel"
   staging_location        = "gs://<gcs_path_staging_data_bucket>"
   temp_location           = "gs://<gcs_path_temp_data_bucket>"
   subnetwork_self_link    = "<subnetwork-self-link>"
   kms_key_name            = "<fully-qualified-kms-key-id>"
   service_account_email   = "<dataflow-controller-service-account-email>"
-  use_public_ips          = false
 
   parameters = {
     firstParameter  = "ONE",

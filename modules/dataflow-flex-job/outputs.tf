@@ -24,5 +24,3 @@ output "state" {
   description = "The current state of the resource, selected from the JobState enum. See https://cloud.google.com/dataflow/docs/reference/rest/v1b3/projects.jobs#Job.JobState ."
   value       = google_dataflow_flex_template_job.dataflow_flex_template_job.state
 }
-
-
