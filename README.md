@@ -115,29 +115,127 @@ These sections describe requirements for using this module.
 
 Install the following dependencies:
 
-- [Terraform][terraform] v0.13
-- [Terraform Provider for GCP][terraform-provider-gcp] plugin v3.67.0
+- [Google Cloud SDK](https://cloud.google.com/sdk/install) version 357.0.0 or later
+- [Terraform](https://www.terraform.io/downloads.html) version 0.13.7 or later
+- [Terraform Provider for GCP](https://github.com/terraform-providers/terraform-provider-google) version 3.67 or later
+- [Terraform Provider for GCP Beta](https://github.com/terraform-providers/terraform-provider-google-beta) version 3.67 or later
 
 ### Service Account
 
 To provision the resources of this module, create a service account
-with the following roles:
+with the following IAM roles:
 
-- Storage Admin: `roles/storage.admin`
+- Project level:
+  - App Engine Creator:`roles/appengine.appCreator`
+  - Artifact Registry Administrator:`roles/artifactregistry.admin`
+  - BigQuery Admin:`roles/bigquery.admin`
+  - Browser:`roles/browser`
+  - Cloud Build Editor:`roles/cloudbuild.builds.editor`
+  - Cloud KMS Admin:`roles/cloudkms.admin`
+  - Cloud KMS CryptoKey Encrypter:`roles/cloudkms.cryptoKeyEncrypter`
+  - Cloud Scheduler Admin:`roles/cloudscheduler.admin`
+  - Compute Network Admin:`roles/compute.networkAdmin`
+  - Compute Security Admin:`roles/compute.securityAdmin`
+  - Create Service Accounts:`roles/iam.serviceAccountCreator`
+  - DLP De-identify Templates Editor:`roles/dlp.deidentifyTemplatesEditor`
+  - DLP Inspect Templates Editor:`roles/dlp.inspectTemplatesEditor`
+  - DLP User:`roles/dlp.user`
+  - DNS Administrator:`roles/dns.admin`
+  - Data Catalog Admin:`roles/datacatalog.admin`
+  - Dataflow Developer:`roles/dataflow.developer`
+  - Delete Service Accounts:`roles/iam.serviceAccountDeleter`
+  - Project IAM Admin:`roles/resourcemanager.projectIamAdmin`
+  - Pub/Sub Admin:`roles/pubsub.admin`
+  - Service Account Token Creator:`roles/iam.serviceAccountTokenCreator`
+  - Service Account User:`roles/iam.serviceAccountUser`
+  - Storage Admin:`roles/storage.admin`
+- Organization level
+  - Access Context Manager Admin: `roles/accesscontextmanager.policyAdmin`
+  - Billing User: `roles/billing.user`
+  - Organization Administrator: `roles/resourcemanager.organizationAdmin`
+  - Organization Policy Administrator: `roles/orgpolicy.policyAdmin`
+  - Organization Shared VPC Admin: `roles/compute.xpnAdmin`
+  - VPC Access Admin: `roles/vpcaccess.admin`
 
 You can use the [Project Factory module][project-factory-module] and the
 [IAM module][iam-module] in combination to provision a
 service account with the necessary roles applied.
 
+The user using this service account must have the necessary roles to [impersonate](https://cloud.google.com/iam/docs/impersonating-service-accounts) the service account.
+
 ### APIs
 
-Create a project with the following APIs enabled mto host the
+Create four projects with the following APIs enabled to host the
 resources of this module:
 
+#### Data ingestion project
+
+- Access Context Manager API: `accesscontextmanager.googleapis.com`
+- App Engine Admin API:`appengine.googleapis.com`
+- Artifact Registry API:`artifactregistry.googleapis.com`
+- BigQuery API:`bigquery.googleapis.com`
+- Cloud Billing API:`cloudbilling.googleapis.com`
+- Cloud Build API:`cloudbuild.googleapis.com`
+- Cloud Key Management Service (KMS) API:`cloudkms.googleapis.com`
+- Cloud Resource Manager API:`cloudresourcemanager.googleapis.com`
+- Cloud Scheduler API:`cloudscheduler.googleapis.com`
+- Compute Engine API:`compute.googleapis.com`
+- Google Cloud Data Catalog API:`datacatalog.googleapis.com`
+- Dataflow API:`dataflow.googleapis.com`
+- Cloud Data Loss Prevention (DLP) API:`dlp.googleapis.com`
+- Cloud DNS API:`dns.googleapis.com`
+- Identity and Access Management (IAM) API:`iam.googleapis.com`
+- Cloud Pub/Sub API:`pubsub.googleapis.com`
+- Service Usage API:`serviceusage.googleapis.com`
+- Google Cloud Storage JSON API:`storage-api.googleapis.com`
+
+#### Data governance project
+
+- Access Context Manager API: `accesscontextmanager.googleapis.com`
+- Cloud Billing API:`cloudbilling.googleapis.com`
+- Cloud Key Management Service (KMS) API:`cloudkms.googleapis.com`
+- Cloud Resource Manager API:`cloudresourcemanager.googleapis.com`
+- Google Cloud Data Catalog API:`datacatalog.googleapis.com`
+- Cloud Data Loss Prevention (DLP) API:`dlp.googleapis.com`
+- Identity and Access Management (IAM) API:`iam.googleapis.com`
+- Service Usage API:`serviceusage.googleapis.com`
+- Google Cloud Storage JSON API:`storage-api.googleapis.com`
+
+#### Data lake project
+
+- Access Context Manager API: `accesscontextmanager.googleapis.com`
+- BigQuery API:`bigquery.googleapis.com`
+- Cloud Billing API:`cloudbilling.googleapis.com`
+- Cloud Key Management Service (KMS) API:`cloudkms.googleapis.com`
+- Cloud Resource Manager API:`cloudresourcemanager.googleapis.com`
+- Google Cloud Data Catalog API:`datacatalog.googleapis.com`
+- Dataflow API:`dataflow.googleapis.com`
+- Cloud Data Loss Prevention (DLP) API:`dlp.googleapis.com`
+- Identity and Access Management (IAM) API:`iam.googleapis.com`
+- Service Usage API:`serviceusage.googleapis.com`
+- Google Cloud Storage JSON API:`storage-api.googleapis.com`
+
+#### Confidential data project
+
+- Access Context Manager API: `accesscontextmanager.googleapis.com`
 - Google Cloud Storage JSON API: `storage-api.googleapis.com`
+- Artifact Registry API:`artifactregistry.googleapis.com`
+- BigQuery API:`bigquery.googleapis.com`
+- Cloud Billing API:`cloudbilling.googleapis.com`
+- Cloud Build API:`cloudbuild.googleapis.com`
+- Cloud Key Management Service (KMS) API:`cloudkms.googleapis.com`
+- Cloud Resource Manager API:`cloudresourcemanager.googleapis.com`
+- Compute Engine API:`compute.googleapis.com`
+- Google Cloud Data Catalog API:`datacatalog.googleapis.com`
+- Dataflow API:`dataflow.googleapis.com`
+- Cloud Data Loss Prevention (DLP) API:`dlp.googleapis.com`
+- Cloud DNS API:`dns.googleapis.com`
+- Identity and Access Management (IAM) API:`iam.googleapis.com`
+- Service Usage API:`serviceusage.googleapis.com`
+- Google Cloud Storage JSON API:`storage-api.googleapis.com`
 
 You can use he [Project Factory module][project-factory-module] to
-provision a project with the necessary APIs enabled.
+provision the projects with the necessary APIs enabled.
 
 ## Contributing
 
