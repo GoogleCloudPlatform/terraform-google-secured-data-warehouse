@@ -23,6 +23,15 @@ output "dataflow_controller_service_account_email" {
   ]
 }
 
+output "confidential_dataflow_controller_service_account_email" {
+  description = "The confidential Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account."
+  value       = module.bigquery_confidential_data.confidential_dataflow_controller_service_account_email
+
+  depends_on = [
+    time_sleep.wait_for_bridge_propagation
+  ]
+}
+
 output "storage_writer_service_account_email" {
   description = "The Storage writer service account email. Should be used to write data to the buckets the ingestion pipeline reads from."
   value       = module.data_ingestion.storage_writer_service_account_email
@@ -140,24 +149,6 @@ output "confidential_service_perimeter_name" {
   ]
 }
 
-output "cmek_keyring_full_name" {
-  description = "The Keyring full name for the KMS Customer Managed Encryption Keys."
-  value       = module.data_governance.cmek_keyring_full_name
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
-output "cmek_keyring_name" {
-  description = "The Keyring name for the KMS Customer Managed Encryption Keys."
-  value       = module.data_governance.cmek_keyring_name
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
 output "cmek_ingestion_crypto_key" {
   description = "The Customer Managed Crypto Key for the Ingestion crypto boundary."
   value       = module.data_governance.cmek_ingestion_crypto_key
@@ -188,51 +179,6 @@ output "cmek_reidentification_crypto_key" {
 output "cmek_confidential_bigquery_crypto_key" {
   description = "The Customer Managed Crypto Key for the confidential BigQuery service."
   value       = module.data_governance.cmek_confidential_bigquery_crypto_key
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
-output "cmek_ingestion_crypto_key_name" {
-  description = "The Customer Managed Crypto Key name for the Ingestion crypto boundary."
-  value       = module.data_governance.cmek_ingestion_crypto_key_name
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
-output "cmek_bigquery_crypto_key_name" {
-  description = "The Customer Managed Crypto Key name for the BigQuery service."
-  value       = module.data_governance.cmek_bigquery_crypto_key_name
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
-output "cmek_reidentification_crypto_key_name" {
-  description = "The Customer Managed Crypto Key name for the reidentification crypto boundary."
-  value       = module.data_governance.cmek_reidentification_crypto_key_name
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
-output "cmek_confidential_bigquery_crypto_key_name" {
-  description = "The Customer Managed Crypto Key name for the confidential BigQuery service."
-  value       = module.data_governance.cmek_confidential_bigquery_crypto_key_name
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
-}
-
-output "confidential_dataflow_controller_service_account_email" {
-  description = "The confidential Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account."
-  value       = module.bigquery_confidential_data.confidential_dataflow_controller_service_account_email
 
   depends_on = [
     time_sleep.wait_for_bridge_propagation
