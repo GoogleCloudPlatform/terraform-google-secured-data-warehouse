@@ -60,8 +60,8 @@ steps:
 #   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do destroy dataflow-with-dlp']
 
 - id: create-batch-data-ingestion
-  waitFor:
-    - destroy-dataflow-with-dlp
+  # waitFor:
+  #   - destroy-dataflow-with-dlp
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source_test_env && init_credentials && sleep 90 && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && cd test/integration && RUN_STAGE=init go test -v -run TestBatchDataIngestion ./... -p 1']
 
@@ -120,8 +120,8 @@ steps:
 #   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do destroy bigquery-confidential-data']
 
 - id: create-de-identification-template
-  waitFor:
-    - destroy-bigquery-confidential-data
+  # waitFor:
+  #   - destroy-bigquery-confidential-data
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && sleep 90 && kitchen_do create de-identification-template']
 
@@ -180,8 +180,8 @@ steps:
 #   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do destroy simple-example']
 
 - id: create-regional-dlp
-  waitFor:
-    - destroy-simple-example
+  # waitFor:
+  #   - destroy-simple-example
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && sleep 90 && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && kitchen_do create regional-dlp']
 
