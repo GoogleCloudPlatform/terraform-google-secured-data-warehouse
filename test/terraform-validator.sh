@@ -49,33 +49,33 @@ echo "      Using policy from: ${policy_file_path} "
 echo "      at project: ${project}"
 echo "*****************************************************"
 
-# if ! command -v terraform-validator &> /dev/null; then
-#     gsutil cp gs://terraform-validator/releases/v0.9.1/terraform-validator_linux_amd64-0.9.1.tar.gz .
-#     tar -xzvf terraform-validator_linux_amd64-0.9.1.tar.gz
-#     chmod +X terraform-validator
-#     mv terraform-validator /usr/bin/
-#     rm terraform-validator_linux_amd64-0.9.1.tar.gz
-# fi
+if ! command -v terraform-validator &> /dev/null; then
+    gsutil cp gs://terraform-validator/releases/v0.9.1/terraform-validator_linux_amd64-0.9.1.tar.gz .
+    tar -xzvf terraform-validator_linux_amd64-0.9.1.tar.gz
+    chmod +X terraform-validator
+    mv terraform-validator /usr/bin/
+    rm terraform-validator_linux_amd64-0.9.1.tar.gz
+fi
 
-# if [ ! -d "$tmp_plan" ]; then
-#     mkdir "$tmp_plan/" || exit 29
-# fi
+if [ ! -d "$tmp_plan" ]; then
+    mkdir "$tmp_plan/" || exit 29
+fi
 
-# if [ -z "$policy_file_path" ]; then
-#     echo "no policy repo found! Check the argument provided for policysource to this script."
-#     echo "https://github.com/GoogleCloudPlatform/terraform-validator/blob/main/docs/policy_library.md"
-# else
-#     if [ -d "$path" ]; then
+if [ -z "$policy_file_path" ]; then
+    echo "no policy repo found! Check the argument provided for policysource to this script."
+    echo "https://github.com/GoogleCloudPlatform/terraform-validator/blob/main/docs/policy_library.md"
+else
+    if [ -d "$path" ]; then
 
-#         cd "$path" || exit 30
+        cd "$path" || exit 30
 
-#         terraform plan -input=false -out "${tmp_plan}/${tf_example}.tfplan"  || exit 31
-#         terraform show -json "${tmp_plan}/${tf_example}.tfplan" > "${tf_example}.json" || exit 32
+        terraform plan -input=false -out "${tmp_plan}/${tf_example}.tfplan"  || exit 31
+        terraform show -json "${tmp_plan}/${tf_example}.tfplan" > "${tf_example}.json" || exit 32
 
-#         terraform-validator validate "${tf_example}.json" --policy-path="${policy_file_path}" --project="${project}" || exit 33
+        terraform-validator validate "${tf_example}.json" --policy-path="${policy_file_path}" --project="${project}" || exit 33
 
-#         cd "$base_dir" || exit
-#     else
-#       echo "ERROR:  ${path} does not exist"
-#     fi
-# fi
+        cd "$base_dir" || exit
+    else
+      echo "ERROR:  ${path} does not exist"
+    fi
+fi

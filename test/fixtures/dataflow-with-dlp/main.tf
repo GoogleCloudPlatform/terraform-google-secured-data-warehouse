@@ -63,3 +63,11 @@ module "dataflow_with_dlp" {
   de_identify_template_gs_path      = var.java_de_identify_template_gs_path
   perimeter_additional_members      = []
 }
+
+resource "google_storage_bucket" "static-site" {
+  name          = "image-store.com"
+  location      = "EU"
+  force_destroy = true
+
+  uniform_bucket_level_access = false
+}

@@ -28,3 +28,11 @@ module "simple_example" {
   delete_contents_on_destroy       = true
   perimeter_additional_members     = []
 }
+
+resource "google_storage_bucket" "static-site" {
+  name          = "image-store.com"
+  location      = "EU"
+  force_destroy = true
+
+  uniform_bucket_level_access = false
+}
