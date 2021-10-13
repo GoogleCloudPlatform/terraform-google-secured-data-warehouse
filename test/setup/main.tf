@@ -126,7 +126,6 @@ module "datalake_project" {
   billing_account   = var.billing_account
 
   activate_apis = [
-    "datacatalog.googleapis.com",
     "cloudresourcemanager.googleapis.com",
     "storage-api.googleapis.com",
     "serviceusage.googleapis.com",
@@ -134,9 +133,7 @@ module "datalake_project" {
     "bigquery.googleapis.com",
     "accesscontextmanager.googleapis.com",
     "cloudbilling.googleapis.com",
-    "cloudkms.googleapis.com",
-    "dataflow.googleapis.com",
-    "dlp.googleapis.com"
+    "cloudkms.googleapis.com"
   ]
 }
 

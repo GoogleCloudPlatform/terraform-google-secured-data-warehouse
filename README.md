@@ -208,9 +208,6 @@ resources of this module:
 - Cloud Billing API:`cloudbilling.googleapis.com`
 - Cloud Key Management Service (KMS) API:`cloudkms.googleapis.com`
 - Cloud Resource Manager API:`cloudresourcemanager.googleapis.com`
-- Google Cloud Data Catalog API:`datacatalog.googleapis.com`
-- Dataflow API:`dataflow.googleapis.com`
-- Cloud Data Loss Prevention (DLP) API:`dlp.googleapis.com`
 - Identity and Access Management (IAM) API:`iam.googleapis.com`
 - Service Usage API:`serviceusage.googleapis.com`
 - Google Cloud Storage JSON API:`storage-api.googleapis.com`
