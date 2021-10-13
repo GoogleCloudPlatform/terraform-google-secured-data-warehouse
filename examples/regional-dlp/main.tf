@@ -84,14 +84,20 @@ resource "google_artifact_registry_repository_iam_member" "python_reader" {
   ]
 }
 
+module "regional_dlp" {
+  source = "../../modules/dataflow-flex-job"
 
-resource "google_dataflow_flex_template_job" "regional_dlp" {
-  provider = google-beta
-
-  project                 = var.data_ingestion_project_id
+  project_id              = var.data_ingestion_project_id
   name                    = "regional-flex-python-pubsub-dlp-bq"
   container_spec_gcs_path = var.flex_template_gs_path
+  job_language            = "PYTHON"
   region                  = var.location
+  service_account_email   = module.data_ingestion.dataflow_controller_service_account_email
+  subnetwork_self_link    = var.subnetwork_self_link
+  kms_key_name            = module.data_ingestion.cmek_ingestion_crypto_key
+  temp_location           = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/tmp/"
+  staging_location        = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/staging/"
+  enable_streaming_engine = false
 
   parameters = {
     input_topic                    = "projects/${var.data_ingestion_project_id}/topics/${module.data_ingestion.data_ingest_topic_name}"
@@ -100,12 +106,6 @@ resource "google_dataflow_flex_template_job" "regional_dlp" {
     dlp_project                    = var.data_governance_project_id
     bq_schema                      = local.bq_schema
     output_table                   = "${var.datalake_project_id}:${module.data_ingestion.data_ingest_bigquery_dataset.dataset_id}.classical_books"
-    service_account_email          = module.data_ingestion.dataflow_controller_service_account_email
-    subnetwork                     = var.subnetwork_self_link
-    dataflow_kms_key               = module.data_ingestion.cmek_ingestion_crypto_key
-    temp_location                  = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/tmp/"
-    staging_location               = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/staging/"
-    no_use_public_ips              = "true"
   }
 
   depends_on = [

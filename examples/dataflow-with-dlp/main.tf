@@ -95,13 +95,19 @@ resource "google_artifact_registry_repository_iam_member" "docker_reader" {
   ]
 }
 
-resource "google_dataflow_flex_template_job" "regional_dlp" {
-  provider = google-beta
+module "regional_dlp" {
+  source = "../../modules/dataflow-flex-job"
 
-  project                 = var.data_ingestion_project_id
+  project_id              = var.data_ingestion_project_id
   name                    = "regional-flex-java-gcs-dlp-bq"
   container_spec_gcs_path = var.de_identify_template_gs_path
   region                  = local.region
+  service_account_email   = module.data_ingestion.dataflow_controller_service_account_email
+  subnetwork_self_link    = var.subnetwork_self_link
+  kms_key_name            = module.data_ingestion.cmek_ingestion_crypto_key
+  temp_location           = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/tmp/"
+  staging_location        = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/staging/"
+  max_workers             = 5
 
   parameters = {
     inputFilePattern       = "gs://${module.data_ingestion.data_ingest_bucket_name}/cc_records.csv"
@@ -111,13 +117,7 @@ resource "google_dataflow_flex_template_job" "regional_dlp" {
     dlpProjectId           = var.data_governance_project_id
     dlpLocation            = local.region
     deidentifyTemplateName = module.de_identification_template.template_full_path
-    serviceAccount         = module.data_ingestion.dataflow_controller_service_account_email
-    subnetwork             = var.subnetwork_self_link
-    dataflowKmsKey         = module.data_ingestion.cmek_ingestion_crypto_key
-    tempLocation           = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/tmp/"
-    stagingLocation        = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/staging/"
-    maxNumWorkers          = 5
-    usePublicIps           = "false"
+
   }
 
   depends_on = [

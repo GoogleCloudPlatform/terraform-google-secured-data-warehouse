@@ -23,13 +23,9 @@ This example illustrates how to use the `secured-data-warehouse` module.
 | Name | Description |
 |------|-------------|
 | cmek\_bigquery\_crypto\_key | The Customer Managed Crypto Key for the BigQuery service. |
-| cmek\_bigquery\_crypto\_key\_name | The Customer Managed Crypto Key name for the BigQuery service. |
-| cmek\_confidential\_bigquery\_crypto\_key\_name | The Customer Managed Crypto Key name for the confidential BigQuery service. |
+| cmek\_confidential\_bigquery\_crypto\_key | The Customer Managed Crypto Key for the confidential BigQuery service. |
 | cmek\_ingestion\_crypto\_key | The Customer Managed Crypto Key for the Ingestion crypto boundary. |
-| cmek\_ingestion\_crypto\_key\_name | The Customer Managed Crypto Key name for the Ingestion crypto boundary. |
-| cmek\_keyring\_full\_name | The Keyring full name for the KMS Customer Managed Encryption Keys. |
-| cmek\_keyring\_name | The Keyring name for the KMS Customer Managed Encryption Keys. |
-| cmek\_reidentification\_crypto\_key\_name | The Customer Managed Crypto Key name for the reidentification crypto boundary. |
+| cmek\_reidentification\_crypto\_key | The Customer Managed Crypto Key for the reidentification crypto boundary. |
 | data\_ingest\_bigquery\_dataset | The bigquery dataset created for data ingest pipeline. |
 | data\_ingest\_bucket\_name | The name of the bucket created for data ingest pipeline. |
 | data\_ingest\_topic\_name | The topic created for data ingest pipeline. |
