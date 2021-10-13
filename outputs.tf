@@ -35,19 +35,11 @@ output "confidential_dataflow_controller_service_account_email" {
 output "storage_writer_service_account_email" {
   description = "The Storage writer service account email. Should be used to write data to the buckets the ingestion pipeline reads from."
   value       = module.data_ingestion.storage_writer_service_account_email
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
 }
 
 output "pubsub_writer_service_account_email" {
   description = "The PubSub writer service account email. Should be used to write data to the PubSub topics the ingestion pipeline reads from."
   value       = module.data_ingestion.pubsub_writer_service_account_email
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
 }
 
 output "data_ingest_bucket_name" {
@@ -98,55 +90,31 @@ output "data_ingest_bigquery_dataset" {
 output "data_ingestion_access_level_name" {
   description = "Access context manager access level name."
   value       = module.data_ingestion_vpc_sc.access_level_name
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
 }
 
 output "data_ingestion_service_perimeter_name" {
   description = "Access context manager service perimeter name."
   value       = module.data_ingestion_vpc_sc.service_perimeter_name
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
 }
 
 output "data_governance_access_level_name" {
   description = "Access context manager access level name."
   value       = module.data_governance_vpc_sc.access_level_name
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
 }
 
 output "data_governance_service_perimeter_name" {
   description = "Access context manager service perimeter name."
   value       = module.data_governance_vpc_sc.service_perimeter_name
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
 }
 
 output "confidential_access_level_name" {
   description = "Access context manager access level name."
   value       = module.confidential_data_vpc_sc.access_level_name
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
 }
 
 output "confidential_service_perimeter_name" {
   description = "Access context manager service perimeter name."
   value       = module.confidential_data_vpc_sc.service_perimeter_name
-
-  depends_on = [
-    time_sleep.wait_for_bridge_propagation
-  ]
 }
 
 output "cmek_ingestion_crypto_key" {
