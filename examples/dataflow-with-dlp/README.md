@@ -1,11 +1,11 @@
 # Dataflow with DLP de-identification
 
-This example illustrates how to run a regional Dataflow job that uses the `de_identification_template` submodule with The [Secured data warehouse](../../README.md).
+This example illustrates how to run a regional Dataflow job that uses the `de-identification template` submodule with The [Secured data warehouse](../../README.md).
 
 It uses:
 
 - The [Secured data warehouse](../../README.md) module to create the Secured data warehouse infrastructure
-- The [de_identification_template](../../modules/de_identification_template/README.md) submodule to create the regional structured DLP template
+- The [de-identification template](../../modules/de-identification-template/README.md) submodule to create the regional structured DLP template
 - A Dataflow flex template to deploy the de-identification job
 
 ## Prerequisites

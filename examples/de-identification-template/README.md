@@ -1,6 +1,6 @@
 # Simple Example
 
-This example illustrates how to use the `de_identification_template` submodule.
+This example illustrates how to use the [de-identification template](../../modules/de-identification-template/README.md) submodule.
 
 **Note:** Contact your Security Team to obtain the `crypto_key` and `wrapped_key` pair.
 The `crypto_key` location must be the same location used for the `dlp_location`.

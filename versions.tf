@@ -16,4 +16,37 @@
 
 terraform {
   required_version = ">= 0.13"
+
+  required_providers {
+
+    google = {
+      source  = "hashicorp/google"
+      version = ">= 3.67"
+    }
+
+    google-beta = {
+      source  = "hashicorp/google-beta"
+      version = "~> 3.67"
+    }
+
+    null = {
+      source  = "hashicorp/null"
+      version = "~> 2.1"
+    }
+
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 2.3"
+    }
+
+  }
+
+  provider_meta "google" {
+    module_name = "blueprints/terraform/terraform-google-secured-data-warehouse/v1.0.0"
+  }
+
+  provider_meta "google-beta" {
+    module_name = "blueprints/terraform/terraform-google-secured-data-warehouse/v1.0.0"
+  }
+
 }

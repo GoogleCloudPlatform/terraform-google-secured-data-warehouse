@@ -27,8 +27,8 @@ locals {
 
 # ====================== Examples to project groups mapping ================================================
 # Examples "dataflow-with-dlp" and "batch-data-ingestion" are together in one group.
-# Examples "simple_example" and "regional-dlp" are together in one group.
-# Examples "bigquery_confidential_data" and "de_identification_template" are together in one group.
+# Examples "simple-example" and "regional-dlp" are together in one group.
+# Examples "bigquery-confidential-data" and "de-identification-template" are together in one group.
 #
 # To add a new example, add it to one of the groups and try keep the number of examples that
 # deploy the main module to two in that group.
@@ -126,7 +126,6 @@ module "datalake_project" {
   billing_account   = var.billing_account
 
   activate_apis = [
-    "datacatalog.googleapis.com",
     "cloudresourcemanager.googleapis.com",
     "storage-api.googleapis.com",
     "serviceusage.googleapis.com",
@@ -134,9 +133,7 @@ module "datalake_project" {
     "bigquery.googleapis.com",
     "accesscontextmanager.googleapis.com",
     "cloudbilling.googleapis.com",
-    "cloudkms.googleapis.com",
-    "dataflow.googleapis.com",
-    "dlp.googleapis.com"
+    "cloudkms.googleapis.com"
   ]
 }
 
