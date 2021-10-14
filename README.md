@@ -74,6 +74,7 @@ module "secured_data_warehouse" {
 | sdx\_project\_number | The Project Number to configure Secure data exchange with egress rule for the dataflow templates. | `string` | n/a | yes |
 | terraform\_service\_account | The email address of the service account that will run the Terraform code. | `string` | n/a | yes |
 | trusted\_locations | This is a list of trusted regions where location-based GCP resources can be created. ie us-locations eu-locations. | `list(string)` | <pre>[<br>  "us-locations",<br>  "eu-locations"<br>]</pre> | no |
+| trusted\_subnetworks | Subnetwork name that eligible resources can use. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
 
 ## Outputs
 
