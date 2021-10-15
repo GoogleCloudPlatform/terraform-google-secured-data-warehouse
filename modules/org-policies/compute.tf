@@ -48,7 +48,7 @@ module "ssh_policy" {
 }
 
 module "vpc_subnetwork_policy" {
-  count             = var.trusted_subnetworks != "" ? 1 : 0
+  count             = length(var.trusted_subnetworks) > 0 ? 1 : 0
   source            = "terraform-google-modules/org-policy/google"
   version           = "~> 4.0"
   constraint        = "compute.restrictSharedVpcSubnetworks"

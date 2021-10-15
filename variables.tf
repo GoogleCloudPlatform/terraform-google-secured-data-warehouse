@@ -23,7 +23,7 @@ variable "trusted_locations" {
 variable "trusted_subnetworks" {
   description = "Subnetwork name that eligible resources can use."
   type        = list(string)
-  default     = [""]
+  default     = []
 }
 
 variable "org_id" {
