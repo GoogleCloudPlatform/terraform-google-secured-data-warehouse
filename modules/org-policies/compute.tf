@@ -55,6 +55,6 @@ module "vpc_subnetwork_policy" {
   policy_for        = "project"
   project_id        = var.project_id
   policy_type       = "list"
-  allow             = length(var.trusted_subnetworks)
-  allow_list_length = 1
+  allow             = var.trusted_subnetworks
+  allow_list_length = length(var.trusted_subnetworks)
 }
