@@ -24,36 +24,20 @@ module "secured_data_warehouse" {
   source  = "terraform-google-modules/secured-data-warehouse/google"
   version = "~> 0.1"
 
-  org_id = ORG_ID
-  project_id = PROJECT_ID
-  region = "us-east4"
-  terraform_service_account = TERRAFORM_SERVICE_ACCOUNT
-  vpc_name = VPC_NAME
-  subnet_ip = "10.0.32.0/21"
-  access_context_manager_policy_id = ACCESS_CONTEXT_MANAGER_POLICY_ID
-  bucket_name = DATA_INGESTION_BUCKET_NAME
-  dataset_id = DATASET_ID
-  cmek_keyring_name = CMEK_KEYRING_NAME
-}
-```
-
-```hcl
-module "secured_data_warehouse" {
-  source  = "terraform-google-modules/secured-data-warehouse/google"
-  version = "~> 0.1"
-
   org_id                           = ORG_ID
   data_governance_project_id       = DATA_GOVERNANCE_PROJECT_ID
   confidential_data_project_id     = CONFIDENTIAL_DATA_PROJECT_ID
   datalake_project_id              = DATALAKE_PROJECT_ID
   data_ingestion_project_id        = DATA_INGESTION_PROJECT_ID
+  sdx_project_number               = EXTERNAL_TEMPLATE_PROJECT_NUMBER
   terraform_service_account        = TERRAFORM_SERVICE_ACCOUNT
   access_context_manager_policy_id = ACCESS_CONTEXT_MANAGER_POLICY_ID
   bucket_name                      = DATA_INGESTION_BUCKET_NAME
+  location                         = LOCATION
   dataset_id                       = DATASET_ID
-  vpc_name                         = VPC_NAME
+  confidential_dataset_id          = CONFIDENTIAL_DATASET_ID
   cmek_keyring_name                = CMEK_KEYRING_NAME
-  subnet_ip                        = "10.0.32.0/21"
+  delete_contents_on_destroy       = false
 }
 ```
 
@@ -72,7 +56,6 @@ module "secured_data_warehouse" {
 | confidential\_data\_project\_id | Project where the confidential datasets and tables are created. | `string` | n/a | yes |
 | confidential\_dataset\_default\_table\_expiration\_ms | TTL of tables using the dataset in MS. The default value is null. | `number` | `null` | no |
 | confidential\_dataset\_id | Unique ID for the confidential dataset being provisioned. | `string` | `"secured_dataset"` | no |
-| confidential\_table\_id | The confidential table ID to deploy to data warehouse. | `string` | `"sample_data"` | no |
 | data\_governance\_project\_id | The ID of the project in which the data governance resources will be created. | `string` | n/a | yes |
 | data\_ingestion\_dataflow\_deployer\_identities | List of members in the standard GCP form: user:{email}, serviceAccount:{email} that will deploy Dataflow jobs in the Data Ingestion project. These identities will be added to the VPC-SC secure data exchange egress rules. | `list(string)` | `[]` | no |
 | data\_ingestion\_project\_id | The ID of the project in which the data ingestion resources will be created | `string` | n/a | yes |
@@ -97,15 +80,9 @@ module "secured_data_warehouse" {
 | Name | Description |
 |------|-------------|
 | cmek\_bigquery\_crypto\_key | The Customer Managed Crypto Key for the BigQuery service. |
-| cmek\_bigquery\_crypto\_key\_name | The Customer Managed Crypto Key name for the BigQuery service. |
 | cmek\_confidential\_bigquery\_crypto\_key | The Customer Managed Crypto Key for the confidential BigQuery service. |
-| cmek\_confidential\_bigquery\_crypto\_key\_name | The Customer Managed Crypto Key name for the confidential BigQuery service. |
 | cmek\_ingestion\_crypto\_key | The Customer Managed Crypto Key for the Ingestion crypto boundary. |
-| cmek\_ingestion\_crypto\_key\_name | The Customer Managed Crypto Key name for the Ingestion crypto boundary. |
-| cmek\_keyring\_full\_name | The Keyring full name for the KMS Customer Managed Encryption Keys. |
-| cmek\_keyring\_name | The Keyring name for the KMS Customer Managed Encryption Keys. |
 | cmek\_reidentification\_crypto\_key | The Customer Managed Crypto Key for the Confidential crypto boundary. |
-| cmek\_reidentification\_crypto\_key\_name | The Customer Managed Crypto Key name for the reidentification crypto boundary. |
 | confidential\_access\_level\_name | Access context manager access level name. |
 | confidential\_data\_dataflow\_bucket\_name | The name of the bucket created for dataflow in the confidential data pipeline. |
 | confidential\_dataflow\_controller\_service\_account\_email | The confidential Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
@@ -132,29 +109,124 @@ These sections describe requirements for using this module.
 
 Install the following dependencies:
 
-- [Terraform][terraform] v0.13
-- [Terraform Provider for GCP][terraform-provider-gcp] plugin v3.67.0
+- [Google Cloud SDK](https://cloud.google.com/sdk/install) version 357.0.0 or later
+- [Terraform](https://www.terraform.io/downloads.html) version 0.13.7 or later
+- [Terraform Provider for GCP](https://github.com/terraform-providers/terraform-provider-google) version 3.67 or later
+- [Terraform Provider for GCP Beta](https://github.com/terraform-providers/terraform-provider-google-beta) version 3.67 or later
 
 ### Service Account
 
 To provision the resources of this module, create a service account
-with the following roles:
+with the following IAM roles:
 
-- Storage Admin: `roles/storage.admin`
+- Project level:
+  - App Engine Creator:`roles/appengine.appCreator`
+  - Artifact Registry Administrator:`roles/artifactregistry.admin`
+  - BigQuery Admin:`roles/bigquery.admin`
+  - Browser:`roles/browser`
+  - Cloud Build Editor:`roles/cloudbuild.builds.editor`
+  - Cloud KMS Admin:`roles/cloudkms.admin`
+  - Cloud KMS CryptoKey Encrypter:`roles/cloudkms.cryptoKeyEncrypter`
+  - Cloud Scheduler Admin:`roles/cloudscheduler.admin`
+  - Compute Network Admin:`roles/compute.networkAdmin`
+  - Compute Security Admin:`roles/compute.securityAdmin`
+  - Create Service Accounts:`roles/iam.serviceAccountCreator`
+  - DLP De-identify Templates Editor:`roles/dlp.deidentifyTemplatesEditor`
+  - DLP Inspect Templates Editor:`roles/dlp.inspectTemplatesEditor`
+  - DLP User:`roles/dlp.user`
+  - DNS Administrator:`roles/dns.admin`
+  - Data Catalog Admin:`roles/datacatalog.admin`
+  - Dataflow Developer:`roles/dataflow.developer`
+  - Delete Service Accounts:`roles/iam.serviceAccountDeleter`
+  - Project IAM Admin:`roles/resourcemanager.projectIamAdmin`
+  - Pub/Sub Admin:`roles/pubsub.admin`
+  - Service Account Token Creator:`roles/iam.serviceAccountTokenCreator`
+  - Service Account User:`roles/iam.serviceAccountUser`
+  - Storage Admin:`roles/storage.admin`
+- Organization level
+  - Access Context Manager Admin: `roles/accesscontextmanager.policyAdmin`
+  - Billing User: `roles/billing.user`
+  - Organization Administrator: `roles/resourcemanager.organizationAdmin`
+  - Organization Policy Administrator: `roles/orgpolicy.policyAdmin`
+  - Organization Shared VPC Admin: `roles/compute.xpnAdmin`
+  - VPC Access Admin: `roles/vpcaccess.admin`
 
 You can use the [Project Factory module][project-factory-module] and the
 [IAM module][iam-module] in combination to provision a
 service account with the necessary roles applied.
 
+The user using this service account must have the necessary roles to [impersonate](https://cloud.google.com/iam/docs/impersonating-service-accounts) the service account.
+
 ### APIs
 
-Create a project with the following APIs enabled mto host the
+Create four projects with the following APIs enabled to host the
 resources of this module:
 
+#### Data ingestion project
+
+- Access Context Manager API: `accesscontextmanager.googleapis.com`
+- App Engine Admin API:`appengine.googleapis.com`
+- Artifact Registry API:`artifactregistry.googleapis.com`
+- BigQuery API:`bigquery.googleapis.com`
+- Cloud Billing API:`cloudbilling.googleapis.com`
+- Cloud Build API:`cloudbuild.googleapis.com`
+- Cloud Key Management Service (KMS) API:`cloudkms.googleapis.com`
+- Cloud Resource Manager API:`cloudresourcemanager.googleapis.com`
+- Cloud Scheduler API:`cloudscheduler.googleapis.com`
+- Compute Engine API:`compute.googleapis.com`
+- Google Cloud Data Catalog API:`datacatalog.googleapis.com`
+- Dataflow API:`dataflow.googleapis.com`
+- Cloud Data Loss Prevention (DLP) API:`dlp.googleapis.com`
+- Cloud DNS API:`dns.googleapis.com`
+- Identity and Access Management (IAM) API:`iam.googleapis.com`
+- Cloud Pub/Sub API:`pubsub.googleapis.com`
+- Service Usage API:`serviceusage.googleapis.com`
+- Google Cloud Storage JSON API:`storage-api.googleapis.com`
+
+#### Data governance project
+
+- Access Context Manager API: `accesscontextmanager.googleapis.com`
+- Cloud Billing API:`cloudbilling.googleapis.com`
+- Cloud Key Management Service (KMS) API:`cloudkms.googleapis.com`
+- Cloud Resource Manager API:`cloudresourcemanager.googleapis.com`
+- Google Cloud Data Catalog API:`datacatalog.googleapis.com`
+- Cloud Data Loss Prevention (DLP) API:`dlp.googleapis.com`
+- Identity and Access Management (IAM) API:`iam.googleapis.com`
+- Service Usage API:`serviceusage.googleapis.com`
+- Google Cloud Storage JSON API:`storage-api.googleapis.com`
+
+#### Data lake project
+
+- Access Context Manager API: `accesscontextmanager.googleapis.com`
+- BigQuery API:`bigquery.googleapis.com`
+- Cloud Billing API:`cloudbilling.googleapis.com`
+- Cloud Key Management Service (KMS) API:`cloudkms.googleapis.com`
+- Cloud Resource Manager API:`cloudresourcemanager.googleapis.com`
+- Identity and Access Management (IAM) API:`iam.googleapis.com`
+- Service Usage API:`serviceusage.googleapis.com`
+- Google Cloud Storage JSON API:`storage-api.googleapis.com`
+
+#### Confidential data project
+
+- Access Context Manager API: `accesscontextmanager.googleapis.com`
 - Google Cloud Storage JSON API: `storage-api.googleapis.com`
+- Artifact Registry API:`artifactregistry.googleapis.com`
+- BigQuery API:`bigquery.googleapis.com`
+- Cloud Billing API:`cloudbilling.googleapis.com`
+- Cloud Build API:`cloudbuild.googleapis.com`
+- Cloud Key Management Service (KMS) API:`cloudkms.googleapis.com`
+- Cloud Resource Manager API:`cloudresourcemanager.googleapis.com`
+- Compute Engine API:`compute.googleapis.com`
+- Google Cloud Data Catalog API:`datacatalog.googleapis.com`
+- Dataflow API:`dataflow.googleapis.com`
+- Cloud Data Loss Prevention (DLP) API:`dlp.googleapis.com`
+- Cloud DNS API:`dns.googleapis.com`
+- Identity and Access Management (IAM) API:`iam.googleapis.com`
+- Service Usage API:`serviceusage.googleapis.com`
+- Google Cloud Storage JSON API:`storage-api.googleapis.com`
 
 You can use he [Project Factory module][project-factory-module] to
-provision a project with the necessary APIs enabled.
+provision the projects with the necessary APIs enabled.
 
 ## Contributing
 

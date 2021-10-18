@@ -16,7 +16,7 @@
 
 
 module "simple_example" {
-  source                           = "../../..//examples/simple_example"
+  source                           = "../../..//examples/simple-example"
   org_id                           = var.org_id
   data_governance_project_id       = var.data_governance_project_id[1]
   confidential_data_project_id     = var.confidential_data_project_id[1]

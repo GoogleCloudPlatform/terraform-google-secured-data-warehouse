@@ -45,7 +45,7 @@ resource "google_kms_secret_ciphertext" "wrapped_key" {
 }
 
 module "bigquery_confidential_data" {
-  source = "../../..//examples/bigquery_confidential_data"
+  source = "../../..//examples/bigquery-confidential-data"
 
   org_id                            = var.org_id
   access_context_manager_policy_id  = var.access_context_manager_policy_id

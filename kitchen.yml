@@ -34,7 +34,7 @@ suites:
     verifier:
       color: false
       systems:
-        - name: base_data_ingestion gcp
+        - name: base-data-ingestion gcp
           backend: gcp
           controls:
             - gcp
@@ -44,11 +44,11 @@ suites:
     verifier:
       color: false
       systems:
-        - name: regional_dlp gcp
+        - name: regional-dlp gcp
           backend: gcp
           controls:
             - gcp
-        - name: regional_dlp gcloud
+        - name: regional-dlp gcloud
           backend: local
           controls:
             - gcloud
@@ -58,11 +58,11 @@ suites:
     verifier:
       color: false
       systems:
-        - name: dataflow_with_dlp gcp
+        - name: dataflow-with-dlp gcp
           backend: gcp
           controls:
             - gcp
-        - name: dataflow_with_dlp gcloud
+        - name: dataflow-with-dlp gcloud
           backend: local
           controls:
             - gcloud
@@ -72,7 +72,7 @@ suites:
     verifier:
       color: false
       systems:
-        - name: de_identification_template gcloud
+        - name: de-identification-template gcloud
           backend: local
           controls:
             - gcloud
@@ -82,25 +82,25 @@ suites:
     verifier:
       color: false
       systems:
-        - name: bigquery_confidential_data gcp
+        - name: bigquery-confidential-data gcp
           backend: gcp
           controls:
             - gcp
-        - name: bigquery_confidential_data gcloud
+        - name: bigquery-confidential-data gcloud
           backend: local
           controls:
             - gcloud
-  - name: simple_example
+  - name: simple-example
     driver:
-      root_module_directory: test/fixtures/simple_example/
+      root_module_directory: test/fixtures/simple-example/
     verifier:
       color: false
       systems:
-        - name: simple_example gcp
+        - name: simple-example gcp
           backend: gcp
           controls:
             - gcp
-        - name: simple_example gcloud
+        - name: simple-example gcloud
           backend: local
           controls:
             - gcloud

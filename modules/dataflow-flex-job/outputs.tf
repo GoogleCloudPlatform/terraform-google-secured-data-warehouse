@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-module "de_identification_template_example" {
-  source = "../..//modules/de_identification_template"
+output "job_id" {
+  description = "The unique ID of this job."
+  value       = google_dataflow_flex_template_job.dataflow_flex_template_job.job_id
 
-  project_id                = var.project_id
-  terraform_service_account = var.terraform_service_account
-  dataflow_service_account  = var.dataflow_service_account
-  crypto_key                = var.crypto_key
-  wrapped_key               = var.wrapped_key
-  dlp_location              = var.dlp_location
-  template_file             = "${path.module}/deidentification.tmpl"
+}
+
+output "state" {
+  description = "The current state of the resource, selected from the JobState enum. See https://cloud.google.com/dataflow/docs/reference/rest/v1b3/projects.jobs#Job.JobState ."
+  value       = google_dataflow_flex_template_job.dataflow_flex_template_job.state
 }

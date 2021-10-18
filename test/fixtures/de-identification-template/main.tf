@@ -42,7 +42,7 @@ resource "google_kms_secret_ciphertext" "wrapped_key" {
 }
 
 module "de_identification_template" {
-  source = "../../..//modules/de_identification_template"
+  source = "../../..//modules/de-identification-template"
 
   project_id                = var.data_governance_project_id[2]
   template_display_name     = local.template_display_name

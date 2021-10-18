@@ -30,7 +30,7 @@ locals {
 // A2 - DATA WAREHOUSE GOVERNANCE - START
 
 module "data_governance" {
-  source = "./modules/data_governance"
+  source = "./modules/data-governance"
 
   terraform_service_account    = var.terraform_service_account
   data_ingestion_project_id    = var.data_ingestion_project_id
@@ -75,7 +75,7 @@ module "data_ingestion" {
 // A4 - DATA WAREHOUSE SENSITIVE DATA - START
 
 module "bigquery_confidential_data" {
-  source = "./modules/confidential_data"
+  source = "./modules/confidential-data"
 
   data_governance_project_id            = var.data_governance_project_id
   confidential_data_project_id          = var.confidential_data_project_id
@@ -92,7 +92,7 @@ module "bigquery_confidential_data" {
 // A5 - DATA WAREHOUSE ORG POLICY - START
 
 module "org_policies" {
-  source = "./modules/org_policies"
+  source = "./modules/org-policies"
 
   for_each          = toset(local.projects_ids)
   project_id        = each.key

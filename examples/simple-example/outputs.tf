@@ -54,16 +54,6 @@ output "data_ingestion_service_perimeter_name" {
   value       = module.secured_data_warehouse.data_ingestion_service_perimeter_name
 }
 
-output "cmek_keyring_full_name" {
-  description = "The Keyring full name for the KMS Customer Managed Encryption Keys."
-  value       = module.secured_data_warehouse.cmek_keyring_full_name
-}
-
-output "cmek_keyring_name" {
-  description = "The Keyring name for the KMS Customer Managed Encryption Keys."
-  value       = module.secured_data_warehouse.cmek_keyring_name
-}
-
 output "cmek_ingestion_crypto_key" {
   description = "The Customer Managed Crypto Key for the Ingestion crypto boundary."
   value       = module.secured_data_warehouse.cmek_ingestion_crypto_key
@@ -74,22 +64,13 @@ output "cmek_bigquery_crypto_key" {
   value       = module.secured_data_warehouse.cmek_bigquery_crypto_key
 }
 
-output "cmek_ingestion_crypto_key_name" {
-  description = "The Customer Managed Crypto Key name for the Ingestion crypto boundary."
-  value       = module.secured_data_warehouse.cmek_ingestion_crypto_key_name
+
+output "cmek_reidentification_crypto_key" {
+  description = "The Customer Managed Crypto Key for the reidentification crypto boundary."
+  value       = module.secured_data_warehouse.cmek_reidentification_crypto_key
 }
 
-output "cmek_bigquery_crypto_key_name" {
-  description = "The Customer Managed Crypto Key name for the BigQuery service."
-  value       = module.secured_data_warehouse.cmek_bigquery_crypto_key_name
-}
-
-output "cmek_reidentification_crypto_key_name" {
-  description = "The Customer Managed Crypto Key name for the reidentification crypto boundary."
-  value       = module.secured_data_warehouse.cmek_reidentification_crypto_key_name
-}
-
-output "cmek_confidential_bigquery_crypto_key_name" {
-  description = "The Customer Managed Crypto Key name for the confidential BigQuery service."
-  value       = module.secured_data_warehouse.cmek_confidential_bigquery_crypto_key_name
+output "cmek_confidential_bigquery_crypto_key" {
+  description = "The Customer Managed Crypto Key for the confidential BigQuery service."
+  value       = module.secured_data_warehouse.cmek_confidential_bigquery_crypto_key
 }

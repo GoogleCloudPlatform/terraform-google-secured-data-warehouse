@@ -119,12 +119,6 @@ variable "confidential_dataset_default_table_expiration_ms" {
   default     = null
 }
 
-variable "confidential_table_id" {
-  description = "The confidential table ID to deploy to data warehouse."
-  type        = string
-  default     = "sample_data"
-}
-
 variable "dataset_id" {
   description = "Unique ID for the dataset being provisioned."
   type        = string

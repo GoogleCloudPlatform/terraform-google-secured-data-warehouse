@@ -64,7 +64,7 @@ resource "time_sleep" "forces_wait_propagation" {
 }
 
 module "data_ingestion_vpc_sc" {
-  source = ".//modules/dwh_vpc_sc"
+  source = ".//modules/dwh-vpc-sc"
 
   org_id                           = var.org_id
   project_id                       = var.data_ingestion_project_id
@@ -108,7 +108,7 @@ module "data_ingestion_vpc_sc" {
 }
 
 module "data_governance_vpc_sc" {
-  source = ".//modules/dwh_vpc_sc"
+  source = ".//modules/dwh-vpc-sc"
 
   org_id                           = var.org_id
   project_id                       = var.data_governance_project_id
@@ -142,7 +142,7 @@ module "data_governance_vpc_sc" {
 }
 
 module "confidential_data_vpc_sc" {
-  source = ".//modules/dwh_vpc_sc"
+  source = ".//modules/dwh-vpc-sc"
 
   org_id                           = var.org_id
   project_id                       = var.confidential_data_project_id

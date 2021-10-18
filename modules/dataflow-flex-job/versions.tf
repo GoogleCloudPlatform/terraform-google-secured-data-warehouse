@@ -42,11 +42,11 @@ terraform {
   }
 
   provider_meta "google" {
-    module_name = "blueprints/terraform/terraform-google-secured-data-warehouse:de_identification_template/v1.0.0"
+    module_name = "blueprints/terraform/terraform-google-secured-data-warehouse:dataflow-flex-job/v1.0.0"
   }
 
   provider_meta "google-beta" {
-    module_name = "blueprints/terraform/terraform-google-secured-data-warehouse:de_identification_template/v1.0.0"
+    module_name = "blueprints/terraform/terraform-google-secured-data-warehouse:dataflow-flex-job/v1.0.0"
   }
 
 }
