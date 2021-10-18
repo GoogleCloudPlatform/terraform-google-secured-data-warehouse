@@ -14,30 +14,20 @@
  * limitations under the License.
  */
 
-terraform {
-  required_version = ">= 0.13"
+module "dwh_networking_ingestion" {
+  source = "../../../modules/dwh-networking"
 
-  required_providers {
+  project_id = module.data_ingestion_project.project_id
+  region     = "us-east4"
+  vpc_name   = "ingestion"
+  subnet_ip  = "10.0.32.0/21"
+}
 
-    google = {
-      source  = "hashicorp/google"
-      version = ">= 3.77"
-    }
+module "dwh_networking_confidential" {
+  source = "../../../modules/dwh-networking"
 
-    google-beta = {
-      source  = "hashicorp/google-beta"
-      version = "~> 3.77"
-    }
-
-    null = {
-      source  = "hashicorp/null"
-      version = "~> 2.1"
-    }
-
-    random = {
-      source  = "hashicorp/random"
-      version = "~> 2.3"
-    }
-
-  }
+  project_id = module.confidential_data_project.project_id
+  region     = "us-east4"
+  vpc_name   = "reidentify"
+  subnet_ip  = "10.0.32.0/21"
 }

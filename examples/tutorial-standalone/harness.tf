@@ -14,30 +14,20 @@
  * limitations under the License.
  */
 
-terraform {
-  required_version = ">= 0.13"
+module "base_projects" {
+  source = "../../test//setup/base-projects"
 
-  required_providers {
+  org_id          = var.org_id
+  folder_id       = var.folder_id
+  billing_account = var.billing_account
+}
 
-    google = {
-      source  = "hashicorp/google"
-      version = ">= 3.77"
-    }
+module "template_project" {
+  source = "../../test//setup/template-project"
 
-    google-beta = {
-      source  = "hashicorp/google-beta"
-      version = "~> 3.77"
-    }
-
-    null = {
-      source  = "hashicorp/null"
-      version = "~> 2.1"
-    }
-
-    random = {
-      source  = "hashicorp/random"
-      version = "~> 2.3"
-    }
-
-  }
+  org_id                   = var.org_id
+  folder_id                = var.folder_id
+  billing_account          = var.billing_account
+  location                 = "us-east4"
+  ci_service_account_email = var.terraform_service_account
 }

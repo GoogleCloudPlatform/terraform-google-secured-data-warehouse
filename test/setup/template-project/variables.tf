@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-module "dwh_networking_ingestion" {
-  source = "../../modules/dwh-networking"
-
-  for_each = local.project_groups
-
-  project_id = module.data_ingestion_project[each.key].project_id
-  region     = "us-east4"
-  vpc_name   = "ingestion"
-  subnet_ip  = "10.0.32.0/21"
+variable "org_id" {
+  description = "The numeric organization id."
 }
 
-module "dwh_networking_confidential" {
-  source = "../../modules/dwh-networking"
+variable "folder_id" {
+  description = "The folder to deploy in."
+}
 
-  for_each = local.project_groups
+variable "billing_account" {
+  description = "The billing account id associated with the project, e.g. XXXXXX-YYYYYY-ZZZZZZ."
+}
 
-  project_id = module.confidential_data_project[each.key].project_id
-  region     = "us-east4"
-  vpc_name   = "reidentify"
-  subnet_ip  = "10.0.32.0/21"
+variable "location" {
+  description = "Artifact Registry location."
+  type        = string
+}
+
+variable "ci_service_account_email" {
+  description = "Terraform service account email"
+  type        = string
 }

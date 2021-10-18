@@ -14,30 +14,14 @@
  * limitations under the License.
  */
 
-terraform {
-  required_version = ">= 0.13"
+variable "org_id" {
+  description = "The numeric organization id"
+}
 
-  required_providers {
+variable "folder_id" {
+  description = "The folder to deploy in"
+}
 
-    google = {
-      source  = "hashicorp/google"
-      version = ">= 3.77"
-    }
-
-    google-beta = {
-      source  = "hashicorp/google-beta"
-      version = "~> 3.77"
-    }
-
-    null = {
-      source  = "hashicorp/null"
-      version = "~> 2.1"
-    }
-
-    random = {
-      source  = "hashicorp/random"
-      version = "~> 2.3"
-    }
-
-  }
+variable "billing_account" {
+  description = "The billing account id associated with the project, e.g. XXXXXX-YYYYYY-ZZZZZZ"
 }

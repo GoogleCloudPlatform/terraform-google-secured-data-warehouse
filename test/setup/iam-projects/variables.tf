@@ -14,30 +14,27 @@
  * limitations under the License.
  */
 
-terraform {
-  required_version = ">= 0.13"
+variable "data_ingestion_project_id" {
+  type        = string
+  description = "(optional) describe your variable"
+}
 
-  required_providers {
+variable "datalake_project_id" {
+  type        = string
+  description = "(optional) describe your variable"
+}
 
-    google = {
-      source  = "hashicorp/google"
-      version = ">= 3.77"
-    }
+variable "data_governance_project_id" {
+  type        = string
+  description = "(optional) describe your variable"
+}
 
-    google-beta = {
-      source  = "hashicorp/google-beta"
-      version = "~> 3.77"
-    }
+variable "confidential_data_project_id" {
+  type        = string
+  description = "(optional) describe your variable"
+}
 
-    null = {
-      source  = "hashicorp/null"
-      version = "~> 2.1"
-    }
-
-    random = {
-      source  = "hashicorp/random"
-      version = "~> 2.3"
-    }
-
-  }
+variable "ci_service_account_email" {
+  type        = string
+  description = "(optional) describe your variable"
 }

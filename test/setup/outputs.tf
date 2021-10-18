@@ -15,23 +15,23 @@
  */
 
 output "data_ingestion_project_id" {
-  value = values(module.data_ingestion_project)[*].project_id
+  value = values(module.base_projects)[*].data_ingestion_project_id
 }
 
 output "data_governance_project_id" {
-  value = values(module.data_governance_project)[*].project_id
+  value = values(module.base_projects)[*].data_governance_project_id
 }
 
 output "datalake_project_id" {
-  value = values(module.datalake_project)[*].project_id
+  value = values(module.base_projects)[*].datalake_project_id
 }
 
 output "confidential_data_project_id" {
-  value = values(module.confidential_data_project)[*].project_id
+  value = values(module.base_projects)[*].confidential_data_project_id
 }
 
 output "external_flex_template_project_id" {
-  value = module.external_flex_template_project.project_id
+  value = module.template_project.project_id
 }
 
 output "sa_key" {
@@ -56,68 +56,52 @@ output "billing_account" {
 }
 
 output "java_de_identify_template_gs_path" {
-  value = local.java_de_identify_template_gs_path
-
-  depends_on = [
-    null_resource.java_de_identification_flex_template
-  ]
+  value = module.template_project.java_de_identify_template_gs_path
 }
 
 output "java_re_identify_template_gs_path" {
-  value = local.java_re_identify_template_gs_path
-
-  depends_on = [
-    null_resource.java_re_identification_flex_template
-  ]
+  value = module.template_project.java_re_identify_template_gs_path
 }
 
 output "python_de_identify_template_gs_path" {
-  value = local.python_de_identify_template_gs_path
-
-  depends_on = [
-    null_resource.python_de_identification_flex_template
-  ]
+  value = module.template_project.python_de_identify_template_gs_path
 }
 
 output "python_re_identify_template_gs_path" {
-  value = local.python_re_identify_template_gs_path
-
-  depends_on = [
-    null_resource.python_re_identification_flex_template
-  ]
+  value = module.template_project.python_re_identify_template_gs_path
 }
 
 output "sdx_project_number" {
   description = "The Project Number to configure Secure data exchange with egress rule for the dataflow templates."
-  value       = module.external_flex_template_project.project_number
+  value       = module.template_project.sdx_project_number
 }
 
 output "data_ingestion_network_name" {
   description = "The name of the data ingestion VPC being created."
-  value       = values(module.dwh_networking_ingestion)[*].network_name
+  value       = values(module.base_projects)[*].data_ingestion_network_name
 }
 
 output "data_ingestion_network_self_link" {
   description = "The URI of the data ingestion VPC being created."
-  value       = values(module.dwh_networking_ingestion)[*].network_self_link
+  value       = values(module.base_projects)[*].data_ingestion_network_self_link
 }
 
 output "data_ingestion_subnets_self_link" {
   description = "The self-links of data ingestion subnets being created."
-  value       = values(module.dwh_networking_ingestion)[*].subnets_self_links[0]
+  value       = values(module.base_projects)[*].data_ingestion_subnets_self_link
 }
 
 output "confidential_network_name" {
   description = "The name of the confidential VPC being created."
-  value       = values(module.dwh_networking_confidential)[*].network_name
+  value       = values(module.base_projects)[*].confidential_network_name
 }
 
 output "confidential_network_self_link" {
   description = "The URI of the confidential VPC being created."
-  value       = values(module.dwh_networking_confidential)[*].network_self_link
+  value       = values(module.base_projects)[*].confidential_network_self_link
 }
 
 output "confidential_subnets_self_link" {
   description = "The self-links of confidential subnets being created."
-  value       = values(module.dwh_networking_confidential)[*].subnets_self_links[0]
+  value       = values(module.base_projects)[*].confidential_subnets_self_link
 }
