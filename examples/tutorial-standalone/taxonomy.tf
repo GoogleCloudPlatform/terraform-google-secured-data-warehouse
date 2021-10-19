@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+// TODO: Replace taxonomy and bq schema template with parsed policy schema
 resource "google_data_catalog_taxonomy" "secure_taxonomy" {
   provider = google-beta
 

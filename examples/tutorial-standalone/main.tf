@@ -30,6 +30,27 @@ resource "random_id" "suffix" {
   byte_length = 4
 }
 
+module "kek" {
+  source  = "terraform-google-modules/kms/google"
+  version = "~> 1.2"
+
+  project_id      = module.base_projects.data_governance_project_id
+  location        = local.location
+  keyring         = local.kek_keyring
+  keys            = [local.kek_key_name]
+  prevent_destroy = false
+}
+
+resource "random_id" "original_key" {
+  byte_length = 16
+}
+
+// TODO: Replace with a method that does not store the plain value in the state
+resource "google_kms_secret_ciphertext" "wrapped_key" {
+  crypto_key = module.kek.keys[local.kek_key_name]
+  plaintext  = random_id.original_key.b64_std
+}
+
 module "secured_data_warehouse" {
   source = "../.."
 
@@ -48,6 +69,10 @@ module "secured_data_warehouse" {
   cmek_keyring_name                = "cmek_keyring_${random_id.suffix.hex}"
   delete_contents_on_destroy       = var.delete_contents_on_destroy
   perimeter_additional_members     = var.perimeter_additional_members
+
+  depends_on = [
+    module.base_projects
+  ]
 }
 
 resource "null_resource" "download_sample_cc_into_gcs" {
@@ -73,8 +98,8 @@ module "de_identification_template" {
 
   project_id                = module.base_projects.data_governance_project_id
   terraform_service_account = var.terraform_service_account
-  crypto_key                = var.crypto_key
-  wrapped_key               = var.wrapped_key
+  crypto_key                = module.kek.keys[local.kek_key_name]
+  wrapped_key               = google_kms_secret_ciphertext.wrapped_key.ciphertext
   dlp_location              = local.location
   template_id_prefix        = "de_identification"
   template_file             = "${path.module}/templates/deidentification.tmpl"
@@ -86,8 +111,8 @@ module "re_identification_template" {
 
   project_id                = module.base_projects.data_governance_project_id
   terraform_service_account = var.terraform_service_account
-  crypto_key                = var.crypto_key
-  wrapped_key               = var.wrapped_key
+  crypto_key                = module.kek.keys[local.kek_key_name]
+  wrapped_key               = google_kms_secret_ciphertext.wrapped_key.ciphertext
   dlp_location              = local.location
   template_id_prefix        = "re_identification"
   template_file             = "${path.module}/templates/reidentification.tmpl"
@@ -114,6 +139,7 @@ resource "google_artifact_registry_repository_iam_member" "confidential_docker_r
   member     = "serviceAccount:${module.secured_data_warehouse.confidential_dataflow_controller_service_account_email}"
 }
 
+// TODO: Replace with job that reads from public Bigquery dataset
 module "regional_deid" {
   source = "../../modules/dataflow-flex-job"
 
@@ -126,7 +152,7 @@ module "regional_deid" {
   kms_key_name            = module.secured_data_warehouse.cmek_ingestion_crypto_key
   temp_location           = "gs://${module.secured_data_warehouse.data_ingest_dataflow_bucket_name}/tmp/"
   staging_location        = "gs://${module.secured_data_warehouse.data_ingest_dataflow_bucket_name}/staging/"
-  max_workers             = 5
+  max_workers             = 1
 
   parameters = {
     inputFilePattern       = "gs://${module.secured_data_warehouse.data_ingest_bucket_name}/${local.cc_file_name}"

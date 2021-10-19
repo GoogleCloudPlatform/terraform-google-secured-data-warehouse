@@ -19,15 +19,13 @@ locals {
   location      = var.location == "" ? lower(var.region) : lower(var.location)
   cmek_location = local.location == "eu" ? "europe" : local.location
 
-  projects_ids = [
-    var.data_ingestion_project_id,
-    var.data_governance_project_id,
-    var.datalake_project_id,
-    var.confidential_data_project_id
-  ]
+  projects_ids = {
+    ingestion    = var.data_ingestion_project_id
+    governance   = var.data_governance_project_id
+    datalake     = var.datalake_project_id
+    confidential = var.confidential_data_project_id
+  }
 }
-
-// A2 - DATA WAREHOUSE GOVERNANCE - START
 
 module "data_governance" {
   source = "./modules/data-governance"
@@ -42,10 +40,6 @@ module "data_governance" {
   key_rotation_period_seconds  = var.key_rotation_period_seconds
   delete_contents_on_destroy   = var.delete_contents_on_destroy
 }
-
-// A2 - DATA WAREHOUSE GOVERNANCE - END
-
-// A3 - DATA WAREHOUSE INGESTION - START
 
 module "data_ingestion" {
   source = "./modules/base-data-ingestion"
@@ -70,10 +64,6 @@ module "data_ingestion" {
   bigquery_encryption_key             = module.data_governance.cmek_bigquery_crypto_key
 }
 
-// A3 - DATA WAREHOUSE INGESTION - END
-
-// A4 - DATA WAREHOUSE SENSITIVE DATA - START
-
 module "bigquery_confidential_data" {
   source = "./modules/confidential-data"
 
@@ -87,15 +77,11 @@ module "bigquery_confidential_data" {
   delete_contents_on_destroy            = var.delete_contents_on_destroy
 }
 
-// A4 - DATA WAREHOUSE SENSITIVE DATA - END
-
-// A5 - DATA WAREHOUSE ORG POLICY - START
-
 module "org_policies" {
-  source = "./modules/org-policies"
+  source   = "./modules/org-policies"
+  for_each = local.projects_ids
 
-  for_each          = toset(local.projects_ids)
-  project_id        = each.key
+  project_id        = each.value
   region            = local.region
   trusted_locations = var.trusted_locations
 
@@ -104,9 +90,3 @@ module "org_policies" {
     module.bigquery_confidential_data
   ]
 }
-
-// A5 - DATA WAREHOUSE ORG POLICY - END
-
-// A6 - DATA WAREHOUSE LOGGING - STAR
-
-// A6 - DATA WAREHOUSE LOGGING - END

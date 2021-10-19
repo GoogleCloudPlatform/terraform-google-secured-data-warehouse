@@ -14,6 +14,26 @@
  * limitations under the License.
  */
 
+locals {
+  data_ingestion_project_roles = [
+    "roles/pubsub.subscriber",
+    "roles/storage.admin",
+    "roles/dataflow.serviceAgent",
+    "roles/dataflow.worker",
+    "roles/compute.viewer"
+  ]
+
+  governance_project_roles = [
+    "roles/cloudkms.admin",
+    "roles/cloudkms.cryptoKeyDecrypter",
+    "roles/dlp.admin"
+  ]
+
+  datalake_project_roles = [
+    "roles/bigquery.admin",
+    "roles/serviceusage.serviceUsageConsumer"
+  ]
+}
 
 //Dataflow controller service account
 module "dataflow_controller_service_account" {
@@ -22,17 +42,31 @@ module "dataflow_controller_service_account" {
   project_id   = var.data_ingestion_project_id
   names        = ["sa-dataflow-controller"]
   display_name = "Cloud Dataflow controller service account"
-  project_roles = [
-    "${var.data_ingestion_project_id}=>roles/pubsub.subscriber",
-    "${var.datalake_project_id}=>roles/bigquery.admin",
-    "${var.data_governance_project_id}=>roles/cloudkms.admin",
-    "${var.data_governance_project_id}=>roles/cloudkms.cryptoKeyDecrypter",
-    "${var.data_governance_project_id}=>roles/dlp.admin",
-    "${var.data_ingestion_project_id}=>roles/storage.admin",
-    "${var.data_ingestion_project_id}=>roles/dataflow.serviceAgent",
-    "${var.data_ingestion_project_id}=>roles/dataflow.worker",
-    "${var.data_ingestion_project_id}=>roles/compute.viewer",
-  ]
+}
+
+
+resource "google_project_iam_member" "ingestion" {
+  for_each = toset(local.data_ingestion_project_roles)
+
+  project = var.data_ingestion_project_id
+  role    = each.value
+  member  = "serviceAccount:${module.dataflow_controller_service_account.email}"
+}
+
+resource "google_project_iam_member" "governance" {
+  for_each = toset(local.governance_project_roles)
+
+  project = var.data_governance_project_id
+  role    = each.value
+  member  = "serviceAccount:${module.dataflow_controller_service_account.email}"
+}
+
+resource "google_project_iam_member" "datalake" {
+  for_each = toset(local.datalake_project_roles)
+
+  project = var.datalake_project_id
+  role    = each.value
+  member  = "serviceAccount:${module.dataflow_controller_service_account.email}"
 }
 
 //service account for storage

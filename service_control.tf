@@ -96,6 +96,8 @@ module "data_ingestion_vpc_sc" {
         ["serviceAccount:${var.terraform_service_account}"]
       ))
       sdx_project_number = var.sdx_project_number
+      service_name       = "storage.googleapis.com"
+      method             = "google.storage.objects.get"
     }
   ]
 
@@ -174,6 +176,8 @@ module "confidential_data_vpc_sc" {
         ["serviceAccount:${var.terraform_service_account}"]
       ))
       sdx_project_number = var.sdx_project_number
+      service_name       = "storage.googleapis.com"
+      method             = "google.storage.objects.get"
     }
   ]
 

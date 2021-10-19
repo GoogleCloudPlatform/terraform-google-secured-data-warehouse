@@ -36,16 +36,6 @@ variable "terraform_service_account" {
   type        = string
 }
 
-variable "crypto_key" {
-  description = "The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP."
-  type        = string
-}
-
-variable "wrapped_key" {
-  description = "The base64 encoded data crypto key wrapped by KMS."
-  type        = string
-}
-
 variable "perimeter_additional_members" {
   description = "The list of all members to be added on perimeter access, except the service accounts created by this module. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required."
   type        = list(string)

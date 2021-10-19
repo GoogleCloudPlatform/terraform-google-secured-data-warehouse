@@ -31,3 +31,5 @@ module "template_project" {
   location                 = "us-east4"
   ci_service_account_email = var.terraform_service_account
 }
+
+// TODO: Add centralized logging
