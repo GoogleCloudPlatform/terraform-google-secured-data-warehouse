@@ -94,10 +94,11 @@ module "bigquery_confidential_data" {
 module "org_policies" {
   source = "./modules/org-policies"
 
-  for_each          = toset(local.projects_ids)
-  project_id        = each.key
-  region            = local.region
-  trusted_locations = var.trusted_locations
+  for_each            = toset(local.projects_ids)
+  project_id          = each.key
+  region              = local.region
+  trusted_locations   = var.trusted_locations
+  trusted_subnetworks = var.trusted_subnetworks
 
   depends_on = [
     module.data_ingestion,
