@@ -21,7 +21,7 @@ variable "trusted_locations" {
 }
 
 variable "trusted_subnetworks" {
-  description = "Subnetwork name that eligible resources can use."
+  description = "The URI of the subnetworks where resources are going to be deployed."
   type        = list(string)
   default     = []
 }
