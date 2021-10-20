@@ -66,11 +66,3 @@ module "regional_dlp_example" {
   crypto_key  = module.kek.keys[local.kek_key_name]
   wrapped_key = google_kms_secret_ciphertext.wrapped_key.ciphertext
 }
-
-resource "google_storage_bucket" "static-site" {
-  name          = "image-store.com"
-  location      = "EU"
-  force_destroy = true
-
-  uniform_bucket_level_access = false
-}
