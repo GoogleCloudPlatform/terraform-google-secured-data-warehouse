@@ -62,6 +62,17 @@ module "base_projects" {
   billing_account = var.billing_account
 }
 
+module "iam_projects" {
+  source   = "./iam-projects"
+  for_each = local.project_groups
+
+  data_ingestion_project_id    = module.base_projects[each.key].data_ingestion_project_id
+  datalake_project_id          = module.base_projects[each.key].datalake_project_id
+  data_governance_project_id   = module.base_projects[each.key].data_governance_project_id
+  confidential_data_project_id = module.base_projects[each.key].confidential_data_project_id
+  ci_service_account_email     = google_service_account.int_ci_service_account.email
+}
+
 resource "google_service_account" "int_ci_service_account" {
   project      = module.base_projects[local.first_project_group].data_ingestion_project_id
   account_id   = "ci-account"

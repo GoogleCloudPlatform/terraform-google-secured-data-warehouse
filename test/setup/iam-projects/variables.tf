@@ -15,26 +15,26 @@
  */
 
 variable "data_ingestion_project_id" {
+  description = "Data ingestion project ID."
   type        = string
-  description = "(optional) describe your variable"
 }
 
 variable "datalake_project_id" {
+  description = "Datalake project ID."
   type        = string
-  description = "(optional) describe your variable"
 }
 
 variable "data_governance_project_id" {
+  description = "Data governance project ID."
   type        = string
-  description = "(optional) describe your variable"
 }
 
 variable "confidential_data_project_id" {
+  description = "Confidential data project ID."
   type        = string
-  description = "(optional) describe your variable"
 }
 
 variable "ci_service_account_email" {
+  description = "Terraform service account."
   type        = string
-  description = "(optional) describe your variable"
 }

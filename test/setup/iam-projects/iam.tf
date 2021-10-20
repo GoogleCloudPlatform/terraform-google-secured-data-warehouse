@@ -15,15 +15,6 @@
  */
 
 locals {
-  int_org_required_roles = [
-    "roles/orgpolicy.policyAdmin",
-    "roles/accesscontextmanager.policyAdmin",
-    "roles/resourcemanager.organizationAdmin",
-    "roles/vpcaccess.admin",
-    "roles/compute.xpnAdmin",
-    "roles/billing.user"
-  ]
-
   int_proj_required_roles = [
     "roles/datacatalog.admin",
     "roles/storage.admin",
