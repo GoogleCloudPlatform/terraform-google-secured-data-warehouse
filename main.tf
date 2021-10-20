@@ -81,9 +81,10 @@ module "org_policies" {
   source   = "./modules/org-policies"
   for_each = local.projects_ids
 
-  project_id        = each.value
-  region            = local.region
-  trusted_locations = var.trusted_locations
+  project_id          = each.value
+  region              = local.region
+  trusted_locations   = var.trusted_locations
+  trusted_subnetworks = var.trusted_subnetworks
 
   depends_on = [
     module.data_ingestion,
