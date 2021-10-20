@@ -20,6 +20,12 @@ variable "trusted_locations" {
   default     = ["us-locations", "eu-locations"]
 }
 
+variable "trusted_subnetworks" {
+  description = "The URI of the subnetworks where resources are going to be deployed."
+  type        = list(string)
+  default     = []
+}
+
 variable "org_id" {
   description = "GCP Organization ID."
   type        = string

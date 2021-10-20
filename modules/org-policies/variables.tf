@@ -24,10 +24,10 @@ variable "region" {
   type        = string
 }
 
-variable "trusted_subnetwork" {
-  description = "Subnetwork name that eligible resources can use."
-  type        = string
-  default     = ""
+variable "trusted_subnetworks" {
+  description = "The URI of the subnetworks where resources are going to be deployed."
+  type        = list(string)
+  default     = []
 }
 
 variable "trusted_locations" {
