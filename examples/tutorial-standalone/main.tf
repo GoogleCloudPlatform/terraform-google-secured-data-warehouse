@@ -75,6 +75,13 @@ module "secured_data_warehouse" {
   ]
 }
 
+
+//START - CENTRALIZED LOGGING MODULE
+
+
+
+//END - CENTRALIZED LOGGIN MODULE
+
 resource "null_resource" "download_sample_cc_into_gcs" {
   provisioner "local-exec" {
     command = <<EOF
