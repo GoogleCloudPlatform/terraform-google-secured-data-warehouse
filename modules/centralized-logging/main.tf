@@ -63,13 +63,13 @@ module "logging_bucket" {
 }
 
 module "log_export" {
-  for_each               = toset(var.projects_ids)
+  for_each               = var.projects_ids
   source                 = "terraform-google-modules/log-export/google"
   version                = "~> 7.1.0"
   destination_uri        = local.destination_uri
   filter                 = var.sink_filter
   log_sink_name          = "sk-dwh-logging-bkt"
-  parent_resource_id     = each.key
+  parent_resource_id     = each.value
   parent_resource_type   = "project"
   unique_writer_identity = true
 }

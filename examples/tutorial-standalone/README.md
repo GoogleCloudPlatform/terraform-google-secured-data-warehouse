@@ -35,6 +35,8 @@ with the following IAM roles:
 - Folder Level
   - Project Creator: `roles/resourcemanager.projectCreator`
 
+The service account must have `Billing User role` in the billing account.
+
 You can use the [Project Factory module](https://github.com/terraform-google-modules/terraform-google-project-factory) and the
 [IAM module](https://github.com/terraform-google-modules/terraform-google-iam) in combination to provision a
 service account with the necessary roles applied.
@@ -42,6 +44,14 @@ service account with the necessary roles applied.
 The user using this service account must have the necessary roles to [impersonate](https://cloud.google.com/iam/docs/impersonating-service-accounts) the service account.
 
 ### APIs
+
+Service account must be in a project with the following APIs enabled:
+
+- Cloud Billing API:`cloudbilling.googleapis.com`
+- Cloud Resource Manager API:`cloudresourcemanager.googleapis.com`
+- Cloud Key Management Service (KMS) API:`cloudkms.googleapis.com`
+- Compute Engine API:`compute.googleapis.com`
+- Identity and Access Management (IAM) API:`iam.googleapis.com`
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs

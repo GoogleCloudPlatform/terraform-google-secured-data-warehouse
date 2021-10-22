@@ -16,7 +16,7 @@
 
 variable "projects_ids" {
   description = "Export logs from the specified list of project IDs."
-  type        = list(string)
+  type        = map(string)
 }
 
 variable "sink_filter" {

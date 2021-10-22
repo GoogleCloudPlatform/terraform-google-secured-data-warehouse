@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
- locals {
-  projects_ids                = [module.base_projects.data_governance_project_id,
-                                 module.base_projects.confidential_data_project_id,
-                                 module.base_projects.datalake_project_id,
-                                 module.base_projects.data_ingestion_project_id]
+locals {
   logging_key_name            = "centralized_logging_kms_key_${random_id.suffix.hex}"
-  keys                        = [logging_key_name]
+  keys                        = [local.logging_key_name]
   key_rotation_period_seconds = "2592000s"
+
+  projects_ids = {
+    landing_zone     = module.base_projects.data_governance_project_id,
+    governance       = module.base_projects.confidential_data_project_id,
+    non_confidential = module.base_projects.datalake_project_id
+    confidential     = module.base_projects.data_ingestion_project_id
+  }
 }
 
 module "base_projects" {
