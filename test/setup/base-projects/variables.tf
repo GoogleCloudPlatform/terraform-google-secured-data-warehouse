@@ -25,3 +25,8 @@ variable "folder_id" {
 variable "billing_account" {
   description = "The billing account id associated with the project, e.g. XXXXXX-YYYYYY-ZZZZZZ"
 }
+
+variable "region" {
+  description = "The region in which the subnetwork will be created."
+  type        = string
+}

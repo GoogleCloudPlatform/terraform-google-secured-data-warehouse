@@ -31,7 +31,7 @@ variable "location" {
   type        = string
 }
 
-variable "ci_service_account_email" {
+variable "service_account_email" {
   description = "Terraform service account email"
   type        = string
 }
