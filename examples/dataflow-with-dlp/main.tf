@@ -16,20 +16,20 @@
 
 locals {
   region     = "us-east4"
-  dataset_id = "dts_data_ingestion"
+  dataset_id = "dts_landing_zone"
 }
 
 resource "random_id" "random_suffix" {
   byte_length = 4
 }
 
-module "data_ingestion" {
+module "landing_zone" {
   source                           = "../.."
   org_id                           = var.org_id
   data_governance_project_id       = var.data_governance_project_id
   confidential_data_project_id     = var.confidential_data_project_id
-  datalake_project_id              = var.datalake_project_id
-  data_ingestion_project_id        = var.data_ingestion_project_id
+  non_confidential_data_project_id = var.non_confidential_data_project_id
+  landing_zone_project_id          = var.landing_zone_project_id
   sdx_project_number               = var.sdx_project_number
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
@@ -54,14 +54,14 @@ resource "null_resource" "download_sample_cc_into_gcs" {
     echo "Changing sample file encoding from ISO-8859-1 to UTF-8"
     iconv -f="ISO-8859-1" -t="UTF-8" cc_records.csv > temp_cc_records.csv
     mv temp_cc_records.csv cc_records.csv
-    gsutil cp cc_records.csv gs://${module.data_ingestion.data_ingest_bucket_name}
+    gsutil cp cc_records.csv gs://${module.landing_zone.data_ingest_bucket_name}
     rm cc_records.csv
 EOF
 
   }
 
   depends_on = [
-    module.data_ingestion
+    module.landing_zone
   ]
 }
 
@@ -74,10 +74,10 @@ module "de_identification_template" {
   wrapped_key               = var.wrapped_key
   dlp_location              = local.region
   template_file             = "${path.module}/deidentification.tmpl"
-  dataflow_service_account  = module.data_ingestion.dataflow_controller_service_account_email
+  dataflow_service_account  = module.landing_zone.dataflow_controller_service_account_email
 
   depends_on = [
-    module.data_ingestion
+    module.landing_zone
   ]
 }
 
@@ -88,30 +88,30 @@ resource "google_artifact_registry_repository_iam_member" "docker_reader" {
   location   = local.region
   repository = "flex-templates"
   role       = "roles/artifactregistry.reader"
-  member     = "serviceAccount:${module.data_ingestion.dataflow_controller_service_account_email}"
+  member     = "serviceAccount:${module.landing_zone.dataflow_controller_service_account_email}"
 
   depends_on = [
-    module.data_ingestion
+    module.landing_zone
   ]
 }
 
 module "regional_dlp" {
   source = "../../modules/dataflow-flex-job"
 
-  project_id              = var.data_ingestion_project_id
+  project_id              = var.landing_zone_project_id
   name                    = "regional-flex-java-gcs-dlp-bq"
   container_spec_gcs_path = var.de_identify_template_gs_path
   region                  = local.region
-  service_account_email   = module.data_ingestion.dataflow_controller_service_account_email
+  service_account_email   = module.landing_zone.dataflow_controller_service_account_email
   subnetwork_self_link    = var.subnetwork_self_link
-  kms_key_name            = module.data_ingestion.cmek_ingestion_crypto_key
-  temp_location           = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/tmp/"
-  staging_location        = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/staging/"
+  kms_key_name            = module.landing_zone.cmek_landing_zone_crypto_key
+  temp_location           = "gs://${module.landing_zone.data_ingest_dataflow_bucket_name}/tmp/"
+  staging_location        = "gs://${module.landing_zone.data_ingest_dataflow_bucket_name}/staging/"
   max_workers             = 5
 
   parameters = {
-    inputFilePattern       = "gs://${module.data_ingestion.data_ingest_bucket_name}/cc_records.csv"
-    bqProjectId            = var.datalake_project_id
+    inputFilePattern       = "gs://${module.landing_zone.data_ingest_bucket_name}/cc_records.csv"
+    bqProjectId            = var.non_confidential_data_project_id
     datasetName            = local.dataset_id
     batchSize              = 1000
     dlpProjectId           = var.data_governance_project_id

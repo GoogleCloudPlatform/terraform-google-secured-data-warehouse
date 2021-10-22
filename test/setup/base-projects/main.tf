@@ -18,7 +18,7 @@ resource "random_id" "project_id_suffix" {
   byte_length = 3
 }
 
-module "data_ingestion_project" {
+module "landing_zone_project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
 
@@ -51,7 +51,7 @@ module "data_ingestion_project" {
 }
 
 resource "google_app_engine_application" "app" {
-  project     = module.data_ingestion_project.project_id
+  project     = module.landing_zone_project.project_id
   location_id = "us-east4"
 }
 
@@ -78,11 +78,11 @@ module "data_governance_project" {
   ]
 }
 
-module "datalake_project" {
+module "non_confidential_data_project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
 
-  name              = "sdw-datalake-${random_id.project_id_suffix.hex}"
+  name              = "sdw-non-conf-${random_id.project_id_suffix.hex}"
   random_project_id = "true"
   org_id            = var.org_id
   folder_id         = var.folder_id

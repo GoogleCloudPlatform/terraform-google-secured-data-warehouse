@@ -48,8 +48,8 @@ variable "terraform_service_account" {
   type        = string
 }
 
-variable "data_ingestion_project_id" {
-  description = "The ID of the project in which the data ingestion resources will be created"
+variable "landing_zone_project_id" {
+  description = "The ID of the project in which the landing zone resources will be created"
   type        = string
 }
 
@@ -58,7 +58,7 @@ variable "data_governance_project_id" {
   type        = string
 }
 
-variable "datalake_project_id" {
+variable "non_confidential_data_project_id" {
   description = "The ID of the project in which the Bigquery will be created."
   type        = string
 }
@@ -177,8 +177,8 @@ variable "delete_contents_on_destroy" {
   default     = false
 }
 
-variable "data_ingestion_dataflow_deployer_identities" {
-  description = "List of members in the standard GCP form: user:{email}, serviceAccount:{email} that will deploy Dataflow jobs in the Data Ingestion project. These identities will be added to the VPC-SC secure data exchange egress rules."
+variable "landing_zone_dataflow_deployer_identities" {
+  description = "List of members in the standard GCP form: user:{email}, serviceAccount:{email} that will deploy Dataflow jobs in the Landing Zone project. These identities will be added to the VPC-SC secure data exchange egress rules."
   type        = list(string)
   default     = []
 }

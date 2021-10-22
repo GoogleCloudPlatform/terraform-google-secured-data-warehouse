@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-variable "data_ingestion_project_id" {
-  description = "Data ingestion project ID."
+variable "landing_zone_project_id" {
+  description = "Landing zone project ID."
   type        = string
 }
 
-variable "datalake_project_id" {
-  description = "Datalake project ID."
+variable "non_confidential_data_project_id" {
+  description = "Non confidential data project ID."
   type        = string
 }
 

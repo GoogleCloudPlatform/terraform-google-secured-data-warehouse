@@ -24,7 +24,7 @@ attributes:
   - name: data_governance_project_id
     required: true
     type: string
-  - name: datalake_project_id
+  - name: non_confidential_data_project_id
     required: true
     type: string
   - name: access_level_name
@@ -57,7 +57,7 @@ attributes:
   - name: cmek_location
     required: true
     type: string
-  - name: cmek_ingestion_crypto_key
+  - name: cmek_landing_zone_crypto_key
     required: true
     type: string
   - name: cmek_bigquery_crypto_key

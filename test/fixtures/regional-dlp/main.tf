@@ -48,9 +48,9 @@ module "regional_dlp_example" {
   source = "../../../examples/regional-dlp"
 
   org_id                            = var.org_id
-  data_ingestion_project_id         = var.data_ingestion_project_id[1]
+  landing_zone_project_id           = var.landing_zone_project_id[1]
   data_governance_project_id        = var.data_governance_project_id[1]
-  datalake_project_id               = var.datalake_project_id[1]
+  non_confidential_data_project_id  = var.non_confidential_data_project_id[1]
   confidential_data_project_id      = var.confidential_data_project_id[1]
   sdx_project_number                = var.sdx_project_number
   external_flex_template_project_id = var.external_flex_template_project_id
@@ -58,8 +58,8 @@ module "regional_dlp_example" {
   terraform_service_account         = var.terraform_service_account
   access_context_manager_policy_id  = var.access_context_manager_policy_id
   flex_template_gs_path             = var.python_de_identify_template_gs_path
-  network_self_link                 = var.data_ingestion_network_self_link[1]
-  subnetwork_self_link              = var.data_ingestion_subnets_self_link[1]
+  network_self_link                 = var.landing_zone_network_self_link[1]
+  subnetwork_self_link              = var.landing_zone_subnets_self_link[1]
   delete_contents_on_destroy        = true
   perimeter_additional_members      = []
 

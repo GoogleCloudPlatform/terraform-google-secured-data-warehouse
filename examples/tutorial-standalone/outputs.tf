@@ -15,7 +15,7 @@
  */
 
 output "dataflow_controller_service_account_email" {
-  description = "The Ingestion project Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account."
+  description = "The landing zone project Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account."
   value       = module.secured_data_warehouse.dataflow_controller_service_account_email
 }
 
@@ -25,12 +25,12 @@ output "confidential_dataflow_controller_service_account_email" {
 }
 
 output "storage_writer_service_account_email" {
-  description = "The Storage writer service account email. Should be used to write data to the buckets the ingestion pipeline reads from."
+  description = "The Storage writer service account email. Should be used to write data to the buckets the landing zone pipeline reads from."
   value       = module.secured_data_warehouse.storage_writer_service_account_email
 }
 
 output "pubsub_writer_service_account_email" {
-  description = "The PubSub writer service account email. Should be used to write data to the PubSub topics the ingestion pipeline reads from."
+  description = "The PubSub writer service account email. Should be used to write data to the PubSub topics the landing zone pipeline reads from."
   value       = module.secured_data_warehouse.pubsub_writer_service_account_email
 }
 

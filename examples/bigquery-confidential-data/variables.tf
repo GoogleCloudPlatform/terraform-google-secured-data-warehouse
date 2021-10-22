@@ -29,18 +29,18 @@ variable "data_governance_project_id" {
   type        = string
 }
 
-variable "data_ingestion_project_id" {
-  description = "The ID of the project in which the data ingestion resources will be created."
+variable "landing_zone_project_id" {
+  description = "The ID of the project in which the landing zone resources will be created."
   type        = string
 }
 
 variable "confidential_subnets_self_link" {
-  description = "The URI of the subnetwork where Data Ingestion Dataflow is going to be deployed."
+  description = "The URI of the subnetwork where Landing Zone Dataflow is going to be deployed."
   type        = string
 }
 
-variable "data_ingestion_subnets_self_link" {
-  description = "The URI of the subnetwork where Data Ingestion Dataflow is going to be deployed."
+variable "landing_zone_subnets_self_link" {
+  description = "The URI of the subnetwork where Landing Zone Dataflow is going to be deployed."
   type        = string
 }
 
@@ -59,7 +59,7 @@ variable "sdx_project_number" {
   type        = string
 }
 
-variable "non_confidential_project_id" {
+variable "non_confidential_data_project_id" {
   description = "Project with the de-identified dataset and table."
   type        = string
 }

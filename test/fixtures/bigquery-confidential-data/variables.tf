@@ -24,8 +24,8 @@ variable "access_context_manager_policy_id" {
   type        = number
 }
 
-variable "data_ingestion_project_id" {
-  description = "The ID of the project in which the data ingestion resources will be created."
+variable "landing_zone_project_id" {
+  description = "The ID of the project in which the landing zone resources will be created."
   type        = list(string)
 }
 
@@ -39,7 +39,7 @@ variable "confidential_data_project_id" {
   type        = list(string)
 }
 
-variable "datalake_project_id" {
+variable "non_confidential_data_project_id" {
   description = "The project ID of the BigQuery source that has de-identified data."
   type        = list(string)
 }
@@ -69,7 +69,7 @@ variable "java_re_identify_template_gs_path" {
   type        = string
 }
 
-variable "data_ingestion_subnets_self_link" {
+variable "landing_zone_subnets_self_link" {
   description = "The URI of the subnetwork where Dataflow is going to be deployed."
   type        = list(string)
 }

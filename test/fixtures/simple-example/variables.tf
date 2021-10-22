@@ -24,8 +24,8 @@ variable "terraform_service_account" {
   type        = string
 }
 
-variable "data_ingestion_project_id" {
-  description = "The ID of the project in which the data ingestion resources will be created."
+variable "landing_zone_project_id" {
+  description = "The ID of the project in which the landing zone resources will be created."
   type        = list(string)
 }
 
@@ -34,7 +34,7 @@ variable "data_governance_project_id" {
   type        = list(string)
 }
 
-variable "datalake_project_id" {
+variable "non_confidential_data_project_id" {
   description = "The ID of the project in which the Bigquery will be created."
   type        = list(string)
 }

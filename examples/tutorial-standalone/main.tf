@@ -57,8 +57,8 @@ module "secured_data_warehouse" {
   org_id                           = var.org_id
   data_governance_project_id       = module.base_projects.data_governance_project_id
   confidential_data_project_id     = module.base_projects.confidential_data_project_id
-  datalake_project_id              = module.base_projects.datalake_project_id
-  data_ingestion_project_id        = module.base_projects.data_ingestion_project_id
+  non_confidential_data_project_id = module.base_projects.non_confidential_data_project_id
+  landing_zone_project_id          = module.base_projects.landing_zone_project_id
   sdx_project_number               = module.template_project.sdx_project_number
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
@@ -144,20 +144,20 @@ resource "google_artifact_registry_repository_iam_member" "confidential_docker_r
 module "regional_deid" {
   source = "../../modules/dataflow-flex-job"
 
-  project_id              = module.base_projects.data_ingestion_project_id
+  project_id              = module.base_projects.landing_zone_project_id
   name                    = "regional-flex-java-gcs-dlp-bq"
   container_spec_gcs_path = module.template_project.java_de_identify_template_gs_path
   region                  = local.location
   service_account_email   = module.secured_data_warehouse.dataflow_controller_service_account_email
-  subnetwork_self_link    = module.base_projects.data_ingestion_subnets_self_link
-  kms_key_name            = module.secured_data_warehouse.cmek_ingestion_crypto_key
+  subnetwork_self_link    = module.base_projects.landing_zone_subnets_self_link
+  kms_key_name            = module.secured_data_warehouse.cmek_landing_zone_crypto_key
   temp_location           = "gs://${module.secured_data_warehouse.data_ingest_dataflow_bucket_name}/tmp/"
   staging_location        = "gs://${module.secured_data_warehouse.data_ingest_dataflow_bucket_name}/staging/"
   max_workers             = 1
 
   parameters = {
     inputFilePattern       = "gs://${module.secured_data_warehouse.data_ingest_bucket_name}/${local.cc_file_name}"
-    bqProjectId            = module.base_projects.datalake_project_id
+    bqProjectId            = module.base_projects.non_confidential_data_project_id
     datasetName            = local.non_confidential_dataset_id
     batchSize              = 1000
     dlpProjectId           = module.base_projects.data_governance_project_id
@@ -193,7 +193,7 @@ module "regional_reid" {
   staging_location        = "gs://${module.secured_data_warehouse.confidential_data_dataflow_bucket_name}/staging/"
 
   parameters = {
-    inputBigQueryTable        = "${module.base_projects.datalake_project_id}:${local.non_confidential_dataset_id}.${trimsuffix(local.cc_file_name, ".csv")}"
+    inputBigQueryTable        = "${module.base_projects.non_confidential_data_project_id}:${local.non_confidential_dataset_id}.${trimsuffix(local.cc_file_name, ".csv")}"
     outputBigQueryDataset     = local.confidential_dataset_id
     deidentifyTemplateName    = module.re_identification_template.template_full_path
     dlpLocation               = local.location

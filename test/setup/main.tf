@@ -45,7 +45,7 @@ locals {
 # If that is not possible, follow these step to add a new group:
 #  1) Create a new project group and add it to the "project_groups" local,
 #  2) In "test/setup/iam.tf" create a new set of "google_project_iam_member" resources for the new group,
-#  3) In your new test fixture use the projects from the new group like "var.data_ingestion_project_id[3]",
+#  3) In your new test fixture use the projects from the new group like "var.landing_zone_project_id[3]",
 #  4) Update "build/int.cloudbuild.yaml" to create a new sequence of build steps for the new group. The
 #     initial step of the new groups must "waitFor:" the "prepare" step.
 #
@@ -67,15 +67,15 @@ module "iam_projects" {
   source   = "./iam-projects"
   for_each = local.project_groups
 
-  data_ingestion_project_id    = module.base_projects[each.key].data_ingestion_project_id
-  datalake_project_id          = module.base_projects[each.key].datalake_project_id
-  data_governance_project_id   = module.base_projects[each.key].data_governance_project_id
-  confidential_data_project_id = module.base_projects[each.key].confidential_data_project_id
-  service_account_email        = google_service_account.int_ci_service_account.email
+  landing_zone_project_id          = module.base_projects[each.key].landing_zone_project_id
+  non_confidential_data_project_id = module.base_projects[each.key].non_confidential_data_project_id
+  data_governance_project_id       = module.base_projects[each.key].data_governance_project_id
+  confidential_data_project_id     = module.base_projects[each.key].confidential_data_project_id
+  service_account_email            = google_service_account.int_ci_service_account.email
 }
 
 resource "google_service_account" "int_ci_service_account" {
-  project      = module.base_projects[local.first_project_group].data_ingestion_project_id
+  project      = module.base_projects[local.first_project_group].landing_zone_project_id
   account_id   = "ci-account"
   display_name = "ci-account"
 }

@@ -49,8 +49,8 @@ module "bigquery_confidential_data" {
 
   org_id                            = var.org_id
   access_context_manager_policy_id  = var.access_context_manager_policy_id
-  non_confidential_project_id       = var.datalake_project_id[2]
-  data_ingestion_project_id         = var.data_ingestion_project_id[2]
+  non_confidential_data_project_id  = var.non_confidential_data_project_id[2]
+  landing_zone_project_id           = var.landing_zone_project_id[2]
   data_governance_project_id        = var.data_governance_project_id[2]
   confidential_data_project_id      = var.confidential_data_project_id[2]
   sdx_project_number                = var.sdx_project_number
@@ -60,7 +60,7 @@ module "bigquery_confidential_data" {
   terraform_service_account         = var.terraform_service_account
   java_de_identify_template_gs_path = var.java_de_identify_template_gs_path
   java_re_identify_template_gs_path = var.java_re_identify_template_gs_path
-  data_ingestion_subnets_self_link  = var.data_ingestion_subnets_self_link[2]
+  landing_zone_subnets_self_link    = var.landing_zone_subnets_self_link[2]
   confidential_subnets_self_link    = var.confidential_subnets_self_link[2]
   delete_contents_on_destroy        = true
   perimeter_additional_members      = []

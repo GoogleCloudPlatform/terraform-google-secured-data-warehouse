@@ -72,7 +72,7 @@ resource "google_project_iam_member" "governance" {
 resource "google_project_iam_member" "non_confidential" {
   for_each = toset(local.non_conf_project_roles)
 
-  project = var.non_confidential_project_id
+  project = var.non_confidential_data_project_id
   role    = each.value
   member  = "serviceAccount:${module.dataflow_controller_service_account.email}"
 }

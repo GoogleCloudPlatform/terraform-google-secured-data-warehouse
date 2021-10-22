@@ -12,7 +12,7 @@ It uses:
 
 1. A `crypto_key` and `wrapped_key` pair.  Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location where DLP, Storage and BigQuery are going to be created (`local.region`).
 1. The identity deploying the example must have permissions to grant role "roles/artifactregistry.reader" in the docker repo of the Flex templates.
-1. A network and subnetwork in the data ingestion project [configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access).
+1. A network and subnetwork in the landing zone project [configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access).
 
 ### Firewall rules
 
@@ -38,12 +38,12 @@ It uses:
 | confidential\_data\_project\_id | Project where the confidential datasets and tables are created. | `string` | n/a | yes |
 | crypto\_key | The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP. | `string` | n/a | yes |
 | data\_governance\_project\_id | The ID of the project in which the data governance resources will be created. | `string` | n/a | yes |
-| data\_ingestion\_project\_id | The ID of the project in which the data ingestion resources will be created. | `string` | n/a | yes |
-| datalake\_project\_id | The ID of the project in which the Bigquery will be created. | `string` | n/a | yes |
 | de\_identify\_template\_gs\_path | The Google Cloud Storage gs path to the JSON file built flex template that supports DLP de-identification. | `string` | `""` | no |
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `false` | no |
 | external\_flex\_template\_project\_id | Project id of the external project that host the flex Dataflow templates. | `string` | n/a | yes |
+| landing\_zone\_project\_id | The ID of the project in which the landing zone resources will be created. | `string` | n/a | yes |
 | network\_self\_link | The URI of the network where Dataflow is going to be deployed. | `string` | n/a | yes |
+| non\_confidential\_data\_project\_id | The ID of the project in which the Bigquery will be created. | `string` | n/a | yes |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | perimeter\_additional\_members | The list of all members to be added on perimeter access, except the service accounts created by this module. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | n/a | yes |
 | sdx\_project\_number | The Project Number to configure Secure data exchange with egress rule for the flex Dataflow templates. | `string` | n/a | yes |
@@ -55,7 +55,7 @@ It uses:
 
 | Name | Description |
 |------|-------------|
-| bucket\_ingestion\_name | The name of the bucket. |
+| bucket\_landing\_zone\_name | The name of the bucket. |
 | controller\_service\_account | The Service Account email that will be used to identify the VMs in which the jobs are running. |
 | df\_job\_network | The URI of the VPC being created. |
 | df\_job\_subnetwork | The name of the subnetwork used for create Dataflow job. |

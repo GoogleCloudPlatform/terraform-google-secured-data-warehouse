@@ -22,13 +22,13 @@ resource "random_id" "suffix" {
   byte_length = 4
 }
 
-module "data_ingestion" {
+module "landing_zone" {
   source                           = "../.."
   org_id                           = var.org_id
   data_governance_project_id       = var.data_governance_project_id
   confidential_data_project_id     = var.confidential_data_project_id
-  datalake_project_id              = var.datalake_project_id
-  data_ingestion_project_id        = var.data_ingestion_project_id
+  non_confidential_data_project_id = var.non_confidential_data_project_id
+  landing_zone_project_id          = var.landing_zone_project_id
   sdx_project_number               = var.sdx_project_number
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
@@ -45,14 +45,14 @@ module "de_identification_template_example" {
 
   project_id                = var.data_governance_project_id
   terraform_service_account = var.terraform_service_account
-  dataflow_service_account  = module.data_ingestion.dataflow_controller_service_account_email
+  dataflow_service_account  = module.landing_zone.dataflow_controller_service_account_email
   crypto_key                = var.crypto_key
   wrapped_key               = var.wrapped_key
   dlp_location              = var.location
   template_file             = "${path.module}/templates/deidentification.tpl"
 
   depends_on = [
-    module.data_ingestion
+    module.landing_zone
   ]
 }
 
@@ -63,10 +63,10 @@ resource "google_artifact_registry_repository_iam_member" "docker_reader" {
   location   = var.location
   repository = "flex-templates"
   role       = "roles/artifactregistry.reader"
-  member     = "serviceAccount:${module.data_ingestion.dataflow_controller_service_account_email}"
+  member     = "serviceAccount:${module.landing_zone.dataflow_controller_service_account_email}"
 
   depends_on = [
-    module.data_ingestion
+    module.landing_zone
   ]
 }
 
@@ -77,35 +77,35 @@ resource "google_artifact_registry_repository_iam_member" "python_reader" {
   location   = var.location
   repository = "python-modules"
   role       = "roles/artifactregistry.reader"
-  member     = "serviceAccount:${module.data_ingestion.dataflow_controller_service_account_email}"
+  member     = "serviceAccount:${module.landing_zone.dataflow_controller_service_account_email}"
 
   depends_on = [
-    module.data_ingestion
+    module.landing_zone
   ]
 }
 
 module "regional_dlp" {
   source = "../../modules/dataflow-flex-job"
 
-  project_id              = var.data_ingestion_project_id
+  project_id              = var.landing_zone_project_id
   name                    = "regional-flex-python-pubsub-dlp-bq"
   container_spec_gcs_path = var.flex_template_gs_path
   job_language            = "PYTHON"
   region                  = var.location
-  service_account_email   = module.data_ingestion.dataflow_controller_service_account_email
+  service_account_email   = module.landing_zone.dataflow_controller_service_account_email
   subnetwork_self_link    = var.subnetwork_self_link
-  kms_key_name            = module.data_ingestion.cmek_ingestion_crypto_key
-  temp_location           = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/tmp/"
-  staging_location        = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/staging/"
+  kms_key_name            = module.landing_zone.cmek_landing_zone_crypto_key
+  temp_location           = "gs://${module.landing_zone.data_ingest_dataflow_bucket_name}/tmp/"
+  staging_location        = "gs://${module.landing_zone.data_ingest_dataflow_bucket_name}/staging/"
   enable_streaming_engine = false
 
   parameters = {
-    input_topic                    = "projects/${var.data_ingestion_project_id}/topics/${module.data_ingestion.data_ingest_topic_name}"
+    input_topic                    = "projects/${var.landing_zone_project_id}/topics/${module.landing_zone.data_ingest_topic_name}"
     deidentification_template_name = "${module.de_identification_template_example.template_full_path}"
     dlp_location                   = var.location
     dlp_project                    = var.data_governance_project_id
     bq_schema                      = local.bq_schema
-    output_table                   = "${var.datalake_project_id}:${module.data_ingestion.data_ingest_bigquery_dataset.dataset_id}.classical_books"
+    output_table                   = "${var.non_confidential_data_project_id}:${module.landing_zone.data_ingest_bigquery_dataset.dataset_id}.classical_books"
   }
 
   depends_on = [

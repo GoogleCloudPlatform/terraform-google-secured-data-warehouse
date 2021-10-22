@@ -13,12 +13,12 @@
 # limitations under the License.
 
 project_id = attribute('project_id')
-bucket_ingestion_name = attribute('bucket_ingestion_name')
+bucket_landing_zone_name = attribute('bucket_landing_zone_name')
 
 control 'gcp' do
   title 'GCP Resources'
 
-  describe google_storage_bucket(name: bucket_ingestion_name) do
+  describe google_storage_bucket(name: bucket_landing_zone_name) do
     it { should exist }
   end
 
