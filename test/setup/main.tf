@@ -60,6 +60,7 @@ module "base_projects" {
   org_id          = var.org_id
   folder_id       = var.folder_id
   billing_account = var.billing_account
+  region          = "us-east4"
 }
 
 module "iam_projects" {
@@ -70,7 +71,7 @@ module "iam_projects" {
   datalake_project_id          = module.base_projects[each.key].datalake_project_id
   data_governance_project_id   = module.base_projects[each.key].data_governance_project_id
   confidential_data_project_id = module.base_projects[each.key].confidential_data_project_id
-  ci_service_account_email     = google_service_account.int_ci_service_account.email
+  service_account_email        = google_service_account.int_ci_service_account.email
 }
 
 resource "google_service_account" "int_ci_service_account" {
@@ -98,9 +99,9 @@ resource "google_billing_account_iam_member" "tf_billing_user" {
 module "template_project" {
   source = "./template-project"
 
-  org_id                   = var.org_id
-  folder_id                = var.folder_id
-  billing_account          = var.billing_account
-  location                 = "us-east4"
-  ci_service_account_email = google_service_account.int_ci_service_account.email
+  org_id                = var.org_id
+  folder_id             = var.folder_id
+  billing_account       = var.billing_account
+  location              = "us-east4"
+  service_account_email = google_service_account.int_ci_service_account.email
 }

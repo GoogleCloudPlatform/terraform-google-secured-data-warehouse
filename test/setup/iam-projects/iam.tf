@@ -45,7 +45,7 @@ resource "google_project_iam_member" "ci-account-ingestion" {
 
   project = var.data_ingestion_project_id
   role    = each.value
-  member  = "serviceAccount:${var.ci_service_account_email}"
+  member  = "serviceAccount:${var.service_account_email}"
 }
 
 resource "google_project_iam_member" "ci-account-datalake" {
@@ -53,7 +53,7 @@ resource "google_project_iam_member" "ci-account-datalake" {
 
   project = var.datalake_project_id
   role    = each.value
-  member  = "serviceAccount:${var.ci_service_account_email}"
+  member  = "serviceAccount:${var.service_account_email}"
 }
 
 resource "google_project_iam_member" "ci-account-governance" {
@@ -61,7 +61,7 @@ resource "google_project_iam_member" "ci-account-governance" {
 
   project = var.data_governance_project_id
   role    = each.value
-  member  = "serviceAccount:${var.ci_service_account_email}"
+  member  = "serviceAccount:${var.service_account_email}"
 }
 
 resource "google_project_iam_member" "ci-account-confidential" {
@@ -69,5 +69,5 @@ resource "google_project_iam_member" "ci-account-confidential" {
 
   project = var.confidential_data_project_id
   role    = each.value
-  member  = "serviceAccount:${var.ci_service_account_email}"
+  member  = "serviceAccount:${var.service_account_email}"
 }

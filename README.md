@@ -112,8 +112,8 @@ Install the following dependencies:
 
 - [Google Cloud SDK](https://cloud.google.com/sdk/install) version 357.0.0 or later
 - [Terraform](https://www.terraform.io/downloads.html) version 0.13.7 or later
-- [Terraform Provider for GCP](https://github.com/terraform-providers/terraform-provider-google) version 3.67 or later
-- [Terraform Provider for GCP Beta](https://github.com/terraform-providers/terraform-provider-google-beta) version 3.67 or later
+- [Terraform Provider for GCP](https://github.com/terraform-providers/terraform-provider-google) version 3.77 or later
+- [Terraform Provider for GCP Beta](https://github.com/terraform-providers/terraform-provider-google-beta) version 3.77 or later
 
 ### Service Account
 
@@ -152,8 +152,8 @@ with the following IAM roles:
   - Organization Shared VPC Admin: `roles/compute.xpnAdmin`
   - VPC Access Admin: `roles/vpcaccess.admin`
 
-You can use the [Project Factory module][project-factory-module] and the
-[IAM module][iam-module] in combination to provision a
+You can use the [Project Factory module](https://github.com/terraform-google-modules/terraform-google-project-factory) and the
+[IAM module](https://github.com/terraform-google-modules/terraform-google-iam) in combination to provision a
 service account with the necessary roles applied.
 
 The user using this service account must have the necessary roles to [impersonate](https://cloud.google.com/iam/docs/impersonating-service-accounts) the service account.
@@ -226,7 +226,7 @@ resources of this module:
 - Service Usage API:`serviceusage.googleapis.com`
 - Google Cloud Storage JSON API:`storage-api.googleapis.com`
 
-You can use he [Project Factory module][project-factory-module] to
+You can use he [Project Factory module](https://github.com/terraform-google-modules/terraform-google-project-factory) to
 provision the projects with the necessary APIs enabled.
 
 ## Contributing

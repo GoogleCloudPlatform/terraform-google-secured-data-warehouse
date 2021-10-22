@@ -73,7 +73,7 @@ resource "google_project_iam_member" "int_permission_artifact_registry_test" {
 
   project = module.external_flex_template_project.project_id
   role    = each.value
-  member  = "serviceAccount:${var.ci_service_account_email}"
+  member  = "serviceAccount:${var.service_account_email}"
 }
 
 
@@ -90,7 +90,7 @@ resource "null_resource" "java_de_identification_flex_template" {
 
   triggers = {
     project_id                = local.project_id
-    terraform_service_account = var.ci_service_account_email
+    terraform_service_account = var.service_account_email
     template_image_tag        = local.java_de_identify_flex_template_image_tag
     template_gs_path          = local.java_de_identify_template_gs_path
   }
@@ -116,7 +116,7 @@ resource "null_resource" "java_re_identification_flex_template" {
 
   triggers = {
     project_id                = local.project_id
-    terraform_service_account = var.ci_service_account_email
+    terraform_service_account = var.service_account_email
     template_image_tag        = local.java_re_identify_flex_template_image_tag
     template_gs_path          = local.java_re_identify_template_gs_path
   }
@@ -142,7 +142,7 @@ resource "null_resource" "python_de_identification_flex_template" {
 
   triggers = {
     project_id                = local.project_id
-    terraform_service_account = var.ci_service_account_email
+    terraform_service_account = var.service_account_email
     template_image_tag        = local.python_de_identify_flex_template_image_tag
     template_gs_path          = local.python_de_identify_template_gs_path
   }
@@ -168,7 +168,7 @@ resource "null_resource" "python_re_identification_flex_template" {
 
   triggers = {
     project_id                = local.project_id
-    terraform_service_account = var.ci_service_account_email
+    terraform_service_account = var.service_account_email
     template_image_tag        = local.python_re_identify_flex_template_image_tag
     template_gs_path          = local.python_re_identify_template_gs_path
   }
@@ -196,7 +196,7 @@ resource "null_resource" "upload_modules" {
     project_id                = local.project_id
     repository_id             = local.python_repository_id
     location                  = local.location
-    terraform_service_account = var.ci_service_account_email
+    terraform_service_account = var.service_account_email
   }
 
   provisioner "local-exec" {

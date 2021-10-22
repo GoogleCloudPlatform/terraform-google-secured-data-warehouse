@@ -18,7 +18,7 @@ module "dwh_networking_ingestion" {
   source = "../../../modules/dwh-networking"
 
   project_id = module.data_ingestion_project.project_id
-  region     = "us-east4"
+  region     = var.region
   vpc_name   = "ingestion"
   subnet_ip  = "10.0.32.0/21"
 }
@@ -27,7 +27,7 @@ module "dwh_networking_confidential" {
   source = "../../../modules/dwh-networking"
 
   project_id = module.confidential_data_project.project_id
-  region     = "us-east4"
+  region     = var.region
   vpc_name   = "reidentify"
   subnet_ip  = "10.0.32.0/21"
 }

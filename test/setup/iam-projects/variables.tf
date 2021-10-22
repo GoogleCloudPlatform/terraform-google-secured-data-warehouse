@@ -34,7 +34,7 @@ variable "confidential_data_project_id" {
   type        = string
 }
 
-variable "ci_service_account_email" {
+variable "service_account_email" {
   description = "Terraform service account."
   type        = string
 }

@@ -71,7 +71,8 @@ module "secured_data_warehouse" {
   perimeter_additional_members     = var.perimeter_additional_members
 
   depends_on = [
-    module.base_projects
+    module.base_projects,
+    module.iam_projects
   ]
 }
 
