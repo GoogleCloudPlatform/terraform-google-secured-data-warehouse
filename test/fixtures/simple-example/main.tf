@@ -21,7 +21,7 @@ module "simple_example" {
   data_governance_project_id       = var.data_governance_project_id[1]
   confidential_data_project_id     = var.confidential_data_project_id[1]
   non_confidential_data_project_id = var.non_confidential_data_project_id[1]
-  data_ingestion_project_id        = var.data_ingestion_project_id[1]
+  landing_zone_project_id          = var.landing_zone_project_id[1]
   sdx_project_number               = var.sdx_project_number
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id

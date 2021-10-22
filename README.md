@@ -28,7 +28,7 @@ module "secured_data_warehouse" {
   data_governance_project_id       = DATA_GOVERNANCE_PROJECT_ID
   confidential_data_project_id     = CONFIDENTIAL_DATA_PROJECT_ID
   non_confidential_data_project_id = NON_CONFIDENTIAL_DATA_PROJECT_ID
-  data_ingestion_project_id        = DATA_INGESTION_PROJECT_ID
+  landing_zone_project_id        = DATA_INGESTION_PROJECT_ID
   sdx_project_number               = EXTERNAL_TEMPLATE_PROJECT_NUMBER
   terraform_service_account        = TERRAFORM_SERVICE_ACCOUNT
   access_context_manager_policy_id = ACCESS_CONTEXT_MANAGER_POLICY_ID
@@ -57,14 +57,14 @@ module "secured_data_warehouse" {
 | confidential\_dataset\_default\_table\_expiration\_ms | TTL of tables using the dataset in MS. The default value is null. | `number` | `null` | no |
 | confidential\_dataset\_id | Unique ID for the confidential dataset being provisioned. | `string` | `"secured_dataset"` | no |
 | data\_governance\_project\_id | The ID of the project in which the data governance resources will be created. | `string` | n/a | yes |
-| data\_ingestion\_dataflow\_deployer\_identities | List of members in the standard GCP form: user:{email}, serviceAccount:{email} that will deploy Dataflow jobs in the Data Ingestion project. These identities will be added to the VPC-SC secure data exchange egress rules. | `list(string)` | `[]` | no |
-| data\_ingestion\_project\_id | The ID of the project in which the data ingestion resources will be created | `string` | n/a | yes |
 | dataset\_default\_table\_expiration\_ms | TTL of tables using the dataset in MS. The default value is null. | `number` | `null` | no |
 | dataset\_description | Dataset description. | `string` | `"Ingest dataset"` | no |
 | dataset\_id | Unique ID for the dataset being provisioned. | `string` | n/a | yes |
 | dataset\_name | Friendly name for the dataset being provisioned. | `string` | `"Ingest dataset"` | no |
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `false` | no |
 | key\_rotation\_period\_seconds | Rotation period for keys. The default value is 30 days. | `string` | `"2592000s"` | no |
+| landing\_zone\_dataflow\_deployer\_identities | List of members in the standard GCP form: user:{email}, serviceAccount:{email} that will deploy Dataflow jobs in the Landing Zone project. These identities will be added to the VPC-SC secure data exchange egress rules. | `list(string)` | `[]` | no |
+| landing\_zone\_project\_id | The ID of the project in which the landing zone resources will be created | `string` | n/a | yes |
 | location | The location for the KMS Customer Managed Encryption Keys, Bucket, and Bigquery dataset. This location can be a multiregion, if it is empty the region value will be used. | `string` | `""` | no |
 | non\_confidential\_data\_project\_id | The ID of the project in which the Bigquery will be created. | `string` | n/a | yes |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
@@ -82,7 +82,7 @@ module "secured_data_warehouse" {
 |------|-------------|
 | cmek\_bigquery\_crypto\_key | The Customer Managed Crypto Key for the BigQuery service. |
 | cmek\_confidential\_bigquery\_crypto\_key | The Customer Managed Crypto Key for the confidential BigQuery service. |
-| cmek\_ingestion\_crypto\_key | The Customer Managed Crypto Key for the Ingestion crypto boundary. |
+| cmek\_landing\_zone\_crypto\_key | The Customer Managed Crypto Key for the landing zone crypto boundary. |
 | cmek\_reidentification\_crypto\_key | The Customer Managed Crypto Key for the Confidential crypto boundary. |
 | confidential\_access\_level\_name | Access context manager access level name. |
 | confidential\_data\_dataflow\_bucket\_name | The name of the bucket created for dataflow in the confidential data pipeline. |
@@ -94,11 +94,11 @@ module "secured_data_warehouse" {
 | data\_ingest\_bucket\_name | The name of the bucket created for data ingest pipeline. |
 | data\_ingest\_dataflow\_bucket\_name | The name of the bucket created for dataflow in the data ingest pipeline. |
 | data\_ingest\_topic\_name | The topic created for data ingest pipeline. |
-| data\_ingestion\_access\_level\_name | Access context manager access level name. |
-| data\_ingestion\_service\_perimeter\_name | Access context manager service perimeter name. |
 | dataflow\_controller\_service\_account\_email | The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
-| pubsub\_writer\_service\_account\_email | The PubSub writer service account email. Should be used to write data to the PubSub topics the ingestion pipeline reads from. |
-| storage\_writer\_service\_account\_email | The Storage writer service account email. Should be used to write data to the buckets the ingestion pipeline reads from. |
+| landing\_zone\_access\_level\_name | Access context manager access level name. |
+| landing\_zone\_service\_perimeter\_name | Access context manager service perimeter name. |
+| pubsub\_writer\_service\_account\_email | The PubSub writer service account email. Should be used to write data to the PubSub topics the landing zone pipeline reads from. |
+| storage\_writer\_service\_account\_email | The Storage writer service account email. Should be used to write data to the buckets the landing zone pipeline reads from. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
@@ -163,7 +163,7 @@ The user using this service account must have the necessary roles to [impersonat
 Create four projects with the following APIs enabled to host the
 resources of this module:
 
-#### Data ingestion project
+#### Landing zone project
 
 - Access Context Manager API: `accesscontextmanager.googleapis.com`
 - App Engine Admin API:`appengine.googleapis.com`

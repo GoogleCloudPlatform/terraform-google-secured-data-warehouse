@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-variable "data_ingestion_project_id" {
-  description = "Data ingestion project ID."
+variable "landing_zone_project_id" {
+  description = "Landing zone project ID."
   type        = string
 }
 

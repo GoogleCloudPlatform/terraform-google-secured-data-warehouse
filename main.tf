@@ -20,7 +20,7 @@ locals {
   cmek_location = local.location == "eu" ? "europe" : local.location
 
   projects_ids = {
-    ingestion        = var.data_ingestion_project_id
+    landing_zone     = var.landing_zone_project_id
     governance       = var.data_governance_project_id
     non_confidential = var.non_confidential_data_project_id
     confidential     = var.confidential_data_project_id
@@ -31,7 +31,7 @@ module "data_governance" {
   source = "./modules/data-governance"
 
   terraform_service_account        = var.terraform_service_account
-  data_ingestion_project_id        = var.data_ingestion_project_id
+  landing_zone_project_id          = var.landing_zone_project_id
   data_governance_project_id       = var.data_governance_project_id
   confidential_data_project_id     = var.confidential_data_project_id
   non_confidential_data_project_id = var.non_confidential_data_project_id
@@ -41,7 +41,7 @@ module "data_governance" {
   delete_contents_on_destroy       = var.delete_contents_on_destroy
 }
 
-module "data_ingestion" {
+module "landing_zone" {
   source = "./modules/base-data-ingestion"
 
   dataset_default_table_expiration_ms = var.dataset_default_table_expiration_ms
@@ -53,14 +53,14 @@ module "data_ingestion" {
   dataset_name                        = var.dataset_name
   dataset_description                 = var.dataset_description
   org_id                              = var.org_id
-  data_ingestion_project_id           = var.data_ingestion_project_id
+  landing_zone_project_id             = var.landing_zone_project_id
   non_confidential_data_project_id    = var.non_confidential_data_project_id
   data_governance_project_id          = var.data_governance_project_id
   terraform_service_account           = var.terraform_service_account
   region                              = local.region
   dataset_location                    = local.location
   bucket_location                     = local.location
-  ingestion_encryption_key            = module.data_governance.cmek_ingestion_crypto_key
+  landing_zone_encryption_key         = module.data_governance.cmek_landing_zone_crypto_key
   bigquery_encryption_key             = module.data_governance.cmek_bigquery_crypto_key
 }
 
@@ -87,7 +87,7 @@ module "org_policies" {
   trusted_subnetworks = var.trusted_subnetworks
 
   depends_on = [
-    module.data_ingestion,
+    module.landing_zone,
     module.bigquery_confidential_data
   ]
 }

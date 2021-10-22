@@ -11,7 +11,7 @@ It uses:
 ## Requirements
 
 1. A project previously created, with [Google App Engine Application Enabled](https://cloud.google.com/scheduler/docs/quickstart#create_a_project_with_an_app_engine_app).
-1 A network and subnetwork in the data ingestion project [configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access).
+1 A network and subnetwork in the landing zone project [configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access).
 
 ### Firewall rules
 
@@ -36,8 +36,8 @@ It uses:
 | access\_context\_manager\_policy\_id | The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format="value(name)"`. | `number` | n/a | yes |
 | confidential\_data\_project\_id | Project where the confidential datasets and tables are created. | `string` | n/a | yes |
 | data\_governance\_project\_id | The ID of the project in which the data governance resources will be created. | `string` | n/a | yes |
-| data\_ingestion\_project\_id | The ID of the project in which the data ingestion resources will be created. | `string` | n/a | yes |
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `false` | no |
+| landing\_zone\_project\_id | The ID of the project in which the landing zone resources will be created. | `string` | n/a | yes |
 | network\_self\_link | The URI of the network where Dataflow is going to be deployed. | `string` | n/a | yes |
 | non\_confidential\_data\_project\_id | The ID of the project in which the Bigquery will be created. | `string` | n/a | yes |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
@@ -55,7 +55,7 @@ It uses:
 | df\_job\_network | The URI of the VPC being created. |
 | df\_job\_region | The region of the newly created Dataflow job. |
 | df\_job\_subnetwork | The name of the subnetwork used for create Dataflow job. |
-| project\_id | The data ingestion project's ID. |
+| project\_id | The landing zone project's ID. |
 | scheduler\_id | Cloud Scheduler Job id created. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

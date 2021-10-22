@@ -26,7 +26,7 @@ module "base_projects" {
 module "iam_projects" {
   source = "../../test//setup/iam-projects"
 
-  data_ingestion_project_id        = module.base_projects.data_ingestion_project_id
+  landing_zone_project_id          = module.base_projects.landing_zone_project_id
   non_confidential_data_project_id = module.base_projects.non_confidential_data_project_id
   data_governance_project_id       = module.base_projects.data_governance_project_id
   confidential_data_project_id     = module.base_projects.confidential_data_project_id

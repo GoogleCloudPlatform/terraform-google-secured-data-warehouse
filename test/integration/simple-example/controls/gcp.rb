@@ -24,11 +24,11 @@ organization_policy_name = attribute('organization_policy_name')
 
 cmek_location = 'us-east4'
 
-cmek_ingestion_crypto_key = attribute('cmek_ingestion_crypto_key')
-cmek_ingestion_crypto_key_split = cmek_ingestion_crypto_key.split('/')
-cmek_keyring_name = cmek_ingestion_crypto_key_split[5]
+cmek_landing_zone_crypto_key = attribute('cmek_landing_zone_crypto_key')
+cmek_landing_zone_crypto_key_split = cmek_landing_zone_crypto_key.split('/')
+cmek_keyring_name = cmek_landing_zone_crypto_key_split[5]
 
-cmek_ingestion_crypto_key_name = cmek_ingestion_crypto_key_split[-1]
+cmek_landing_zone_crypto_key_name = cmek_landing_zone_crypto_key_split[-1]
 cmek_bigquery_crypto_key_name = attribute('cmek_bigquery_crypto_key').split('/')[-1]
 cmek_reidentification_crypto_key_name = attribute('cmek_reidentification_crypto_key').split('/')[-1]
 cmek_confidential_bigquery_crypto_key_name = attribute('cmek_confidential_bigquery_crypto_key').split('/')[-1]
@@ -69,10 +69,10 @@ control 'gcp' do
     project: data_governance_project_id,
     location: cmek_location,
     key_ring_name: cmek_keyring_name,
-    name: cmek_ingestion_crypto_key_name
+    name: cmek_landing_zone_crypto_key_name
   ) do
     it { should exist }
-    its('crypto_key_name') { should cmp cmek_ingestion_crypto_key_name }
+    its('crypto_key_name') { should cmp cmek_landing_zone_crypto_key_name }
     its('primary_state') { should eq 'ENABLED' }
     its('purpose') { should eq 'ENCRYPT_DECRYPT' }
   end
@@ -81,7 +81,7 @@ control 'gcp' do
     project: data_governance_project_id,
     location: cmek_location,
     key_ring_name: cmek_keyring_name,
-    crypto_key_name: cmek_ingestion_crypto_key_name,
+    crypto_key_name: cmek_landing_zone_crypto_key_name,
     role: 'roles/cloudkms.cryptoKeyDecrypter'
   ) do
     it { should exist }
@@ -91,7 +91,7 @@ control 'gcp' do
     project: data_governance_project_id,
     location: cmek_location,
     key_ring_name: cmek_keyring_name,
-    crypto_key_name: cmek_ingestion_crypto_key_name,
+    crypto_key_name: cmek_landing_zone_crypto_key_name,
     role: 'roles/cloudkms.cryptoKeyEncrypter'
   ) do
     it { should exist }

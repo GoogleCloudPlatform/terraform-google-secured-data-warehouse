@@ -17,7 +17,7 @@
 
 output "project_id" {
   description = "The project_id used to create infra."
-  value       = var.data_ingestion_project_id[1]
+  value       = var.landing_zone_project_id[1]
 }
 
 output "data_governance_project_id" {
@@ -72,17 +72,17 @@ output "data_ingest_bigquery_dataset" {
 
 output "access_level_name" {
   description = "Access context manager access level name."
-  value       = module.simple_example.data_ingestion_access_level_name
+  value       = module.simple_example.landing_zone_access_level_name
 }
 
 output "service_perimeter_name" {
   description = "Access context manager service perimeter name."
-  value       = module.simple_example.data_ingestion_service_perimeter_name
+  value       = module.simple_example.landing_zone_service_perimeter_name
 }
 
-output "cmek_ingestion_crypto_key" {
-  description = "The Customer Managed Crypto Key for the Ingestion crypto boundary."
-  value       = module.simple_example.cmek_ingestion_crypto_key
+output "cmek_landing_zone_crypto_key" {
+  description = "The Customer Managed Crypto Key for the landing zone crypto boundary."
+  value       = module.simple_example.cmek_landing_zone_crypto_key
 }
 
 output "cmek_bigquery_crypto_key" {

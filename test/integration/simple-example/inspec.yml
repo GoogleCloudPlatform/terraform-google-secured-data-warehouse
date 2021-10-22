@@ -57,7 +57,7 @@ attributes:
   - name: cmek_location
     required: true
     type: string
-  - name: cmek_ingestion_crypto_key
+  - name: cmek_landing_zone_crypto_key
     required: true
     type: string
   - name: cmek_bigquery_crypto_key

@@ -20,12 +20,12 @@ output "dataflow_controller_service_account_email" {
 }
 
 output "storage_writer_service_account_email" {
-  description = "The Storage writer service account email. Should be used to write data to the buckets the ingestion pipeline reads from."
+  description = "The Storage writer service account email. Should be used to write data to the buckets the landing zone pipeline reads from."
   value       = google_service_account.storage_writer_service_account.email
 }
 
 output "pubsub_writer_service_account_email" {
-  description = "The PubSub writer service account email. Should be used to write data to the PubSub topics the ingestion pipeline reads from."
+  description = "The PubSub writer service account email. Should be used to write data to the PubSub topics the landing zone pipeline reads from."
   value       = google_service_account.pubsub_writer_service_account.email
 }
 

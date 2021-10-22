@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-output "data_ingestion_project_id" {
+output "landing_zone_project_id" {
   description = "(optional) describe your variable"
-  value       = module.data_ingestion_project.project_id
+  value       = module.landing_zone_project.project_id
 }
 
 output "non_confidential_data_project_id" {
@@ -34,19 +34,19 @@ output "confidential_data_project_id" {
   value       = module.confidential_data_project.project_id
 }
 
-output "data_ingestion_network_name" {
-  description = "The name of the data ingestion VPC being created."
-  value       = module.dwh_networking_ingestion.network_name
+output "landing_zone_network_name" {
+  description = "The name of the landing zone VPC being created."
+  value       = module.dwh_networking_landing_zone.network_name
 }
 
-output "data_ingestion_network_self_link" {
-  description = "The URI of the data ingestion VPC being created."
-  value       = module.dwh_networking_ingestion.network_self_link
+output "landing_zone_network_self_link" {
+  description = "The URI of the landing zone VPC being created."
+  value       = module.dwh_networking_landing_zone.network_self_link
 }
 
-output "data_ingestion_subnets_self_link" {
-  description = "The self-links of data ingestion subnets being created."
-  value       = module.dwh_networking_ingestion.subnets_self_links[0]
+output "landing_zone_subnets_self_link" {
+  description = "The self-links of landing zone subnets being created."
+  value       = module.dwh_networking_landing_zone.subnets_self_links[0]
 }
 
 output "confidential_network_name" {

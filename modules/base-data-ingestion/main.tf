@@ -23,15 +23,15 @@ module "data_ingest_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 2.0"
 
-  project_id      = var.data_ingestion_project_id
-  name            = "bkt-${var.data_ingestion_project_id}-${var.bucket_name}-${random_id.suffix.hex}"
+  project_id      = var.landing_zone_project_id
+  name            = "bkt-${var.landing_zone_project_id}-${var.bucket_name}-${random_id.suffix.hex}"
   location        = var.bucket_location
   storage_class   = var.bucket_class
   lifecycle_rules = var.bucket_lifecycle_rules
   force_destroy   = var.delete_contents_on_destroy
 
   encryption = {
-    default_kms_key_name = var.ingestion_encryption_key
+    default_kms_key_name = var.landing_zone_encryption_key
   }
 
   labels = {
@@ -43,15 +43,15 @@ module "dataflow_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 2.0"
 
-  project_id    = var.data_ingestion_project_id
-  name          = "bkt-${var.data_ingestion_project_id}-tmp-dataflow-${random_id.suffix.hex}"
+  project_id    = var.landing_zone_project_id
+  name          = "bkt-${var.landing_zone_project_id}-tmp-dataflow-${random_id.suffix.hex}"
   location      = var.bucket_location
   storage_class = "STANDARD"
   force_destroy = var.delete_contents_on_destroy
 
 
   encryption = {
-    default_kms_key_name = var.ingestion_encryption_key
+    default_kms_key_name = var.landing_zone_encryption_key
   }
 
   labels = {
@@ -65,9 +65,9 @@ module "data_ingest_topic" {
   source  = "terraform-google-modules/pubsub/google"
   version = "~> 2.0"
 
-  project_id             = var.data_ingestion_project_id
+  project_id             = var.landing_zone_project_id
   topic                  = "tpc-data-ingest-${random_id.suffix.hex}"
-  topic_kms_key_name     = var.ingestion_encryption_key
+  topic_kms_key_name     = var.landing_zone_encryption_key
   message_storage_policy = { allowed_persistence_regions : [var.region] }
 }
 
