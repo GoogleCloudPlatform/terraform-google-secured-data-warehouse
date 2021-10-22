@@ -11,18 +11,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-apiVersion: constraints.gatekeeper.sh/v1alpha1 # Copyright 2019 Google LLC
-kind: GCPBigQueryDatasetWorldReadableConstraintV1
+#
+apiVersion: constraints.gatekeeper.sh/v1alpha1
+kind: GCPCMEKSettingsConstraintV1
 metadata:
-  name: require_bq_table_iam
+  name: cmek_rotation
   annotations:
-    # This constraint is not certified by CIS.
-    bundles.validator.forsetisecurity.org/cis-v1.1: 5.03
-    bundles.validator.forsetisecurity.org/forseti-security: v2.26.0
-    bundles.validator.forsetisecurity.org/scorecard-v1: security
-    bundles.validator.forsetisecurity.org/healthcare-baseline-v1: security
-    description: "Checks if BigQuery datasets are publicly readable or allAuthenticatedUsers."
+    description: Checks multiple CMEK key rotation with value 30 days
 spec:
   severity: high
-  parameters: {}
+  match:
+    target: # {"$ref":"#/definitions/io.k8s.cli.setters.target_prj_kms"}
+    - "organizations/**"
+  parameters:
+    # Valid time units are  "ns", "us", "ms", "s", "m", "h"
+    rotation_period: 720h
