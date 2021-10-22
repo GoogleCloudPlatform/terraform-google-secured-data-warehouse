@@ -29,7 +29,7 @@ locals {
     "roles/dlp.admin"
   ]
 
-  datalake_project_roles = [
+  non_confidential_data_project_roles = [
     "roles/bigquery.admin",
     "roles/serviceusage.serviceUsageConsumer"
   ]
@@ -61,10 +61,10 @@ resource "google_project_iam_member" "governance" {
   member  = "serviceAccount:${module.dataflow_controller_service_account.email}"
 }
 
-resource "google_project_iam_member" "datalake" {
-  for_each = toset(local.datalake_project_roles)
+resource "google_project_iam_member" "non_confidential" {
+  for_each = toset(local.non_confidential_data_project_roles)
 
-  project = var.datalake_project_id
+  project = var.non_confidential_data_project_id
   role    = each.value
   member  = "serviceAccount:${module.dataflow_controller_service_account.email}"
 }

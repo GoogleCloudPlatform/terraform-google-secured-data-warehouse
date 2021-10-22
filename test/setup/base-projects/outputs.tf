@@ -19,9 +19,9 @@ output "data_ingestion_project_id" {
   value       = module.data_ingestion_project.project_id
 }
 
-output "datalake_project_id" {
+output "non_confidential_data_project_id" {
   description = "(optional) describe your variable"
-  value       = module.datalake_project.project_id
+  value       = module.non_confidential_data_project.project_id
 }
 
 output "data_governance_project_id" {

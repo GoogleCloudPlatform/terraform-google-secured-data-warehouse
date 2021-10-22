@@ -39,8 +39,8 @@ data "google_project" "governance_project" {
   project_id = var.data_governance_project_id
 }
 
-data "google_project" "datalake_project" {
-  project_id = var.datalake_project_id
+data "google_project" "non_confidential_data_project" {
+  project_id = var.non_confidential_data_project_id
 }
 
 data "google_project" "confidential_project" {
@@ -71,7 +71,7 @@ module "data_ingestion_vpc_sc" {
   access_context_manager_policy_id = var.access_context_manager_policy_id
   common_name                      = "data_ingestion"
   common_suffix                    = random_id.suffix.hex
-  resources                        = [data.google_project.ingestion_project.number, data.google_project.datalake_project.number]
+  resources                        = [data.google_project.ingestion_project.number, data.google_project.non_confidential_data_project.number]
   perimeter_members                = local.perimeter_members_ingestion
   restricted_services = [
     "artifactregistry.googleapis.com",
@@ -214,7 +214,7 @@ module "vpc_sc_bridge_ingestion_governance" {
   resources = [
     data.google_project.ingestion_project.number,
     data.google_project.governance_project.number,
-    data.google_project.datalake_project.number
+    data.google_project.non_confidential_data_project.number
   ]
 
   depends_on = [
@@ -254,7 +254,7 @@ module "vpc_sc_bridge_confidential_ingestion" {
 
   resources = [
     data.google_project.confidential_project.number,
-    data.google_project.datalake_project.number
+    data.google_project.non_confidential_data_project.number
   ]
 
   depends_on = [

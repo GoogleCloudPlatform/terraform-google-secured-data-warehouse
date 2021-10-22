@@ -73,8 +73,8 @@ data "google_project" "governance_project" {
   project_id = var.data_governance_project_id
 }
 
-data "google_project" "datalake_project" {
-  project_id = var.datalake_project_id
+data "google_project" "non_confidential_data_project" {
+  project_id = var.non_confidential_data_project_id
 }
 
 data "google_storage_project_service_account" "gcs_account" {
@@ -82,7 +82,7 @@ data "google_storage_project_service_account" "gcs_account" {
 }
 
 data "google_bigquery_default_service_account" "bigquery_sa" {
-  project = var.datalake_project_id
+  project = var.non_confidential_data_project_id
 }
 
 resource "google_project_service_identity" "pubsub_sa" {

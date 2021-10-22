@@ -26,11 +26,11 @@ module "base_projects" {
 module "iam_projects" {
   source = "../../test//setup/iam-projects"
 
-  data_ingestion_project_id    = module.base_projects.data_ingestion_project_id
-  datalake_project_id          = module.base_projects.datalake_project_id
-  data_governance_project_id   = module.base_projects.data_governance_project_id
-  confidential_data_project_id = module.base_projects.confidential_data_project_id
-  service_account_email        = var.terraform_service_account
+  data_ingestion_project_id        = module.base_projects.data_ingestion_project_id
+  non_confidential_data_project_id = module.base_projects.non_confidential_data_project_id
+  data_governance_project_id       = module.base_projects.data_governance_project_id
+  confidential_data_project_id     = module.base_projects.confidential_data_project_id
+  service_account_email            = var.terraform_service_account
 }
 
 module "template_project" {

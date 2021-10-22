@@ -36,7 +36,7 @@ variable "confidential_data_project_id" {
   type        = string
 }
 
-variable "non_confidential_project_id" {
+variable "non_confidential_data_project_id" {
   description = "Project with the de-identified dataset and table."
   type        = string
 }

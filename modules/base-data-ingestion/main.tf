@@ -76,7 +76,7 @@ module "bigquery_dataset" {
   source  = "terraform-google-modules/bigquery/google"
   version = "~> 5.2.0"
 
-  project_id                  = var.datalake_project_id
+  project_id                  = var.non_confidential_data_project_id
   dataset_id                  = var.dataset_id
   dataset_name                = var.dataset_name
   description                 = var.dataset_description

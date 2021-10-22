@@ -19,8 +19,8 @@ variable "data_ingestion_project_id" {
   type        = string
 }
 
-variable "datalake_project_id" {
-  description = "Datalake project ID."
+variable "non_confidential_data_project_id" {
+  description = "Non confidential data project ID."
   type        = string
 }
 

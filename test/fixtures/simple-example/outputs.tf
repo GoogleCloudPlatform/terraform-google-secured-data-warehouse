@@ -25,9 +25,9 @@ output "data_governance_project_id" {
   value       = var.data_governance_project_id[1]
 }
 
-output "datalake_project_id" {
-  description = "The datalake_project_id used to create bigquery."
-  value       = var.datalake_project_id[1]
+output "non_confidential_data_project_id" {
+  description = "The non_confidential_data_project_id used to create bigquery."
+  value       = var.non_confidential_data_project_id[1]
 }
 
 output "org_id" {

@@ -33,7 +33,7 @@ locals {
       dataflow_service_account            = module.data_ingestion.dataflow_controller_service_account_email,
       subnetwork_self_link                = var.subnetwork_self_link,
       inputFilePattern                    = "gs://${module.data_ingestion.data_ingest_bucket_name}/cc_records.csv",
-      bigquery_project_id                 = var.datalake_project_id,
+      bigquery_project_id                 = var.non_confidential_data_project_id,
       dataset_id                          = local.dataset_id,
       table_name                          = local.table_name,
       javascriptTextTransformFunctionName = "transform",
@@ -49,7 +49,7 @@ module "data_ingestion" {
   org_id                           = var.org_id
   data_governance_project_id       = var.data_governance_project_id
   confidential_data_project_id     = var.confidential_data_project_id
-  datalake_project_id              = var.datalake_project_id
+  non_confidential_data_project_id = var.non_confidential_data_project_id
   data_ingestion_project_id        = var.data_ingestion_project_id
   sdx_project_number               = var.sdx_project_number
   terraform_service_account        = var.terraform_service_account

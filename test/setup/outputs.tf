@@ -22,8 +22,8 @@ output "data_governance_project_id" {
   value = values(module.base_projects)[*].data_governance_project_id
 }
 
-output "datalake_project_id" {
-  value = values(module.base_projects)[*].datalake_project_id
+output "non_confidential_data_project_id" {
+  value = values(module.base_projects)[*].non_confidential_data_project_id
 }
 
 output "confidential_data_project_id" {

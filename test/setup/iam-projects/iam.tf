@@ -48,10 +48,10 @@ resource "google_project_iam_member" "ci-account-ingestion" {
   member  = "serviceAccount:${var.service_account_email}"
 }
 
-resource "google_project_iam_member" "ci-account-datalake" {
+resource "google_project_iam_member" "ci-account-non-confidential" {
   for_each = toset(local.int_proj_required_roles)
 
-  project = var.datalake_project_id
+  project = var.non_confidential_data_project_id
   role    = each.value
   member  = "serviceAccount:${var.service_account_email}"
 }

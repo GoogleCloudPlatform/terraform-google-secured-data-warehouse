@@ -24,7 +24,7 @@ attributes:
   - name: data_governance_project_id
     required: true
     type: string
-  - name: datalake_project_id
+  - name: non_confidential_data_project_id
     required: true
     type: string
   - name: access_level_name

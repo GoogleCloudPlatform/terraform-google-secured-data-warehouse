@@ -36,7 +36,7 @@ module "secured_data_warehouse" {
   org_id                           = var.org_id
   data_governance_project_id       = var.data_governance_project_id
   confidential_data_project_id     = var.confidential_data_project_id
-  datalake_project_id              = var.non_confidential_project_id
+  non_confidential_data_project_id = var.non_confidential_data_project_id
   data_ingestion_project_id        = var.data_ingestion_project_id
   sdx_project_number               = var.sdx_project_number
   terraform_service_account        = var.terraform_service_account
@@ -130,7 +130,7 @@ module "regional_deid" {
 
   parameters = {
     inputFilePattern       = "gs://${module.secured_data_warehouse.data_ingest_bucket_name}/${local.cc_file_name}"
-    bqProjectId            = var.non_confidential_project_id
+    bqProjectId            = var.non_confidential_data_project_id
     datasetName            = local.non_confidential_dataset_id
     batchSize              = 1000
     dlpProjectId           = var.data_governance_project_id
@@ -166,7 +166,7 @@ module "regional_reid" {
   staging_location        = "gs://${module.secured_data_warehouse.confidential_data_dataflow_bucket_name}/staging/"
 
   parameters = {
-    inputBigQueryTable        = "${var.non_confidential_project_id}:${local.non_confidential_dataset_id}.${trimsuffix(local.cc_file_name, ".csv")}"
+    inputBigQueryTable        = "${var.non_confidential_data_project_id}:${local.non_confidential_dataset_id}.${trimsuffix(local.cc_file_name, ".csv")}"
     outputBigQueryDataset     = local.confidential_dataset_id
     deidentifyTemplateName    = module.re_identification_template.template_full_path
     dlpLocation               = local.location

@@ -49,7 +49,7 @@ It uses:
 | external\_flex\_template\_project\_id | Project id of the external project that host the flex Dataflow templates. | `string` | n/a | yes |
 | java\_de\_identify\_template\_gs\_path | The Google Cloud Storage gs path to the JSON file built flex template that supports DLP de-identification. | `string` | n/a | yes |
 | java\_re\_identify\_template\_gs\_path | The Google Cloud Storage gs path to the JSON file built flex template that supports DLP re-identification. | `string` | n/a | yes |
-| non\_confidential\_project\_id | Project with the de-identified dataset and table. | `string` | n/a | yes |
+| non\_confidential\_data\_project\_id | Project with the de-identified dataset and table. | `string` | n/a | yes |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | perimeter\_additional\_members | The list of all members to be added on perimeter access, except the service accounts created by this module. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | n/a | yes |
 | sdx\_project\_number | The Project Number to configure Secure data exchange with egress rule for the flex Dataflow templates. | `string` | n/a | yes |

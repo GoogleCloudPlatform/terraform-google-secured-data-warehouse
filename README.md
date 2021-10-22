@@ -27,7 +27,7 @@ module "secured_data_warehouse" {
   org_id                           = ORG_ID
   data_governance_project_id       = DATA_GOVERNANCE_PROJECT_ID
   confidential_data_project_id     = CONFIDENTIAL_DATA_PROJECT_ID
-  datalake_project_id              = DATALAKE_PROJECT_ID
+  non_confidential_data_project_id = NON_CONFIDENTIAL_DATA_PROJECT_ID
   data_ingestion_project_id        = DATA_INGESTION_PROJECT_ID
   sdx_project_number               = EXTERNAL_TEMPLATE_PROJECT_NUMBER
   terraform_service_account        = TERRAFORM_SERVICE_ACCOUNT
@@ -59,7 +59,6 @@ module "secured_data_warehouse" {
 | data\_governance\_project\_id | The ID of the project in which the data governance resources will be created. | `string` | n/a | yes |
 | data\_ingestion\_dataflow\_deployer\_identities | List of members in the standard GCP form: user:{email}, serviceAccount:{email} that will deploy Dataflow jobs in the Data Ingestion project. These identities will be added to the VPC-SC secure data exchange egress rules. | `list(string)` | `[]` | no |
 | data\_ingestion\_project\_id | The ID of the project in which the data ingestion resources will be created | `string` | n/a | yes |
-| datalake\_project\_id | The ID of the project in which the Bigquery will be created. | `string` | n/a | yes |
 | dataset\_default\_table\_expiration\_ms | TTL of tables using the dataset in MS. The default value is null. | `number` | `null` | no |
 | dataset\_description | Dataset description. | `string` | `"Ingest dataset"` | no |
 | dataset\_id | Unique ID for the dataset being provisioned. | `string` | n/a | yes |
@@ -67,6 +66,7 @@ module "secured_data_warehouse" {
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `false` | no |
 | key\_rotation\_period\_seconds | Rotation period for keys. The default value is 30 days. | `string` | `"2592000s"` | no |
 | location | The location for the KMS Customer Managed Encryption Keys, Bucket, and Bigquery dataset. This location can be a multiregion, if it is empty the region value will be used. | `string` | `""` | no |
+| non\_confidential\_data\_project\_id | The ID of the project in which the Bigquery will be created. | `string` | n/a | yes |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | perimeter\_additional\_members | The list additional members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | `[]` | no |
 | private\_access\_members | List of members in the standard GCP form: user:{email}, serviceAccount:{email}, group:{email} who will have access to private information in BigQuery. | `list(string)` | `[]` | no |
@@ -196,7 +196,7 @@ resources of this module:
 - Service Usage API:`serviceusage.googleapis.com`
 - Google Cloud Storage JSON API:`storage-api.googleapis.com`
 
-#### Data lake project
+#### Non confidential data project
 
 - Access Context Manager API: `accesscontextmanager.googleapis.com`
 - BigQuery API:`bigquery.googleapis.com`

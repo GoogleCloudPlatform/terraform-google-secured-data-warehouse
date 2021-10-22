@@ -27,7 +27,7 @@ module "data_ingestion" {
   org_id                           = var.org_id
   data_governance_project_id       = var.data_governance_project_id
   confidential_data_project_id     = var.confidential_data_project_id
-  datalake_project_id              = var.datalake_project_id
+  non_confidential_data_project_id = var.non_confidential_data_project_id
   data_ingestion_project_id        = var.data_ingestion_project_id
   sdx_project_number               = var.sdx_project_number
   terraform_service_account        = var.terraform_service_account
@@ -105,7 +105,7 @@ module "regional_dlp" {
     dlp_location                   = var.location
     dlp_project                    = var.data_governance_project_id
     bq_schema                      = local.bq_schema
-    output_table                   = "${var.datalake_project_id}:${module.data_ingestion.data_ingest_bigquery_dataset.dataset_id}.classical_books"
+    output_table                   = "${var.non_confidential_data_project_id}:${module.data_ingestion.data_ingest_bigquery_dataset.dataset_id}.classical_books"
   }
 
   depends_on = [

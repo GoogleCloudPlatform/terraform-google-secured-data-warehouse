@@ -20,25 +20,25 @@ locals {
   cmek_location = local.location == "eu" ? "europe" : local.location
 
   projects_ids = {
-    ingestion    = var.data_ingestion_project_id
-    governance   = var.data_governance_project_id
-    datalake     = var.datalake_project_id
-    confidential = var.confidential_data_project_id
+    ingestion        = var.data_ingestion_project_id
+    governance       = var.data_governance_project_id
+    non_confidential = var.non_confidential_data_project_id
+    confidential     = var.confidential_data_project_id
   }
 }
 
 module "data_governance" {
   source = "./modules/data-governance"
 
-  terraform_service_account    = var.terraform_service_account
-  data_ingestion_project_id    = var.data_ingestion_project_id
-  data_governance_project_id   = var.data_governance_project_id
-  confidential_data_project_id = var.confidential_data_project_id
-  datalake_project_id          = var.datalake_project_id
-  cmek_location                = local.cmek_location
-  cmek_keyring_name            = var.cmek_keyring_name
-  key_rotation_period_seconds  = var.key_rotation_period_seconds
-  delete_contents_on_destroy   = var.delete_contents_on_destroy
+  terraform_service_account        = var.terraform_service_account
+  data_ingestion_project_id        = var.data_ingestion_project_id
+  data_governance_project_id       = var.data_governance_project_id
+  confidential_data_project_id     = var.confidential_data_project_id
+  non_confidential_data_project_id = var.non_confidential_data_project_id
+  cmek_location                    = local.cmek_location
+  cmek_keyring_name                = var.cmek_keyring_name
+  key_rotation_period_seconds      = var.key_rotation_period_seconds
+  delete_contents_on_destroy       = var.delete_contents_on_destroy
 }
 
 module "data_ingestion" {
@@ -54,7 +54,7 @@ module "data_ingestion" {
   dataset_description                 = var.dataset_description
   org_id                              = var.org_id
   data_ingestion_project_id           = var.data_ingestion_project_id
-  datalake_project_id                 = var.datalake_project_id
+  non_confidential_data_project_id    = var.non_confidential_data_project_id
   data_governance_project_id          = var.data_governance_project_id
   terraform_service_account           = var.terraform_service_account
   region                              = local.region
@@ -69,7 +69,7 @@ module "bigquery_confidential_data" {
 
   data_governance_project_id            = var.data_governance_project_id
   confidential_data_project_id          = var.confidential_data_project_id
-  non_confidential_project_id           = var.datalake_project_id
+  non_confidential_data_project_id      = var.non_confidential_data_project_id
   dataset_id                            = var.confidential_dataset_id
   location                              = local.location
   cmek_confidential_bigquery_crypto_key = module.data_governance.cmek_confidential_bigquery_crypto_key

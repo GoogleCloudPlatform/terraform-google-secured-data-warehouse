@@ -67,11 +67,11 @@ module "iam_projects" {
   source   = "./iam-projects"
   for_each = local.project_groups
 
-  data_ingestion_project_id    = module.base_projects[each.key].data_ingestion_project_id
-  datalake_project_id          = module.base_projects[each.key].datalake_project_id
-  data_governance_project_id   = module.base_projects[each.key].data_governance_project_id
-  confidential_data_project_id = module.base_projects[each.key].confidential_data_project_id
-  service_account_email        = google_service_account.int_ci_service_account.email
+  data_ingestion_project_id        = module.base_projects[each.key].data_ingestion_project_id
+  non_confidential_data_project_id = module.base_projects[each.key].non_confidential_data_project_id
+  data_governance_project_id       = module.base_projects[each.key].data_governance_project_id
+  confidential_data_project_id     = module.base_projects[each.key].confidential_data_project_id
+  service_account_email            = google_service_account.int_ci_service_account.email
 }
 
 resource "google_service_account" "int_ci_service_account" {
