@@ -33,7 +33,7 @@ module "landing_zone" {
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
   bucket_name                      = "dlp-flex-landing-zone"
-  dataset_id                       = "dlp_flex_landing-zone"
+  dataset_id                       = "dlp_flex_landing_zone"
   cmek_keyring_name                = "dlp_flex_landing-zone-${random_id.suffix.hex}"
   region                           = var.location
   delete_contents_on_destroy       = var.delete_contents_on_destroy
