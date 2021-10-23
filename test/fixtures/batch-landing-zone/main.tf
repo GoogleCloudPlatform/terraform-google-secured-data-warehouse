@@ -20,7 +20,7 @@ locals {
 
 
 module "batch_dataflow" {
-  source                           = "../../../examples/batch-data-ingestion"
+  source                           = "../../../examples/batch-landing-zone"
   org_id                           = var.org_id
   landing_zone_project_id          = var.landing_zone_project_id[0]
   data_governance_project_id       = var.data_governance_project_id[0]

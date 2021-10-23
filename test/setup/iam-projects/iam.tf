@@ -40,7 +40,7 @@ locals {
   ]
 }
 
-resource "google_project_iam_member" "ci-account-ingestion" {
+resource "google_project_iam_member" "ci-account-landing-zone" {
   for_each = toset(local.int_proj_required_roles)
 
   project = var.landing_zone_project_id

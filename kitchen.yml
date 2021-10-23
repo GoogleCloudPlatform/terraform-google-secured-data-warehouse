@@ -28,13 +28,13 @@ platforms:
   - name: default
 
 suites:
-  - name: base-data-ingestion
+  - name: landing-zone
     driver:
-      root_module_directory: test/fixtures/base-data-ingestion/
+      root_module_directory: test/fixtures/landing-zone/
     verifier:
       color: false
       systems:
-        - name: base-data-ingestion gcp
+        - name: landing-zone gcp
           backend: gcp
           controls:
             - gcp

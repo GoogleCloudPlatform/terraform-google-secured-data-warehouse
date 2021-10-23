@@ -36,7 +36,7 @@ output "controller_service_account" {
 
 output "bucket_landing_zone_name" {
   description = "The name of the bucket."
-  value       = module.landing_zone.data_ingest_bucket_name
+  value       = module.landing_zone.landing_zone_bucket_name
 }
 
 output "dlp_location" {

@@ -29,22 +29,22 @@ output "pubsub_writer_service_account_email" {
   value       = google_service_account.pubsub_writer_service_account.email
 }
 
-output "data_ingest_bucket_name" {
-  description = "The name of the bucket created for data ingest pipeline."
-  value       = module.data_ingest_bucket.bucket.name
+output "landing_zone_bucket_name" {
+  description = "The name of the bucket created for landing zone pipeline."
+  value       = module.landing_zone_bucket.bucket.name
 }
 
-output "data_ingest_dataflow_bucket_name" {
-  description = "The name of the bucket created for dataflow in the data ingest pipeline."
+output "landing_zone_dataflow_bucket_name" {
+  description = "The name of the bucket created for dataflow in the landing zone pipeline."
   value       = module.dataflow_bucket.bucket.name
 }
 
-output "data_ingest_topic_name" {
-  description = "The topic created for data ingest pipeline."
-  value       = module.data_ingest_topic.topic
+output "landing_zone_topic_name" {
+  description = "The topic created for landing zone pipeline."
+  value       = module.landing_zone_topic.topic
 }
 
-output "data_ingest_bigquery_dataset" {
-  description = "The bigquery dataset created for data ingest pipeline."
+output "landing_zone_bigquery_dataset" {
+  description = "The bigquery dataset created for landing zone pipeline."
   value       = module.bigquery_dataset.bigquery_dataset
 }

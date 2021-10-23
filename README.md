@@ -28,11 +28,11 @@ module "secured_data_warehouse" {
   data_governance_project_id       = DATA_GOVERNANCE_PROJECT_ID
   confidential_data_project_id     = CONFIDENTIAL_DATA_PROJECT_ID
   non_confidential_data_project_id = NON_CONFIDENTIAL_DATA_PROJECT_ID
-  landing_zone_project_id        = DATA_INGESTION_PROJECT_ID
+  landing_zone_project_id          = LANDING_ZONE_PROJECT_ID
   sdx_project_number               = EXTERNAL_TEMPLATE_PROJECT_NUMBER
   terraform_service_account        = TERRAFORM_SERVICE_ACCOUNT
   access_context_manager_policy_id = ACCESS_CONTEXT_MANAGER_POLICY_ID
-  bucket_name                      = DATA_INGESTION_BUCKET_NAME
+  bucket_name                      = LANDING_ZONE_BUCKET_NAME
   location                         = LOCATION
   dataset_id                       = DATASET_ID
   confidential_dataset_id          = CONFIDENTIAL_DATASET_ID
@@ -58,9 +58,9 @@ module "secured_data_warehouse" {
 | confidential\_dataset\_id | Unique ID for the confidential dataset being provisioned. | `string` | `"secured_dataset"` | no |
 | data\_governance\_project\_id | The ID of the project in which the data governance resources will be created. | `string` | n/a | yes |
 | dataset\_default\_table\_expiration\_ms | TTL of tables using the dataset in MS. The default value is null. | `number` | `null` | no |
-| dataset\_description | Dataset description. | `string` | `"Ingest dataset"` | no |
+| dataset\_description | Dataset description. | `string` | `"Landing-zone dataset"` | no |
 | dataset\_id | Unique ID for the dataset being provisioned. | `string` | n/a | yes |
-| dataset\_name | Friendly name for the dataset being provisioned. | `string` | `"Ingest dataset"` | no |
+| dataset\_name | Friendly name for the dataset being provisioned. | `string` | `"Landing-zone dataset"` | no |
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `false` | no |
 | key\_rotation\_period\_seconds | Rotation period for keys. The default value is 30 days. | `string` | `"2592000s"` | no |
 | landing\_zone\_dataflow\_deployer\_identities | List of members in the standard GCP form: user:{email}, serviceAccount:{email} that will deploy Dataflow jobs in the Landing Zone project. These identities will be added to the VPC-SC secure data exchange egress rules. | `list(string)` | `[]` | no |
@@ -90,13 +90,13 @@ module "secured_data_warehouse" {
 | confidential\_service\_perimeter\_name | Access context manager service perimeter name. |
 | data\_governance\_access\_level\_name | Access context manager access level name. |
 | data\_governance\_service\_perimeter\_name | Access context manager service perimeter name. |
-| data\_ingest\_bigquery\_dataset | The bigquery dataset created for data ingest pipeline. |
-| data\_ingest\_bucket\_name | The name of the bucket created for data ingest pipeline. |
-| data\_ingest\_dataflow\_bucket\_name | The name of the bucket created for dataflow in the data ingest pipeline. |
-| data\_ingest\_topic\_name | The topic created for data ingest pipeline. |
 | dataflow\_controller\_service\_account\_email | The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
 | landing\_zone\_access\_level\_name | Access context manager access level name. |
+| landing\_zone\_bigquery\_dataset | The bigquery dataset created for landing zone pipeline. |
+| landing\_zone\_bucket\_name | The name of the bucket created for landing zone pipeline. |
+| landing\_zone\_dataflow\_bucket\_name | The name of the bucket created for dataflow in the landing zone pipeline. |
 | landing\_zone\_service\_perimeter\_name | Access context manager service perimeter name. |
+| landing\_zone\_topic\_name | The topic created for landing zone pipeline. |
 | pubsub\_writer\_service\_account\_email | The PubSub writer service account email. Should be used to write data to the PubSub topics the landing zone pipeline reads from. |
 | storage\_writer\_service\_account\_email | The Storage writer service account email. Should be used to write data to the buckets the landing zone pipeline reads from. |
 

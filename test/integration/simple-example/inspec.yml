@@ -42,10 +42,10 @@ attributes:
   - name: pubsub_writer_service_account_email
     required: true
     type: string
-  - name: data_ingest_bucket_name
+  - name: landing_zone_bucket_name
     required: true
     type: string
-  - name: data_ingest_topic_name
+  - name: landing_zone_topic_name
     required: true
     type: string
   - name: access_level_name

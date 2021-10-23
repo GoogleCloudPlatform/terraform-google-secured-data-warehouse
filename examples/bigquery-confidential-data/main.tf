@@ -41,7 +41,7 @@ module "secured_data_warehouse" {
   sdx_project_number               = var.sdx_project_number
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  bucket_name                      = "bkt-data-ingestion"
+  bucket_name                      = "landing-zone"
   location                         = local.location
   dataset_id                       = local.non_confidential_dataset_id
   confidential_dataset_id          = local.confidential_dataset_id
@@ -57,7 +57,7 @@ resource "null_resource" "download_sample_cc_into_gcs" {
     unzip cc_records.zip
     echo "Changing sample file encoding from ISO-8859-1 to UTF-8"
     iconv -f="ISO-8859-1" -t="UTF-8" 100\ CC\ Records.csv > ${local.cc_file_name}
-    gsutil cp ${local.cc_file_name} gs://${module.secured_data_warehouse.data_ingest_bucket_name}
+    gsutil cp ${local.cc_file_name} gs://${module.secured_data_warehouse.landing_zone_bucket_name}
     rm ${local.cc_file_name} 100\ CC\ Records.csv cc_records.zip
 EOF
 
@@ -124,12 +124,12 @@ module "regional_deid" {
   service_account_email   = module.secured_data_warehouse.dataflow_controller_service_account_email
   subnetwork_self_link    = var.landing_zone_subnets_self_link
   kms_key_name            = module.secured_data_warehouse.cmek_landing_zone_crypto_key
-  temp_location           = "gs://${module.secured_data_warehouse.data_ingest_dataflow_bucket_name}/tmp/"
-  staging_location        = "gs://${module.secured_data_warehouse.data_ingest_dataflow_bucket_name}/staging/"
+  temp_location           = "gs://${module.secured_data_warehouse.landing_zone_dataflow_bucket_name}/tmp/"
+  staging_location        = "gs://${module.secured_data_warehouse.landing_zone_dataflow_bucket_name}/staging/"
   max_workers             = 5
 
   parameters = {
-    inputFilePattern       = "gs://${module.secured_data_warehouse.data_ingest_bucket_name}/${local.cc_file_name}"
+    inputFilePattern       = "gs://${module.secured_data_warehouse.landing_zone_bucket_name}/${local.cc_file_name}"
     bqProjectId            = var.non_confidential_data_project_id
     datasetName            = local.non_confidential_dataset_id
     batchSize              = 1000

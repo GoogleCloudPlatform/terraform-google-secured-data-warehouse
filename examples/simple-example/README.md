@@ -26,12 +26,12 @@ This example illustrates how to use the `secured-data-warehouse` module.
 | cmek\_confidential\_bigquery\_crypto\_key | The Customer Managed Crypto Key for the confidential BigQuery service. |
 | cmek\_landing\_zone\_crypto\_key | The Customer Managed Crypto Key for the landing zone crypto boundary. |
 | cmek\_reidentification\_crypto\_key | The Customer Managed Crypto Key for the reidentification crypto boundary. |
-| data\_ingest\_bigquery\_dataset | The bigquery dataset created for data ingest pipeline. |
-| data\_ingest\_bucket\_name | The name of the bucket created for data ingest pipeline. |
-| data\_ingest\_topic\_name | The topic created for data ingest pipeline. |
 | dataflow\_controller\_service\_account\_email | The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
 | landing\_zone\_access\_level\_name | Access context manager access level name. |
+| landing\_zone\_bigquery\_dataset | The bigquery dataset created for landing zone pipeline. |
+| landing\_zone\_bucket\_name | The name of the bucket created for landing zone pipeline. |
 | landing\_zone\_service\_perimeter\_name | Access context manager service perimeter name. |
+| landing\_zone\_topic\_name | The topic created for landing zone pipeline. |
 | pubsub\_writer\_service\_account\_email | The PubSub writer service account email. Should be used to write data to the PubSub topics the landing zone pipeline reads from. |
 | storage\_writer\_service\_account\_email | The Storage writer service account email. Should be used to write data to the buckets the landing zone pipeline reads from. |
 

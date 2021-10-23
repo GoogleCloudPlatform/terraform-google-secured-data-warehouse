@@ -19,7 +19,7 @@ module "dwh_networking_landing_zone" {
 
   project_id = module.landing_zone_project.project_id
   region     = var.region
-  vpc_name   = "ingestion"
+  vpc_name   = "landing"
   subnet_ip  = "10.0.32.0/21"
 }
 

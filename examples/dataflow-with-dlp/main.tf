@@ -33,7 +33,7 @@ module "landing_zone" {
   sdx_project_number               = var.sdx_project_number
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  bucket_name                      = "data-ingestion"
+  bucket_name                      = "landing-zone"
   dataset_id                       = local.dataset_id
   cmek_keyring_name                = "cmek_keyring_${random_id.random_suffix.hex}"
   delete_contents_on_destroy       = var.delete_contents_on_destroy
@@ -54,7 +54,7 @@ resource "null_resource" "download_sample_cc_into_gcs" {
     echo "Changing sample file encoding from ISO-8859-1 to UTF-8"
     iconv -f="ISO-8859-1" -t="UTF-8" cc_records.csv > temp_cc_records.csv
     mv temp_cc_records.csv cc_records.csv
-    gsutil cp cc_records.csv gs://${module.landing_zone.data_ingest_bucket_name}
+    gsutil cp cc_records.csv gs://${module.landing_zone.landing_zone_bucket_name}
     rm cc_records.csv
 EOF
 
@@ -105,12 +105,12 @@ module "regional_dlp" {
   service_account_email   = module.landing_zone.dataflow_controller_service_account_email
   subnetwork_self_link    = var.subnetwork_self_link
   kms_key_name            = module.landing_zone.cmek_landing_zone_crypto_key
-  temp_location           = "gs://${module.landing_zone.data_ingest_dataflow_bucket_name}/tmp/"
-  staging_location        = "gs://${module.landing_zone.data_ingest_dataflow_bucket_name}/staging/"
+  temp_location           = "gs://${module.landing_zone.landing_zone_dataflow_bucket_name}/tmp/"
+  staging_location        = "gs://${module.landing_zone.landing_zone_dataflow_bucket_name}/staging/"
   max_workers             = 5
 
   parameters = {
-    inputFilePattern       = "gs://${module.landing_zone.data_ingest_bucket_name}/cc_records.csv"
+    inputFilePattern       = "gs://${module.landing_zone.landing_zone_bucket_name}/cc_records.csv"
     bqProjectId            = var.non_confidential_data_project_id
     datasetName            = local.dataset_id
     batchSize              = 1000

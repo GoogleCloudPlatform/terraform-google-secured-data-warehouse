@@ -32,9 +32,9 @@ module "landing_zone" {
   sdx_project_number               = var.sdx_project_number
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  bucket_name                      = "dlp-flex-ingest"
-  dataset_id                       = "dlp_flex_ingest"
-  cmek_keyring_name                = "dlp_flex_ingest-${random_id.suffix.hex}"
+  bucket_name                      = "dlp-flex-landing-zone"
+  dataset_id                       = "dlp_flex_landing-zone"
+  cmek_keyring_name                = "dlp_flex_landing-zone-${random_id.suffix.hex}"
   region                           = var.location
   delete_contents_on_destroy       = var.delete_contents_on_destroy
   perimeter_additional_members     = var.perimeter_additional_members
@@ -95,17 +95,17 @@ module "regional_dlp" {
   service_account_email   = module.landing_zone.dataflow_controller_service_account_email
   subnetwork_self_link    = var.subnetwork_self_link
   kms_key_name            = module.landing_zone.cmek_landing_zone_crypto_key
-  temp_location           = "gs://${module.landing_zone.data_ingest_dataflow_bucket_name}/tmp/"
-  staging_location        = "gs://${module.landing_zone.data_ingest_dataflow_bucket_name}/staging/"
+  temp_location           = "gs://${module.landing_zone.landing_zone_dataflow_bucket_name}/tmp/"
+  staging_location        = "gs://${module.landing_zone.landing_zone_dataflow_bucket_name}/staging/"
   enable_streaming_engine = false
 
   parameters = {
-    input_topic                    = "projects/${var.landing_zone_project_id}/topics/${module.landing_zone.data_ingest_topic_name}"
+    input_topic                    = "projects/${var.landing_zone_project_id}/topics/${module.landing_zone.landing_zone_topic_name}"
     deidentification_template_name = "${module.de_identification_template_example.template_full_path}"
     dlp_location                   = var.location
     dlp_project                    = var.data_governance_project_id
     bq_schema                      = local.bq_schema
-    output_table                   = "${var.non_confidential_data_project_id}:${module.landing_zone.data_ingest_bigquery_dataset.dataset_id}.classical_books"
+    output_table                   = "${var.non_confidential_data_project_id}:${module.landing_zone.landing_zone_bigquery_dataset.dataset_id}.classical_books"
   }
 
   depends_on = [
