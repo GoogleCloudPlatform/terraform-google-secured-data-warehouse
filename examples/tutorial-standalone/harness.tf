@@ -20,10 +20,10 @@ locals {
   key_rotation_period_seconds = "2592000s"
 
   projects_ids = {
-    landing_zone     = module.base_projects.data_governance_project_id,
-    governance       = module.base_projects.confidential_data_project_id,
-    non_confidential = module.base_projects.datalake_project_id
-    confidential     = module.base_projects.data_ingestion_project_id
+    landing_zone     = module.base_projects.landing_zone_project_id,
+    governance       = module.base_projects.data_governance_project_id,
+    non_confidential = module.base_projects.non_confidential_data_project_id,
+    confidential     = module.base_projects.confidential_data_project_id
   }
 }
 

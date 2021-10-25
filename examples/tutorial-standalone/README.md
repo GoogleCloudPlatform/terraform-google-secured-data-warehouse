@@ -47,10 +47,14 @@ The user using this service account must have the necessary roles to [impersonat
 
 Service account must be in a project with the following APIs enabled:
 
+- Access Context Manager API: `accesscontextmanager.googleapis.com`
+- App Engine Admin API: `appengine.googleapis.com`
 - Cloud Billing API:`cloudbilling.googleapis.com`
-- Cloud Resource Manager API:`cloudresourcemanager.googleapis.com`
 - Cloud Key Management Service (KMS) API:`cloudkms.googleapis.com`
+- Cloud Pub/Sub API: `pubsub.googleapis.com`
+- Cloud Resource Manager API:`cloudresourcemanager.googleapis.com`
 - Compute Engine API:`compute.googleapis.com`
+- Dataflow API:`dataflow.googleapis.com`
 - Identity and Access Management (IAM) API:`iam.googleapis.com`
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
