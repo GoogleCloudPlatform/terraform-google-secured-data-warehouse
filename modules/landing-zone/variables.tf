@@ -94,13 +94,13 @@ variable "dataset_id" {
 variable "dataset_name" {
   description = "Friendly name for the dataset being provisioned."
   type        = string
-  default     = "Ingest dataset"
+  default     = "Landing-zone dataset"
 }
 
 variable "dataset_description" {
   description = "Dataset description."
   type        = string
-  default     = "Ingest dataset"
+  default     = "Landing-zone dataset"
 }
 
 variable "dataset_location" {

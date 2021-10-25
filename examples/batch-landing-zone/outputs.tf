@@ -31,7 +31,7 @@ output "controller_service_account" {
 
 output "dataflow_temp_bucket_name" {
   description = "The name of the dataflow temporary bucket."
-  value       = module.landing_zone.data_ingest_dataflow_bucket_name
+  value       = module.landing_zone.landing_zone_dataflow_bucket_name
 }
 
 output "df_job_region" {

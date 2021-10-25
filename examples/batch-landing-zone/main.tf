@@ -32,14 +32,14 @@ locals {
       network_self_link                   = var.network_self_link,
       dataflow_service_account            = module.landing_zone.dataflow_controller_service_account_email,
       subnetwork_self_link                = var.subnetwork_self_link,
-      inputFilePattern                    = "gs://${module.landing_zone.data_ingest_bucket_name}/cc_records.csv",
+      inputFilePattern                    = "gs://${module.landing_zone.landing_zone_bucket_name}/cc_records.csv",
       bigquery_project_id                 = var.non_confidential_data_project_id,
       dataset_id                          = local.dataset_id,
       table_name                          = local.table_name,
       javascriptTextTransformFunctionName = "transform",
-      JSONPath                            = "gs://${module.landing_zone.data_ingest_dataflow_bucket_name}/code/${local.schema_file}",
-      javascriptTextTransformGcsPath      = "gs://${module.landing_zone.data_ingest_dataflow_bucket_name}/code/${local.transform_code_file}",
-      bigQueryLoadingTemporaryDirectory   = "gs://${module.landing_zone.data_ingest_dataflow_bucket_name}/tmp"
+      JSONPath                            = "gs://${module.landing_zone.landing_zone_dataflow_bucket_name}/code/${local.schema_file}",
+      javascriptTextTransformGcsPath      = "gs://${module.landing_zone.landing_zone_dataflow_bucket_name}/code/${local.transform_code_file}",
+      bigQueryLoadingTemporaryDirectory   = "gs://${module.landing_zone.landing_zone_dataflow_bucket_name}/tmp"
     }
   )
 }
@@ -54,7 +54,7 @@ module "landing_zone" {
   sdx_project_number               = var.sdx_project_number
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  bucket_name                      = "bkt-data-ingestion"
+  bucket_name                      = "landing-zone"
   location                         = local.region
   region                           = local.region
   dataset_id                       = local.dataset_id
@@ -73,7 +73,7 @@ resource "null_resource" "download_sample_cc_into_gcs" {
     echo "Changing sample file encoding from ISO-8859-1 to UTF-8"
     iconv -f="ISO-8859-1" -t="UTF-8" cc_records.csv > temp_cc_records.csv
     mv temp_cc_records.csv cc_records.csv
-    gsutil cp cc_records.csv gs://${module.landing_zone.data_ingest_bucket_name}
+    gsutil cp cc_records.csv gs://${module.landing_zone.landing_zone_bucket_name}
     rm cc_records.csv
 EOF
 
@@ -89,7 +89,7 @@ EOF
 resource "google_storage_bucket_object" "schema" {
   name   = "code/${local.schema_file}"
   source = "${path.module}/${local.schema_file}"
-  bucket = module.landing_zone.data_ingest_dataflow_bucket_name
+  bucket = module.landing_zone.landing_zone_dataflow_bucket_name
 
   depends_on = [
     module.landing_zone.landing_zone_access_level_name,
@@ -101,7 +101,7 @@ resource "google_storage_bucket_object" "schema" {
 resource "google_storage_bucket_object" "transform_code" {
   name   = "code/${local.transform_code_file}"
   source = "${path.module}/${local.transform_code_file}"
-  bucket = module.landing_zone.data_ingest_dataflow_bucket_name
+  bucket = module.landing_zone.landing_zone_dataflow_bucket_name
 
   depends_on = [
     module.landing_zone.landing_zone_access_level_name,

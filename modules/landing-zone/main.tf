@@ -18,8 +18,8 @@ resource "random_id" "suffix" {
   byte_length = 4
 }
 
-//storage ingest bucket
-module "data_ingest_bucket" {
+//storage landing zone bucket
+module "landing_zone_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 2.0"
 
@@ -35,7 +35,7 @@ module "data_ingest_bucket" {
   }
 
   labels = {
-    "enterprise_data_ingest_bucket" = "true"
+    "enterprise_landing_zone_bucket" = "true"
   }
 }
 
@@ -55,18 +55,18 @@ module "dataflow_bucket" {
   }
 
   labels = {
-    "dataflow_data_ingest_bucket" = "true"
+    "dataflow_landing_zone_bucket" = "true"
   }
 
 }
 
-//pub/sub ingest topic
-module "data_ingest_topic" {
+//pub/sub landing zone topic
+module "landing_zone_topic" {
   source  = "terraform-google-modules/pubsub/google"
   version = "~> 2.0"
 
   project_id             = var.landing_zone_project_id
-  topic                  = "tpc-data-ingest-${random_id.suffix.hex}"
+  topic                  = "tpc-landing-zone-${random_id.suffix.hex}"
   topic_kms_key_name     = var.landing_zone_encryption_key
   message_storage_policy = { allowed_persistence_regions : [var.region] }
 }
@@ -86,7 +86,7 @@ module "bigquery_dataset" {
   default_table_expiration_ms = var.dataset_default_table_expiration_ms
 
   dataset_labels = {
-    purpose  = "ingest"
+    purpose  = "landing-zone"
     billable = "true"
   }
 }

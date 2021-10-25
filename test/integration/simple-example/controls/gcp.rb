@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-data_ingest_bucket_name = attribute('data_ingest_bucket_name')
-data_ingest_topic_name = attribute('data_ingest_topic_name')
+landing_zone_bucket_name = attribute('landing_zone_bucket_name')
+landing_zone_topic_name = attribute('landing_zone_topic_name')
 project_id = attribute('project_id')
 data_governance_project_id = attribute('data_governance_project_id')
 non_confidential_data_project_id = attribute('non_confidential_data_project_id')
@@ -41,11 +41,11 @@ restricted_services = ['pubsub.googleapis.com', 'bigquery.googleapis.com', 'stor
 control 'gcp' do
   title 'GCP Resources'
 
-  describe google_storage_bucket(name: data_ingest_bucket_name) do
+  describe google_storage_bucket(name: landing_zone_bucket_name) do
     it { should exist }
   end
 
-  describe google_pubsub_topic(project: project_id, name: data_ingest_topic_name) do
+  describe google_pubsub_topic(project: project_id, name: landing_zone_topic_name) do
     it { should exist }
   end
 

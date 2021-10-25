@@ -42,7 +42,7 @@ module "data_governance" {
 }
 
 module "landing_zone" {
-  source = "./modules/base-data-ingestion"
+  source = "./modules/landing-zone"
 
   dataset_default_table_expiration_ms = var.dataset_default_table_expiration_ms
   bucket_name                         = var.bucket_name

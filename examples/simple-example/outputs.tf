@@ -29,19 +29,19 @@ output "pubsub_writer_service_account_email" {
   value       = module.secured_data_warehouse.pubsub_writer_service_account_email
 }
 
-output "data_ingest_bucket_name" {
-  description = "The name of the bucket created for data ingest pipeline."
-  value       = module.secured_data_warehouse.data_ingest_bucket_name
+output "landing_zone_bucket_name" {
+  description = "The name of the bucket created for landing zone pipeline."
+  value       = module.secured_data_warehouse.landing_zone_bucket_name
 }
 
-output "data_ingest_topic_name" {
-  description = "The topic created for data ingest pipeline."
-  value       = module.secured_data_warehouse.data_ingest_topic_name
+output "landing_zone_topic_name" {
+  description = "The topic created for landing zone pipeline."
+  value       = module.secured_data_warehouse.landing_zone_topic_name
 }
 
-output "data_ingest_bigquery_dataset" {
-  description = "The bigquery dataset created for data ingest pipeline."
-  value       = module.secured_data_warehouse.data_ingest_bigquery_dataset
+output "landing_zone_bigquery_dataset" {
+  description = "The bigquery dataset created for landing zone pipeline."
+  value       = module.secured_data_warehouse.landing_zone_bigquery_dataset
 }
 
 output "landing_zone_access_level_name" {

@@ -45,7 +45,7 @@ module "dataflow_controller_service_account" {
 }
 
 
-resource "google_project_iam_member" "ingestion" {
+resource "google_project_iam_member" "landing" {
   for_each = toset(local.landing_zone_project_roles)
 
   project = var.landing_zone_project_id
@@ -77,13 +77,13 @@ resource "google_service_account" "storage_writer_service_account" {
 }
 
 resource "google_storage_bucket_iam_member" "objectViewer" {
-  bucket = module.data_ingest_bucket.bucket.name
+  bucket = module.landing_zone_bucket.bucket.name
   role   = "roles/storage.objectViewer"
   member = "serviceAccount:${google_service_account.storage_writer_service_account.email}"
 }
 
 resource "google_storage_bucket_iam_member" "objectCreator" {
-  bucket = module.data_ingest_bucket.bucket.name
+  bucket = module.landing_zone_bucket.bucket.name
   role   = "roles/storage.objectCreator"
   member = "serviceAccount:${google_service_account.storage_writer_service_account.email}"
 }
@@ -97,14 +97,14 @@ resource "google_service_account" "pubsub_writer_service_account" {
 
 resource "google_pubsub_topic_iam_member" "publisher" {
   project = var.landing_zone_project_id
-  topic   = module.data_ingest_topic.id
+  topic   = module.landing_zone_topic.id
   role    = "roles/pubsub.publisher"
   member  = "serviceAccount:${google_service_account.pubsub_writer_service_account.email}"
 }
 
 resource "google_pubsub_topic_iam_member" "subscriber" {
   project = var.landing_zone_project_id
-  topic   = module.data_ingest_topic.id
+  topic   = module.landing_zone_topic.id
   role    = "roles/pubsub.subscriber"
   member  = "serviceAccount:${google_service_account.pubsub_writer_service_account.email}"
 }

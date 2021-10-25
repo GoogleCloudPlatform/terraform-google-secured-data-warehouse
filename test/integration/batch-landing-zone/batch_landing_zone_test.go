@@ -24,7 +24,7 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-func TestBatchDataIngestion(t *testing.T) {
+func TestBatchLandingZone(t *testing.T) {
 	bdi := tft.NewTFBlueprintTest(t)
 	bdi.DefineVerify(func(assert *assert.Assertions) {
 		bdi.DefaultVerify(assert)
