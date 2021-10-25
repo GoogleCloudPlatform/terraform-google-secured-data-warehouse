@@ -22,11 +22,7 @@ locals {
   projects_ids = {
     landing_zone     = module.base_projects.landing_zone_project_id,
     governance       = module.base_projects.data_governance_project_id,
-<<<<<<< HEAD
-    non_confidential = module.base_projects.non_confidential_data_project_id,
-=======
     non_confidential = module.base_projects.non_confidential_data_project_id
->>>>>>> f4a58af33753b3a9c0a19094f1d68e287768cd16
     confidential     = module.base_projects.confidential_data_project_id
   }
 }
