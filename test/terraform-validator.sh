@@ -65,13 +65,13 @@ policy_file_path="$(pwd)/policy-library"
 fixtures_path="test/fixtures"
 
 for f in ${policy_file_path}/policies/constraints/*.yaml ; do
-    sed -i "s/DATALAKE_PROJECT_ID_1/${datalake_project_id_1}/g" -e "s/DATALAKE_PROJECT_ID_2/${datalake_project_id_2}/" -e "s/DATALAKE_PROJECT_ID_3/${datalake_project_id_3}/" "${f}"
-    sed -i -e "s/DATA_INGESTION_PROJECT_ID_1/${data_ingestion_project_id_1}/" -e "s/DATA_INGESTION_PROJECT_ID_2/${data_ingestion_project_id_2}/g" -e "s/DATA_INGESTION_PROJECT_ID_3/${data_ingestion_project_id_3}/g" "${f}"
-    # sed -i -e "s/DATA_INGESTION_NETWORK_1/${data_ingestion_network_1}/" -e "s/DATA_INGESTION_NETWORK_2/${data_ingestion_network_2}/" -e "s/DATA_INGESTION_NETWORK_3/${data_ingestion_network_3}/" "${f}"
+    sed -i -e "s/DATALAKE_PROJECT_ID_1/${datalake_project_id_1}/g" -e "s/DATALAKE_PROJECT_ID_2/${datalake_project_id_2}/" -e "s/DATALAKE_PROJECT_ID_3/${datalake_project_id_3}/" "${f}"
+    sed -i -e "s/DATA_INGESTION_PROJECT_ID_1/${data_ingestion_project_id_1}/" -e "s/DATA_INGESTION_PROJECT_ID_2/${data_ingestion_project_id_2}/" -e "s/DATA_INGESTION_PROJECT_ID_3/${data_ingestion_project_id_3}/" "${f}"
     sed -i -e "s/DATA_GOVERNANCE_PROJECT_ID_1/${data_governance_project_id_1}/" -e "s/DATA_GOVERNANCE_PROJECT_ID_2/${data_governance_project_id_2}/" -e "s/DATA_GOVERNANCE_PROJECT_ID_3/${data_governance_project_id_3}/" "${f}"
     sed -i -e "s/CONFIDENTIAL_PROJECT_ID_1/${confidential_project_id_1}/" -e "s/CONFIDENTIAL_PROJECT_ID_2/${confidential_project_id_3}/" -e "s/CONFIDENTIAL_PROJECT_ID_3/${confidential_project_id_3}/" "${f}"
-    # sed -i -e "s/CONFIDENTIAL_NETWORK_1/${confidential_network_1}/" -e "s/CONFIDENTIAL_NETWORK_2/${confidential_network_2}/" -e "s/CONFIDENTIAL_NETWORK_3/${confidential_network_3}/" "${f}"
     sed -i -e "s/ORG_ID/${TF_VAR_org_id}/" "${f}"
+    sed -i -e "s@DATA_INGESTION_NETWORK_1@${data_ingestion_network_1}@" -e "s@DATA_INGESTION_NETWORK_2@${data_ingestion_network_2}@" -e "s@DATA_INGESTION_NETWORK_3@${data_ingestion_network_3}@" "${f}"
+    sed -i -e "s@CONFIDENTIAL_NETWORK_1@${confidential_network_1}@" -e "s@CONFIDENTIAL_NETWORK_2@${confidential_network_2}@" -e "s@CONFIDENTIAL_NETWORK_3@${confidential_network_3}@" "${f}"
 done
 
 source /usr/local/bin/test_validator.sh "${fixtures_path}/${tf_example}" "${data_ingestion_project_id_1}" "${policy_file_path}"
