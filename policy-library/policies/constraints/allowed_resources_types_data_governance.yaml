@@ -22,9 +22,9 @@ spec:
   severity: high
   match:
     target:
-    - "projects/DATA_GOVERNANCE_PROJECT_ID_1"
-    - "projects/DATA_GOVERNANCE_PROJECT_ID_2"
-    - "projects/DATA_GOVERNANCE_PROJECT_ID_3"
+    - "organizations/ORG_ID/projects/DATA_GOVERNANCE_PROJECT_ID_1"
+    - "organizations/ORG_ID/projects/DATA_GOVERNANCE_PROJECT_ID_2"
+    - "organizations/ORG_ID/projects/DATA_GOVERNANCE_PROJECT_ID_3"
   parameters:
     mode: "allowlist"
     resource_type_list:
