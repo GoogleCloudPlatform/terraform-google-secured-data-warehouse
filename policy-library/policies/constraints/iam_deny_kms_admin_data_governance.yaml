@@ -13,17 +13,20 @@
 # limitations under the License.
 
 apiVersion: constraints.gatekeeper.sh/v1alpha1
-kind: GCPBigQueryTableRetentionConstraintV1
+kind: GCPIAMAllowedBindingsConstraintV3
 metadata:
-  name: bq_table_maximum_retention_confidential
+  name: denylist_kms_admin_in_data_governance_project
   annotations:
-    description: Checks if a BigQuery table violates retention policy.
+    description: Deny Cloud KMS Admin in data governance project
 spec:
   severity: high
   match:
     target:
-    - "projects/CONFIDENTIAL_PROJECT_ID_1"
-    - "projects/CONFIDENTIAL_PROJECT_ID_2"
-    - "projects/CONFIDENTIAL_PROJECT_ID_3"
+    - "projects/DATA_GOVERNANCE_PROJECT_ID_1"
+    - "projects/DATA_GOVERNANCE_PROJECT_ID_2"
+    - "projects/DATA_GOVERNANCE_PROJECT_ID_3"
   parameters:
-    maximum_retention_days: 30
+    mode: denylist
+    role: "roles/cloudkms.admin"
+    members:
+    - "**"

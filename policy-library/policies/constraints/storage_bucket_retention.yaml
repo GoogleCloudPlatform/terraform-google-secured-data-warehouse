@@ -15,12 +15,13 @@
 apiVersion: constraints.gatekeeper.sh/v1alpha1
 kind: GCPStorageBucketRetentionConstraintV1
 metadata:
-  name: storage_bucket_minimum_maximum_retention
+  name: storage_bucket_maximum_retention_data_ingestion
 spec:
   severity: high
   match:
     target: # {"$ref":"#/definitions/io.k8s.cli.setters.target_prj_data_etl"}
-    - "projects/**"
+    - "projects/DATA_INGESTION_PROJECT_ID_1"
+    - "projects/DATA_INGESTION_PROJECT_ID_2"
+    - "projects/DATA_INGESTION_PROJECT_ID_3"
   parameters:
     maximum_retention_days: 30
-    exemptions: []

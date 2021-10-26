@@ -1,4 +1,4 @@
-# Copyright 2021 Google LLC
+# Copyright 2019 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,17 +13,23 @@
 # limitations under the License.
 
 apiVersion: constraints.gatekeeper.sh/v1alpha1
-kind: GCPBigQueryTableRetentionConstraintV1
+kind: GCPAllowedResourceTypesConstraintV2
 metadata:
-  name: bq_table_maximum_retention_confidential
+  name: allow_resource_types_confidential
   annotations:
-    description: Checks if a BigQuery table violates retention policy.
+    description: Restricts kind of resources that are allowed in your projects.
 spec:
   severity: high
   match:
     target:
-    - "projects/CONFIDENTIAL_PROJECT_ID_1"
-    - "projects/CONFIDENTIAL_PROJECT_ID_2"
-    - "projects/CONFIDENTIAL_PROJECT_ID_3"
+    - "projects/DATA_CONFIDENTIAL_PROJECT_ID_1"
+    - "projects/DATA_CONFIDENTIAL_PROJECT_ID_2"
+    - "projects/DATA_CONFIDENTIAL_PROJECT_ID_3"
   parameters:
-    maximum_retention_days: 30
+    mode: "allowlist"
+    resource_type_list:
+    - bigquery.googleapis.com/Table
+    - bigquery.googleapis.com/Dataset
+    - dataflow.googleapis.com/Job
+    - iam.googleapis.com/ServiceAccount
+    - storage.googleapis.com/Bucket

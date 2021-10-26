@@ -13,17 +13,21 @@
 # limitations under the License.
 
 apiVersion: constraints.gatekeeper.sh/v1alpha1
-kind: GCPBigQueryTableRetentionConstraintV1
+kind: GCPComputeAllowedNetworksConstraintV2
 metadata:
-  name: bq_table_maximum_retention_confidential
+  name: confidential-allowed-networks
   annotations:
-    description: Checks if a BigQuery table violates retention policy.
+    description: Checks all VM network interfaces are attached to certain VPC networks.
 spec:
   severity: high
   match:
-    target:
-    - "projects/CONFIDENTIAL_PROJECT_ID_1"
-    - "projects/CONFIDENTIAL_PROJECT_ID_2"
-    - "projects/CONFIDENTIAL_PROJECT_ID_3"
+    gcp:
+      target:
+      - "projects/CONFIDENTIAL_PROJECT_ID_1"
+      - "projects/CONFIDENTIAL_PROJECT_ID_2"
+      - "projects/CONFIDENTIAL_PROJECT_ID_3"
   parameters:
-    maximum_retention_days: 30
+    allowed:
+    - "CONFIDENTIAL_NETWORK_1"
+    - "CONFIDENTIAL_NETWORK_2"
+    - "CONFIDENTIAL_NETWORK_3"

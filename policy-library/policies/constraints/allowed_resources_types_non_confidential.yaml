@@ -13,17 +13,21 @@
 # limitations under the License.
 
 apiVersion: constraints.gatekeeper.sh/v1alpha1
-kind: GCPBigQueryTableRetentionConstraintV1
+kind: GCPAllowedResourceTypesConstraintV2
 metadata:
-  name: bq_table_maximum_retention_confidential
+  name: allow_resource_types_non_confidential
   annotations:
-    description: Checks if a BigQuery table violates retention policy.
+    description: Restricts kind of resources that are allowed in your projects.
 spec:
   severity: high
   match:
     target:
-    - "projects/CONFIDENTIAL_PROJECT_ID_1"
-    - "projects/CONFIDENTIAL_PROJECT_ID_2"
-    - "projects/CONFIDENTIAL_PROJECT_ID_3"
+    - "projects/DATA_LAKE_PROJECT_ID_1"
+    - "projects/DATA_LAKE_PROJECT_ID_2"
+    - "projects/DATA_LAKE_PROJECT_ID_3"
   parameters:
-    maximum_retention_days: 30
+    mode: "allowlist"
+    resource_type_list:
+    - cloudkms.googleapis.com/KeyRing
+    - cloudkms.googleapis.com/CryptoKey
+    - cloudkms.googleapis.com/CryptoKeyVersion
