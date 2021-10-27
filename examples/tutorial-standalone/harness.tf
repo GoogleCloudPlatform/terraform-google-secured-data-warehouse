@@ -53,9 +53,9 @@ module "template_project" {
 }
 
 module "centralized_logging" {
-  source                  = "../../modules/centralized-logging"
-  projects_ids            = local.projects_ids
-  logging_project_id      = module.base_projects.data_governance_project_id
-  bucket_name             = "bkt-logging-${module.base_projects.data_governance_project_id}"
-  logging_location        = local.location
+  source             = "../../modules/centralized-logging"
+  projects_ids       = local.projects_ids
+  logging_project_id = module.base_projects.data_governance_project_id
+  bucket_name        = "bkt-logging-${module.base_projects.data_governance_project_id}"
+  logging_location   = local.location
 }

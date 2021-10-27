@@ -23,7 +23,7 @@ locals {
   kek_keyring                 = "kek_keyring_${random_id.suffix.hex}"
   kek_key_name                = "kek_key_${random_id.suffix.hex}"
   cc_file_name                = "cc_100_records.csv"
-
+  key_rotation_period_seconds = "2592000s"
 }
 
 resource "random_id" "suffix" {

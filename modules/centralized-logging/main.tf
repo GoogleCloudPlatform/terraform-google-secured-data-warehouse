@@ -16,11 +16,12 @@
 
 locals {
 
-  new_bucket_name             = "${var.bucket_name}-${random_id.random_suffix.hex}"
+  new_bucket_name             = "${var.bucket_name}-${random_id.suffix.hex}"
   bucket_name                 = var.create_bucket ? module.logging_bucket[0].bucket.name : var.bucket_name
   destination_uri             = "storage.googleapis.com/${local.bucket_name}"
   storage_sa                  = data.google_storage_project_service_account.gcs_account.email_address
-  logging_key_name            = "centralized_logging_kms_key_${random_id.random_suffix.hex}"
+  logging_keyring_name        = "logging_keyring_${random_id.suffix.hex}"
+  logging_key_name            = "logging_key"
   keys                        = [local.logging_key_name]
   key_rotation_period_seconds = "2592000s"
   log_exports = toset([
@@ -29,7 +30,7 @@ locals {
   parent_resource_ids = [for parent_resource_id in local.log_exports[*].parent_resource_id : parent_resource_id]
 }
 
-resource "random_id" "random_suffix" {
+resource "random_id" "suffix" {
   byte_length = 4
 }
 
@@ -44,7 +45,7 @@ module "cmek" {
 
   project_id          = var.logging_project_id
   location            = var.logging_location
-  keyring             = local.logging_key_name
+  keyring             = local.logging_keyring_name
   key_rotation_period = local.key_rotation_period_seconds
   keys                = local.keys
   set_encrypters_for  = local.keys
@@ -68,9 +69,9 @@ module "logging_bucket" {
 }
 
 module "log_export" {
-  for_each               = var.projects_ids
-  source                 = "terraform-google-modules/log-export/google"
-  version                = "~> 7.1.0"
+  for_each = var.projects_ids
+  source   = "terraform-google-modules/log-export/google"
+  version  = "~> 7.1.0"
 
   destination_uri        = local.destination_uri
   filter                 = var.sink_filter
