@@ -73,7 +73,8 @@ module "secured_data_warehouse" {
 
   depends_on = [
     module.base_projects,
-    module.iam_projects
+    module.iam_projects,
+    module.centralized_logging
   ]
 }
 
