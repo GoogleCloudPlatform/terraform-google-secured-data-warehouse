@@ -17,21 +17,20 @@
 locals {
   landing_zone_project_roles = [
     "roles/pubsub.subscriber",
-    "roles/storage.admin",
-    "roles/dataflow.serviceAgent",
-    "roles/dataflow.worker",
-    "roles/compute.viewer"
+    "roles/pubsub.editor",
+    "roles/storage.objectAdmin",
+    "roles/dataflow.worker"
   ]
 
   governance_project_roles = [
-    "roles/cloudkms.admin",
-    "roles/cloudkms.cryptoKeyDecrypter",
-    "roles/dlp.admin"
+    "roles/dlp.user",
+    "roles/dlp.inspectTemplatesReader",
+    "roles/dlp.deidentifyTemplatesReader"
   ]
 
   non_confidential_data_project_roles = [
-    "roles/bigquery.admin",
-    "roles/serviceusage.serviceUsageConsumer"
+    "roles/bigquery.dataEditor",
+    "roles/bigquery.jobUser"
   ]
 }
 

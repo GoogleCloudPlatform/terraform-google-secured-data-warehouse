@@ -16,32 +16,19 @@
 
 locals {
   confidential_project_roles = [
-    "roles/pubsub.subscriber",
-    "roles/bigquery.admin",
-    "roles/cloudkms.admin",
-    "roles/cloudkms.cryptoKeyDecrypter",
-    "roles/dlp.admin",
-    "roles/dlp.deidentifyTemplatesEditor",
-    "roles/dlp.user",
-    "roles/storage.admin",
-    "roles/dataflow.serviceAgent",
     "roles/dataflow.worker",
-    "roles/compute.viewer",
+    "roles/bigquery.dataEditor",
     "roles/serviceusage.serviceUsageConsumer"
   ]
 
   governance_project_roles = [
-    "roles/serviceusage.serviceUsageConsumer",
-    "roles/dlp.admin",
-    "roles/dlp.deidentifyTemplatesEditor",
     "roles/dlp.user",
-    "roles/cloudkms.admin",
-    "roles/cloudkms.cryptoKeyDecrypter"
+    "roles/dlp.inspectTemplatesReader",
+    "roles/dlp.deidentifyTemplatesReader"
   ]
 
   non_conf_project_roles = [
-    "roles/bigquery.admin",
-    "roles/serviceusage.serviceUsageConsumer"
+    "roles/bigquery.dataViewer"
   ]
 }
 
