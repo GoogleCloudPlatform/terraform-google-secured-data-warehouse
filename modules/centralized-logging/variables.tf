@@ -42,7 +42,7 @@ variable "logging_location" {
 }
 
 variable "create_bucket" {
-  description = "A valid location for the bucket and KMS key that will be deployed."
+  description = "(Optional) If set to true, the module will create a bucket and a kms key; otherwise, the module will consider that the bucket already exists."
   type        = bool
   default     = true
 }
