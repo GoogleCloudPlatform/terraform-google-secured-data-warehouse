@@ -65,6 +65,7 @@ module "cmek" {
   keyring             = local.logging_key_name
   key_rotation_period = local.key_rotation_period_seconds
   keys                = local.keys
+  prevent_destroy     = !var.delete_contents_on_destroy
 }
 
 module "centralized_logging" {
