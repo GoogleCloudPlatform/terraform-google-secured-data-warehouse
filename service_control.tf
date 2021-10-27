@@ -74,7 +74,7 @@ module "landing_zone_vpc_sc" {
   resources                        = [data.google_project.landing_zone_project.number, data.google_project.non_confidential_data_project.number]
   perimeter_members                = local.perimeter_members_landing_zone
   restricted_services = [
-    "artifactregistry.googleapis.com",
+    #"artifactregistry.googleapis.com",
     "bigquery.googleapis.com",
     "cloudasset.googleapis.com",
     "cloudfunctions.googleapis.com",
@@ -161,7 +161,7 @@ module "confidential_data_vpc_sc" {
   resources                        = [data.google_project.confidential_project.number]
   perimeter_members                = local.perimeter_members_confidential
   restricted_services = [
-    "artifactregistry.googleapis.com",
+    #"artifactregistry.googleapis.com",
     "bigquery.googleapis.com",
     "cloudasset.googleapis.com",
     "cloudfunctions.googleapis.com",
