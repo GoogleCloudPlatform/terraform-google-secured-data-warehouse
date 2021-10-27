@@ -23,7 +23,7 @@ output "sinks" {
 
 output "bucket_name" {
   description = "The name of the bucket that will store the exported logs."
-  value       = module.logging_bucket.bucket.name
+  value       = local.bucket_name
 }
 
 output "sink_projects" {

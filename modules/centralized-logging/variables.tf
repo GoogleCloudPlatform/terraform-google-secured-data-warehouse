@@ -30,17 +30,19 @@ variable "logging_project_id" {
   type        = string
 }
 
-variable "bucket_logging_prefix" {
+variable "bucket_name" {
   description = "The prefix added to the name of the logging bucket that will store the logs."
   type        = string
 }
 
-variable "bucket_logging_location" {
-  description = "A valid location for the bucket that will store the logs."
+variable "logging_location" {
+  description = "A valid location for the bucket and KMS key that will be deployed."
   type        = string
+  default     = "us-central-1"
 }
 
-variable "kms_key_name" {
-  description = "The full resource uri name for kms key that will be used to encrypt the bucket."
-  type        = string
+variable "create_bucket" {
+  description = "A valid location for the bucket and KMS key that will be deployed."
+  type        = bool
+  default     = true
 }

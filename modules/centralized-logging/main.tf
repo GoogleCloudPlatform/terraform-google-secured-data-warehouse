@@ -15,9 +15,14 @@
  */
 
 locals {
-  destination_uri = "storage.googleapis.com/${module.logging_bucket.bucket.name}"
-  storage_sa      = data.google_storage_project_service_account.gcs_account.email_address
-  bucket_name     = "${var.bucket_logging_prefix}-${random_id.random_suffix.hex}"
+
+  new_bucket_name             = "${var.bucket_name}-${random_id.random_suffix.hex}"
+  bucket_name                 = var.create_bucket ? module.logging_bucket[0].bucket.name : var.bucket_name
+  destination_uri             = "storage.googleapis.com/${local.bucket_name}"
+  storage_sa                  = data.google_storage_project_service_account.gcs_account.email_address
+  logging_key_name            = "centralized_logging_kms_key_${random_id.random_suffix.hex}"
+  keys                        = [local.logging_key_name]
+  key_rotation_period_seconds = "2592000s"
   log_exports = toset([
     for value in module.log_export : value
   ])
@@ -32,40 +37,41 @@ data "google_storage_project_service_account" "gcs_account" {
   project = var.logging_project_id
 }
 
-resource "google_kms_crypto_key_iam_member" "decrypters" {
-  role          = "roles/cloudkms.cryptoKeyDecrypter"
-  crypto_key_id = var.kms_key_name
-  member        = "serviceAccount:${local.storage_sa}"
-}
+module "cmek" {
+  count   = var.create_bucket ? 1 : 0
+  source  = "terraform-google-modules/kms/google"
+  version = "~> 2.0.1"
 
-resource "google_kms_crypto_key_iam_member" "encrypters" {
-  role          = "roles/cloudkms.cryptoKeyEncrypter"
-  crypto_key_id = var.kms_key_name
-  member        = "serviceAccount:${local.storage_sa}"
+  project_id          = var.logging_project_id
+  location            = var.logging_location
+  keyring             = local.logging_key_name
+  key_rotation_period = local.key_rotation_period_seconds
+  keys                = local.keys
+  set_encrypters_for  = local.keys
+  set_decrypters_for  = local.keys
+  encrypters          = ["serviceAccount:${local.storage_sa}"]
+  decrypters          = ["serviceAccount:${local.storage_sa}"]
 }
 
 module "logging_bucket" {
+  count   = var.create_bucket ? 1 : 0
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 2.1"
 
-  name          = local.bucket_name
+  name          = local.new_bucket_name
   project_id    = var.logging_project_id
-  location      = var.bucket_logging_location
+  location      = var.logging_location
   force_destroy = true
   encryption = {
-    default_kms_key_name = var.kms_key_name
+    default_kms_key_name = module.cmek[0].keys[local.logging_key_name]
   }
-
-  depends_on = [
-    google_kms_crypto_key_iam_member.decrypters,
-    google_kms_crypto_key_iam_member.encrypters
-  ]
 }
 
 module "log_export" {
   for_each               = var.projects_ids
   source                 = "terraform-google-modules/log-export/google"
   version                = "~> 7.1.0"
+
   destination_uri        = local.destination_uri
   filter                 = var.sink_filter
   log_sink_name          = "sk-dwh-logging-bkt"
