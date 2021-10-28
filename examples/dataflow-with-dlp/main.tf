@@ -51,8 +51,8 @@ resource "null_resource" "download_sample_cc_into_gcs" {
     unzip cc_records.zip
     rm cc_records.zip
     mv 1500000\ CC\ Records.csv cc_records.csv
-    echo "Changing sample file encoding from ISO-8859-1 to UTF-8"
-    iconv -f="ISO-8859-1" -t="UTF-8" cc_records.csv > temp_cc_records.csv
+    echo "Changing sample file encoding from WINDOWS-1252 to UTF-8"
+    iconv -f="WINDOWS-1252" -t="UTF-8" cc_records.csv > temp_cc_records.csv
     mv temp_cc_records.csv cc_records.csv
     gsutil cp cc_records.csv gs://${module.landing_zone.landing_zone_bucket_name}
     rm cc_records.csv
