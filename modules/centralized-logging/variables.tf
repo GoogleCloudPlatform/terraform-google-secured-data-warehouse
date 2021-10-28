@@ -52,3 +52,9 @@ variable "delete_contents_on_destroy" {
   type        = bool
   default     = false
 }
+
+variable "kms_key_protection_level" {
+  description = "The protection level to use when creating a version based on this template. Default value: \"HSM\" Possible values: [\"SOFTWARE\", \"HSM\"]"
+  type        = string
+  default     = "HSM"
+}

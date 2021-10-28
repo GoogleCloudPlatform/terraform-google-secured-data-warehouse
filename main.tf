@@ -39,6 +39,7 @@ module "data_governance" {
   cmek_keyring_name                = var.cmek_keyring_name
   key_rotation_period_seconds      = var.key_rotation_period_seconds
   delete_contents_on_destroy       = var.delete_contents_on_destroy
+  kms_key_protection_level         = var.kms_key_protection_level
 }
 
 module "landing_zone" {

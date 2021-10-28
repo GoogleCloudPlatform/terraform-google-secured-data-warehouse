@@ -52,3 +52,9 @@ variable "taxonomy_name" {
   type        = string
   default     = "secured_taxonomy"
 }
+
+variable "kms_key_protection_level" {
+  description = "The protection level to use when creating a version based on this template. Default value: \"HSM\" Possible values: [\"SOFTWARE\", \"HSM\"]"
+  type        = string
+  default     = "HSM"
+}

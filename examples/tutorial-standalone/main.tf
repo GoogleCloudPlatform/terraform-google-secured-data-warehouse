@@ -39,7 +39,7 @@ module "kek" {
   keyring              = local.kek_keyring
   key_rotation_period  = local.key_rotation_period_seconds
   keys                 = [local.kek_key_name]
-  key_protection_level = "HSM"
+  key_protection_level = var.kms_key_protection_level
   prevent_destroy      = !var.delete_contents_on_destroy
 }
 

@@ -63,6 +63,7 @@ module "secured_data_warehouse" {
 | dataset\_name | Friendly name for the dataset being provisioned. | `string` | `"Landing-zone dataset"` | no |
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `false` | no |
 | key\_rotation\_period\_seconds | Rotation period for keys. The default value is 30 days. | `string` | `"2592000s"` | no |
+| kms\_key\_protection\_level | The protection level to use when creating a version based on this template. Default value: "HSM" Possible values: ["SOFTWARE", "HSM"] | `string` | `"HSM"` | no |
 | landing\_zone\_dataflow\_deployer\_identities | List of members in the standard GCP form: user:{email}, serviceAccount:{email} that will deploy Dataflow jobs in the Landing Zone project. These identities will be added to the VPC-SC secure data exchange egress rules. | `list(string)` | `[]` | no |
 | landing\_zone\_project\_id | The ID of the project in which the landing zone resources will be created | `string` | n/a | yes |
 | location | The location for the KMS Customer Managed Encryption Keys, Bucket, and Bigquery dataset. This location can be a multiregion, if it is empty the region value will be used. | `string` | `""` | no |
