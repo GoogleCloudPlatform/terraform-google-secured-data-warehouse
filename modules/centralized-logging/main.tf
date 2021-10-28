@@ -53,6 +53,7 @@ module "cmek" {
   set_decrypters_for   = local.keys
   encrypters           = ["serviceAccount:${local.storage_sa}"]
   decrypters           = ["serviceAccount:${local.storage_sa}"]
+  prevent_destroy      = !var.delete_contents_on_destroy
 }
 
 module "logging_bucket" {

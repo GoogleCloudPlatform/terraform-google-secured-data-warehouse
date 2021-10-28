@@ -46,3 +46,9 @@ variable "create_bucket" {
   type        = bool
   default     = true
 }
+
+variable "delete_contents_on_destroy" {
+  description = "(Optional) If set to true, disable the prevent destroy protection in the KMS keys."
+  type        = bool
+  default     = false
+}
