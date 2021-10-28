@@ -38,11 +38,17 @@ variable "bucket_name" {
 variable "logging_location" {
   description = "A valid location for the bucket and KMS key that will be deployed."
   type        = string
-  default     = "us-central-1"
+  default     = "us-east4"
 }
 
 variable "create_bucket" {
   description = "(Optional) If set to true, the module will create a bucket and a kms key; otherwise, the module will consider that the bucket already exists."
   type        = bool
   default     = true
+}
+
+variable "delete_contents_on_destroy" {
+  description = "(Optional) If set to true, disable the prevent destroy protection in the KMS keys."
+  type        = bool
+  default     = false
 }
