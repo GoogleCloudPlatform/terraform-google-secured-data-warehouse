@@ -22,8 +22,8 @@ spec:
   severity: high
   match:
     target:
-    - "organizations/ORG_ID/projects/CONFIDENTIAL_PROJECT_ID_1"
-    - "organizations/ORG_ID/projects/CONFIDENTIAL_PROJECT_ID_2"
-    - "organizations/ORG_ID/projects/CONFIDENTIAL_PROJECT_ID_3"
+    - "organizations/**/projects/CONFIDENTIAL_PROJECT_ID_1"
+    - "organizations/**/projects/CONFIDENTIAL_PROJECT_ID_2"
+    - "organizations/**/projects/CONFIDENTIAL_PROJECT_ID_3"
   parameters:
     maximum_retention_days: 30

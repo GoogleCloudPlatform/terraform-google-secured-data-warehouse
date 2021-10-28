@@ -24,7 +24,7 @@ spec:
   match:
     gcp:
       target: # {"$ref":"#/definitions/io.k8s.cli.setters.target"}
-      - "organizations/ORG_ID"
+      - "organizations/**"
   parameters:
     regions:
     - US
