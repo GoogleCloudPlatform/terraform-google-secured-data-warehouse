@@ -18,6 +18,8 @@ locals {
   confidential_project_roles = [
     "roles/dataflow.worker",
     "roles/bigquery.dataEditor",
+    "roles/bigquery.jobUser",
+    "roles/storage.objectAdmin",
     "roles/serviceusage.serviceUsageConsumer"
   ]
 
