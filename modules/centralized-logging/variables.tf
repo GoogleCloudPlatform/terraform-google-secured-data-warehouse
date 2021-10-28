@@ -31,7 +31,7 @@ variable "logging_project_id" {
 }
 
 variable "bucket_name" {
-  description = "The prefix added to the name of the logging bucket that will store the logs."
+  description = "The name of the logging bucket that will store the logs."
   type        = string
 }
 
@@ -45,10 +45,4 @@ variable "create_bucket" {
   description = "(Optional) If set to true, the module will create a bucket and a kms key; otherwise, the module will consider that the bucket already exists."
   type        = bool
   default     = true
-}
-
-variable "delete_contents_on_destroy" {
-  description = "(Optional) If set to true, disable the prevent destroy protection in the KMS keys."
-  type        = bool
-  default     = false
 }
