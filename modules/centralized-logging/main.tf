@@ -43,15 +43,16 @@ module "cmek" {
   source  = "terraform-google-modules/kms/google"
   version = "~> 2.0.1"
 
-  project_id          = var.logging_project_id
-  location            = var.logging_location
-  keyring             = local.logging_keyring_name
-  key_rotation_period = local.key_rotation_period_seconds
-  keys                = local.keys
-  set_encrypters_for  = local.keys
-  set_decrypters_for  = local.keys
-  encrypters          = ["serviceAccount:${local.storage_sa}"]
-  decrypters          = ["serviceAccount:${local.storage_sa}"]
+  project_id           = var.logging_project_id
+  location             = var.logging_location
+  keyring              = local.logging_keyring_name
+  key_rotation_period  = local.key_rotation_period_seconds
+  keys                 = local.keys
+  key_protection_level = "HSM"
+  set_encrypters_for   = local.keys
+  set_decrypters_for   = local.keys
+  encrypters           = ["serviceAccount:${local.storage_sa}"]
+  decrypters           = ["serviceAccount:${local.storage_sa}"]
 }
 
 module "logging_bucket" {

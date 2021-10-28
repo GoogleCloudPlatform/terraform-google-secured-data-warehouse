@@ -34,12 +34,13 @@ module "kek" {
   source  = "terraform-google-modules/kms/google"
   version = "~> 1.2"
 
-  project_id          = module.base_projects.data_governance_project_id
-  location            = local.location
-  keyring             = local.kek_keyring
-  key_rotation_period = local.key_rotation_period_seconds
-  keys                = [local.kek_key_name]
-  prevent_destroy     = !var.delete_contents_on_destroy
+  project_id           = module.base_projects.data_governance_project_id
+  location             = local.location
+  keyring              = local.kek_keyring
+  key_rotation_period  = local.key_rotation_period_seconds
+  keys                 = [local.kek_key_name]
+  key_protection_level = "HSM"
+  prevent_destroy      = !var.delete_contents_on_destroy
 }
 
 resource "random_id" "original_key" {

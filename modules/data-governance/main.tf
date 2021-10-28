@@ -122,14 +122,15 @@ module "cmek" {
   source  = "terraform-google-modules/kms/google"
   version = "~> 2.0.1"
 
-  project_id          = var.data_governance_project_id
-  location            = var.cmek_location
-  keyring             = var.cmek_keyring_name
-  key_rotation_period = var.key_rotation_period_seconds
-  prevent_destroy     = !var.delete_contents_on_destroy
-  keys                = local.keys
-  set_encrypters_for  = local.keys
-  set_decrypters_for  = local.keys
-  encrypters          = local.encrypters
-  decrypters          = local.decrypters
+  project_id           = var.data_governance_project_id
+  location             = var.cmek_location
+  keyring              = var.cmek_keyring_name
+  key_rotation_period  = var.key_rotation_period_seconds
+  prevent_destroy      = !var.delete_contents_on_destroy
+  keys                 = local.keys
+  key_protection_level = "HSM"
+  set_encrypters_for   = local.keys
+  set_decrypters_for   = local.keys
+  encrypters           = local.encrypters
+  decrypters           = local.decrypters
 }
