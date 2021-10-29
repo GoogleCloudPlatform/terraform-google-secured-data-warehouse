@@ -54,12 +54,13 @@ resource "random_id" "suffix" {
 // It's necessary to use the forces_wait_propagation to guarantee the resources that use this VPC do not have issues related to the propagation.
 // See: https://cloud.google.com/vpc-service-controls/docs/manage-service-perimeters#update.
 resource "time_sleep" "forces_wait_propagation" {
-  destroy_duration = "300s"
+  destroy_duration = "330s"
 
   depends_on = [
     module.landing_zone,
     module.org_policies,
-    module.data_governance
+    module.data_governance,
+    module.bigquery_confidential_data
   ]
 }
 
