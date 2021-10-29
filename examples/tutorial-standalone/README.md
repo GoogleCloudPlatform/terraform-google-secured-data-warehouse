@@ -45,7 +45,7 @@ The user using this service account must have the necessary roles to [impersonat
 
 ### APIs
 
-Service account must be in a project with the following APIs enabled:
+The following APIs must be enabled in the project where the service account was created:
 
 - Access Context Manager API: `accesscontextmanager.googleapis.com`
 - App Engine Admin API: `appengine.googleapis.com`
