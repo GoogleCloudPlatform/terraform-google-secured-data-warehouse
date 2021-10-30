@@ -147,11 +147,7 @@ with the following IAM roles:
   - Storage Admin:`roles/storage.admin`
 - Organization level
   - Access Context Manager Admin: `roles/accesscontextmanager.policyAdmin`
-  - Billing User: `roles/billing.user`
-  - Organization Administrator: `roles/resourcemanager.organizationAdmin`
   - Organization Policy Administrator: `roles/orgpolicy.policyAdmin`
-  - Organization Shared VPC Admin: `roles/compute.xpnAdmin`
-  - VPC Access Admin: `roles/vpcaccess.admin`
 
 You can use the [Project Factory module](https://github.com/terraform-google-modules/terraform-google-project-factory) and the
 [IAM module](https://github.com/terraform-google-modules/terraform-google-iam) in combination to provision a

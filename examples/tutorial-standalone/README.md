@@ -27,13 +27,10 @@ with the following IAM roles:
 
 - Organization level
   - Access Context Manager Admin: `roles/accesscontextmanager.policyAdmin`
-  - Billing User: `roles/billing.user`
-  - Organization Administrator: `roles/resourcemanager.organizationAdmin`
   - Organization Policy Administrator: `roles/orgpolicy.policyAdmin`
-  - Organization Shared VPC Admin: `roles/compute.xpnAdmin`
-  - VPC Access Admin: `roles/vpcaccess.admin`
 - Folder Level
   - Project Creator: `roles/resourcemanager.projectCreator`
+  - Billing User: `roles/billing.user`
 
 The service account must have `Billing User role` in the billing account.
 
