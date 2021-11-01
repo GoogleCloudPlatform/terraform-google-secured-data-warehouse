@@ -34,7 +34,7 @@ resource "google_data_catalog_policy_tag" "policy_tag_confidential" {
 
   taxonomy     = google_data_catalog_taxonomy.secure_taxonomy.id
   display_name = "3_Confidential"
-  description  = "Most sensitive data classification. Significant damage to enterprise"
+  description  = "Most sensitive data classification. Significant damage to enterprise."
 }
 
 resource "google_data_catalog_policy_tag" "child_policy_tag_card_number" {
@@ -60,7 +60,7 @@ resource "google_data_catalog_policy_tag" "policy_tag_private" {
 
   taxonomy          = google_data_catalog_taxonomy.secure_taxonomy.id
   display_name      = "2_Private"
-  description       = "Data meant to be private. Likely to cause damage to enterprise"
+  description       = "Data meant to be private. Likely to cause damage to enterprise."
   parent_policy_tag = google_data_catalog_policy_tag.policy_tag_confidential.id
 }
 

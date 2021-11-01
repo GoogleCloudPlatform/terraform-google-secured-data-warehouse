@@ -9,6 +9,26 @@ This examples deploy the Secured data warehouse blueprint with "batteries includ
 - Run `terraform plan` and review the plan
 - Run `terraform apply`
 
+### Perimeter members list
+
+To be able to see the resources protected the the VPC Service Controls Perimeters in the Google Cloud Console
+you need to add your user in the variable `perimeter_additional_members` in the `terraform.tfvars` file.
+
+### Taxonomy used
+
+This example creates a hierarchical Data Catalog taxonomy to do BigQuery column-level Restrict access security.
+The taxonomy has three level: Confidential, Private, and Sensitive and access to a higher level grants also access to the lower levels
+
+- **3_Confidential:** Most sensitive data classification. Significant damage to enterprise.
+  - CREDIT_CARD_NUMBER
+  - CARD_VERIFICATION_VALUE
+  - **2_Private:** Data meant to be private. Likely to cause damage to enterprise.
+    - PERSON_NAME
+    - CREDIT_CARD_PIN
+    - CARD_EXPIRY_DATE
+    - **1_Sensitive:** Data not meant to be public.
+      - CREDIT_LIMIT
+
 ## Requirements
 
 These sections describe requirements for running this example.
