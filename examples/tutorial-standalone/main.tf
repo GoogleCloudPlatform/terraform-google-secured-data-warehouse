@@ -206,7 +206,7 @@ module "regional_reid" {
     outputBigQueryDataset     = local.confidential_dataset_id
     deidentifyTemplateName    = module.re_identification_template.template_full_path
     dlpLocation               = local.location
-    batchSize                 = 100*1024
+    batchSize                 = 100 * 1024
     dlpProjectId              = module.base_projects.data_governance_project_id
     confidentialDataProjectId = module.base_projects.confidential_data_project_id
   }
