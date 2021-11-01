@@ -19,46 +19,46 @@ set -e
 tf_example=$1
 
 IFS=',' read -ra data_ingestion_projects <<< "$TF_VAR_data_ingestion_project_id"
-data_ingestion_project_id_1=$(echo "${data_ingestion_projects[0]}" | tr -d \" | tr -d \[ | tr -d \])
-data_ingestion_project_number_1=$(gcloud projects describe "${data_ingestion_project_id_1}" --format="value(projectNumber)")
-data_ingestion_project_id_2=$(echo "${data_ingestion_projects[1]}" | tr -d \" | tr -d \[ | tr -d \])
-data_ingestion_project_number_2=$(gcloud projects describe "${data_ingestion_project_id_2}" --format="value(projectNumber)")
-data_ingestion_project_id_3=$(echo "${data_ingestion_projects[2]}" | tr -d \" | tr -d \[ | tr -d \])
-data_ingestion_project_number_3=$(gcloud projects describe "${data_ingestion_project_id_3}" --format="value(projectNumber)")
+data_ingestion_project_id_1=$(echo ${data_ingestion_projects[0]} | tr -d \" | tr -d \[ | tr -d \])
+data_ingestion_project_number_1=$(gcloud projects describe ${data_ingestion_project_id_1} --format="value(projectNumber)")
+data_ingestion_project_id_2=$(echo ${data_ingestion_projects[1]} | tr -d \" | tr -d \[ | tr -d \])
+data_ingestion_project_number_2=$(gcloud projects describe ${data_ingestion_project_id_2} --format="value(projectNumber)")
+data_ingestion_project_id_3=$(echo ${data_ingestion_projects[2]} | tr -d \" | tr -d \[ | tr -d \])
+data_ingestion_project_number_3=$(gcloud projects describe ${data_ingestion_project_id_3} --format="value(projectNumber)")
 
 IFS=',' read -ra data_ingestion_networks <<< "$TF_VAR_data_ingestion_network_self_link"
-data_ingestion_network_1=$(echo "${data_ingestion_networks[0]}" | tr -d \" | tr -d \[ | tr -d \])
-data_ingestion_network_2=$(echo "${data_ingestion_networks[1]}" | tr -d \" | tr -d \[ | tr -d \])
-data_ingestion_network_3=$(echo "${data_ingestion_networks[2]}" | tr -d \" | tr -d \[ | tr -d \])
+data_ingestion_network_1=$(echo ${data_ingestion_networks[0]} | tr -d \" | tr -d \[ | tr -d \])
+data_ingestion_network_2=$(echo ${data_ingestion_networks[1]} | tr -d \" | tr -d \[ | tr -d \])
+data_ingestion_network_3=$(echo ${data_ingestion_networks[2]} | tr -d \" | tr -d \[ | tr -d \])
 
 IFS=',' read -ra data_governance_projects <<< "$TF_VAR_data_governance_project_id"
-data_governance_project_id_1=$(echo "${data_governance_projects[0]}" | tr -d \" | tr -d \[ | tr -d \])
-data_governance_project_number_1=$(gcloud projects describe "${data_governance_project_id_1}" --format="value(projectNumber)")
-data_governance_project_id_2=$(echo "${data_governance_projects[1]}" | tr -d \" | tr -d \[ | tr -d \])
-data_governance_project_number_2=$(gcloud projects describe "${data_governance_project_id_2}" --format="value(projectNumber)")
-data_governance_project_id_3=$(echo "${data_governance_projects[2]}" | tr -d \" | tr -d \[ | tr -d \])
-data_governance_project_number_3=$(gcloud projects describe "${data_governance_project_id_3}" --format="value(projectNumber)")
+data_governance_project_id_1=$(echo ${data_governance_projects[0]} | tr -d \" | tr -d \[ | tr -d \])
+data_governance_project_number_1=$(gcloud projects describe ${data_governance_project_id_1} --format="value(projectNumber)")
+data_governance_project_id_2=$(echo ${data_governance_projects[1]} | tr -d \" | tr -d \[ | tr -d \])
+data_governance_project_number_2=$(gcloud projects describe ${data_governance_project_id_2} --format="value(projectNumber)")
+data_governance_project_id_3=$(echo ${data_governance_projects[2]} | tr -d \" | tr -d \[ | tr -d \])
+data_governance_project_number_3=$(gcloud projects describe ${data_governance_project_id_3} --format="value(projectNumber)")
 
 IFS=',' read -ra datalake_projects <<< "$TF_VAR_datalake_project_id"
-datalake_project_id_1=$(echo "${datalake_projects[0]}" | tr -d \" | tr -d \[ | tr -d \])
-datalake_project_number_1=$(gcloud projects describe "${datalake_project_id_1}" --format="value(projectNumber)")
-datalake_project_id_2=$(echo "${datalake_projects[1]}" | tr -d \" | tr -d \[ | tr -d \])
-datalake_project_number_2=$(gcloud projects describe "${datalake_project_id_2}" --format="value(projectNumber)")
-datalake_project_id_3=$(echo "${datalake_projects[2]}" | tr -d \" | tr -d \[ | tr -d \])
-datalake_project_number_3=$(gcloud projects describe "${datalake_project_id_3}" --format="value(projectNumber)")
+datalake_project_id_1=$(echo ${datalake_projects[0]} | tr -d \" | tr -d \[ | tr -d \])
+datalake_project_number_1=$(gcloud projects describe ${datalake_project_id_1} --format="value(projectNumber)")
+datalake_project_id_2=$(echo ${datalake_projects[1]} | tr -d \" | tr -d \[ | tr -d \])
+datalake_project_number_2=$(gcloud projects describe ${datalake_project_id_2} --format="value(projectNumber)")
+datalake_project_id_3=$(echo ${datalake_projects[2]} | tr -d \" | tr -d \[ | tr -d \])
+datalake_project_number_3=$(gcloud projects describe ${datalake_project_id_3} --format="value(projectNumber)")
 
 IFS=',' read -ra confidential_projects <<< "$TF_VAR_confidential_data_project_id"
-confidential_project_id_1=$(echo "${confidential_projects[0]}" | tr -d \" | tr -d \[ | tr -d \])
-confidential_project_number_1=$(gcloud projects describe "${confidential_project_id_1}" --format="value(projectNumber)")
-confidential_project_id_2=$(echo "${confidential_projects[1]}" | tr -d \" | tr -d \[ | tr -d \])
-confidential_project_number_2=$(gcloud projects describe "${confidential_project_id_2}" --format="value(projectNumber)")
-confidential_project_id_3=$(echo "${confidential_projects[2]}" | tr -d \" | tr -d \[ | tr -d \])
-confidential_project_number_3=$(gcloud projects describe "${confidential_project_id_3}" --format="value(projectNumber)")
+confidential_project_id_1=$(echo ${confidential_projects[0]} | tr -d \" | tr -d \[ | tr -d \])
+confidential_project_number_1=$(gcloud projects describe ${confidential_project_id_1} --format="value(projectNumber)")
+confidential_project_id_2=$(echo ${confidential_projects[1]} | tr -d \" | tr -d \[ | tr -d \])
+confidential_project_number_2=$(gcloud projects describe ${confidential_project_id_2} --format="value(projectNumber)")
+confidential_project_id_3=$(echo ${confidential_projects[2]} | tr -d \" | tr -d \[ | tr -d \])
+confidential_project_number_3=$(gcloud projects describe ${confidential_project_id_3} --format="value(projectNumber)")
 
 IFS=',' read -ra confidential_networks <<< "$TF_VAR_confidential_network_self_link"
-confidential_network_1=$(echo "${confidential_networks[0]}" | tr -d \" | tr -d \[ | tr -d \])
-confidential_network_2=$(echo "${confidential_networks[1]}" | tr -d \" | tr -d \[ | tr -d \])
-confidential_network_3=$(echo "${confidential_networks[2]}" | tr -d \" | tr -d \[ | tr -d \])
+confidential_network_1=$(echo ${confidential_networks[0]} | tr -d \" | tr -d \[ | tr -d \])
+confidential_network_2=$(echo ${confidential_networks[1]} | tr -d \" | tr -d \[ | tr -d \])
+confidential_network_3=$(echo ${confidential_networks[2]} | tr -d \" | tr -d \[ | tr -d \])
 
 
 policy_file_path="$(pwd)/policy-library"

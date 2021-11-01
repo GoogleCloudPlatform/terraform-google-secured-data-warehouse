@@ -70,7 +70,7 @@ docker_test_lint:
 	docker run --rm -it \
 		-e EXCLUDE_LINT_DIRS \
 		-e EXCLUDE_HEADER_CHECK \
-		-e SHELLCHECK_OPTS="-e SC2154 -e SC2171" \
+		-e SHELLCHECK_OPTS="-e SC2154 -e SC2171 -e SC2086" \
 		-v "$(CURDIR)":/workspace \
 		$(REGISTRY_URL)/${DOCKER_IMAGE_DEVELOPER_TOOLS}:${DOCKER_TAG_VERSION_DEVELOPER_TOOLS} \
 		/usr/local/bin/test_lint.sh
