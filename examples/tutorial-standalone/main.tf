@@ -22,7 +22,7 @@ locals {
   confidential_table_id       = "${trimsuffix(local.cc_file_name, ".csv")}_re_id"
   kek_keyring                 = "kek_keyring_${random_id.suffix.hex}"
   kek_key_name                = "kek_key_${random_id.suffix.hex}"
-  cc_file_name                = "cc_100_records.csv"
+  cc_file_name                = "cc_10000_records.csv"
   key_rotation_period_seconds = "2592000s"
 }
 
@@ -80,14 +80,20 @@ module "secured_data_warehouse" {
 }
 
 resource "null_resource" "download_sample_cc_into_gcs" {
+
+  triggers = {
+    cc_file_name = local.cc_file_name
+    bucket       = module.secured_data_warehouse.landing_zone_bucket_name
+  }
+
   provisioner "local-exec" {
     command = <<EOF
-    curl https://eforexcel.com/wp/wp-content/uploads/2017/07/100-CC-Records.zip > cc_records.zip
+    curl https://eforexcel.com/wp/wp-content/uploads/2017/07/10000-CC-Records.zip > cc_records.zip
     unzip cc_records.zip
     echo "Changing sample file encoding from WINDOWS-1252 to UTF-8"
-    iconv -f="WINDOWS-1252" -t="UTF-8" 100\ CC\ Records.csv > ${local.cc_file_name}
+    iconv -f="WINDOWS-1252" -t="UTF-8" 10000\ CC\ Records.csv > ${local.cc_file_name}
     gsutil cp ${local.cc_file_name} gs://${module.secured_data_warehouse.landing_zone_bucket_name}
-    rm ${local.cc_file_name} 100\ CC\ Records.csv cc_records.zip
+    rm ${local.cc_file_name} 10000\ CC\ Records.csv cc_records.zip
 EOF
 
   }
@@ -200,6 +206,7 @@ module "regional_reid" {
     outputBigQueryDataset     = local.confidential_dataset_id
     deidentifyTemplateName    = module.re_identification_template.template_full_path
     dlpLocation               = local.location
+    batchSize                 = 100*1024
     dlpProjectId              = module.base_projects.data_governance_project_id
     confidentialDataProjectId = module.base_projects.confidential_data_project_id
   }
