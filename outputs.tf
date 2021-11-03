@@ -16,7 +16,7 @@
 
 output "dataflow_controller_service_account_email" {
   description = "The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account."
-  value       = module.landing_zone.dataflow_controller_service_account_email
+  value       = module.data_ingestion.dataflow_controller_service_account_email
 
   depends_on = [
     time_sleep.wait_for_bridge_propagation
@@ -33,27 +33,27 @@ output "confidential_dataflow_controller_service_account_email" {
 }
 
 output "storage_writer_service_account_email" {
-  description = "The Storage writer service account email. Should be used to write data to the buckets the landing zone pipeline reads from."
-  value       = module.landing_zone.storage_writer_service_account_email
+  description = "The Storage writer service account email. Should be used to write data to the buckets the data ingestion pipeline reads from."
+  value       = module.data_ingestion.storage_writer_service_account_email
 }
 
 output "pubsub_writer_service_account_email" {
-  description = "The PubSub writer service account email. Should be used to write data to the PubSub topics the landing zone pipeline reads from."
-  value       = module.landing_zone.pubsub_writer_service_account_email
+  description = "The PubSub writer service account email. Should be used to write data to the PubSub topics the data ingestion pipeline reads from."
+  value       = module.data_ingestion.pubsub_writer_service_account_email
 }
 
-output "landing_zone_bucket_name" {
-  description = "The name of the bucket created for landing zone pipeline."
-  value       = module.landing_zone.landing_zone_bucket_name
+output "data_ingestion_bucket_name" {
+  description = "The name of the bucket created for data ingestion pipeline."
+  value       = module.data_ingestion.data_ingestion_bucket_name
 
   depends_on = [
     time_sleep.wait_for_bridge_propagation
   ]
 }
 
-output "landing_zone_dataflow_bucket_name" {
-  description = "The name of the bucket created for dataflow in the landing zone pipeline."
-  value       = module.landing_zone.landing_zone_dataflow_bucket_name
+output "data_ingestion_dataflow_bucket_name" {
+  description = "The name of the bucket created for dataflow in the data ingestion pipeline."
+  value       = module.data_ingestion.data_ingestion_dataflow_bucket_name
 
   depends_on = [
     time_sleep.wait_for_bridge_propagation
@@ -69,32 +69,32 @@ output "confidential_data_dataflow_bucket_name" {
   ]
 }
 
-output "landing_zone_topic_name" {
-  description = "The topic created for landing zone pipeline."
-  value       = module.landing_zone.landing_zone_topic_name
+output "data_ingestion_topic_name" {
+  description = "The topic created for data ingestion pipeline."
+  value       = module.data_ingestion.data_ingestion_topic_name
 
   depends_on = [
     time_sleep.wait_for_bridge_propagation
   ]
 }
 
-output "landing_zone_bigquery_dataset" {
-  description = "The bigquery dataset created for landing zone pipeline."
-  value       = module.landing_zone.landing_zone_bigquery_dataset
+output "data_ingestion_bigquery_dataset" {
+  description = "The bigquery dataset created for data ingestion pipeline."
+  value       = module.data_ingestion.data_ingestion_bigquery_dataset
 
   depends_on = [
     time_sleep.wait_for_bridge_propagation
   ]
 }
 
-output "landing_zone_access_level_name" {
+output "data_ingestion_access_level_name" {
   description = "Access context manager access level name."
-  value       = module.landing_zone_vpc_sc.access_level_name
+  value       = module.data_ingestion_vpc_sc.access_level_name
 }
 
-output "landing_zone_service_perimeter_name" {
+output "data_ingestion_service_perimeter_name" {
   description = "Access context manager service perimeter name."
-  value       = module.landing_zone_vpc_sc.service_perimeter_name
+  value       = module.data_ingestion_vpc_sc.service_perimeter_name
 }
 
 output "data_governance_access_level_name" {
@@ -117,9 +117,9 @@ output "confidential_service_perimeter_name" {
   value       = module.confidential_data_vpc_sc.service_perimeter_name
 }
 
-output "cmek_landing_zone_crypto_key" {
-  description = "The Customer Managed Crypto Key for the landing zone crypto boundary."
-  value       = module.data_governance.cmek_landing_zone_crypto_key
+output "cmek_data_ingestion_crypto_key" {
+  description = "The Customer Managed Crypto Key for the data ingestion crypto boundary."
+  value       = module.data_governance.cmek_data_ingestion_crypto_key
 
   depends_on = [
     time_sleep.wait_for_bridge_propagation

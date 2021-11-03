@@ -33,7 +33,7 @@ module "dataflow_bucket" {
   }
 
   labels = {
-    "dataflow_landing_zone_bucket" = "true"
+    "dataflow_data_ingestion_bucket" = "true"
   }
 
 }

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-module "dwh_networking_landing_zone" {
+module "dwh_networking_data_ingestion" {
   source = "../../../modules/dwh-networking"
 
-  project_id = module.landing_zone_project.project_id
+  project_id = module.data_ingestion_project.project_id
   region     = var.region
-  vpc_name   = "landing"
+  vpc_name   = "ingestion"
   subnet_ip  = "10.0.32.0/21"
 }
 

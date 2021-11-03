@@ -15,7 +15,7 @@
  */
 
 output "dataflow_controller_service_account_email" {
-  description = "The landing zone project Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account."
+  description = "The data ingestion project Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account."
   value       = module.secured_data_warehouse.dataflow_controller_service_account_email
 }
 
@@ -25,21 +25,21 @@ output "confidential_dataflow_controller_service_account_email" {
 }
 
 output "storage_writer_service_account_email" {
-  description = "The Storage writer service account email. Should be used to write data to the buckets the landing zone pipeline reads from."
+  description = "The Storage writer service account email. Should be used to write data to the buckets the data ingestion pipeline reads from."
   value       = module.secured_data_warehouse.storage_writer_service_account_email
 }
 
 output "pubsub_writer_service_account_email" {
-  description = "The PubSub writer service account email. Should be used to write data to the PubSub topics the landing zone pipeline reads from."
+  description = "The PubSub writer service account email. Should be used to write data to the PubSub topics the data ingestion pipeline reads from."
   value       = module.secured_data_warehouse.pubsub_writer_service_account_email
 }
 
-output "landing_zone_bucket_name" {
-  description = "The name of the bucket created for landing zone pipeline."
-  value       = module.secured_data_warehouse.landing_zone_bucket_name
+output "data_ingestion_bucket_name" {
+  description = "The name of the bucket created for data ingestion pipeline."
+  value       = module.secured_data_warehouse.data_ingestion_bucket_name
 }
 
-output "landing_zone_topic_name" {
-  description = "The topic created for landing zone pipeline."
-  value       = module.secured_data_warehouse.landing_zone_topic_name
+output "data_ingestion_topic_name" {
+  description = "The topic created for data ingestion pipeline."
+  value       = module.secured_data_warehouse.data_ingestion_topic_name
 }

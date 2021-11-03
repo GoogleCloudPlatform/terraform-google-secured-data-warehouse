@@ -18,24 +18,24 @@ resource "random_id" "suffix" {
   byte_length = 4
 }
 
-//storage landing zone bucket
-module "landing_zone_bucket" {
+//storage data ingestion bucket
+module "data_ingestion_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 2.0"
 
-  project_id      = var.landing_zone_project_id
-  name            = "bkt-${var.landing_zone_project_id}-${var.bucket_name}-${random_id.suffix.hex}"
+  project_id      = var.data_ingestion_project_id
+  name            = "bkt-${var.data_ingestion_project_id}-${var.bucket_name}-${random_id.suffix.hex}"
   location        = var.bucket_location
   storage_class   = var.bucket_class
   lifecycle_rules = var.bucket_lifecycle_rules
   force_destroy   = var.delete_contents_on_destroy
 
   encryption = {
-    default_kms_key_name = var.landing_zone_encryption_key
+    default_kms_key_name = var.data_ingestion_encryption_key
   }
 
   labels = {
-    "enterprise_landing_zone_bucket" = "true"
+    "enterprise_data_ingestion_bucket" = "true"
   }
 }
 
@@ -43,31 +43,31 @@ module "dataflow_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 2.0"
 
-  project_id    = var.landing_zone_project_id
-  name          = "bkt-${var.landing_zone_project_id}-tmp-dataflow-${random_id.suffix.hex}"
+  project_id    = var.data_ingestion_project_id
+  name          = "bkt-${var.data_ingestion_project_id}-tmp-dataflow-${random_id.suffix.hex}"
   location      = var.bucket_location
   storage_class = "STANDARD"
   force_destroy = var.delete_contents_on_destroy
 
 
   encryption = {
-    default_kms_key_name = var.landing_zone_encryption_key
+    default_kms_key_name = var.data_ingestion_encryption_key
   }
 
   labels = {
-    "dataflow_landing_zone_bucket" = "true"
+    "dataflow_data_ingestion_bucket" = "true"
   }
 
 }
 
-//pub/sub landing zone topic
-module "landing_zone_topic" {
+//pub/sub data ingestion topic
+module "data_ingestion_topic" {
   source  = "terraform-google-modules/pubsub/google"
   version = "~> 2.0"
 
-  project_id             = var.landing_zone_project_id
-  topic                  = "tpc-landing-zone-${random_id.suffix.hex}"
-  topic_kms_key_name     = var.landing_zone_encryption_key
+  project_id             = var.data_ingestion_project_id
+  topic                  = "tpc-data-ingestion-${random_id.suffix.hex}"
+  topic_kms_key_name     = var.data_ingestion_encryption_key
   message_storage_policy = { allowed_persistence_regions : [var.region] }
 }
 
@@ -86,7 +86,7 @@ module "bigquery_dataset" {
   default_table_expiration_ms = var.dataset_default_table_expiration_ms
 
   dataset_labels = {
-    purpose  = "landing-zone"
+    purpose  = "data-ingestion"
     billable = "true"
   }
 }

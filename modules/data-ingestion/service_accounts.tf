@@ -15,7 +15,7 @@
  */
 
 locals {
-  landing_zone_project_roles = [
+  data_ingestion_project_roles = [
     "roles/pubsub.subscriber",
     "roles/pubsub.editor",
     "roles/storage.objectAdmin",
@@ -38,16 +38,16 @@ locals {
 module "dataflow_controller_service_account" {
   source       = "terraform-google-modules/service-accounts/google"
   version      = "~> 3.0"
-  project_id   = var.landing_zone_project_id
+  project_id   = var.data_ingestion_project_id
   names        = ["sa-dataflow-controller"]
   display_name = "Cloud Dataflow controller service account"
 }
 
 
-resource "google_project_iam_member" "landing" {
-  for_each = toset(local.landing_zone_project_roles)
+resource "google_project_iam_member" "ingestion" {
+  for_each = toset(local.data_ingestion_project_roles)
 
-  project = var.landing_zone_project_id
+  project = var.data_ingestion_project_id
   role    = each.value
   member  = "serviceAccount:${module.dataflow_controller_service_account.email}"
 }
@@ -70,40 +70,40 @@ resource "google_project_iam_member" "non_confidential" {
 
 //service account for storage
 resource "google_service_account" "storage_writer_service_account" {
-  project      = var.landing_zone_project_id
+  project      = var.data_ingestion_project_id
   account_id   = "sa-storage-writer"
   display_name = "Cloud Storage data writer service account"
 }
 
 resource "google_storage_bucket_iam_member" "objectViewer" {
-  bucket = module.landing_zone_bucket.bucket.name
+  bucket = module.data_ingestion_bucket.bucket.name
   role   = "roles/storage.objectViewer"
   member = "serviceAccount:${google_service_account.storage_writer_service_account.email}"
 }
 
 resource "google_storage_bucket_iam_member" "objectCreator" {
-  bucket = module.landing_zone_bucket.bucket.name
+  bucket = module.data_ingestion_bucket.bucket.name
   role   = "roles/storage.objectCreator"
   member = "serviceAccount:${google_service_account.storage_writer_service_account.email}"
 }
 
 //service account for Pub/sub
 resource "google_service_account" "pubsub_writer_service_account" {
-  project      = var.landing_zone_project_id
+  project      = var.data_ingestion_project_id
   account_id   = "sa-pubsub-writer"
   display_name = "Cloud PubSub data writer service account"
 }
 
 resource "google_pubsub_topic_iam_member" "publisher" {
-  project = var.landing_zone_project_id
-  topic   = module.landing_zone_topic.id
+  project = var.data_ingestion_project_id
+  topic   = module.data_ingestion_topic.id
   role    = "roles/pubsub.publisher"
   member  = "serviceAccount:${google_service_account.pubsub_writer_service_account.email}"
 }
 
 resource "google_pubsub_topic_iam_member" "subscriber" {
-  project = var.landing_zone_project_id
-  topic   = module.landing_zone_topic.id
+  project = var.data_ingestion_project_id
+  topic   = module.data_ingestion_topic.id
   role    = "roles/pubsub.subscriber"
   member  = "serviceAccount:${google_service_account.pubsub_writer_service_account.email}"
 }

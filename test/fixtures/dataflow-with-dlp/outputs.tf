@@ -17,7 +17,7 @@
 
 output "project_id" {
   description = "The project's ID."
-  value       = var.landing_zone_project_id[0]
+  value       = var.data_ingestion_project_id[0]
 }
 
 output "df_job_controller_service_account" {
@@ -35,7 +35,7 @@ output "df_job_subnetwork" {
   value       = module.dataflow_with_dlp.df_job_subnetwork
 }
 
-output "bucket_landing_zone_name" {
+output "bucket_data_ingestion_name" {
   description = "The name of the bucket."
-  value       = module.dataflow_with_dlp.bucket_landing_zone_name
+  value       = module.dataflow_with_dlp.bucket_data_ingestion_name
 }

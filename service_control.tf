@@ -15,10 +15,10 @@
  */
 
 locals {
-  perimeter_members_landing_zone = distinct(concat([
-    "serviceAccount:${module.landing_zone.dataflow_controller_service_account_email}",
-    "serviceAccount:${module.landing_zone.storage_writer_service_account_email}",
-    "serviceAccount:${module.landing_zone.pubsub_writer_service_account_email}",
+  perimeter_members_data_ingestion = distinct(concat([
+    "serviceAccount:${module.data_ingestion.dataflow_controller_service_account_email}",
+    "serviceAccount:${module.data_ingestion.storage_writer_service_account_email}",
+    "serviceAccount:${module.data_ingestion.pubsub_writer_service_account_email}",
     "serviceAccount:${var.terraform_service_account}"
   ], var.perimeter_additional_members))
 
@@ -31,8 +31,8 @@ locals {
   ], var.perimeter_additional_members))
 }
 
-data "google_project" "landing_zone_project" {
-  project_id = var.landing_zone_project_id
+data "google_project" "data_ingestion_project" {
+  project_id = var.data_ingestion_project_id
 }
 
 data "google_project" "governance_project" {
@@ -57,23 +57,23 @@ resource "time_sleep" "forces_wait_propagation" {
   destroy_duration = "330s"
 
   depends_on = [
-    module.landing_zone,
+    module.data_ingestion,
     module.org_policies,
     module.data_governance,
     module.bigquery_confidential_data
   ]
 }
 
-module "landing_zone_vpc_sc" {
+module "data_ingestion_vpc_sc" {
   source = ".//modules/dwh-vpc-sc"
 
   org_id                           = var.org_id
-  project_id                       = var.landing_zone_project_id
+  project_id                       = var.data_ingestion_project_id
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  common_name                      = "landing_zone"
+  common_name                      = "data_ingestion"
   common_suffix                    = random_id.suffix.hex
-  resources                        = [data.google_project.landing_zone_project.number, data.google_project.non_confidential_data_project.number]
-  perimeter_members                = local.perimeter_members_landing_zone
+  resources                        = [data.google_project.data_ingestion_project.number, data.google_project.non_confidential_data_project.number]
+  perimeter_members                = local.perimeter_members_data_ingestion
   restricted_services = [
     #"artifactregistry.googleapis.com",
     "bigquery.googleapis.com",
@@ -94,7 +94,7 @@ module "landing_zone_vpc_sc" {
   sdx_egress_rule = [
     {
       sdx_identities = distinct(concat(
-        var.landing_zone_dataflow_deployer_identities,
+        var.data_ingestion_dataflow_deployer_identities,
         ["serviceAccount:${var.terraform_service_account}"]
       ))
       sdx_project_number = var.sdx_project_number
@@ -102,7 +102,7 @@ module "landing_zone_vpc_sc" {
       method             = "google.storage.objects.get"
     },
     {
-      sdx_identities     = ["serviceAccount:${module.landing_zone.dataflow_controller_service_account_email}"]
+      sdx_identities     = ["serviceAccount:${module.data_ingestion.dataflow_controller_service_account_email}"]
       sdx_project_number = var.sdx_project_number
       service_name       = "artifactregistry.googleapis.com"
       method             = "artifactregistry.googleapis.com/DockerRead"
@@ -204,16 +204,16 @@ module "confidential_data_vpc_sc" {
   ]
 }
 
-module "vpc_sc_bridge_landing_zone_governance" {
+module "vpc_sc_bridge_data_ingestion_governance" {
   source  = "terraform-google-modules/vpc-service-controls/google//modules/bridge_service_perimeter"
   version = "~> 3.0"
 
   policy         = var.access_context_manager_policy_id
-  perimeter_name = "vpc_sc_bridge_landing_zone_governance_${random_id.suffix.hex}"
-  description    = "VPC-SC bridge between landing zone and data governance"
+  perimeter_name = "vpc_sc_bridge_data_ingestion_governance_${random_id.suffix.hex}"
+  description    = "VPC-SC bridge between data ingestion and data governance"
 
   resources = [
-    data.google_project.landing_zone_project.number,
+    data.google_project.data_ingestion_project.number,
     data.google_project.governance_project.number,
     data.google_project.non_confidential_data_project.number
   ]
@@ -221,7 +221,7 @@ module "vpc_sc_bridge_landing_zone_governance" {
   depends_on = [
     time_sleep.forces_wait_propagation,
     module.data_governance_vpc_sc,
-    module.landing_zone_vpc_sc
+    module.data_ingestion_vpc_sc
   ]
 }
 
@@ -245,13 +245,13 @@ module "vpc_sc_bridge_confidential_governance" {
   ]
 }
 
-module "vpc_sc_bridge_confidential_landing_zone" {
+module "vpc_sc_bridge_confidential_data_ingestion" {
   source  = "terraform-google-modules/vpc-service-controls/google//modules/bridge_service_perimeter"
   version = "~> 3.0"
 
   policy         = var.access_context_manager_policy_id
-  perimeter_name = "vpc_sc_bridge_confidential_landing_zone_${random_id.suffix.hex}"
-  description    = "VPC-SC bridge between confidential data and landing zone"
+  perimeter_name = "vpc_sc_bridge_confidential_data_ingestion_${random_id.suffix.hex}"
+  description    = "VPC-SC bridge between confidential data and data ingestion"
 
   resources = [
     data.google_project.confidential_project.number,
@@ -261,7 +261,7 @@ module "vpc_sc_bridge_confidential_landing_zone" {
   depends_on = [
     time_sleep.forces_wait_propagation,
     module.confidential_data_vpc_sc,
-    module.landing_zone_vpc_sc
+    module.data_ingestion_vpc_sc
   ]
 }
 
@@ -269,8 +269,8 @@ resource "time_sleep" "wait_for_bridge_propagation" {
   create_duration = "240s"
 
   depends_on = [
-    module.vpc_sc_bridge_confidential_landing_zone,
+    module.vpc_sc_bridge_confidential_data_ingestion,
     module.vpc_sc_bridge_confidential_governance,
-    module.vpc_sc_bridge_landing_zone_governance
+    module.vpc_sc_bridge_data_ingestion_governance
   ]
 }

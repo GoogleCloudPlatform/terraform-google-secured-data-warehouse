@@ -16,7 +16,7 @@
 
 output "project_id" {
   description = "The project's ID."
-  value       = var.landing_zone_project_id
+  value       = var.data_ingestion_project_id
 }
 
 output "df_job_network" {
@@ -31,12 +31,12 @@ output "df_job_subnetwork" {
 
 output "controller_service_account" {
   description = "The Service Account email that will be used to identify the VMs in which the jobs are running."
-  value       = module.landing_zone.dataflow_controller_service_account_email
+  value       = module.data_ingestion.dataflow_controller_service_account_email
 }
 
-output "bucket_landing_zone_name" {
+output "bucket_data_ingestion_name" {
   description = "The name of the bucket."
-  value       = module.landing_zone.landing_zone_bucket_name
+  value       = module.data_ingestion.data_ingestion_bucket_name
 }
 
 output "dlp_location" {

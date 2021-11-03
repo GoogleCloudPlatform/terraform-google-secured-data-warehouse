@@ -40,10 +40,10 @@ locals {
   ]
 }
 
-resource "google_project_iam_member" "ci-account-landing-zone" {
+resource "google_project_iam_member" "ci-account-data-ingestion" {
   for_each = toset(local.int_proj_required_roles)
 
-  project = var.landing_zone_project_id
+  project = var.data_ingestion_project_id
   role    = each.value
   member  = "serviceAccount:${var.service_account_email}"
 }

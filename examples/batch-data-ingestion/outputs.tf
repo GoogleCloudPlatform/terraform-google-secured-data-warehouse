@@ -14,38 +14,37 @@
  * limitations under the License.
  */
 
-
 output "project_id" {
-  description = "The project's ID."
-  value       = var.landing_zone_project_id[0]
+  description = "The data ingestion project's ID."
+  value       = var.data_ingestion_project_id
 }
 
 output "scheduler_id" {
   description = "Cloud Scheduler Job id created."
-  value       = module.batch_dataflow.scheduler_id
+  value       = google_cloud_scheduler_job.scheduler.id
 }
 
-output "df_job_controller_service_account" {
-  description = "The email of the service account used for create Dataflow job."
-  value       = module.batch_dataflow.controller_service_account
-}
-
-output "df_job_region" {
-  description = "The region of the newly created Dataflow job."
-  value       = module.batch_dataflow.df_job_region
-}
-
-output "df_job_network" {
-  description = "The name of the network used for create Dataflow job."
-  value       = module.batch_dataflow.df_job_network
-}
-
-output "df_job_subnetwork" {
-  description = "The name of the subnetwork used for create Dataflow job."
-  value       = module.batch_dataflow.df_job_subnetwork
+output "controller_service_account" {
+  description = "The Service Account email that will be used to identify the VMs in which the jobs are running."
+  value       = module.data_ingestion.dataflow_controller_service_account_email
 }
 
 output "dataflow_temp_bucket_name" {
   description = "The name of the dataflow temporary bucket."
-  value       = module.batch_dataflow.dataflow_temp_bucket_name
+  value       = module.data_ingestion.data_ingestion_dataflow_bucket_name
+}
+
+output "df_job_region" {
+  description = "The region of the newly created Dataflow job."
+  value       = local.region
+}
+
+output "df_job_network" {
+  description = "The URI of the VPC being created."
+  value       = var.network_self_link
+}
+
+output "df_job_subnetwork" {
+  description = "The name of the subnetwork used for create Dataflow job."
+  value       = var.subnetwork_self_link
 }

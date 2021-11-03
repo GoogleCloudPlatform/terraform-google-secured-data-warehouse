@@ -24,9 +24,9 @@ output "cmek_keyring_name" {
   value       = module.cmek.keyring_name
 }
 
-output "cmek_landing_zone_crypto_key" {
-  description = "The Customer Managed Crypto Key for the landing zone crypto boundary."
-  value       = module.cmek.keys[local.landing_zone_key_name]
+output "cmek_data_ingestion_crypto_key" {
+  description = "The Customer Managed Crypto Key for the data ingestion crypto boundary."
+  value       = module.cmek.keys[local.data_ingestion_key_name]
 }
 
 output "cmek_bigquery_crypto_key" {
@@ -44,9 +44,9 @@ output "cmek_confidential_bigquery_crypto_key" {
   value       = module.cmek.keys[local.confidential_bigquery_key_name]
 }
 
-output "cmek_landing_zone_crypto_key_name" {
-  description = "The Customer Managed Crypto Key name for the landing zone crypto boundary."
-  value       = local.landing_zone_key_name
+output "cmek_data_ingestion_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the data ingestion crypto boundary."
+  value       = local.data_ingestion_key_name
 }
 
 output "cmek_bigquery_crypto_key_name" {

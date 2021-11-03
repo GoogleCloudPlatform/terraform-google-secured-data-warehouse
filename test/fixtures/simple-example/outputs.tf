@@ -17,7 +17,7 @@
 
 output "project_id" {
   description = "The project_id used to create infra."
-  value       = var.landing_zone_project_id[1]
+  value       = var.data_ingestion_project_id[1]
 }
 
 output "data_governance_project_id" {
@@ -55,34 +55,34 @@ output "pubsub_writer_service_account_email" {
   value       = module.simple_example.pubsub_writer_service_account_email
 }
 
-output "landing_zone_bucket_name" {
-  description = "The name of the bucket created for landing zone pipeline."
-  value       = module.simple_example.landing_zone_bucket_name
+output "data_ingestion_bucket_name" {
+  description = "The name of the bucket created for data ingestion pipeline."
+  value       = module.simple_example.data_ingestion_bucket_name
 }
 
-output "landing_zone_topic_name" {
-  description = "The topic created for landing zone pipeline."
-  value       = module.simple_example.landing_zone_topic_name
+output "data_ingestion_topic_name" {
+  description = "The topic created for data ingestion pipeline."
+  value       = module.simple_example.data_ingestion_topic_name
 }
 
-output "landing_zone_bigquery_dataset" {
-  description = "The bigquery dataset created for landing zone pipeline."
-  value       = module.simple_example.landing_zone_bigquery_dataset
+output "data_ingestion_bigquery_dataset" {
+  description = "The bigquery dataset created for data ingestion pipeline."
+  value       = module.simple_example.data_ingestion_bigquery_dataset
 }
 
 output "access_level_name" {
   description = "Access context manager access level name."
-  value       = module.simple_example.landing_zone_access_level_name
+  value       = module.simple_example.data_ingestion_access_level_name
 }
 
 output "service_perimeter_name" {
   description = "Access context manager service perimeter name."
-  value       = module.simple_example.landing_zone_service_perimeter_name
+  value       = module.simple_example.data_ingestion_service_perimeter_name
 }
 
-output "cmek_landing_zone_crypto_key" {
-  description = "The Customer Managed Crypto Key for the landing zone crypto boundary."
-  value       = module.simple_example.cmek_landing_zone_crypto_key
+output "cmek_data_ingestion_crypto_key" {
+  description = "The Customer Managed Crypto Key for the data ingestion crypto boundary."
+  value       = module.simple_example.cmek_data_ingestion_crypto_key
 }
 
 output "cmek_bigquery_crypto_key" {

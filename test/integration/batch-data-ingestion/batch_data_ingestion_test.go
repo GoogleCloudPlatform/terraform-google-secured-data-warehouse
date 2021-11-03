@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package batch_landing_zone
+package batch_data_ingestion
 
 import (
 	"fmt"
@@ -24,7 +24,7 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-func TestBatchLandingZone(t *testing.T) {
+func TestBatchDataIngestion(t *testing.T) {
 	bdi := tft.NewTFBlueprintTest(t)
 	bdi.DefineVerify(func(assert *assert.Assertions) {
 		bdi.DefaultVerify(assert)

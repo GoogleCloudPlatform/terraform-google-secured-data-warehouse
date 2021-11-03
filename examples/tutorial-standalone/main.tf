@@ -60,11 +60,11 @@ module "secured_data_warehouse" {
   data_governance_project_id       = module.base_projects.data_governance_project_id
   confidential_data_project_id     = module.base_projects.confidential_data_project_id
   non_confidential_data_project_id = module.base_projects.non_confidential_data_project_id
-  landing_zone_project_id          = module.base_projects.landing_zone_project_id
+  data_ingestion_project_id        = module.base_projects.data_ingestion_project_id
   sdx_project_number               = module.template_project.sdx_project_number
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  bucket_name                      = "landing-zone"
+  bucket_name                      = "data-ingestion"
   location                         = local.location
   dataset_id                       = local.non_confidential_dataset_id
   confidential_dataset_id          = local.confidential_dataset_id
@@ -83,7 +83,7 @@ resource "null_resource" "download_sample_cc_into_gcs" {
 
   triggers = {
     cc_file_name = local.cc_file_name
-    bucket       = module.secured_data_warehouse.landing_zone_bucket_name
+    bucket       = module.secured_data_warehouse.data_ingestion_bucket_name
   }
 
   provisioner "local-exec" {
@@ -92,7 +92,7 @@ resource "null_resource" "download_sample_cc_into_gcs" {
     unzip cc_records.zip
     echo "Changing sample file encoding from WINDOWS-1252 to UTF-8"
     iconv -f="WINDOWS-1252" -t="UTF-8" 10000\ CC\ Records.csv > ${local.cc_file_name}
-    gsutil cp ${local.cc_file_name} gs://${module.secured_data_warehouse.landing_zone_bucket_name}
+    gsutil cp ${local.cc_file_name} gs://${module.secured_data_warehouse.data_ingestion_bucket_name}
     rm ${local.cc_file_name} 10000\ CC\ Records.csv cc_records.zip
 EOF
 
@@ -153,19 +153,19 @@ resource "google_artifact_registry_repository_iam_member" "confidential_docker_r
 module "regional_deid" {
   source = "../../modules/dataflow-flex-job"
 
-  project_id              = module.base_projects.landing_zone_project_id
+  project_id              = module.base_projects.data_ingestion_project_id
   name                    = "regional-flex-java-gcs-dlp-bq"
   container_spec_gcs_path = module.template_project.java_de_identify_template_gs_path
   region                  = local.location
   service_account_email   = module.secured_data_warehouse.dataflow_controller_service_account_email
-  subnetwork_self_link    = module.base_projects.landing_zone_subnets_self_link
-  kms_key_name            = module.secured_data_warehouse.cmek_landing_zone_crypto_key
-  temp_location           = "gs://${module.secured_data_warehouse.landing_zone_dataflow_bucket_name}/tmp/"
-  staging_location        = "gs://${module.secured_data_warehouse.landing_zone_dataflow_bucket_name}/staging/"
+  subnetwork_self_link    = module.base_projects.data_ingestion_subnets_self_link
+  kms_key_name            = module.secured_data_warehouse.cmek_data_ingestion_crypto_key
+  temp_location           = "gs://${module.secured_data_warehouse.data_ingestion_dataflow_bucket_name}/tmp/"
+  staging_location        = "gs://${module.secured_data_warehouse.data_ingestion_dataflow_bucket_name}/staging/"
   max_workers             = 1
 
   parameters = {
-    inputFilePattern       = "gs://${module.secured_data_warehouse.landing_zone_bucket_name}/${local.cc_file_name}"
+    inputFilePattern       = "gs://${module.secured_data_warehouse.data_ingestion_bucket_name}/${local.cc_file_name}"
     bqProjectId            = module.base_projects.non_confidential_data_project_id
     datasetName            = local.non_confidential_dataset_id
     batchSize              = 1000

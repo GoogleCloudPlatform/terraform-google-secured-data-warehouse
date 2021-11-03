@@ -49,7 +49,7 @@ resource "google_kms_secret_ciphertext" "wrapped_key" {
 
 module "dataflow_with_dlp" {
   source                            = "../../../examples/dataflow-with-dlp"
-  landing_zone_project_id           = var.landing_zone_project_id[0]
+  data_ingestion_project_id         = var.data_ingestion_project_id[0]
   data_governance_project_id        = var.data_governance_project_id[0]
   non_confidential_data_project_id  = var.non_confidential_data_project_id[0]
   confidential_data_project_id      = var.confidential_data_project_id[0]
@@ -59,8 +59,8 @@ module "dataflow_with_dlp" {
   access_context_manager_policy_id  = var.access_context_manager_policy_id
   org_id                            = var.org_id
   delete_contents_on_destroy        = true
-  network_self_link                 = var.landing_zone_network_self_link[0]
-  subnetwork_self_link              = var.landing_zone_subnets_self_link[0]
+  network_self_link                 = var.data_ingestion_network_self_link[0]
+  subnetwork_self_link              = var.data_ingestion_subnets_self_link[0]
   crypto_key                        = module.kek.keys[local.kek_key_name]
   wrapped_key                       = google_kms_secret_ciphertext.wrapped_key.ciphertext
   de_identify_template_gs_path      = var.java_de_identify_template_gs_path

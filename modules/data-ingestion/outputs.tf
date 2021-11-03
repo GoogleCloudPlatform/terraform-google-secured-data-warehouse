@@ -20,31 +20,31 @@ output "dataflow_controller_service_account_email" {
 }
 
 output "storage_writer_service_account_email" {
-  description = "The Storage writer service account email. Should be used to write data to the buckets the landing zone pipeline reads from."
+  description = "The Storage writer service account email. Should be used to write data to the buckets the data ingestion pipeline reads from."
   value       = google_service_account.storage_writer_service_account.email
 }
 
 output "pubsub_writer_service_account_email" {
-  description = "The PubSub writer service account email. Should be used to write data to the PubSub topics the landing zone pipeline reads from."
+  description = "The PubSub writer service account email. Should be used to write data to the PubSub topics the data ingestion pipeline reads from."
   value       = google_service_account.pubsub_writer_service_account.email
 }
 
-output "landing_zone_bucket_name" {
-  description = "The name of the bucket created for landing zone pipeline."
-  value       = module.landing_zone_bucket.bucket.name
+output "data_ingestion_bucket_name" {
+  description = "The name of the bucket created for data ingestion pipeline."
+  value       = module.data_ingestion_bucket.bucket.name
 }
 
-output "landing_zone_dataflow_bucket_name" {
-  description = "The name of the bucket created for dataflow in the landing zone pipeline."
+output "data_ingestion_dataflow_bucket_name" {
+  description = "The name of the bucket created for dataflow in the data ingestion pipeline."
   value       = module.dataflow_bucket.bucket.name
 }
 
-output "landing_zone_topic_name" {
-  description = "The topic created for landing zone pipeline."
-  value       = module.landing_zone_topic.topic
+output "data_ingestion_topic_name" {
+  description = "The topic created for data ingestion pipeline."
+  value       = module.data_ingestion_topic.topic
 }
 
-output "landing_zone_bigquery_dataset" {
-  description = "The bigquery dataset created for landing zone pipeline."
+output "data_ingestion_bigquery_dataset" {
+  description = "The bigquery dataset created for data ingestion pipeline."
   value       = module.bigquery_dataset.bigquery_dataset
 }

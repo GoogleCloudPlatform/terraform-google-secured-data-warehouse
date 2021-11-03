@@ -30,8 +30,8 @@ variable "terraform_service_account" {
   type        = string
 }
 
-variable "landing_zone_project_id" {
-  description = "The ID of the project in which the landing zone resources will be created."
+variable "data_ingestion_project_id" {
+  description = "The ID of the project in which the data ingestion resources will be created."
   type        = string
 }
 
@@ -94,13 +94,13 @@ variable "dataset_id" {
 variable "dataset_name" {
   description = "Friendly name for the dataset being provisioned."
   type        = string
-  default     = "Landing-zone dataset"
+  default     = "Data-ingestion dataset"
 }
 
 variable "dataset_description" {
   description = "Dataset description."
   type        = string
-  default     = "Landing-zone dataset"
+  default     = "Data-ingestion dataset"
 }
 
 variable "dataset_location" {
@@ -120,7 +120,7 @@ variable "bigquery_encryption_key" {
   type        = string
 }
 
-variable "landing_zone_encryption_key" {
+variable "data_ingestion_encryption_key" {
   description = "Self-link of the encryption key to be used by Pub/Sub and Storage."
   type        = string
 }

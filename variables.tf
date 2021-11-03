@@ -48,8 +48,8 @@ variable "terraform_service_account" {
   type        = string
 }
 
-variable "landing_zone_project_id" {
-  description = "The ID of the project in which the landing zone resources will be created"
+variable "data_ingestion_project_id" {
+  description = "The ID of the project in which the data ingestion resources will be created"
   type        = string
 }
 
@@ -133,13 +133,13 @@ variable "dataset_id" {
 variable "dataset_name" {
   description = "Friendly name for the dataset being provisioned."
   type        = string
-  default     = "Landing-zone dataset"
+  default     = "Data-ingestion dataset"
 }
 
 variable "dataset_description" {
   description = "Dataset description."
   type        = string
-  default     = "Landing-zone dataset"
+  default     = "Data-ingestion dataset"
 }
 
 variable "dataset_default_table_expiration_ms" {
@@ -177,8 +177,8 @@ variable "delete_contents_on_destroy" {
   default     = false
 }
 
-variable "landing_zone_dataflow_deployer_identities" {
-  description = "List of members in the standard GCP form: user:{email}, serviceAccount:{email} that will deploy Dataflow jobs in the Landing Zone project. These identities will be added to the VPC-SC secure data exchange egress rules."
+variable "data_ingestion_dataflow_deployer_identities" {
+  description = "List of members in the standard GCP form: user:{email}, serviceAccount:{email} that will deploy Dataflow jobs in the Data Ingestion project. These identities will be added to the VPC-SC secure data exchange egress rules."
   type        = list(string)
   default     = []
 }
