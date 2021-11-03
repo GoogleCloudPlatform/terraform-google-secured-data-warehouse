@@ -22,11 +22,12 @@ module "landing_zone_project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
 
-  name              = "sdw-data-ing-${random_id.project_id_suffix.hex}"
-  random_project_id = "true"
-  org_id            = var.org_id
-  folder_id         = var.folder_id
-  billing_account   = var.billing_account
+  name                    = "sdw-data-ing-${random_id.project_id_suffix.hex}"
+  random_project_id       = "true"
+  org_id                  = var.org_id
+  folder_id               = var.folder_id
+  billing_account         = var.billing_account
+  default_service_account = "deprivilege"
 
   activate_apis = [
     "datacatalog.googleapis.com",
@@ -59,11 +60,12 @@ module "data_governance_project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
 
-  name              = "sdw-data-gov-${random_id.project_id_suffix.hex}"
-  random_project_id = "true"
-  org_id            = var.org_id
-  folder_id         = var.folder_id
-  billing_account   = var.billing_account
+  name                    = "sdw-data-gov-${random_id.project_id_suffix.hex}"
+  random_project_id       = "true"
+  org_id                  = var.org_id
+  folder_id               = var.folder_id
+  billing_account         = var.billing_account
+  default_service_account = "deprivilege"
 
   activate_apis = [
     "datacatalog.googleapis.com",
@@ -82,11 +84,12 @@ module "non_confidential_data_project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
 
-  name              = "sdw-non-conf-${random_id.project_id_suffix.hex}"
-  random_project_id = "true"
-  org_id            = var.org_id
-  folder_id         = var.folder_id
-  billing_account   = var.billing_account
+  name                    = "sdw-non-conf-${random_id.project_id_suffix.hex}"
+  random_project_id       = "true"
+  org_id                  = var.org_id
+  folder_id               = var.folder_id
+  billing_account         = var.billing_account
+  default_service_account = "deprivilege"
 
   activate_apis = [
     "cloudresourcemanager.googleapis.com",
@@ -105,11 +108,12 @@ module "confidential_data_project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
 
-  name              = "sdw-conf-${random_id.project_id_suffix.hex}"
-  random_project_id = "true"
-  org_id            = var.org_id
-  folder_id         = var.folder_id
-  billing_account   = var.billing_account
+  name                    = "sdw-conf-${random_id.project_id_suffix.hex}"
+  random_project_id       = "true"
+  org_id                  = var.org_id
+  folder_id               = var.folder_id
+  billing_account         = var.billing_account
+  default_service_account = "deprivilege"
 
   activate_apis = [
     "cloudresourcemanager.googleapis.com",
