@@ -42,6 +42,21 @@ module "iam_projects" {
   service_account_email            = var.terraform_service_account
 }
 
+resource "null_resource" "remove_owner_role" {
+  for_each = local.projects_ids
+
+  provisioner "local-exec" {
+    command = <<EOF
+    gcloud projects remove-iam-policy-binding ${each.value} \
+    --member=${var.terraform_service_account} --role="roles/owner"
+EOF
+  }
+
+  depends_on = [
+    module.iam_projects
+  ]
+}
+
 module "template_project" {
   source = "../../test//setup/template-project"
 
@@ -50,6 +65,19 @@ module "template_project" {
   billing_account       = var.billing_account
   location              = local.location
   service_account_email = var.terraform_service_account
+}
+
+resource "null_resource" "remove_owner_role_from_template" {
+  provisioner "local-exec" {
+    command = <<EOF
+    gcloud projects remove-iam-policy-binding ${module.template_project.project_id} \
+    --member=${var.terraform_service_account} --role="roles/owner"
+EOF
+  }
+
+  depends_on = [
+    module.template_project
+  ]
 }
 
 module "centralized_logging" {

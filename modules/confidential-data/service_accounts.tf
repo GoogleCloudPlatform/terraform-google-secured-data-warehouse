@@ -50,6 +50,12 @@ resource "google_project_iam_member" "confidential" {
   member  = "serviceAccount:${module.dataflow_controller_service_account.email}"
 }
 
+resource "google_storage_bucket_iam_member" "objectAdmin" {
+  bucket = module.dataflow_bucket.bucket.name
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:${module.dataflow_controller_service_account.email}"
+}
+
 resource "google_project_iam_member" "governance" {
   for_each = toset(local.governance_project_roles)
 

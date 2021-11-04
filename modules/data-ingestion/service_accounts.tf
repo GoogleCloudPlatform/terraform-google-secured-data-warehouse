@@ -18,7 +18,7 @@ locals {
   data_ingestion_project_roles = [
     "roles/pubsub.subscriber",
     "roles/pubsub.editor",
-    "roles/storage.objectAdmin",
+    "roles/storage.objectViewer",
     "roles/dataflow.worker"
   ]
 
@@ -52,6 +52,12 @@ resource "google_project_iam_member" "ingestion" {
   member  = "serviceAccount:${module.dataflow_controller_service_account.email}"
 }
 
+resource "google_storage_bucket_iam_member" "objectAdmin" {
+  bucket = module.dataflow_bucket.bucket.name
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:${module.dataflow_controller_service_account.email}"
+}
+
 resource "google_project_iam_member" "governance" {
   for_each = toset(local.governance_project_roles)
 
@@ -75,12 +81,6 @@ resource "google_service_account" "storage_writer_service_account" {
   display_name = "Cloud Storage data writer service account"
 }
 
-resource "google_storage_bucket_iam_member" "objectViewer" {
-  bucket = module.data_ingestion_bucket.bucket.name
-  role   = "roles/storage.objectViewer"
-  member = "serviceAccount:${google_service_account.storage_writer_service_account.email}"
-}
-
 resource "google_storage_bucket_iam_member" "objectCreator" {
   bucket = module.data_ingestion_bucket.bucket.name
   role   = "roles/storage.objectCreator"
@@ -98,12 +98,5 @@ resource "google_pubsub_topic_iam_member" "publisher" {
   project = var.data_ingestion_project_id
   topic   = module.data_ingestion_topic.id
   role    = "roles/pubsub.publisher"
-  member  = "serviceAccount:${google_service_account.pubsub_writer_service_account.email}"
-}
-
-resource "google_pubsub_topic_iam_member" "subscriber" {
-  project = var.data_ingestion_project_id
-  topic   = module.data_ingestion_topic.id
-  role    = "roles/pubsub.subscriber"
   member  = "serviceAccount:${google_service_account.pubsub_writer_service_account.email}"
 }

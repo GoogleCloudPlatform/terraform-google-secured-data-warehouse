@@ -77,7 +77,6 @@ resource "google_project_iam_member" "int_permission_artifact_registry_test" {
   member  = "serviceAccount:${var.service_account_email}"
 }
 
-
 module "external_flex_template_infrastructure" {
   source = "../../..//flex-templates/template-artifact-storage"
 
