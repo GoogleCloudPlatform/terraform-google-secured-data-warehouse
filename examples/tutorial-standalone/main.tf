@@ -75,7 +75,9 @@ module "secured_data_warehouse" {
   depends_on = [
     module.base_projects,
     module.iam_projects,
-    module.centralized_logging
+    module.centralized_logging,
+    null_resource.remove_owner_role,
+    null_resource.remove_owner_role_from_template
   ]
 }
 

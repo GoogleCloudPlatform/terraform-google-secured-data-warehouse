@@ -20,6 +20,8 @@ locals {
     "roles/storage.admin",
     "roles/browser",
     "roles/artifactregistry.admin",
+    "roles/iam.serviceAccountCreator",
+    "roles/iam.serviceAccountDeleter",
     "roles/cloudbuild.builds.editor"
   ]
 
@@ -84,6 +86,10 @@ module "external_flex_template_infrastructure" {
   location             = local.location
   docker_repository_id = local.docker_repository_id
   python_repository_id = local.python_repository_id
+
+  depends_on = [
+    google_project_iam_member.int_permission_artifact_registry_test
+  ]
 }
 
 resource "null_resource" "java_de_identification_flex_template" {

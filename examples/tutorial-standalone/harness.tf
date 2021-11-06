@@ -87,4 +87,8 @@ module "centralized_logging" {
   bucket_name                = "bkt-logging-${module.base_projects.data_governance_project_id}"
   logging_location           = local.location
   delete_contents_on_destroy = var.delete_contents_on_destroy
+
+  depends_on = [
+    module.iam_projects
+  ]
 }

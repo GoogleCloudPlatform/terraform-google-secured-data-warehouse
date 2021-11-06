@@ -49,8 +49,13 @@ with the following IAM roles:
   - Access Context Manager Admin: `roles/accesscontextmanager.policyAdmin`
   - Organization Policy Administrator: `roles/orgpolicy.policyAdmin`
 - Folder Level
-  - Project Creator: `roles/resourcemanager.projectCreator`
   - Billing User: `roles/billing.user`
+  - Compute Network Admin: `roles/compute.networkAdmin`
+  - Logging Admin: `roles/logging.admin`
+  - Project Creator: `roles/resourcemanager.projectCreator`
+  - Project Deleter: `roles/resourcemanager.projectDeleter`
+  - Project IAM Admin: `roles/resourcemanager.projectIamAdmin`
+  - Service Usage Admin: `roles/serviceusage.serviceUsageAdmin`
 
 The service account must have `Billing User role` in the billing account.
 
