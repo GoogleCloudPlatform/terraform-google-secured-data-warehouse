@@ -15,6 +15,10 @@
  */
 
 locals {
+  kek_keyring                 = "kek_keyring_${random_id.suffix.hex}"
+  kek_key_name                = "kek_key_${random_id.suffix.hex}"
+  key_rotation_period_seconds = "2592000s" #30 days
+
   projects_ids = {
     data_ingestion   = module.base_projects.data_ingestion_project_id,
     governance       = module.base_projects.data_governance_project_id,
@@ -80,13 +84,38 @@ EOF
   ]
 }
 
+module "kek" {
+  source  = "terraform-google-modules/kms/google"
+  version = "~> 1.2"
+
+  project_id           = module.base_projects.data_governance_project_id
+  location             = local.location
+  keyring              = local.kek_keyring
+  key_rotation_period  = local.key_rotation_period_seconds
+  keys                 = [local.kek_key_name]
+  key_protection_level = var.kms_key_protection_level
+  prevent_destroy      = !var.delete_contents_on_destroy
+}
+
+resource "random_id" "original_key" {
+  byte_length = 16
+}
+
+// TODO: Replace with a method that does not store the plain value in the state
+resource "google_kms_secret_ciphertext" "wrapped_key" {
+  crypto_key = module.kek.keys[local.kek_key_name]
+  plaintext  = random_id.original_key.b64_std
+}
+
 module "centralized_logging" {
-  source                     = "../../modules/centralized-logging"
-  projects_ids               = local.projects_ids
-  logging_project_id         = module.base_projects.data_governance_project_id
-  bucket_name                = "bkt-logging-${module.base_projects.data_governance_project_id}"
-  logging_location           = local.location
-  delete_contents_on_destroy = var.delete_contents_on_destroy
+  source                      = "../../modules/centralized-logging"
+  projects_ids                = local.projects_ids
+  logging_project_id          = module.base_projects.data_governance_project_id
+  kms_project_id              = module.base_projects.data_governance_project_id
+  bucket_name                 = "bkt-logging-${module.base_projects.data_governance_project_id}"
+  logging_location            = local.location
+  delete_contents_on_destroy  = var.delete_contents_on_destroy
+  key_rotation_period_seconds = local.key_rotation_period_seconds
 
   depends_on = [
     module.iam_projects

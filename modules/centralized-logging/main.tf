@@ -16,14 +16,13 @@
 
 locals {
 
-  new_bucket_name             = "${var.bucket_name}-${random_id.suffix.hex}"
-  bucket_name                 = var.create_bucket ? module.logging_bucket[0].bucket.name : var.bucket_name
-  destination_uri             = "storage.googleapis.com/${local.bucket_name}"
-  storage_sa                  = data.google_storage_project_service_account.gcs_account.email_address
-  logging_keyring_name        = "logging_keyring_${random_id.suffix.hex}"
-  logging_key_name            = "logging_key"
-  keys                        = [local.logging_key_name]
-  key_rotation_period_seconds = "2592000s"
+  new_bucket_name      = "${var.bucket_name}-${random_id.suffix.hex}"
+  bucket_name          = var.create_bucket ? module.logging_bucket[0].bucket.name : var.bucket_name
+  destination_uri      = "storage.googleapis.com/${local.bucket_name}"
+  storage_sa           = data.google_storage_project_service_account.gcs_account.email_address
+  logging_keyring_name = "logging_keyring_${random_id.suffix.hex}"
+  logging_key_name     = "logging_key"
+  keys                 = [local.logging_key_name]
   log_exports = toset([
     for value in module.log_export : value
   ])
@@ -39,16 +38,17 @@ data "google_storage_project_service_account" "gcs_account" {
 }
 
 module "cmek" {
-  count   = var.create_bucket ? 1 : 0
   source  = "terraform-google-modules/kms/google"
   version = "~> 2.0.1"
 
-  project_id           = var.logging_project_id
+  count = var.create_bucket ? 1 : 0
+
+  project_id           = var.kms_project_id
   location             = var.logging_location
   keyring              = local.logging_keyring_name
-  key_rotation_period  = local.key_rotation_period_seconds
+  key_rotation_period  = var.key_rotation_period_seconds
   keys                 = local.keys
-  key_protection_level = "HSM"
+  key_protection_level = var.kms_key_protection_level
   set_encrypters_for   = local.keys
   set_decrypters_for   = local.keys
   encrypters           = ["serviceAccount:${local.storage_sa}"]
@@ -57,9 +57,10 @@ module "cmek" {
 }
 
 module "logging_bucket" {
-  count   = var.create_bucket ? 1 : 0
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 2.1"
+
+  count = var.create_bucket ? 1 : 0
 
   name          = local.new_bucket_name
   project_id    = var.logging_project_id
@@ -71,9 +72,10 @@ module "logging_bucket" {
 }
 
 module "log_export" {
+  source  = "terraform-google-modules/log-export/google"
+  version = "~> 7.1.0"
+
   for_each = var.projects_ids
-  source   = "terraform-google-modules/log-export/google"
-  version  = "~> 7.1.0"
 
   destination_uri        = local.destination_uri
   filter                 = var.sink_filter
@@ -85,7 +87,8 @@ module "log_export" {
 
 resource "google_storage_bucket_iam_member" "storage_sink_member" {
   for_each = module.log_export
-  bucket   = local.bucket_name
-  role     = "roles/storage.objectCreator"
-  member   = each.value.writer_identity
+
+  bucket = local.bucket_name
+  role   = "roles/storage.objectCreator"
+  member = each.value.writer_identity
 }

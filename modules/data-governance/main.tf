@@ -128,7 +128,7 @@ module "cmek" {
   key_rotation_period  = var.key_rotation_period_seconds
   prevent_destroy      = !var.delete_contents_on_destroy
   keys                 = local.keys
-  key_protection_level = "HSM"
+  key_protection_level = var.kms_key_protection_level
   set_encrypters_for   = local.keys
   set_decrypters_for   = local.keys
   encrypters           = local.encrypters

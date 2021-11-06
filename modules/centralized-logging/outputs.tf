@@ -15,7 +15,7 @@
  */
 
 output "sinks" {
-  description = "The list of sink that were created."
+  description = "The list of sinks that were created."
   value = toset([
     for value in module.log_export : value
   ])

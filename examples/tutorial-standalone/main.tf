@@ -20,37 +20,11 @@ locals {
   confidential_dataset_id     = "secured_dataset"
   taxonomy_display_name       = "${var.taxonomy_name}-${random_id.suffix.hex}"
   confidential_table_id       = "${trimsuffix(local.cc_file_name, ".csv")}_re_id"
-  kek_keyring                 = "kek_keyring_${random_id.suffix.hex}"
-  kek_key_name                = "kek_key_${random_id.suffix.hex}"
   cc_file_name                = "cc_10000_records.csv"
-  key_rotation_period_seconds = "2592000s"
 }
 
 resource "random_id" "suffix" {
   byte_length = 4
-}
-
-module "kek" {
-  source  = "terraform-google-modules/kms/google"
-  version = "~> 1.2"
-
-  project_id           = module.base_projects.data_governance_project_id
-  location             = local.location
-  keyring              = local.kek_keyring
-  key_rotation_period  = local.key_rotation_period_seconds
-  keys                 = [local.kek_key_name]
-  key_protection_level = var.kms_key_protection_level
-  prevent_destroy      = !var.delete_contents_on_destroy
-}
-
-resource "random_id" "original_key" {
-  byte_length = 16
-}
-
-// TODO: Replace with a method that does not store the plain value in the state
-resource "google_kms_secret_ciphertext" "wrapped_key" {
-  crypto_key = module.kek.keys[local.kek_key_name]
-  plaintext  = random_id.original_key.b64_std
 }
 
 module "secured_data_warehouse" {

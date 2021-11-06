@@ -75,7 +75,6 @@ module "data_ingestion_vpc_sc" {
   resources                        = [data.google_project.data_ingestion_project.number, data.google_project.non_confidential_data_project.number]
   perimeter_members                = local.perimeter_members_data_ingestion
   restricted_services = [
-    #"artifactregistry.googleapis.com",
     "bigquery.googleapis.com",
     "cloudasset.googleapis.com",
     "cloudfunctions.googleapis.com",
@@ -100,12 +99,6 @@ module "data_ingestion_vpc_sc" {
       sdx_project_number = var.sdx_project_number
       service_name       = "storage.googleapis.com"
       method             = "google.storage.objects.get"
-    },
-    {
-      sdx_identities     = ["serviceAccount:${module.data_ingestion.dataflow_controller_service_account_email}"]
-      sdx_project_number = var.sdx_project_number
-      service_name       = "artifactregistry.googleapis.com"
-      method             = "artifactregistry.googleapis.com/DockerRead"
     }
   ]
 
@@ -162,7 +155,6 @@ module "confidential_data_vpc_sc" {
   resources                        = [data.google_project.confidential_project.number]
   perimeter_members                = local.perimeter_members_confidential
   restricted_services = [
-    #"artifactregistry.googleapis.com",
     "bigquery.googleapis.com",
     "cloudasset.googleapis.com",
     "cloudfunctions.googleapis.com",
@@ -187,12 +179,6 @@ module "confidential_data_vpc_sc" {
       sdx_project_number = var.sdx_project_number
       service_name       = "storage.googleapis.com"
       method             = "google.storage.objects.get"
-    },
-    {
-      sdx_identities     = ["serviceAccount:${module.bigquery_confidential_data.confidential_dataflow_controller_service_account_email}"]
-      sdx_project_number = var.sdx_project_number
-      service_name       = "artifactregistry.googleapis.com"
-      method             = "artifactregistry.googleapis.com/DockerRead"
     }
   ]
 

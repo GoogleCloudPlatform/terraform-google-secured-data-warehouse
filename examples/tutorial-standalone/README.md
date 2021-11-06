@@ -88,7 +88,7 @@ The following APIs must be enabled in the project where the service account was 
 | billing\_account | The billing account id associated with the projects, e.g. XXXXXX-YYYYYY-ZZZZZZ. | `any` | n/a | yes |
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `false` | no |
 | folder\_id | The folder to deploy in. | `any` | n/a | yes |
-| kms\_key\_protection\_level | The protection level to use when creating a version based on this template. Default value: "HSM" Possible values: ["SOFTWARE", "HSM"] | `string` | `"HSM"` | no |
+| kms\_key\_protection\_level | The protection level to use when creating a key. Possible values: ["SOFTWARE", "HSM"] | `string` | `"HSM"` | no |
 | org\_id | The numeric organization id. | `any` | n/a | yes |
 | perimeter\_additional\_members | The list of all members to be added on perimeter access, except the service accounts created by this module. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | n/a | yes |
 | taxonomy\_name | The taxonomy display name. | `string` | `"secured_taxonomy"` | no |
