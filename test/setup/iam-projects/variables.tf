@@ -20,7 +20,7 @@ variable "data_ingestion_project_id" {
 }
 
 variable "non_confidential_data_project_id" {
-  description = "Non confidential data project ID."
+  description = "Non-confidential data project ID."
   type        = string
 }
 

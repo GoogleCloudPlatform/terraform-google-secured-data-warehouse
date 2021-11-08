@@ -15,22 +15,22 @@
  */
 
 output "data_ingestion_project_id" {
-  description = "(optional) describe your variable"
+  description = "Data ingestion project ID."
   value       = module.data_ingestion_project.project_id
 }
 
 output "non_confidential_data_project_id" {
-  description = "(optional) describe your variable"
+  description = "Non-confidential data project ID."
   value       = module.non_confidential_data_project.project_id
 }
 
 output "data_governance_project_id" {
-  description = "(optional) describe your variable"
+  description = "Data governance project ID"
   value       = module.data_governance_project.project_id
 }
 
 output "confidential_data_project_id" {
-  description = "(optional) describe your variable"
+  description = "Confidential data project ID."
   value       = module.confidential_data_project.project_id
 }
 

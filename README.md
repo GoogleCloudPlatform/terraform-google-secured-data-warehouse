@@ -193,7 +193,7 @@ resources of this module:
 - Service Usage API:`serviceusage.googleapis.com`
 - Google Cloud Storage JSON API:`storage-api.googleapis.com`
 
-#### Non confidential data project
+#### Non-confidential data project
 
 - Access Context Manager API: `accesscontextmanager.googleapis.com`
 - BigQuery API:`bigquery.googleapis.com`
