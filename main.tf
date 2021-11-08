@@ -75,6 +75,7 @@ module "bigquery_confidential_data" {
   location                              = local.location
   cmek_confidential_bigquery_crypto_key = module.data_governance.cmek_confidential_bigquery_crypto_key
   cmek_reidentification_crypto_key      = module.data_governance.cmek_reidentification_crypto_key
+  terraform_service_account             = var.terraform_service_account
   delete_contents_on_destroy            = var.delete_contents_on_destroy
 }
 
