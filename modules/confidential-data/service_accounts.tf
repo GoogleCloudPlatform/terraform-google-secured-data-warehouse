@@ -42,6 +42,12 @@ module "dataflow_controller_service_account" {
   display_name = "Cloud Dataflow controller service account"
 }
 
+resource "google_service_account_iam_member" "terraform_sa_service_account_user" {
+  service_account_id = module.dataflow_controller_service_account.service_account.name
+  role               = "roles/iam.serviceAccountUser"
+  member             = "serviceAccount:${var.terraform_service_account}"
+}
+
 resource "google_project_iam_member" "confidential" {
   for_each = toset(local.confidential_project_roles)
 

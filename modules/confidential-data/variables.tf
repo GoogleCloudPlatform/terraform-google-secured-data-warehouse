@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+variable "terraform_service_account" {
+  description = "The email address of the service account that will run the Terraform code."
+  type        = string
+}
+
 variable "delete_contents_on_destroy" {
   description = "(Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present."
   type        = bool

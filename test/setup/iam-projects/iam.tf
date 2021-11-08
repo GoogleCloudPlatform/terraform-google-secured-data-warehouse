@@ -15,7 +15,7 @@
  */
 
 locals {
-  int_proj_required_roles = [
+  ingestion_proj_required_roles = [
     "roles/datacatalog.admin",
     "roles/storage.admin",
     "roles/pubsub.admin",
@@ -24,13 +24,10 @@ locals {
     "roles/bigquery.admin",
     "roles/resourcemanager.projectIamAdmin",
     "roles/dns.admin",
-    "roles/iam.serviceAccountCreator",
-    "roles/iam.serviceAccountDeleter",
-    "roles/iam.serviceAccountTokenCreator",
-    "roles/iam.serviceAccountUser",
     "roles/browser",
     "roles/cloudkms.admin",
     "roles/dataflow.developer",
+    "roles/iam.serviceAccountAdmin",
     "roles/dlp.deidentifyTemplatesEditor",
     "roles/dlp.inspectTemplatesEditor",
     "roles/dlp.user",
@@ -38,10 +35,40 @@ locals {
     "roles/cloudscheduler.admin",
     "roles/appengine.appCreator"
   ]
+
+  confidential_proj_required_roles = [
+    "roles/storage.admin",
+    "roles/compute.networkAdmin",
+    "roles/compute.securityAdmin",
+    "roles/bigquery.admin",
+    "roles/resourcemanager.projectIamAdmin",
+    "roles/iam.serviceAccountAdmin",
+    "roles/dns.admin",
+    "roles/dataflow.developer"
+  ]
+
+  non_confidential_proj_required_roles = [
+    "roles/storage.admin",
+    "roles/iam.serviceAccountAdmin",
+    "roles/resourcemanager.projectIamAdmin",
+    "roles/bigquery.admin"
+  ]
+
+  governance_proj_required_roles = [
+    "roles/datacatalog.admin",
+    "roles/resourcemanager.projectIamAdmin",
+    "roles/iam.serviceAccountAdmin",
+    "roles/cloudkms.admin",
+    "roles/storage.admin",
+    "roles/dlp.deidentifyTemplatesEditor",
+    "roles/dlp.inspectTemplatesEditor",
+    "roles/dlp.user",
+    "roles/cloudkms.cryptoKeyEncrypter",
+  ]
 }
 
 resource "google_project_iam_member" "ci-account-data-ingestion" {
-  for_each = toset(local.int_proj_required_roles)
+  for_each = toset(local.ingestion_proj_required_roles)
 
   project = var.data_ingestion_project_id
   role    = each.value
@@ -49,7 +76,7 @@ resource "google_project_iam_member" "ci-account-data-ingestion" {
 }
 
 resource "google_project_iam_member" "ci-account-non-confidential" {
-  for_each = toset(local.int_proj_required_roles)
+  for_each = toset(local.non_confidential_proj_required_roles)
 
   project = var.non_confidential_data_project_id
   role    = each.value
@@ -57,7 +84,7 @@ resource "google_project_iam_member" "ci-account-non-confidential" {
 }
 
 resource "google_project_iam_member" "ci-account-governance" {
-  for_each = toset(local.int_proj_required_roles)
+  for_each = toset(local.governance_proj_required_roles)
 
   project = var.data_governance_project_id
   role    = each.value
@@ -65,7 +92,7 @@ resource "google_project_iam_member" "ci-account-governance" {
 }
 
 resource "google_project_iam_member" "ci-account-confidential" {
-  for_each = toset(local.int_proj_required_roles)
+  for_each = toset(local.confidential_proj_required_roles)
 
   project = var.confidential_data_project_id
   role    = each.value

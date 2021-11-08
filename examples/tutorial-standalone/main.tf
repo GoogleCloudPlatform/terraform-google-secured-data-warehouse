@@ -125,7 +125,6 @@ resource "google_artifact_registry_repository_iam_member" "confidential_docker_r
   member     = "serviceAccount:${module.secured_data_warehouse.confidential_dataflow_controller_service_account_email}"
 }
 
-// TODO: Replace with job that reads from public Bigquery dataset
 module "regional_deid" {
   source = "../../modules/dataflow-flex-job"
 
