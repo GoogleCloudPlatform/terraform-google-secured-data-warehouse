@@ -16,29 +16,18 @@
 
 locals {
   ingestion_proj_required_roles = [
-    "roles/datacatalog.admin",
     "roles/storage.admin",
     "roles/pubsub.admin",
     "roles/compute.networkAdmin",
     "roles/compute.securityAdmin",
-    "roles/bigquery.admin",
     "roles/resourcemanager.projectIamAdmin",
     "roles/dns.admin",
     "roles/serviceusage.serviceUsageAdmin",
-    "roles/cloudkms.admin",
     "roles/dataflow.developer",
     "roles/iam.serviceAccountAdmin",
-    "roles/dlp.deidentifyTemplatesEditor",
-    "roles/dlp.inspectTemplatesEditor",
-    "roles/dlp.user",
-    "roles/cloudkms.cryptoKeyEncrypter",
     "roles/cloudscheduler.admin",
     "roles/appengine.appCreator",
-    "roles/browser",
-    "roles/iam.serviceAccountCreator",
-    "roles/iam.serviceAccountDeleter",
-    "roles/iam.serviceAccountTokenCreator",
-    "roles/iam.serviceAccountUser"
+    "roles/iam.serviceAccountTokenCreator"
   ]
 
   confidential_proj_required_roles = [
@@ -51,11 +40,7 @@ locals {
     "roles/dns.admin",
     "roles/serviceusage.serviceUsageAdmin",
     "roles/dataflow.developer",
-    "roles/browser",
-    "roles/iam.serviceAccountCreator",
-    "roles/iam.serviceAccountDeleter",
-    "roles/iam.serviceAccountTokenCreator",
-    "roles/iam.serviceAccountUser"
+    "roles/iam.serviceAccountTokenCreator"
   ]
 
   non_confidential_proj_required_roles = [
@@ -64,18 +49,13 @@ locals {
     "roles/resourcemanager.projectIamAdmin",
     "roles/serviceusage.serviceUsageAdmin",
     "roles/bigquery.admin",
-    "roles/browser",
-    "roles/iam.serviceAccountCreator",
-    "roles/iam.serviceAccountDeleter",
-    "roles/iam.serviceAccountTokenCreator",
-    "roles/iam.serviceAccountUser"
+    "roles/iam.serviceAccountTokenCreator"
   ]
 
   governance_proj_required_roles = [
     "roles/datacatalog.admin",
     "roles/resourcemanager.projectIamAdmin",
     "roles/iam.serviceAccountAdmin",
-    "roles/iam.serviceAccountUser",
     "roles/cloudkms.admin",
     "roles/storage.admin",
     "roles/dlp.deidentifyTemplatesEditor",
@@ -83,11 +63,7 @@ locals {
     "roles/dlp.user",
     "roles/serviceusage.serviceUsageAdmin",
     "roles/cloudkms.cryptoKeyEncrypter",
-    "roles/browser",
-    "roles/iam.serviceAccountCreator",
-    "roles/iam.serviceAccountDeleter",
-    "roles/iam.serviceAccountTokenCreator",
-    "roles/iam.serviceAccountUser"
+    "roles/iam.serviceAccountTokenCreator"
   ]
 }
 

@@ -60,7 +60,9 @@ resource "null_resource" "remove_owner_role" {
   provisioner "local-exec" {
     command = <<EOF
     gcloud projects remove-iam-policy-binding ${each.value} \
-    --member="serviceAccount:${var.terraform_service_account}" --role="roles/owner"
+    --member="serviceAccount:${var.terraform_service_account}" \
+    --role="roles/owner" \
+    --impersonate-service-account=${var.terraform_service_account}
 EOF
   }
 
@@ -91,7 +93,9 @@ resource "null_resource" "remove_owner_role_from_template" {
   provisioner "local-exec" {
     command = <<EOF
     gcloud projects remove-iam-policy-binding ${module.template_project.project_id} \
-    --member="serviceAccount:${var.terraform_service_account}" --role="roles/owner"
+    --member="serviceAccount:${var.terraform_service_account}" \
+    --role="roles/owner" \
+    --impersonate-service-account=${var.terraform_service_account}
 EOF
   }
 
