@@ -24,7 +24,7 @@ locals {
     "roles/bigquery.admin",
     "roles/resourcemanager.projectIamAdmin",
     "roles/dns.admin",
-    "roles/browser",
+    "roles/serviceusage.serviceUsageAdmin",
     "roles/cloudkms.admin",
     "roles/dataflow.developer",
     "roles/iam.serviceAccountAdmin",
@@ -44,7 +44,7 @@ locals {
     "roles/resourcemanager.projectIamAdmin",
     "roles/iam.serviceAccountAdmin",
     "roles/dns.admin",
-    "roles/browser",
+    "roles/serviceusage.serviceUsageAdmin",
     "roles/dataflow.developer"
   ]
 
@@ -52,7 +52,7 @@ locals {
     "roles/storage.admin",
     "roles/iam.serviceAccountAdmin",
     "roles/resourcemanager.projectIamAdmin",
-    "roles/browser",
+    "roles/serviceusage.serviceUsageAdmin",
     "roles/bigquery.admin"
   ]
 
@@ -66,7 +66,7 @@ locals {
     "roles/dlp.deidentifyTemplatesEditor",
     "roles/dlp.inspectTemplatesEditor",
     "roles/dlp.user",
-    "roles/browser",
+    "roles/serviceusage.serviceUsageAdmin",
     "roles/cloudkms.cryptoKeyEncrypter"
   ]
 }
