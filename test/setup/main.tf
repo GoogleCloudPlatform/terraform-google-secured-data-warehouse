@@ -74,6 +74,14 @@ module "iam_projects" {
   service_account_email            = google_service_account.int_ci_service_account.email
 }
 
+resource "time_sleep" "wait_90_seconds" {
+  depends_on = [
+    module.iam_projects
+  ]
+
+  create_duration = "90s"
+}
+
 resource "google_service_account" "int_ci_service_account" {
   project      = module.base_projects[local.first_project_group].data_ingestion_project_id
   account_id   = "ci-account"
