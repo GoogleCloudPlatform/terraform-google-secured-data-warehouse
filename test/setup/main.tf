@@ -75,11 +75,11 @@ module "iam_projects" {
 }
 
 resource "time_sleep" "wait_90_seconds" {
+  create_duration = "90s"
+
   depends_on = [
     module.iam_projects
   ]
-
-  create_duration = "90s"
 }
 
 resource "google_service_account" "int_ci_service_account" {

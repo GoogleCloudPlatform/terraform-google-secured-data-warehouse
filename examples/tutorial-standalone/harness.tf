@@ -46,6 +46,14 @@ module "iam_projects" {
   service_account_email            = var.terraform_service_account
 }
 
+resource "time_sleep" "wait_60_seconds_projects" {
+  create_duration = "60s"
+
+  depends_on = [
+    module.iam_projects
+  ]
+}
+
 resource "null_resource" "remove_owner_role" {
   for_each = local.projects_ids
 
@@ -57,7 +65,7 @@ EOF
   }
 
   depends_on = [
-    module.iam_projects
+    time_sleep.wait_60_seconds_projects
   ]
 }
 
@@ -71,6 +79,14 @@ module "template_project" {
   service_account_email = var.terraform_service_account
 }
 
+resource "time_sleep" "wait_60_seconds" {
+  create_duration = "60s"
+
+  depends_on = [
+    module.template_project
+  ]
+}
+
 resource "null_resource" "remove_owner_role_from_template" {
   provisioner "local-exec" {
     command = <<EOF
@@ -80,7 +96,7 @@ EOF
   }
 
   depends_on = [
-    module.template_project
+    time_sleep.wait_60_seconds
   ]
 }
 

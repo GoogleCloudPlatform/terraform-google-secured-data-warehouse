@@ -33,7 +33,12 @@ locals {
     "roles/dlp.user",
     "roles/cloudkms.cryptoKeyEncrypter",
     "roles/cloudscheduler.admin",
-    "roles/appengine.appCreator"
+    "roles/appengine.appCreator",
+    "roles/browser",
+    "roles/iam.serviceAccountCreator",
+    "roles/iam.serviceAccountDeleter",
+    "roles/iam.serviceAccountTokenCreator",
+    "roles/iam.serviceAccountUser"
   ]
 
   confidential_proj_required_roles = [
@@ -45,7 +50,12 @@ locals {
     "roles/iam.serviceAccountAdmin",
     "roles/dns.admin",
     "roles/serviceusage.serviceUsageAdmin",
-    "roles/dataflow.developer"
+    "roles/dataflow.developer",
+    "roles/browser",
+    "roles/iam.serviceAccountCreator",
+    "roles/iam.serviceAccountDeleter",
+    "roles/iam.serviceAccountTokenCreator",
+    "roles/iam.serviceAccountUser"
   ]
 
   non_confidential_proj_required_roles = [
@@ -53,7 +63,12 @@ locals {
     "roles/iam.serviceAccountAdmin",
     "roles/resourcemanager.projectIamAdmin",
     "roles/serviceusage.serviceUsageAdmin",
-    "roles/bigquery.admin"
+    "roles/bigquery.admin",
+    "roles/browser",
+    "roles/iam.serviceAccountCreator",
+    "roles/iam.serviceAccountDeleter",
+    "roles/iam.serviceAccountTokenCreator",
+    "roles/iam.serviceAccountUser"
   ]
 
   governance_proj_required_roles = [
@@ -67,7 +82,12 @@ locals {
     "roles/dlp.inspectTemplatesEditor",
     "roles/dlp.user",
     "roles/serviceusage.serviceUsageAdmin",
-    "roles/cloudkms.cryptoKeyEncrypter"
+    "roles/cloudkms.cryptoKeyEncrypter",
+    "roles/browser",
+    "roles/iam.serviceAccountCreator",
+    "roles/iam.serviceAccountDeleter",
+    "roles/iam.serviceAccountTokenCreator",
+    "roles/iam.serviceAccountUser"
   ]
 }
 
