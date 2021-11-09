@@ -28,6 +28,7 @@ locals {
     "roles/cloudkms.admin",
     "roles/dataflow.developer",
     "roles/iam.serviceAccountAdmin",
+    "roles/iam.serviceAccountUser",
     "roles/dlp.deidentifyTemplatesEditor",
     "roles/dlp.inspectTemplatesEditor",
     "roles/dlp.user",
@@ -43,6 +44,7 @@ locals {
     "roles/bigquery.admin",
     "roles/resourcemanager.projectIamAdmin",
     "roles/iam.serviceAccountAdmin",
+    "roles/iam.serviceAccountUser",
     "roles/dns.admin",
     "roles/dataflow.developer"
   ]
@@ -50,6 +52,7 @@ locals {
   non_confidential_proj_required_roles = [
     "roles/storage.admin",
     "roles/iam.serviceAccountAdmin",
+    "roles/iam.serviceAccountUser",
     "roles/resourcemanager.projectIamAdmin",
     "roles/bigquery.admin"
   ]
@@ -58,6 +61,7 @@ locals {
     "roles/datacatalog.admin",
     "roles/resourcemanager.projectIamAdmin",
     "roles/iam.serviceAccountAdmin",
+    "roles/iam.serviceAccountUser",
     "roles/cloudkms.admin",
     "roles/storage.admin",
     "roles/dlp.deidentifyTemplatesEditor",
