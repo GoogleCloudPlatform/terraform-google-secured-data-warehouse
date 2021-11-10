@@ -104,7 +104,7 @@ EOF
   ]
 }
 
-module "kek" {
+module "tek_wrapping_key" {
   source  = "terraform-google-modules/kms/google"
   version = "~> 1.2"
 
@@ -123,7 +123,7 @@ resource "random_id" "original_key" {
 
 // TODO: Replace with a method that does not store the plain value in the state
 resource "google_kms_secret_ciphertext" "wrapped_key" {
-  crypto_key = module.kek.keys[local.kek_key_name]
+  crypto_key = module.tek_wrapping_key.keys[local.kek_key_name]
   plaintext  = random_id.original_key.b64_std
 }
 

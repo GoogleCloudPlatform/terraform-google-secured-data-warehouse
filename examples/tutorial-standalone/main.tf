@@ -67,7 +67,7 @@ resource "null_resource" "download_sample_cc_into_gcs" {
     curl https://eforexcel.com/wp/wp-content/uploads/2017/07/10000-CC-Records.zip > cc_records.zip
     unzip cc_records.zip
     echo "Changing sample file encoding from WINDOWS-1252 to UTF-8"
-    iconv -f="WINDOWS-1252" -t="UTF-8" 10000\ CC\ Records.csv > ${local.cc_file_name}
+    iconv -f="WINDOWS-1252" -t="UTF-8" 10000\ CC\ Records.csv -o ${local.cc_file_name}
     gsutil cp ${local.cc_file_name} gs://${module.secured_data_warehouse.data_ingestion_bucket_name}
     rm ${local.cc_file_name} 10000\ CC\ Records.csv cc_records.zip
 EOF
@@ -84,7 +84,7 @@ module "de_identification_template" {
 
   project_id                = module.base_projects.data_governance_project_id
   terraform_service_account = var.terraform_service_account
-  crypto_key                = module.kek.keys[local.kek_key_name]
+  crypto_key                = module.tek_wrapping_key.keys[local.kek_key_name]
   wrapped_key               = google_kms_secret_ciphertext.wrapped_key.ciphertext
   dlp_location              = local.location
   template_id_prefix        = "de_identification"
@@ -97,7 +97,7 @@ module "re_identification_template" {
 
   project_id                = module.base_projects.data_governance_project_id
   terraform_service_account = var.terraform_service_account
-  crypto_key                = module.kek.keys[local.kek_key_name]
+  crypto_key                = module.tek_wrapping_key.keys[local.kek_key_name]
   wrapped_key               = google_kms_secret_ciphertext.wrapped_key.ciphertext
   dlp_location              = local.location
   template_id_prefix        = "re_identification"
