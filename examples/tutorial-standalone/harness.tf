@@ -106,7 +106,7 @@ EOF
   ]
 }
 
-module "kek" {
+module "tek_wrapping_key" {
   source  = "terraform-google-modules/kms/google"
   version = "~> 1.2"
 
@@ -153,7 +153,7 @@ EOF
   }
 
   depends_on = [
-    module.kek,
+    module.tek_wrapping_key,
     google_secret_manager_secret.wrapped_key_secret,
     null_resource.remove_owner_role
   ]
