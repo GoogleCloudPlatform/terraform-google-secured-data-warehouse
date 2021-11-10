@@ -107,18 +107,7 @@ Install the following dependencies:
 To provision the resources of this module, create a service account
 with the following IAM roles:
 
-- Organization level
-  - Access Context Manager Admin: `roles/accesscontextmanager.policyAdmin`
-  - Organization Policy Administrator: `roles/orgpolicy.policyAdmin`
-- Folder Level
-  - Billing User: `roles/billing.user`
-  - Compute Network Admin: `roles/compute.networkAdmin`
-  - Logging Admin: `roles/logging.admin`
-  - Project Creator: `roles/resourcemanager.projectCreator`
-  - Project Deleter: `roles/resourcemanager.projectDeleter`
-  - Project IAM Admin: `roles/resourcemanager.projectIamAdmin`
-  - Service Usage Admin: `roles/serviceusage.serviceUsageAdmin`
-
+- Organization level000000-000000-000000
 The service account must have `Billing User role` in the billing account.
 
 You can use the [Project Factory module](https://github.com/terraform-google-modules/terraform-google-project-factory) and the
@@ -126,6 +115,57 @@ You can use the [Project Factory module](https://github.com/terraform-google-mod
 service account with the necessary roles applied.
 
 The user using this service account must have the necessary roles to [impersonate](https://cloud.google.com/iam/docs/impersonating-service-accounts) the service account.
+
+You can run the following commands to assign roles to the service account:
+
+```sh
+export ORG_ID=<YOUR-ORG-ID>
+export FOLDER_ID=<YOUR-FOLDER-ID>
+export SA_EMAIL=<YOUR-SA-EMAIL>
+
+gcloud organizations add-iam-policy-binding ${ORG_ID} \
+--member="serviceAccount:${SA_EMAIL}" \
+--role="roles/accesscontextmanager.policyAdmin"
+
+gcloud organizations add-iam-policy-binding ${ORG_ID} \
+--member="serviceAccount:${SA_EMAIL}" \
+--role="roles/orgpolicy.policyAdmin"
+
+gcloud resource-manager folders \
+add-iam-policy-binding ${FOLDER_ID} \
+--member="serviceAccount:${SA_EMAIL}" \
+--role="roles/billing.user"
+
+gcloud resource-manager folders \
+add-iam-policy-binding ${FOLDER_ID} \
+--member="serviceAccount:${SA_EMAIL}" \
+--role="roles/compute.networkAdmin"
+
+gcloud resource-manager folders \
+add-iam-policy-binding ${FOLDER_ID} \
+--member="serviceAccount:${SA_EMAIL}" \
+--role="roles/logging.admin"
+
+gcloud resource-manager folders \
+add-iam-policy-binding ${FOLDER_ID} \
+--member="serviceAccount:${SA_EMAIL}" \
+--role="roles/resourcemanager.projectCreator"
+
+gcloud resource-manager folders \
+add-iam-policy-binding ${FOLDER_ID} \
+--member="serviceAccount:${SA_EMAIL}" \
+--role="roles/resourcemanager.projectDeleter"
+
+gcloud resource-manager folders \
+add-iam-policy-binding ${FOLDER_ID} \
+--member="serviceAccount:${SA_EMAIL}" \
+--role="roles/resourcemanager.projectIamAdmin"
+
+gcloud resource-manager folders \
+add-iam-policy-binding ${FOLDER_ID} \
+--member="serviceAccount:${SA_EMAIL}" \
+--role="roles/serviceusage.serviceUsageAdmin"
+```
 
 ### APIs
 
@@ -140,6 +180,24 @@ The following APIs must be enabled in the project where the service account was 
 - Compute Engine API:`compute.googleapis.com`
 - Dataflow API:`dataflow.googleapis.com`
 - Identity and Access Management (IAM) API:`iam.googleapis.com`
+
+You can run the gcloud command to enable these APIs in the service account project
+
+```sh
+export PROJECT_ID=<SA-PROJECT-ID>
+
+gcloud services enable \
+accesscontextmanager.googleapis.com \
+appengine.googleapis.com \
+cloudbilling.googleapis.com \
+cloudkms.googleapis.com \
+pubsub.googleapis.com \
+cloudresourcemanager.googleapis.com \
+compute.googleapis.com \
+dataflow.googleapis.com \
+iam.googleapis.com \
+--project ${PROJECT_ID}
+```
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
