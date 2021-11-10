@@ -18,6 +18,8 @@ locals {
   kek_keyring                 = "kek_keyring_${random_id.suffix.hex}"
   kek_key_name                = "kek_key_${random_id.suffix.hex}"
   key_rotation_period_seconds = "2592000s" #30 days
+  secret_name                 = "wrapped_key"
+  wrapped_key_secret_data     = chomp(data.google_secret_manager_secret_version.wrapped_key.secret_data)
 
   projects_ids = {
     data_ingestion   = module.base_projects.data_ingestion_project_id,
@@ -117,14 +119,53 @@ module "kek" {
   prevent_destroy      = !var.delete_contents_on_destroy
 }
 
-resource "random_id" "original_key" {
-  byte_length = 16
+resource "google_secret_manager_secret" "wrapped_key_secret" {
+  provider = google-beta
+
+  secret_id = local.secret_name
+  project   = module.base_projects.data_governance_project_id
+
+  replication {
+    user_managed {
+      replicas {
+        location = local.location
+      }
+    }
+  }
 }
 
-// TODO: Replace with a method that does not store the plain value in the state
-resource "google_kms_secret_ciphertext" "wrapped_key" {
-  crypto_key = module.kek.keys[local.kek_key_name]
-  plaintext  = random_id.original_key.b64_std
+resource "null_resource" "wrapped_key" {
+
+  triggers = {
+    secret_id = google_secret_manager_secret.wrapped_key_secret.id
+  }
+
+  provisioner "local-exec" {
+    command = <<EOF
+    ${path.module}/../../helpers/wrapped_key.sh \
+    ${module.base_projects.data_governance_project_id} \
+    ${local.location} \
+    ${var.terraform_service_account} \
+    ${local.kek_keyring} \
+    ${local.kek_key_name} \
+    ${local.secret_name}
+EOF
+  }
+
+  depends_on = [
+    module.kek,
+    google_secret_manager_secret.wrapped_key_secret,
+    null_resource.remove_owner_role
+  ]
+}
+
+data "google_secret_manager_secret_version" "wrapped_key" {
+  project = module.base_projects.data_governance_project_id
+  secret  = google_secret_manager_secret.wrapped_key_secret.id
+
+  depends_on = [
+    null_resource.wrapped_key
+  ]
 }
 
 module "centralized_logging" {

@@ -44,6 +44,7 @@ Install the following dependencies:
 
 - [Google Cloud SDK](https://cloud.google.com/sdk/install) version 357.0.0 or later
 - [Terraform](https://www.terraform.io/downloads.html) version 0.13.7 or later
+- [curl](https://curl.haxx.se/)
 
 ### Service Account
 

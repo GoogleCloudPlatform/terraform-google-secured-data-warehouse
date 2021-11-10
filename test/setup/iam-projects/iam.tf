@@ -63,7 +63,9 @@ locals {
     "roles/dlp.user",
     "roles/serviceusage.serviceUsageAdmin",
     "roles/cloudkms.cryptoKeyEncrypter",
-    "roles/iam.serviceAccountTokenCreator"
+    "roles/iam.serviceAccountTokenCreator",
+    "roles/secretmanager.admin",
+    "roles/cloudkms.cryptoOperator"
   ]
 }
 

@@ -85,7 +85,7 @@ module "de_identification_template" {
   project_id                = module.base_projects.data_governance_project_id
   terraform_service_account = var.terraform_service_account
   crypto_key                = module.kek.keys[local.kek_key_name]
-  wrapped_key               = google_kms_secret_ciphertext.wrapped_key.ciphertext
+  wrapped_key               = local.wrapped_key_secret_data
   dlp_location              = local.location
   template_id_prefix        = "de_identification"
   template_file             = "${path.module}/templates/deidentification.tmpl"
@@ -98,7 +98,7 @@ module "re_identification_template" {
   project_id                = module.base_projects.data_governance_project_id
   terraform_service_account = var.terraform_service_account
   crypto_key                = module.kek.keys[local.kek_key_name]
-  wrapped_key               = google_kms_secret_ciphertext.wrapped_key.ciphertext
+  wrapped_key               = local.wrapped_key_secret_data
   dlp_location              = local.location
   template_id_prefix        = "re_identification"
   template_file             = "${path.module}/templates/reidentification.tmpl"
