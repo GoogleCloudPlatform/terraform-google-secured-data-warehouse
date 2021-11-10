@@ -2,12 +2,44 @@
 
 This examples deploy the Secured data warehouse blueprint and the required infrastructure needed to deploy it.
 
+The required infrastructure includes:
+
+- Projects
+  - Data Ingestion project
+  - Non-confidential Data project
+  - Data Governance project
+  - Confidential Data project
+  - External Artifact Registry project
+- Artifact Registry
+  - Docker Artifact registry
+- Dataflow Templates
+  - Java Cloud storage to Bigquery dlp de-identification Dataflow flex template
+  - Java Bigquery to Bigquery dlp re-identification Dataflow flex template
+- Networks
+  - Data Ingestion Network
+    - VPC with one subnetwork
+    - Firewall rules
+    - DNS configuration for Google private access
+  - Confidential Data Network
+    - VPC with one subnetwork
+    - Firewall rules
+    - DNS configuration for Google private access
+- Logging
+  - Log Sinks in all projects
+  - Logging bucket in the data governance project
+
+This example will be deployed at the `us-east4` location, to deploy in another location change the local `location` in example [main.tf](./main.tf#L18) file.
+
 ## Usage
 
 - Copy `tfvars` by running `cp terraform.example.tfvars terraform.tfvars` and update `terraform.tfvars` with values from your environment.
 - Run `terraform init`
-- Run `terraform plan` and review the plan
+- Run `terraform plan` and review the plan.
 - Run `terraform apply`
+
+### Clean up
+
+- Run `terraform destroy` to clean up your environment.
 
 ### Perimeter members list
 
@@ -16,7 +48,32 @@ you need to add your user in the variable `perimeter_additional_members` in the 
 
 ### Sample data
 
+The sample data use in this example is a csv file with fake credit card data.
+For this example the input file has 10k records.
 
+Each record has these values:
+
+- Card Type Code
+- Card Type Full Name
+- Issuing Bank
+- Card Number
+- Card Holder's Name
+- CVV/CVV2
+- Issue Date
+- Expiry Date
+- Billing Date
+- Card PIN
+- Credit Limit
+
+The de-identification Dataflow job will apply these DLP Crypto-based tokenization transformations to encrypt the data:
+
+- [Deterministic encryption](https://cloud.google.com/dlp/docs/transformations-reference#de) Transformation
+  - Card Number
+  - Card Holder's Name
+  - CVV/CVV2
+  - Expiry Date
+- [Cryptographic hashing](https://cloud.google.com/dlp/docs/transformations-reference#crypto-hashing) Transformation
+  - Card PIN
 
 ### Taxonomy used
 
