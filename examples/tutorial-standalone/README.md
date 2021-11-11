@@ -27,6 +27,10 @@ The required infrastructure includes:
 - Logging
   - Log Sinks in all projects
   - Logging bucket in the data governance project
+- Cloud KMS
+  - A Cloud KMS Keyring
+  - A Cloud KMS key
+  - A traffic encryption key for DLP Templates
 
 This example will be deployed at the `us-east4` location, to deploy in another location change the local `location` in example [main.tf](./main.tf#L18) file.
 
@@ -120,13 +124,13 @@ with the following IAM roles:
   - Project IAM Admin: `roles/resourcemanager.projectIamAdmin`
   - Service Usage Admin: `roles/serviceusage.serviceUsageAdmin`
 
-The service account must have `Billing User` role in the billing account.
+The service account must have `Billing Account User` role in the billing account.
 
 You can use the [Project Factory module](https://github.com/terraform-google-modules/terraform-google-project-factory) and the
 [IAM module](https://github.com/terraform-google-modules/terraform-google-iam) in combination to provision a
 service account with the necessary roles applied.
 
-The user using this service account must have the necessary roles to [impersonate](https://cloud.google.com/iam/docs/impersonating-service-accounts) the service account.
+The user using this service account must have the necessary roles, `Service Account User` and `Service Account Token Creator`, to [impersonate](https://cloud.google.com/iam/docs/impersonating-service-accounts) the service account.
 
 You can run the following commands to assign roles to the service account:
 
@@ -192,6 +196,7 @@ The following APIs must be enabled in the project where the service account was 
 - Compute Engine API:`compute.googleapis.com`
 - Dataflow API:`dataflow.googleapis.com`
 - Identity and Access Management (IAM) API:`iam.googleapis.com`
+- BigQuery API: `bigquery.googleapis.com`
 
 You can run the gcloud command to enable these APIs in the service account project
 
@@ -201,6 +206,7 @@ export PROJECT_ID=<SA-PROJECT-ID>
 gcloud services enable \
 accesscontextmanager.googleapis.com \
 appengine.googleapis.com \
+bigquery.googleapis.com \
 cloudbilling.googleapis.com \
 cloudkms.googleapis.com \
 pubsub.googleapis.com \
