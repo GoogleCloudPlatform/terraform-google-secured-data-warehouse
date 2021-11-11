@@ -108,8 +108,19 @@ Install the following dependencies:
 To provision the resources of this module, create a service account
 with the following IAM roles:
 
-- Organization level000000-000000-000000
-The service account must have `Billing User role` in the billing account.
+- Organization level
+  - Access Context Manager Admin: `roles/accesscontextmanager.policyAdmin`
+  - Organization Policy Administrator: `roles/orgpolicy.policyAdmin`
+- Folder Level
+  - Billing User: `roles/billing.user`
+  - Compute Network Admin: `roles/compute.networkAdmin`
+  - Logging Admin: `roles/logging.admin`
+  - Project Creator: `roles/resourcemanager.projectCreator`
+  - Project Deleter: `roles/resourcemanager.projectDeleter`
+  - Project IAM Admin: `roles/resourcemanager.projectIamAdmin`
+  - Service Usage Admin: `roles/serviceusage.serviceUsageAdmin`
+
+The service account must have `Billing User` role in the billing account.
 
 You can use the [Project Factory module](https://github.com/terraform-google-modules/terraform-google-project-factory) and the
 [IAM module](https://github.com/terraform-google-modules/terraform-google-iam) in combination to provision a
