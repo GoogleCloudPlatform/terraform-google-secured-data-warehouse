@@ -36,6 +36,14 @@
       "helpText": "ID of the project that holds the confidential data in BigQuery."
     },
     {
+      "name": "dlpTransform",
+      "label": "DLP transformation type.",
+      "helpText": "Choose between DLP DE-IDENTIFY or RE-IDENTIFY.",
+      "regexes": [
+        "RE-IDENTIFY|DE-IDENTIFY"
+      ]
+    },
+    {
       "name": "batchSize",
       "label": "DLP batch size.",
       "helpText": "Number of records to be sent in a batch in the call to the DLP API. Default is 100",

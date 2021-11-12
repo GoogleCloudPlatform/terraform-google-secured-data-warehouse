@@ -19,7 +19,10 @@ package com.google.cloud.blueprints.datawarehouse;
 import com.google.api.services.bigquery.model.TableRow;
 import com.google.auto.value.AutoValue;
 import com.google.privacy.dlp.v2.ReidentifyContentResponse;
+
 import com.google.privacy.dlp.v2.Table;
+
+import java.io.Console;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
@@ -40,9 +43,9 @@ import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("serial")
 @AutoValue
-public abstract class DLPTransform
+public abstract class DLPReidentifyTransform
     extends PTransform<PCollection<KV<String, Table.Row>>, PCollectionTuple> {
-  public static final Logger LOG = LoggerFactory.getLogger(DLPTransform.class);
+  public static final Logger LOG = LoggerFactory.getLogger(DLPReidentifyTransform.class);
 
   @Nullable
   public abstract String deidTemplateName();
@@ -56,6 +59,7 @@ public abstract class DLPTransform
   public abstract Character columnDelimiter();
 
   public abstract PCollectionView<List<String>> header();
+
 
   @AutoValue.Builder
   public abstract static class Builder {
@@ -72,16 +76,17 @@ public abstract class DLPTransform
 
     public abstract Builder setColumnDelimiter(Character columnDelimiter);
 
-    public abstract DLPTransform build();
+    public abstract DLPReidentifyTransform build();
   }
 
   public static Builder newBuilder() {
-    return new AutoValue_DLPTransform.Builder();
+    return new AutoValue_DLPReidentifyTransform.Builder();
   }
+  
 
   @Override
   public PCollectionTuple expand(PCollection<KV<String, Table.Row>> input) {
-
+    
     return input
         .apply(
             "ReIdTransform",
@@ -96,9 +101,8 @@ public abstract class DLPTransform
         .apply(
             "ConvertReidResponse",
             ParDo.of(new ConvertReidResponse())
-                .withOutputTags(Util.reidSuccess, TupleTagList.of(Util.reidFailure)));
+                .withOutputTags(Util.jobSuccess, TupleTagList.of(Util.jobFailure)));
   }
-
 
   static class ConvertReidResponse
       extends DoFn<KV<String, ReidentifyContentResponse>, KV<String, TableRow>> {
@@ -126,7 +130,7 @@ public abstract class DLPTransform
             throw new IllegalArgumentException(
                 "BigQuery column count must exactly match with data element count");
           }
-          out.get(Util.reidSuccess)
+          out.get(Util.jobSuccess)
               .output(
                   KV.of(
                       tableName,
