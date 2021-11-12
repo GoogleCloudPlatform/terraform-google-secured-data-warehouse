@@ -64,8 +64,7 @@ locals {
     "roles/serviceusage.serviceUsageAdmin",
     "roles/cloudkms.cryptoKeyEncrypter",
     "roles/iam.serviceAccountTokenCreator",
-    "roles/secretmanager.admin",
-    "roles/cloudkms.cryptoOperator"
+    "roles/secretmanager.admin"
   ]
 }
 
