@@ -71,7 +71,6 @@ resource "null_resource" "download_sample_cc_into_gcs" {
     gsutil cp ${local.cc_file_name} gs://${module.secured_data_warehouse.data_ingestion_bucket_name}
     rm ${local.cc_file_name} 10000\ CC\ Records.csv cc_records.zip
 EOF
-
   }
 
   depends_on = [

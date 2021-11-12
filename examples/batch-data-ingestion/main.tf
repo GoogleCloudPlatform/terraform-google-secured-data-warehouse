@@ -124,7 +124,7 @@ module "scheduler_controller_service_account" {
   ]
 }
 
-resource "google_service_account_iam_member" "terraform_sa_service_account_user" {
+resource "google_service_account_iam_member" "scheduler_sa_user" {
   service_account_id = module.scheduler_controller_service_account.service_account.name
   role               = "roles/iam.serviceAccountUser"
   member             = "serviceAccount:${var.terraform_service_account}"

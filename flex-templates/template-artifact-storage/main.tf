@@ -95,7 +95,6 @@ resource "google_artifact_registry_repository" "python_modules" {
   repository_id = var.python_repository_id
   description   = "Repository for Python modules for Dataflow flex templates"
   format        = "PYTHON"
-
 }
 
 resource "google_artifact_registry_repository_iam_member" "python_writer" {

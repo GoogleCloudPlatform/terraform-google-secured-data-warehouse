@@ -15,7 +15,6 @@
  */
 
 locals {
-
   new_bucket_name      = "${var.bucket_name}-${random_id.suffix.hex}"
   bucket_name          = var.create_bucket ? module.logging_bucket[0].bucket.name : var.bucket_name
   destination_uri      = "storage.googleapis.com/${local.bucket_name}"

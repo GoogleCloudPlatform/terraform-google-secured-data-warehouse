@@ -1,6 +1,6 @@
 # Standalone Tutorial
 
-This examples deploy the Secured data warehouse blueprint and the required infrastructure needed to deploy it.
+This examples deploys the Secured data warehouse blueprint and the required infrastructure needed to deploy it.
 
 The required infrastructure includes:
 
