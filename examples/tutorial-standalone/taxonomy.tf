@@ -14,7 +14,41 @@
  * limitations under the License.
  */
 
-// TODO: Replace taxonomy and bq schema template with parsed policy schema
+locals {
+  confidential_tags = {
+    card_number = {
+      display_name = "CREDIT_CARD_NUMBER"
+      description  = "A credit card number is 12 to 19 digits long. They are used for payment transactions globally."
+    }
+    cvv = {
+      display_name = "CARD_VERIFICATION_VALUE"
+      description  = "A card verification value is 3 to 4 digits long. Used for card not present transactions."
+    }
+  }
+
+  private_tags = {
+    card_holder_name = {
+      display_name = "PERSON_NAME"
+      description  = "A full person name, which can include first names, middle names or initials, and last names."
+    }
+    card_pin = {
+      display_name = "CREDIT_CARD_PIN"
+      description  = "Card personal identification number."
+    }
+    card_expiry_date = {
+      display_name = "CARD_EXPIRY_DATE"
+      description  = "Card expiry date."
+    }
+  }
+
+  sensitive_tags = {
+    credit_limit = {
+      display_name = "CREDIT_LIMIT"
+      description  = "Credit allowed to individual."
+    }
+  }
+}
+
 resource "google_data_catalog_taxonomy" "secure_taxonomy" {
   provider = google-beta
 
@@ -37,21 +71,14 @@ resource "google_data_catalog_policy_tag" "policy_tag_confidential" {
   description  = "Most sensitive data classification. Significant damage to enterprise."
 }
 
-resource "google_data_catalog_policy_tag" "child_policy_tag_card_number" {
+resource "google_data_catalog_policy_tag" "confidential_tags" {
   provider = google-beta
 
-  taxonomy          = google_data_catalog_taxonomy.secure_taxonomy.id
-  display_name      = "CREDIT_CARD_NUMBER"
-  description       = "A credit card number is 12 to 19 digits long. They are used for payment transactions globally."
-  parent_policy_tag = google_data_catalog_policy_tag.policy_tag_confidential.id
-}
-
-resource "google_data_catalog_policy_tag" "child_policy_tag_cvv" {
-  provider = google-beta
+  for_each = local.confidential_tags
 
   taxonomy          = google_data_catalog_taxonomy.secure_taxonomy.id
-  display_name      = "CARD_VERIFICATION_VALUE"
-  description       = "A card verification value is 3 to 4 digits long. Used for card not present transactions."
+  display_name      = each.value["display_name"]
+  description       = each.value["description"]
   parent_policy_tag = google_data_catalog_policy_tag.policy_tag_confidential.id
 }
 
@@ -64,30 +91,14 @@ resource "google_data_catalog_policy_tag" "policy_tag_private" {
   parent_policy_tag = google_data_catalog_policy_tag.policy_tag_confidential.id
 }
 
-resource "google_data_catalog_policy_tag" "child_policy_tag_card_holder_name" {
+resource "google_data_catalog_policy_tag" "private_tags" {
   provider = google-beta
 
-  taxonomy          = google_data_catalog_taxonomy.secure_taxonomy.id
-  display_name      = "PERSON_NAME"
-  description       = "A full person name, which can include first names, middle names or initials, and last names."
-  parent_policy_tag = google_data_catalog_policy_tag.policy_tag_private.id
-}
-
-resource "google_data_catalog_policy_tag" "child_policy_tag_card_pin" {
-  provider = google-beta
+  for_each = local.private_tags
 
   taxonomy          = google_data_catalog_taxonomy.secure_taxonomy.id
-  display_name      = "CREDIT_CARD_PIN"
-  description       = "Card personal identification number."
-  parent_policy_tag = google_data_catalog_policy_tag.policy_tag_private.id
-}
-
-resource "google_data_catalog_policy_tag" "child_policy_tag_card_expiry_date" {
-  provider = google-beta
-
-  taxonomy          = google_data_catalog_taxonomy.secure_taxonomy.id
-  display_name      = "CARD_EXPIRY_DATE"
-  description       = "Card expiry date."
+  display_name      = each.value["display_name"]
+  description       = each.value["description"]
   parent_policy_tag = google_data_catalog_policy_tag.policy_tag_private.id
 }
 
@@ -100,12 +111,14 @@ resource "google_data_catalog_policy_tag" "policy_tag_sensitive" {
   parent_policy_tag = google_data_catalog_policy_tag.policy_tag_private.id
 }
 
-resource "google_data_catalog_policy_tag" "child_policy_tag_credit_limit" {
+resource "google_data_catalog_policy_tag" "sensitive_tags" {
   provider = google-beta
 
+  for_each = local.sensitive_tags
+
   taxonomy          = google_data_catalog_taxonomy.secure_taxonomy.id
-  display_name      = "CREDIT_LIMIT"
-  description       = "Credit allowed to individual."
+  display_name      = each.value["display_name"]
+  description       = each.value["description"]
   parent_policy_tag = google_data_catalog_policy_tag.policy_tag_sensitive.id
 }
 
@@ -116,15 +129,14 @@ resource "google_bigquery_table" "re_id" {
   friendly_name       = local.confidential_table_id
   deletion_protection = !var.delete_contents_on_destroy
 
-
   schema = templatefile("${path.module}/templates/schema.template",
     {
-      pt_credit_limit = google_data_catalog_policy_tag.child_policy_tag_credit_limit.id,
-      pt_name         = google_data_catalog_policy_tag.child_policy_tag_card_holder_name.id,
-      pt_card_number  = google_data_catalog_policy_tag.child_policy_tag_card_number.id,
-      pt_cvv          = google_data_catalog_policy_tag.child_policy_tag_cvv.id,
-      pt_card_pin     = google_data_catalog_policy_tag.child_policy_tag_card_pin.id,
-      pt_expiry_date  = google_data_catalog_policy_tag.child_policy_tag_card_expiry_date.id,
+      pt_card_number  = google_data_catalog_policy_tag.confidential_tags["card_number"].id,
+      pt_cvv          = google_data_catalog_policy_tag.confidential_tags["cvv"].id,
+      pt_name         = google_data_catalog_policy_tag.private_tags["card_holder_name"].id,
+      pt_card_pin     = google_data_catalog_policy_tag.private_tags["card_pin"].id,
+      pt_expiry_date  = google_data_catalog_policy_tag.private_tags["card_expiry_date"].id,
+      pt_credit_limit = google_data_catalog_policy_tag.sensitive_tags["credit_limit"].id
   })
 
   lifecycle {
