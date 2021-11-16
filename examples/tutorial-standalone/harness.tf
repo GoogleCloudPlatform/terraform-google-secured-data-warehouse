@@ -56,17 +56,13 @@ resource "time_sleep" "wait_60_seconds_projects" {
   ]
 }
 
-resource "null_resource" "remove_owner_role" {
+
+resource "google_project_iam_binding" "remove_owner_role" {
   for_each = local.projects_ids
 
-  provisioner "local-exec" {
-    command = <<EOF
-    gcloud projects remove-iam-policy-binding ${each.value} \
-    --member="serviceAccount:${var.terraform_service_account}" \
-    --role="roles/owner" \
-    --impersonate-service-account=${var.terraform_service_account}
-EOF
-  }
+  project = each.value
+  role    = "roles/owner"
+  members = []
 
   depends_on = [
     time_sleep.wait_60_seconds_projects
@@ -91,15 +87,10 @@ resource "time_sleep" "wait_60_seconds" {
   ]
 }
 
-resource "null_resource" "remove_owner_role_from_template" {
-  provisioner "local-exec" {
-    command = <<EOF
-    gcloud projects remove-iam-policy-binding ${module.template_project.project_id} \
-    --member="serviceAccount:${var.terraform_service_account}" \
-    --role="roles/owner" \
-    --impersonate-service-account=${var.terraform_service_account}
-EOF
-  }
+resource "google_project_iam_binding" "remove_owner_role_from_template" {
+  project = module.template_project.project_id
+  role    = "roles/owner"
+  members = []
 
   depends_on = [
     time_sleep.wait_60_seconds
@@ -155,7 +146,7 @@ EOF
   depends_on = [
     module.tek_wrapping_key,
     google_secret_manager_secret.wrapped_key_secret,
-    null_resource.remove_owner_role
+    google_project_iam_binding.remove_owner_role
   ]
 }
 
