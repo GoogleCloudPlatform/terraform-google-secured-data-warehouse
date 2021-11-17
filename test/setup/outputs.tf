@@ -55,6 +55,10 @@ output "billing_account" {
   value = var.billing_account
 }
 
+output "group_email" {
+  value = var.group_email
+}
+
 output "java_de_identify_template_gs_path" {
   value = module.template_project.java_de_identify_template_gs_path
 }

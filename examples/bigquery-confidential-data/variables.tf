@@ -105,3 +105,28 @@ variable "taxonomy_name" {
   type        = string
   default     = "secured_taxonomy"
 }
+
+variable "security_administrator_group" {
+  description = "Google Cloud IAM group that administers security configurations in the organization(org policies, KMS, VPC service perimeter)."
+  type        = string
+}
+
+variable "network_administrator_group" {
+  description = "Google Cloud IAM group that reviews network configuration. Typically, this includes members of the networking team."
+  type        = string
+}
+
+variable "security_analyst_group" {
+  description = "Google Cloud IAM group that monitors and responds to security incidents."
+  type        = string
+}
+
+variable "data_analyst_group" {
+  description = "Google Cloud IAM group that analyzes the data in the warehouse."
+  type        = string
+}
+
+variable "data_engineer_group" {
+  description = "Google Cloud IAM group that sets up and maintains the data pipeline and warehouse."
+  type        = string
+}

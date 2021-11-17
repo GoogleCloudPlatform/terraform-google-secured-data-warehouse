@@ -19,6 +19,10 @@ variable "org_id" {
   type        = string
 }
 
+variable "group_email" {
+  description = "The group that will be assigned permissions for testing."
+}
+
 variable "data_ingestion_project_id" {
   description = "The ID of the project in which the data ingestion resources will be created."
   type        = list(string)
