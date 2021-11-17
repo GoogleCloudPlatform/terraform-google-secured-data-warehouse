@@ -39,13 +39,13 @@ data_governance_project_number_2=$(gcloud projects describe ${data_governance_pr
 data_governance_project_id_3=$(echo ${data_governance_projects[2]} | tr -d \" | tr -d \[ | tr -d \])
 data_governance_project_number_3=$(gcloud projects describe ${data_governance_project_id_3} --format="value(projectNumber)")
 
-IFS=',' read -ra datalake_projects <<< "$TF_VAR_datalake_project_id"
-datalake_project_id_1=$(echo ${datalake_projects[0]} | tr -d \" | tr -d \[ | tr -d \])
-datalake_project_number_1=$(gcloud projects describe ${datalake_project_id_1} --format="value(projectNumber)")
-datalake_project_id_2=$(echo ${datalake_projects[1]} | tr -d \" | tr -d \[ | tr -d \])
-datalake_project_number_2=$(gcloud projects describe ${datalake_project_id_2} --format="value(projectNumber)")
-datalake_project_id_3=$(echo ${datalake_projects[2]} | tr -d \" | tr -d \[ | tr -d \])
-datalake_project_number_3=$(gcloud projects describe ${datalake_project_id_3} --format="value(projectNumber)")
+IFS=',' read -ra non_confidential_data_projects <<< "$TF_VAR_non_confidential_data_project_id"
+non_confidential_data_project_id_1=$(echo ${non_confidential_data_projects[0]} | tr -d \" | tr -d \[ | tr -d \])
+non_confidential_data_project_number_1=$(gcloud projects describe ${non_confidential_data_project_id_1} --format="value(projectNumber)")
+non_confidential_data_project_id_2=$(echo ${non_confidential_data_projects[1]} | tr -d \" | tr -d \[ | tr -d \])
+non_confidential_data_project_number_2=$(gcloud projects describe ${non_confidential_data_project_id_2} --format="value(projectNumber)")
+non_confidential_data_project_id_3=$(echo ${non_confidential_data_projects[2]} | tr -d \" | tr -d \[ | tr -d \])
+non_confidential_data_project_number_3=$(gcloud projects describe ${non_confidential_data_project_id_3} --format="value(projectNumber)")
 
 IFS=',' read -ra confidential_projects <<< "$TF_VAR_confidential_data_project_id"
 confidential_project_id_1=$(echo ${confidential_projects[0]} | tr -d \" | tr -d \[ | tr -d \])
@@ -65,8 +65,8 @@ policy_file_path="$(pwd)/policy-library"
 fixtures_path="test/fixtures"
 
 for f in "${policy_file_path}"/policies/constraints/*.yaml ; do
-    sed -i -e "s/DATALAKE_PROJECT_ID_1/${datalake_project_id_1}/g" -e "s/DATALAKE_PROJECT_ID_2/${datalake_project_id_2}/" -e "s/DATALAKE_PROJECT_ID_3/${datalake_project_id_3}/" "${f}"
-    sed -i -e "s/DATALAKE_PROJECT_NUMBER_1/${datalake_project_number_1}/g" -e "s/DATALAKE_PROJECT_NUMBER_2/${datalake_project_number_2}/" -e "s/DATALAKE_PROJECT_NUMBER_3/${datalake_project_number_3}/" "${f}"
+    sed -i -e "s/NON_CONFIDENTIAL_DATA_PROJECT_ID_1/${non_confidential_data_project_id_1}/g" -e "s/NON_CONFIDENTIAL_DATA_PROJECT_ID_2/${non_confidential_data_project_id_2}/" -e "s/NON_CONFIDENTIAL_DATA_PROJECT_ID_3/${non_confidential_data_project_id_3}/" "${f}"
+    sed -i -e "s/NON_CONFIDENTIAL_DATA_PROJECT_NUMBER_1/${non_confidential_data_project_number_1}/g" -e "s/NON_CONFIDENTIAL_DATA_PROJECT_NUMBER_2/${non_confidential_data_project_number_2}/" -e "s/NON_CONFIDENTIAL_DATA_PROJECT_NUMBER_3/${non_confidential_data_project_number_3}/" "${f}"
     sed -i -e "s/DATA_INGESTION_PROJECT_ID_1/${data_ingestion_project_id_1}/" -e "s/DATA_INGESTION_PROJECT_ID_2/${data_ingestion_project_id_2}/" -e "s/DATA_INGESTION_PROJECT_ID_3/${data_ingestion_project_id_3}/" "${f}"
     sed -i -e "s/DATA_INGESTION_PROJECT_NUMBER_1/${data_ingestion_project_number_1}/" -e "s/DATA_INGESTION_PROJECT_NUMBER_2/${data_ingestion_project_number_2}/" -e "s/DATA_INGESTION_PROJECT_NUMBER_3/${data_ingestion_project_number_3}/" "${f}"
     sed -i -e "s/DATA_GOVERNANCE_PROJECT_ID_1/${data_governance_project_id_1}/" -e "s/DATA_GOVERNANCE_PROJECT_ID_2/${data_governance_project_id_2}/" -e "s/DATA_GOVERNANCE_PROJECT_ID_3/${data_governance_project_id_3}/" "${f}"

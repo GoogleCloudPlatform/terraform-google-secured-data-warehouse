@@ -22,9 +22,9 @@ spec:
   severity: high
   match:
     target:
-    - "organizations/**/projects/DATALAKE_PROJECT_ID_1"
-    - "organizations/**/projects/DATALAKE_PROJECT_ID_2"
-    - "organizations/**/projects/DATALAKE_PROJECT_ID_3"
+    - "organizations/**/projects/NON_CONFIDENTIAL_DATA_PROJECT_ID_1"
+    - "organizations/**/projects/NON_CONFIDENTIAL_DATA_PROJECT_ID_2"
+    - "organizations/**/projects/NON_CONFIDENTIAL_DATA_PROJECT_ID_3"
   parameters:
     mode: "allowlist"
     resource_type_list:
