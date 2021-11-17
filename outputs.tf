@@ -152,3 +152,8 @@ output "cmek_confidential_bigquery_crypto_key" {
     time_sleep.wait_for_bridge_propagation
   ]
 }
+  
+output "blueprint_type" {
+  description = "Type of blueprint this module represents."
+  value       = "blueprints/terraform/terraform-google-secured-data-warehouse/v1.0.0"
+}
