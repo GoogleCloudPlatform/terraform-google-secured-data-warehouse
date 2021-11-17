@@ -26,14 +26,14 @@ locals {
     "roles/storage.objectCreator",
     "roles/storage.objectAdmin",
     "roles/pubsub.editor",
-    "roles/Network user"
+    "roles/compute.networkUser"
   ]
 
   data_analyst_group_project_roles = [
     "roles/logging.viewer",
     "roles/dataflow.viewer",
     "roles/dataflow.developer",
-    "roles/bigquery.dataViewer ",
+    "roles/bigquery.dataViewer",
     "roles/bigquery.jobUser",
     "roles/bigquery.user",
     "roles/storage.objectViewer",
@@ -47,7 +47,7 @@ locals {
     "roles/cloudkms.viewer",
     "roles/bigquery.jobUser",
     "roles/storage.objectViewer",
-    "roles/pubsub.viewer ",
+    "roles/pubsub.viewer",
     "roles/datacatalog.viewer",
     "roles/networkmanagement.viewer",
     "roles/orgpolicy.policyViewer",
