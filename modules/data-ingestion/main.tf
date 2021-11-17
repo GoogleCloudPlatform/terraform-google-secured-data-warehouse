@@ -18,8 +18,8 @@ resource "random_id" "suffix" {
   byte_length = 4
 }
 
-//storage ingest bucket
-module "data_ingest_bucket" {
+//storage data ingestion bucket
+module "data_ingestion_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 2.0"
 
@@ -31,11 +31,11 @@ module "data_ingest_bucket" {
   force_destroy   = var.delete_contents_on_destroy
 
   encryption = {
-    default_kms_key_name = var.ingestion_encryption_key
+    default_kms_key_name = var.data_ingestion_encryption_key
   }
 
   labels = {
-    "enterprise_data_ingest_bucket" = "true"
+    "enterprise_data_ingestion_bucket" = "true"
   }
 }
 
@@ -51,23 +51,23 @@ module "dataflow_bucket" {
 
 
   encryption = {
-    default_kms_key_name = var.ingestion_encryption_key
+    default_kms_key_name = var.data_ingestion_encryption_key
   }
 
   labels = {
-    "dataflow_data_ingest_bucket" = "true"
+    "dataflow_data_ingestion_bucket" = "true"
   }
 
 }
 
-//pub/sub ingest topic
-module "data_ingest_topic" {
+//pub/sub data ingestion topic
+module "data_ingestion_topic" {
   source  = "terraform-google-modules/pubsub/google"
   version = "~> 2.0"
 
   project_id             = var.data_ingestion_project_id
-  topic                  = "tpc-data-ingest-${random_id.suffix.hex}"
-  topic_kms_key_name     = var.ingestion_encryption_key
+  topic                  = "tpc-data-ingestion-${random_id.suffix.hex}"
+  topic_kms_key_name     = var.data_ingestion_encryption_key
   message_storage_policy = { allowed_persistence_regions : [var.region] }
 }
 
@@ -76,7 +76,7 @@ module "bigquery_dataset" {
   source  = "terraform-google-modules/bigquery/google"
   version = "~> 5.2.0"
 
-  project_id                  = var.datalake_project_id
+  project_id                  = var.non_confidential_data_project_id
   dataset_id                  = var.dataset_id
   dataset_name                = var.dataset_name
   description                 = var.dataset_description
@@ -86,7 +86,7 @@ module "bigquery_dataset" {
   default_table_expiration_ms = var.dataset_default_table_expiration_ms
 
   dataset_labels = {
-    purpose  = "ingest"
+    purpose  = "data-ingestion"
     billable = "true"
   }
 }

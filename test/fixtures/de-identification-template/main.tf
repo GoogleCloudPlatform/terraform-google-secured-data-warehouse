@@ -15,21 +15,24 @@
  */
 
 locals {
-  keyring               = "keyring_kek"
-  key_name              = "key_name_kek"
-  template_display_name = "De-identification template using a KMS wrapped CMEK"
-  template_description  = "De-identifies sensitive content defined in the template with a KMS wrapped CMEK."
+  keyring                     = "keyring_kek"
+  key_name                    = "key_name_kek"
+  key_rotation_period_seconds = "2592000s"
+  template_display_name       = "De-identification template using a KMS wrapped CMEK"
+  template_description        = "De-identifies sensitive content defined in the template with a KMS wrapped CMEK."
 }
 
 module "kms" {
   source  = "terraform-google-modules/kms/google"
   version = "~> 1.2"
 
-  project_id      = var.data_governance_project_id[2]
-  location        = var.dlp_location
-  keyring         = local.keyring
-  keys            = [local.key_name]
-  prevent_destroy = false
+  project_id           = var.data_governance_project_id[2]
+  location             = var.dlp_location
+  keyring              = local.keyring
+  keys                 = [local.key_name]
+  key_protection_level = "HSM"
+  key_rotation_period  = local.key_rotation_period_seconds
+  prevent_destroy      = false
 }
 
 resource "random_id" "original_key" {

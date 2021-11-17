@@ -35,7 +35,7 @@ variable "data_ingestion_project_id" {
   type        = string
 }
 
-variable "datalake_project_id" {
+variable "non_confidential_data_project_id" {
   description = "The ID of the project in which the Bigquery will be created."
   type        = string
 }
@@ -94,13 +94,13 @@ variable "dataset_id" {
 variable "dataset_name" {
   description = "Friendly name for the dataset being provisioned."
   type        = string
-  default     = "Ingest dataset"
+  default     = "Data-ingestion dataset"
 }
 
 variable "dataset_description" {
   description = "Dataset description."
   type        = string
-  default     = "Ingest dataset"
+  default     = "Data-ingestion dataset"
 }
 
 variable "dataset_location" {
@@ -120,7 +120,7 @@ variable "bigquery_encryption_key" {
   type        = string
 }
 
-variable "ingestion_encryption_key" {
+variable "data_ingestion_encryption_key" {
   description = "Self-link of the encryption key to be used by Pub/Sub and Storage."
   type        = string
 }

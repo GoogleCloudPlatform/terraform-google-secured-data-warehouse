@@ -15,9 +15,10 @@
  */
 
 locals {
-  kek_keyring  = "kek_keyring_${random_id.random_suffix.hex}"
-  kek_key_name = "kek_key_${random_id.random_suffix.hex}"
-  location     = "us-east4"
+  kek_keyring                 = "kek_keyring_${random_id.random_suffix.hex}"
+  kek_key_name                = "kek_key_${random_id.random_suffix.hex}"
+  location                    = "us-east4"
+  key_rotation_period_seconds = "2592000s"
 }
 
 resource "random_id" "random_suffix" {
@@ -28,11 +29,13 @@ module "kek" {
   source  = "terraform-google-modules/kms/google"
   version = "~> 1.2"
 
-  project_id      = var.data_governance_project_id[2]
-  location        = local.location
-  keyring         = local.kek_keyring
-  keys            = [local.kek_key_name]
-  prevent_destroy = false
+  project_id           = var.data_governance_project_id[2]
+  location             = local.location
+  keyring              = local.kek_keyring
+  keys                 = [local.kek_key_name]
+  key_protection_level = "HSM"
+  key_rotation_period  = local.key_rotation_period_seconds
+  prevent_destroy      = false
 }
 
 resource "random_id" "original_key" {
@@ -49,7 +52,7 @@ module "bigquery_confidential_data" {
 
   org_id                            = var.org_id
   access_context_manager_policy_id  = var.access_context_manager_policy_id
-  non_confidential_project_id       = var.datalake_project_id[2]
+  non_confidential_data_project_id  = var.non_confidential_data_project_id[2]
   data_ingestion_project_id         = var.data_ingestion_project_id[2]
   data_governance_project_id        = var.data_governance_project_id[2]
   confidential_data_project_id      = var.confidential_data_project_id[2]

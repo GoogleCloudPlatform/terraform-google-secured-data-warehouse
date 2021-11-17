@@ -72,6 +72,8 @@ variable "sdx_egress_rule" {
   description = "List of Egress rule configurations to allow Dataflow to fetch the Flex template in Cloud Storage in an external project, See: https://cloud.google.com/vpc-service-controls/docs/secure-data-exchange#allow_access_to_a_google_cloud_resource_outside_the_perimeter. `sdx_project_number`, is the Project Number to configure Secure data exchange with the egress rule for the dataflow templates and `sdx_identities`, is the list of email address of the Google Identities that will need to access the external flex template. format is `user:<USER_EMAIL>` or `serviceAccount:<SERVICE_ACCOUNT_EMAIL>`. These are the identities that will deploy Dataflow jobs."
   type = list(object({
     sdx_project_number = string
+    service_name       = string
+    method             = string
     sdx_identities     = list(string)
   }))
   default = []

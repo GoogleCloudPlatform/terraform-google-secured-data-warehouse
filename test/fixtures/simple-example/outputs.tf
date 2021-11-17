@@ -25,9 +25,9 @@ output "data_governance_project_id" {
   value       = var.data_governance_project_id[1]
 }
 
-output "datalake_project_id" {
-  description = "The datalake_project_id used to create bigquery."
-  value       = var.datalake_project_id[1]
+output "non_confidential_data_project_id" {
+  description = "The non_confidential_data_project_id used to create bigquery."
+  value       = var.non_confidential_data_project_id[1]
 }
 
 output "org_id" {
@@ -55,19 +55,19 @@ output "pubsub_writer_service_account_email" {
   value       = module.simple_example.pubsub_writer_service_account_email
 }
 
-output "data_ingest_bucket_name" {
-  description = "The name of the bucket created for data ingest pipeline."
-  value       = module.simple_example.data_ingest_bucket_name
+output "data_ingestion_bucket_name" {
+  description = "The name of the bucket created for data ingestion pipeline."
+  value       = module.simple_example.data_ingestion_bucket_name
 }
 
-output "data_ingest_topic_name" {
-  description = "The topic created for data ingest pipeline."
-  value       = module.simple_example.data_ingest_topic_name
+output "data_ingestion_topic_name" {
+  description = "The topic created for data ingestion pipeline."
+  value       = module.simple_example.data_ingestion_topic_name
 }
 
-output "data_ingest_bigquery_dataset" {
-  description = "The bigquery dataset created for data ingest pipeline."
-  value       = module.simple_example.data_ingest_bigquery_dataset
+output "data_ingestion_bigquery_dataset" {
+  description = "The bigquery dataset created for data ingestion pipeline."
+  value       = module.simple_example.data_ingestion_bigquery_dataset
 }
 
 output "access_level_name" {
@@ -80,9 +80,9 @@ output "service_perimeter_name" {
   value       = module.simple_example.data_ingestion_service_perimeter_name
 }
 
-output "cmek_ingestion_crypto_key" {
-  description = "The Customer Managed Crypto Key for the Ingestion crypto boundary."
-  value       = module.simple_example.cmek_ingestion_crypto_key
+output "cmek_data_ingestion_crypto_key" {
+  description = "The Customer Managed Crypto Key for the data ingestion crypto boundary."
+  value       = module.simple_example.cmek_data_ingestion_crypto_key
 }
 
 output "cmek_bigquery_crypto_key" {

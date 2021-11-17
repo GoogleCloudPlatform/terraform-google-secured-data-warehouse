@@ -15,7 +15,7 @@
  */
 
 locals {
-  perimeter_members_ingestion = distinct(concat([
+  perimeter_members_data_ingestion = distinct(concat([
     "serviceAccount:${module.data_ingestion.dataflow_controller_service_account_email}",
     "serviceAccount:${module.data_ingestion.storage_writer_service_account_email}",
     "serviceAccount:${module.data_ingestion.pubsub_writer_service_account_email}",
@@ -31,7 +31,7 @@ locals {
   ], var.perimeter_additional_members))
 }
 
-data "google_project" "ingestion_project" {
+data "google_project" "data_ingestion_project" {
   project_id = var.data_ingestion_project_id
 }
 
@@ -39,8 +39,8 @@ data "google_project" "governance_project" {
   project_id = var.data_governance_project_id
 }
 
-data "google_project" "datalake_project" {
-  project_id = var.datalake_project_id
+data "google_project" "non_confidential_data_project" {
+  project_id = var.non_confidential_data_project_id
 }
 
 data "google_project" "confidential_project" {
@@ -54,12 +54,13 @@ resource "random_id" "suffix" {
 // It's necessary to use the forces_wait_propagation to guarantee the resources that use this VPC do not have issues related to the propagation.
 // See: https://cloud.google.com/vpc-service-controls/docs/manage-service-perimeters#update.
 resource "time_sleep" "forces_wait_propagation" {
-  destroy_duration = "300s"
+  destroy_duration = "330s"
 
   depends_on = [
     module.data_ingestion,
     module.org_policies,
-    module.data_governance
+    module.data_governance,
+    module.bigquery_confidential_data
   ]
 }
 
@@ -71,8 +72,8 @@ module "data_ingestion_vpc_sc" {
   access_context_manager_policy_id = var.access_context_manager_policy_id
   common_name                      = "data_ingestion"
   common_suffix                    = random_id.suffix.hex
-  resources                        = [data.google_project.ingestion_project.number, data.google_project.datalake_project.number]
-  perimeter_members                = local.perimeter_members_ingestion
+  resources                        = [data.google_project.data_ingestion_project.number, data.google_project.non_confidential_data_project.number]
+  perimeter_members                = local.perimeter_members_data_ingestion
   restricted_services = [
     "bigquery.googleapis.com",
     "cloudasset.googleapis.com",
@@ -96,6 +97,8 @@ module "data_ingestion_vpc_sc" {
         ["serviceAccount:${var.terraform_service_account}"]
       ))
       sdx_project_number = var.sdx_project_number
+      service_name       = "storage.googleapis.com"
+      method             = "google.storage.objects.get"
     }
   ]
 
@@ -174,6 +177,8 @@ module "confidential_data_vpc_sc" {
         ["serviceAccount:${var.terraform_service_account}"]
       ))
       sdx_project_number = var.sdx_project_number
+      service_name       = "storage.googleapis.com"
+      method             = "google.storage.objects.get"
     }
   ]
 
@@ -185,18 +190,18 @@ module "confidential_data_vpc_sc" {
   ]
 }
 
-module "vpc_sc_bridge_ingestion_governance" {
+module "vpc_sc_bridge_data_ingestion_governance" {
   source  = "terraform-google-modules/vpc-service-controls/google//modules/bridge_service_perimeter"
   version = "~> 3.0"
 
   policy         = var.access_context_manager_policy_id
-  perimeter_name = "vpc_sc_bridge_ingestion_governance_${random_id.suffix.hex}"
+  perimeter_name = "vpc_sc_bridge_data_ingestion_governance_${random_id.suffix.hex}"
   description    = "VPC-SC bridge between data ingestion and data governance"
 
   resources = [
-    data.google_project.ingestion_project.number,
+    data.google_project.data_ingestion_project.number,
     data.google_project.governance_project.number,
-    data.google_project.datalake_project.number
+    data.google_project.non_confidential_data_project.number
   ]
 
   depends_on = [
@@ -226,17 +231,17 @@ module "vpc_sc_bridge_confidential_governance" {
   ]
 }
 
-module "vpc_sc_bridge_confidential_ingestion" {
+module "vpc_sc_bridge_confidential_data_ingestion" {
   source  = "terraform-google-modules/vpc-service-controls/google//modules/bridge_service_perimeter"
   version = "~> 3.0"
 
   policy         = var.access_context_manager_policy_id
-  perimeter_name = "vpc_sc_bridge_confidential_ingestion_${random_id.suffix.hex}"
+  perimeter_name = "vpc_sc_bridge_confidential_data_ingestion_${random_id.suffix.hex}"
   description    = "VPC-SC bridge between confidential data and data ingestion"
 
   resources = [
     data.google_project.confidential_project.number,
-    data.google_project.datalake_project.number
+    data.google_project.non_confidential_data_project.number
   ]
 
   depends_on = [
@@ -250,8 +255,8 @@ resource "time_sleep" "wait_for_bridge_propagation" {
   create_duration = "240s"
 
   depends_on = [
-    module.vpc_sc_bridge_confidential_ingestion,
+    module.vpc_sc_bridge_confidential_data_ingestion,
     module.vpc_sc_bridge_confidential_governance,
-    module.vpc_sc_bridge_ingestion_governance
+    module.vpc_sc_bridge_data_ingestion_governance
   ]
 }

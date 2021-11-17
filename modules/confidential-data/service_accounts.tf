@@ -16,32 +16,21 @@
 
 locals {
   confidential_project_roles = [
-    "pubsub.subscriber",
-    "bigquery.admin",
-    "cloudkms.admin",
-    "cloudkms.cryptoKeyDecrypter",
-    "dlp.admin",
-    "dlp.deidentifyTemplatesEditor",
-    "dlp.user",
-    "storage.admin",
-    "dataflow.serviceAgent",
-    "dataflow.worker",
-    "compute.viewer",
-    "serviceusage.serviceUsageConsumer"
+    "roles/dataflow.worker",
+    "roles/bigquery.dataEditor",
+    "roles/bigquery.jobUser",
+    "roles/storage.objectAdmin",
+    "roles/serviceusage.serviceUsageConsumer"
   ]
 
   governance_project_roles = [
-    "serviceusage.serviceUsageConsumer",
-    "dlp.admin",
-    "dlp.deidentifyTemplatesEditor",
-    "dlp.user",
-    "cloudkms.admin",
-    "cloudkms.cryptoKeyDecrypter"
+    "roles/dlp.user",
+    "roles/dlp.inspectTemplatesReader",
+    "roles/dlp.deidentifyTemplatesReader"
   ]
 
   non_conf_project_roles = [
-    "bigquery.admin",
-    "serviceusage.serviceUsageConsumer"
+    "roles/bigquery.dataViewer"
   ]
 }
 
@@ -51,10 +40,40 @@ module "dataflow_controller_service_account" {
   project_id   = var.confidential_data_project_id
   names        = ["sa-dataflow-controller-reid"]
   display_name = "Cloud Dataflow controller service account"
-  project_roles = concat(
-    [for role in local.confidential_project_roles : "${var.confidential_data_project_id}=>roles/${role}"],
-    [for role in local.governance_project_roles : "${var.data_governance_project_id}=>roles/${role}"],
-    [for role in local.non_conf_project_roles : "${var.non_confidential_project_id}=>roles/${role}"]
-  )
 }
 
+resource "google_service_account_iam_member" "terraform_sa_service_account_user" {
+  service_account_id = module.dataflow_controller_service_account.service_account.name
+  role               = "roles/iam.serviceAccountUser"
+  member             = "serviceAccount:${var.terraform_service_account}"
+}
+
+resource "google_project_iam_member" "confidential" {
+  for_each = toset(local.confidential_project_roles)
+
+  project = var.confidential_data_project_id
+  role    = each.value
+  member  = "serviceAccount:${module.dataflow_controller_service_account.email}"
+}
+
+resource "google_storage_bucket_iam_member" "objectAdmin" {
+  bucket = module.dataflow_bucket.bucket.name
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:${module.dataflow_controller_service_account.email}"
+}
+
+resource "google_project_iam_member" "governance" {
+  for_each = toset(local.governance_project_roles)
+
+  project = var.data_governance_project_id
+  role    = each.value
+  member  = "serviceAccount:${module.dataflow_controller_service_account.email}"
+}
+
+resource "google_project_iam_member" "non_confidential" {
+  for_each = toset(local.non_conf_project_roles)
+
+  project = var.non_confidential_data_project_id
+  role    = each.value
+  member  = "serviceAccount:${module.dataflow_controller_service_account.email}"
+}

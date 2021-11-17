@@ -58,7 +58,7 @@ variable "data_governance_project_id" {
   type        = string
 }
 
-variable "datalake_project_id" {
+variable "non_confidential_data_project_id" {
   description = "The ID of the project in which the Bigquery will be created."
   type        = string
 }
@@ -133,13 +133,13 @@ variable "dataset_id" {
 variable "dataset_name" {
   description = "Friendly name for the dataset being provisioned."
   type        = string
-  default     = "Ingest dataset"
+  default     = "Data-ingestion dataset"
 }
 
 variable "dataset_description" {
   description = "Dataset description."
   type        = string
-  default     = "Ingest dataset"
+  default     = "Data-ingestion dataset"
 }
 
 variable "dataset_default_table_expiration_ms" {
@@ -187,4 +187,10 @@ variable "confidential_data_dataflow_deployer_identities" {
   description = "List of members in the standard GCP form: user:{email}, serviceAccount:{email} that will deploy Dataflow jobs in the Confidential Data project. These identities will be added to the VPC-SC secure data exchange egress rules."
   type        = list(string)
   default     = []
+}
+
+variable "kms_key_protection_level" {
+  description = "The protection level to use when creating a key. Possible values: [\"SOFTWARE\", \"HSM\"]"
+  type        = string
+  default     = "HSM"
 }
