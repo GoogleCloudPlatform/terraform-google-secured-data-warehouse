@@ -14,6 +14,25 @@
  * limitations under the License.
  */
 
+locals {
+  data_ingestion_project_roles = [
+    "roles/pubsub.subscriber",
+    "roles/pubsub.editor",
+    "roles/storage.objectViewer",
+    "roles/dataflow.worker"
+  ]
+
+  governance_project_roles = [
+    "roles/dlp.user",
+    "roles/dlp.inspectTemplatesReader",
+    "roles/dlp.deidentifyTemplatesReader"
+  ]
+
+  non_confidential_data_project_roles = [
+    "roles/bigquery.dataEditor",
+    "roles/bigquery.jobUser"
+  ]
+}
 
 //Dataflow controller service account
 module "dataflow_controller_service_account" {
@@ -22,17 +41,42 @@ module "dataflow_controller_service_account" {
   project_id   = var.data_ingestion_project_id
   names        = ["sa-dataflow-controller"]
   display_name = "Cloud Dataflow controller service account"
-  project_roles = [
-    "${var.data_ingestion_project_id}=>roles/pubsub.subscriber",
-    "${var.datalake_project_id}=>roles/bigquery.admin",
-    "${var.data_governance_project_id}=>roles/cloudkms.admin",
-    "${var.data_governance_project_id}=>roles/cloudkms.cryptoKeyDecrypter",
-    "${var.data_governance_project_id}=>roles/dlp.admin",
-    "${var.data_ingestion_project_id}=>roles/storage.admin",
-    "${var.data_ingestion_project_id}=>roles/dataflow.serviceAgent",
-    "${var.data_ingestion_project_id}=>roles/dataflow.worker",
-    "${var.data_ingestion_project_id}=>roles/compute.viewer",
-  ]
+}
+
+resource "google_service_account_iam_member" "terraform_sa_service_account_user" {
+  service_account_id = module.dataflow_controller_service_account.service_account.name
+  role               = "roles/iam.serviceAccountUser"
+  member             = "serviceAccount:${var.terraform_service_account}"
+}
+
+resource "google_project_iam_member" "ingestion" {
+  for_each = toset(local.data_ingestion_project_roles)
+
+  project = var.data_ingestion_project_id
+  role    = each.value
+  member  = "serviceAccount:${module.dataflow_controller_service_account.email}"
+}
+
+resource "google_storage_bucket_iam_member" "objectAdmin" {
+  bucket = module.dataflow_bucket.bucket.name
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:${module.dataflow_controller_service_account.email}"
+}
+
+resource "google_project_iam_member" "governance" {
+  for_each = toset(local.governance_project_roles)
+
+  project = var.data_governance_project_id
+  role    = each.value
+  member  = "serviceAccount:${module.dataflow_controller_service_account.email}"
+}
+
+resource "google_project_iam_member" "non_confidential" {
+  for_each = toset(local.non_confidential_data_project_roles)
+
+  project = var.non_confidential_data_project_id
+  role    = each.value
+  member  = "serviceAccount:${module.dataflow_controller_service_account.email}"
 }
 
 //service account for storage
@@ -42,14 +86,8 @@ resource "google_service_account" "storage_writer_service_account" {
   display_name = "Cloud Storage data writer service account"
 }
 
-resource "google_storage_bucket_iam_member" "objectViewer" {
-  bucket = module.data_ingest_bucket.bucket.name
-  role   = "roles/storage.objectViewer"
-  member = "serviceAccount:${google_service_account.storage_writer_service_account.email}"
-}
-
 resource "google_storage_bucket_iam_member" "objectCreator" {
-  bucket = module.data_ingest_bucket.bucket.name
+  bucket = module.data_ingestion_bucket.bucket.name
   role   = "roles/storage.objectCreator"
   member = "serviceAccount:${google_service_account.storage_writer_service_account.email}"
 }
@@ -63,14 +101,7 @@ resource "google_service_account" "pubsub_writer_service_account" {
 
 resource "google_pubsub_topic_iam_member" "publisher" {
   project = var.data_ingestion_project_id
-  topic   = module.data_ingest_topic.id
+  topic   = module.data_ingestion_topic.id
   role    = "roles/pubsub.publisher"
-  member  = "serviceAccount:${google_service_account.pubsub_writer_service_account.email}"
-}
-
-resource "google_pubsub_topic_iam_member" "subscriber" {
-  project = var.data_ingestion_project_id
-  topic   = module.data_ingest_topic.id
-  role    = "roles/pubsub.subscriber"
   member  = "serviceAccount:${google_service_account.pubsub_writer_service_account.email}"
 }

@@ -39,7 +39,7 @@ variable "confidential_data_project_id" {
   type        = list(string)
 }
 
-variable "datalake_project_id" {
+variable "non_confidential_data_project_id" {
   description = "The project ID of the BigQuery source that has de-identified data."
   type        = list(string)
 }

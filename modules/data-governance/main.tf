@@ -18,7 +18,7 @@ locals {
   storage_sa  = data.google_storage_project_service_account.gcs_account.email_address
   pubsub_sa   = google_project_service_identity.pubsub_sa.email
   dataflow_sa = google_project_service_identity.dataflow_sa.email
-  compute_sa  = "service-${data.google_project.ingestion_project.number}@compute-system.iam.gserviceaccount.com"
+  compute_sa  = "service-${data.google_project.data_ingestion_project.number}@compute-system.iam.gserviceaccount.com"
   bigquery_sa = data.google_bigquery_default_service_account.bigquery_sa.email
 
   confidential_storage_sa  = data.google_storage_project_service_account.confidential_gcs_account.email_address
@@ -26,35 +26,35 @@ locals {
   confidential_compute_sa  = "service-${data.google_project.reid_project.number}@compute-system.iam.gserviceaccount.com"
   confidential_bigquery_sa = data.google_bigquery_default_service_account.confidential_bigquery_sa.email
 
-  ingestion_key_name = "ingestion_kms_key_${random_id.suffix.hex}"
-  bigquery_key_name  = "bigquery_kms_key_${random_id.suffix.hex}"
+  data_ingestion_key_name = "data_ingestion_kms_key_${random_id.suffix.hex}"
+  bigquery_key_name       = "bigquery_kms_key_${random_id.suffix.hex}"
 
   reidentification_key_name      = "reidentification_kms_key_${random_id.suffix.hex}"
   confidential_bigquery_key_name = "confidential_bigquery_kms_key_${random_id.suffix.hex}"
 
-  ingestion_key_encrypters_decrypters = "serviceAccount:${local.storage_sa},serviceAccount:${local.pubsub_sa},serviceAccount:${local.dataflow_sa},serviceAccount:${local.compute_sa}"
-  bigquery_key_encrypters_decrypters  = "serviceAccount:${local.bigquery_sa}"
+  data_ingestion_key_encrypters_decrypters = "serviceAccount:${local.storage_sa},serviceAccount:${local.pubsub_sa},serviceAccount:${local.dataflow_sa},serviceAccount:${local.compute_sa}"
+  bigquery_key_encrypters_decrypters       = "serviceAccount:${local.bigquery_sa}"
 
   reidentification_key_encrypters_decrypters      = "serviceAccount:${local.confidential_storage_sa},serviceAccount:${local.confidential_dataflow_sa},serviceAccount:${local.confidential_compute_sa}"
   confidential_bigquery_key_encrypters_decrypters = "serviceAccount:${local.confidential_bigquery_sa}"
 
 
   keys = [
-    local.ingestion_key_name,
+    local.data_ingestion_key_name,
     local.bigquery_key_name,
     local.reidentification_key_name,
     local.confidential_bigquery_key_name
   ]
 
   encrypters = [
-    local.ingestion_key_encrypters_decrypters,
+    local.data_ingestion_key_encrypters_decrypters,
     local.bigquery_key_encrypters_decrypters,
     local.reidentification_key_encrypters_decrypters,
     local.confidential_bigquery_key_encrypters_decrypters
   ]
 
   decrypters = [
-    local.ingestion_key_encrypters_decrypters,
+    local.data_ingestion_key_encrypters_decrypters,
     local.bigquery_key_encrypters_decrypters,
     local.reidentification_key_encrypters_decrypters,
     local.confidential_bigquery_key_encrypters_decrypters
@@ -65,7 +65,7 @@ resource "random_id" "suffix" {
   byte_length = 4
 }
 
-data "google_project" "ingestion_project" {
+data "google_project" "data_ingestion_project" {
   project_id = var.data_ingestion_project_id
 }
 
@@ -73,8 +73,8 @@ data "google_project" "governance_project" {
   project_id = var.data_governance_project_id
 }
 
-data "google_project" "datalake_project" {
-  project_id = var.datalake_project_id
+data "google_project" "non_confidential_data_project" {
+  project_id = var.non_confidential_data_project_id
 }
 
 data "google_storage_project_service_account" "gcs_account" {
@@ -82,7 +82,7 @@ data "google_storage_project_service_account" "gcs_account" {
 }
 
 data "google_bigquery_default_service_account" "bigquery_sa" {
-  project = var.datalake_project_id
+  project = var.non_confidential_data_project_id
 }
 
 resource "google_project_service_identity" "pubsub_sa" {
@@ -122,14 +122,15 @@ module "cmek" {
   source  = "terraform-google-modules/kms/google"
   version = "~> 2.0.1"
 
-  project_id          = var.data_governance_project_id
-  location            = var.cmek_location
-  keyring             = var.cmek_keyring_name
-  key_rotation_period = var.key_rotation_period_seconds
-  prevent_destroy     = !var.delete_contents_on_destroy
-  keys                = local.keys
-  set_encrypters_for  = local.keys
-  set_decrypters_for  = local.keys
-  encrypters          = local.encrypters
-  decrypters          = local.decrypters
+  project_id           = var.data_governance_project_id
+  location             = var.cmek_location
+  keyring              = var.cmek_keyring_name
+  key_rotation_period  = var.key_rotation_period_seconds
+  prevent_destroy      = !var.delete_contents_on_destroy
+  keys                 = local.keys
+  key_protection_level = var.kms_key_protection_level
+  set_encrypters_for   = local.keys
+  set_decrypters_for   = local.keys
+  encrypters           = local.encrypters
+  decrypters           = local.decrypters
 }

@@ -34,9 +34,9 @@ output "controller_service_account" {
   value       = module.data_ingestion.dataflow_controller_service_account_email
 }
 
-output "bucket_ingestion_name" {
+output "bucket_data_ingestion_name" {
   description = "The name of the bucket."
-  value       = module.data_ingestion.data_ingest_bucket_name
+  value       = module.data_ingestion.data_ingestion_bucket_name
 }
 
 output "dlp_location" {

@@ -32,14 +32,14 @@ locals {
       network_self_link                   = var.network_self_link,
       dataflow_service_account            = module.data_ingestion.dataflow_controller_service_account_email,
       subnetwork_self_link                = var.subnetwork_self_link,
-      inputFilePattern                    = "gs://${module.data_ingestion.data_ingest_bucket_name}/cc_records.csv",
-      bigquery_project_id                 = var.datalake_project_id,
+      inputFilePattern                    = "gs://${module.data_ingestion.data_ingestion_bucket_name}/cc_records.csv",
+      bigquery_project_id                 = var.non_confidential_data_project_id,
       dataset_id                          = local.dataset_id,
       table_name                          = local.table_name,
       javascriptTextTransformFunctionName = "transform",
-      JSONPath                            = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/code/${local.schema_file}",
-      javascriptTextTransformGcsPath      = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/code/${local.transform_code_file}",
-      bigQueryLoadingTemporaryDirectory   = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/tmp"
+      JSONPath                            = "gs://${module.data_ingestion.data_ingestion_dataflow_bucket_name}/code/${local.schema_file}",
+      javascriptTextTransformGcsPath      = "gs://${module.data_ingestion.data_ingestion_dataflow_bucket_name}/code/${local.transform_code_file}",
+      bigQueryLoadingTemporaryDirectory   = "gs://${module.data_ingestion.data_ingestion_dataflow_bucket_name}/tmp"
     }
   )
 }
@@ -49,12 +49,12 @@ module "data_ingestion" {
   org_id                           = var.org_id
   data_governance_project_id       = var.data_governance_project_id
   confidential_data_project_id     = var.confidential_data_project_id
-  datalake_project_id              = var.datalake_project_id
+  non_confidential_data_project_id = var.non_confidential_data_project_id
   data_ingestion_project_id        = var.data_ingestion_project_id
   sdx_project_number               = var.sdx_project_number
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  bucket_name                      = "bkt-data-ingestion"
+  bucket_name                      = "data-ingestion"
   location                         = local.region
   region                           = local.region
   dataset_id                       = local.dataset_id
@@ -70,10 +70,10 @@ resource "null_resource" "download_sample_cc_into_gcs" {
     unzip cc_records.zip
     rm cc_records.zip
     mv 1500000\ CC\ Records.csv cc_records.csv
-    echo "Changing sample file encoding from ISO-8859-1 to UTF-8"
-    iconv -f="ISO-8859-1" -t="UTF-8" cc_records.csv > temp_cc_records.csv
+    echo "Changing sample file encoding from WINDOWS-1252 to UTF-8"
+    iconv -f="WINDOWS-1252" -t="UTF-8" cc_records.csv > temp_cc_records.csv
     mv temp_cc_records.csv cc_records.csv
-    gsutil cp cc_records.csv gs://${module.data_ingestion.data_ingest_bucket_name}
+    gsutil cp cc_records.csv gs://${module.data_ingestion.data_ingestion_bucket_name}
     rm cc_records.csv
 EOF
 
@@ -89,7 +89,7 @@ EOF
 resource "google_storage_bucket_object" "schema" {
   name   = "code/${local.schema_file}"
   source = "${path.module}/${local.schema_file}"
-  bucket = module.data_ingestion.data_ingest_dataflow_bucket_name
+  bucket = module.data_ingestion.data_ingestion_dataflow_bucket_name
 
   depends_on = [
     module.data_ingestion.data_ingestion_access_level_name,
@@ -101,7 +101,7 @@ resource "google_storage_bucket_object" "schema" {
 resource "google_storage_bucket_object" "transform_code" {
   name   = "code/${local.transform_code_file}"
   source = "${path.module}/${local.transform_code_file}"
-  bucket = module.data_ingestion.data_ingest_dataflow_bucket_name
+  bucket = module.data_ingestion.data_ingestion_dataflow_bucket_name
 
   depends_on = [
     module.data_ingestion.data_ingestion_access_level_name,
@@ -122,6 +122,12 @@ module "scheduler_controller_service_account" {
     "${var.data_ingestion_project_id}=>roles/dataflow.developer",
     "${var.data_ingestion_project_id}=>roles/compute.viewer",
   ]
+}
+
+resource "google_service_account_iam_member" "scheduler_sa_user" {
+  service_account_id = module.scheduler_controller_service_account.service_account.name
+  role               = "roles/iam.serviceAccountUser"
+  member             = "serviceAccount:${var.terraform_service_account}"
 }
 
 resource "google_cloud_scheduler_job" "scheduler" {

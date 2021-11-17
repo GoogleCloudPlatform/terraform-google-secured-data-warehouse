@@ -21,6 +21,6 @@ attributes:
   - name: project_id
     required: true
     type: string
-  - name: bucket_ingestion_name
+  - name: bucket_data_ingestion_name
     required: true
     type: string

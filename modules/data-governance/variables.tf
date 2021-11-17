@@ -29,7 +29,7 @@ variable "data_governance_project_id" {
   type        = string
 }
 
-variable "datalake_project_id" {
+variable "non_confidential_data_project_id" {
   description = "The ID of the project in which the Bigquery will be created."
   type        = string
 }
@@ -59,4 +59,10 @@ variable "key_rotation_period_seconds" {
   description = "Rotation period for keys. The default value is 30 days."
   type        = string
   default     = "2592000s"
+}
+
+variable "kms_key_protection_level" {
+  description = "The protection level to use when creating a key. Possible values: [\"SOFTWARE\", \"HSM\"]"
+  type        = string
+  default     = "HSM"
 }

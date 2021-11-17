@@ -28,7 +28,7 @@ module "data_ingestion" {
   org_id                           = var.org_id
   data_governance_project_id       = var.data_governance_project_id
   confidential_data_project_id     = var.confidential_data_project_id
-  datalake_project_id              = var.datalake_project_id
+  non_confidential_data_project_id = var.non_confidential_data_project_id
   data_ingestion_project_id        = var.data_ingestion_project_id
   sdx_project_number               = var.sdx_project_number
   terraform_service_account        = var.terraform_service_account
@@ -51,10 +51,10 @@ resource "null_resource" "download_sample_cc_into_gcs" {
     unzip cc_records.zip
     rm cc_records.zip
     mv 1500000\ CC\ Records.csv cc_records.csv
-    echo "Changing sample file encoding from ISO-8859-1 to UTF-8"
-    iconv -f="ISO-8859-1" -t="UTF-8" cc_records.csv > temp_cc_records.csv
+    echo "Changing sample file encoding from WINDOWS-1252 to UTF-8"
+    iconv -f="WINDOWS-1252" -t="UTF-8" cc_records.csv > temp_cc_records.csv
     mv temp_cc_records.csv cc_records.csv
-    gsutil cp cc_records.csv gs://${module.data_ingestion.data_ingest_bucket_name}
+    gsutil cp cc_records.csv gs://${module.data_ingestion.data_ingestion_bucket_name}
     rm cc_records.csv
 EOF
 
@@ -104,14 +104,14 @@ module "regional_dlp" {
   region                  = local.region
   service_account_email   = module.data_ingestion.dataflow_controller_service_account_email
   subnetwork_self_link    = var.subnetwork_self_link
-  kms_key_name            = module.data_ingestion.cmek_ingestion_crypto_key
-  temp_location           = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/tmp/"
-  staging_location        = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/staging/"
+  kms_key_name            = module.data_ingestion.cmek_data_ingestion_crypto_key
+  temp_location           = "gs://${module.data_ingestion.data_ingestion_dataflow_bucket_name}/tmp/"
+  staging_location        = "gs://${module.data_ingestion.data_ingestion_dataflow_bucket_name}/staging/"
   max_workers             = 5
 
   parameters = {
-    inputFilePattern       = "gs://${module.data_ingestion.data_ingest_bucket_name}/cc_records.csv"
-    bqProjectId            = var.datalake_project_id
+    inputFilePattern       = "gs://${module.data_ingestion.data_ingestion_bucket_name}/cc_records.csv"
+    bqProjectId            = var.non_confidential_data_project_id
     datasetName            = local.dataset_id
     batchSize              = 1000
     dlpProjectId           = var.data_governance_project_id
