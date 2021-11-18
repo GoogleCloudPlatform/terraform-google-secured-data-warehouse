@@ -1,0 +1,56 @@
+{
+    "deidentifyTemplate": {
+        displayName: "${display_name}",
+        description: "${description}",
+        "deidentifyConfig": {
+            "recordTransformations": {
+                "fieldTransformations": [
+                    {
+                        "fields": [
+                            {
+                                "name": "Card Number"
+                            },
+                            {
+                                "name": "Card Holder'\''s Name"
+                            },
+                            {
+                                "name": "CVV/CVV2"
+                            },
+                            {
+                                "name": "Expiry Date"
+                            }
+                        ],
+                        "primitiveTransformation": {
+                            "cryptoDeterministicConfig": {
+                                "cryptoKey": {
+                                    "kmsWrapped": {
+                                        "cryptoKeyName": "${crypto_key}",
+                                        "wrappedKey": "${wrapped_key}"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "fields": [
+                            {
+                                "name": "Card PIN"
+                            }
+                        ],
+                        "primitiveTransformation": {
+                            "cryptoHashConfig": {
+                                "cryptoKey": {
+                                    "kmsWrapped": {
+                                        "cryptoKeyName": "${crypto_key}",
+                                        "wrappedKey": "${wrapped_key}"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                ]
+            }
+        }
+    },
+    "templateId": "${template_id}"
+}

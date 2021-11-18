@@ -75,9 +75,9 @@ resource "google_access_context_manager_service_perimeter" "regular_service_peri
       content {
         egress_to {
           operations {
-            service_name = "storage.googleapis.com"
+            service_name = egress_policies.value.service_name
             method_selectors {
-              method = "google.storage.objects.get"
+              method = egress_policies.value.method
             }
           }
           resources = ["projects/${egress_policies.value.sdx_project_number}"]

@@ -15,13 +15,11 @@
  */
 
 provider "google" {
-  version                     = "~> 3.77"
   impersonate_service_account = var.terraform_service_account
   request_timeout             = "60s"
 }
 
 provider "google-beta" {
-  version                     = "~> 3.77"
   impersonate_service_account = var.terraform_service_account
   request_timeout             = "60s"
 }

@@ -35,7 +35,7 @@ output "df_job_subnetwork" {
   value       = module.dataflow_with_dlp.df_job_subnetwork
 }
 
-output "bucket_ingestion_name" {
+output "bucket_data_ingestion_name" {
   description = "The name of the bucket."
-  value       = module.dataflow_with_dlp.bucket_ingestion_name
+  value       = module.dataflow_with_dlp.bucket_data_ingestion_name
 }

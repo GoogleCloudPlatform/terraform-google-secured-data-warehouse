@@ -53,6 +53,12 @@ resource "google_project_service_identity" "cloudbuild_sa" {
   ]
 }
 
+resource "google_project_iam_member" "cloud_build_builder" {
+  project = var.project_id
+  role    = "roles/cloudbuild.builds.builder"
+  member  = "serviceAccount:${google_project_service_identity.cloudbuild_sa.email}"
+}
+
 resource "google_artifact_registry_repository" "flex_templates" {
   provider = google-beta
 
@@ -65,17 +71,6 @@ resource "google_artifact_registry_repository" "flex_templates" {
   depends_on = [
     google_project_service.apis_to_enable
   ]
-}
-
-resource "google_artifact_registry_repository" "python_modules" {
-  provider = google-beta
-
-  project       = var.project_id
-  location      = var.location
-  repository_id = var.python_repository_id
-  description   = "Repository for Python modules for Dataflow flex templates"
-  format        = "PYTHON"
-
 }
 
 resource "google_artifact_registry_repository_iam_member" "docker_writer" {
@@ -92,6 +87,16 @@ resource "google_artifact_registry_repository_iam_member" "docker_writer" {
   ]
 }
 
+resource "google_artifact_registry_repository" "python_modules" {
+  provider = google-beta
+
+  project       = var.project_id
+  location      = var.location
+  repository_id = var.python_repository_id
+  description   = "Repository for Python modules for Dataflow flex templates"
+  format        = "PYTHON"
+}
+
 resource "google_artifact_registry_repository_iam_member" "python_writer" {
   provider = google-beta
 
@@ -102,15 +107,8 @@ resource "google_artifact_registry_repository_iam_member" "python_writer" {
   member     = "serviceAccount:${google_project_service_identity.cloudbuild_sa.email}"
 
   depends_on = [
-    google_artifact_registry_repository.flex_templates
+    google_artifact_registry_repository.python_modules
   ]
-}
-
-
-resource "google_project_iam_member" "cloud_build_builder" {
-  project = var.project_id
-  role    = "roles/cloudbuild.builds.builder"
-  member  = "serviceAccount:${google_project_service_identity.cloudbuild_sa.email}"
 }
 
 resource "google_storage_bucket" "templates_bucket" {

@@ -20,28 +20,28 @@ output "dataflow_controller_service_account_email" {
 }
 
 output "storage_writer_service_account_email" {
-  description = "The Storage writer service account email. Should be used to write data to the buckets the ingestion pipeline reads from."
+  description = "The Storage writer service account email. Should be used to write data to the buckets the data ingestion pipeline reads from."
   value       = module.secured_data_warehouse.storage_writer_service_account_email
 }
 
 output "pubsub_writer_service_account_email" {
-  description = "The PubSub writer service account email. Should be used to write data to the PubSub topics the ingestion pipeline reads from."
+  description = "The PubSub writer service account email. Should be used to write data to the PubSub topics the data ingestion pipeline reads from."
   value       = module.secured_data_warehouse.pubsub_writer_service_account_email
 }
 
-output "data_ingest_bucket_name" {
-  description = "The name of the bucket created for data ingest pipeline."
-  value       = module.secured_data_warehouse.data_ingest_bucket_name
+output "data_ingestion_bucket_name" {
+  description = "The name of the bucket created for data ingestion pipeline."
+  value       = module.secured_data_warehouse.data_ingestion_bucket_name
 }
 
-output "data_ingest_topic_name" {
-  description = "The topic created for data ingest pipeline."
-  value       = module.secured_data_warehouse.data_ingest_topic_name
+output "data_ingestion_topic_name" {
+  description = "The topic created for data ingestion pipeline."
+  value       = module.secured_data_warehouse.data_ingestion_topic_name
 }
 
-output "data_ingest_bigquery_dataset" {
-  description = "The bigquery dataset created for data ingest pipeline."
-  value       = module.secured_data_warehouse.data_ingest_bigquery_dataset
+output "data_ingestion_bigquery_dataset" {
+  description = "The bigquery dataset created for data ingestion pipeline."
+  value       = module.secured_data_warehouse.data_ingestion_bigquery_dataset
 }
 
 output "data_ingestion_access_level_name" {
@@ -54,9 +54,9 @@ output "data_ingestion_service_perimeter_name" {
   value       = module.secured_data_warehouse.data_ingestion_service_perimeter_name
 }
 
-output "cmek_ingestion_crypto_key" {
-  description = "The Customer Managed Crypto Key for the Ingestion crypto boundary."
-  value       = module.secured_data_warehouse.cmek_ingestion_crypto_key
+output "cmek_data_ingestion_crypto_key" {
+  description = "The Customer Managed Crypto Key for the data ingestion crypto boundary."
+  value       = module.secured_data_warehouse.cmek_data_ingestion_crypto_key
 }
 
 output "cmek_bigquery_crypto_key" {

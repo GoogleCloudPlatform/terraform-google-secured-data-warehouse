@@ -27,14 +27,14 @@ module "data_ingestion" {
   org_id                           = var.org_id
   data_governance_project_id       = var.data_governance_project_id
   confidential_data_project_id     = var.confidential_data_project_id
-  datalake_project_id              = var.datalake_project_id
+  non_confidential_data_project_id = var.non_confidential_data_project_id
   data_ingestion_project_id        = var.data_ingestion_project_id
   sdx_project_number               = var.sdx_project_number
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  bucket_name                      = "dlp-flex-ingest"
-  dataset_id                       = "dlp_flex_ingest"
-  cmek_keyring_name                = "dlp_flex_ingest-${random_id.suffix.hex}"
+  bucket_name                      = "dlp-flex-data-ingestion"
+  dataset_id                       = "dlp_flex_data_ingestion"
+  cmek_keyring_name                = "dlp_flex_data-ingestion-${random_id.suffix.hex}"
   region                           = var.location
   delete_contents_on_destroy       = var.delete_contents_on_destroy
   perimeter_additional_members     = var.perimeter_additional_members
@@ -94,18 +94,18 @@ module "regional_dlp" {
   region                  = var.location
   service_account_email   = module.data_ingestion.dataflow_controller_service_account_email
   subnetwork_self_link    = var.subnetwork_self_link
-  kms_key_name            = module.data_ingestion.cmek_ingestion_crypto_key
-  temp_location           = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/tmp/"
-  staging_location        = "gs://${module.data_ingestion.data_ingest_dataflow_bucket_name}/staging/"
+  kms_key_name            = module.data_ingestion.cmek_data_ingestion_crypto_key
+  temp_location           = "gs://${module.data_ingestion.data_ingestion_dataflow_bucket_name}/tmp/"
+  staging_location        = "gs://${module.data_ingestion.data_ingestion_dataflow_bucket_name}/staging/"
   enable_streaming_engine = false
 
   parameters = {
-    input_topic                    = "projects/${var.data_ingestion_project_id}/topics/${module.data_ingestion.data_ingest_topic_name}"
+    input_topic                    = "projects/${var.data_ingestion_project_id}/topics/${module.data_ingestion.data_ingestion_topic_name}"
     deidentification_template_name = "${module.de_identification_template_example.template_full_path}"
     dlp_location                   = var.location
     dlp_project                    = var.data_governance_project_id
     bq_schema                      = local.bq_schema
-    output_table                   = "${var.datalake_project_id}:${module.data_ingestion.data_ingest_bigquery_dataset.dataset_id}.classical_books"
+    output_table                   = "${var.non_confidential_data_project_id}:${module.data_ingestion.data_ingestion_bigquery_dataset.dataset_id}.classical_books"
   }
 
   depends_on = [
