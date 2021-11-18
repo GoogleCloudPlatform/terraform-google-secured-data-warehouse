@@ -19,10 +19,7 @@ package com.google.cloud.blueprints.datawarehouse;
 import com.google.api.services.bigquery.model.TableRow;
 import com.google.auto.value.AutoValue;
 import com.google.privacy.dlp.v2.DeidentifyContentResponse;
-
 import com.google.privacy.dlp.v2.Table;
-
-import java.io.Console;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
