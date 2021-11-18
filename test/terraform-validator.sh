@@ -19,7 +19,7 @@ set -e
 # get project number for a project id
 get_project_number(){
     project_id=$1
-    projectNumber=$(get_project_number ${project_id})
+    projectNumber=$(gcloud projects describe ${project_id} --format="value(projectNumber)")
     echo ${projectNumber}
 }
 
