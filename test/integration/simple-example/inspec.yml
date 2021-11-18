@@ -69,3 +69,6 @@ attributes:
   - name: cmek_confidential_bigquery_crypto_key
     required: true
     type: string
+  - name: blueprint_type
+    required: true
+    type: string
