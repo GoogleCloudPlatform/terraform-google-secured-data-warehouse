@@ -87,6 +87,8 @@ module "data_ingestion_vpc_sc" {
     "monitoring.googleapis.com",
     "pubsub.googleapis.com",
     "secretmanager.googleapis.com",
+    "sts.googleapis.com",
+    "iam.googleapis.com",
     "storage.googleapis.com"
   ]
 
@@ -133,6 +135,8 @@ module "data_governance_vpc_sc" {
     "monitoring.googleapis.com",
     "pubsub.googleapis.com",
     "secretmanager.googleapis.com",
+    "sts.googleapis.com",
+    "iam.googleapis.com",
     "storage.googleapis.com"
   ]
 
@@ -167,6 +171,8 @@ module "confidential_data_vpc_sc" {
     "monitoring.googleapis.com",
     "pubsub.googleapis.com",
     "secretmanager.googleapis.com",
+    "sts.googleapis.com",
+    "iam.googleapis.com",
     "storage.googleapis.com"
   ]
 
