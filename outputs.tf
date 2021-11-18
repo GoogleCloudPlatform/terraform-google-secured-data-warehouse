@@ -155,5 +155,5 @@ output "cmek_confidential_bigquery_crypto_key" {
 
 output "blueprint_type" {
   description = "Type of blueprint this module represents."
-  value       = "blueprints/terraform/terraform-google-secured-data-warehouse/v1.0.0"
+  value       = local.blueprint_type
 }
