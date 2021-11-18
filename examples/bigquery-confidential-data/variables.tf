@@ -54,6 +54,11 @@ variable "external_flex_template_project_id" {
   type        = string
 }
 
+variable "dlp_transformation_type" {
+  description = "DLP transformation type."
+  type        = string
+}
+
 variable "sdx_project_number" {
   description = "The Project Number to configure Secure data exchange with egress rule for the flex Dataflow templates."
   type        = string

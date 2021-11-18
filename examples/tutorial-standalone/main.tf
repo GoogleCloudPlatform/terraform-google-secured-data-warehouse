@@ -18,6 +18,8 @@ locals {
   location                    = "us-east4"
   non_confidential_dataset_id = "non_confidential_dataset"
   confidential_dataset_id     = "secured_dataset"
+
+  dlp_transformation_type     = "RE-IDENTIFY"
   taxonomy_display_name       = "${var.taxonomy_name}-${random_id.suffix.hex}"
   confidential_table_id       = "${trimsuffix(local.cc_file_name, ".csv")}_re_id"
   cc_file_name                = "cc_10000_records.csv"
@@ -183,6 +185,7 @@ module "regional_reid" {
     batchSize                 = 100 * 1024
     dlpProjectId              = module.base_projects.data_governance_project_id
     confidentialDataProjectId = module.base_projects.confidential_data_project_id
+    dlpTransform              = local.dlp_transformation_type
   }
 
   depends_on = [
