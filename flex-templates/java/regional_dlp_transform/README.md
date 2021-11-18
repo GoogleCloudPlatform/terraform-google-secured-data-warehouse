@@ -1,4 +1,4 @@
-# Regional DLP re-identification BigQuery to BigQuery flex template
+# Regional DLP Transformation BigQuery to BigQuery flex template
 
 ## Build the flex template with Cloud Build
 
@@ -39,7 +39,7 @@ steps:
 
 1.  Follow the instructions in [Using Flex Templates:Setting up your development environment](https://cloud.google.com/dataflow/docs/guides/templates/using-flex-templates#setting_up_your_development_environment) to configure your environment to build the images.
 2.  Build the flex template
-3.  make sure you have input BigQuery table available with deidentified data (and corresponding DLP template)
+3.  make sure you have input BigQuery table available with correct data (and corresponding DLP template)
 4.  apply the `example/bigquery-confidential-data`
 5.  run the dataflow job
 
@@ -60,6 +60,7 @@ gcloud dataflow flex-template run "regional-bq-dlp-bq-`date +%Y%m%d-%H%M%S`" \
     --parameters dlpProjectId="DLP_PROJECT_ID" \
     --parameters dlpLocation="DLP_LOCATION" \
     --parameters confidentialDataProjectId="CONFIDENTIAL_DATA_PROJECT_ID" \
+    --parameters dlpTransform="DLP_TRANSFORMATION_TYPE" \
     --project=${PROJECT} \
     --service-account-email="DATAFLOW_SERVICE_ACCOUNT" \
     --network="NETWORK" \

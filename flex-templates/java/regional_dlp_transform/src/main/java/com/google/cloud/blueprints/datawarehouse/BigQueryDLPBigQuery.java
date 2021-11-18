@@ -55,13 +55,13 @@ public class BigQueryDLPBigQuery {
   **/
   public static void main(String[] args) {
 
-    BigQueryReidentifyPipelineOptions options =
+    BigQueryTransformPipelineOptions options =
         PipelineOptionsFactory.fromArgs(args)
-            .as(BigQueryReidentifyPipelineOptions.class);
+            .as(BigQueryTransformPipelineOptions.class);
 
     run(options);
   }
-
+ 
   /**
    * Runs the pipeline with the supplied options.
    * https://github.com/GoogleCloudPlatform/dlp-dataflow-deidentification/blob/2375b8af9017a32a836ae09a43b3e498a5db63f1/src/main/java/com/google/swarm/tokenization/DLPTextToBigQueryStreamingV2.java#L204
@@ -69,7 +69,7 @@ public class BigQueryDLPBigQuery {
    * @param options The execution parameters to the pipeline.
    * @return The result of the pipeline execution.
    */
-  public static PipelineResult run(BigQueryReidentifyPipelineOptions options) {
+  public static PipelineResult run(BigQueryTransformPipelineOptions options) {
     // Create the pipeline
     Pipeline p = Pipeline.create(options);
 
@@ -110,27 +110,41 @@ public class BigQueryDLPBigQuery {
           "ViewAsList",
           View.asList()
         );
-
-    PCollection<KV<String, TableRow>> reidData =
-        record.apply(
+    
+    PCollection<KV<String, TableRow>> transformData = 
+        
+         record.apply(
           "ConvertTableRow",
           ParDo.of(new MergeBigQueryRowToDlpRow())
         )
         .apply(
           "DLPTransform",
-          DLPTransform.newBuilder()
+          (
+            ( options.getDlpTransform().equals("RE-IDENTIFY")) ? (
+          DLPReidentifyTransform.newBuilder()
             .setBatchSize(options.getBatchSize())
             .setDeidTemplateName(options.getDeidentifyTemplateName())
             .setProjectId(options.getDlpProjectId())
             .setDlpLocation(options.getDlpLocation())
             .setHeader(selectedColumns)
             .setColumnDelimiter(options.getColumnDelimiter())
-            .build()
+            .build() ) : (
+          DLPDeidentifyTransform.newBuilder()
+            .setBatchSize(options.getBatchSize())
+            .setDeidTemplateName(options.getDeidentifyTemplateName())
+            .setProjectId(options.getDlpProjectId())
+            .setDlpLocation(options.getDlpLocation())
+            .setHeader(selectedColumns)
+            .setColumnDelimiter(options.getColumnDelimiter())
+            .build() ) 
+          ) 
         )
-        .get(Util.reidSuccess);
+        .get(Util.jobSuccess);
+        
 
+    
     // BQ insert
-    reidData.apply(
+    transformData.apply(
         "BigQueryInsert",
         BigQueryDynamicWriteTransform.newBuilder()
           .setDatasetId(options.getOutputBigQueryDataset())
@@ -140,5 +154,5 @@ public class BigQueryDLPBigQuery {
 
     return p.run();
   }
-
+   
 }
