@@ -80,6 +80,7 @@ module "secured_data_warehouse" {
 
 | Name | Description |
 |------|-------------|
+| blueprint\_type | Type of blueprint this module represents. |
 | cmek\_bigquery\_crypto\_key | The Customer Managed Crypto Key for the BigQuery service. |
 | cmek\_confidential\_bigquery\_crypto\_key | The Customer Managed Crypto Key for the confidential BigQuery service. |
 | cmek\_ingestion\_crypto\_key | The Customer Managed Crypto Key for the Ingestion crypto boundary. |
