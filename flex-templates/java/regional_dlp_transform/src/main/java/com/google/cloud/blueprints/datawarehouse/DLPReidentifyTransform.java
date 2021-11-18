@@ -79,11 +79,11 @@ public abstract class DLPReidentifyTransform
   public static Builder newBuilder() {
     return new AutoValue_DLPReidentifyTransform.Builder();
   }
-  
+
 
   @Override
   public PCollectionTuple expand(PCollection<KV<String, Table.Row>> input) {
-    
+
     return input
         .apply(
             "ReIdTransform",

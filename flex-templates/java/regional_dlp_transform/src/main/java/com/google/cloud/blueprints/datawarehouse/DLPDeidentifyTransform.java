@@ -79,7 +79,7 @@ public abstract class DLPDeidentifyTransform
   public static Builder newBuilder() {
     return new AutoValue_DLPDeidentifyTransform.Builder();
   }
-  
+
 
   @Override
   public PCollectionTuple expand(PCollection<KV<String, Table.Row>> input) {

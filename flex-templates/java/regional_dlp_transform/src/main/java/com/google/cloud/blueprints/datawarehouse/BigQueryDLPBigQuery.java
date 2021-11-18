@@ -61,7 +61,7 @@ public class BigQueryDLPBigQuery {
 
     run(options);
   }
- 
+
   /**
    * Runs the pipeline with the supplied options.
    * https://github.com/GoogleCloudPlatform/dlp-dataflow-deidentification/blob/2375b8af9017a32a836ae09a43b3e498a5db63f1/src/main/java/com/google/swarm/tokenization/DLPTextToBigQueryStreamingV2.java#L204
@@ -110,9 +110,9 @@ public class BigQueryDLPBigQuery {
           "ViewAsList",
           View.asList()
         );
-    
-    PCollection<KV<String, TableRow>> transformData = 
-        
+
+    PCollection<KV<String, TableRow>> transformData =
+
          record.apply(
           "ConvertTableRow",
           ParDo.of(new MergeBigQueryRowToDlpRow())
@@ -136,13 +136,13 @@ public class BigQueryDLPBigQuery {
             .setDlpLocation(options.getDlpLocation())
             .setHeader(selectedColumns)
             .setColumnDelimiter(options.getColumnDelimiter())
-            .build() ) 
-          ) 
+            .build() )
+          )
         )
         .get(Util.jobSuccess);
-        
 
-    
+
+
     // BQ insert
     transformData.apply(
         "BigQueryInsert",
@@ -154,5 +154,5 @@ public class BigQueryDLPBigQuery {
 
     return p.run();
   }
-   
+
 }
