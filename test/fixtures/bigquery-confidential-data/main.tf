@@ -19,6 +19,7 @@ locals {
   kek_key_name                = "kek_key_${random_id.random_suffix.hex}"
   location                    = "us-east4"
   key_rotation_period_seconds = "2592000s"
+  dlp_transformation_type     = "RE-IDENTIFY"
 }
 
 resource "random_id" "random_suffix" {
@@ -67,4 +68,5 @@ module "bigquery_confidential_data" {
   confidential_subnets_self_link    = var.confidential_subnets_self_link[2]
   delete_contents_on_destroy        = true
   perimeter_additional_members      = []
+  dlp_transformation_type           = local.dlp_transformation_type
 }
