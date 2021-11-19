@@ -13,6 +13,7 @@
 # limitations under the License.
 
 project_id = attribute('project_id')
+blueprint_type = attribute('blueprint_type')
 
 boolean_policy_constraints = [
   'constraints/iam.disableServiceAccountCreation',
@@ -27,7 +28,7 @@ list_policy_constraints = [
 ]
 
 control 'gcloud' do
-  title 'organization boolean and list policy tests'
+  title 'boolean and list organization policy and output tests'
 
   boolean_policy_constraints.each do |constraint|
     describe command("gcloud beta resource-manager org-policies list --project=#{project_id} --format=json") do
@@ -80,6 +81,12 @@ control 'gcloud' do
           expect(data['listPolicy']['allowedValues']).to_not be_empty
         end
       end
+    end
+  end
+
+  describe "check blueprint_type #{blueprint_type}" do
+    it 'should have expected value' do
+      expect("#{blueprint_type}" ).to eq 'blueprints/terraform/terraform-google-secured-data-warehouse/v1.0.0'
     end
   end
 end
