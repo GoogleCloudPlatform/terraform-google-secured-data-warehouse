@@ -51,6 +51,7 @@ variable "org_id" {
 
 variable "group_email" {
   description = "The group that will be assigned permissions for testing."
+  type        = list(string)
 }
 
 variable "access_context_manager_policy_id" {

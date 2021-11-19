@@ -21,6 +21,7 @@ variable "org_id" {
 
 variable "group_email" {
   description = "The group that will be assigned permissions for testing."
+  type        = list(string)
 }
 
 variable "terraform_service_account" {

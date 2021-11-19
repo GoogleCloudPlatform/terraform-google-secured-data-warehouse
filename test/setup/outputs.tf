@@ -56,7 +56,11 @@ output "billing_account" {
 }
 
 output "group_email" {
-  value = var.group_email
+  value = [
+    "test-gcp-developers@test.infra.cft.tips",
+    "test-gcp-qa@test.infra.cft.tips",
+    "test-gcp-ops@test.infra.cft.tips"
+  ]
 }
 
 output "java_de_identify_template_gs_path" {

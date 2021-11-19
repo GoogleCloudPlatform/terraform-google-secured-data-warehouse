@@ -67,9 +67,9 @@ module "bigquery_confidential_data" {
   confidential_subnets_self_link    = var.confidential_subnets_self_link[2]
   delete_contents_on_destroy        = true
   perimeter_additional_members      = []
-  data_engineer_group               = var.group_email
-  data_analyst_group                = var.group_email
-  security_analyst_group            = var.group_email
-  network_administrator_group       = var.group_email
-  security_administrator_group      = var.group_email
+  data_engineer_group               = var.group_email[2]
+  data_analyst_group                = var.group_email[2]
+  security_analyst_group            = var.group_email[2]
+  network_administrator_group       = var.group_email[2]
+  security_administrator_group      = var.group_email[2]
 }
