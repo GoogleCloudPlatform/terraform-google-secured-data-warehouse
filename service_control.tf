@@ -90,7 +90,7 @@ module "data_ingestion_vpc_sc" {
     "storage.googleapis.com"
   ]
 
-  egress_policies = [
+  egress_policies = distinct(concat([
     {
       "from" = {
         "identity_type" = ""
@@ -110,7 +110,7 @@ module "data_ingestion_vpc_sc" {
         }
       }
     },
-  ]
+  ], var.data_ingestion_egress_policies))
 
   # depends_on needed to prevent intermittent errors
   # when the VPC-SC is created but perimeter member
@@ -146,6 +146,8 @@ module "data_governance_vpc_sc" {
     "storage.googleapis.com"
   ]
 
+  egress_policies = var.data_governance_egress_policies
+
   # depends_on needed to prevent intermittent errors
   # when the VPC-SC is created but perimeter member
   # not yet propagated.
@@ -180,7 +182,7 @@ module "confidential_data_vpc_sc" {
     "storage.googleapis.com"
   ]
 
-  egress_policies = [
+  egress_policies = distinct(concat([
     {
       "from" = {
         "identity_type" = ""
@@ -199,8 +201,8 @@ module "confidential_data_vpc_sc" {
           }
         }
       }
-    },
-  ]
+    }
+  ], var.confidential_data_egress_policies))
 
   # depends_on needed to prevent intermittent errors
   # when the VPC-SC is created but perimeter member
