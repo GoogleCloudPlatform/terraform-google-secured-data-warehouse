@@ -90,16 +90,26 @@ module "data_ingestion_vpc_sc" {
     "storage.googleapis.com"
   ]
 
-  sdx_egress_rule = [
+  egress_policies = [
     {
-      sdx_identities = distinct(concat(
-        var.data_ingestion_dataflow_deployer_identities,
-        ["serviceAccount:${var.terraform_service_account}"]
-      ))
-      sdx_project_number = var.sdx_project_number
-      service_name       = "storage.googleapis.com"
-      method             = "google.storage.objects.get"
-    }
+      "from" = {
+        "identity_type" = ""
+        "identities" = distinct(concat(
+          var.data_ingestion_dataflow_deployer_identities,
+          ["serviceAccount:${var.terraform_service_account}"]
+        ))
+      },
+      "to" = {
+        "resources" = ["projects/${var.sdx_project_number}"]
+        "operations" = {
+          "storage.googleapis.com" = {
+            "methods" = [
+              "google.storage.objects.get"
+            ]
+          }
+        }
+      }
+    },
   ]
 
   # depends_on needed to prevent intermittent errors
@@ -170,16 +180,26 @@ module "confidential_data_vpc_sc" {
     "storage.googleapis.com"
   ]
 
-  sdx_egress_rule = [
+  egress_policies = [
     {
-      sdx_identities = distinct(concat(
-        var.confidential_data_dataflow_deployer_identities,
-        ["serviceAccount:${var.terraform_service_account}"]
-      ))
-      sdx_project_number = var.sdx_project_number
-      service_name       = "storage.googleapis.com"
-      method             = "google.storage.objects.get"
-    }
+      "from" = {
+        "identity_type" = ""
+        "identities" = distinct(concat(
+          var.confidential_data_dataflow_deployer_identities,
+          ["serviceAccount:${var.terraform_service_account}"]
+        ))
+      },
+      "to" = {
+        "resources" = ["projects/${var.sdx_project_number}"]
+        "operations" = {
+          "storage.googleapis.com" = {
+            "methods" = [
+              "google.storage.objects.get"
+            ]
+          }
+        }
+      }
+    },
   ]
 
   # depends_on needed to prevent intermittent errors
