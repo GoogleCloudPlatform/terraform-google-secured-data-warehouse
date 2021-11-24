@@ -194,3 +194,9 @@ variable "kms_key_protection_level" {
   type        = string
   default     = "HSM"
 }
+
+variable "additional_restricted_services" {
+  description = "The list of additional Google services to be protected by the VPC-SC service perimeters."
+  type        = list(string)
+  default     = []
+}
