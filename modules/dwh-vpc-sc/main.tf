@@ -49,29 +49,59 @@ module "access_level_policy" {
   regions        = var.access_level_regions
 }
 
-module "regular_service_perimeter" {
-  source  = "terraform-google-modules/vpc-service-controls/google//modules/regular_service_perimeter"
-  version = "~> 3.1"
-
-  policy         = local.actual_policy
-  perimeter_name = local.perimeter_name
+# Can not use the module "terraform-google-modules/vpc-service-controls/google/modules/regular_service_perimeter"
+# because we need to set the  lifecycle of the resource.
+resource "google_access_context_manager_service_perimeter" "regular_service_perimeter" {
+  provider       = google
+  parent         = "accessPolicies/${local.actual_policy}"
+  perimeter_type = "PERIMETER_TYPE_REGULAR"
+  name           = "accessPolicies/${local.actual_policy}/servicePerimeters/${local.perimeter_name}"
+  title          = local.perimeter_name
   description    = "perimeter for data warehouse projects"
 
-  resources           = var.resources
-  restricted_services = var.restricted_services
-  egress_policies     = var.egress_policies
+  status {
+    restricted_services = var.restricted_services
+    resources           = formatlist("projects/%s", var.resources)
+    access_levels = formatlist(
+      "accessPolicies/${local.actual_policy}/accessLevels/%s",
+      [module.access_level_policy.name]
+    )
 
-  access_levels = [
-    module.access_level_policy.name
-  ]
+    dynamic "egress_policies" {
+      for_each = var.egress_policies
+      content {
+        egress_from {
+          identity_type = lookup(egress_policies.value["from"], "identity_type", null)
+          identities    = lookup(egress_policies.value["from"], "identities", null)
+        }
+        egress_to {
+          resources = lookup(egress_policies.value["to"], "resources", ["*"])
+          dynamic "operations" {
+            for_each = lookup(egress_policies.value["to"], "operations", [])
+            content {
+              service_name = operations.key
+              dynamic "method_selectors" {
+                for_each = merge(
+                  { for k, v in lookup(operations.value, "methods", {}) : v => "method" },
+                { for k, v in lookup(operations.value, "permissions", {}) : v => "permission" })
+                content {
+                  method     = method_selectors.value == "method" ? method_selectors.key : ""
+                  permission = method_selectors.value == "permission" ? method_selectors.key : ""
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
-
 
 resource "time_sleep" "wait_for_vpc_sc_propagation" {
   create_duration = "240s"
 
   depends_on = [
     module.access_level_policy,
-    module.regular_service_perimeter
+    google_access_context_manager_service_perimeter.regular_service_perimeter
   ]
 }
