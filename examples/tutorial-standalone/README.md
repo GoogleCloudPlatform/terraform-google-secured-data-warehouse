@@ -114,9 +114,9 @@ with the following IAM roles:
 
 - Organization level
   - Access Context Manager Admin: `roles/accesscontextmanager.policyAdmin`
+  - Billing Account User: `roles/billing.user`
   - Organization Policy Administrator: `roles/orgpolicy.policyAdmin`
 - Folder Level
-  - Billing User: `roles/billing.user`
   - Compute Network Admin: `roles/compute.networkAdmin`
   - Logging Admin: `roles/logging.admin`
   - Project Creator: `roles/resourcemanager.projectCreator`
@@ -124,7 +124,17 @@ with the following IAM roles:
   - Project IAM Admin: `roles/resourcemanager.projectIamAdmin`
   - Service Usage Admin: `roles/serviceusage.serviceUsageAdmin`
 
-The service account must have `Billing Account User` role in the billing account.
+As an alternative to granting the service account the `Billing Account User` role in organization,
+it is possible to grant it [directly in the billing account](https://cloud.google.com/billing/docs/how-to/billing-access#update-cloud-billing-permissions).
+
+```sh
+export SA_EMAIL=<YOUR-SA-EMAIL>
+export BILLING_ACCOUNT=<YOUR-BILLING-ACCOUNT>
+
+gcloud beta billing accounts add-iam-policy-binding "${BILLING_ACCOUNT}" \
+--member="serviceAccount:${SA_EMAIL}" \
+--role="roles/billing.user"
+```
 
 You can use the [Project Factory module](https://github.com/terraform-google-modules/terraform-google-project-factory) and the
 [IAM module](https://github.com/terraform-google-modules/terraform-google-iam) in combination to provision a
@@ -145,12 +155,11 @@ gcloud organizations add-iam-policy-binding ${ORG_ID} \
 
 gcloud organizations add-iam-policy-binding ${ORG_ID} \
 --member="serviceAccount:${SA_EMAIL}" \
---role="roles/orgpolicy.policyAdmin"
-
-gcloud resource-manager folders \
-add-iam-policy-binding ${FOLDER_ID} \
---member="serviceAccount:${SA_EMAIL}" \
 --role="roles/billing.user"
+
+gcloud organizations add-iam-policy-binding ${ORG_ID} \
+--member="serviceAccount:${SA_EMAIL}" \
+--role="roles/orgpolicy.policyAdmin"
 
 gcloud resource-manager folders \
 add-iam-policy-binding ${FOLDER_ID} \
