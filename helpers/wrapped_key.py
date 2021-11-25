@@ -1,3 +1,16 @@
+# Copyright 2021 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 def encrypt_symmetric(project_id, location_id, key_ring_id, key_id, plaintext):
     """
@@ -47,12 +60,14 @@ def encrypt_symmetric(project_id, location_id, key_ring_id, key_id, plaintext):
     if not encrypt_response.verified_plaintext_crc32c:
         raise Exception(
             'The request sent to the server was corrupted in-transit.')
-    if not encrypt_response.ciphertext_crc32c == crc32c(encrypt_response.ciphertext):
+    if not encrypt_response.ciphertext_crc32c == \
+            crc32c(encrypt_response.ciphertext):
         raise Exception(
             'The response received from the server was corrupted in-transit.')
     # End integrity verification
 
-    print('Ciphertext: {}'.format(base64.b64encode(encrypt_response.ciphertext)))
+    print('Ciphertext: {}'.format(
+          base64.b64encode(encrypt_response.ciphertext)))
     return encrypt_response
 
 
@@ -66,6 +81,7 @@ def crc32c(data):
     Returns:
         An int representing the CRC32C checksum of the provided bytes.
     """
+
     import crcmod
     import six
     crc32c_fun = crcmod.predefined.mkPredefinedCrcFun('crc-32c')
@@ -74,7 +90,6 @@ def crc32c(data):
 
 if __name__ == '__main__':
     import argparse
-    import sys
 
     parser = argparse.ArgumentParser(
         description='Encrypt plaintext using a symmetric key.')
@@ -83,12 +98,13 @@ if __name__ == '__main__':
     parser.add_argument('--location_id', dest='location_id',
                         help='location_id (string): Cloud KMS location.')
     parser.add_argument('--key_ring_id', dest='key_ring_id',
-                        help='key_ring_id (string): ID of the Cloud KMS key ring.')
+                        help="key_ring_id (string): ID of the"
+                        "Cloud KMS key ring.")
     parser.add_argument('--key_id', dest='key_id',
                         help='key_id (string): ID of the key to use.')
     parser.add_argument('--plaintext', dest='plaintext',
                         help='plaintext (string): message to encrypt')
 
     args = parser.parse_args()
-    sys.exit(encrypt_symmetric(args.project_id, args.location_id,
-             args.key_ring_id, args.key_id, args.plaintext))
+    encrypt_symmetric(args.project_id, args.location_id,
+                      args.key_ring_id, args.key_id, args.plaintext)
