@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def encrypt_symmetric(project_id, location_id, key_ring_id, key_id, plaintext):
+def encrypt_symmetric(project_id, location_id, key_ring_id, key_id):
     """
     Encrypt plaintext using a symmetric key.
 
@@ -21,7 +21,6 @@ def encrypt_symmetric(project_id, location_id, key_ring_id, key_id, plaintext):
         location_id (string): Cloud KMS location.
         key_ring_id (string): ID of the Cloud KMS key ring.
         key_id (string): ID of the key to use.
-        plaintext (string): message to encrypt
 
     Returns:
         bytes: Encrypted ciphertext.
@@ -32,9 +31,12 @@ def encrypt_symmetric(project_id, location_id, key_ring_id, key_id, plaintext):
 
     # Import base64 for printing the ciphertext.
     import base64
+    # Import os for generate random key
+    import os
+    key = os.urandom(32)
 
-    # Convert the plaintext to bytes.
-    plaintext_bytes = plaintext.encode('utf-8')
+    # Convert the key to bytes.
+    plaintext_bytes = base64.b64encode(key)
 
     # Optional, but recommended: compute plaintext's CRC32C.
     # See crc32c() function defined below.
@@ -102,9 +104,7 @@ if __name__ == '__main__':
                         "Cloud KMS key ring.")
     parser.add_argument('--key_id', dest='key_id',
                         help='key_id (string): ID of the key to use.')
-    parser.add_argument('--plaintext', dest='plaintext',
-                        help='plaintext (string): message to encrypt')
 
     args = parser.parse_args()
     encrypt_symmetric(args.project_id, args.location_id,
-                      args.key_ring_id, args.key_id, args.plaintext)
+                      args.key_ring_id, args.key_id)
