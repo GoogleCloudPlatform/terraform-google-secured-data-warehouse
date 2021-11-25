@@ -33,6 +33,8 @@ def encrypt_symmetric(project_id, location_id, key_ring_id, key_id):
     import base64
     # Import os for generate random key
     import os
+
+    # Generate random bytes
     key = os.urandom(32)
 
     # Convert the key to bytes.
