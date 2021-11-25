@@ -1,4 +1,7 @@
-# Helpers
+# Wrapped Key Helper
+
+This helper will generate a cyphertext using KMS API
+from generated random bytes
 
 ## Wrapped Key helper usage
 
