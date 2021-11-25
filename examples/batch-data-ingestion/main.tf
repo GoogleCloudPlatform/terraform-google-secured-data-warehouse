@@ -67,7 +67,7 @@ module "data_ingestion" {
 }
 
 resource "google_storage_bucket_object" "sample_file" {
-  name         = "${local.cc_file_name}"
+  name         = local.cc_file_name
   source       = "${local.cc_file_path}/${local.cc_file_name}"
   content_type = "text/csv"
   bucket       = module.data_ingestion.data_ingestion_bucket_name
