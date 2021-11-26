@@ -55,4 +55,5 @@ module "de_identification_template" {
   crypto_key                = module.kms.keys[local.key_name]
   wrapped_key               = google_kms_secret_ciphertext.wrapped_key.ciphertext
   template_file             = "${path.module}/deidentification.tmpl"
+  dlp_location              = "us-east4"
 }
