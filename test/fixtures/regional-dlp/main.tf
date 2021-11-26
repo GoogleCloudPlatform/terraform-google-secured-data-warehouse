@@ -17,7 +17,6 @@
 locals {
   kek_keyring                 = "kek_keyring_${random_id.random_suffix.hex}"
   kek_key_name                = "kek_key_${random_id.random_suffix.hex}"
-  location                    = "us-east4"
   key_rotation_period_seconds = "2592000s"
 }
 
@@ -30,7 +29,7 @@ module "kek" {
   version = "~> 1.2"
 
   project_id           = var.data_governance_project_id[1]
-  location             = local.location
+  location             = "us-east4"
   keyring              = local.kek_keyring
   keys                 = [local.kek_key_name]
   key_protection_level = "HSM"
@@ -57,7 +56,6 @@ module "regional_dlp_example" {
   confidential_data_project_id      = var.confidential_data_project_id[1]
   sdx_project_number                = var.sdx_project_number
   external_flex_template_project_id = var.external_flex_template_project_id
-  location                          = local.location
   terraform_service_account         = var.terraform_service_account
   access_context_manager_policy_id  = var.access_context_manager_policy_id
   flex_template_gs_path             = var.python_de_identify_template_gs_path

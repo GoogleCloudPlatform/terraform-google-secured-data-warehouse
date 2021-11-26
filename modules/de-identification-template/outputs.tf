@@ -23,6 +23,16 @@ output "template_full_path" {
   ]
 }
 
+
+output "dlp_location" {
+  description = "The location of the DLP resources."
+  value       = var.dlp_location
+  depends_on = [
+    null_resource.de_identify_template
+  ]
+}
+
+
 output "template_id" {
   description = "The ID of the Cloud DLP de-identification template that is created."
   value       = local.template_id

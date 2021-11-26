@@ -99,9 +99,3 @@ variable "delete_contents_on_destroy" {
   type        = bool
   default     = false
 }
-
-variable "taxonomy_name" {
-  description = "The taxonomy display name."
-  type        = string
-  default     = "secured_taxonomy"
-}

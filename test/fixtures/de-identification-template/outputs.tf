@@ -21,7 +21,7 @@ output "data_governance_project_id" {
 
 output "de_identification_template_dlp_location" {
   description = "The location of the DLP resources."
-  value       = var.dlp_location
+  value       = module.de_identification_template.dlp_location
 }
 
 output "de_identification_template_crypto_key" {
