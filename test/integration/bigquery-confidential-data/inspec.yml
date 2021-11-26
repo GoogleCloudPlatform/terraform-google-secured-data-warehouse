@@ -24,6 +24,3 @@ attributes:
   - name: bigquery_project_id
     required: true
     type: string
-  - name: taxonomy_name
-    required: true
-    type: string

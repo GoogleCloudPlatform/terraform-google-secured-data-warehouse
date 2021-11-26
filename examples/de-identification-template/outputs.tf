@@ -14,13 +14,6 @@
  * limitations under the License.
  */
 
-
-
-output "dlp_location" {
-  description = "The location of the DLP resources."
-  value       = module.de_identification_template_example.dlp_location
-}
-
 output "template_id" {
   description = "The ID of the Cloud DLP de-identification template that is created."
   value       = module.de_identification_template_example.template_id

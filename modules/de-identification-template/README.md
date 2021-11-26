@@ -77,7 +77,6 @@ A functional example for a Record Transformation is included under the
 
 | Name | Description |
 |------|-------------|
-| dlp\_location | The location of the DLP resources. |
 | template\_full\_path | The full path of DLP de-identification template. |
 | template\_id | The ID of the Cloud DLP de-identification template that is created. |
 

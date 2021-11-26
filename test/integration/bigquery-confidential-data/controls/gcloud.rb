@@ -13,7 +13,7 @@
 # limitations under the License.
 
 data_governance_project_id = attribute('data_governance_project_id')
-taxonomy_name              = attribute('taxonomy_name')
+taxonomy_name              = "secured_taxonomy"
 
 control 'gcloud' do
   title 'Gcloud Resources'

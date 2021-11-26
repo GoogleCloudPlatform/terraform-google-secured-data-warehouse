@@ -20,7 +20,6 @@ The `crypto_key` location must be the same location used for the `dlp_location`.
 
 | Name | Description |
 |------|-------------|
-| dlp\_location | The location of the DLP resources. |
 | template\_id | The ID of the Cloud DLP de-identification template that is created. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

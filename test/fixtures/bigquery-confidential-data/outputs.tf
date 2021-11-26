@@ -23,8 +23,3 @@ output "data_governance_project_id" {
   description = "The ID of the project in which the KMS, Datacatalog, and DLP resources are created."
   value       = var.data_governance_project_id[2]
 }
-
-output "taxonomy_name" {
-  description = "The taxonomy display name."
-  value       = module.bigquery_confidential_data.taxonomy_name
-}
