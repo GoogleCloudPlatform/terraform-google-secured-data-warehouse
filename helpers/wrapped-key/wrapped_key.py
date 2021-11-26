@@ -31,11 +31,9 @@ def encrypt_symmetric(project_id, location_id, key_ring_id, key_id):
 
     # Import base64 for printing the ciphertext.
     import base64
-    # Import os for generate random key
-    import os
 
     # Generate random bytes
-    key = os.urandom(32)
+    key = generate_random_bytes(project_id, location_id, 32)
 
     # Convert the key to bytes.
     plaintext_bytes = base64.b64encode(key)
@@ -73,6 +71,38 @@ def encrypt_symmetric(project_id, location_id, key_ring_id, key_id):
     print('Ciphertext: {}'.format(
           base64.b64encode(encrypt_response.ciphertext)))
     return encrypt_response
+
+
+def generate_random_bytes(project_id, location_id, num_bytes):
+    """
+    Generate random bytes with entropy sourced from the given location.
+
+    Args:
+        project_id (string): Google Cloud project ID (e.g. 'my-project').
+        location_id (string): Cloud KMS location (e.g. 'us-east1').
+        num_bytes (integer): number of bytes of random data.
+
+    Returns:
+        bytes: Encrypted ciphertext.
+
+    """
+
+    # Import the client library.
+    from google.cloud import kms
+
+    # Create the client.
+    client = kms.KeyManagementServiceClient()
+
+    # Build the location name.
+    location_name = client.common_location_path(project_id, location_id)
+
+    # Call the API.
+    protection_level = kms.ProtectionLevel.HSM
+    random_bytes_response = client.generate_random_bytes(
+        request={'location': location_name, 'length_bytes': num_bytes,
+                 'protection_level': protection_level})
+
+    return random_bytes_response.data
 
 
 def crc32c(data):
