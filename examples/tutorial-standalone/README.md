@@ -189,13 +189,14 @@ The following APIs must be enabled in the project where the service account was 
 
 - Access Context Manager API: `accesscontextmanager.googleapis.com`
 - App Engine Admin API: `appengine.googleapis.com`
-- Cloud Billing API:`cloudbilling.googleapis.com`
-- Cloud Key Management Service (KMS) API:`cloudkms.googleapis.com`
+- Cloud Billing API: `cloudbilling.googleapis.com`
+- Cloud Build API: `cloudbuild.googleapis.com`
+- Cloud Key Management Service (KMS) API: `cloudkms.googleapis.com`
 - Cloud Pub/Sub API: `pubsub.googleapis.com`
-- Cloud Resource Manager API:`cloudresourcemanager.googleapis.com`
-- Compute Engine API:`compute.googleapis.com`
-- Dataflow API:`dataflow.googleapis.com`
-- Identity and Access Management (IAM) API:`iam.googleapis.com`
+- Cloud Resource Manager API: `cloudresourcemanager.googleapis.com`
+- Compute Engine API: `compute.googleapis.com`
+- Dataflow API: `dataflow.googleapis.com`
+- Identity and Access Management (IAM) API: `iam.googleapis.com`
 - BigQuery API: `bigquery.googleapis.com`
 
 You can run the gcloud command to enable these APIs in the service account project
@@ -208,6 +209,7 @@ accesscontextmanager.googleapis.com \
 appengine.googleapis.com \
 bigquery.googleapis.com \
 cloudbilling.googleapis.com \
+cloudbuild.googleapis.com \
 cloudkms.googleapis.com \
 pubsub.googleapis.com \
 cloudresourcemanager.googleapis.com \
