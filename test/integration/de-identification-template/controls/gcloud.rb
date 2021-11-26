@@ -13,7 +13,7 @@
 # limitations under the License.
 
 project_id = attribute('data_governance_project_id')
-de_identification_template_dlp_location = attribute('de_identification_template_dlp_location')
+de_identification_template_dlp_location = "us-east4"
 de_identification_template_crypto_key = attribute('de_identification_template_crypto_key')
 de_identification_template_wrapped_key = attribute('de_identification_template_wrapped_key')
 de_identification_template_template_id = attribute('de_identification_template_template_id')

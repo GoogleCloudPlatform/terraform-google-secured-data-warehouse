@@ -19,11 +19,6 @@ output "data_governance_project_id" {
   value       = var.data_governance_project_id[2]
 }
 
-output "de_identification_template_dlp_location" {
-  description = "The location of the DLP resources."
-  value       = module.de_identification_template.dlp_location
-}
-
 output "de_identification_template_crypto_key" {
   description = "The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP."
   value       = module.kms.keys[local.key_name]
