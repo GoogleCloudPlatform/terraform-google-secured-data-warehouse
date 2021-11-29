@@ -105,6 +105,7 @@ func issueBank(faker *gofakeit.Faker, ccName string) string {
 }
 
 // ccShortCode generates a short code based on cc name
+// https://github.com/brianvoe/gofakeit/blob/master/data/payment.go#L19 for supported ccTypes
 func ccShortCode(ccName string) string {
 	switch ccName {
 	case "Visa":

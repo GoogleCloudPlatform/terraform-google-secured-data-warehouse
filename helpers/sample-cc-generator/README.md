@@ -18,3 +18,7 @@ Supported flags
   -seed int
         Random seed for generator. Defaults to 1 (default 1)
 ```
+
+## Requirements
+
+- [Go](https://go.dev/doc/install) 1.16+
