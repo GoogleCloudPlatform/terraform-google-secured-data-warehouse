@@ -29,6 +29,26 @@ locals {
   perimeter_members_confidential = distinct(concat([
     "serviceAccount:${var.terraform_service_account}"
   ], var.perimeter_additional_members))
+
+  base_restricted_services = [
+    "bigquery.googleapis.com",
+    "cloudasset.googleapis.com",
+    "cloudfunctions.googleapis.com",
+    "cloudkms.googleapis.com",
+    "compute.googleapis.com",
+    "datacatalog.googleapis.com",
+    "dataflow.googleapis.com",
+    "dlp.googleapis.com",
+    "logging.googleapis.com",
+    "monitoring.googleapis.com",
+    "pubsub.googleapis.com",
+    "secretmanager.googleapis.com",
+    "sts.googleapis.com",
+    "iam.googleapis.com",
+    "storage.googleapis.com"
+  ]
+
+  restricted_services = distinct(concat(local.base_restricted_services, var.additional_restricted_services))
 }
 
 data "google_project" "data_ingestion_project" {
@@ -74,21 +94,7 @@ module "data_ingestion_vpc_sc" {
   common_suffix                    = random_id.suffix.hex
   resources                        = [data.google_project.data_ingestion_project.number, data.google_project.non_confidential_data_project.number]
   perimeter_members                = local.perimeter_members_data_ingestion
-  restricted_services = [
-    "bigquery.googleapis.com",
-    "cloudasset.googleapis.com",
-    "cloudfunctions.googleapis.com",
-    "cloudkms.googleapis.com",
-    "compute.googleapis.com",
-    "datacatalog.googleapis.com",
-    "dataflow.googleapis.com",
-    "dlp.googleapis.com",
-    "logging.googleapis.com",
-    "monitoring.googleapis.com",
-    "pubsub.googleapis.com",
-    "secretmanager.googleapis.com",
-    "storage.googleapis.com"
-  ]
+  restricted_services              = local.restricted_services
 
   egress_policies = distinct(concat([
     {
@@ -130,21 +136,7 @@ module "data_governance_vpc_sc" {
   common_suffix                    = random_id.suffix.hex
   resources                        = [data.google_project.governance_project.number]
   perimeter_members                = local.perimeter_members_governance
-  restricted_services = [
-    "bigquery.googleapis.com",
-    "cloudasset.googleapis.com",
-    "cloudfunctions.googleapis.com",
-    "cloudkms.googleapis.com",
-    "compute.googleapis.com",
-    "datacatalog.googleapis.com",
-    "dataflow.googleapis.com",
-    "dlp.googleapis.com",
-    "logging.googleapis.com",
-    "monitoring.googleapis.com",
-    "pubsub.googleapis.com",
-    "secretmanager.googleapis.com",
-    "storage.googleapis.com"
-  ]
+  restricted_services              = local.restricted_services
 
   egress_policies = var.data_governance_egress_policies
 
@@ -166,21 +158,7 @@ module "confidential_data_vpc_sc" {
   common_suffix                    = random_id.suffix.hex
   resources                        = [data.google_project.confidential_project.number]
   perimeter_members                = local.perimeter_members_confidential
-  restricted_services = [
-    "bigquery.googleapis.com",
-    "cloudasset.googleapis.com",
-    "cloudfunctions.googleapis.com",
-    "cloudkms.googleapis.com",
-    "compute.googleapis.com",
-    "datacatalog.googleapis.com",
-    "dataflow.googleapis.com",
-    "dlp.googleapis.com",
-    "logging.googleapis.com",
-    "monitoring.googleapis.com",
-    "pubsub.googleapis.com",
-    "secretmanager.googleapis.com",
-    "storage.googleapis.com"
-  ]
+  restricted_services              = local.restricted_services
 
   egress_policies = distinct(concat([
     {

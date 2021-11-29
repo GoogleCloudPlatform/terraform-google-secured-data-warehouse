@@ -15,10 +15,10 @@
 steps:
 - name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
   id: 'lint'
-  args: ['/usr/local/bin/test_lint.sh']
+  args: ['/bin/bash', '-c', 'export SHELLCHECK_OPTS="-e SC2154 -e SC2171 -e SC2086" && /usr/local/bin/test_lint.sh']
 tags:
 - 'ci'
 - 'lint'
 substitutions:
   _DOCKER_IMAGE_DEVELOPER_TOOLS: 'cft/developer-tools'
-  _DOCKER_TAG_VERSION_DEVELOPER_TOOLS: '1.1'
+  _DOCKER_TAG_VERSION_DEVELOPER_TOOLS: '1.2.3'

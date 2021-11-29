@@ -23,9 +23,3 @@ variable "terraform_service_account" {
   description = "The email address of the service account that will run the Terraform config."
   type        = string
 }
-
-variable "dlp_location" {
-  description = "The location of DLP resources. See https://cloud.google.com/dlp/docs/locations. The 'global' KMS location is valid."
-  type        = string
-  default     = "us-east4"
-}
