@@ -12,6 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import argparse
+import base64
+import crcmod
+import six
+from google.cloud import kms
+
+
 def encrypt_symmetric(project_id, location_id, key_ring_id, key_id):
     """
     Encrypt securely generated random bytes using a symmetric key.
@@ -25,12 +32,6 @@ def encrypt_symmetric(project_id, location_id, key_ring_id, key_id):
     Returns:
         bytes: Encrypted ciphertext.
     """
-
-    # Import the client library.
-    from google.cloud import kms
-
-    # Import base64 for printing the ciphertext.
-    import base64
 
     # Generate random bytes
     key = generate_random_bytes(project_id, location_id, 32)
@@ -68,7 +69,6 @@ def encrypt_symmetric(project_id, location_id, key_ring_id, key_id):
             'The response received from the server was corrupted in-transit.')
     # End integrity verification
 
-    print(base64.b64encode(encrypt_response.ciphertext))
     return encrypt_response
 
 
@@ -85,9 +85,6 @@ def generate_random_bytes(project_id, location_id, num_bytes):
         bytes: Encrypted ciphertext.
 
     """
-
-    # Import the client library.
-    from google.cloud import kms
 
     # Create the client.
     client = kms.KeyManagementServiceClient()
@@ -115,14 +112,11 @@ def crc32c(data):
         An int representing the CRC32C checksum of the provided bytes.
     """
 
-    import crcmod
-    import six
     crc32c_fun = crcmod.predefined.mkPredefinedCrcFun('crc-32c')
     return crc32c_fun(six.ensure_binary(data))
 
 
 if __name__ == '__main__':
-    import argparse
 
     parser = argparse.ArgumentParser(
         description='Encrypt securely generated random bytes'
@@ -138,5 +132,6 @@ if __name__ == '__main__':
                         help='key_id (string): ID of the key to use.')
 
     args = parser.parse_args()
-    encrypt_symmetric(args.project_id, args.location_id,
-                      args.key_ring_id, args.key_id)
+    encrypt_response = encrypt_symmetric(args.project_id, args.location_id,
+                                         args.key_ring_id, args.key_id)
+    print(base64.b64encode(encrypt_response.ciphertext))
