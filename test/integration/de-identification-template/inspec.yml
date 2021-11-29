@@ -24,9 +24,6 @@ attributes:
   - name: terraform_service_account
     required: true
     type: string
-  - name: de_identification_template_dlp_location
-    required: true
-    type: string
   - name: de_identification_template_crypto_key
     required: true
     type: string
