@@ -15,9 +15,9 @@
  */
 
 locals {
-  first_project_group  = "1"
-  second_project_group = "2"
-  third_project_group  = "3"
+  first_project_group  = "0"
+  second_project_group = "1"
+  third_project_group  = "2"
   project_groups = toset([
     local.first_project_group,
     local.second_project_group,
@@ -87,6 +87,12 @@ resource "google_service_account" "int_ci_service_account" {
   project      = module.base_projects[local.first_project_group].data_ingestion_project_id
   account_id   = "ci-account"
   display_name = "ci-account"
+}
+
+resource "google_service_account_iam_member" "cloud_build_iam" {
+  service_account_id = google_service_account.int_ci_service_account.name
+  role               = "roles/iam.serviceAccountTokenCreator"
+  member             = "serviceAccount:${var.build_project_number}@cloudbuild.gserviceaccount.com"
 }
 
 resource "google_organization_iam_member" "org_admins_group" {

@@ -100,12 +100,6 @@ variable "delete_contents_on_destroy" {
   default     = false
 }
 
-variable "taxonomy_name" {
-  description = "The taxonomy display name."
-  type        = string
-  default     = "secured_taxonomy"
-}
-
 variable "security_administrator_group" {
   description = "Google Cloud IAM group that administers security configurations in the organization(org policies, KMS, VPC service perimeter)."
   type        = string

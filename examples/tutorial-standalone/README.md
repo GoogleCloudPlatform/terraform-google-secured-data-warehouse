@@ -114,9 +114,9 @@ with the following IAM roles:
 
 - Organization level
   - Access Context Manager Admin: `roles/accesscontextmanager.policyAdmin`
+  - Billing Account User: `roles/billing.user`
   - Organization Policy Administrator: `roles/orgpolicy.policyAdmin`
 - Folder Level
-  - Billing User: `roles/billing.user`
   - Compute Network Admin: `roles/compute.networkAdmin`
   - Logging Admin: `roles/logging.admin`
   - Project Creator: `roles/resourcemanager.projectCreator`
@@ -124,7 +124,17 @@ with the following IAM roles:
   - Project IAM Admin: `roles/resourcemanager.projectIamAdmin`
   - Service Usage Admin: `roles/serviceusage.serviceUsageAdmin`
 
-The service account must have `Billing Account User` role in the billing account.
+As an alternative to granting the service account the `Billing Account User` role in organization,
+it is possible to grant it [directly in the billing account](https://cloud.google.com/billing/docs/how-to/billing-access#update-cloud-billing-permissions).
+
+```sh
+export SA_EMAIL=<YOUR-SA-EMAIL>
+export BILLING_ACCOUNT=<YOUR-BILLING-ACCOUNT>
+
+gcloud beta billing accounts add-iam-policy-binding "${BILLING_ACCOUNT}" \
+--member="serviceAccount:${SA_EMAIL}" \
+--role="roles/billing.user"
+```
 
 You can use the [Project Factory module](https://github.com/terraform-google-modules/terraform-google-project-factory) and the
 [IAM module](https://github.com/terraform-google-modules/terraform-google-iam) in combination to provision a
@@ -145,12 +155,11 @@ gcloud organizations add-iam-policy-binding ${ORG_ID} \
 
 gcloud organizations add-iam-policy-binding ${ORG_ID} \
 --member="serviceAccount:${SA_EMAIL}" \
---role="roles/orgpolicy.policyAdmin"
-
-gcloud resource-manager folders \
-add-iam-policy-binding ${FOLDER_ID} \
---member="serviceAccount:${SA_EMAIL}" \
 --role="roles/billing.user"
+
+gcloud organizations add-iam-policy-binding ${ORG_ID} \
+--member="serviceAccount:${SA_EMAIL}" \
+--role="roles/orgpolicy.policyAdmin"
 
 gcloud resource-manager folders \
 add-iam-policy-binding ${FOLDER_ID} \
@@ -189,13 +198,14 @@ The following APIs must be enabled in the project where the service account was 
 
 - Access Context Manager API: `accesscontextmanager.googleapis.com`
 - App Engine Admin API: `appengine.googleapis.com`
-- Cloud Billing API:`cloudbilling.googleapis.com`
-- Cloud Key Management Service (KMS) API:`cloudkms.googleapis.com`
+- Cloud Billing API: `cloudbilling.googleapis.com`
+- Cloud Build API: `cloudbuild.googleapis.com`
+- Cloud Key Management Service (KMS) API: `cloudkms.googleapis.com`
 - Cloud Pub/Sub API: `pubsub.googleapis.com`
-- Cloud Resource Manager API:`cloudresourcemanager.googleapis.com`
-- Compute Engine API:`compute.googleapis.com`
-- Dataflow API:`dataflow.googleapis.com`
-- Identity and Access Management (IAM) API:`iam.googleapis.com`
+- Cloud Resource Manager API: `cloudresourcemanager.googleapis.com`
+- Compute Engine API: `compute.googleapis.com`
+- Dataflow API: `dataflow.googleapis.com`
+- Identity and Access Management (IAM) API: `iam.googleapis.com`
 - BigQuery API: `bigquery.googleapis.com`
 
 You can run the gcloud command to enable these APIs in the service account project
@@ -208,6 +218,7 @@ accesscontextmanager.googleapis.com \
 appengine.googleapis.com \
 bigquery.googleapis.com \
 cloudbilling.googleapis.com \
+cloudbuild.googleapis.com \
 cloudkms.googleapis.com \
 pubsub.googleapis.com \
 cloudresourcemanager.googleapis.com \
@@ -234,7 +245,6 @@ iam.googleapis.com \
 | perimeter\_additional\_members | The list of all members to be added on perimeter access, except the service accounts created by this module. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | n/a | yes |
 | security\_administrator\_group | Google Cloud IAM group that administers security configurations in the organization(org policies, KMS, VPC service perimeter). | `string` | n/a | yes |
 | security\_analyst\_group | Google Cloud IAM group that monitors and responds to security incidents. | `string` | n/a | yes |
-| taxonomy\_name | The taxonomy display name. | `string` | `"secured_taxonomy"` | no |
 | terraform\_service\_account | The email address of the service account that will run the Terraform code. | `string` | n/a | yes |
 
 ## Outputs

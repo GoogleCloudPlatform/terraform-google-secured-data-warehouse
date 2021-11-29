@@ -74,3 +74,8 @@ output "cmek_confidential_bigquery_crypto_key" {
   description = "The Customer Managed Crypto Key for the confidential BigQuery service."
   value       = module.secured_data_warehouse.cmek_confidential_bigquery_crypto_key
 }
+
+output "blueprint_type" {
+  description = "Type of blueprint this module represents."
+  value       = module.secured_data_warehouse.blueprint_type
+}
