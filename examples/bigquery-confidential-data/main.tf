@@ -19,6 +19,7 @@ locals {
   non_confidential_dataset_id = "non_confidential_dataset"
   confidential_dataset_id     = "secured_dataset"
   dlp_transformation_type     = "RE-IDENTIFY"
+  taxonomy_name               = "secured_taxonomy"
   taxonomy_display_name       = "${var.taxonomy_name}-${random_id.suffix.hex}"
   confidential_table_id       = "${trimsuffix(local.cc_file_name, ".csv")}_re_id"
   kek_keyring                 = "kek_keyring_${random_id.suffix.hex}"
