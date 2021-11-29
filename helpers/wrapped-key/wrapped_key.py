@@ -68,8 +68,7 @@ def encrypt_symmetric(project_id, location_id, key_ring_id, key_id):
             'The response received from the server was corrupted in-transit.')
     # End integrity verification
 
-    print('Ciphertext: {}'.format(
-          base64.b64encode(encrypt_response.ciphertext)))
+    print(base64.b64encode(encrypt_response.ciphertext))
     return encrypt_response
 
 
@@ -126,7 +125,8 @@ if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser(
-        description='Encrypt plaintext using a symmetric key.')
+        description='Encrypt securely generated random bytes'
+                    'using a symmetric key.')
     parser.add_argument('--project_id', dest='project_id',
                         help='project_id (string): Google Cloud project ID.')
     parser.add_argument('--location_id', dest='location_id',
