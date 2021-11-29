@@ -26,7 +26,7 @@ locals {
   dataset_id          = "dts_data_ingestion"
   table_name          = "batch_flow_table"
   cc_file_name        = "cc_10000_records.csv"
-  cc_file_path        = "${path.module}/../assets"
+  cc_file_path        = "${path.module}/assets"
 
   httpRequestTemplate = templatefile(
     "${path.module}/httpRequest.tmpl",

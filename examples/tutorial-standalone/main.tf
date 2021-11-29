@@ -21,7 +21,7 @@ locals {
   taxonomy_display_name       = "${var.taxonomy_name}-${random_id.suffix.hex}"
   confidential_table_id       = "${trimsuffix(local.cc_file_name, ".csv")}_re_id"
   cc_file_name                = "cc_10000_records.csv"
-  cc_file_path                = "${path.module}/../assets"
+  cc_file_path                = "${path.module}/assets"
 }
 
 resource "random_id" "suffix" {
