@@ -88,6 +88,12 @@ resource "google_service_account" "int_ci_service_account" {
   display_name = "ci-account"
 }
 
+resource "google_service_account_iam_member" "cloud_build_iam" {
+  service_account_id = google_service_account.int_ci_service_account.name
+  role               = "roles/iam.serviceAccountTokenCreator"
+  member             = "serviceAccount:${var.build_project_number}@cloudbuild.gserviceaccount.com"
+}
+
 resource "google_organization_iam_member" "org_admins_group" {
   for_each = toset(local.int_org_required_roles)
   org_id   = var.org_id

@@ -108,6 +108,7 @@ resource "null_resource" "java_de_identification_flex_template" {
        --project=${local.project_id} \
        --config ${local.templates_path}/java/regional_dlp_de_identification/cloudbuild.yaml \
        ${local.templates_path}/java/regional_dlp_de_identification \
+       --impersonate-service-account=${var.service_account_email} \
        --substitutions="_PROJECT=${local.project_id},_FLEX_TEMPLATE_IMAGE_TAG=${local.java_de_identify_flex_template_image_tag},_TEMPLATE_GS_PATH=${local.java_de_identify_template_gs_path}"
 EOF
 
@@ -134,6 +135,7 @@ resource "null_resource" "java_re_identification_flex_template" {
        --project=${local.project_id} \
        --config ${local.templates_path}/java/regional_dlp_re_identification/cloudbuild.yaml \
        ${local.templates_path}/java/regional_dlp_re_identification \
+       --impersonate-service-account=${var.service_account_email} \
        --substitutions="_PROJECT=${local.project_id},_FLEX_TEMPLATE_IMAGE_TAG=${local.java_re_identify_flex_template_image_tag},_TEMPLATE_GS_PATH=${local.java_re_identify_template_gs_path}"
 EOF
 
@@ -160,6 +162,7 @@ resource "null_resource" "python_de_identification_flex_template" {
        --project=${local.project_id} \
        --config ${local.templates_path}/python/regional_dlp_de_identification/cloudbuild.yaml \
        ${local.templates_path}/python/regional_dlp_de_identification \
+       --impersonate-service-account=${var.service_account_email} \
        --substitutions="_PROJECT=${local.project_id},_FLEX_TEMPLATE_IMAGE_TAG=${local.python_de_identify_flex_template_image_tag},_PIP_INDEX_URL=${local.pip_index_url},_TEMPLATE_GS_PATH=${local.python_de_identify_template_gs_path}"
 EOF
 
@@ -186,6 +189,7 @@ resource "null_resource" "python_re_identification_flex_template" {
        --project=${local.project_id} \
        --config ${local.templates_path}/python/regional_dlp_re_identification/cloudbuild.yaml \
        ${local.templates_path}/python/regional_dlp_re_identification \
+       --impersonate-service-account=${var.service_account_email} \
        --substitutions="_PROJECT=${local.project_id},_FLEX_TEMPLATE_IMAGE_TAG=${local.python_re_identify_flex_template_image_tag},_PIP_INDEX_URL=${local.pip_index_url},_TEMPLATE_GS_PATH=${local.python_re_identify_template_gs_path}"
 EOF
 
@@ -211,6 +215,7 @@ resource "null_resource" "upload_modules" {
      gcloud builds submit --project=${local.project_id} \
      --config ${local.templates_path}/python/modules/cloudbuild.yaml \
      ${local.templates_path}/python/modules \
+     --impersonate-service-account=${var.service_account_email} \
      --substitutions=_REPOSITORY_ID=${local.python_repository_id},_DEFAULT_REGION=${local.location}
 EOF
 
