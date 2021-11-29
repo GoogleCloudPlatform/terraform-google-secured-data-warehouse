@@ -27,7 +27,7 @@ module "kms" {
   version = "~> 1.2"
 
   project_id           = var.data_governance_project_id[2]
-  location             = var.dlp_location
+  location             = "us-east4"
   keyring              = local.keyring
   keys                 = [local.key_name]
   key_protection_level = "HSM"
@@ -54,6 +54,6 @@ module "de_identification_template" {
   dataflow_service_account  = var.terraform_service_account
   crypto_key                = module.kms.keys[local.key_name]
   wrapped_key               = google_kms_secret_ciphertext.wrapped_key.ciphertext
-  dlp_location              = var.dlp_location
   template_file             = "${path.module}/deidentification.tmpl"
+  dlp_location              = "us-east4"
 }

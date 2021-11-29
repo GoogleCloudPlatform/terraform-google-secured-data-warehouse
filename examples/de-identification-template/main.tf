@@ -22,6 +22,6 @@ module "de_identification_template_example" {
   dataflow_service_account  = var.dataflow_service_account
   crypto_key                = var.crypto_key
   wrapped_key               = var.wrapped_key
-  dlp_location              = var.dlp_location
+  dlp_location              = "us-east4"
   template_file             = "${path.module}/deidentification.tmpl"
 }
