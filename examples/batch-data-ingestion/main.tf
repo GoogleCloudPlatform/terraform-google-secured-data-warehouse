@@ -25,6 +25,9 @@ locals {
   transform_code_file = "transform.js"
   dataset_id          = "dts_data_ingestion"
   table_name          = "batch_flow_table"
+  cc_file_name        = "cc_10000_records.csv"
+  cc_file_path        = "${path.module}/assets"
+
   httpRequestTemplate = templatefile(
     "${path.module}/httpRequest.tmpl",
     {
@@ -32,7 +35,7 @@ locals {
       network_self_link                   = var.network_self_link,
       dataflow_service_account            = module.data_ingestion.dataflow_controller_service_account_email,
       subnetwork_self_link                = var.subnetwork_self_link,
-      inputFilePattern                    = "gs://${module.data_ingestion.data_ingestion_bucket_name}/cc_records.csv",
+      inputFilePattern                    = "gs://${module.data_ingestion.data_ingestion_bucket_name}/${local.cc_file_name}",
       bigquery_project_id                 = var.non_confidential_data_project_id,
       dataset_id                          = local.dataset_id,
       table_name                          = local.table_name,
@@ -63,21 +66,11 @@ module "data_ingestion" {
   perimeter_additional_members     = var.perimeter_additional_members
 }
 
-resource "null_resource" "download_sample_cc_into_gcs" {
-  provisioner "local-exec" {
-    command = <<EOF
-    curl http://eforexcel.com/wp/wp-content/uploads/2017/07/1500000%20CC%20Records.zip > cc_records.zip
-    unzip cc_records.zip
-    rm cc_records.zip
-    mv 1500000\ CC\ Records.csv cc_records.csv
-    echo "Changing sample file encoding from WINDOWS-1252 to UTF-8"
-    iconv -f="WINDOWS-1252" -t="UTF-8" cc_records.csv > temp_cc_records.csv
-    mv temp_cc_records.csv cc_records.csv
-    gsutil cp cc_records.csv gs://${module.data_ingestion.data_ingestion_bucket_name}
-    rm cc_records.csv
-EOF
-
-  }
+resource "google_storage_bucket_object" "sample_file" {
+  name         = local.cc_file_name
+  source       = "${local.cc_file_path}/${local.cc_file_name}"
+  content_type = "text/csv"
+  bucket       = module.data_ingestion.data_ingestion_bucket_name
 
   depends_on = [
     module.data_ingestion.data_ingestion_access_level_name,
@@ -155,6 +148,7 @@ resource "google_cloud_scheduler_job" "scheduler" {
   }
   depends_on = [
     google_storage_bucket_object.schema,
-    google_storage_bucket_object.transform_code
+    google_storage_bucket_object.transform_code,
+    google_storage_bucket_object.sample_file
   ]
 }

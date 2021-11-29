@@ -15,8 +15,10 @@
  */
 
 locals {
-  region     = "us-east4"
-  dataset_id = "dts_data_ingestion"
+  region       = "us-east4"
+  dataset_id   = "dts_data_ingestion"
+  cc_file_name = "cc_10000_records.csv"
+  cc_file_path = "${path.module}/assets"
 }
 
 resource "random_id" "random_suffix" {
@@ -44,21 +46,11 @@ resource "random_id" "original_key" {
   byte_length = 16
 }
 
-resource "null_resource" "download_sample_cc_into_gcs" {
-  provisioner "local-exec" {
-    command = <<EOF
-    curl http://eforexcel.com/wp/wp-content/uploads/2017/07/1500000%20CC%20Records.zip > cc_records.zip
-    unzip cc_records.zip
-    rm cc_records.zip
-    mv 1500000\ CC\ Records.csv cc_records.csv
-    echo "Changing sample file encoding from WINDOWS-1252 to UTF-8"
-    iconv -f="WINDOWS-1252" -t="UTF-8" cc_records.csv > temp_cc_records.csv
-    mv temp_cc_records.csv cc_records.csv
-    gsutil cp cc_records.csv gs://${module.data_ingestion.data_ingestion_bucket_name}
-    rm cc_records.csv
-EOF
-
-  }
+resource "google_storage_bucket_object" "sample_file" {
+  name         = local.cc_file_name
+  source       = "${local.cc_file_path}/${local.cc_file_name}"
+  content_type = "text/csv"
+  bucket       = module.data_ingestion.data_ingestion_bucket_name
 
   depends_on = [
     module.data_ingestion
@@ -110,7 +102,7 @@ module "regional_dlp" {
   max_workers             = 5
 
   parameters = {
-    inputFilePattern       = "gs://${module.data_ingestion.data_ingestion_bucket_name}/cc_records.csv"
+    inputFilePattern       = "gs://${module.data_ingestion.data_ingestion_bucket_name}/${local.cc_file_name}"
     bqProjectId            = var.non_confidential_data_project_id
     datasetName            = local.dataset_id
     batchSize              = 1000
