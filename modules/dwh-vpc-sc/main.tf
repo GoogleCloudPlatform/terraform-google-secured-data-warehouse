@@ -49,7 +49,7 @@ module "access_level_policy" {
   regions        = var.access_level_regions
 }
 
-# Can not use the module "terraform-google-modules/vpc-service-controls/google/modules/regular_service_perimeter"
+# Cannot use the module "terraform-google-modules/vpc-service-controls/google/modules/regular_service_perimeter"
 # because we need to set the  lifecycle of the resource.
 resource "google_access_context_manager_service_perimeter" "regular_service_perimeter" {
   provider       = google
