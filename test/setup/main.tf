@@ -15,9 +15,9 @@
  */
 
 locals {
-  first_project_group  = "1"
-  second_project_group = "2"
-  third_project_group  = "3"
+  first_project_group  = "0"
+  second_project_group = "1"
+  third_project_group  = "2"
   project_groups = toset([
     local.first_project_group,
     local.second_project_group,

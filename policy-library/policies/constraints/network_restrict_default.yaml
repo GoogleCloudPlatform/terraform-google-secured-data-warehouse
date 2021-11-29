@@ -12,13 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-steps:
-- name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-  id: 'lint'
-  args: ['/bin/bash', '-c', 'export SHELLCHECK_OPTS="-e SC2154 -e SC2171 -e SC2086" && /usr/local/bin/test_lint.sh']
-tags:
-- 'ci'
-- 'lint'
-substitutions:
-  _DOCKER_IMAGE_DEVELOPER_TOOLS: 'cft/developer-tools'
-  _DOCKER_TAG_VERSION_DEVELOPER_TOOLS: '1.2.3'
+apiVersion: constraints.gatekeeper.sh/v1alpha1
+kind: GCPNetworkRestrictDefaultV1
+metadata:
+  name: network_restrict_default
+  annotations:
+    description: "Restrict default networks with open firewall rules"
+spec:
+  severity: high
+  match:
+    gcp:
+      target: # {"$ref":"#/definitions/io.k8s.cli.setters.target_fldr_trusted"}
+      - "organizations/**"
+  parameters: {}
