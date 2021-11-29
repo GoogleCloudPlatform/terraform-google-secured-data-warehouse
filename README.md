@@ -47,6 +47,7 @@ module "secured_data_warehouse" {
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | access\_context\_manager\_policy\_id | The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format="value(name)"`. | `number` | n/a | yes |
+| additional\_restricted\_services | The list of additional Google services to be protected by the VPC-SC service perimeters. | `list(string)` | `[]` | no |
 | bucket\_class | The storage class for the bucket being provisioned. | `string` | `"STANDARD"` | no |
 | bucket\_lifecycle\_rules | List of lifecycle rules to configure. Format is the same as described in provider documentation https://www.terraform.io/docs/providers/google/r/storage_bucket.html#lifecycle_rule except condition.matches\_storage\_class should be a comma delimited string. | <pre>set(object({<br>    action    = any<br>    condition = any<br>  }))</pre> | <pre>[<br>  {<br>    "action": {<br>      "type": "Delete"<br>    },<br>    "condition": {<br>      "age": 30,<br>      "matches_storage_class": [<br>        "STANDARD"<br>      ],<br>      "with_state": "ANY"<br>    }<br>  }<br>]</pre> | no |
 | bucket\_name | The name of for the bucket being provisioned. | `string` | n/a | yes |

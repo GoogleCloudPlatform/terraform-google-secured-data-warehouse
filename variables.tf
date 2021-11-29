@@ -219,3 +219,9 @@ variable "data_engineer_group" {
   description = "Google Cloud IAM group that sets up and maintains the data pipeline and warehouse."
   type        = string
 }
+
+variable "additional_restricted_services" {
+  description = "The list of additional Google services to be protected by the VPC-SC service perimeters."
+  type        = list(string)
+  default     = []
+}
