@@ -14,7 +14,7 @@
 
 def encrypt_symmetric(project_id, location_id, key_ring_id, key_id):
     """
-    Encrypt plaintext using a symmetric key.
+    Encrypt securely generated random bytes using a symmetric key.
 
     Args:
         project_id (string): Google Cloud project ID.
