@@ -137,7 +137,10 @@ if __name__ == '__main__':
 
     group1.add_argument('--crypto_key_path', dest='crypto_key_path',
                         help='crypto_key_path (string): '
-                        'Crypto key path to use.')
+                        'Crypto key path to use. '
+                        'Expected format: projects/PROJECT-ID/'
+                        'locations/LOCATION-ID'
+                        '/keyRings/KEY-RING-ID/cryptoKeys/KEY-ID')
 
     args = parser.parse_args()
     print(args.crypto_key_path)
