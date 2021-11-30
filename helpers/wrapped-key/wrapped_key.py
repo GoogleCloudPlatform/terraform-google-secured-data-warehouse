@@ -135,14 +135,14 @@ if __name__ == '__main__':
     group2.add_argument('--key_id', dest='key_id',
                         help='key_id (string): ID of the key to use.')
 
-    group1.add_argument('--key_ring_path', dest='key_ring_path',
-                        help='key_ring_path (string): ID of the key to use.')
+    group1.add_argument('--crypto_key_path', dest='crypto_key_path',
+                        help='crypto_key_path (string): Crypto key path to use.')
 
     args = parser.parse_args()
-    print(args.key_ring_path)
-    if args.key_ring_path is not None:
+    print(args.crypto_key_path)
+    if args.crypto_key_path is not None:
         client = kms.KeyManagementServiceClient()
-        key_ring_args = client.parse_crypto_key_path(args.key_ring_path)
+        key_ring_args = client.parse_crypto_key_path(args.crypto_key_path)
         project_id = key_ring_args['project']
         location_id = key_ring_args['location']
         key_ring_id = key_ring_args['key_ring']
