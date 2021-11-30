@@ -1,7 +1,9 @@
 # Wrapped Key Helper
 
-This helper will generate a cyphertext using KMS API
-from generated random bytes
+This helper uses cloudHSM to generate 256 bits, which is wrapped by an encryption key protected by cloudHSM.
+It base64 encodes the output so it can be used in a Cloud DLP de-identification template.
+
+__Note:__ This helper is mainly for sample purpose. You should use your security team's recommend approach to generate and handle key material properly.
 
 ## Wrapped Key helper usage
 

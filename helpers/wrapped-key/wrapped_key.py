@@ -21,7 +21,8 @@ from google.cloud import kms
 
 def encrypt_symmetric(project_id, location_id, key_ring_id, key_id):
     """
-    Encrypt securely generated random bytes using a symmetric key.
+    Encrypt securely generated random bytes using a confidential
+    computing symmetric key.
 
     Args:
         project_id (string): Google Cloud project ID.
@@ -36,7 +37,7 @@ def encrypt_symmetric(project_id, location_id, key_ring_id, key_id):
     # Generate random bytes
     key = generate_random_bytes(project_id, location_id, 32)
 
-    # Convert the key to bytes.
+    # Encode key to b64
     plaintext_bytes = base64.b64encode(key)
 
     # Optional, but recommended: compute plaintext's CRC32C.
