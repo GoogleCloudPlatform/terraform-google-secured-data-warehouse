@@ -60,6 +60,10 @@ resource "google_access_context_manager_service_perimeter" "regular_service_peri
   title          = local.perimeter_name
   description    = "perimeter for data warehouse projects"
 
+  lifecycle {
+    ignore_changes = [status[0].resources]
+  }
+
   status {
     restricted_services = var.restricted_services
     resources           = formatlist("projects/%s", var.resources)
