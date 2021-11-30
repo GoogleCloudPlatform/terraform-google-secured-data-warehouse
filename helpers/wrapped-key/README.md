@@ -1,6 +1,6 @@
 # Wrapped Key Helper
 
-This helper uses cloudHSM to generate 256 bits, which is wrapped by an encryption key protected by cloudHSM.
+This helper uses cloudHSM to generate 256 [random bits](https://cloud.google.com/kms/docs/generate-random), which are [wrapped by an encryption key](https://cloud.google.com/kms/docs/encrypt-decrypt) protected by cloudHSM.
 It base64 encodes the output so it can be used in a Cloud DLP de-identification template.
 
 __Note:__ This helper is mainly for sample purpose. You should use your security team's recommend approach to generate and handle key material properly.
