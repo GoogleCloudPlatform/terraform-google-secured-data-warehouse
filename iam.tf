@@ -23,9 +23,6 @@ locals {
     "roles/bigquery.dataEditor",
     "roles/bigquery.jobUser",
     "roles/cloudbuild.builds.editor",
-    "roles/storage.objectCreator",
-    "roles/storage.objectAdmin",
-    "roles/pubsub.editor",
     "roles/compute.networkUser"
   ]
 
@@ -35,10 +32,7 @@ locals {
     "roles/dataflow.developer",
     "roles/bigquery.dataViewer",
     "roles/bigquery.jobUser",
-    "roles/bigquery.user",
-    "roles/storage.objectViewer",
-    "roles/pubsub.subscriber",
-    "roles/pubsub.publisher"
+    "roles/bigquery.user"
   ]
 
   security_analyst_group_org_roles = [
