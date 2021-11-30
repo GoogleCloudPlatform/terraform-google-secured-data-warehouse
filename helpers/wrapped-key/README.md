@@ -61,3 +61,12 @@ python3 wrapped_key.py \
 --key_ring_id ${key_ring_id} \
 --key_id ${key_id} \
 ```
+
+OR
+
+```sh
+export cryptokey_path=<cryptokey_path>
+
+python3 wrapped_key.py \
+--key_ring_path ${cryptokey_path}
+```

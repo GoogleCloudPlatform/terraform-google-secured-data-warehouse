@@ -122,17 +122,37 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='Encrypt securely generated random bytes'
                     'using a symmetric key.')
-    parser.add_argument('--project_id', dest='project_id',
+    group1 = parser.add_argument_group("Crypto Key Self link")
+    group2 = parser.add_argument_group("Crypto Key parameters")
+
+    group2.add_argument('--project_id', dest='project_id',
                         help='project_id (string): Google Cloud project ID.')
-    parser.add_argument('--location_id', dest='location_id',
+    group2.add_argument('--location_id', dest='location_id',
                         help='location_id (string): Cloud KMS location.')
-    parser.add_argument('--key_ring_id', dest='key_ring_id',
+    group2.add_argument('--key_ring_id', dest='key_ring_id',
                         help="key_ring_id (string): ID of the"
                         "Cloud KMS key ring.")
-    parser.add_argument('--key_id', dest='key_id',
+    group2.add_argument('--key_id', dest='key_id',
                         help='key_id (string): ID of the key to use.')
 
+    group1.add_argument('--key_ring_path', dest='key_ring_path',
+                        help='key_ring_path (string): ID of the key to use.')
+
     args = parser.parse_args()
-    encrypt_response = encrypt_symmetric(args.project_id, args.location_id,
-                                         args.key_ring_id, args.key_id)
+    print(args.key_ring_path)
+    if args.key_ring_path is not None:
+        client = kms.KeyManagementServiceClient()
+        key_ring_args = client.parse_crypto_key_path(args.key_ring_path)
+        project_id = key_ring_args['project']
+        location_id = key_ring_args['location']
+        key_ring_id = key_ring_args['key_ring']
+        key_id = key_ring_args['crypto_key']
+    else:
+        project_id = args.project_id
+        location_id = args.location_id
+        key_ring_id = args.key_ring_id
+        key_id = args.key_id
+
+    encrypt_response = encrypt_symmetric(project_id, location_id,
+                                         key_ring_id, key_id)
     print(base64.b64encode(encrypt_response.ciphertext))
