@@ -136,7 +136,8 @@ if __name__ == '__main__':
                         help='key_id (string): ID of the key to use.')
 
     group1.add_argument('--crypto_key_path', dest='crypto_key_path',
-                        help='crypto_key_path (string): Crypto key path to use.')
+                        help='crypto_key_path (string): '
+                        'Crypto key path to use.')
 
     args = parser.parse_args()
     print(args.crypto_key_path)
