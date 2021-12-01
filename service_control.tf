@@ -97,17 +97,27 @@ module "data_ingestion_vpc_sc" {
   perimeter_members                = local.perimeter_members_data_ingestion
   restricted_services              = local.restricted_services
 
-  sdx_egress_rule = [
+  egress_policies = distinct(concat([
     {
-      sdx_identities = distinct(concat(
-        var.data_ingestion_dataflow_deployer_identities,
-        ["serviceAccount:${var.terraform_service_account}"]
-      ))
-      sdx_project_number = var.sdx_project_number
-      service_name       = "storage.googleapis.com"
-      method             = "google.storage.objects.get"
-    }
-  ]
+      "from" = {
+        "identity_type" = ""
+        "identities" = distinct(concat(
+          var.data_ingestion_dataflow_deployer_identities,
+          ["serviceAccount:${var.terraform_service_account}"]
+        ))
+      },
+      "to" = {
+        "resources" = ["projects/${var.sdx_project_number}"]
+        "operations" = {
+          "storage.googleapis.com" = {
+            "methods" = [
+              "google.storage.objects.get"
+            ]
+          }
+        }
+      }
+    },
+  ], var.data_ingestion_egress_policies))
 
   # depends_on needed to prevent intermittent errors
   # when the VPC-SC is created but perimeter member
@@ -129,6 +139,8 @@ module "data_governance_vpc_sc" {
   perimeter_members                = local.perimeter_members_governance
   restricted_services              = local.restricted_services
 
+  egress_policies = var.data_governance_egress_policies
+
   # depends_on needed to prevent intermittent errors
   # when the VPC-SC is created but perimeter member
   # not yet propagated.
@@ -149,17 +161,27 @@ module "confidential_data_vpc_sc" {
   perimeter_members                = local.perimeter_members_confidential
   restricted_services              = local.restricted_services
 
-  sdx_egress_rule = [
+  egress_policies = distinct(concat([
     {
-      sdx_identities = distinct(concat(
-        var.confidential_data_dataflow_deployer_identities,
-        ["serviceAccount:${var.terraform_service_account}"]
-      ))
-      sdx_project_number = var.sdx_project_number
-      service_name       = "storage.googleapis.com"
-      method             = "google.storage.objects.get"
+      "from" = {
+        "identity_type" = ""
+        "identities" = distinct(concat(
+          var.confidential_data_dataflow_deployer_identities,
+          ["serviceAccount:${var.terraform_service_account}"]
+        ))
+      },
+      "to" = {
+        "resources" = ["projects/${var.sdx_project_number}"]
+        "operations" = {
+          "storage.googleapis.com" = {
+            "methods" = [
+              "google.storage.objects.get"
+            ]
+          }
+        }
+      }
     }
-  ]
+  ], var.confidential_data_egress_policies))
 
   # depends_on needed to prevent intermittent errors
   # when the VPC-SC is created but perimeter member

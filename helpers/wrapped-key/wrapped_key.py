@@ -120,7 +120,7 @@ def crc32c(data):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(
-        description='Encrypt securely generated random bytes'
+        description='Encrypt securely generated random bytes '
                     'using a symmetric key.')
     group1 = parser.add_argument_group("Crypto Key Self link")
     group2 = parser.add_argument_group("Crypto Key parameters")
