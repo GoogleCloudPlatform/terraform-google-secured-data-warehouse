@@ -63,6 +63,7 @@ locals {
     "roles/orgpolicy.policyAdmin",
     "roles/logging.admin",
     "roles/cloudasset.viewer",
+    "roles/compute.securityAdmin",
     "roles/iam.securityAdmin"
   ]
 }
