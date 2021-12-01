@@ -107,10 +107,8 @@ resource "google_pubsub_topic_iam_member" "publisher" {
 }
 
 //Cloud Scheduler service account
-module "scheduler_controller_service_account" {
-  source       = "terraform-google-modules/service-accounts/google"
-  version      = "~> 3.0"
-  project_id   = var.data_ingestion_project_id
-  names        = ["sa-scheduler-controller"]
+resource "google_service_account" "scheduler_controller_service_account" {
+  project      = var.data_ingestion_project_id
+  account_id   = "sa-scheduler-controller"
   display_name = "Cloud Scheduler controller service account"
 }

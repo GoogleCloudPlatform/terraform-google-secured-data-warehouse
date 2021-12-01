@@ -103,22 +103,6 @@ resource "google_storage_bucket_object" "transform_code" {
   ]
 }
 
-
-//Scheduler controller service account
-# module "scheduler_controller_service_account" {
-#   source       = "terraform-google-modules/service-accounts/google"
-#   version      = "~> 3.0"
-#   project_id   = var.data_ingestion_project_id
-#   names        = ["sa-scheduler-controller"]
-#   display_name = "Cloud Scheduler controller service account"
-#   project_roles = [
-#     "${var.data_ingestion_project_id}=>roles/dataflow.developer",
-#     "${var.data_ingestion_project_id}=>roles/compute.viewer",
-#   ]
-# }
-
-
-
 data "google_service_account" "scheduler_service_account" {
   account_id = module.data_ingestion.scheduler_service_account_email
 }
