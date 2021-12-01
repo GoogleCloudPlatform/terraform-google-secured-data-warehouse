@@ -149,7 +149,7 @@ variable "dataset_default_table_expiration_ms" {
 }
 
 variable "cmek_keyring_name" {
-  description = "The Keyring name for the KMS Customer Managed Encryption Keys being provisioned."
+  description = "The Keyring prefix name for the KMS Customer Managed Encryption Keys being provisioned."
   type        = string
 }
 
