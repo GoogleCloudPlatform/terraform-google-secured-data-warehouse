@@ -49,9 +49,8 @@ module "access_level_policy" {
   regions        = var.access_level_regions
 }
 
-# We are using the terraform resource `google_access_context_manager_service_perimeter`
-# instead of the module "terraform-google-modules/vpc-service-controls/google/modules/regular_service_perimeter"
-# until ingress and egress rules are added to the module https://github.com/terraform-google-modules/terraform-google-vpc-service-controls/issues/53
+# Cannot use the module "terraform-google-modules/vpc-service-controls/google/modules/regular_service_perimeter"
+# because we need to set the  lifecycle of the resource.
 resource "google_access_context_manager_service_perimeter" "regular_service_perimeter" {
   provider       = google
   parent         = "accessPolicies/${local.actual_policy}"
@@ -68,22 +67,30 @@ resource "google_access_context_manager_service_perimeter" "regular_service_peri
       [module.access_level_policy.name]
     )
 
-    # Configure Egress rule to allow fetch of External Dataflow flex template jobs.
-    # Flex templates in public buckets don't need an egress rule.
     dynamic "egress_policies" {
-      for_each = var.sdx_egress_rule
+      for_each = var.egress_policies
       content {
+        egress_from {
+          identity_type = lookup(egress_policies.value["from"], "identity_type", null)
+          identities    = lookup(egress_policies.value["from"], "identities", null)
+        }
         egress_to {
-          operations {
-            service_name = egress_policies.value.service_name
-            method_selectors {
-              method = egress_policies.value.method
+          resources = lookup(egress_policies.value["to"], "resources", ["*"])
+          dynamic "operations" {
+            for_each = lookup(egress_policies.value["to"], "operations", [])
+            content {
+              service_name = operations.key
+              dynamic "method_selectors" {
+                for_each = merge(
+                  { for k, v in lookup(operations.value, "methods", {}) : v => "method" },
+                { for k, v in lookup(operations.value, "permissions", {}) : v => "permission" })
+                content {
+                  method     = method_selectors.value == "method" ? method_selectors.key : ""
+                  permission = method_selectors.value == "permission" ? method_selectors.key : ""
+                }
+              }
             }
           }
-          resources = ["projects/${egress_policies.value.sdx_project_number}"]
-        }
-        egress_from {
-          identities = egress_policies.value.sdx_identities
         }
       }
     }
