@@ -19,6 +19,7 @@ locals {
     "serviceAccount:${module.data_ingestion.dataflow_controller_service_account_email}",
     "serviceAccount:${module.data_ingestion.storage_writer_service_account_email}",
     "serviceAccount:${module.data_ingestion.pubsub_writer_service_account_email}",
+    "serviceAccount:${module.data_ingestion.scheduler_service_account_email}",
     "serviceAccount:${var.terraform_service_account}"
   ], var.perimeter_additional_members))
 

@@ -105,20 +105,37 @@ resource "google_storage_bucket_object" "transform_code" {
 
 
 //Scheduler controller service account
-module "scheduler_controller_service_account" {
-  source       = "terraform-google-modules/service-accounts/google"
-  version      = "~> 3.0"
-  project_id   = var.data_ingestion_project_id
-  names        = ["sa-scheduler-controller"]
-  display_name = "Cloud Scheduler controller service account"
-  project_roles = [
-    "${var.data_ingestion_project_id}=>roles/dataflow.developer",
-    "${var.data_ingestion_project_id}=>roles/compute.viewer",
-  ]
+# module "scheduler_controller_service_account" {
+#   source       = "terraform-google-modules/service-accounts/google"
+#   version      = "~> 3.0"
+#   project_id   = var.data_ingestion_project_id
+#   names        = ["sa-scheduler-controller"]
+#   display_name = "Cloud Scheduler controller service account"
+#   project_roles = [
+#     "${var.data_ingestion_project_id}=>roles/dataflow.developer",
+#     "${var.data_ingestion_project_id}=>roles/compute.viewer",
+#   ]
+# }
+
+
+
+data "google_service_account" "scheduler_service_account" {
+  account_id = module.data_ingestion.scheduler_service_account_email
+}
+resource "google_project_iam_member" "scheduler_dataflow_developer" {
+  project = var.data_ingestion_project_id
+  role    = "roles/dataflow.developer"
+  member  = "serviceAccount:${module.data_ingestion.scheduler_service_account_email}"
+}
+
+resource "google_project_iam_member" "scheduler_compute_viewer" {
+  project = var.data_ingestion_project_id
+  role    = "roles/compute.viewer"
+  member  = "serviceAccount:${module.data_ingestion.scheduler_service_account_email}"
 }
 
 resource "google_service_account_iam_member" "scheduler_sa_user" {
-  service_account_id = module.scheduler_controller_service_account.service_account.name
+  service_account_id = data.google_service_account.scheduler_service_account.name
   role               = "roles/iam.serviceAccountUser"
   member             = "serviceAccount:${var.terraform_service_account}"
 }
@@ -140,7 +157,7 @@ resource "google_cloud_scheduler_job" "scheduler" {
     }
     uri = "https://dataflow.googleapis.com/v1b3/projects/${var.data_ingestion_project_id}/locations/${local.region}/templates"
     oauth_token {
-      service_account_email = module.scheduler_controller_service_account.email
+      service_account_email = module.data_ingestion.scheduler_service_account_email
     }
 
     # need to encode the string

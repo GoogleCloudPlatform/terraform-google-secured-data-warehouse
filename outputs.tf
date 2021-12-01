@@ -23,6 +23,15 @@ output "dataflow_controller_service_account_email" {
   ]
 }
 
+output "scheduler_service_account_email" {
+  description = "The Cloud Scheduler service account email, no roles granted."
+  value       = module.data_ingestion.scheduler_service_account_email
+
+  depends_on = [
+    time_sleep.wait_for_bridge_propagation
+  ]
+}
+
 output "confidential_dataflow_controller_service_account_email" {
   description = "The confidential Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account."
   value       = module.bigquery_confidential_data.confidential_dataflow_controller_service_account_email

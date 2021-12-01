@@ -105,3 +105,12 @@ resource "google_pubsub_topic_iam_member" "publisher" {
   role    = "roles/pubsub.publisher"
   member  = "serviceAccount:${google_service_account.pubsub_writer_service_account.email}"
 }
+
+//Cloud Scheduler service account
+module "scheduler_controller_service_account" {
+  source       = "terraform-google-modules/service-accounts/google"
+  version      = "~> 3.0"
+  project_id   = var.data_ingestion_project_id
+  names        = ["sa-scheduler-controller"]
+  display_name = "Cloud Scheduler controller service account"
+}
