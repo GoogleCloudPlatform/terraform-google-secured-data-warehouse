@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
  * purposes.
  */
 public class BigQueryDLPBigQuery {
+  public static final String DLP_REIDENTIFY_TRANSFORMATION = "RE-IDENTIFY";
   private static final String PIPELINE_PACKAGE_NAME = "com.google.cloud.blueprints.datawarehouse";
   public static final Logger LOG = LoggerFactory.getLogger(BigQueryDLPBigQuery.class);
 
@@ -120,7 +121,7 @@ public class BigQueryDLPBigQuery {
         .apply(
           "DLPTransform",
           (
-            ( options.getDlpTransform().equals("RE-IDENTIFY")) ? (
+            ( options.getDlpTransform().equals(DLP_REIDENTIFY_TRANSFORMATION)) ? (
           DLPReidentifyTransform.newBuilder()
             .setBatchSize(options.getBatchSize())
             .setDeidTemplateName(options.getDeidentifyTemplateName())
