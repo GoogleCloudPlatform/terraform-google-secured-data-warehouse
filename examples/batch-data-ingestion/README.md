@@ -11,7 +11,7 @@ It uses:
 ## Requirements
 
 1. A project previously created, with [Google App Engine Application Enabled](https://cloud.google.com/scheduler/docs/quickstart#create_a_project_with_an_app_engine_app).
-1 A network and subnetwork in the data ingestion project [configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access).
+1. A network and subnetwork in the data ingestion project [configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access).
 
 ### Firewall rules
 
@@ -19,7 +19,7 @@ It uses:
 - Allow only Restricted API Egress by TPC at 443 port
 - Allow only Private API Egress by TPC at 443 port
 - Allow ingress Dataflow workers by TPC at ports 12345 and 12346
-- Allow egress Dataflow workers     by TPC at ports 12345 and 12346
+- Allow egress Dataflow workers by TPC at ports 12345 and 12346
 
 ### DNS configurations
 
@@ -41,6 +41,14 @@ locals {
   cc_file_name = "cc_10000_records.csv"
   ...
 ```
+
+## Scheduler Service Account
+
+This exemple uses the service account created by [Secured data warehouse](../../README.md) to run [Cloud Scheduler
+job](https://cloud.google.com/scheduler/docs/creating#creating_jobs) to create a [Dataflow Batch pipeline](https://cloud.google.com/dataflow/docs/guides/templates/provided-batch#cloud-storage-text-to-bigquery).
+
+This service account is needed by Cloud Scheduler to run an HTTP request to create a new Batch Dataflow job in a schedulable way,
+since Batch Dataflow jobs end when finishes the pipeline.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
