@@ -76,6 +76,7 @@ resource "google_project_iam_member" "data-engineer-group-ingestion" {
   role    = each.value
   member  = "group:${var.data_engineer_group}"
 }
+
 resource "google_project_iam_member" "data-engineer-group-non-confidential" {
   for_each = toset(local.data_engineer_group_project_roles)
 
@@ -83,6 +84,7 @@ resource "google_project_iam_member" "data-engineer-group-non-confidential" {
   role    = each.value
   member  = "group:${var.data_engineer_group}"
 }
+
 resource "google_project_iam_member" "data-engineer-group-confidential" {
   for_each = toset(local.data_engineer_group_project_roles)
 
@@ -91,13 +93,6 @@ resource "google_project_iam_member" "data-engineer-group-confidential" {
   member  = "group:${var.data_engineer_group}"
 }
 
-resource "google_project_iam_member" "data-analyst-group-ingestion" {
-  for_each = toset(local.data_analyst_group_project_roles)
-
-  project = var.data_ingestion_project_id
-  role    = each.value
-  member  = "group:${var.data_analyst_group}"
-}
 resource "google_project_iam_member" "data-analyst-group-non-confidential" {
   for_each = toset(local.data_analyst_group_project_roles)
 
@@ -105,6 +100,7 @@ resource "google_project_iam_member" "data-analyst-group-non-confidential" {
   role    = each.value
   member  = "group:${var.data_analyst_group}"
 }
+
 resource "google_project_iam_member" "data-analyst-group-confidential" {
   for_each = toset(local.data_analyst_group_project_roles)
 
