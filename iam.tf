@@ -39,8 +39,6 @@ locals {
     "roles/logging.viewer",
     "roles/accesscontextmanager.policyReader",
     "roles/cloudkms.viewer",
-    "roles/bigquery.jobUser",
-    "roles/storage.objectViewer",
     "roles/pubsub.viewer",
     "roles/datacatalog.viewer",
     "roles/networkmanagement.viewer",
