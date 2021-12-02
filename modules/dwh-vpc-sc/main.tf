@@ -66,7 +66,6 @@ resource "google_access_context_manager_service_perimeter" "regular_service_peri
 
   status {
     restricted_services = var.restricted_services
-    resources           = formatlist("projects/%s", var.resources)
     access_levels = formatlist(
       "accessPolicies/${local.actual_policy}/accessLevels/%s",
       [module.access_level_policy.name]
@@ -92,6 +91,12 @@ resource "google_access_context_manager_service_perimeter" "regular_service_peri
       }
     }
   }
+}
+
+resource "google_access_context_manager_service_perimeter_resource" "service-perimeter-resource" {
+  for_each       = var.resources
+  perimeter_name = google_access_context_manager_service_perimeter.regular_service_perimeter.name
+  resource       = "projects/${each.value}"
 }
 
 resource "time_sleep" "wait_for_vpc_sc_propagation" {
