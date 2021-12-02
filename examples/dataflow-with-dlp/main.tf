@@ -21,10 +21,6 @@ locals {
   cc_file_path = "${path.module}/assets"
 }
 
-resource "random_id" "random_suffix" {
-  byte_length = 4
-}
-
 module "data_ingestion" {
   source                           = "../.."
   org_id                           = var.org_id
@@ -37,7 +33,7 @@ module "data_ingestion" {
   access_context_manager_policy_id = var.access_context_manager_policy_id
   bucket_name                      = "data-ingestion"
   dataset_id                       = local.dataset_id
-  cmek_keyring_name                = "cmek_keyring_${random_id.random_suffix.hex}"
+  cmek_keyring_name                = "cmek_keyring"
   delete_contents_on_destroy       = var.delete_contents_on_destroy
   perimeter_additional_members     = var.perimeter_additional_members
 }

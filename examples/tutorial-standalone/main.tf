@@ -44,7 +44,7 @@ module "secured_data_warehouse" {
   location                         = local.location
   dataset_id                       = local.non_confidential_dataset_id
   confidential_dataset_id          = local.confidential_dataset_id
-  cmek_keyring_name                = "cmek_keyring_${random_id.suffix.hex}"
+  cmek_keyring_name                = "cmek_keyring"
   delete_contents_on_destroy       = var.delete_contents_on_destroy
   perimeter_additional_members     = var.perimeter_additional_members
 

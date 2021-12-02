@@ -18,10 +18,6 @@ locals {
   bq_schema = "book:STRING, author:STRING"
 }
 
-resource "random_id" "suffix" {
-  byte_length = 4
-}
-
 module "data_ingestion" {
   source                           = "../.."
   org_id                           = var.org_id
@@ -34,7 +30,7 @@ module "data_ingestion" {
   access_context_manager_policy_id = var.access_context_manager_policy_id
   bucket_name                      = "dlp-flex-data-ingestion"
   dataset_id                       = "dlp_flex_data_ingestion"
-  cmek_keyring_name                = "dlp_flex_data-ingestion-${random_id.suffix.hex}"
+  cmek_keyring_name                = "dlp_flex_data-ingestion"
   region                           = "us-east4"
   delete_contents_on_destroy       = var.delete_contents_on_destroy
   perimeter_additional_members     = var.perimeter_additional_members
