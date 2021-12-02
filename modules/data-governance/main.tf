@@ -26,8 +26,9 @@ locals {
   confidential_compute_sa  = "service-${data.google_project.reid_project.number}@compute-system.iam.gserviceaccount.com"
   confidential_bigquery_sa = data.google_bigquery_default_service_account.confidential_bigquery_sa.email
 
-  data_ingestion_key_name = "data_ingestion_kms_key_${random_id.suffix.hex}"
-  bigquery_key_name       = "bigquery_kms_key_${random_id.suffix.hex}"
+  data_ingestion_keyring_name = "${var.cmek_keyring_name}_${random_id.suffix.hex}"
+  data_ingestion_key_name     = "data_ingestion_kms_key_${random_id.suffix.hex}"
+  bigquery_key_name           = "bigquery_kms_key_${random_id.suffix.hex}"
 
   reidentification_key_name      = "reidentification_kms_key_${random_id.suffix.hex}"
   confidential_bigquery_key_name = "confidential_bigquery_kms_key_${random_id.suffix.hex}"
@@ -124,7 +125,7 @@ module "cmek" {
 
   project_id           = var.data_governance_project_id
   location             = var.cmek_location
-  keyring              = var.cmek_keyring_name
+  keyring              = local.data_ingestion_keyring_name
   key_rotation_period  = var.key_rotation_period_seconds
   prevent_destroy      = !var.delete_contents_on_destroy
   keys                 = local.keys

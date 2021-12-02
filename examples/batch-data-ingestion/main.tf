@@ -13,11 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-resource "random_id" "random_suffix" {
-  byte_length = 4
-}
-
 locals {
   region              = "us-east4"
   location            = "us-east4-a"
@@ -61,7 +56,7 @@ module "data_ingestion" {
   location                         = local.region
   region                           = local.region
   dataset_id                       = local.dataset_id
-  cmek_keyring_name                = "cmek_keyring_${random_id.random_suffix.hex}"
+  cmek_keyring_name                = "cmek_keyring"
   delete_contents_on_destroy       = var.delete_contents_on_destroy
   perimeter_additional_members     = var.perimeter_additional_members
 }
