@@ -145,6 +145,9 @@ resource "google_cloud_scheduler_job" "scheduler" {
   depends_on = [
     google_storage_bucket_object.schema,
     google_storage_bucket_object.transform_code,
-    google_storage_bucket_object.sample_file
+    google_storage_bucket_object.sample_file,
+    google_service_account_iam_member.scheduler_sa_user,
+    google_project_iam_member.scheduler_compute_viewer,
+    google_project_iam_member.scheduler_dataflow_developer
   ]
 }
