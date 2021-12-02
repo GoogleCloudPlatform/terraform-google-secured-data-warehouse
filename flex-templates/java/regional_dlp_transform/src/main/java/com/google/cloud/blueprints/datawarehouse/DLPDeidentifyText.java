@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,14 +23,9 @@ import com.google.privacy.dlp.v2.DeidentifyConfig;
 import com.google.privacy.dlp.v2.FieldId;
 import com.google.privacy.dlp.v2.InspectConfig;
 import com.google.privacy.dlp.v2.LocationName;
-import com.google.privacy.dlp.v2.ReidentifyContentRequest;
-import com.google.privacy.dlp.v2.ReidentifyContentResponse;
-
 import com.google.privacy.dlp.v2.DeidentifyContentRequest;
 import com.google.privacy.dlp.v2.DeidentifyContentRequest.Builder;
 import com.google.privacy.dlp.v2.DeidentifyContentResponse;
-
-
 import com.google.privacy.dlp.v2.Table;
 import java.io.IOException;
 import java.util.ArrayList;
