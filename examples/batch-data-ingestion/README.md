@@ -48,7 +48,7 @@ This exemple uses the service account created by [Secured data warehouse](../../
 job](https://cloud.google.com/scheduler/docs/creating#creating_jobs) to create a [Dataflow Batch pipeline](https://cloud.google.com/dataflow/docs/guides/templates/provided-batch#cloud-storage-text-to-bigquery).
 
 This service account is needed by Cloud Scheduler to run an HTTP request to create a new Batch Dataflow job in a schedulable way,
-since Batch Dataflow jobs end when finishes the pipeline.
+since the Batch Dataflow job ends when the pipeline finishes .
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
