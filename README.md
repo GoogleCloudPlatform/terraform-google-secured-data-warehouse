@@ -104,6 +104,7 @@ module "secured_data_warehouse" {
 | data\_ingestion\_topic\_name | The topic created for data ingestion pipeline. |
 | dataflow\_controller\_service\_account\_email | The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
 | pubsub\_writer\_service\_account\_email | The PubSub writer service account email. Should be used to write data to the PubSub topics the data ingestion pipeline reads from. |
+| scheduler\_service\_account\_email | The Cloud Scheduler service account email, no roles granted. |
 | storage\_writer\_service\_account\_email | The Storage writer service account email. Should be used to write data to the buckets the data ingestion pipeline reads from. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

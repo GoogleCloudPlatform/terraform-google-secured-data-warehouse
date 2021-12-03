@@ -105,3 +105,10 @@ resource "google_pubsub_topic_iam_member" "publisher" {
   role    = "roles/pubsub.publisher"
   member  = "serviceAccount:${google_service_account.pubsub_writer_service_account.email}"
 }
+
+//Cloud Scheduler service account
+resource "google_service_account" "scheduler_controller_service_account" {
+  project      = var.data_ingestion_project_id
+  account_id   = "sa-scheduler-controller"
+  display_name = "Cloud Scheduler controller service account"
+}

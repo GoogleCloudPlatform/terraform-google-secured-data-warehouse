@@ -19,6 +19,11 @@ output "dataflow_controller_service_account_email" {
   value       = module.dataflow_controller_service_account.email
 }
 
+output "scheduler_service_account_email" {
+  description = "The Cloud Scheduler service account email, no roles granted."
+  value       = google_service_account.scheduler_controller_service_account.email
+}
+
 output "storage_writer_service_account_email" {
   description = "The Storage writer service account email. Should be used to write data to the buckets the data ingestion pipeline reads from."
   value       = google_service_account.storage_writer_service_account.email
