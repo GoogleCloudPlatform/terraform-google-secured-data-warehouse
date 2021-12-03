@@ -228,20 +228,20 @@ variable "additional_restricted_services" {
   default     = []
 }
 
-variable "use_existing_as_data_ingestion_perimeter" {
-  description = "Existing data ingestion perimeter to be used instead of the auto-crated perimeter. The service account provided in the variable `terraform_service_account` must be in an access level member list for this perimeter **before** this external perimeter can be used in this module."
+variable "data_ingestion_perimeter" {
+  description = "Existing data ingestion perimeter to be used instead of the auto-crated perimeter. The service account provided in the variable `terraform_service_account` must be in an access level member list for this perimeter **before** this perimeter can be used in this module."
   type        = string
   default     = ""
 }
 
-variable "use_existing_as_data_governance_perimeter" {
-  description = "Existing data governance perimeter to be used instead of the auto-crated perimeter. The service account provided in the variable `terraform_service_account` must be in an access level member list for this perimeter **before** this external perimeter can be used in this module."
+variable "data_governance_perimeter" {
+  description = "Existing data governance perimeter to be used instead of the auto-crated perimeter. The service account provided in the variable `terraform_service_account` must be in an access level member list for this perimeter **before** this perimeter can be used in this module."
   type        = string
   default     = ""
 }
 
-variable "use_existing_as_confidential_data_perimeter" {
-  description = "Existing confidential data perimeter to be used instead of the auto-crated perimeter. The service account provided in the variable `terraform_service_account` must be in an access level member list for this perimeter **before** this external perimeter can be used in this module."
+variable "confidential_data_perimeter" {
+  description = "Existing confidential data perimeter to be used instead of the auto-crated perimeter. The service account provided in the variable `terraform_service_account` must be in an access level member list for this perimeter **before** this perimeter can be used in this module."
   type        = string
   default     = ""
 }
