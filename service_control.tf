@@ -85,6 +85,7 @@ resource "time_sleep" "forces_wait_propagation" {
   ]
 }
 
+# Default VPC Service Controls perimeter and access list.
 module "data_ingestion_vpc_sc" {
   source = ".//modules/dwh-vpc-sc"
 
@@ -129,6 +130,9 @@ module "data_ingestion_vpc_sc" {
   ]
 }
 
+# Adding project to an existing VPC Service Controls Perimeter
+# instead of the default VPC Service Controls perimeter.
+# The default VPC Service Controls perimeter and access list will not be created.
 resource "google_access_context_manager_service_perimeter_resource" "ingestion-perimeter-resource" {
   count = var.use_existing_as_data_ingestion_perimeter != "" ? 1 : 0
 
@@ -151,6 +155,7 @@ resource "google_access_context_manager_service_perimeter_resource" "non-confide
   ]
 }
 
+# Default VPC Service Controls perimeter and access list.
 module "data_governance_vpc_sc" {
   source = ".//modules/dwh-vpc-sc"
 
@@ -175,6 +180,9 @@ module "data_governance_vpc_sc" {
   ]
 }
 
+# Adding project to an existing VPC Service Controls Perimeter
+# instead of the default VPC Service Controls perimeter.
+# The default VPC Service Controls perimeter and access list will not be created.
 resource "google_access_context_manager_service_perimeter_resource" "governance-perimeter-resource" {
   count = var.use_existing_as_data_governance_perimeter != "" ? 1 : 0
 
@@ -186,6 +194,7 @@ resource "google_access_context_manager_service_perimeter_resource" "governance-
   ]
 }
 
+# Default VPC Service Controls perimeter and access list.
 module "confidential_data_vpc_sc" {
   source = ".//modules/dwh-vpc-sc"
 
@@ -230,6 +239,9 @@ module "confidential_data_vpc_sc" {
   ]
 }
 
+# Adding project to an existing VPC Service Controls Perimeter
+# instead of the default VPC Service Controls perimeter.
+# The default VPC Service Controls perimeter and access list will not be created.
 resource "google_access_context_manager_service_perimeter_resource" "confidential-perimeter-resource" {
   count = var.use_existing_as_confidential_data_perimeter != "" ? 1 : 0
 
