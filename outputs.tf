@@ -89,32 +89,32 @@ output "data_ingestion_bigquery_dataset" {
 
 output "data_ingestion_access_level_name" {
   description = "Access context manager access level name."
-  value       = module.data_ingestion_vpc_sc.access_level_name
+  value       = var.external_data_ingestion_perimeter == "" ? module.data_ingestion_vpc_sc[0].access_level_name : ""
 }
 
 output "data_ingestion_service_perimeter_name" {
   description = "Access context manager service perimeter name."
-  value       = module.data_ingestion_vpc_sc.service_perimeter_name
+  value       = var.external_data_ingestion_perimeter == "" ? module.data_ingestion_vpc_sc[0].service_perimeter_name : ""
 }
 
 output "data_governance_access_level_name" {
   description = "Access context manager access level name."
-  value       = module.data_governance_vpc_sc.access_level_name
+  value       = var.external_data_governance_perimeter == "" ? module.data_governance_vpc_sc[0].access_level_name : ""
 }
 
 output "data_governance_service_perimeter_name" {
   description = "Access context manager service perimeter name."
-  value       = module.data_governance_vpc_sc.service_perimeter_name
+  value       = var.external_data_governance_perimeter == "" ? module.data_governance_vpc_sc[0].service_perimeter_name : ""
 }
 
 output "confidential_access_level_name" {
   description = "Access context manager access level name."
-  value       = module.confidential_data_vpc_sc.access_level_name
+  value       = var.external_confidential_data_perimeter == "" ? module.confidential_data_vpc_sc[0].access_level_name : ""
 }
 
 output "confidential_service_perimeter_name" {
   description = "Access context manager service perimeter name."
-  value       = module.confidential_data_vpc_sc.service_perimeter_name
+  value       = var.external_confidential_data_perimeter == "" ? module.confidential_data_vpc_sc[0].service_perimeter_name : ""
 }
 
 output "cmek_data_ingestion_crypto_key" {

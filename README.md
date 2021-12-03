@@ -68,6 +68,9 @@ module "secured_data_warehouse" {
 | dataset\_id | Unique ID for the dataset being provisioned. | `string` | n/a | yes |
 | dataset\_name | Friendly name for the dataset being provisioned. | `string` | `"Data-ingestion dataset"` | no |
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `false` | no |
+| external\_confidential\_data\_perimeter | External confidential data perimeter for usage instead of the internal perimeter. The service account provided in the variable `terraform_service_account` must be in an access level member list for this perimeter **before** this external perimeter can be used in this module. | `string` | `""` | no |
+| external\_data\_governance\_perimeter | External data governance perimeter for usage instead of the internal perimeter. The service account provided in the variable `terraform_service_account` must be in an access level member list for this perimeter **before** this external perimeter can be used in this module. | `string` | `""` | no |
+| external\_data\_ingestion\_perimeter | External data ingestion perimeter for usage instead of the internal perimeter. The service account provided in the variable `terraform_service_account` must be in an access level member list for this perimeter **before** this external perimeter can be used in this module. | `string` | `""` | no |
 | key\_rotation\_period\_seconds | Rotation period for keys. The default value is 30 days. | `string` | `"2592000s"` | no |
 | kms\_key\_protection\_level | The protection level to use when creating a key. Possible values: ["SOFTWARE", "HSM"] | `string` | `"HSM"` | no |
 | location | The location for the KMS Customer Managed Encryption Keys, Bucket, and Bigquery dataset. This location can be a multiregion, if it is empty the region value will be used. | `string` | `""` | no |

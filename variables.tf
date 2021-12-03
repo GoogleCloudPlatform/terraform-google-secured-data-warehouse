@@ -227,3 +227,21 @@ variable "additional_restricted_services" {
   type        = list(string)
   default     = []
 }
+
+variable "external_data_ingestion_perimeter" {
+  description = "External data ingestion perimeter for usage instead of the internal perimeter. The service account provided in the variable `terraform_service_account` must be in an access level member list for this perimeter **before** this external perimeter can be used in this module."
+  type        = string
+  default     = ""
+}
+
+variable "external_data_governance_perimeter" {
+  description = "External data governance perimeter for usage instead of the internal perimeter. The service account provided in the variable `terraform_service_account` must be in an access level member list for this perimeter **before** this external perimeter can be used in this module."
+  type        = string
+  default     = ""
+}
+
+variable "external_confidential_data_perimeter" {
+  description = "External confidential data perimeter for usage instead of the internal perimeter. The service account provided in the variable `terraform_service_account` must be in an access level member list for this perimeter **before** this external perimeter can be used in this module."
+  type        = string
+  default     = ""
+}
