@@ -67,7 +67,6 @@ locals {
     "roles/logging.viewer",
     "roles/accesscontextmanager.policyReader",
     "roles/cloudkms.viewer",
-    "roles/pubsub.viewer",
     "roles/datacatalog.viewer",
     "roles/networkmanagement.viewer",
     "roles/orgpolicy.policyViewer",
