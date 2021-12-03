@@ -1,11 +1,11 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2021 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -40,9 +40,9 @@ import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("serial")
 @AutoValue
-public abstract class DLPTransform
+public abstract class DLPReidentifyTransform
     extends PTransform<PCollection<KV<String, Table.Row>>, PCollectionTuple> {
-  public static final Logger LOG = LoggerFactory.getLogger(DLPTransform.class);
+  public static final Logger LOG = LoggerFactory.getLogger(DLPReidentifyTransform.class);
 
   @Nullable
   public abstract String deidTemplateName();
@@ -56,6 +56,7 @@ public abstract class DLPTransform
   public abstract Character columnDelimiter();
 
   public abstract PCollectionView<List<String>> header();
+
 
   @AutoValue.Builder
   public abstract static class Builder {
@@ -72,12 +73,13 @@ public abstract class DLPTransform
 
     public abstract Builder setColumnDelimiter(Character columnDelimiter);
 
-    public abstract DLPTransform build();
+    public abstract DLPReidentifyTransform build();
   }
 
   public static Builder newBuilder() {
-    return new AutoValue_DLPTransform.Builder();
+    return new AutoValue_DLPReidentifyTransform.Builder();
   }
+
 
   @Override
   public PCollectionTuple expand(PCollection<KV<String, Table.Row>> input) {
@@ -96,9 +98,8 @@ public abstract class DLPTransform
         .apply(
             "ConvertReidResponse",
             ParDo.of(new ConvertReidResponse())
-                .withOutputTags(Util.reidSuccess, TupleTagList.of(Util.reidFailure)));
+                .withOutputTags(Util.jobSuccess, TupleTagList.of(Util.jobFailure)));
   }
-
 
   static class ConvertReidResponse
       extends DoFn<KV<String, ReidentifyContentResponse>, KV<String, TableRow>> {
@@ -126,7 +127,7 @@ public abstract class DLPTransform
             throw new IllegalArgumentException(
                 "BigQuery column count must exactly match with data element count");
           }
-          out.get(Util.reidSuccess)
+          out.get(Util.jobSuccess)
               .output(
                   KV.of(
                       tableName,

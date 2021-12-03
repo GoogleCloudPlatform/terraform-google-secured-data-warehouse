@@ -1,11 +1,11 @@
 /*
- * Copyright 2021 Google Inc.
+ * Copyright 2021 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,13 +22,13 @@ import org.apache.beam.sdk.options.Description;
 import org.apache.beam.sdk.options.Validation.Required;
 
 /**
- * The {@link BigQueryReidentifyPipelineOptions} interface provides the custom execution options
+ * The {@link BigQueryJobPipelineOptions} interface provides the custom execution options
  * passed by the executor at the command-line.
  */
-public interface BigQueryReidentifyPipelineOptions extends DataflowPipelineOptions {
+public interface BigQueryTransformPipelineOptions extends DataflowPipelineOptions {
 
-  @Description("Input BigQuery Table with de-identified data from DLP; specified as "
-      + "<project_id>:<dataset_id>.<table_id>. "
+  @Description("Input BigQuery Table with de-identified data from DLP or data to re-identify; "
+      + "specified as <project_id>:<dataset_id>.<table_id>. "
       + "The dataset_id must already exist")
   @Required
   String getInputBigQueryTable();
@@ -66,6 +66,12 @@ public interface BigQueryReidentifyPipelineOptions extends DataflowPipelineOptio
   String getDlpLocation();
 
   void setDlpLocation(String value);
+
+  @Description("Parameter to choose between De-Identify or Re-Identify data")
+  @Required
+  String getDlpTransform();
+
+  void setDlpTransform(String value);
 
   @Description("DLP API has a limit for payload size of 524KB /api call. "
   + "That's why dataflow process will need to chunk it. User will have to decide "

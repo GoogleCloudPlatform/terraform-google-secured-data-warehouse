@@ -1,11 +1,11 @@
 /*
- * Copyright 2021 Google Inc.
+ * Copyright 2021 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
  * purposes.
  */
 public class BigQueryDLPBigQuery {
+  public static final String DLP_REIDENTIFY_TRANSFORMATION = "RE-IDENTIFY";
   private static final String PIPELINE_PACKAGE_NAME = "com.google.cloud.blueprints.datawarehouse";
   public static final Logger LOG = LoggerFactory.getLogger(BigQueryDLPBigQuery.class);
 
@@ -55,9 +56,9 @@ public class BigQueryDLPBigQuery {
   **/
   public static void main(String[] args) {
 
-    BigQueryReidentifyPipelineOptions options =
+    BigQueryTransformPipelineOptions options =
         PipelineOptionsFactory.fromArgs(args)
-            .as(BigQueryReidentifyPipelineOptions.class);
+            .as(BigQueryTransformPipelineOptions.class);
 
     run(options);
   }
@@ -69,7 +70,7 @@ public class BigQueryDLPBigQuery {
    * @param options The execution parameters to the pipeline.
    * @return The result of the pipeline execution.
    */
-  public static PipelineResult run(BigQueryReidentifyPipelineOptions options) {
+  public static PipelineResult run(BigQueryTransformPipelineOptions options) {
     // Create the pipeline
     Pipeline p = Pipeline.create(options);
 
@@ -111,26 +112,40 @@ public class BigQueryDLPBigQuery {
           View.asList()
         );
 
-    PCollection<KV<String, TableRow>> reidData =
-        record.apply(
+    PCollection<KV<String, TableRow>> transformData =
+
+         record.apply(
           "ConvertTableRow",
           ParDo.of(new MergeBigQueryRowToDlpRow())
         )
         .apply(
           "DLPTransform",
-          DLPTransform.newBuilder()
+          (
+            ( options.getDlpTransform().equals(DLP_REIDENTIFY_TRANSFORMATION)) ? (
+          DLPReidentifyTransform.newBuilder()
             .setBatchSize(options.getBatchSize())
             .setDeidTemplateName(options.getDeidentifyTemplateName())
             .setProjectId(options.getDlpProjectId())
             .setDlpLocation(options.getDlpLocation())
             .setHeader(selectedColumns)
             .setColumnDelimiter(options.getColumnDelimiter())
-            .build()
+            .build() ) : (
+          DLPDeidentifyTransform.newBuilder()
+            .setBatchSize(options.getBatchSize())
+            .setDeidTemplateName(options.getDeidentifyTemplateName())
+            .setProjectId(options.getDlpProjectId())
+            .setDlpLocation(options.getDlpLocation())
+            .setHeader(selectedColumns)
+            .setColumnDelimiter(options.getColumnDelimiter())
+            .build() )
+          )
         )
-        .get(Util.reidSuccess);
+        .get(Util.jobSuccess);
+
+
 
     // BQ insert
-    reidData.apply(
+    transformData.apply(
         "BigQueryInsert",
         BigQueryDynamicWriteTransform.newBuilder()
           .setDatasetId(options.getOutputBigQueryDataset())
