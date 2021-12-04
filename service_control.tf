@@ -31,6 +31,19 @@ locals {
     "serviceAccount:${var.terraform_service_account}"
   ], var.perimeter_additional_members))
 
+  data_ingestion_vpc_sc_resources = {
+    data_ingestion   = data.google_project.data_ingestion_project.number
+    non_confidential = data.google_project.non_confidential_data_project.number
+  }
+
+  data_governance_vpc_sc_resources = {
+    governance = data.google_project.governance_project.number
+  }
+
+  confidential_data_vpc_sc_resources = {
+    confidential = data.google_project.confidential_project.number
+  }
+
   base_restricted_services = [
     "bigquery.googleapis.com",
     "cloudasset.googleapis.com",
@@ -97,7 +110,7 @@ module "data_ingestion_vpc_sc" {
   access_context_manager_policy_id = var.access_context_manager_policy_id
   common_name                      = "data_ingestion"
   common_suffix                    = random_id.suffix.hex
-  resources                        = [data.google_project.data_ingestion_project.number, data.google_project.non_confidential_data_project.number]
+  resources                        = local.data_ingestion_vpc_sc_resources
   perimeter_members                = local.perimeter_members_data_ingestion
   restricted_services              = local.restricted_services
 
@@ -167,7 +180,7 @@ module "data_governance_vpc_sc" {
   access_context_manager_policy_id = var.access_context_manager_policy_id
   common_name                      = "data_governance"
   common_suffix                    = random_id.suffix.hex
-  resources                        = [data.google_project.governance_project.number]
+  resources                        = local.data_governance_vpc_sc_resources
   perimeter_members                = local.perimeter_members_governance
   restricted_services              = local.restricted_services
 
@@ -206,7 +219,7 @@ module "confidential_data_vpc_sc" {
   access_context_manager_policy_id = var.access_context_manager_policy_id
   common_name                      = "confidential_data"
   common_suffix                    = random_id.suffix.hex
-  resources                        = [data.google_project.confidential_project.number]
+  resources                        = local.confidential_data_vpc_sc_resources
   perimeter_members                = local.perimeter_members_confidential
   restricted_services              = local.restricted_services
 

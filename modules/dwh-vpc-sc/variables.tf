@@ -26,8 +26,7 @@ variable "project_id" {
 
 variable "resources" {
   description = "A list of GCP resources that are inside of the service perimeter. Currently only projects are allowed."
-  type        = list(string)
-  default     = []
+  type        = map(string)
 }
 
 variable "common_suffix" {
