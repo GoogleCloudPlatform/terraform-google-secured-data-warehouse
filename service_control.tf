@@ -50,6 +50,7 @@ locals {
   ]
 
   restricted_services = distinct(concat(local.base_restricted_services, var.additional_restricted_services))
+
 }
 
 data "google_project" "data_ingestion_project" {
@@ -85,8 +86,11 @@ resource "time_sleep" "forces_wait_propagation" {
   ]
 }
 
+# Default VPC Service Controls perimeter and access list.
 module "data_ingestion_vpc_sc" {
   source = ".//modules/dwh-vpc-sc"
+
+  count = var.data_ingestion_perimeter == "" ? 1 : 0
 
   org_id                           = var.org_id
   project_id                       = var.data_ingestion_project_id
@@ -127,8 +131,36 @@ module "data_ingestion_vpc_sc" {
   ]
 }
 
+# Adding project to an existing VPC Service Controls Perimeter
+# instead of the default VPC Service Controls perimeter.
+# The default VPC Service Controls perimeter and access list will not be created.
+resource "google_access_context_manager_service_perimeter_resource" "ingestion-perimeter-resource" {
+  count = var.data_ingestion_perimeter != "" ? 1 : 0
+
+  perimeter_name = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${var.data_ingestion_perimeter}"
+  resource       = "projects/${data.google_project.data_ingestion_project.number}"
+
+  depends_on = [
+    time_sleep.forces_wait_propagation
+  ]
+}
+
+resource "google_access_context_manager_service_perimeter_resource" "non-confidential-perimeter-resource" {
+  count = var.data_ingestion_perimeter != "" ? 1 : 0
+
+  perimeter_name = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${var.data_ingestion_perimeter}"
+  resource       = "projects/${data.google_project.non_confidential_data_project.number}"
+
+  depends_on = [
+    time_sleep.forces_wait_propagation
+  ]
+}
+
+# Default VPC Service Controls perimeter and access list.
 module "data_governance_vpc_sc" {
   source = ".//modules/dwh-vpc-sc"
+
+  count = var.data_governance_perimeter == "" ? 1 : 0
 
   org_id                           = var.org_id
   project_id                       = var.data_governance_project_id
@@ -149,8 +181,25 @@ module "data_governance_vpc_sc" {
   ]
 }
 
+# Adding project to an existing VPC Service Controls Perimeter
+# instead of the default VPC Service Controls perimeter.
+# The default VPC Service Controls perimeter and access list will not be created.
+resource "google_access_context_manager_service_perimeter_resource" "governance-perimeter-resource" {
+  count = var.data_governance_perimeter != "" ? 1 : 0
+
+  perimeter_name = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${var.data_governance_perimeter}"
+  resource       = "projects/${data.google_project.governance_project.number}"
+
+  depends_on = [
+    time_sleep.forces_wait_propagation
+  ]
+}
+
+# Default VPC Service Controls perimeter and access list.
 module "confidential_data_vpc_sc" {
   source = ".//modules/dwh-vpc-sc"
+
+  count = var.confidential_data_perimeter == "" ? 1 : 0
 
   org_id                           = var.org_id
   project_id                       = var.confidential_data_project_id
@@ -191,6 +240,20 @@ module "confidential_data_vpc_sc" {
   ]
 }
 
+# Adding project to an existing VPC Service Controls Perimeter
+# instead of the default VPC Service Controls perimeter.
+# The default VPC Service Controls perimeter and access list will not be created.
+resource "google_access_context_manager_service_perimeter_resource" "confidential-perimeter-resource" {
+  count = var.confidential_data_perimeter != "" ? 1 : 0
+
+  perimeter_name = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${var.confidential_data_perimeter}"
+  resource       = "projects/${data.google_project.confidential_project.number}"
+
+  depends_on = [
+    time_sleep.forces_wait_propagation
+  ]
+}
+
 module "vpc_sc_bridge_data_ingestion_governance" {
   source  = "terraform-google-modules/vpc-service-controls/google//modules/bridge_service_perimeter"
   version = "~> 3.0"
@@ -208,7 +271,10 @@ module "vpc_sc_bridge_data_ingestion_governance" {
   depends_on = [
     time_sleep.forces_wait_propagation,
     module.data_governance_vpc_sc,
-    module.data_ingestion_vpc_sc
+    module.data_ingestion_vpc_sc,
+    google_access_context_manager_service_perimeter_resource.ingestion-perimeter-resource,
+    google_access_context_manager_service_perimeter_resource.governance-perimeter-resource,
+    google_access_context_manager_service_perimeter_resource.non-confidential-perimeter-resource,
   ]
 }
 
@@ -228,7 +294,9 @@ module "vpc_sc_bridge_confidential_governance" {
   depends_on = [
     time_sleep.forces_wait_propagation,
     module.confidential_data_vpc_sc,
-    module.data_governance_vpc_sc
+    module.data_governance_vpc_sc,
+    google_access_context_manager_service_perimeter_resource.confidential-perimeter-resource,
+    google_access_context_manager_service_perimeter_resource.governance-perimeter-resource
   ]
 }
 
@@ -248,7 +316,10 @@ module "vpc_sc_bridge_confidential_data_ingestion" {
   depends_on = [
     time_sleep.forces_wait_propagation,
     module.confidential_data_vpc_sc,
-    module.data_ingestion_vpc_sc
+    module.data_ingestion_vpc_sc,
+    google_access_context_manager_service_perimeter_resource.confidential-perimeter-resource,
+    google_access_context_manager_service_perimeter_resource.non-confidential-perimeter-resource,
+    google_access_context_manager_service_perimeter_resource.ingestion-perimeter-resource
   ]
 }
 

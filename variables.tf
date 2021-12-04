@@ -227,3 +227,21 @@ variable "additional_restricted_services" {
   type        = list(string)
   default     = []
 }
+
+variable "data_ingestion_perimeter" {
+  description = "Existing data ingestion perimeter to be used instead of the auto-crated perimeter. The service account provided in the variable `terraform_service_account` must be in an access level member list for this perimeter **before** this perimeter can be used in this module."
+  type        = string
+  default     = ""
+}
+
+variable "data_governance_perimeter" {
+  description = "Existing data governance perimeter to be used instead of the auto-crated perimeter. The service account provided in the variable `terraform_service_account` must be in an access level member list for this perimeter **before** this perimeter can be used in this module."
+  type        = string
+  default     = ""
+}
+
+variable "confidential_data_perimeter" {
+  description = "Existing confidential data perimeter to be used instead of the auto-crated perimeter. The service account provided in the variable `terraform_service_account` must be in an access level member list for this perimeter **before** this perimeter can be used in this module."
+  type        = string
+  default     = ""
+}
