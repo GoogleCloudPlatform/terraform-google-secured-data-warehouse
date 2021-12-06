@@ -1,18 +1,8 @@
 # Troubleshooting
 
-## Terminology
+## Issues
 
-See [GLOSSARY.md](./GLOSSARY.md).
-
-- - -
-## Problems
-
-- [Common issues](#common-issues)
-- - -
-
-## Common issues
-
-- [Unable to open the staging file](#unable-to-open the-staging-file)
+- [Unable to open the staging file](#unable-to-open-the-staging-file)
 - [Usar vpc](#usar-vpc)
 - [Egress](#egress)
 - [Se adicionar na lista de perimeters](#se-adicionar-na-lista-de-perimeters)
