@@ -14,7 +14,9 @@ This error message is shown on the `Job Logs` when trying to run the job on the 
 **Error message:**
 
 ```console
-Failed to read the result file : gs://<BUCKET-NAME>/staging/template_launches/ 2021-12-06_04_37_18-105494327517795773/ operation_result with error message: (59b58cff2e1b7caf): Unable to open template file: gs://<BUCKET-NAME>/staging/template_launches/ 2021-12-06_04_37_18-105494327517795773/ operation_result..
+Failed to read the result file : gs://<BUCKET-NAME>/staging/template_launches/ 2021-12-06_04_37_18-105494327517795773/ 
+operation_result with error message: (59b58cff2e1b7caf): Unable to open template file: 
+gs://<BUCKET-NAME>/staging/template_launches/ 2021-12-06_04_37_18-105494327517795773/ operation_result..
 ```
 
 **Cause:**
@@ -47,7 +49,9 @@ This error message is shown on the `Job Logs` when trying to run the job on the 
 **Error message:**
 
 ```console
-Failed to start the VM, launcher-2021120604300713065380799072320283, used for launching because of status code: INVALID_ARGUMENT, reason: Error: Message: Invalid value for field 'resource.networkInterfaces[0].network': 'global/networks/default'. The referenced network resource cannot be found. HTTP Code: 400.
+Failed to start the VM, launcher-2021120604300713065380799072320283, used for launching because of status code: INVALID_ARGUMENT, reason: 
+Error: Message: Invalid value for field 'resource.networkInterfaces[0].network': 'global/networks/default'. 
+The referenced network resource cannot be found. HTTP Code: 400.
 ```
 
 **Cause:**
@@ -77,7 +81,11 @@ The metadata file for this template could not be parsed.
 In `VIEW DETAILS`:
 
 ```console
-Fail to process as Flex Template and Legacy Template. Flex Template Process result:(390ac373ef6bcb87): Template file failed to load: gs://<BUCKET-NAME>/flex-template-samples/regional-bq-dlp-bq-streaming.json. Permissions denied. Request is prohibited by organization's policy. vpcServiceControlsUniqueIdentifier: <UNIQUE-IDENTIFIER>, Legacy Template Process result:(390ac373ef6bc2a5): Template file failed to load: gs://<BUCKET-NAME>/flex-template-samples/regional-bq-dlp-bq-streaming.json. Permissions denied. Request is prohibited by organization's policy. vpcServiceControlsUniqueIdentifier: <UNIQUE-IDENTIFIER>
+Fail to process as Flex Template and Legacy Template. Flex Template Process result:(390ac373ef6bcb87): 
+Template file failed to load: gs://<BUCKET-NAME>/flex-template-samples/regional-bq-dlp-bq-streaming.json. 
+Permissions denied. Request is prohibited by organization's policy. vpcServiceControlsUniqueIdentifier: <UNIQUE-IDENTIFIER>, 
+Legacy Template Process result:(390ac373ef6bc2a5): Template file failed to load: gs://<BUCKET-NAME>/flex-template-samples/regional-bq-dlp-bq-streaming.json.
+Permissions denied. Request is prohibited by organization's policy. vpcServiceControlsUniqueIdentifier: <UNIQUE-IDENTIFIER>
 ```
 
 **Cause:**
