@@ -3,17 +3,17 @@
 ## Issues
 
 - [Unable to open the staging file](#unable-to-open-the-staging-file)
-- [Usar vpc](#usar-vpc)
-- [Egress](#egress)
-- [Se adicionar na lista de perimeters](#se-adicionar-na-lista-de-perimeters)
-
+- [The referenced network resource cannot be found](#the-referenced-network-resource-cannot-be-found)
+- [Template file failed to load](#template-file-failed-to-load)
+- [The resources deployed are not visible](#the-resources-deployed-are-not-visible)
 
 ### Unable to open the staging file
 
+This error message is shown on the `Job Logs` when trying to run the job on the console.
+
 **Error message:**
 
-
-```
+```console
 Failed to read the result file : gs://<BUCKET-NAME>/staging/template_launches/ 2021-12-06_04_37_18-105494327517795773/ operation_result with error message: (59b58cff2e1b7caf): Unable to open template file: gs://<BUCKET-NAME>/staging/template_launches/ 2021-12-06_04_37_18-105494327517795773/ operation_result..
 ```
 
@@ -34,97 +34,83 @@ You must use one of the Service Accounts created on the main module.
   - Module output: `confidential_dataflow_controller_service_account_email`
   - Email format: `sa-dataflow-controller-reid@<CONFIDENTIAL-DATA-PROJECT-ID>.iam.gserviceaccount.com`
 
-The Service Account must be declared as a job parameter.
-- Console:
-  - Use the optional parameter `Service account email`.
-- Gcloud:
-  - Use the optional flag [--service-account-email](https://cloud.google.com/sdk/gcloud/reference/dataflow/jobs/run#--service-account-email).
-- Terraform:
-  - Use the input `service_account_email` from the [Dataflow Flex Job Module](../modules/dataflow-flex-job/README.md#inputs).
+The `Service Account` must be declared as a job parameter.
 
+- **Console**: Use the optional parameter `Service account email`.
+- **Gcloud**: Use the optional flag [--service-account-email](https://cloud.google.com/sdk/gcloud/reference/dataflow/jobs/run#--service-account-email).
+- **Terraform**: Use the input `service_account_email` from the [Dataflow Flex Job Module](../modules/dataflow-flex-job/README.md#inputs).
 
+------------------------------------------------------------------------
 
+### The referenced network resource cannot be found
 
-
-### Usar vpc
+This error message is shown on the `Job Logs` when trying to run the job on the console.
 
 **Error message:**
 
-```
+```console
 Failed to start the VM, launcher-2021120604300713065380799072320283, used for launching because of status code: INVALID_ARGUMENT, reason: Error: Message: Invalid value for field 'resource.networkInterfaces[0].network': 'global/networks/default'. The referenced network resource cannot be found. HTTP Code: 400.
 ```
 
 **Cause:**
 
-This message means you have reached your [project creation quota](https://support.google.com/cloud/answer/6330231).
+If you do not specify a **subnetwork** in the job parameters, Dataflow will use the [default VPC subnetwork](https://cloud.google.com/dataflow/docs/guides/specifying-networks#specifying_a_network_and_a_subnetwork) to deploy the Job.
+If the default network does not exist you will get the 400 error.
 
 **Solution:**
 
-In this case, you can use the [Request Project Quota Increase](https://support.google.com/code/contact/project_quota_increase)
-form to request a quota increase.
+A valid `VPC subnetwork` must be declared as a job parameter in the creation of the Dataflow Job.
 
-In the support form,
-for the field **Email addresses that will be used to create projects**,
-use the email address of `terraform_service_account` that is created by the Terraform Example Foundation 0-bootstrap step.
+- **Console**: Use the optional parameter `Subnetwork`.
+- **Gcloud CLI**: Use the optional flag [--subnetwork](https://cloud.google.com/sdk/gcloud/reference/dataflow/jobs/run#--subnetwork).
+- **Terraform**: Use the input `subnetwork_self_link` from the [Dataflow Flex Job Module](../modules/dataflow-flex-job/README.md#inputs).
 
-**Notes:**
+### Template file failed to load
 
-- If you see other quota errors, see the [Quota documentation](https://cloud.google.com/docs/quota).
-
-### Egress
+This error message is shown on the `GCP Console` when trying to create a new job.
 
 **Error message:**
 
-```
-The metadata file for this template coukd not be parsed.
+```console
+The metadata file for this template could not be parsed.
     VIEW DETAILS
 ```
+
 In `VIEW DETAILS`:
-```
-Fail to process as Flex Template and Legacy Template. Flex Template Process result:(390ac373ef6bcb87): Template file failed to load: gs://bkt-ci-sdw-ext-flx-235c70-61e9-tpl-b9c1/flex-template-samples/regional-bq-dlp-bq-streaming.json. Permissions denied. Request is prohibited by organization's policy. vpcServiceControlsUniqueIdentifier: UkMfebL5M8PxBH2MtCok1uzicBVh3ijxggZ_f9HxQWPQB1mVPNCC, Legacy Template Process result:(390ac373ef6bc2a5): Template file failed to load: gs://bkt-ci-sdw-ext-flx-235c70-61e9-tpl-b9c1/flex-template-samples/regional-bq-dlp-bq-streaming.json_metadata. Permissions denied. Request is prohibited by organization's policy. vpcServiceControlsUniqueIdentifier: R0K-N1zbfk05YDsZQDW5DqZftkGP-NjQLAdJiH4FoEMy7oVtnXdr
-```
-```
-Fail to process as Flex Template and Legacy Template. Flex Template Process result:(390ac373ef6bcb87): Template file failed to load: <gcs_template_path>. Permissions denied. Request is prohibited by organization's policy. vpcServiceControlsUniqueIdentifier: <unique_identifier>, Legacy Template Process result:(390ac373ef6bc2a5): Template file failed to load: <gcs_template_path>. Permissions denied. Request is prohibited by organization's policy. vpcServiceControlsUniqueIdentifier: <unique_identifier>
+
+```console
+Fail to process as Flex Template and Legacy Template. Flex Template Process result:(390ac373ef6bcb87): Template file failed to load: gs://<BUCKET-NAME>/flex-template-samples/regional-bq-dlp-bq-streaming.json. Permissions denied. Request is prohibited by organization's policy. vpcServiceControlsUniqueIdentifier: <UNIQUE-IDENTIFIER>, Legacy Template Process result:(390ac373ef6bc2a5): Template file failed to load: gs://<BUCKET-NAME>/flex-template-samples/regional-bq-dlp-bq-streaming.json. Permissions denied. Request is prohibited by organization's policy. vpcServiceControlsUniqueIdentifier: <UNIQUE-IDENTIFIER>
 ```
 
 **Cause:**
 
-This message means you have reached your [project creation quota](https://support.google.com/cloud/answer/6330231).
+One of the perimeters `confidential` or `data ingestion` do not allow external access asked to fetch the template file.
 
 **Solution:**
 
-In this case, you can use the [Request Project Quota Increase](https://support.google.com/code/contact/project_quota_increase)
-form to request a quota increase.
+Any user that need access for a external template must be specified:
 
-In the support form,
-for the field **Email addresses that will be used to create projects**,
-use the email address of `terraform_service_account` that is created by the Terraform Example Foundation 0-bootstrap step.
+- For confidential perimeter use the `confidential_data_dataflow_deployer_identities` in the parameter in the [Data Secured Warehouse Module](../README.md#inputs)
+- For data ingestion perimeter use the  `data_ingestion_dataflow_deployer_identities` in the parameter in the [Data Secured Warehouse Module](../README.md#inputs)
 
-**Notes:**
+This will add the user to an egress rule that allow the template to be fetched.
 
-- If you see other quota errors, see the [Quota documentation](https://cloud.google.com/docs/quota).
+### The resources deployed are not visible
 
-### Se adicionar na lista de perimeters
+This error message is shown on the `GCP Console` when trying to view the Dataflow Job created.
 
 **Error message:**
 
+```console
+Sorry, the server was only able to partially fulfill your request. Some data might not be rendered.
 ```
-COLOCAR O ERRO
-```
+
+![Dataflow jobs on the GCP console showing the message: Sorry, the server was only able to partially fulfill your request. Some data might not be rendered.](./images/resources-deployed-are-not-visible.png)
 
 **Cause:**
 
-This message means you have reached your [project creation quota](https://support.google.com/cloud/answer/6330231).
+You are not in the list of members of the access policy associated with the perimeter
 
 **Solution:**
 
-In this case, you can use the [Request Project Quota Increase](https://support.google.com/code/contact/project_quota_increase)
-form to request a quota increase.
-
-In the support form,
-for the field **Email addresses that will be used to create projects**,
-use the email address of `terraform_service_account` that is created by the Terraform Example Foundation 0-bootstrap step.
-
-**Notes:**
-
-- If you see other quota errors, see the [Quota documentation](https://cloud.google.com/docs/quota).
+The users that need access in the perimeters must be specified as `perimeter_additional_members` parameter in the [Data Secured Warehouse Module](../README.md#inputs) deploy.
