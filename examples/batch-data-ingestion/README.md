@@ -1,6 +1,7 @@
 # Batch Dataflow with DLP de-identification
 
-This example illustrates how to run a public Batch Dataflow job, [Cloud Storage Text to BigQuery](https://cloud.google.com/dataflow/docs/guides/templates/provided-batch#gcstexttobigquery), with The [Secured data warehouse](../../README.md).
+This example illustrates how to run a public Batch Dataflow job, [Cloud Storage Text to BigQuery](https://cloud.google.com/dataflow/docs/guides/templates/provided-batch#gcstexttobigquery),
+with Google Cloud Scheduler [job](https://cloud.google.com/scheduler/docs/creating#creating_jobs) in the [Secured data warehouse](../../README.md) infrastructure.
 
 It uses:
 
@@ -10,23 +11,23 @@ It uses:
 
 ## Requirements
 
-1. A project previously created, with [Google App Engine Application Enabled](https://cloud.google.com/scheduler/docs/quickstart#create_a_project_with_an_app_engine_app).
+1. All the requirements in [Secured Data Warehouse](../../README.md#requirements)
 1. A network and subnetwork in the data ingestion project [configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access).
 
 ### Firewall rules
 
 - All the egress should be denied
-- Allow only Restricted API Egress by TPC at 443 port
-- Allow only Private API Egress by TPC at 443 port
-- Allow ingress Dataflow workers by TPC at ports 12345 and 12346
-- Allow egress Dataflow workers by TPC at ports 12345 and 12346
+- [Allow only Restricted API Egress by TPC at 443 port](https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity#configure-firewall)
+- [Allow only Private API Egress by TPC at 443 port](https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity#configure-firewall)
+- [Allow ingress Dataflow workers by TPC at ports 12345 and 12346](https://cloud.google.com/dataflow/docs/guides/routes-firewall#example_firewall_ingress_rule)
+- [Allow egress Dataflow workers by TPC at ports 12345 and 12346](https://cloud.google.com/dataflow/docs/guides/routes-firewall#example_firewall_egress_rule)
 
 ### DNS configurations
 
-- Restricted Google APIs
-- Private Google APIs
-- Restricted gcr.io
-- Restricted Artifact Registry
+- [Restricted Google APIs](https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity#configure-routes)
+- [Private Google APIs](https://cloud.google.com/vpc/docs/configure-private-google-access)
+- [Restricted gcr.io](https://cloud.google.com/vpc-service-controls/docs/set-up-gke#configure-dns)
+- [Restricted Artifact Registry](https://cloud.google.com/vpc-service-controls/docs/set-up-gke#configure-dns)
 
 ## Generate sample credit card .csv file
 
@@ -44,8 +45,9 @@ locals {
 
 ## Scheduler Service Account
 
-This exemple uses the service account created by [Secured data warehouse](../../README.md) to run [Cloud Scheduler
-job](https://cloud.google.com/scheduler/docs/creating#creating_jobs) to create a [Dataflow Batch pipeline](https://cloud.google.com/dataflow/docs/guides/templates/provided-batch#cloud-storage-text-to-bigquery).
+This example uses the service account created by [Secured data warehouse](../../README.md) to run [Cloud Scheduler
+job](https://cloud.google.com/scheduler/docs/creating#creating_jobs) to create a
+[Dataflow Batch pipeline](https://cloud.google.com/dataflow/docs/guides/templates/provided-batch#cloud-storage-text-to-bigquery).
 
 This service account is needed by Cloud Scheduler to run an HTTP request to create a new Batch Dataflow job in a schedulable way,
 since the Batch Dataflow job ends when the pipeline finishes .
