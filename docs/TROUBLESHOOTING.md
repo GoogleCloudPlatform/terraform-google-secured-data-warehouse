@@ -9,7 +9,7 @@
 
 ### Unable to open the staging file
 
-This error message is shown on the `Job Logs` when trying to run the job on the console.
+This error message is shown in the Dataflow jobs details page for the deployed Dataflow Job, in the `Job Logs` section.
 
 **Error message:**
 
@@ -44,7 +44,7 @@ The `Service Account` must be declared as a job parameter.
 
 ### The referenced network resource cannot be found
 
-This error message is shown on the `Job Logs` when trying to run the job on the console.
+This error message is shown in the Dataflow jobs details page for the deployed Dataflow Job, in the `Job Logs` section.
 
 **Error message:**
 
@@ -69,7 +69,7 @@ A valid `VPC subnetwork` must be declared as a job parameter in the creation of 
 
 ### Template file failed to load
 
-This error message is shown on the `GCP Console` when trying to create a new job.
+This error message is shown on the **GCP Console** when you are [creating](https://console.cloud.google.com/dataflow/createjob) a new Dataflow Job.
 
 **Error message:**
 
@@ -78,7 +78,7 @@ The metadata file for this template could not be parsed.
     VIEW DETAILS
 ```
 
-In `VIEW DETAILS`:
+In **VIEW DETAILS**:
 
 ```console
 Fail to process as Flex Template and Legacy Template. Flex Template Process result:(390ac373ef6bcb87):
@@ -90,20 +90,20 @@ Permissions denied. Request is prohibited by organization's policy. vpcServiceCo
 
 **Cause:**
 
-One of the perimeters `confidential` or `data ingestion` do not allow external access asked to fetch the template file.
+The private Dataflow job template that is being used is outside of the VPC-SC Perimeter. Use the [troubleshooting page](https://console.cloud.google.com/security/service-perimeter/troubleshoot-landing) to [debug](https://cloud.google.com/vpc-service-controls/docs/troubleshooting#debugging) the details regarding the violation.
 
 **Solution:**
 
-Any user that need access for a external template must be specified:
+An identity that needs to deploy Dataflow jobs must be on a list that is added to an egress rule that allow the template to be fetched.
 
-- For the `confidential perimeter` use the `confidential_data_dataflow_deployer_identities` in the parameter in the [Data Secured Warehouse Module](../README.md#inputs).
-- For the `data ingestion perimeter` use the  `data_ingestion_dataflow_deployer_identities` in the parameter in the [Data Secured Warehouse Module](../README.md#inputs).
+- For the **confidential perimeter** the identity needs to be added in the input `confidential_data_dataflow_deployer_identities` of the *Secured Warehouse Module*.
+- For the **data ingestion perimeter** the identity needs to be added in the input `data_ingestion_dataflow_deployer_identities` of the *Secured Warehouse Module*.
 
-This will add the user to an egress rule that allow the template to be fetched.
+See the inputs section in the [README](../README.md#inputs) for more details.
 
 ### The server was only able to partially fulfill your request
 
-This error message is shown on the `GCP Console` when trying to view the Dataflow Job created.
+This error message is shown on the **GCP Console** when trying to view the [list](https://console.cloud.google.com/dataflow/jobs) of Dataflow Jobs.
 
 **Error message:**
 
@@ -111,14 +111,14 @@ This error message is shown on the `GCP Console` when trying to view the Dataflo
 Sorry, the server was only able to partially fulfill your request. Some data might not be rendered.
 ```
 
-![Dataflow jobs on the GCP console showing the message: Sorry, the server was only able to partially fulfill your request. Some data might not be rendered.](./images/the-server-was-only-able-to-partially-fulfill-your-request.png)
+![Dataflow jobs list on the GCP console showing the message: Sorry, the server was only able to partially fulfill your request. Some data might not be rendered.](./images/the-server-was-only-able-to-partially-fulfill-your-request.png)
 
 **Cause:**
 
-You are not in the list of members of the access policy associated with the perimeter
+You are not in the list of members of the access policy associated with the perimeter.
 
 **Solution:**
 
-The users that need access in the perimeters must be specified as `perimeter_additional_members` parameter in the [Data Secured Warehouse Module](../README.md#inputs) deploy.
+You need to be added in the input `perimeter_additional_members` of the *Secured Warehouse Module*. Members of this list will be added in the members of the access policy associated with the perimeters.
 
-The user that be on the `perimeter_additional_members` list will be added in the members of the access policy associated with the perimeters.
+See the inputs section in the [README](../README.md#inputs) for more details.
