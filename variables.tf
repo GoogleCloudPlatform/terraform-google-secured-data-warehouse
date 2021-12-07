@@ -195,6 +195,31 @@ variable "kms_key_protection_level" {
   default     = "HSM"
 }
 
+variable "security_administrator_group" {
+  description = "Google Cloud IAM group that administers security configurations in the organization(org policies, KMS, VPC service perimeter)."
+  type        = string
+}
+
+variable "network_administrator_group" {
+  description = "Google Cloud IAM group that reviews network configuration. Typically, this includes members of the networking team."
+  type        = string
+}
+
+variable "security_analyst_group" {
+  description = "Google Cloud IAM group that monitors and responds to security incidents."
+  type        = string
+}
+
+variable "data_analyst_group" {
+  description = "Google Cloud IAM group that analyzes the data in the warehouse."
+  type        = string
+}
+
+variable "data_engineer_group" {
+  description = "Google Cloud IAM group that sets up and maintains the data pipeline and warehouse."
+  type        = string
+}
+
 variable "data_ingestion_egress_policies" {
   description = "A list of all [egress policies](https://cloud.google.com/vpc-service-controls/docs/ingress-egress-rules#egress-rules-reference) for the Data Ingestion perimeter, each list object has a `from` and `to` value that describes egress_from and egress_to. See also [secure data exchange](https://cloud.google.com/vpc-service-controls/docs/secure-data-exchange#allow_access_to_a_google_cloud_resource_outside_the_perimeter) and the [VPC-SC](https://github.com/terraform-google-modules/terraform-google-vpc-service-controls/blob/v3.1.0/modules/regular_service_perimeter/README.md) module."
   type = list(object({

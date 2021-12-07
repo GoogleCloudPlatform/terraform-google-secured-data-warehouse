@@ -65,4 +65,9 @@ module "dataflow_with_dlp" {
   wrapped_key                       = google_kms_secret_ciphertext.wrapped_key.ciphertext
   de_identify_template_gs_path      = var.java_de_identify_template_gs_path
   perimeter_additional_members      = []
+  data_engineer_group               = var.group_email[0]
+  data_analyst_group                = var.group_email[0]
+  security_analyst_group            = var.group_email[0]
+  network_administrator_group       = var.group_email[0]
+  security_administrator_group      = var.group_email[0]
 }
