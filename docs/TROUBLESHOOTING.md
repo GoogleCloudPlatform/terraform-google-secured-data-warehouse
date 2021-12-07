@@ -40,8 +40,6 @@ The `Service Account` must be declared as a job parameter.
 - **Gcloud**: Use the optional flag [--service-account-email](https://cloud.google.com/sdk/gcloud/reference/dataflow/jobs/run#--service-account-email).
 - **Terraform**: Use the input `service_account_email` from the [Dataflow Flex Job Module](../modules/dataflow-flex-job/README.md#inputs).
 
-------------------------------------------------------------------------
-
 ### The referenced network resource cannot be found
 
 This error message is shown on the `Job Logs` when trying to run the job on the console.
@@ -90,8 +88,8 @@ One of the perimeters `confidential` or `data ingestion` do not allow external a
 
 Any user that need access for a external template must be specified:
 
-- For confidential perimeter use the `confidential_data_dataflow_deployer_identities` in the parameter in the [Data Secured Warehouse Module](../README.md#inputs)
-- For data ingestion perimeter use the  `data_ingestion_dataflow_deployer_identities` in the parameter in the [Data Secured Warehouse Module](../README.md#inputs)
+- For the `confidential perimeter` use the `confidential_data_dataflow_deployer_identities` in the parameter in the [Data Secured Warehouse Module](../README.md#inputs).
+- For the `data ingestion perimeter` use the  `data_ingestion_dataflow_deployer_identities` in the parameter in the [Data Secured Warehouse Module](../README.md#inputs).
 
 This will add the user to an egress rule that allow the template to be fetched.
 
