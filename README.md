@@ -222,6 +222,7 @@ resources of this module:
 - Identity and Access Management (IAM) API:`iam.googleapis.com`
 - Service Usage API:`serviceusage.googleapis.com`
 - Google Cloud Storage JSON API:`storage-api.googleapis.com`
+- Secrect Manager API: `secretmanager.googleapis.com`
 
 #### Non-confidential data project
 
@@ -237,7 +238,6 @@ resources of this module:
 #### Confidential data project
 
 - Access Context Manager API: `accesscontextmanager.googleapis.com`
-- Google Cloud Storage JSON API: `storage-api.googleapis.com`
 - Artifact Registry API:`artifactregistry.googleapis.com`
 - BigQuery API:`bigquery.googleapis.com`
 - Cloud Billing API:`cloudbilling.googleapis.com`
