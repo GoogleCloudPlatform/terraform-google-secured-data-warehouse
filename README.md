@@ -130,33 +130,54 @@ Install the following dependencies:
 To provision the resources of this module, create a service account
 with the following IAM roles:
 
-- Project level:
-  - App Engine Creator:`roles/appengine.appCreator`
-  - Artifact Registry Administrator:`roles/artifactregistry.admin`
-  - BigQuery Admin:`roles/bigquery.admin`
-  - Browser:`roles/browser`
-  - Cloud Build Editor:`roles/cloudbuild.builds.editor`
-  - Cloud KMS Admin:`roles/cloudkms.admin`
-  - Cloud KMS CryptoKey Encrypter:`roles/cloudkms.cryptoKeyEncrypter`
-  - Cloud Scheduler Admin:`roles/cloudscheduler.admin`
-  - Compute Network Admin:`roles/compute.networkAdmin`
-  - Compute Security Admin:`roles/compute.securityAdmin`
-  - Create Service Accounts:`roles/iam.serviceAccountCreator`
-  - DLP De-identify Templates Editor:`roles/dlp.deidentifyTemplatesEditor`
-  - DLP Inspect Templates Editor:`roles/dlp.inspectTemplatesEditor`
-  - DLP User:`roles/dlp.user`
-  - DNS Administrator:`roles/dns.admin`
-  - Data Catalog Admin:`roles/datacatalog.admin`
-  - Dataflow Developer:`roles/dataflow.developer`
-  - Delete Service Accounts:`roles/iam.serviceAccountDeleter`
-  - Project IAM Admin:`roles/resourcemanager.projectIamAdmin`
-  - Pub/Sub Admin:`roles/pubsub.admin`
-  - Service Account Token Creator:`roles/iam.serviceAccountTokenCreator`
-  - Service Account User:`roles/iam.serviceAccountUser`
-  - Storage Admin:`roles/storage.admin`
 - Organization level
   - Access Context Manager Admin: `roles/accesscontextmanager.policyAdmin`
   - Organization Policy Administrator: `roles/orgpolicy.policyAdmin`
+- Project level:
+  - Data ingestion project
+    - App Engine Creator:`roles/appengine.appCreator`
+    - Cloud Scheduler Admin:`roles/cloudscheduler.admin`
+    - Compute Network Admin:`roles/compute.networkAdmin`
+    - Compute Security Admin:`roles/compute.securityAdmin`
+    - Dataflow Developer:`roles/dataflow.developer`
+    - DNS Administrator:`roles/dns.admin`
+    - Project IAM Admin:`roles/resourcemanager.projectIamAdmin`
+    - Pub/Sub Admin:`roles/pubsub.admin`
+    - Service Account Admin:`roles/iam.serviceAccountAdmin`
+    - Service Account Token Creator:`roles/iam.serviceAccountTokenCreator`
+    - Service Usage Admin: `roles/serviceusage.serviceUsageAdmin`
+    - Storage Admin:`roles/storage.admin`
+  - Data governance project
+    - Cloud KMS Admin:`roles/cloudkms.admin`
+    - Cloud KMS CryptoKey Encrypter:`roles/cloudkms.cryptoKeyEncrypter`
+    - DLP De-identify Templates Editor:`roles/dlp.deidentifyTemplatesEditor`
+    - DLP Inspect Templates Editor:`roles/dlp.inspectTemplatesEditor`
+    - DLP User:`roles/dlp.user`
+    - Data Catalog Admin:`roles/datacatalog.admin`
+    - Project IAM Admin:`roles/resourcemanager.projectIamAdmin`
+    - Secret Manager Admin: `roles/secretmanager.admin`
+    - Service Account Admin:`roles/iam.serviceAccountAdmin`
+    - Service Account Token Creator:`roles/iam.serviceAccountTokenCreator`
+    - Service Usage Admin: `roles/serviceusage.serviceUsageAdmin`
+    - Storage Admin:`roles/storage.admin`
+  - Non Confidential project
+    - BigQuery Admin:`roles/bigquery.admin`
+    - Project IAM Admin:`roles/resourcemanager.projectIamAdmin`
+    - Service Account Admin:`roles/iam.serviceAccountAdmin`
+    - Service Account Token Creator:`roles/iam.serviceAccountTokenCreator`
+    - Service Usage Admin: `roles/serviceusage.serviceUsageAdmin`
+    - Storage Admin:`roles/storage.admin`
+  - Confidential project
+    - BigQuery Admin:`roles/bigquery.admin`
+    - Compute Network Admin:`roles/compute.networkAdmin`
+    - Compute Security Admin:`roles/compute.securityAdmin`
+    - DNS Administrator:`roles/dns.admin`
+    - Dataflow Developer:`roles/dataflow.developer`
+    - Project IAM Admin:`roles/resourcemanager.projectIamAdmin`
+    - Service Account Admin:`roles/iam.serviceAccountAdmin`
+    - Service Account Token Creator:`roles/iam.serviceAccountTokenCreator`
+    - Service Usage Admin: `roles/serviceusage.serviceUsageAdmin`
+    - Storage Admin:`roles/storage.admin`
 
 You can use the [Project Factory module](https://github.com/terraform-google-modules/terraform-google-project-factory) and the
 [IAM module](https://github.com/terraform-google-modules/terraform-google-iam) in combination to provision a
