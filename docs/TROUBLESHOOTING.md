@@ -5,7 +5,7 @@
 - [Unable to open the staging file](#unable-to-open-the-staging-file)
 - [The referenced network resource cannot be found](#the-referenced-network-resource-cannot-be-found)
 - [Template file failed to load](#template-file-failed-to-load)
-- [The resources deployed are not visible](#the-resources-deployed-are-not-visible)
+- [The server was only able to partially fulfill your request](#the-server-was-only-able-to-partially-fulfill-your-request)
 
 ### Unable to open the staging file
 
@@ -14,8 +14,8 @@ This error message is shown on the `Job Logs` when trying to run the job on the 
 **Error message:**
 
 ```console
-Failed to read the result file : gs://<BUCKET-NAME>/staging/template_launches/ 2021-12-06_04_37_18-105494327517795773/ 
-operation_result with error message: (59b58cff2e1b7caf): Unable to open template file: 
+Failed to read the result file : gs://<BUCKET-NAME>/staging/template_launches/ 2021-12-06_04_37_18-105494327517795773/
+operation_result with error message: (59b58cff2e1b7caf): Unable to open template file:
 gs://<BUCKET-NAME>/staging/template_launches/ 2021-12-06_04_37_18-105494327517795773/ operation_result..
 ```
 
@@ -49,8 +49,8 @@ This error message is shown on the `Job Logs` when trying to run the job on the 
 **Error message:**
 
 ```console
-Failed to start the VM, launcher-2021120604300713065380799072320283, used for launching because of status code: INVALID_ARGUMENT, reason: 
-Error: Message: Invalid value for field 'resource.networkInterfaces[0].network': 'global/networks/default'. 
+Failed to start the VM, launcher-2021120604300713065380799072320283, used for launching because of status code: INVALID_ARGUMENT, reason:
+Error: Message: Invalid value for field 'resource.networkInterfaces[0].network': 'global/networks/default'.
 The referenced network resource cannot be found. HTTP Code: 400.
 ```
 
@@ -81,9 +81,9 @@ The metadata file for this template could not be parsed.
 In `VIEW DETAILS`:
 
 ```console
-Fail to process as Flex Template and Legacy Template. Flex Template Process result:(390ac373ef6bcb87): 
-Template file failed to load: gs://<BUCKET-NAME>/flex-template-samples/regional-bq-dlp-bq-streaming.json. 
-Permissions denied. Request is prohibited by organization's policy. vpcServiceControlsUniqueIdentifier: <UNIQUE-IDENTIFIER>, 
+Fail to process as Flex Template and Legacy Template. Flex Template Process result:(390ac373ef6bcb87):
+Template file failed to load: gs://<BUCKET-NAME>/flex-template-samples/regional-bq-dlp-bq-streaming.json.
+Permissions denied. Request is prohibited by organization's policy. vpcServiceControlsUniqueIdentifier: <UNIQUE-IDENTIFIER>,
 Legacy Template Process result:(390ac373ef6bc2a5): Template file failed to load: gs://<BUCKET-NAME>/flex-template-samples/regional-bq-dlp-bq-streaming.json.
 Permissions denied. Request is prohibited by organization's policy. vpcServiceControlsUniqueIdentifier: <UNIQUE-IDENTIFIER>
 ```
@@ -101,7 +101,7 @@ Any user that need access for a external template must be specified:
 
 This will add the user to an egress rule that allow the template to be fetched.
 
-### The resources deployed are not visible
+### The server was only able to partially fulfill your request
 
 This error message is shown on the `GCP Console` when trying to view the Dataflow Job created.
 
@@ -111,7 +111,7 @@ This error message is shown on the `GCP Console` when trying to view the Dataflo
 Sorry, the server was only able to partially fulfill your request. Some data might not be rendered.
 ```
 
-![Dataflow jobs on the GCP console showing the message: Sorry, the server was only able to partially fulfill your request. Some data might not be rendered.](./images/resources-deployed-are-not-visible.png)
+![Dataflow jobs on the GCP console showing the message: Sorry, the server was only able to partially fulfill your request. Some data might not be rendered.](./images/the-server-was-only-able-to-partially-fulfill-your-request.png)
 
 **Cause:**
 
@@ -120,3 +120,5 @@ You are not in the list of members of the access policy associated with the peri
 **Solution:**
 
 The users that need access in the perimeters must be specified as `perimeter_additional_members` parameter in the [Data Secured Warehouse Module](../README.md#inputs) deploy.
+
+The user that be on the `perimeter_additional_members` list will be added in the members of the access policy associated with the perimeters.
