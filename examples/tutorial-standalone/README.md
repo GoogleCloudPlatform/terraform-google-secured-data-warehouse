@@ -259,6 +259,7 @@ locals {
 
 | Name | Description |
 |------|-------------|
+| blueprint\_type | Type of blueprint this module represents. |
 | confidential\_dataflow\_controller\_service\_account\_email | The confidential project Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
 | data\_ingestion\_bucket\_name | The name of the bucket created for data ingestion pipeline. |
 | data\_ingestion\_topic\_name | The topic created for data ingestion pipeline. |

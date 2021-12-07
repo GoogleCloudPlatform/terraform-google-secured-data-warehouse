@@ -43,3 +43,8 @@ output "data_ingestion_topic_name" {
   description = "The topic created for data ingestion pipeline."
   value       = module.secured_data_warehouse.data_ingestion_topic_name
 }
+
+output "blueprint_type" {
+  description = "Type of blueprint this module represents."
+  value       = module.secured_data_warehouse.blueprint_type
+}
