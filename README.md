@@ -252,6 +252,10 @@ resources of this module:
 You can use he [Project Factory module](https://github.com/terraform-google-modules/terraform-google-project-factory) to
 provision the projects with the necessary APIs enabled.
 
+## Security Disclosures
+
+Please see our [security disclosure process](./SECURITY.md).
+
 ## Contributing
 
 Refer to the [contribution guidelines](./CONTRIBUTING.md) for
