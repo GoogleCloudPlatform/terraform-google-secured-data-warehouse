@@ -32,10 +32,10 @@ It uses:
 
 ## Generate sample credit card .csv file
 
-This examples uses a [csv file with sample data](../assets/cc_10000_records.csv) as input for the dataflow job.
-You can create new files with different sizes using the [sample-cc-generator](helpers/sample-cc-generator/README.md) helper.
-This new file must be placed in the [assets folder](../assets)
-You need to change value of the local `cc_file_name` in the [main.tf](./main.tf#L28) file to use the new sample file:
+This examples uses a [csv file with sample data](./assets/cc_10000_records.csv) as input for the dataflow job.
+You can create new files with different sizes using the [sample-cc-generator](../../helpers/sample-cc-generator/README.md) helper.
+This new file must be placed in the [assets folder](./assets)
+You need to change value of the local `cc_file_name` in the [main.tf](./main.tf#L23) file to use the new sample file:
 
 ```hcl
 locals {
