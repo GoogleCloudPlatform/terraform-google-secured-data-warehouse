@@ -38,7 +38,7 @@ It uses:
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| access\_context\_manager\_policy\_id | The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format="value(name)"`. | `number` | n/a | yes |
+| access\_context\_manager\_policy\_id | The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format="value(name)"`. | `string` | `""` | no |
 | confidential\_data\_project\_id | Project where the confidential datasets and tables are created. | `string` | n/a | yes |
 | confidential\_subnets\_self\_link | The URI of the subnetwork where Data Ingestion Dataflow is going to be deployed. | `string` | n/a | yes |
 | crypto\_key | The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP. | `string` | n/a | yes |

@@ -28,7 +28,8 @@ variable "billing_account" {
 
 variable "access_context_manager_policy_id" {
   description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
-  type        = number
+  type        = string
+  default     = ""
 }
 
 variable "terraform_service_account" {
