@@ -1,4 +1,4 @@
-# Simple Example
+# De-identification template submodule example
 
 This example illustrates how to use the [de-identification template](../../modules/de-identification-template/README.md) submodule.
 
