@@ -33,10 +33,16 @@ module "secured_data_warehouse" {
   terraform_service_account        = TERRAFORM_SERVICE_ACCOUNT
   access_context_manager_policy_id = ACCESS_CONTEXT_MANAGER_POLICY_ID
   bucket_name                      = DATA_INGESTION_BUCKET_NAME
-  location                         = LOCATION
+  region                           = REGION
   dataset_id                       = DATASET_ID
   confidential_dataset_id          = CONFIDENTIAL_DATASET_ID
   cmek_keyring_name                = CMEK_KEYRING_NAME
+  perimeter_additional_members     = PERIMETER_ADDITIONAL_MEMBERS
+  data_engineer_group              = DATA_ENGINEER_GROUP
+  data_analyst_group               = DATA_ANALYST_GROUP
+  security_analyst_group           = SECURITY_ANALYST_GROUP
+  network_administrator_group      = NETWORK_ADMINISTRATOR_GROUP
+  security_administrator_group     = SECURITY_ADMINISTRATOR_GROUP
   delete_contents_on_destroy       = false
 }
 ```
