@@ -10,7 +10,7 @@ It uses:
 
 ## Prerequisites
 
-1. The [Secured data warehouse](../../README.md) module to create the Secured data warehouse infrastructure.
+1. The [Secured data warehouse](../../README.md#requirements) module requirements to create the Secured data warehouse infrastructure.
 1. A `crypto_key` and `wrapped_key` pair. Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location where DLP, Storage and BigQuery are going to be created (`local.region`). There is a helper python script in `helpers/wrapped-key` folder which generates a wrapped key.
 1. The identity deploying the example must have permissions to grant role "roles/artifactregistry.reader" in the docker repo of the Flex templates.
 1. A network and subnetwork in the data ingestion project [configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access).
