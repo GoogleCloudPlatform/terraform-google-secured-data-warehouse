@@ -3,6 +3,7 @@
 This example illustrates how to use the `secured-data-warehouse` module.
 
 It uses:
+
 - The [Secured data warehouse](../../README.md) module to create the Secured data warehouse infrastructure.
 
 ## Requirements
