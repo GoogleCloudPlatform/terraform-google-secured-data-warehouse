@@ -61,7 +61,6 @@ locals {
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `false` | no |
 | external\_flex\_template\_project\_id | Project id of the external project that host the flex Dataflow templates. | `string` | n/a | yes |
 | network\_administrator\_group | Google Cloud IAM group that reviews network configuration. Typically, this includes members of the networking team. | `string` | n/a | yes |
-| network\_self\_link | The URI of the network where Dataflow is going to be deployed. | `string` | n/a | yes |
 | non\_confidential\_data\_project\_id | The ID of the project in which the Bigquery will be created. | `string` | n/a | yes |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | perimeter\_additional\_members | The list of all members to be added on perimeter access, except the service accounts created by this module. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | n/a | yes |
@@ -78,7 +77,6 @@ locals {
 |------|-------------|
 | bucket\_data\_ingestion\_name | The name of the bucket. |
 | controller\_service\_account | The Service Account email that will be used to identify the VMs in which the jobs are running. |
-| df\_job\_network | The URI of the VPC being created. |
 | df\_job\_subnetwork | The name of the subnetwork used for create Dataflow job. |
 | dlp\_location | The location of the DLP resources. |
 | project\_id | The project's ID. |
