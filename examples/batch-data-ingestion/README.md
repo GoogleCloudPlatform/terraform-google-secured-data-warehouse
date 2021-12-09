@@ -1,34 +1,35 @@
 # Batch Dataflow with DLP de-identification
 
-This example illustrates how to run a public Batch Dataflow job, [Cloud Storage Text to BigQuery](https://cloud.google.com/dataflow/docs/guides/templates/provided-batch#gcstexttobigquery),
+This example illustrates how to run a public Batch Dataflow job, [Cloud Storage Text to BigQuery](https://cloud.google.com/dataflow/docs/guides/templates/provided-batch#gcstexttobigquery)
 with Google Cloud Scheduler [job](https://cloud.google.com/scheduler/docs/creating#creating_jobs) in the [Secured data warehouse](../../README.md) infrastructure.
 
 It uses:
 
-- The [Secured data warehouse](../../README.md) module to create the Secured data warehouse infrastructure,
-- The public Google provided Dataflow template [Cloud Storage Text to BigQuery](https://cloud.google.com/dataflow/docs/guides/templates/provided-batch#cloud-storage-text-to-bigquery)
-- A Google Cloud Scheduler [job](https://cloud.google.com/scheduler/docs/creating#creating_jobs)
+- The [Secured data warehouse](../../README.md) module to create the Secured data warehouse infrastructure.
+- The public Google provided Dataflow template [Cloud Storage Text to BigQuery](https://cloud.google.com/dataflow/docs/guides/templates/provided-batch#cloud-storage-text-to-bigquery).
+- A Google Cloud Scheduler [job](https://cloud.google.com/scheduler/docs/creating#creating_jobs).
 
 ## Requirements
 
-1. All the requirements in [Secured Data Warehouse](../../README.md#requirements)
-1. The Data Ingestion project must have [Google App Engine Application Enabled](https://cloud.google.com/scheduler/docs/quickstart#create_a_project_with_an_app_engine_app).
-1. A network and subnetwork in the data ingestion project [configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access).
+1. All the requirements in [Secured Data Warehouse](../../README.md#requirements).
+1. The Data Ingestion project must have [Google App Engine Application app](https://cloud.google.com/scheduler/docs/quickstart#create_a_project_with_an_app_engine_app) created.
+1. A network and subnetwork in the data ingestion project [configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access)
+configure with the firewall rules and DNS configurations described bellow.
 
 ### Firewall rules
 
-- All the egress should be denied
-- [Allow only Restricted API Egress by TPC at 443 port](https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity#configure-firewall)
-- [Allow only Private API Egress by TPC at 443 port](https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity#configure-firewall)
-- [Allow ingress Dataflow workers by TPC at ports 12345 and 12346](https://cloud.google.com/dataflow/docs/guides/routes-firewall#example_firewall_ingress_rule)
-- [Allow egress Dataflow workers by TPC at ports 12345 and 12346](https://cloud.google.com/dataflow/docs/guides/routes-firewall#example_firewall_egress_rule)
+- [All the egress should be denied](https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity#configure-firewall).
+- [Allow only Restricted API Egress by TPC at 443 port](https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity#configure-firewall).
+- [Allow only Private API Egress by TPC at 443 port](https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity#configure-firewall).
+- [Allow ingress Dataflow workers by TPC at ports 12345 and 12346](https://cloud.google.com/dataflow/docs/guides/routes-firewall#example_firewall_ingress_rule).
+- [Allow egress Dataflow workers by TPC at ports 12345 and 12346](https://cloud.google.com/dataflow/docs/guides/routes-firewall#example_firewall_egress_rule).
 
 ### DNS configurations
 
-- [Restricted Google APIs](https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity#configure-routes)
-- [Private Google APIs](https://cloud.google.com/vpc/docs/configure-private-google-access)
-- [Restricted gcr.io](https://cloud.google.com/vpc-service-controls/docs/set-up-gke#configure-dns)
-- [Restricted Artifact Registry](https://cloud.google.com/vpc-service-controls/docs/set-up-gke#configure-dns)
+- [Restricted Google APIs](https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity#configure-routes).
+- [Private Google APIs](https://cloud.google.com/vpc/docs/configure-private-google-access).
+- [Restricted gcr.io](https://cloud.google.com/vpc-service-controls/docs/set-up-gke#configure-dns).
+- [Restricted Artifact Registry](https://cloud.google.com/vpc-service-controls/docs/set-up-gke#configure-dns).
 
 ## Generate sample credit card .csv file
 
@@ -46,7 +47,7 @@ locals {
 
 ## Scheduler Service Account
 
-This example uses the service account created by [Secured data warehouse](../../README.md) to run [Cloud Scheduler
+This example uses the service account created by [Secured data warehouse](../../README.md#outputs) to run [Cloud Scheduler
 job](https://cloud.google.com/scheduler/docs/creating#creating_jobs) to create a
 [Dataflow Batch pipeline](https://cloud.google.com/dataflow/docs/guides/templates/provided-batch#cloud-storage-text-to-bigquery).
 
