@@ -6,7 +6,7 @@ It uses:
 
 - The [Secured data warehouse](../../README.md) module to create the Secured data warehouse infrastructure,
 - The [de-identification template](../../modules/de-identification-template/README.md) submodule to create the regional structured DLP template,
-- The [Dataflow Flex Template Job](../../modules/dataflow-flex-job/README.md) submodule to deploy a Dataflow flex template de-identification job.
+- The [Dataflow Flex Template Job](../../modules/dataflow-flex-job/README.md) submodule to deploy a Dataflow Python flex template de-identification job.
 
 ## Prerequisites
 
@@ -50,7 +50,6 @@ It uses:
 | flex\_template\_gs\_path | The Google Cloud Storage gs path to the JSON file built flex template that supports DLP de-identification. | `string` | `""` | no |
 | location | The location of Artifact registry. Run `gcloud artifacts locations list` to list available locations. | `string` | `"us-east4"` | no |
 | network\_administrator\_group | Google Cloud IAM group that reviews network configuration. Typically, this includes members of the networking team. | `string` | n/a | yes |
-| network\_self\_link | The URI of the network where Dataflow is going to be deployed. | `string` | n/a | yes |
 | non\_confidential\_data\_project\_id | The ID of the project in which the Bigquery will be created. | `string` | n/a | yes |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | perimeter\_additional\_members | The list of all members to be added on perimeter access, except the service accounts created by this module. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | n/a | yes |
