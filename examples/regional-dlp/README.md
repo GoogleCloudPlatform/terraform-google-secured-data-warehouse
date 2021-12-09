@@ -28,10 +28,10 @@ It uses:
 
 ### DNS configurations
 
-- Restricted Google APIs
-- Private Google APIs
-- Restricted gcr.io
-- Restricted Artifact Registry
+- [Restricted Google APIs](https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity#configure-routes).
+- [Private Google APIs](https://cloud.google.com/vpc/docs/configure-private-google-access).
+- [Restricted gcr.io](https://cloud.google.com/vpc-service-controls/docs/set-up-gke#configure-dns).
+- [Restricted Artifact Registry](https://cloud.google.com/vpc-service-controls/docs/set-up-gke#configure-dns).
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
