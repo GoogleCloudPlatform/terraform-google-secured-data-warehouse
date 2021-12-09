@@ -21,13 +21,13 @@ gs://<BUCKET-NAME>/staging/template_launches/ 2021-12-06_04_37_18-10549432751779
 
 **Cause:**
 
-You did not use one of the Service Accounts created on the main module to be used as the Dataflow Worker Service Account.
+You did not use one of the Service Accounts created by the main module to be used as the Dataflow Worker Service Account.
 
-If you do not specify one in the parameters, the Dataflow job always use the default [Dataflow Service Account](https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#security_and_permissions_for_pipelines_on).
+If you do not specify a service account in the parameters, the Dataflow job always use the default [Dataflow Service Account](https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#security_and_permissions_for_pipelines_on).
 
 **Solution:**
 
-You must use one of the Service Accounts created on the main module.
+You must use one of the Service Accounts created by the main module.
 
 - Data ingestion:
   - Module output: `dataflow_controller_service_account_email`
@@ -94,7 +94,7 @@ The private Dataflow job template that is being used is outside of the VPC-SC Pe
 
 **Solution:**
 
-An identity that needs to deploy Dataflow jobs must be on a list that is added to an egress rule that allow the template to be fetched.
+The identity deploying the Dataflow jobs must be added to an egress rule that allows the template to be fetched.
 
 - For the **confidential perimeter** the identity needs to be added in the input `confidential_data_dataflow_deployer_identities` of the *Secured Warehouse Module*.
 - For the **data ingestion perimeter** the identity needs to be added in the input `data_ingestion_dataflow_deployer_identities` of the *Secured Warehouse Module*.
