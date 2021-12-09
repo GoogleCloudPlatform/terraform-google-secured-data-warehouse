@@ -4,15 +4,16 @@ This example illustrates how to run a regional Dataflow job that uses the `de-id
 
 It uses:
 
-- The [Secured data warehouse](../../README.md) module to create the Secured data warehouse infrastructure
-- The [de-identification template](../../modules/de-identification-template/README.md) submodule to create the regional structured DLP template
-- A Dataflow flex template to deploy the de-identification job
+- The [Secured data warehouse](../../README.md) module to create the Secured data warehouse infrastructure.
+- The [de-identification template](../../modules/de-identification-template/README.md) submodule to create the regional structured DLP template.
+- The [Dataflow Flex Template Job](../../modules/dataflow-flex-job/README.md) submodule to deploy a Dataflow flex template de-identification job.
 
 ## Prerequisites
 
 1. The [Secured data warehouse](../../README.md#requirements) module requirements to create the Secured data warehouse infrastructure.
-1. A `crypto_key` and `wrapped_key` pair. Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location where DLP, Storage and BigQuery are going to be created (`local.region`). There is a helper python script in `helpers/wrapped-key` folder which generates a wrapped key.
-1. The identity deploying the example must have permissions to grant role "roles/artifactregistry.reader" in the docker repo of the Flex templates.
+1. A `crypto_key` and `wrapped_key` pair. Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location where DLP, Storage and BigQuery are going to be created (`local.region`). There is a [Wrapped Key Helper](../../helpers/wrapped-key/README.md) python script which generates a wrapped key.
+1. The identity deploying the example must have permission to grant roles "roles/cloudkms.cryptoKeyDecrypter" and "roles/cloudkms.cryptoKeyEncrypter" in the KMS `crypto_key`. It will be granted to the Data ingestion Dataflow worker service account created by the Secured Data Warehouse module.
+1. The identity deploying the example must have permission to grant role "roles/artifactregistry.reader" in the docker repo of the Flex templates.
 1. A network and subnetwork in the data ingestion project [configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access).
 
 ### Firewall rules
