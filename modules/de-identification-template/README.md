@@ -31,6 +31,7 @@ You will need the wrapped key and the full resource name of the Cloud KMS key th
 
 **Note:** Contact your Security Team to obtain the `crypto_key` and `wrapped_key` pair.
 The `crypto_key` location must be the same location used for the `dlp_location`.
+There is a helper python script in `helpers/wrapped-key` folder which generates a wrapped key.
 
 ### Template file
 
