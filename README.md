@@ -127,8 +127,9 @@ Install the following dependencies:
 
 ### Service Account
 
-To provision the resources of this module, create a service account
-with the following IAM roles:
+To provision the resources of this module, create a privileged service account, where the service account key cannot be created.
+In addition, consider using Cloud Monitoring to alert on this service account's activity.
+Grant the following roles to the service account.
 
 - Organization level
   - Access Context Manager Admin: `roles/accesscontextmanager.policyAdmin`
