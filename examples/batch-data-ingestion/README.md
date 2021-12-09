@@ -11,7 +11,7 @@ It uses:
 
 ## Requirements
 
-1. All the requirements in [Secured Data Warehouse](../../README.md#requirements).
+1. The [Secured data warehouse](../../README.md#requirements) module requirements to create the Secured data warehouse infrastructure.
 1. The Data Ingestion project must have [Google App Engine Application app](https://cloud.google.com/scheduler/docs/quickstart#create_a_project_with_an_app_engine_app) created.
 1. A network and subnetwork in the data ingestion project [configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access)
 configure with the firewall rules and DNS configurations described below.
