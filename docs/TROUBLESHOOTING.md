@@ -2,14 +2,14 @@
 
 ## Issues
 
-- [Unable to open the staging file](#unable-to-open-the-staging-file)
-- [The referenced network resource cannot be found](#the-referenced-network-resource-cannot-be-found)
-- [Template file failed to load](#template-file-failed-to-load)
 - [The server was only able to partially fulfill your request](#the-server-was-only-able-to-partially-fulfill-your-request)
+- [Template file failed to load](#template-file-failed-to-load)
+- [The referenced network resource cannot be found](#the-referenced-network-resource-cannot-be-found)
+- [Unable to open the Dataflow staging file](#unable-to-open-the-dataflow-staging-file)
 
-### Unable to open the staging file
+### Unable to open the Dataflow staging file
 
-This error message is shown in the Dataflow jobs details page for the deployed Dataflow Job, in the `Job Logs` section.
+When manually deploying a Dataflow Job on the GCP Console the following error message is shown in the Dataflow jobs details page for the Dataflow Job deployed, in the `Job Logs` section.
 
 **Error message:**
 
@@ -21,13 +21,11 @@ gs://<BUCKET-NAME>/staging/template_launches/ 2021-12-06_04_37_18-10549432751779
 
 **Cause:**
 
-You did not use one of the Service Accounts created by the main module to be used as the Dataflow Worker Service Account.
-
-If you do not specify a service account in the parameters, the Dataflow job always use the default [Dataflow Service Account](https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#security_and_permissions_for_pipelines_on).
+You did not specify the appropriate Service Account created by the main module as the Dataflow [Worker Service Account](https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#worker_service_account) in the parameters, the Dataflow job will use the [Compute Engine default service account](https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#default_worker_service_account) as the Dataflow Worker Service Account.
 
 **Solution:**
 
-You must use one of the Service Accounts created by the main module.
+You must use the appropriate Service Account created by the main module.
 
 - Data ingestion:
   - Module output: `dataflow_controller_service_account_email`
@@ -36,11 +34,13 @@ You must use one of the Service Accounts created by the main module.
   - Module output: `confidential_dataflow_controller_service_account_email`
   - Email format: `sa-dataflow-controller-reid@<CONFIDENTIAL-DATA-PROJECT-ID>.iam.gserviceaccount.com`
 
-The `Service Account` must be declared as a job parameter.
+The **Service Account** must be declared as a job parameter.
 
-- **Console**: Use the optional parameter `Service account email`.
+- **GCP Console**: Use the *optional* parameter **Service account email**.
 - **Gcloud**: Use the optional flag [--service-account-email](https://cloud.google.com/sdk/gcloud/reference/dataflow/jobs/run#--service-account-email).
 - **Terraform**: Use the input `service_account_email` from the [Dataflow Flex Job Module](../modules/dataflow-flex-job/README.md#inputs).
+
+For more details about Dataflow staging files see [Resource usage and management](https://cloud.google.com/dataflow/docs/guides/deploying-a-pipeline#resource-usage-and-management) documentation.
 
 ### The referenced network resource cannot be found
 
@@ -54,16 +54,25 @@ Error: Message: Invalid value for field 'resource.networkInterfaces[0].network':
 The referenced network resource cannot be found. HTTP Code: 400.
 ```
 
+or
+
+```console
+Failed to start the VM, launcher-2021120906191814752290113584255576, used for launching because of
+status code: INVALID_ARGUMENT, reason:
+Error: Message: Invalid value for field 'resource.networkInterfaces[0]': '{ "network": "global/networks/default", "accessConfig": [{ "type": "ONE_TO_ONE_NAT", "name":...'.
+Subnetwork should be specified for custom subnetmode network HTTP Code: 400.
+```
+
 **Cause:**
 
-If you do not specify a **subnetwork** in the job parameters, Dataflow will use the [default VPC subnetwork](https://cloud.google.com/dataflow/docs/guides/specifying-networks#specifying_a_network_and_a_subnetwork) to deploy the Job.
-If the default network does not exist you will get the 400 error.
+If you do not specify a **network** or **subnetwork** in the job parameters, Dataflow will use the [default VPC network](https://cloud.google.com/dataflow/docs/guides/specifying-networks#specifying_a_network_and_a_subnetwork) to deploy the Job.
+If the default network does not exist, you will get the 400 error.
 
 **Solution:**
 
-A valid `VPC subnetwork` must be declared as a job parameter in the creation of the Dataflow Job.
+A valid **VPC subnetwork** must be declared as a job parameter in the creation of the Dataflow Job, as you can see in the dataflow-with-dlp [example](../examples/dataflow-with-dlp/main.tf#L86) that uses the dataflow-flex-job [module](../modules/dataflow-flex-job/README.md).
 
-- **Console**: Use the optional parameter `Subnetwork`.
+- **GCP Console**: Use the optional parameter `Subnetwork`.
 - **Gcloud CLI**: Use the optional flag [--subnetwork](https://cloud.google.com/sdk/gcloud/reference/dataflow/jobs/run#--subnetwork).
 - **Terraform**: Use the input `subnetwork_self_link` from the [Dataflow Flex Job Module](../modules/dataflow-flex-job/README.md#inputs).
 
@@ -94,16 +103,16 @@ The private Dataflow job template that is being used is outside of the VPC-SC Pe
 
 **Solution:**
 
-The identity deploying the Dataflow jobs must be added to an egress rule that allows the template to be fetched.
+The identity deploying the Dataflow jobs must be added to the correct list indicated below. The list configures egress rules that allows the Dataflow templates to be fetched.
 
-- For the **confidential perimeter** the identity needs to be added in the input `confidential_data_dataflow_deployer_identities` of the *Secured Warehouse Module*.
-- For the **data ingestion perimeter** the identity needs to be added in the input `data_ingestion_dataflow_deployer_identities` of the *Secured Warehouse Module*.
+- For the **confidential perimeter**, the identity needs to be added in the input `confidential_data_dataflow_deployer_identities` of the *Secured Data Warehouse Module*.
+- For the **data ingestion perimeter**, the identity needs to be added in the input `data_ingestion_dataflow_deployer_identities` of the *Secured Data Warehouse Module*.
 
 See the inputs section in the [README](../README.md#inputs) for more details.
 
 ### The server was only able to partially fulfill your request
 
-This error message is shown on the **GCP Console** when trying to view the [list](https://console.cloud.google.com/dataflow/jobs) of Dataflow Jobs.
+This error message is shown on the **GCP Console** when trying to view resources protected by the VPC-SC [perimeters](https://cloud.google.com/vpc-service-controls/docs/service-perimeters), such as [Dataflow Jobs](https://console.cloud.google.com/dataflow/jobs).
 
 **Error message:**
 
@@ -115,10 +124,10 @@ Sorry, the server was only able to partially fulfill your request. Some data mig
 
 **Cause:**
 
-You are not in the list of members of the access policy associated with the perimeter.
+You are not in the list of members of the access level associated with the perimeter.
 
 **Solution:**
 
-You need to be added in the input `perimeter_additional_members` of the *Secured Warehouse Module*. Members of this list will be added in the members of the access policy associated with the perimeters.
+You need to be added in the input `perimeter_additional_members` of the *Secured Data Warehouse Module*. Members of this list are added to the [access level](https://cloud.google.com/access-context-manager/docs/create-basic-access-level#members-example).
 
 See the inputs section in the [README](../README.md#inputs) for more details.
