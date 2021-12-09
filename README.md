@@ -133,6 +133,18 @@ Install the following dependencies:
 - [Terraform Provider for GCP](https://github.com/terraform-providers/terraform-provider-google) version 3.77 or later
 - [Terraform Provider for GCP Beta](https://github.com/terraform-providers/terraform-provider-google-beta) version 3.77 or later
 
+### Security Groups
+
+The Secured Data Warehouse module grant to a set of security groups appropriated roles to perform standard tasks in the projects and the organization.
+
+- **Data Engineer group**: Google Cloud IAM group that sets up and maintains the data pipeline and warehouse.
+- **Data Analyst group**: Google Cloud IAM group that analyzes the data in the warehouse.
+- **Security Analyst group**: Google Cloud IAM group that monitors and responds to security incidents.
+- **Network Administrator group**: Google Cloud IAM group that reviews network configuration. Typically, this includes members of the networking team.
+- **Security Administrator group**: Google Cloud IAM group that administers security configurations in the organization(org policies, KMS, VPC service perimeter).
+
+Groups can be created in the Google [Workspace Admin Console](https://support.google.com/a/answer/9400082?hl=en) or in the Google [Cloud Console](https://cloud.google.com/iam/docs/groups-in-cloud-console).
+
 ### Service Account
 
 To provision the resources of this module, create a privileged service account, where the service account key cannot be created.
