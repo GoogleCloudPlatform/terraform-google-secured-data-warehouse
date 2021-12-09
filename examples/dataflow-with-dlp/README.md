@@ -10,24 +10,25 @@ It uses:
 
 ## Prerequisites
 
-1. A `crypto_key` and `wrapped_key` pair.  Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location where DLP, Storage and BigQuery are going to be created (`local.region`).
+1. The [Secured data warehouse](../../README.md) module to create the Secured data warehouse infrastructure.
+1. A `crypto_key` and `wrapped_key` pair. Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location where DLP, Storage and BigQuery are going to be created (`local.region`). There is a helper python script in `helpers/wrapped-key` folder which generates a wrapped key.
 1. The identity deploying the example must have permissions to grant role "roles/artifactregistry.reader" in the docker repo of the Flex templates.
 1. A network and subnetwork in the data ingestion project [configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access).
 
 ### Firewall rules
 
-- All the egress should be denied
-- Allow only Restricted API Egress by TPC at 443 port
-- Allow only Private API Egress by TPC at 443 port
-- Allow ingress Dataflow workers by TPC at ports 12345 and 12346
-- Allow egress Dataflow workers     by TPC at ports 12345 and 12346
+- [All the egress should be denied](https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity#configure-firewall).
+- [Allow only Restricted API Egress by TPC at 443 port](https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity#configure-firewall).
+- [Allow only Private API Egress by TPC at 443 port](https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity#configure-firewall).
+- [Allow ingress Dataflow workers by TPC at ports 12345 and 12346](https://cloud.google.com/dataflow/docs/guides/routes-firewall#example_firewall_ingress_rule).
+- [Allow egress Dataflow workers by TPC at ports 12345 and 12346](https://cloud.google.com/dataflow/docs/guides/routes-firewall#example_firewall_egress_rule).
 
 ### DNS configurations
 
-- Restricted Google APIs
-- Private Google APIs
-- Restricted gcr.io
-- Restricted Artifact Registry
+- [Restricted Google APIs](https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity#configure-routes).
+- [Private Google APIs](https://cloud.google.com/vpc/docs/configure-private-google-access).
+- [Restricted gcr.io](https://cloud.google.com/vpc-service-controls/docs/set-up-gke#configure-dns).
+- [Restricted Artifact Registry](https://cloud.google.com/vpc-service-controls/docs/set-up-gke#configure-dns).
 
 ## Generate sample credit card .csv file
 
