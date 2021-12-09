@@ -1,4 +1,4 @@
-# Bigquery Sensitive Data Example
+# Bigquery Confidential Data Example
 
 This example illustrates how to run a Flex Java re-identification Dataflow job in the Secured data warehouse and
 how to use [Data Catalog policy tags](https://cloud.google.com/bigquery/docs/best-practices-policy-tags) to restrict access to confidential columns in the re-identified table.
@@ -12,8 +12,7 @@ It uses:
 
 ## Requirements
 
-1. All the requirements in [Secured Data Warehouse](../../README.md#requirements).
-1. A `crypto_key` and `wrapped_key` pair.  Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location used for the `location` variable.
+1. A `crypto_key` and `wrapped_key` pair. Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location used for the `location` variable. There is a helper python script in `helpers/wrapped-key` folder which generates a wrapped key.
 1. Pre-build Java Regional DLP De-identification and Re-identification flex templates. See [Flex templates](../../flex-templates/README.md).
 1. The identity deploying the example must have permissions to grant role "roles/artifactregistry.reader" in the docker and python repos of the Flex templates.
 1. You need to create network and subnetwork in the data ingestion project [configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access).
