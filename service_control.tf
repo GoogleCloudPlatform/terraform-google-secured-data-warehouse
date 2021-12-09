@@ -64,6 +64,14 @@ locals {
 
   restricted_services = distinct(concat(local.base_restricted_services, var.additional_restricted_services))
 
+  actual_policy = var.access_context_manager_policy_id != "" ? var.access_context_manager_policy_id : google_access_context_manager_access_policy.access_policy[0].name
+
+}
+
+resource "google_access_context_manager_access_policy" "access_policy" {
+  count  = var.access_context_manager_policy_id != "" ? 0 : 1
+  parent = "organizations/${var.org_id}"
+  title  = "default policy"
 }
 
 data "google_project" "data_ingestion_project" {
@@ -107,7 +115,7 @@ module "data_ingestion_vpc_sc" {
 
   org_id                           = var.org_id
   project_id                       = var.data_ingestion_project_id
-  access_context_manager_policy_id = var.access_context_manager_policy_id
+  access_context_manager_policy_id = local.actual_policy
   common_name                      = "data_ingestion"
   common_suffix                    = random_id.suffix.hex
   resources                        = local.data_ingestion_vpc_sc_resources
@@ -150,7 +158,7 @@ module "data_ingestion_vpc_sc" {
 resource "google_access_context_manager_service_perimeter_resource" "ingestion-perimeter-resource" {
   count = var.data_ingestion_perimeter != "" ? 1 : 0
 
-  perimeter_name = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${var.data_ingestion_perimeter}"
+  perimeter_name = "accessPolicies/${local.actual_policy}/servicePerimeters/${var.data_ingestion_perimeter}"
   resource       = "projects/${data.google_project.data_ingestion_project.number}"
 
   depends_on = [
@@ -161,7 +169,7 @@ resource "google_access_context_manager_service_perimeter_resource" "ingestion-p
 resource "google_access_context_manager_service_perimeter_resource" "non-confidential-perimeter-resource" {
   count = var.data_ingestion_perimeter != "" ? 1 : 0
 
-  perimeter_name = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${var.data_ingestion_perimeter}"
+  perimeter_name = "accessPolicies/${local.actual_policy}/servicePerimeters/${var.data_ingestion_perimeter}"
   resource       = "projects/${data.google_project.non_confidential_data_project.number}"
 
   depends_on = [
@@ -177,7 +185,7 @@ module "data_governance_vpc_sc" {
 
   org_id                           = var.org_id
   project_id                       = var.data_governance_project_id
-  access_context_manager_policy_id = var.access_context_manager_policy_id
+  access_context_manager_policy_id = local.actual_policy
   common_name                      = "data_governance"
   common_suffix                    = random_id.suffix.hex
   resources                        = local.data_governance_vpc_sc_resources
@@ -200,7 +208,7 @@ module "data_governance_vpc_sc" {
 resource "google_access_context_manager_service_perimeter_resource" "governance-perimeter-resource" {
   count = var.data_governance_perimeter != "" ? 1 : 0
 
-  perimeter_name = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${var.data_governance_perimeter}"
+  perimeter_name = "accessPolicies/${local.actual_policy}/servicePerimeters/${var.data_governance_perimeter}"
   resource       = "projects/${data.google_project.governance_project.number}"
 
   depends_on = [
@@ -216,7 +224,7 @@ module "confidential_data_vpc_sc" {
 
   org_id                           = var.org_id
   project_id                       = var.confidential_data_project_id
-  access_context_manager_policy_id = var.access_context_manager_policy_id
+  access_context_manager_policy_id = local.actual_policy
   common_name                      = "confidential_data"
   common_suffix                    = random_id.suffix.hex
   resources                        = local.confidential_data_vpc_sc_resources
@@ -259,7 +267,7 @@ module "confidential_data_vpc_sc" {
 resource "google_access_context_manager_service_perimeter_resource" "confidential-perimeter-resource" {
   count = var.confidential_data_perimeter != "" ? 1 : 0
 
-  perimeter_name = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${var.confidential_data_perimeter}"
+  perimeter_name = "accessPolicies/${local.actual_policy}/servicePerimeters/${var.confidential_data_perimeter}"
   resource       = "projects/${data.google_project.confidential_project.number}"
 
   depends_on = [
@@ -271,7 +279,7 @@ module "vpc_sc_bridge_data_ingestion_governance" {
   source  = "terraform-google-modules/vpc-service-controls/google//modules/bridge_service_perimeter"
   version = "~> 3.0"
 
-  policy         = var.access_context_manager_policy_id
+  policy         = local.actual_policy
   perimeter_name = "vpc_sc_bridge_data_ingestion_governance_${random_id.suffix.hex}"
   description    = "VPC-SC bridge between data ingestion and data governance"
 
@@ -295,7 +303,7 @@ module "vpc_sc_bridge_confidential_governance" {
   source  = "terraform-google-modules/vpc-service-controls/google//modules/bridge_service_perimeter"
   version = "~> 3.0"
 
-  policy         = var.access_context_manager_policy_id
+  policy         = local.actual_policy
   perimeter_name = "vpc_sc_bridge_confidential_governance_${random_id.suffix.hex}"
   description    = "VPC-SC bridge between confidential data and data governance"
 
@@ -317,7 +325,7 @@ module "vpc_sc_bridge_confidential_data_ingestion" {
   source  = "terraform-google-modules/vpc-service-controls/google//modules/bridge_service_perimeter"
   version = "~> 3.0"
 
-  policy         = var.access_context_manager_policy_id
+  policy         = local.actual_policy
   perimeter_name = "vpc_sc_bridge_confidential_data_ingestion_${random_id.suffix.hex}"
   description    = "VPC-SC bridge between confidential data and data ingestion"
 
