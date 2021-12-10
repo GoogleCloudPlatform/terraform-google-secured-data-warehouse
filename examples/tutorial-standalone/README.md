@@ -29,8 +29,8 @@ The required infrastructure created in this example includes:
   - Logging bucket in the data governance project.
 - Cloud KMS:
   - A Cloud KMS Keyring.
-  - A Cloud KMS key.
-  - A traffic encryption key for DLP Templates.
+  - A Cloud KMS key encryption key (KEK).
+  - A token encryption key (TEK) for DLP Templates.
 
 This example will be deployed at the `us-east4` location, to deploy in another location, change the local `location` in the example [main.tf](./main.tf#L18) file.
 
