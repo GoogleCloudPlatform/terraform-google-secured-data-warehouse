@@ -15,29 +15,25 @@ These sections describe requirements for running this example.
 
 Install the following dependencies:
 
-- [Google Cloud SDK](https://cloud.google.com/sdk/install) version 357.0.0 or later
-- [Terraform](https://www.terraform.io/downloads.html) version 0.13.7 or later
-- [curl](https://curl.haxx.se/)
+- [Google Cloud SDK](https://cloud.google.com/sdk/install) version 357.0.0 or later.
+- [Terraform](https://www.terraform.io/downloads.html) version 0.13.7 or later.
 
-### Service Account
+### Deployer entity
 
 To provision the resources of this module, create a service account
 with the following IAM roles:
 
-- Dataflow Developer:`roles/dataflow.developer`
-- Service Account Admin:`roles/iam.serviceAccountAdmin`
-- Service Account Token Creator:`roles/iam.serviceAccountTokenCreator`
-- Service Usage Admin: `roles/serviceusage.serviceUsageAdmin`
+- Dataflow Developer:`roles/dataflow.developer`.
 
 ### APIs
 
-Create a [project](https://cloud.google.com/resource-manager/docs/creating-managing-projects) with the following APIs enabled to host the resources for this module:
+The following APIs must be enabled in the project where the service account was created:
 
-- Dataflow API:`dataflow.googleapis.com`
+- Cloud Key Management Service (KMS) API: `cloudkms.googleapis.com`.
+- Compute Engine API: `compute.googleapis.com`.
+- Dataflow API: `dataflow.googleapis.com`.
 
-You can use the [Project Factory module](https://github.com/terraform-google-modules/terraform-google-project-factory) to provision a project with the necessary APIs enabled.
-
-To provision the service account, you can use the [IAM module](https://github.com/terraform-google-modules/terraform-google-iam) in combination with the Project Factory module.
+Any others APIs you pipeline may need.
 
 ### Assumption
 
