@@ -59,7 +59,6 @@ module "regional_dlp_example" {
   terraform_service_account         = var.terraform_service_account
   access_context_manager_policy_id  = var.access_context_manager_policy_id
   flex_template_gs_path             = var.python_de_identify_template_gs_path
-  network_self_link                 = var.data_ingestion_network_self_link[1]
   subnetwork_self_link              = var.data_ingestion_subnets_self_link[1]
   delete_contents_on_destroy        = true
   perimeter_additional_members      = []
