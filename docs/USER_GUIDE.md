@@ -17,16 +17,61 @@ To use a private template repository outside of the perimeter, the identity depl
 
 ### Pipeline requirements
 
-<!-- Ensured that the additional apis that your pipeline need are able. -->
-The projects used in the *Secured Data Warehouse Module* must have some [apis enabled](../README.md#apis). Ensured that all the additional apis that your Dataflow pipeline need are enable too.
+After deploy the *Secured Data Warehouse Module* you will have this following scenario:
 
-<!-- Section to user study the template and APIS and required roles. -->
+- The projects used have the required *Secured Data Warehouse Module* [apis enabled](../README.md#apis).
+- Dataflow Controller Service Accounts created:
+  - Data ingestion Dataflow Controller Service Account:
+    - Data ingestion project:
+      - Dataflow Worker: `roles/dataflow.worker`
+      - Pub/Sub Editor: `roles/pubsub.editor`
+      - Pub/Sub Subscriber: `roles/pubsub.subscriber`
+      - Storage Object Viewer: `roles/storage.objectViewer`
+    - Governance project:
+      - DLP De-identify Templates Reader: `roles/dlp.deidentifyTemplatesReader`
+      - DLP Inspect Templates Reader: `roles/dlp.inspectTemplatesReader`
+      - DLP User: `roles/dlp.user`
+    - Non-confidential project:
+      - BigQuery Data Editor: `roles/bigquery.dataEditor`
+      - BigQuery Job User: `roles/bigquery.jobUser`
+  - Confidential Data Dataflow Controller Service Account:
+    - Confidential project:
+      - BigQuery Data Editor: `roles/bigquery.dataEditor`
+      - BigQuery Job User: `roles/bigquery.jobUser`
+      - Dataflow Worker: `roles/dataflow.worker`
+      - Service Usage Consumer: `roles/serviceusage.serviceUsageConsumer`
+      - Storage Object Admin: `roles/storage.objectAdmin`
+    - Governance project:
+      - DLP De-identify Templates Reader: `roles/dlp.deidentifyTemplatesReader`
+      - DLP Inspect Templates Reader: `roles/dlp.inspectTemplatesReader`
+      - DLP User: `roles/dlp.user`
+    - Non-confidential project:
+      - BigQuery Data Viewer: `roles/bigquery.dataViewer`
+
+Ensured that all the additional APIs your Dataflow pipeline needs are enable.
+Also make sure your Dataflow Controller Service Account have all the roles needed to run the Dataflow Pipeline.
 
 ### Opinionated Dataflow Flex Template Usage
 
-- Use the staging/temp bucket created by the main module
-- Use the appropriate Service Account provider by the main module
-- Use the appropriate kms key
+The following outputs provided by the *Secured Data Warehouse Module*, must be used as Dataflow Job input:
+
+- Use the staging/temp bucket created by the main module.
+  - Data ingestion project:
+    - Module output: `data_ingestion_dataflow_bucket_name`.
+  - Confidential Data project:
+    - Module output: `confidential_data_dataflow_bucket_name`.
+- Use the appropriate Service Account provider by the main module. <!-- Use the appropriate Service Account provider as Dataflow Controller Service Account. >
+  - Data ingestion project:
+    - Module output: `dataflow_controller_service_account_email`.
+    - Email format: `sa-dataflow-controller@<DATA-INGESTION-PROJECT-ID>.iam.gserviceaccount.com`.
+  - Confidential Data project:
+    - Module output: `confidential_dataflow_controller_service_account_email`.
+    - Email format: `sa-dataflow-controller-reid@<CONFIDENTIAL-DATA-PROJECT-ID>.iam.gserviceaccount.com`.
+- Use the appropriate kms key.
+  - Data ingestion project:
+    - Module output: `cmek_data_ingestion_crypto_key`
+  - Confidential project:
+    - Module output: `cmek_reidentification_crypto_key`
 
 ### Deploying with Terraform
 
@@ -67,11 +112,11 @@ gcloud dataflow flex-template run "TEMPLATE_NAME`date +%Y%m%d-%H%M%S`" \
 
 ```
 
-For more details about gcloud dataflow flex-template command see the command [documentation](https://cloud.google.com/sdk/gcloud/reference/dataflow/flex-template/run).
+For more details about `gcloud dataflow flex-template` see the command [documentation](https://cloud.google.com/sdk/gcloud/reference/dataflow/flex-template/run).
 
 **Classic Template**
 
-You can run the following commands to create a **Java** Dataflow Flex Job using the **Gcloud Command**:
+*********:
 
 ```sh
 
@@ -79,4 +124,4 @@ COMMAND
 
 ```
 
-For more details about gcloud dataflow ***** command see the command [documentation](https://cloud.google.com/sdk/gcloud/reference/dataflow/jobs/run).
+For more details about `gcloud dataflow jobs run` see the command [documentation](https://cloud.google.com/sdk/gcloud/reference/dataflow/jobs/run).
