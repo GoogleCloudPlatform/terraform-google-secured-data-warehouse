@@ -5,6 +5,39 @@ This module handles opinionated Dataflow flex template job configuration and dep
 ## Usage
 
 Before using this module, one should get familiar with the `google_dataflow_flex_template_job`’s [Note on "destroy"/"apply"](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/dataflow_flex_template_job#note-on-destroy--apply) as the behavior is atypical when compared to other resources.
+'
+
+## Requirements
+
+These sections describe requirements for running this example.
+
+### Software
+
+Install the following dependencies:
+
+- [Google Cloud SDK](https://cloud.google.com/sdk/install) version 357.0.0 or later
+- [Terraform](https://www.terraform.io/downloads.html) version 0.13.7 or later
+- [curl](https://curl.haxx.se/)
+
+### Service Account
+
+To provision the resources of this module, create a service account
+with the following IAM roles:
+
+- Dataflow Developer:`roles/dataflow.developer`
+- Service Account Admin:`roles/iam.serviceAccountAdmin`
+- Service Account Token Creator:`roles/iam.serviceAccountTokenCreator`
+- Service Usage Admin: `roles/serviceusage.serviceUsageAdmin`
+
+### APIs
+
+Create a [project](https://cloud.google.com/resource-manager/docs/creating-managing-projects) with the following APIs enabled to host the resources for this module:
+
+- Dataflow API:`dataflow.googleapis.com`
+
+You can use the [Project Factory module](https://github.com/terraform-google-modules/terraform-google-project-factory) to provision a project with the necessary APIs enabled.
+
+To provision the service account, you can use the [IAM module](https://github.com/terraform-google-modules/terraform-google-iam) in combination with the Project Factory module.
 
 ### Assumption
 
