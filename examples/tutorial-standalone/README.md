@@ -79,7 +79,7 @@ The de-identification Dataflow job will apply these DLP Crypto-based tokenizatio
 - [Cryptographic hashing](https://cloud.google.com/dlp/docs/transformations-reference#crypto-hashing) Transformation:
   - Card PIN.
 
-### Generate sample credit card .csv file
+### [optional] Generate sample credit card .csv file
 
 You can create new csv files with different sizes using the [sample-cc-generator](../../helpers/sample-cc-generator/README.md) helper.
 This new file must be placed in the [assets folder](./assets)
