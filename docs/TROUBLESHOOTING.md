@@ -99,7 +99,8 @@ A valid **VPC subnetwork** must be declared as a job parameter in the creation o
 
 ### Unable to open the Dataflow staging file
 
-When manually deploying a Dataflow Job on the GCP Console, the following error message is shown in the **Job Logs** section of the Dataflow jobs details page for the Dataflow Job deployed.
+An user deploys a new Dataflow job in the console and the job creation fails.
+Looking at the **Job Logs** section, in the bottom part of the job detail page, there is an error with the message:
 
 **Error message:**
 
