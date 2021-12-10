@@ -84,7 +84,6 @@ module "org_policies" {
   for_each = local.projects_ids
 
   project_id          = each.value
-  region              = local.region
   trusted_locations   = var.trusted_locations
   trusted_subnetworks = var.trusted_subnetworks
 

@@ -19,11 +19,6 @@ variable "project_id" {
   type        = string
 }
 
-variable "region" {
-  description = "The region in which the subnetwork resides."
-  type        = string
-}
-
 variable "trusted_subnetworks" {
   description = "The URI of the subnetworks where resources are going to be deployed."
   type        = list(string)
