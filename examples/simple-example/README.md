@@ -8,7 +8,7 @@ It uses:
 
 ## Requirements
 
-1. The [Secured data warehouse](../../README.md#requirements) module requirements to create the Secured data warehouse infrastructure
+1. The [Secured data warehouse](../../README.md#requirements) module requirements to create the Secured data warehouse infrastructure.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
