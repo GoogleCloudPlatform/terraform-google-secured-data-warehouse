@@ -1,117 +1,82 @@
 # User Guide
 
 ## Deploy Dataflow Jobs in the Secured Data Warehouse
-<!--
-TODO: ESTAMOS USANDO O TEMPLATE (JAVA) DO NOSSO EXEMPLO
-- DEVEMOS USA-LO?
-- DEVEMOS EVIDENCIAR ISSO?
-- SE SIM, COMO?
--->
-Make sure you have input and output BigQuery table available with correct data (and corresponding DLP template).
 
-To deploy a dataflow flex job you must specify this following inputs:
+We assume you are familiar with [Deploying a Pipeline]((https://cloud.google.com/dataflow/docs/guides/deploying-a-pipeline)) documentation.
 
-- Job Name
-- Template File Gcs Location
-- Input Bigquery Table
-- Output Bigquery Dataset
-- Deidentify Template Name
-- Dlp Project Id
-- Dlp Location
-- Confidential Data Project Id
-- Dlp Transform
-- Batch Size
-- Project Id
-- Staging Location
-- Dataflow Kms Key
-- Service Account Email
-- Subnetwork
-- Temporary Location
-- Region
+### VPC-SC
 
-Também informe os parametros que são dependentes do templete:
+The Secured Data Warehouse module provide a infrastructure that uses [VPC-SC](https://cloud.google.com/vpc-service-controls/docs/service-perimeters).
 
-- Output Bigquery Dataset
-- Deidentify Template Name
-- Dlp Project Id
-- Dlp Location
-- Confidential Data Project Id
-- Dlp Transform
-- Batch Size
-- Project Id
-- Staging Location
+Therefore, you must be sure that the identity deploying the Dataflow job is in the [access level](https://cloud.google.com/access-context-manager/docs/create-basic-access-level#members-example) of the perimeter. You can add it using the input `perimeter_additional_members` of the *Secured Data Warehouse Module*.
 
-Nesses exemplos estamos considerando o template deployado
+To use a private template repository outside of the perimeter, the identity deploying the Dataflow job must be in a egress rule that allow the Dataflow templates to be fetched. In the *Secured Data Warehouse Module* you configure it using the correct list indicated below.
 
-<!-- TODO: COMO MONSTRAR A EQUIVALENCIA DOS OUTPUTS DO MODULO -->
+- For the **confidential perimeter**, the identity needs to be added in the input `confidential_data_dataflow_deployer_identities` of the *Secured Data Warehouse Module*.
+- For the **data ingestion perimeter**, the identity needs to be added in the input `data_ingestion_dataflow_deployer_identities` of the *Secured Data Warehouse Module*.
 
-For more details about Dataflow Jobs deploys see [Deploying a Pipeline]((https://cloud.google.com/dataflow/docs/guides/deploying-a-pipeline)) documentation.
+### Pipeline requirements
+
+<!-- Ensured that the additional apis that your pipeline need are able. -->
+The projects used in the *Secured Data Warehouse Module* must have some [apis enabled](../README.md#apis). Ensured that all the additional apis that your Dataflow pipeline need are enable too.
+
+<!-- Section to user study the template and APIS and required roles. -->
+
+### Opinionated Dataflow Flex Template Usage
+
+- Use the staging/temp bucket created by the main module
+- Use the appropriate Service Account provider by the main module
+- Use the appropriate kms key
 
 ### Deploying with Terraform
 
-Use the Dataflow Flex Job Template [submodule](../modules/dataflow-flex-job/README.md).
+Use the Dataflow Flex Job Template [submodule](../modules/dataflow-flex-job/README.md). See [Tutorial Standalone example](../examples/tutorial-standalone/README.md) for details.
 
 ### Deploying with GCP Console
 
-To deploy a dataflow flex job on the **GCP Console**, follow these steps:
+To deploy a Dataflow Job on the **GCP Console**, follow these steps in these documentation:
 
-1. [Log in](https://console.cloud.google.com/) to the Cloud Console.
-1. Select your Google Cloud project.
-1. Click the menu in the upper left corner.
-1. Navigate to the Big Data section and click Dataflow.
-1. Click the button named *Create Job From Template*, in the right side of the title of this page.
-1. In the *Create job from a template* [page](https://console.cloud.google.com/dataflow/createjob)
-<!--  TODO: COMO CONTINUAR? -->
+- [Classic Template](https://cloud.google.com/dataflow/docs/guides/templates/provided-streaming#text-files-on-cloud-storage-to-bigquery-stream).
+- [Flex Template](https://cloud.google.com/dataflow/docs/guides/templates/using-flex-templates#java_2).
 
 ### Deploying with Gcloud Command
 
-<!--
-TODO: ONDE ENCAIXAR ESSA DOCUMENTAÇÃO?
-https://cloud.google.com/sdk/gcloud/reference/dataflow/jobs/run
--->
+**Flex Template**
 
 You can run the following commands to create a **Java** Dataflow Flex Job using the **Gcloud Command**:
 
 ```sh
 
-export JOB_NAME=<JOB_NAME>
-export TEMPLATE_FILE_GCS_LOCATION=<TEMPLATE_FILE_GCS_LOCATION>
-export INPUT_BIGQUERY_TABLE=<INPUT_BIGQUERY_TABLE>
-export OUTPUT_BIGQUERY_DATASET=<OUTPUT_BIGQUERY_DATASET>
-export DEIDENTIFY_TEMPLATE_NAME=<DEIDENTIFY_TEMPLATE_NAME>
-export DLP_PROJECT_ID=<DLP_PROJECT_ID>
-export DLP_LOCATION=<DLP_LOCATION>
-export CONFIDENTIAL_DATA_PROJECT_ID=<CONFIDENTIAL_DATA_PROJECT_ID>
-export DLP_TRANSFORM=<DLP_TRANSFORM>
-export BATCH_SIZE=<BATCH_SIZE>
 export PROJECT_ID=<PROJECT_ID>
-export STAGING_LOCATION=<STAGING_LOCATION>
+export DATAFLOW_BUCKET=<DATAFLOW_BUCKET>
 export DATAFLOW_KMS_KEY=<DATAFLOW_KMS_KEY>
 export SERVICE_ACCOUNT_EMAIL=<SERVICE_ACCOUNT_EMAIL>
 export SUBNETWORK=<SUBNETWORK>
-export TEMP_LOCATION=<TEMP_LOCATION>
-export REGION=<REGION>
 
-gcloud dataflow flex-template run "${JOB_NAME}" \
-    --template-file-gcs-location="${TEMPLATE_FILE_GCS_LOCATION}" \
-    --parameters inputBigQueryTable="${INPUT_BIGQUERY_TABLE}" \
-    --parameters outputBigQueryDataset="${OUTPUT_BIGQUERY_DATASET}" \
-    --parameters deidentifyTemplateName="${DEIDENTIFY_TEMPLATE_NAME}" \
-    --parameters dlpProjectId="${DLP_PROJECT_ID}" \
-    --parameters dlpLocation="${DLP_LOCATION}" \
-    --parameters confidentialDataProjectId="${CONFIDENTIAL_DATA_PROJECT_ID}" \
-    --parameters dlpTransform="${DLP_TRANSFORM}" \
-    --parameters batchSize="${BATCH_SIZE}" \
+gcloud dataflow flex-template run "TEMPLATE_NAME`date +%Y%m%d-%H%M%S`" \
+    --template-file-gcs-location="TEMPLATE_NAME_LOCATION" \
     --project="${PROJECT_ID}" \
-    --staging-location="${STAGING_LOCATION}" \
+    --staging-location="${DATAFLOW_BUCKET}/staging/" \
+    --temp-location="${DATAFLOW_BUCKET}/tmp/" \
     --dataflow-kms-key="${DATAFLOW_KMS_KEY}" \
     --service-account-email="${SERVICE_ACCOUNT_EMAIL}" \
     --subnetwork="${SUBNETWORK}" \
-    --temp-location="${TEMP_LOCATION}" \
-    --region="${REGION}" \
+    --region="us-east4" \
     --disable-public-ips \
     --enable-streaming-engine
 
 ```
 
 For more details about gcloud dataflow flex-template command see the command [documentation](https://cloud.google.com/sdk/gcloud/reference/dataflow/flex-template/run).
+
+**Classic Template**
+
+You can run the following commands to create a **Java** Dataflow Flex Job using the **Gcloud Command**:
+
+```sh
+
+COMMAND
+
+```
+
+For more details about gcloud dataflow ***** command see the command [documentation](https://cloud.google.com/sdk/gcloud/reference/dataflow/jobs/run).
