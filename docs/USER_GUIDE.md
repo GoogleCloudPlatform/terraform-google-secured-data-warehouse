@@ -2,76 +2,82 @@
 
 ## Deploy Dataflow Jobs in the Secured Data Warehouse
 
-We assume you are familiar with [Deploying a Pipeline]((https://cloud.google.com/dataflow/docs/guides/deploying-a-pipeline)) documentation.
+We assume you are familiar with [Deploying a Pipeline](https://cloud.google.com/dataflow/docs/guides/deploying-a-pipeline).
 
-### VPC-SC
+### VPC Service Controls
 
-The Secured Data Warehouse module provide a infrastructure that uses [VPC-SC](https://cloud.google.com/vpc-service-controls/docs/service-perimeters).
+The Secured Data Warehouse module provide a infrastructure that uses [VPC Service Controls](https://cloud.google.com/vpc-service-controls/docs/service-perimeters).
 
-Therefore, you must be sure that the identity deploying the Dataflow job is in the [access level](https://cloud.google.com/access-context-manager/docs/create-basic-access-level#members-example) of the perimeter. You can add it using the input `perimeter_additional_members` of the *Secured Data Warehouse Module*.
+The identity deploying the Dataflow job must be in the [access level](https://cloud.google.com/access-context-manager/docs/create-basic-access-level#members-example) of the perimeter. You can add it using the input `perimeter_additional_members` of the *Secured Data Warehouse Module*.
 
-To use a private template repository outside of the perimeter, the identity deploying the Dataflow job must be in a egress rule that allow the Dataflow templates to be fetched. In the *Secured Data Warehouse Module* you configure it using the correct list indicated below.
+To use a private template repository outside of the perimeter, the identity deploying the Dataflow job must be in a egress rule that allow the Dataflow templates to be fetched. In the *Secured Data Warehouse Module* you configure it using the appropriated list below.
 
 - For the **confidential perimeter**, the identity needs to be added in the input `confidential_data_dataflow_deployer_identities` of the *Secured Data Warehouse Module*.
 - For the **data ingestion perimeter**, the identity needs to be added in the input `data_ingestion_dataflow_deployer_identities` of the *Secured Data Warehouse Module*.
 
 ### Pipeline requirements
 
-After deploy the *Secured Data Warehouse Module* you will have this following scenario:
+All the required APIs to deploy the module had to be enabled. See the list of [APIs](../README.md#apis) in the README file.
+ Ensured that all the additional APIs your Dataflow pipeline needs are enabled too.
 
-- The projects used have the required *Secured Data Warehouse Module* [apis enabled](../README.md#apis).
-- Dataflow Controller Service Accounts created:
-  - Data ingestion Dataflow Controller Service Account:
-    - Data ingestion project:
-      - Dataflow Worker: `roles/dataflow.worker`
-      - Pub/Sub Editor: `roles/pubsub.editor`
-      - Pub/Sub Subscriber: `roles/pubsub.subscriber`
-      - Storage Object Viewer: `roles/storage.objectViewer`
-    - Governance project:
-      - DLP De-identify Templates Reader: `roles/dlp.deidentifyTemplatesReader`
-      - DLP Inspect Templates Reader: `roles/dlp.inspectTemplatesReader`
-      - DLP User: `roles/dlp.user`
-    - Non-confidential project:
-      - BigQuery Data Editor: `roles/bigquery.dataEditor`
-      - BigQuery Job User: `roles/bigquery.jobUser`
-  - Confidential Data Dataflow Controller Service Account:
-    - Confidential project:
-      - BigQuery Data Editor: `roles/bigquery.dataEditor`
-      - BigQuery Job User: `roles/bigquery.jobUser`
-      - Dataflow Worker: `roles/dataflow.worker`
-      - Service Usage Consumer: `roles/serviceusage.serviceUsageConsumer`
-      - Storage Object Admin: `roles/storage.objectAdmin`
-    - Governance project:
-      - DLP De-identify Templates Reader: `roles/dlp.deidentifyTemplatesReader`
-      - DLP Inspect Templates Reader: `roles/dlp.inspectTemplatesReader`
-      - DLP User: `roles/dlp.user`
-    - Non-confidential project:
-      - BigQuery Data Viewer: `roles/bigquery.dataViewer`
+Also make sure that the two Dataflow Controller Service Accounts created by the module have all the roles needed to run the Dataflow Pipeline.
 
-Ensured that all the additional APIs your Dataflow pipeline needs are enable.
-Also make sure your Dataflow Controller Service Account have all the roles needed to run the Dataflow Pipeline.
+Current roles associated with the Services Accounts:
+
+**Data ingestion Dataflow Controller Service Account:**
+
+- Data ingestion project:
+  - Dataflow Worker: `roles/dataflow.worker`
+  - Pub/Sub Editor: `roles/pubsub.editor`
+  - Pub/Sub Subscriber: `roles/pubsub.subscriber`
+  - Storage Object Viewer: `roles/storage.objectViewer`
+- Governance project:
+  - DLP De-identify Templates Reader: `roles/dlp.deidentifyTemplatesReader`
+  - DLP Inspect Templates Reader: `roles/dlp.inspectTemplatesReader`
+  - DLP User: `roles/dlp.user`
+- Non-confidential project:
+  - BigQuery Data Editor: `roles/bigquery.dataEditor`
+  - BigQuery Job User: `roles/bigquery.jobUser`
+
+**Confidential Data Dataflow Controller Service Account:**
+
+- Confidential project:
+  - BigQuery Data Editor: `roles/bigquery.dataEditor`
+  - BigQuery Job User: `roles/bigquery.jobUser`
+  - Dataflow Worker: `roles/dataflow.worker`
+  - Service Usage Consumer: `roles/serviceusage.serviceUsageConsumer`
+  - Storage Object Admin: `roles/storage.objectAdmin`
+- Governance project:
+  - DLP De-identify Templates Reader: `roles/dlp.deidentifyTemplatesReader`
+  - DLP Inspect Templates Reader: `roles/dlp.inspectTemplatesReader`
+  - DLP User: `roles/dlp.user`
+- Non-confidential project:
+  - BigQuery Data Viewer: `roles/bigquery.dataViewer`
 
 ### Opinionated Dataflow Flex Template Usage
 
-The following outputs provided by the *Secured Data Warehouse Module*, must be used as Dataflow Job input:
+The following outputs provided by the *Secured Data Warehouse Module*, must be used as inputs to a new Dataflow Job:
 
-- Use the staging/temp bucket created by the main module.
-  - Data ingestion project:
-    - Module output: `data_ingestion_dataflow_bucket_name`.
-  - Confidential Data project:
-    - Module output: `confidential_data_dataflow_bucket_name`.
-- Use the appropriate Service Account provider by the main module. <!-- Use the appropriate Service Account provider as Dataflow Controller Service Account. >
-  - Data ingestion project:
-    - Module output: `dataflow_controller_service_account_email`.
-    - Email format: `sa-dataflow-controller@<DATA-INGESTION-PROJECT-ID>.iam.gserviceaccount.com`.
-  - Confidential Data project:
-    - Module output: `confidential_dataflow_controller_service_account_email`.
-    - Email format: `sa-dataflow-controller-reid@<CONFIDENTIAL-DATA-PROJECT-ID>.iam.gserviceaccount.com`.
-- Use the appropriate kms key.
-  - Data ingestion project:
-    - Module output: `cmek_data_ingestion_crypto_key`
-  - Confidential project:
-    - Module output: `cmek_reidentification_crypto_key`
+#### Staging/Temp Bucket
+
+Use the appropriated [output](../README.md#outputs) of the main module as the [temp location](https://cloud.google.com/dataflow/docs/guides/setting-pipeline-options#setting_required_options) bucket:
+
+- Data ingestion project: `data_ingestion_dataflow_bucket_name`.
+- Confidential Data project: `confidential_data_dataflow_bucket_name`.
+
+#### Dataflow Worker Service Account
+
+Use the appropriated [output](../README.md#outputs) of the main module as the [Dataflow Controller Service Account](https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_worker_service_account):
+
+- Data ingestion project: `dataflow_controller_service_account_email`.
+- Confidential Data project: `confidential_dataflow_controller_service_account_email`.
+
+#### Customer Managed Encryption Key
+
+Use the appropriated [output](../README.md#outputs) of the main module as the [Dataflow KMS Key](https://cloud.google.com/dataflow/docs/guides/customer-managed-encryption-keys):
+
+- Data ingestion project: `cmek_data_ingestion_crypto_key`
+- Confidential project: `cmek_reidentification_crypto_key`
 
 ### Deploying with Terraform
 
@@ -79,16 +85,44 @@ Use the Dataflow Flex Job Template [submodule](../modules/dataflow-flex-job/READ
 
 ### Deploying with GCP Console
 
-To deploy a Dataflow Job on the **GCP Console**, follow these steps in these documentation:
+To deploy a Dataflow Job on the **GCP Console** in the *Secured Data Warehouse*, follow
+these instructions:
 
-- [Classic Template](https://cloud.google.com/dataflow/docs/guides/templates/provided-streaming#text-files-on-cloud-storage-to-bigquery-stream).
-- [Flex Template](https://cloud.google.com/dataflow/docs/guides/templates/using-flex-templates#java_2).
+#### Classic Template
 
-### Deploying with Gcloud Command
+When deploying a Classic Template provide values for these optional parameters:
 
-**Flex Template**
+- Set **Worker IP Address Configuration** to `Private` to [Disabled Public IPs](https://cloud.google.com/dataflow/docs/guides/specifying-networks#public_ip_parameter).
+- Check the [Enable Streaming Engine](https://cloud.google.com/dataflow/docs/guides/deploying-a-pipeline#streaming-engine) option.
+- Use the [storage bucket](#stagingtemp-bucket) created as the **Temporary location**.
+- Use the [Dataflow KMS Key](#customer-managed-encryption-key) created as the **custom-managed encryption key (CMEK)**.
+- Use the [Dataflow Worker Service Account](#dataflow-worker-service-account) created as the **service account email**.
+- Provide your [subnetwork](https://cloud.google.com/dataflow/docs/guides/specifying-networks#specifying_a_network_and_a_subnetwork) as the **subnetwork**.
 
-You can run the following commands to create a **Java** Dataflow Flex Job using the **Gcloud Command**:
+See the [official documentation](https://cloud.google.com/dataflow/docs/guides/templates/provided-streaming#text-files-on-cloud-storage-to-bigquery-stream) on how to deploy a Classic Template.
+
+#### Flex Template
+
+When deploying a Flex Template provide values for these optional parameters:
+
+- Set **Use Public Ips** to `false` to [Disabled Public IPs](https://cloud.google.com/dataflow/docs/guides/specifying-networks#public_ip_parameter).
+- Set [Enable Streaming Engine](https://cloud.google.com/dataflow/docs/guides/deploying-a-pipeline#streaming-engine) to `true`.
+- Use the [storage bucket](#stagingtemp-bucket) created as the **Temp location**.
+- Use the [Dataflow KMS Key](#customer-managed-encryption-key) created as the **Dataflow KMS Key**.
+- Use the [Dataflow Worker Service Account](#dataflow-worker-service-account) created as the **service account email**.
+- Provide your [subnetwork](https://cloud.google.com/dataflow/docs/guides/specifying-networks#specifying_a_network_and_a_subnetwork) as the **subnetwork**.
+
+See the [official documentation](https://cloud.google.com/dataflow/docs/guides/templates/using-flex-templates#java_2) on how to deploy a Flex Template.
+
+----------------------
+
+# WORK IN PROGRESS:
+
+### Deploying with `gcloud` Command
+
+**Flex Template** https://cloud.google.com/dataflow/docs/guides/templates/using-flex-templates
+
+You can run the following commands to create a **Java** Dataflow Flex Job using the **gcloud command**:
 
 ```sh
 
@@ -114,7 +148,7 @@ gcloud dataflow flex-template run "TEMPLATE_NAME`date +%Y%m%d-%H%M%S`" \
 
 For more details about `gcloud dataflow flex-template` see the command [documentation](https://cloud.google.com/sdk/gcloud/reference/dataflow/flex-template/run).
 
-**Classic Template**
+**Classic Template** https://cloud.google.com/dataflow/docs/guides/templates/running-templates#using-gcloud
 
 *********:
 
