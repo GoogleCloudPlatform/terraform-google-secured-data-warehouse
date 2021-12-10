@@ -1,39 +1,42 @@
 # Batch Dataflow with DLP de-identification
 
-This example illustrates how to run a public Batch Dataflow job, [Cloud Storage Text to BigQuery](https://cloud.google.com/dataflow/docs/guides/templates/provided-batch#gcstexttobigquery), with The [Secured data warehouse](../../README.md).
+This example illustrates how to run a public Batch Dataflow job, [Cloud Storage Text to BigQuery](https://cloud.google.com/dataflow/docs/guides/templates/provided-batch#gcstexttobigquery)
+with Google Cloud Scheduler [job](https://cloud.google.com/scheduler/docs/creating#creating_jobs) in the [Secured data warehouse](../../README.md) infrastructure.
 
 It uses:
 
-- The [Secured data warehouse](../../README.md) module to create the Secured data warehouse infrastructure,
-- The public Google provided Dataflow template [Cloud Storage Text to BigQuery](https://cloud.google.com/dataflow/docs/guides/templates/provided-batch#cloud-storage-text-to-bigquery)
-- A Google Cloud Scheduler [job](https://cloud.google.com/scheduler/docs/creating#creating_jobs)
+- The [Secured data warehouse](../../README.md) module to create the Secured data warehouse infrastructure.
+- The public Google provided Dataflow template [Cloud Storage Text to BigQuery](https://cloud.google.com/dataflow/docs/guides/templates/provided-batch#cloud-storage-text-to-bigquery).
+- A Google Cloud Scheduler [job](https://cloud.google.com/scheduler/docs/creating#creating_jobs).
 
 ## Requirements
 
-1. A project previously created, with [Google App Engine Application Enabled](https://cloud.google.com/scheduler/docs/quickstart#create_a_project_with_an_app_engine_app).
-1. A network and subnetwork in the data ingestion project [configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access).
+1. The [Secured data warehouse](../../README.md#requirements) module requirements to create the Secured data warehouse infrastructure.
+1. The Data Ingestion project must have [Google App Engine Application app](https://cloud.google.com/scheduler/docs/quickstart#create_a_project_with_an_app_engine_app) created.
+1. A network and subnetwork in the data ingestion project [configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access)
+configure with the firewall rules and DNS configurations described below.
 
 ### Firewall rules
 
-- All the egress should be denied
-- Allow only Restricted API Egress by TPC at 443 port
-- Allow only Private API Egress by TPC at 443 port
-- Allow ingress Dataflow workers by TPC at ports 12345 and 12346
-- Allow egress Dataflow workers by TPC at ports 12345 and 12346
+- [All the egress should be denied](https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity#configure-firewall).
+- [Allow only Restricted API Egress by TPC at 443 port](https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity#configure-firewall).
+- [Allow only Private API Egress by TPC at 443 port](https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity#configure-firewall).
+- [Allow ingress Dataflow workers by TPC at ports 12345 and 12346](https://cloud.google.com/dataflow/docs/guides/routes-firewall#example_firewall_ingress_rule).
+- [Allow egress Dataflow workers by TPC at ports 12345 and 12346](https://cloud.google.com/dataflow/docs/guides/routes-firewall#example_firewall_egress_rule).
 
 ### DNS configurations
 
-- Restricted Google APIs
-- Private Google APIs
-- Restricted gcr.io
-- Restricted Artifact Registry
+- [Restricted Google APIs](https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity#configure-routes).
+- [Private Google APIs](https://cloud.google.com/vpc/docs/configure-private-google-access).
+- [Restricted gcr.io](https://cloud.google.com/vpc-service-controls/docs/set-up-gke#configure-dns).
+- [Restricted Artifact Registry](https://cloud.google.com/vpc-service-controls/docs/set-up-gke#configure-dns).
 
 ## Generate sample credit card .csv file
 
-This examples uses a [csv file with sample data](../assets/cc_10000_records.csv) as input for the dataflow job.
-You can create new files with different sizes using the [sample-cc-generator](helpers/sample-cc-generator/README.md) helper.
-This new file must be placed in the [assets folder](../assets)
-You need to change value of the local `cc_file_name` in the [main.tf](./main.tf#L28) file to use the new sample file:
+This examples uses a [csv file with sample data](./assets/cc_10000_records.csv) as input for the dataflow job.
+You can create new files with different sizes using the [sample-cc-generator](../../helpers/sample-cc-generator/README.md) helper.
+This new file must be placed in the [assets folder](./assets)
+You need to change value of the local `cc_file_name` in the [main.tf](./main.tf#L23) file to use the new sample file:
 
 ```hcl
 locals {
@@ -44,8 +47,9 @@ locals {
 
 ## Scheduler Service Account
 
-This exemple uses the service account created by [Secured data warehouse](../../README.md) to run [Cloud Scheduler
-job](https://cloud.google.com/scheduler/docs/creating#creating_jobs) to create a [Dataflow Batch pipeline](https://cloud.google.com/dataflow/docs/guides/templates/provided-batch#cloud-storage-text-to-bigquery).
+This example uses the service account created by [Secured data warehouse](../../README.md#outputs) to run [Cloud Scheduler
+job](https://cloud.google.com/scheduler/docs/creating#creating_jobs) to create a
+[Dataflow Batch pipeline](https://cloud.google.com/dataflow/docs/guides/templates/provided-batch#cloud-storage-text-to-bigquery).
 
 This service account is needed by Cloud Scheduler to run an HTTP request to create a new Batch Dataflow job in a schedulable way,
 since the Batch Dataflow job ends when the pipeline finishes .
