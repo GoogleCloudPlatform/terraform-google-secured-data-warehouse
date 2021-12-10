@@ -96,7 +96,7 @@ locals {
 
 This example creates a Data Catalog taxonomy to enable [BigQuery column-level access controls](https://cloud.google.com/bigquery/docs/column-level-security-intro).
 
-The taxonomy has three level: Confidential, Private, and Sensitive and access to a higher level grants also access to the lower levels
+The taxonomy has three level: **Confidential**, **Private**, and **Sensitive** and access to a higher level grants also access to the lower levels
 
 - **3_Confidential:** Most sensitive data classification. Significant damage to enterprise.
   - CREDIT_CARD_NUMBER.
@@ -107,6 +107,9 @@ The taxonomy has three level: Confidential, Private, and Sensitive and access to
     - CARD_EXPIRY_DATE.
     - **1_Sensitive:** Data not meant to be public.
       - CREDIT_LIMIT.
+
+No user has access to read this data protected with column-level security.
+If they need access, the  [Fine-Grained Reader](https://cloud.google.com/bigquery/docs/column-level-security#fine_grained_reader) role needs to be added to the appropriate user or group.
 
 ## Requirements
 
