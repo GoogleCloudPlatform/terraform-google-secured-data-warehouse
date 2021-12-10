@@ -29,7 +29,9 @@ with the following IAM roles:
 
 The following APIs must be enabled in the project where the service account was created:
 
+- BigQuery API: `bigquery.googleapis.com`.
 - Cloud Key Management Service (KMS) API: `cloudkms.googleapis.com`.
+- Google Cloud Storage JSON API:`storage-api.googleapis.com`.
 - Compute Engine API: `compute.googleapis.com`.
 - Dataflow API: `dataflow.googleapis.com`.
 
