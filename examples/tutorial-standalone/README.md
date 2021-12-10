@@ -2,44 +2,44 @@
 
 This examples deploys the Secured data warehouse blueprint and the required infrastructure needed to deploy it.
 
-The required infrastructure includes:
+The required infrastructure created in this example includes:
 
-- Projects
-  - Data Ingestion project
-  - Non-confidential Data project
-  - Data Governance project
-  - Confidential Data project
-  - External Artifact Registry project
-- Artifact Registry
-  - Docker Artifact registry
-- Dataflow Templates
-  - Java Cloud storage to Bigquery dlp de-identification Dataflow flex template
-  - Java Bigquery to Bigquery dlp re-identification Dataflow flex template
-- Networks
-  - Data Ingestion Network
-    - VPC with one subnetwork
-    - Firewall rules
-    - DNS configuration for Google private access
-  - Confidential Data Network
-    - VPC with one subnetwork
-    - Firewall rules
-    - DNS configuration for Google private access
-- Logging
-  - Log Sinks in all projects
-  - Logging bucket in the data governance project
-- Cloud KMS
-  - A Cloud KMS Keyring
-  - A Cloud KMS key
-  - A traffic encryption key for DLP Templates
+- GCP Projects:
+  - Data Ingestion project.
+  - Non-confidential Data project.
+  - Data Governance project.
+  - Confidential Data project.
+  - External Artifact Registry project.
+- Artifact Registry:
+  - Docker Artifact registry.
+- Dataflow Templates:
+  - Java Cloud storage to Bigquery dlp de-identification Dataflow flex template.
+  - Java Bigquery to Bigquery dlp re-identification Dataflow flex template.
+- Networks:
+  - Data Ingestion Network:
+    - VPC with one subnetwork.
+    - Firewall rules.
+    - DNS configuration for Google private access.
+  - Confidential Data Network:
+    - VPC with one subnetwork.
+    - Firewall rules.
+    - DNS configuration for Google private access.
+- Logging:
+  - Log Sinks in all projects.
+  - Logging bucket in the data governance project.
+- Cloud KMS:
+  - A Cloud KMS Keyring.
+  - A Cloud KMS key.
+  - A traffic encryption key for DLP Templates.
 
-This example will be deployed at the `us-east4` location, to deploy in another location change the local `location` in example [main.tf](./main.tf#L18) file.
+This example will be deployed at the `us-east4` location, to deploy in another location, change the local `location` in the example [main.tf](./main.tf#L18) file.
 
 ## Usage
 
 - Copy `tfvars` by running `cp terraform.example.tfvars terraform.tfvars` and update `terraform.tfvars` with values from your environment.
-- Run `terraform init`
+- Run `terraform init`.
 - Run `terraform plan` and review the plan.
-- Run `terraform apply`
+- Run `terraform apply`.
 
 ### Clean up
 
@@ -47,37 +47,50 @@ This example will be deployed at the `us-east4` location, to deploy in another l
 
 ### Perimeter members list
 
-To be able to see the resources protected the the VPC Service Controls Perimeters in the Google Cloud Console
+To be able to see the resources protected by the VPC Service Controls [Perimeters](https://cloud.google.com/vpc-service-controls/docs/service-perimeters) in the Google Cloud Console
 you need to add your user in the variable `perimeter_additional_members` in the `terraform.tfvars` file.
 
 ### Sample data
 
-The sample data use in this example is a csv file with fake credit card data.
-For this example the input file has 10k records.
+The sample data used in this example is a [csv file](./assets/cc_10000_records.csv) with fake credit card data.
+For this example, the input file has 10k records.
 
 Each record has these values:
 
-- Card Type Code
-- Card Type Full Name
-- Issuing Bank
-- Card Number
-- Card Holder's Name
-- CVV/CVV2
-- Issue Date
-- Expiry Date
-- Billing Date
-- Card PIN
-- Credit Limit
+- Card Type Code.
+- Card Type Full Name.
+- Issuing Bank.
+- Card Number.
+- Card Holder's Name.
+- CVV/CVV2.
+- Issue Date.
+- Expiry Date.
+- Billing Date.
+- Card PIN.
+- Credit Limit.
 
 The de-identification Dataflow job will apply these DLP Crypto-based tokenization transformations to encrypt the data:
 
-- [Deterministic encryption](https://cloud.google.com/dlp/docs/transformations-reference#de) Transformation
-  - Card Number
-  - Card Holder's Name
-  - CVV/CVV2
-  - Expiry Date
-- [Cryptographic hashing](https://cloud.google.com/dlp/docs/transformations-reference#crypto-hashing) Transformation
-  - Card PIN
+- [Deterministic encryption](https://cloud.google.com/dlp/docs/transformations-reference#de) Transformation:
+  - Card Number.
+  - Card Holder's Name.
+  - CVV/CVV2.
+  - Expiry Date.
+- [Cryptographic hashing](https://cloud.google.com/dlp/docs/transformations-reference#crypto-hashing) Transformation:
+  - Card PIN.
+
+### Generate sample credit card .csv file
+
+You can create new csv files with different sizes using the [sample-cc-generator](../../helpers/sample-cc-generator/README.md) helper.
+This new file must be placed in the [assets folder](./assets)
+You need to change the value of the local `cc_file_name` in the [main.tf](./main.tf#L25) file to use the new sample file:
+
+```hcl
+locals {
+  ...
+  cc_file_name = "cc_10000_records.csv"
+  ...
+```
 
 ### Taxonomy used
 
@@ -86,14 +99,14 @@ This example creates a Data Catalog taxonomy to enable [BigQuery column-level ac
 The taxonomy has three level: Confidential, Private, and Sensitive and access to a higher level grants also access to the lower levels
 
 - **3_Confidential:** Most sensitive data classification. Significant damage to enterprise.
-  - CREDIT_CARD_NUMBER
-  - CARD_VERIFICATION_VALUE
+  - CREDIT_CARD_NUMBER.
+  - CARD_VERIFICATION_VALUE.
   - **2_Private:** Data meant to be private. Likely to cause damage to enterprise.
-    - PERSON_NAME
-    - CREDIT_CARD_PIN
-    - CARD_EXPIRY_DATE
+    - PERSON_NAME.
+    - CREDIT_CARD_PIN.
+    - CARD_EXPIRY_DATE.
     - **1_Sensitive:** Data not meant to be public.
-      - CREDIT_LIMIT
+      - CREDIT_LIMIT.
 
 ## Requirements
 
@@ -103,20 +116,22 @@ These sections describe requirements for running this example.
 
 Install the following dependencies:
 
-- [Google Cloud SDK](https://cloud.google.com/sdk/install) version 357.0.0 or later
-- [Terraform](https://www.terraform.io/downloads.html) version 0.13.7 or later
-- [curl](https://curl.haxx.se/)
+- [Google Cloud SDK](https://cloud.google.com/sdk/install) version 357.0.0 or later.
+- [Terraform](https://www.terraform.io/downloads.html) version 0.13.7 or later.
+- [curl](https://curl.haxx.se/) version 7.68.0 or later.
 
 ### Service Account
 
-To provision the resources of this module, create a service account
-with the following IAM roles:
+To provision the resources of this example, create a privileged service account,
+where the service account key cannot be created.
+In addition, consider using Cloud Monitoring to alert on this service account's activity.
+Grant the following roles to the service account.
 
-- Organization level
+- Organization level:
   - Access Context Manager Admin: `roles/accesscontextmanager.policyAdmin`
   - Billing Account User: `roles/billing.user`
   - Organization Policy Administrator: `roles/orgpolicy.policyAdmin`
-- Folder Level
+- Folder Level:
   - Compute Network Admin: `roles/compute.networkAdmin`
   - Logging Admin: `roles/logging.admin`
   - Project Creator: `roles/resourcemanager.projectCreator`
@@ -126,6 +141,8 @@ with the following IAM roles:
 
 As an alternative to granting the service account the `Billing Account User` role in organization,
 it is possible to grant it [directly in the billing account](https://cloud.google.com/billing/docs/how-to/billing-access#update-cloud-billing-permissions).
+
+You can run the following `gcloud` command to assign `Billing Account User` role to the service account.
 
 ```sh
 export SA_EMAIL=<YOUR-SA-EMAIL>
@@ -208,7 +225,7 @@ The following APIs must be enabled in the project where the service account was 
 - Identity and Access Management (IAM) API: `iam.googleapis.com`
 - BigQuery API: `bigquery.googleapis.com`
 
-You can run the gcloud command to enable these APIs in the service account project
+You can run the following `gcloud` command to enable these APIs in the service account project.
 
 ```sh
 export PROJECT_ID=<SA-PROJECT-ID>
@@ -226,20 +243,6 @@ compute.googleapis.com \
 dataflow.googleapis.com \
 iam.googleapis.com \
 --project ${PROJECT_ID}
-```
-
-## Generate sample credit card .csv file
-
-This examples uses a [csv file with sample data](../assets/cc_10000_records.csv) as input for the dataflow job.
-You can create new files with different sizes using the [sample-cc-generator](helpers/sample-cc-generator/README.md) helper.
-This new file must be placed in the [assets folder](../assets)
-You need to change value of the local `cc_file_name` in the [main.tf](./main.tf#L28) file to use the new sample file:
-
-```hcl
-locals {
-  ...
-  cc_file_name = "cc_10000_records.csv"
-  ...
 ```
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
