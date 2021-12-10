@@ -6,16 +6,17 @@ It uses:
 
 - The [Secured data warehouse](../../README.md) module to create the Secured data warehouse infrastructure,
 - The [de-identification template](../../modules/de-identification-template/README.md) submodule to create the regional structured DLP template,
-- A Dataflow flex template to deploy the de-identification job.
+- The [Dataflow Flex Template Job](../../modules/dataflow-flex-job/README.md) submodule to deploy a Dataflow Python flex template de-identification job.
 
 ## Prerequisites
 
 1. The [Secured data warehouse](../../README.md#requirements) module requirements to create the Secured data warehouse infrastructure.
-1. A `crypto_key` and `wrapped_key` pair.  Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location used for the `location` variable. There is a helper python script in `helpers/wrapped-key` folder which generates a wrapped key.
+1. A `crypto_key` and `wrapped_key` pair.  Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location used for the `location` variable. There is a [Wrapped Key Helper](../../helpers/wrapped-key/README.md) python script which generates a wrapped key.
+1. The identity deploying the example must have permission to grant roles "roles/cloudkms.cryptoKeyDecrypter" and "roles/cloudkms.cryptoKeyEncrypter" in the KMS `crypto_key`. It will be granted to the Data ingestion Dataflow worker service account created by the Secured Data Warehouse module.
 1. An Existing GCP Project.
 1. A pre-build Python Regional DLP De-identification flex template. See [Flex templates](../../flex-templates/README.md).
 1. The identity deploying the example must have permissions to grant role "roles/artifactregistry.reader" in the docker and python repos of the Flex templates.
-1. A network and subnetwork in the data ingestion project [configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access).
+1. A network and subnetwork in the Data Ingestion project [configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access).
 
 ### Firewall rules
 
@@ -27,10 +28,10 @@ It uses:
 
 ### DNS configurations
 
-- Restricted Google APIs
-- Private Google APIs
-- Restricted gcr.io
-- Restricted Artifact Registry
+- [Restricted Google APIs](https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity#configure-routes).
+- [Private Google APIs](https://cloud.google.com/vpc/docs/configure-private-google-access).
+- [Restricted gcr.io](https://cloud.google.com/vpc-service-controls/docs/set-up-gke#configure-dns).
+- [Restricted Artifact Registry](https://cloud.google.com/vpc-service-controls/docs/set-up-gke#configure-dns).
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
@@ -49,7 +50,6 @@ It uses:
 | flex\_template\_gs\_path | The Google Cloud Storage gs path to the JSON file built flex template that supports DLP de-identification. | `string` | `""` | no |
 | location | The location of Artifact registry. Run `gcloud artifacts locations list` to list available locations. | `string` | `"us-east4"` | no |
 | network\_administrator\_group | Google Cloud IAM group that reviews network configuration. Typically, this includes members of the networking team. | `string` | n/a | yes |
-| network\_self\_link | The URI of the network where Dataflow is going to be deployed. | `string` | n/a | yes |
 | non\_confidential\_data\_project\_id | The ID of the project in which the Bigquery will be created. | `string` | n/a | yes |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | perimeter\_additional\_members | The list of all members to be added on perimeter access, except the service accounts created by this module. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | n/a | yes |
