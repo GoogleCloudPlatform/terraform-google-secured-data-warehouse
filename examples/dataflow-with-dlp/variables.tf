@@ -70,11 +70,6 @@ variable "access_context_manager_policy_id" {
   default     = ""
 }
 
-variable "network_self_link" {
-  description = "The URI of the network where Dataflow is going to be deployed."
-  type        = string
-}
-
 variable "subnetwork_self_link" {
   description = "The URI of the subnetwork where Dataflow is going to be deployed."
   type        = string

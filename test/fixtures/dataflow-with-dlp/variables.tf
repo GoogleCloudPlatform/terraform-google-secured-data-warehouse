@@ -54,11 +54,6 @@ variable "sdx_project_number" {
   type        = string
 }
 
-variable "data_ingestion_network_self_link" {
-  description = "The URI of the network where Dataflow is going to be deployed."
-  type        = list(string)
-}
-
 variable "data_ingestion_subnets_self_link" {
   description = "The URI of the subnetwork where Dataflow is going to be deployed."
   type        = list(string)

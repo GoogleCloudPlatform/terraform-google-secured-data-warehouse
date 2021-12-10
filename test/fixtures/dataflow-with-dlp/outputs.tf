@@ -25,11 +25,6 @@ output "df_job_controller_service_account" {
   value       = module.dataflow_with_dlp.controller_service_account
 }
 
-output "df_job_network" {
-  description = "The name of the network used for create Dataflow job."
-  value       = module.dataflow_with_dlp.df_job_network
-}
-
 output "df_job_subnetwork" {
   description = "The name of the subnetwork used for create Dataflow job."
   value       = module.dataflow_with_dlp.df_job_subnetwork
