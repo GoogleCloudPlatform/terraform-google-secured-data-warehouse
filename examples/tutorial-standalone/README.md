@@ -134,6 +134,7 @@ Grant the following roles to the service account.
   - Access Context Manager Admin: `roles/accesscontextmanager.policyAdmin`
   - Billing Account User: `roles/billing.user`
   - Organization Policy Administrator: `roles/orgpolicy.policyAdmin`
+  - Organization Administrator: `roles/resourcemanager.organizationAdmin`
 - Folder Level:
   - Compute Network Admin: `roles/compute.networkAdmin`
   - Logging Admin: `roles/logging.admin`
