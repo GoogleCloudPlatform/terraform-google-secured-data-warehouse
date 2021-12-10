@@ -12,7 +12,7 @@ It uses:
 
 1. The [Secured data warehouse](../../README.md#requirements) module requirements to create the Secured data warehouse infrastructure.
 1. A `crypto_key` and `wrapped_key` pair.  Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location used for the `location` variable. There is a helper python script in `helpers/wrapped-key` folder which generates a wrapped key.
-1. An Existing GCP Project
+1. An Existing GCP Project.
 1. A pre-build Python Regional DLP De-identification flex template. See [Flex templates](../../flex-templates/README.md).
 1. The identity deploying the example must have permissions to grant role "roles/artifactregistry.reader" in the docker and python repos of the Flex templates.
 1. A network and subnetwork in the data ingestion project [configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access).
