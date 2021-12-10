@@ -135,7 +135,9 @@ Install the following dependencies:
 
 ### Security Groups
 
-The Secured Data Warehouse module grant to a set of security groups appropriated roles to perform standard tasks in the projects and the organization.
+Provide the following groups for separation of duty.
+Each group is granted roles to perform their tasks.
+Then, add users to the appropriate groups as needed.
 
 - **Data Engineer group**: Google Cloud IAM group that sets up and maintains the data pipeline and warehouse.
 - **Data Analyst group**: Google Cloud IAM group that analyzes the data in the warehouse.
@@ -143,7 +145,7 @@ The Secured Data Warehouse module grant to a set of security groups appropriated
 - **Network Administrator group**: Google Cloud IAM group that reviews network configuration. Typically, this includes members of the networking team.
 - **Security Administrator group**: Google Cloud IAM group that administers security configurations in the organization(org policies, KMS, VPC service perimeter).
 
-Groups can be created in the Google [Workspace Admin Console](https://support.google.com/a/answer/9400082?hl=en) or in the Google [Cloud Console](https://cloud.google.com/iam/docs/groups-in-cloud-console).
+Groups can be created in the Google [Workspace Admin Console](https://support.google.com/a/answer/9400082?hl=en), in the Google [Cloud Console](https://cloud.google.com/iam/docs/groups-in-cloud-console), and using gcloud identity [groups create](https://cloud.google.com/sdk/gcloud/reference/identity/groups/create).
 
 ### Service Account
 
