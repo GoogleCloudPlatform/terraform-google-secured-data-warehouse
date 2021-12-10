@@ -9,7 +9,7 @@ Before using this module, one should get familiar with the `google_dataflow_flex
 
 ## Requirements
 
-These sections describe requirements for running this example.
+These sections describe requirements for running this module.
 
 ### Software
 
