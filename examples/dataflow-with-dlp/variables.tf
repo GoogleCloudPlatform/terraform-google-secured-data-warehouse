@@ -66,12 +66,8 @@ variable "sdx_project_number" {
 
 variable "access_context_manager_policy_id" {
   description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
-  type        = number
-}
-
-variable "network_self_link" {
-  description = "The URI of the network where Dataflow is going to be deployed."
   type        = string
+  default     = ""
 }
 
 variable "subnetwork_self_link" {
@@ -94,4 +90,29 @@ variable "de_identify_template_gs_path" {
   description = "The Google Cloud Storage gs path to the JSON file built flex template that supports DLP de-identification."
   type        = string
   default     = ""
+}
+
+variable "security_administrator_group" {
+  description = "Google Cloud IAM group that administers security configurations in the organization(org policies, KMS, VPC service perimeter)."
+  type        = string
+}
+
+variable "network_administrator_group" {
+  description = "Google Cloud IAM group that reviews network configuration. Typically, this includes members of the networking team."
+  type        = string
+}
+
+variable "security_analyst_group" {
+  description = "Google Cloud IAM group that monitors and responds to security incidents."
+  type        = string
+}
+
+variable "data_analyst_group" {
+  description = "Google Cloud IAM group that analyzes the data in the warehouse."
+  type        = string
+}
+
+variable "data_engineer_group" {
+  description = "Google Cloud IAM group that sets up and maintains the data pipeline and warehouse."
+  type        = string
 }

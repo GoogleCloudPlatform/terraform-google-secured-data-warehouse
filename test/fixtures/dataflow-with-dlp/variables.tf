@@ -19,6 +19,11 @@ variable "org_id" {
   type        = string
 }
 
+variable "group_email" {
+  description = "The group that will be assigned permissions for testing."
+  type        = list(string)
+}
+
 variable "data_ingestion_project_id" {
   description = "The ID of the project in which the data ingestion resources will be created."
   type        = list(string)
@@ -47,11 +52,6 @@ variable "external_flex_template_project_id" {
 variable "sdx_project_number" {
   description = "The Project Number to configure Secure data exchange with egress rule for the dataflow templates."
   type        = string
-}
-
-variable "data_ingestion_network_self_link" {
-  description = "The URI of the network where Dataflow is going to be deployed."
-  type        = list(string)
 }
 
 variable "data_ingestion_subnets_self_link" {

@@ -16,16 +16,9 @@
 
 locals {
   suffix                         = var.common_suffix != "" ? var.common_suffix : random_id.suffix.hex
-  actual_policy                  = var.access_context_manager_policy_id != "" ? var.access_context_manager_policy_id : google_access_context_manager_access_policy.access_policy[0].name
   perimeter_name                 = "rp_dwh_${var.common_name}_${local.suffix}"
-  regular_service_perimeter_name = "accessPolicies/${local.actual_policy}/servicePerimeters/${local.perimeter_name}"
+  regular_service_perimeter_name = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
   access_policy_name             = "ac_dwh_${var.common_name}_${local.suffix}"
-}
-
-resource "google_access_context_manager_access_policy" "access_policy" {
-  count  = var.access_context_manager_policy_id != "" ? 0 : 1
-  parent = "organizations/${var.org_id}"
-  title  = "default policy"
 }
 
 resource "random_id" "suffix" {
@@ -39,7 +32,7 @@ data "google_project" "target_project" {
 module "access_level_policy" {
   source      = "terraform-google-modules/vpc-service-controls/google//modules/access_level"
   version     = "~> 3.0"
-  policy      = local.actual_policy
+  policy      = var.access_context_manager_policy_id
   name        = local.access_policy_name
   description = "policy with all available options to configure"
 
@@ -53,9 +46,9 @@ module "access_level_policy" {
 # because we need to set the  lifecycle of the resource.
 resource "google_access_context_manager_service_perimeter" "regular_service_perimeter" {
   provider       = google
-  parent         = "accessPolicies/${local.actual_policy}"
+  parent         = "accessPolicies/${var.access_context_manager_policy_id}"
   perimeter_type = "PERIMETER_TYPE_REGULAR"
-  name           = "accessPolicies/${local.actual_policy}/servicePerimeters/${local.perimeter_name}"
+  name           = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
   title          = local.perimeter_name
   description    = "perimeter for data warehouse projects"
 
@@ -66,7 +59,7 @@ resource "google_access_context_manager_service_perimeter" "regular_service_peri
   status {
     restricted_services = var.restricted_services
     access_levels = formatlist(
-      "accessPolicies/${local.actual_policy}/accessLevels/%s",
+      "accessPolicies/${var.access_context_manager_policy_id}/accessLevels/%s",
       [module.access_level_policy.name]
     )
 

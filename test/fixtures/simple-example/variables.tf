@@ -19,6 +19,11 @@ variable "org_id" {
   type        = string
 }
 
+variable "group_email" {
+  description = "The group that will be assigned permissions for testing."
+  type        = list(string)
+}
+
 variable "terraform_service_account" {
   description = "The email address of the service account that will run the Terraform code."
   type        = string

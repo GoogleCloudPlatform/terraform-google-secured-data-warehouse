@@ -19,11 +19,6 @@ output "project_id" {
   value       = var.data_ingestion_project_id
 }
 
-output "df_job_network" {
-  description = "The URI of the VPC being created."
-  value       = var.network_self_link
-}
-
 output "df_job_subnetwork" {
   description = "The name of the subnetwork used for create Dataflow job."
   value       = var.subnetwork_self_link
