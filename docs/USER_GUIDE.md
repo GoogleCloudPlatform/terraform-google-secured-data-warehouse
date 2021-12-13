@@ -1,3 +1,7 @@
+<!--I think this user guide is misleading. This doc is mainly for p -->
+<!-- This is an initial version of User Guide, we started adding the main pain point of usage,
+deploy Dataflow jobs, but it should not be only about it. This doc should also contains more tips about usage, adding Alida and user's feedbacks -->
+
 # User Guide
 
 ## Deploy Dataflow Jobs in the Secured Data Warehouse
@@ -18,49 +22,27 @@ To use a private template repository outside of the perimeter, the identity depl
 ### Pipeline requirements
 
 All the required APIs to deploy the module had to be enabled. See the list of [APIs](../README.md#apis) in the README file.
- Ensured that all the additional APIs your Dataflow pipeline needs are enabled too.
+Ensured that all the additional APIs your Dataflow pipeline needs are enabled too.
 
 Also make sure that the two Dataflow Controller Service Accounts created by the module have all the roles needed to run the Dataflow Pipeline.
 
-Current roles associated with the Services Accounts:
+<!--I'd like to avoid dual maintenace in github markdown docs and guide. -->
+You can check the current roles associated with the Services Accounts in the files below:
 
-**Data ingestion Dataflow Controller Service Account:**
+- [Data ingestion Dataflow Controller Service Account roles](../modules/data-ingestion/service_accounts.tf)
+- [Confidential Data Dataflow Controller Service Account roles](../modules/confidential-data/service_accounts.tf)
 
-- Data ingestion project:
-  - Dataflow Worker: `roles/dataflow.worker`
-  - Pub/Sub Editor: `roles/pubsub.editor`
-  - Pub/Sub Subscriber: `roles/pubsub.subscriber`
-  - Storage Object Viewer: `roles/storage.objectViewer`
-- Governance project:
-  - DLP De-identify Templates Reader: `roles/dlp.deidentifyTemplatesReader`
-  - DLP Inspect Templates Reader: `roles/dlp.inspectTemplatesReader`
-  - DLP User: `roles/dlp.user`
-- Non-confidential project:
-  - BigQuery Data Editor: `roles/bigquery.dataEditor`
-  - BigQuery Job User: `roles/bigquery.jobUser`
-
-**Confidential Data Dataflow Controller Service Account:**
-
-- Confidential project:
-  - BigQuery Data Editor: `roles/bigquery.dataEditor`
-  - BigQuery Job User: `roles/bigquery.jobUser`
-  - Dataflow Worker: `roles/dataflow.worker`
-  - Service Usage Consumer: `roles/serviceusage.serviceUsageConsumer`
-  - Storage Object Admin: `roles/storage.objectAdmin`
-- Governance project:
-  - DLP De-identify Templates Reader: `roles/dlp.deidentifyTemplatesReader`
-  - DLP Inspect Templates Reader: `roles/dlp.inspectTemplatesReader`
-  - DLP User: `roles/dlp.user`
-- Non-confidential project:
-  - BigQuery Data Viewer: `roles/bigquery.dataViewer`
-
+<!--Is it opinionated or rather best practice -->
+<!-- Some of the points in this section must be done, if the user does not follow the instruction he may face errors during deploy new jobs-->
 ### Opinionated Dataflow Flex Template Usage
 
 The following outputs provided by the *Secured Data Warehouse Module*, must be used as inputs to a new Dataflow Job:
 
-#### Staging/Temp Bucket
+<!--avoid use or / . use same term in public doc -->
+<!--Some template asked to use the Temporary and Staging Location. -->
+#### Temporary and Staging Location
 
-Use the appropriated [output](../README.md#outputs) of the main module as the [temp location](https://cloud.google.com/dataflow/docs/guides/setting-pipeline-options#setting_required_options) bucket:
+Use the appropriated [output](../README.md#outputs) of the main module as the Temporary and Staging Location bucket in the [pipeline options](https://cloud.google.com/dataflow/docs/guides/setting-pipeline-options#setting_required_options):
 
 - Data ingestion project: `data_ingestion_dataflow_bucket_name`.
 - Confidential Data project: `confidential_data_dataflow_bucket_name`.
@@ -82,6 +64,13 @@ Use the appropriated [output](../README.md#outputs) of the main module as the [D
 ### Deploying with Terraform
 
 Use the Dataflow Flex Job Template [submodule](../modules/dataflow-flex-job/README.md). See [Tutorial Standalone example](../examples/tutorial-standalone/README.md) for details.
+
+<!--
+i'd like user focused actions described as additional topics . consider adding:
+I suggest to scope this down to
+
+can't we just point to the cloud build file. don't need to rewrite the code in docs, right?
+ -->
 
 ### Deploying with GCP Console
 
