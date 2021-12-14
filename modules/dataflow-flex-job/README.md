@@ -5,6 +5,37 @@ This module handles opinionated Dataflow flex template job configuration and dep
 ## Usage
 
 Before using this module, one should get familiar with the `google_dataflow_flex_template_job`’s [Note on "destroy"/"apply"](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/dataflow_flex_template_job#note-on-destroy--apply) as the behavior is atypical when compared to other resources.
+'
+
+## Requirements
+
+These sections describe requirements for running this module.
+
+### Software
+
+Install the following dependencies:
+
+- [Google Cloud SDK](https://cloud.google.com/sdk/install) version 357.0.0 or later.
+- [Terraform](https://www.terraform.io/downloads.html) version 0.13.7 or later.
+
+### Deployer entity
+
+To provision the resources of this module, create a service account
+with the following IAM roles:
+
+- Dataflow Developer:`roles/dataflow.developer`.
+
+### APIs
+
+The following APIs must be enabled in the project where the service account was created:
+
+- BigQuery API: `bigquery.googleapis.com`.
+- Cloud Key Management Service (KMS) API: `cloudkms.googleapis.com`.
+- Google Cloud Storage JSON API:`storage-api.googleapis.com`.
+- Compute Engine API: `compute.googleapis.com`.
+- Dataflow API: `dataflow.googleapis.com`.
+
+Any others APIs you pipeline may need.
 
 ### Assumption
 

@@ -2,6 +2,14 @@
 
 This example illustrates how to use the `secured-data-warehouse` module.
 
+It uses:
+
+- The [Secured data warehouse](../../README.md) module to create the Secured data warehouse infrastructure.
+
+## Requirements
+
+1. The [Secured data warehouse](../../README.md#requirements) module requirements to create the Secured data warehouse infrastructure.
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
 

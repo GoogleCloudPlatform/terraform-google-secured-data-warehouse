@@ -16,6 +16,7 @@ module "de_identification_template" {
 
   project_id                = "PROJECT_ID"
   terraform_service_account = "SERVICE_ACCOUNT_EMAIL"
+  dataflow_service_account  = "DATAFLOW_WORKER_SERVICE_ACCOUNT"
   crypto_key                = "CRYPTO_KEY"
   wrapped_key               = "WRAPPED_KEY"
   dlp_location              = "DLP_LOCATION"
@@ -29,8 +30,11 @@ Create a base64 encoded data crypto key [wrapped by KMS](https://cloud.google.co
 
 You will need the wrapped key and the full resource name of the Cloud KMS key that encrypted the data crypto key.
 
-**Note:** Contact your Security Team to obtain the `crypto_key` and `wrapped_key` pair.
+**Note 1:** Contact your Security Team to obtain the `crypto_key` and `wrapped_key` pair.
 The `crypto_key` location must be the same location used for the `dlp_location`.
+There is a [Wrapped Key Helper](../../helpers/wrapped-key/README.md) python script which generates a wrapped key.
+
+**Note 2:** The identity running Terraform, the `terraform_service_account`, must have permission to grant roles "roles/cloudkms.cryptoKeyDecrypter" and "roles/cloudkms.cryptoKeyEncrypter" in the KMS `crypto_key`. It will be granted to the `dataflow_service_account`.
 
 ### Template file
 
@@ -55,7 +59,7 @@ Because you provide the de-identification template, you can choose the type of t
 - For structured data, use [Record Transformation](https://cloud.google.com/dlp/docs/reference/rest/v2/projects.deidentifyTemplates#DeidentifyTemplate.RecordTransformations) for structured data.
 
 A functional example for a Record Transformation is included under the
-[examples/de-identification-template](./examples/de-identification-template/) directory.
+[examples/de-identification-template](../../examples/de-identification-template/README.md) directory.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
