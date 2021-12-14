@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+locals {
+  app_engine_location = lookup({ "europe-west1" = "europe-west", "us-central1" = "us-central" }, var.region, var.region)
+}
+
 resource "random_id" "project_id_suffix" {
   byte_length = 3
 }
@@ -53,7 +57,7 @@ module "data_ingestion_project" {
 
 resource "google_app_engine_application" "app" {
   project     = module.data_ingestion_project.project_id
-  location_id = "us-east4"
+  location_id = local.app_engine_location
 }
 
 module "data_governance_project" {

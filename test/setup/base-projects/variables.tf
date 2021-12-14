@@ -27,6 +27,6 @@ variable "billing_account" {
 }
 
 variable "region" {
-  description = "The region in which the subnetwork will be created."
+  description = "The region in which the subnetwork and the App Engine application will be created."
   type        = string
 }
