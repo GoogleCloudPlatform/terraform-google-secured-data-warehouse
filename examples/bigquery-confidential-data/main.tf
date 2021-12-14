@@ -24,7 +24,8 @@ locals {
   confidential_table_id       = "${trimsuffix(local.cc_file_name, ".csv")}_re_id"
   kek_keyring                 = "kek_keyring_${random_id.suffix.hex}"
   kek_key_name                = "kek_key_${random_id.suffix.hex}"
-  cc_file_name                = "cc_100_records.csv"
+  cc_file_name                = "cc_10000_records.csv"
+  cc_file_path                = "${path.module}/assets"
 
 }
 
@@ -57,18 +58,11 @@ module "secured_data_warehouse" {
   security_administrator_group     = var.security_administrator_group
 }
 
-resource "null_resource" "download_sample_cc_into_gcs" {
-  provisioner "local-exec" {
-    command = <<EOF
-    curl https://eforexcel.com/wp/wp-content/uploads/2017/07/100-CC-Records.zip > cc_records.zip
-    unzip cc_records.zip
-    echo "Changing sample file encoding from WINDOWS-1252 to UTF-8"
-    iconv -f="WINDOWS-1252" -t="UTF-8" 100\ CC\ Records.csv > ${local.cc_file_name}
-    gsutil cp ${local.cc_file_name} gs://${module.secured_data_warehouse.data_ingestion_bucket_name}
-    rm ${local.cc_file_name} 100\ CC\ Records.csv cc_records.zip
-EOF
-
-  }
+resource "google_storage_bucket_object" "sample_file" {
+  name         = local.cc_file_name
+  source       = "${local.cc_file_path}/${local.cc_file_name}"
+  content_type = "text/csv"
+  bucket       = module.secured_data_warehouse.data_ingestion_bucket_name
 
   depends_on = [
     module.secured_data_warehouse
@@ -146,8 +140,7 @@ module "regional_deid" {
   }
 
   depends_on = [
-    google_artifact_registry_repository_iam_member.docker_reader,
-    null_resource.download_sample_cc_into_gcs
+    google_artifact_registry_repository_iam_member.docker_reader
   ]
 }
 
