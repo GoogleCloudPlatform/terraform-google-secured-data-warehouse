@@ -71,6 +71,26 @@ module "external_flex_template_project" {
   ]
 }
 
+# The name of this bucket is the name of the bucket that
+# Cloud Build creates to host the source code if one is
+# not provided with the flag `--gcs-source-staging-dir`.
+# Creating the bucket beforehand is necessary because it
+# is not possible to pass a `--gcs-source-staging-dir`
+# flag to the gcloud dataflow flex-template build command
+# used in the cloudbuild.yaml file.
+resource "google_storage_bucket" "cloudbuild_bucket" {
+  name     = "${local.project_id}_cloudbuild"
+  location = local.location
+  project  = local.project_id
+
+  force_destroy               = true
+  uniform_bucket_level_access = true
+
+  depends_on = [
+    module.external_flex_template_project
+  ]
+}
+
 resource "google_project_iam_member" "int_permission_artifact_registry_test" {
   for_each = toset(local.int_proj_required_roles)
 
@@ -106,6 +126,7 @@ resource "null_resource" "java_de_identification_flex_template" {
     command = <<EOF
       gcloud builds submit \
        --project=${local.project_id} \
+       --gcs-source-staging-dir="gs://${google_storage_bucket.cloudbuild_bucket.name}/source" \
        --config ${local.templates_path}/java/regional_dlp_de_identification/cloudbuild.yaml \
        ${local.templates_path}/java/regional_dlp_de_identification \
        --impersonate-service-account=${var.service_account_email} \
@@ -133,6 +154,7 @@ resource "null_resource" "java_re_identification_flex_template" {
     command = <<EOF
       gcloud builds submit \
        --project=${local.project_id} \
+       --gcs-source-staging-dir="gs://${google_storage_bucket.cloudbuild_bucket.name}/source" \
        --config ${local.templates_path}/java/regional_dlp_transform/cloudbuild.yaml \
        ${local.templates_path}/java/regional_dlp_transform \
        --impersonate-service-account=${var.service_account_email} \
@@ -160,6 +182,7 @@ resource "null_resource" "python_de_identification_flex_template" {
     command = <<EOF
       gcloud builds submit \
        --project=${local.project_id} \
+       --gcs-source-staging-dir="gs://${google_storage_bucket.cloudbuild_bucket.name}/source" \
        --config ${local.templates_path}/python/regional_dlp_de_identification/cloudbuild.yaml \
        ${local.templates_path}/python/regional_dlp_de_identification \
        --impersonate-service-account=${var.service_account_email} \
@@ -187,6 +210,7 @@ resource "null_resource" "python_re_identification_flex_template" {
     command = <<EOF
       gcloud builds submit \
        --project=${local.project_id} \
+       --gcs-source-staging-dir="gs://${google_storage_bucket.cloudbuild_bucket.name}/source" \
        --config ${local.templates_path}/python/regional_dlp_re_identification/cloudbuild.yaml \
        ${local.templates_path}/python/regional_dlp_re_identification \
        --impersonate-service-account=${var.service_account_email} \
@@ -212,7 +236,9 @@ resource "null_resource" "upload_modules" {
   provisioner "local-exec" {
     when    = create
     command = <<EOF
-     gcloud builds submit --project=${local.project_id} \
+     gcloud builds submit \
+     --project=${local.project_id} \
+     --gcs-source-staging-dir="gs://${google_storage_bucket.cloudbuild_bucket.name}/source" \
      --config ${local.templates_path}/python/modules/cloudbuild.yaml \
      ${local.templates_path}/python/modules \
      --impersonate-service-account=${var.service_account_email} \
