@@ -15,9 +15,9 @@
  */
 
 variable "trusted_locations" {
-  description = "This is a list of trusted regions where location-based GCP resources can be created. ie us-locations eu-locations."
+  description = "This is a list of trusted regions where location-based GCP resources can be created."
   type        = list(string)
-  default     = ["us-locations", "eu-locations"]
+  default     = ["us-locations"]
 }
 
 variable "trusted_subnetworks" {
@@ -32,13 +32,13 @@ variable "org_id" {
 }
 
 variable "region" {
-  description = "The region in which the resources will be deployed."
+  description = "The region in which the messages published to Pub/Sub will be persisted. Cannot be a multi-region."
   type        = string
   default     = "us-east4"
 }
 
 variable "location" {
-  description = "The location for the KMS Customer Managed Encryption Keys, Bucket, and Bigquery dataset. This location can be a multiregion, if it is empty the region value will be used."
+  description = "The location for the KMS Customer Managed Encryption Keys, Bucket, and Bigquery dataset. This location can be a multi-region, if it is empty the region value will be used."
   type        = string
   default     = ""
 }

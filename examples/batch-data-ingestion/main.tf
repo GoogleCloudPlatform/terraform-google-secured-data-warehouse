@@ -15,7 +15,7 @@
  */
 locals {
   region              = "us-east4"
-  location            = "us-east4-a"
+  zone                = "us-east4-a"
   schema_file         = "schema.json"
   transform_code_file = "transform.js"
   dataset_id          = "dts_data_ingestion"
@@ -26,7 +26,7 @@ locals {
   httpRequestTemplate = templatefile(
     "${path.module}/httpRequest.tmpl",
     {
-      location                            = local.location,
+      zone                                = local.zone,
       network_self_link                   = var.network_self_link,
       dataflow_service_account            = module.data_ingestion.dataflow_controller_service_account_email,
       subnetwork_self_link                = var.subnetwork_self_link,
@@ -53,8 +53,8 @@ module "data_ingestion" {
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
   bucket_name                      = "data-ingestion"
-  location                         = local.region
   region                           = local.region
+  location                         = local.region
   dataset_id                       = local.dataset_id
   cmek_keyring_name                = "cmek_keyring"
   delete_contents_on_destroy       = var.delete_contents_on_destroy

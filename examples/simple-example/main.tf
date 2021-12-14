@@ -27,6 +27,8 @@ module "secured_data_warehouse" {
   bucket_name                      = "bucket_simple_example"
   dataset_id                       = "dataset_simple_example"
   cmek_keyring_name                = "key_name_simple_example"
+  region                           = "us-east4"
+  location                         = "us-east4"
   delete_contents_on_destroy       = var.delete_contents_on_destroy
   perimeter_additional_members     = var.perimeter_additional_members
   data_engineer_group              = var.data_engineer_group

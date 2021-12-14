@@ -34,6 +34,8 @@ module "data_ingestion" {
   bucket_name                      = "data-ingestion"
   dataset_id                       = local.dataset_id
   cmek_keyring_name                = "cmek_keyring"
+  region                           = local.region
+  location                         = local.region
   delete_contents_on_destroy       = var.delete_contents_on_destroy
   perimeter_additional_members     = var.perimeter_additional_members
   data_engineer_group              = var.data_engineer_group

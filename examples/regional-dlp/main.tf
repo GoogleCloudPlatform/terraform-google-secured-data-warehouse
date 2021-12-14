@@ -32,6 +32,7 @@ module "data_ingestion" {
   dataset_id                       = "dlp_flex_data_ingestion"
   cmek_keyring_name                = "dlp_flex_data-ingestion"
   region                           = "us-east4"
+  location                         = "us-east4"
   delete_contents_on_destroy       = var.delete_contents_on_destroy
   perimeter_additional_members     = var.perimeter_additional_members
   data_engineer_group              = var.data_engineer_group
