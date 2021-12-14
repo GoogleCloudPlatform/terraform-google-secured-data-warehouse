@@ -34,6 +34,8 @@ module "secured_data_warehouse" {
   access_context_manager_policy_id = ACCESS_CONTEXT_MANAGER_POLICY_ID
   bucket_name                      = DATA_INGESTION_BUCKET_NAME
   region                           = REGION
+  location                         = LOCATION
+  trusted_locations                = TRUSTED_LOCATIONS
   dataset_id                       = DATASET_ID
   confidential_dataset_id          = CONFIDENTIAL_DATASET_ID
   cmek_keyring_name                = CMEK_KEYRING_NAME
@@ -46,6 +48,12 @@ module "secured_data_warehouse" {
   delete_contents_on_destroy       = false
 }
 ```
+
+**Note:** There are three inputs related to GCP Locations in the module:
+
+- `region`: is used to define which GCP region will be used to [Restrict Pub/Sub resource locations](https://cloud.google.com/pubsub/docs/resource-location-restriction). This policy offers a way to ensure that messages published to a topic are never persisted outside of a Google Cloud regions you specify, regardless of where the publish requests originate. **Zones or multi-region locations are not supported**.
+- `location`: is used to define which GCP region will be used for all other resources created: [Cloud Storage buckets](https://cloud.google.com/storage/docs/locations), [BigQuery datasets](https://cloud.google.com/bigquery/docs/locations), and [Cloud KMS key rings](https://cloud.google.com/kms/docs/locations). **Multi-region locations are supported**. if this input is omitted, the `region` will be used instead to define these resources.
+- `trusted_locations`: is a list of locations that are used to set an [Organization Policy](https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations) that restricts the GCP locations that can be used in the projects of the Secured Data Warehouse. Both `region` and `location` must respect this restriction.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
