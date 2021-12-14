@@ -99,14 +99,17 @@ Make sure you have your subnetwork configured as [Subnetwork section](#subnetwor
 
 Enabling Streaming Engine it is important to ensure all the performance benefits of the infrastructure. You can learn more about it in the [documentation](https://cloud.google.com/dataflow/docs/guides/deploying-a-pipeline#streaming-engine).
 
-## Deploying with Terraform
+## Deploying Dataflow Flex Jobs
+
+We recommend the usage of [Flex Job Templates](https://cloud.google.com/dataflow/docs/guides/templates/using-flex-templates).
+You can learn more about the differences between Classic and Flex Templates [here](https://cloud.google.com/dataflow/docs/concepts/dataflow-templates#evaluating-which-template-type-to-use).
+
+### Deploying with Terraform
 
 Use the Dataflow Flex Job Template [submodule](../modules/dataflow-flex-job/README.md).
 See [Tutorial Standalone example](../examples/tutorial-standalone/README.md) for details.
 
 ### Deploying with `gcloud` Command
-
-**Flex Template** <https://cloud.google.com/dataflow/docs/guides/templates/using-flex-templates>
 
 You can run the following commands to create a **Java** Dataflow Flex Job using the **gcloud command**:
 
@@ -136,8 +139,8 @@ For more details about `gcloud dataflow flex-template` see the command [document
 
 ## Common tasks
 
-### how do I rerun the job for new data (let's day add 10k more records?
+### How do I rerun the job for new data?
 
-### how do i send streaming data through and how to check it's been de-id
+### How do I send streaming data through and how to check it's been de-id?
 
-### what if I have my own flex templates in a different project?
+### What if I have my own flex templates in a different project?
