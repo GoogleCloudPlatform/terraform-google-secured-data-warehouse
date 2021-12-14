@@ -15,7 +15,6 @@
  */
 locals {
   region              = "us-east4"
-  zone                = "us-east4-a"
   schema_file         = "schema.json"
   transform_code_file = "transform.js"
   dataset_id          = "dts_data_ingestion"
@@ -26,7 +25,7 @@ locals {
   httpRequestTemplate = templatefile(
     "${path.module}/httpRequest.tmpl",
     {
-      zone                                = local.zone,
+      zone                                = "us-east4-a",
       network_self_link                   = var.network_self_link,
       dataflow_service_account            = module.data_ingestion.dataflow_controller_service_account_email,
       subnetwork_self_link                = var.subnetwork_self_link,
