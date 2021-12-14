@@ -1,36 +1,45 @@
 # Standalone Tutorial
 
-This examples deploys the Secured data warehouse blueprint and the required infrastructure needed to deploy it.
+This examples deploys the Secured data warehouse blueprint module,
+the required "external harness" needed to deploy it,
+and Dataflow Jobs that process sensitive data using the Secured data warehouse infrastructure.
 
-The required infrastructure created in this example includes:
+In the External Harness we have:
 
-- GCP Projects:
+- The creation of four GCP projects needed by the Secured Data Warehouse:
   - Data Ingestion project.
   - Non-confidential Data project.
   - Data Governance project.
   - Confidential Data project.
-  - External Artifact Registry project.
-- Artifact Registry:
-  - Docker Artifact registry.
-- Dataflow Templates:
-  - Java Cloud storage to Bigquery dlp de-identification Dataflow flex template.
-  - Java Bigquery to Bigquery dlp re-identification Dataflow flex template.
-- Networks:
-  - Data Ingestion Network:
-    - VPC with one subnetwork.
-    - Firewall rules.
-    - DNS configuration for Google private access.
-  - Confidential Data Network:
-    - VPC with one subnetwork.
-    - Firewall rules.
-    - DNS configuration for Google private access.
-- Logging:
-  - Log Sinks in all projects.
-  - Logging bucket in the data governance project.
-- Cloud KMS:
+- The Creation of an external Artifact Registry project for the dataflow flex templates and the build of the templates themselves, including:
+  - A Docker Artifact registry.
+  - Two Dataflow Templates:
+    - A Java Cloud storage to BigQuery dlp de-identification Dataflow flex template.
+    - A Java BigQuery to BigQuery dlp re-identification Dataflow flex template.
+- The Creation of two VPC Networks to deploy dataflow jobs, one in the Data Ingestion project and another one in the Confidential Data project, each network having:
+  - A VPC Network with one subnetwork.
+  - A set of Firewall rules.
+  - The required DNS configuration for Google private access.
+- The configuration of Log Sinks in all projects with the creation of a related Logging bucket in the Data Governance project
+- The Cloud KMS infrastructure for the creation of a `wrapped_key` and `crypto_key` pair:
   - A Cloud KMS Keyring.
   - A Cloud KMS key encryption key (KEK).
   - A token encryption key (TEK) for DLP Templates.
+
+In the deploy of the Secured Data Warehouse and the Dataflow Jobs we have:
+
+- The deploy of the [main module](../../README.md) itself.
+- The creation of two Dataflow templates, one for [de-identification](../../flex-templates/java/regional_dlp_de_identification/README.md) and one for [re-identification](../../flex-templates/java/regional_dlp_transform/README.md) using the `wrapped_key` and `crypto_key` pair created in the harness.
+- The creation of a Data Catalog taxonomy and [policy tags](https://cloud.google.com/bigquery/docs/best-practices-policy-tags) representing security levels
+- The creation of a BigQuery table with [column-level security](https://cloud.google.com/bigquery/docs/column-level-security) enabled using the Data Catalog policy tags
+- The deploy of a Dataflow flex Java pipeline that does de-identification of a sample CSV file with [credit card data](./assets/cc_10000_records.csv), read from a Google Cloud Storage bucket into a BigQuery table.
+- The deploy of a Dataflow flex Java pipeline that does re-identification from the BigQuery table which is the output from the first pipeline to the BigQuery table created with the column-level security.
+
+The example waits for 10 minutes between the deploy of the de-identification dataflow pipeline and the start of the re-identification dataflow pipeline,
+to wait for the first job to deploy, process the 10k records, and write to the BigQuery table that will be processed by the second job.
+
+The re-identification step is typically a separate deliberate action (with change control) to re-identify and limit
+who can read the data but is executed automatically in the example to showcase the BigQuery security controls.
 
 This example will be deployed at the `us-east4` location, to deploy in another location, change the local `location` in the example [main.tf](./main.tf#L18) file.
 
