@@ -34,11 +34,6 @@ output "bucket_data_ingestion_name" {
   value       = module.data_ingestion.data_ingestion_bucket_name
 }
 
-output "dlp_location" {
-  description = "The location of the DLP resources."
-  value       = local.region
-}
-
 output "template_id" {
   description = "The ID of the Cloud DLP de-identification template that is created."
   value       = module.de_identification_template.template_id

@@ -42,7 +42,9 @@ module "secured_data_warehouse" {
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
   bucket_name                      = "data-ingestion"
+  pubsub_resource_location         = local.location
   location                         = local.location
+  trusted_locations                = ["us-locations"]
   dataset_id                       = local.non_confidential_dataset_id
   confidential_dataset_id          = local.confidential_dataset_id
   cmek_keyring_name                = "cmek_keyring"

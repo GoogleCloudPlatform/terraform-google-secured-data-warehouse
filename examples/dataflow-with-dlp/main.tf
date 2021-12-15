@@ -15,7 +15,7 @@
  */
 
 locals {
-  region       = "us-east4"
+  location     = "us-east4"
   dataset_id   = "dts_data_ingestion"
   cc_file_name = "cc_10000_records.csv"
   cc_file_path = "${path.module}/assets"
@@ -34,6 +34,8 @@ module "data_ingestion" {
   bucket_name                      = "data-ingestion"
   dataset_id                       = local.dataset_id
   cmek_keyring_name                = "cmek_keyring"
+  pubsub_resource_location         = local.location
+  location                         = local.location
   delete_contents_on_destroy       = var.delete_contents_on_destroy
   perimeter_additional_members     = var.perimeter_additional_members
   data_engineer_group              = var.data_engineer_group
@@ -65,7 +67,7 @@ module "de_identification_template" {
   terraform_service_account = var.terraform_service_account
   crypto_key                = var.crypto_key
   wrapped_key               = var.wrapped_key
-  dlp_location              = local.region
+  dlp_location              = local.location
   template_file             = "${path.module}/deidentification.tmpl"
   dataflow_service_account  = module.data_ingestion.dataflow_controller_service_account_email
 
@@ -78,7 +80,7 @@ resource "google_artifact_registry_repository_iam_member" "docker_reader" {
   provider = google-beta
 
   project    = var.external_flex_template_project_id
-  location   = local.region
+  location   = local.location
   repository = "flex-templates"
   role       = "roles/artifactregistry.reader"
   member     = "serviceAccount:${module.data_ingestion.dataflow_controller_service_account_email}"
@@ -94,7 +96,7 @@ module "regional_dlp" {
   project_id              = var.data_ingestion_project_id
   name                    = "regional-flex-java-gcs-dlp-bq"
   container_spec_gcs_path = var.de_identify_template_gs_path
-  region                  = local.region
+  region                  = local.location
   service_account_email   = module.data_ingestion.dataflow_controller_service_account_email
   subnetwork_self_link    = var.subnetwork_self_link
   kms_key_name            = module.data_ingestion.cmek_data_ingestion_crypto_key
@@ -108,7 +110,7 @@ module "regional_dlp" {
     datasetName            = local.dataset_id
     batchSize              = 1000
     dlpProjectId           = var.data_governance_project_id
-    dlpLocation            = local.region
+    dlpLocation            = local.location
     deidentifyTemplateName = module.de_identification_template.template_full_path
 
   }

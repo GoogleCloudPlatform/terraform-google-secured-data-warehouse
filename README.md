@@ -33,7 +33,9 @@ module "secured_data_warehouse" {
   terraform_service_account        = TERRAFORM_SERVICE_ACCOUNT
   access_context_manager_policy_id = ACCESS_CONTEXT_MANAGER_POLICY_ID
   bucket_name                      = DATA_INGESTION_BUCKET_NAME
-  region                           = REGION
+  pubsub_resource_location         = PUBSUB_RESOURCE_LOCATION
+  location                         = LOCATION
+  trusted_locations                = TRUSTED_LOCATIONS
   dataset_id                       = DATASET_ID
   confidential_dataset_id          = CONFIDENTIAL_DATASET_ID
   cmek_keyring_name                = CMEK_KEYRING_NAME
@@ -46,6 +48,12 @@ module "secured_data_warehouse" {
   delete_contents_on_destroy       = false
 }
 ```
+
+**Note:** There are three inputs related to GCP Locations in the module:
+
+- `pubsub_resource_location`: is used to define which GCP location will be used to [Restrict Pub/Sub resource locations](https://cloud.google.com/pubsub/docs/resource-location-restriction). This policy offers a way to ensure that messages published to a topic are never persisted outside of a Google Cloud regions you specify, regardless of where the publish requests originate. **Zones or multi-region locations are not supported**.
+- `location`: is used to define which GCP region will be used for all other resources created: [Cloud Storage buckets](https://cloud.google.com/storage/docs/locations), [BigQuery datasets](https://cloud.google.com/bigquery/docs/locations), and [Cloud KMS key rings](https://cloud.google.com/kms/docs/locations). **Multi-region locations are supported**.
+- `trusted_locations`: is a list of locations that are used to set an [Organization Policy](https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations#location_types) that restricts the GCP locations that can be used in the projects of the Secured Data Warehouse. Both `pubsub_resource_location` and `location` must respect this restriction.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
@@ -79,17 +87,17 @@ module "secured_data_warehouse" {
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `false` | no |
 | key\_rotation\_period\_seconds | Rotation period for keys. The default value is 30 days. | `string` | `"2592000s"` | no |
 | kms\_key\_protection\_level | The protection level to use when creating a key. Possible values: ["SOFTWARE", "HSM"] | `string` | `"HSM"` | no |
-| location | The location for the KMS Customer Managed Encryption Keys, Bucket, and Bigquery dataset. This location can be a multiregion, if it is empty the region value will be used. | `string` | `""` | no |
+| location | The location for the KMS Customer Managed Encryption Keys, Cloud Storage Buckets, and Bigquery datasets. This location can be a multi-region. | `string` | `"us-east4"` | no |
 | network\_administrator\_group | Google Cloud IAM group that reviews network configuration. Typically, this includes members of the networking team. | `string` | n/a | yes |
 | non\_confidential\_data\_project\_id | The ID of the project in which the Bigquery will be created. | `string` | n/a | yes |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | perimeter\_additional\_members | The list additional members to be added on perimeter access. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | `[]` | no |
-| region | The region in which the resources will be deployed. | `string` | `"us-east4"` | no |
+| pubsub\_resource\_location | The location in which the messages published to Pub/Sub will be persisted. This location cannot be a multi-region. | `string` | `"us-east4"` | no |
 | sdx\_project\_number | The Project Number to configure Secure data exchange with egress rule for the dataflow templates. | `string` | n/a | yes |
 | security\_administrator\_group | Google Cloud IAM group that administers security configurations in the organization(org policies, KMS, VPC service perimeter). | `string` | n/a | yes |
 | security\_analyst\_group | Google Cloud IAM group that monitors and responds to security incidents. | `string` | n/a | yes |
 | terraform\_service\_account | The email address of the service account that will run the Terraform code. | `string` | n/a | yes |
-| trusted\_locations | This is a list of trusted regions where location-based GCP resources can be created. ie us-locations eu-locations. | `list(string)` | <pre>[<br>  "us-locations",<br>  "eu-locations"<br>]</pre> | no |
+| trusted\_locations | This is a list of trusted regions where location-based GCP resources can be created. | `list(string)` | <pre>[<br>  "us-locations"<br>]</pre> | no |
 | trusted\_subnetworks | The URI of the subnetworks where resources are going to be deployed. | `list(string)` | `[]` | no |
 
 ## Outputs

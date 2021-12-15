@@ -11,7 +11,7 @@ It uses:
 ## Prerequisites
 
 1. The [Secured data warehouse](../../README.md#requirements) module requirements to create the Secured data warehouse infrastructure.
-1. A `crypto_key` and `wrapped_key` pair. Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location where DLP, Storage and BigQuery are going to be created (`local.region`). There is a [Wrapped Key Helper](../../helpers/wrapped-key/README.md) python script which generates a wrapped key.
+1. A `crypto_key` and `wrapped_key` pair. Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location where DLP, Storage and BigQuery are going to be created (`local.location`). There is a [Wrapped Key Helper](../../helpers/wrapped-key/README.md) python script which generates a wrapped key.
 1. The identity deploying the example must have permission to grant roles `roles/cloudkms.cryptoKeyDecrypter` and `roles/cloudkms.cryptoKeyEncrypter` in the KMS `crypto_key`. It will be granted to the Data ingestion Dataflow worker service account created by the Secured Data Warehouse module.
 1. The identity deploying the example must have permission to grant role `roles/artifactregistry.reader` in the docker repo of the Flex templates.
 1. A network and subnetwork in the data ingestion project [configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access).
@@ -78,7 +78,6 @@ locals {
 | bucket\_data\_ingestion\_name | The name of the bucket. |
 | controller\_service\_account | The Service Account email that will be used to identify the VMs in which the jobs are running. |
 | df\_job\_subnetwork | The name of the subnetwork used for create Dataflow job. |
-| dlp\_location | The location of the DLP resources. |
 | project\_id | The project's ID. |
 | template\_id | The ID of the Cloud DLP de-identification template that is created. |
 

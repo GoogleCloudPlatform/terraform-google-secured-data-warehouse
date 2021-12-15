@@ -15,9 +15,9 @@
  */
 
 locals {
-  region        = lower(var.region)
-  location      = var.location == "" ? lower(var.region) : lower(var.location)
-  cmek_location = local.location == "eu" ? "europe" : local.location
+  pubsub_resource_location = lower(var.pubsub_resource_location)
+  location                 = lower(var.location)
+  cmek_location            = local.location == "eu" ? "europe" : local.location
 
   projects_ids = {
     data_ingestion   = var.data_ingestion_project_id
@@ -58,7 +58,7 @@ module "data_ingestion" {
   non_confidential_data_project_id    = var.non_confidential_data_project_id
   data_governance_project_id          = var.data_governance_project_id
   terraform_service_account           = var.terraform_service_account
-  region                              = local.region
+  pubsub_resource_location            = local.pubsub_resource_location
   dataset_location                    = local.location
   bucket_location                     = local.location
   data_ingestion_encryption_key       = module.data_governance.cmek_data_ingestion_crypto_key
@@ -84,7 +84,6 @@ module "org_policies" {
   for_each = local.projects_ids
 
   project_id          = each.value
-  region              = local.region
   trusted_locations   = var.trusted_locations
   trusted_subnetworks = var.trusted_subnetworks
 
