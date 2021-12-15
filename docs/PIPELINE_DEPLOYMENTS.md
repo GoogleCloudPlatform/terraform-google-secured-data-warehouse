@@ -145,17 +145,29 @@ For more details about `gcloud dataflow flex-template` see the command [document
 
 ##### Storage to Bigquery
 
-If you are using our [Tutorial Standalone Example](../examples/tutorial-standalone/README.md),
-the de-identification Dataflow deployed has hardcoded the file name as the `inputFilePattern` parameter.
+If you are using our [Java De-Identification Flex Template sample](../flex-templates/java/regional_dlp_de_identification/README.md), you can provide a pattern as value to `inputFilePattern`.
+
+Examples using [Java De-Identification Dataflow Flex Template](../flex-templates/java/regional_dlp_de_identification/README.md):
+
+- [Bigquery Confidential Data Example](../examples/bigquery-confidential-data/README.md)
+- [Dataflow with DLP](../examples/dataflow-with-dlp/README.md)
+- [Tutorial Standalone Example](../examples/tutorial-standalone/README.md)
+
+If you are using any of our examples, the Dataflow job deployed has hardcoded the file name as the `inputFilePattern` parameter.
 
 You must change the pattern for some who is more usable for you, for example: `*.csv`for all CSV files in the storage
 or `*2021-12-14-0000.csv` for any files in the date and hour in the bucket.
-After change the [`inputFilePattern`](../examples/tutorial-standalone/main.tf#L138)
-you must re-deploy the job.
+After change the `inputFilePattern` you must re-deploy the job.
 
 Since the de-identification Dataflow is a streaming one, any new file match the pattern will be ingested.
 
 ##### Pub/Sub to Bigquery
+
+If you are using our [Python De-Identification Flex Template sample](../flex-templates/java/regional_dlp_de_identification/README.md), you can provide a topic as value to `input_topic`.
+
+Examples using [Python De-Identification Flex Template](../flex-templates/java/regional_dlp_de_identification/README.md):
+
+- [Regional DLP](../examples/regional-dlp/README.md)
 
 If you are using our [Regional DLP Example](../examples/regional-dlp/README.md), the Dataflow deployed is
 already waiting for new input data in the topic. You just need do publish a new message with the format
@@ -165,16 +177,23 @@ expected by the template. You can check how publishing messages [here](https://c
 
 ##### Bigquery to Bigquery
 
-If you are using our [Tutorial Standalone Example](../examples/tutorial-standalone/README.md),
-the re-identification Dataflow deployed has hardcoded the table name as the `inputBigQueryTable` parameter.
+If you are using our [Java Re-Identification Flex Template sample](../flex-templates/java/regional_dlp_de_identification/README.md), you can provide a pattern as value to `inputBigQueryTable`.
+
+Examples using [Java De-Identification Dataflow Flex Template](../flex-templates/java/regional_dlp_de_identification/README.md):
+
+- [Bigquery Confidential Data Example](../examples/bigquery-confidential-data/README.md)
+- [Tutorial Standalone Example](../examples/tutorial-standalone/README.md)
+
+If you are using any of our examples, the re-identification Dataflow deployed has hardcoded the table name as the `inputBigQueryTable` parameter.
 
 You must change the pattern for the table name or pattern you want to ingest.
-After change the [`inputBigQueryTable`](../examples/tutorial-standalone/main.tf#L175)
-you must re-deploy the job.
+After change the `inputBigQueryTable` you must re-deploy the job.
 
 __Note:__ All Batch Dataflow Jobs will stop at the end of execution.
 If you want to trigger again, you must do a new deploy of the Batch Dataflow Job.
 
-### How do I send streaming data through and how to check it's been de-id?
+### How do I check if my data have been de-identified?
+
+### How do I check if my data have been re-identified?
 
 ### What if I have my own flex templates in a different project?
