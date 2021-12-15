@@ -17,4 +17,5 @@ To be able to deploy this Flex template you need to grant to the Dataflow contro
 - Artifact Registry Reader (`roles/artifactregistry.reader`) in the Artifact Registry Repository,
 - Storage Object Viewer (`roles/storage.objectViewer`) in the Storage Bucket.
 
-See the [main.tf](../test/setup/template-project/main.tf) file of the test setup for an example of usage.
+See the [main.tf](../test/setup/template-project/main.tf) file of the test setup for an example of usage,
+this example needs Cloud Build api to be enabled in the project of the `service_account_email` input.
