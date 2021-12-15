@@ -35,6 +35,10 @@ It uses:
 - [Restricted gcr.io](https://cloud.google.com/vpc-service-controls/docs/set-up-gke#configure-dns).
 - [Restricted Artifact Registry](https://cloud.google.com/vpc-service-controls/docs/set-up-gke#configure-dns).
 
+### Route configuration
+
+- Static routes configured to *private* and *restricted* IPs roles. For more information see [Routing options](https://cloud.google.com/vpc/docs/configure-private-google-access#config-routing) in the documentation.
+
 ## Generate sample credit card .csv file
 
 This examples uses a [csv file with sample data](./assets/cc_10000_records.csv) as input for the dataflow job.
