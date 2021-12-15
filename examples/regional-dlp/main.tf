@@ -16,6 +16,7 @@
 
 locals {
   bq_schema = "book:STRING, author:STRING"
+  location  = "us-east4"
 }
 
 module "data_ingestion" {
@@ -31,8 +32,8 @@ module "data_ingestion" {
   bucket_name                      = "dlp-flex-data-ingestion"
   dataset_id                       = "dlp_flex_data_ingestion"
   cmek_keyring_name                = "dlp_flex_data-ingestion"
-  region                           = "us-east4"
-  location                         = "us-east4"
+  pubsub_resource_location         = local.location
+  location                         = local.location
   delete_contents_on_destroy       = var.delete_contents_on_destroy
   perimeter_additional_members     = var.perimeter_additional_members
   data_engineer_group              = var.data_engineer_group
@@ -50,7 +51,7 @@ module "de_identification_template_example" {
   dataflow_service_account  = module.data_ingestion.dataflow_controller_service_account_email
   crypto_key                = var.crypto_key
   wrapped_key               = var.wrapped_key
-  dlp_location              = "us-east4"
+  dlp_location              = local.location
   template_file             = "${path.module}/templates/deidentification.tpl"
 
   depends_on = [
@@ -62,7 +63,7 @@ resource "google_artifact_registry_repository_iam_member" "docker_reader" {
   provider = google-beta
 
   project    = var.external_flex_template_project_id
-  location   = "us-east4"
+  location   = local.location
   repository = "flex-templates"
   role       = "roles/artifactregistry.reader"
   member     = "serviceAccount:${module.data_ingestion.dataflow_controller_service_account_email}"
@@ -76,7 +77,7 @@ resource "google_artifact_registry_repository_iam_member" "python_reader" {
   provider = google-beta
 
   project    = var.external_flex_template_project_id
-  location   = "us-east4"
+  location   = local.location
   repository = "python-modules"
   role       = "roles/artifactregistry.reader"
   member     = "serviceAccount:${module.data_ingestion.dataflow_controller_service_account_email}"
@@ -93,7 +94,7 @@ module "regional_dlp" {
   name                    = "regional-flex-python-pubsub-dlp-bq"
   container_spec_gcs_path = var.flex_template_gs_path
   job_language            = "PYTHON"
-  region                  = "us-east4"
+  region                  = local.location
   service_account_email   = module.data_ingestion.dataflow_controller_service_account_email
   subnetwork_self_link    = var.subnetwork_self_link
   kms_key_name            = module.data_ingestion.cmek_data_ingestion_crypto_key
@@ -104,7 +105,7 @@ module "regional_dlp" {
   parameters = {
     input_topic                    = "projects/${var.data_ingestion_project_id}/topics/${module.data_ingestion.data_ingestion_topic_name}"
     deidentification_template_name = "${module.de_identification_template_example.template_full_path}"
-    dlp_location                   = "us-east4"
+    dlp_location                   = local.location
     dlp_project                    = var.data_governance_project_id
     bq_schema                      = local.bq_schema
     output_table                   = "${var.non_confidential_data_project_id}:${module.data_ingestion.data_ingestion_bigquery_dataset.dataset_id}.classical_books"

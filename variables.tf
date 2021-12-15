@@ -31,16 +31,16 @@ variable "org_id" {
   type        = string
 }
 
-variable "region" {
-  description = "The region in which the messages published to Pub/Sub will be persisted. Cannot be a multi-region."
+variable "pubsub_resource_location" {
+  description = "The location in which the messages published to Pub/Sub will be persisted. This location cannot be a multi-region."
   type        = string
   default     = "us-east4"
 }
 
 variable "location" {
-  description = "The location for the KMS Customer Managed Encryption Keys, Bucket, and Bigquery dataset. This location can be a multi-region, if it is empty the region value will be used."
+  description = "The location for the KMS Customer Managed Encryption Keys, Cloud Storage Buckets, and Bigquery datasets. This location can be a multi-region."
   type        = string
-  default     = ""
+  default     = "us-east4"
 }
 
 variable "terraform_service_account" {

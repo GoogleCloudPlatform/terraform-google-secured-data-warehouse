@@ -78,7 +78,6 @@ locals {
 | bucket\_data\_ingestion\_name | The name of the bucket. |
 | controller\_service\_account | The Service Account email that will be used to identify the VMs in which the jobs are running. |
 | df\_job\_subnetwork | The name of the subnetwork used for create Dataflow job. |
-| dlp\_location | The location of the DLP resources. |
 | project\_id | The project's ID. |
 | template\_id | The ID of the Cloud DLP de-identification template that is created. |
 

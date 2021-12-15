@@ -19,8 +19,8 @@ variable "org_id" {
   type        = string
 }
 
-variable "region" {
-  description = "The region in which subnetwork will be created and Pub/Sub message will be stored."
+variable "pubsub_resource_location" {
+  description = "The locaiton in which Pub/Sub message will be stored."
   type        = string
   default     = "us-east4"
 }

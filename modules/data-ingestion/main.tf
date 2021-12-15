@@ -68,7 +68,7 @@ module "data_ingestion_topic" {
   project_id             = var.data_ingestion_project_id
   topic                  = "tpc-data-ingestion-${random_id.suffix.hex}"
   topic_kms_key_name     = var.data_ingestion_encryption_key
-  message_storage_policy = { allowed_persistence_regions : [var.region] }
+  message_storage_policy = { allowed_persistence_regions : [var.pubsub_resource_location] }
 }
 
 //BigQuery dataset

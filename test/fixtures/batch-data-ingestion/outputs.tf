@@ -30,11 +30,6 @@ output "df_job_controller_service_account" {
   value       = module.batch_dataflow.controller_service_account
 }
 
-output "df_job_region" {
-  description = "The region of the newly created Dataflow job."
-  value       = module.batch_dataflow.df_job_region
-}
-
 output "df_job_network" {
   description = "The name of the network used for create Dataflow job."
   value       = module.batch_dataflow.df_job_network

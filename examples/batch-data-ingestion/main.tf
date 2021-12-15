@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 locals {
-  region              = "us-east4"
+  location            = "us-east4"
   schema_file         = "schema.json"
   transform_code_file = "transform.js"
   dataset_id          = "dts_data_ingestion"
@@ -52,8 +52,8 @@ module "data_ingestion" {
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
   bucket_name                      = "data-ingestion"
-  region                           = local.region
-  location                         = local.region
+  pubsub_resource_location         = local.location
+  location                         = local.location
   dataset_id                       = local.dataset_id
   cmek_keyring_name                = "cmek_keyring"
   delete_contents_on_destroy       = var.delete_contents_on_destroy
@@ -129,7 +129,7 @@ resource "google_cloud_scheduler_job" "scheduler" {
   # Scheduler need App Engine enabled in the project to run, in the same region where it going to be deployed.
   # If you are using App Engine in us-central, you will need to use as region us-central1 for Scheduler.
   # You will get a resource not found error if just using us-central.
-  region  = local.region
+  region  = local.location
   project = var.data_ingestion_project_id
 
   http_target {
@@ -138,7 +138,7 @@ resource "google_cloud_scheduler_job" "scheduler" {
       "Accept"       = "application/json"
       "Content-Type" = "application/json"
     }
-    uri = "https://dataflow.googleapis.com/v1b3/projects/${var.data_ingestion_project_id}/locations/${local.region}/templates"
+    uri = "https://dataflow.googleapis.com/v1b3/projects/${var.data_ingestion_project_id}/locations/${local.location}/templates"
     oauth_token {
       service_account_email = module.data_ingestion.scheduler_service_account_email
     }
