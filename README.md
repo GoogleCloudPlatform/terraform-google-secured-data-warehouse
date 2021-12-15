@@ -156,6 +156,7 @@ Grant the following roles to the service account.
 - Organization level
   - Access Context Manager Admin: `roles/accesscontextmanager.policyAdmin`
   - Organization Policy Administrator: `roles/orgpolicy.policyAdmin`
+  - Organization Administrator: `roles/resourcemanager.organizationAdmin`
 - Project level:
   - Data ingestion project
     - App Engine Creator:`roles/appengine.appCreator`
