@@ -17,11 +17,9 @@
 locals {
   first_project_group  = "0"
   second_project_group = "1"
-  third_project_group  = "2"
   project_groups = toset([
     local.first_project_group,
-    local.second_project_group,
-    local.third_project_group
+    local.second_project_group
   ])
 
   int_org_required_roles = [
@@ -35,9 +33,8 @@ locals {
 }
 
 # ====================== Examples to project groups mapping ================================================
-# Examples "dataflow-with-dlp" and "batch-data-ingestion" are together in one group.
-# Examples "simple-example" and "regional-dlp" are together in one group.
-# Examples "bigquery-confidential-data" and "de-identification-template" are together in one group.
+# Examples "de-identification-template" and "simple-example" are together in one group.
+# Example "regional-dlp" in one group.
 #
 # To add a new example, add it to one of the groups and try keep the number of examples that
 # deploy the main module to two in that group.
@@ -46,7 +43,7 @@ locals {
 #  1) Create a new project group and add it to the "project_groups" local,
 #  1.1) Add a new existing Google IAM group in "test/setup/outputs.tf#group_email",
 #  2) In "test/setup/iam.tf" create a new set of "google_project_iam_member" resources for the new group,
-#  3) In your new test fixture use the projects from the new group like "var.data_ingestion_project_id[3]",
+#  3) In your new test fixture use the projects from the new group like "var.data_ingestion_project_id[1]",
 #  4) Update "build/int.cloudbuild.yaml" to create a new sequence of build steps for the new group. The
 #     initial step of the new groups must "waitFor:" the "prepare" step.
 #
