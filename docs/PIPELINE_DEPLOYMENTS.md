@@ -139,7 +139,7 @@ For more details about `gcloud dataflow flex-template` see the command [document
 
 ## Common tasks
 
-### How do I rerun the job for new data?
+### How do I rerun the Dataflow flex pipeline for new data?
 
 #### Streaming Dataflow
 
