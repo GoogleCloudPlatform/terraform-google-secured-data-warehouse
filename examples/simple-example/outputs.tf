@@ -44,16 +44,6 @@ output "data_ingestion_bigquery_dataset" {
   value       = module.secured_data_warehouse.data_ingestion_bigquery_dataset
 }
 
-output "data_ingestion_access_level_name" {
-  description = "Access context manager access level name."
-  value       = module.secured_data_warehouse.data_ingestion_access_level_name
-}
-
-output "data_ingestion_service_perimeter_name" {
-  description = "Access context manager service perimeter name."
-  value       = module.secured_data_warehouse.data_ingestion_service_perimeter_name
-}
-
 output "cmek_data_ingestion_crypto_key" {
   description = "The Customer Managed Crypto Key for the data ingestion crypto boundary."
   value       = module.secured_data_warehouse.cmek_data_ingestion_crypto_key
@@ -64,7 +54,6 @@ output "cmek_bigquery_crypto_key" {
   value       = module.secured_data_warehouse.cmek_bigquery_crypto_key
 }
 
-
 output "cmek_reidentification_crypto_key" {
   description = "The Customer Managed Crypto Key for the reidentification crypto boundary."
   value       = module.secured_data_warehouse.cmek_reidentification_crypto_key
@@ -73,6 +62,36 @@ output "cmek_reidentification_crypto_key" {
 output "cmek_confidential_bigquery_crypto_key" {
   description = "The Customer Managed Crypto Key for the confidential BigQuery service."
   value       = module.secured_data_warehouse.cmek_confidential_bigquery_crypto_key
+}
+
+output "data_ingestion_access_level_name" {
+  description = "Data Ingestion Access Context Manager access level name."
+  value       = module.secured_data_warehouse.data_ingestion_access_level_name
+}
+
+output "data_ingestion_service_perimeter_name" {
+  description = "Data Ingestion VPC Service Controls service perimeter name."
+  value       = module.secured_data_warehouse.data_ingestion_service_perimeter_name
+}
+
+output "data_governance_access_level_name" {
+  description = "Data Governance Access Context Manager access level name."
+  value       = module.secured_data_warehouse.data_governance_access_level_name
+}
+
+output "data_governance_service_perimeter_name" {
+  description = "Data Governance VPC Service Controls service perimeter name."
+  value       = module.secured_data_warehouse.data_governance_service_perimeter_name
+}
+
+output "confidential_data_access_level_name" {
+  description = "Confidential Data Access Context Manager access level name."
+  value       = module.secured_data_warehouse.confidential_access_level_name
+}
+
+output "confidential_data_service_perimeter_name" {
+  description = "Confidential Data VPC Service Controls service perimeter name"
+  value       = module.secured_data_warehouse.confidential_service_perimeter_name
 }
 
 output "blueprint_type" {

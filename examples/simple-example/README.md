@@ -40,10 +40,14 @@ It uses:
 | cmek\_confidential\_bigquery\_crypto\_key | The Customer Managed Crypto Key for the confidential BigQuery service. |
 | cmek\_data\_ingestion\_crypto\_key | The Customer Managed Crypto Key for the data ingestion crypto boundary. |
 | cmek\_reidentification\_crypto\_key | The Customer Managed Crypto Key for the reidentification crypto boundary. |
-| data\_ingestion\_access\_level\_name | Access context manager access level name. |
+| confidential\_data\_access\_level\_name | Confidential Data Access Context Manager access level name. |
+| confidential\_data\_service\_perimeter\_name | Confidential Data VPC Service Controls service perimeter name |
+| data\_governance\_access\_level\_name | Data Governance Access Context Manager access level name. |
+| data\_governance\_service\_perimeter\_name | Data Governance VPC Service Controls service perimeter name. |
+| data\_ingestion\_access\_level\_name | Data Ingestion Access Context Manager access level name. |
 | data\_ingestion\_bigquery\_dataset | The bigquery dataset created for data ingestion pipeline. |
 | data\_ingestion\_bucket\_name | The name of the bucket created for data ingestion pipeline. |
-| data\_ingestion\_service\_perimeter\_name | Access context manager service perimeter name. |
+| data\_ingestion\_service\_perimeter\_name | Data Ingestion VPC Service Controls service perimeter name. |
 | data\_ingestion\_topic\_name | The topic created for data ingestion pipeline. |
 | dataflow\_controller\_service\_account\_email | The Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
 | pubsub\_writer\_service\_account\_email | The PubSub writer service account email. Should be used to write data to the PubSub topics the data ingestion pipeline reads from. |
