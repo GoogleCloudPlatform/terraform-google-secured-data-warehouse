@@ -29,4 +29,3 @@ spec:
     allowed:
     - "DATA_INGESTION_NETWORK_1"
     - "DATA_INGESTION_NETWORK_2"
-    - "DATA_INGESTION_NETWORK_3"

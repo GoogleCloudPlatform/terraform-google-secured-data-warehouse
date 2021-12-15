@@ -29,4 +29,3 @@ spec:
     allowed:
     - "CONFIDENTIAL_NETWORK_1"
     - "CONFIDENTIAL_NETWORK_2"
-    - "CONFIDENTIAL_NETWORK_3"
