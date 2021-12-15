@@ -141,6 +141,39 @@ For more details about `gcloud dataflow flex-template` see the command [document
 
 ### How do I rerun the job for new data?
 
+#### Streaming Dataflow
+
+##### Storage to Bigquery
+
+If you are using our [Tutorial Standalone Example](../examples/tutorial-standalone/README.md),
+the de-identification Dataflow deployed has hardcoded the file name as the `inputFilePattern` parameter.
+
+You must change the pattern for some who is more usable for you, for example: `*.csv`for all CSV files in the storage
+or `*2021-12-14-0000.csv` for any files in the date and hour in the bucket.
+After change the [`inputFilePattern`](../examples/tutorial-standalone/main.tf#L138)
+you must re-deploy the job.
+
+Since the de-identification Dataflow is a streaming one, any new file match the pattern will be ingested.
+
+##### Pub/Sub to Bigquery
+
+If you are using our [Regional DLP Example](../examples/regional-dlp/README.md), the Dataflow deployed is
+already waiting for new input data in the topic. You just need do publish a new message with the format
+expected by the template. You can check how publishing messages [here](https://cloud.google.com/pubsub/docs/publisher).
+
+#### Batch Dataflow
+
+##### Bigquery to Bigquery
+
+If you are using our [Tutorial Standalone Example](../examples/tutorial-standalone/README.md),
+the de-identification Dataflow deployed has hardcoded the table name as the `inputBigQueryTable` parameter.
+
+You must change the pattern for the table name or pattern you want to ingest. After change the [`inputBigQueryTable`](../examples/tutorial-standalone/main.tf#L175)
+you must re-deploy the job.
+
+__Note:__ All Batch Dataflow JObs at the end of execution, it will stop.
+If you want to trigger again, you must do a new deploy of the Dataflow Job.
+
 ### How do I send streaming data through and how to check it's been de-id?
 
 ### What if I have my own flex templates in a different project?
