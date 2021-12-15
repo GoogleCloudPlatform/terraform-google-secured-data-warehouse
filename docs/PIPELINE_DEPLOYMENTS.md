@@ -166,13 +166,14 @@ expected by the template. You can check how publishing messages [here](https://c
 ##### Bigquery to Bigquery
 
 If you are using our [Tutorial Standalone Example](../examples/tutorial-standalone/README.md),
-the de-identification Dataflow deployed has hardcoded the table name as the `inputBigQueryTable` parameter.
+the re-identification Dataflow deployed has hardcoded the table name as the `inputBigQueryTable` parameter.
 
-You must change the pattern for the table name or pattern you want to ingest. After change the [`inputBigQueryTable`](../examples/tutorial-standalone/main.tf#L175)
+You must change the pattern for the table name or pattern you want to ingest.
+After change the [`inputBigQueryTable`](../examples/tutorial-standalone/main.tf#L175)
 you must re-deploy the job.
 
-__Note:__ All Batch Dataflow JObs at the end of execution, it will stop.
-If you want to trigger again, you must do a new deploy of the Dataflow Job.
+__Note:__ All Batch Dataflow Jobs will stop at the end of execution.
+If you want to trigger again, you must do a new deploy of the Batch Dataflow Job.
 
 ### How do I send streaming data through and how to check it's been de-id?
 
