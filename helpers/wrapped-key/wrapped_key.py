@@ -143,7 +143,6 @@ if __name__ == '__main__':
                         '/keyRings/KEY-RING-ID/cryptoKeys/KEY-ID')
 
     args = parser.parse_args()
-    print(args.crypto_key_path)
     if args.crypto_key_path is not None:
         client = kms.KeyManagementServiceClient()
         key_ring_args = client.parse_crypto_key_path(args.crypto_key_path)
@@ -159,4 +158,4 @@ if __name__ == '__main__':
 
     encrypt_response = encrypt_symmetric(project_id, location_id,
                                          key_ring_id, key_id)
-    print(base64.b64encode(encrypt_response.ciphertext))
+    print(base64.b64encode(encrypt_response.ciphertext).decode("utf-8"))

@@ -34,11 +34,6 @@ output "dataflow_temp_bucket_name" {
   value       = module.data_ingestion.data_ingestion_dataflow_bucket_name
 }
 
-output "df_job_region" {
-  description = "The region of the newly created Dataflow job."
-  value       = local.region
-}
-
 output "df_job_network" {
   description = "The URI of the VPC being created."
   value       = var.network_self_link

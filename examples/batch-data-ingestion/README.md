@@ -36,7 +36,7 @@ configure with the firewall rules and DNS configurations described below.
 This examples uses a [csv file with sample data](./assets/cc_10000_records.csv) as input for the dataflow job.
 You can create new files with different sizes using the [sample-cc-generator](../../helpers/sample-cc-generator/README.md) helper.
 This new file must be placed in the [assets folder](./assets)
-You need to change value of the local `cc_file_name` in the [main.tf](./main.tf#L23) file to use the new sample file:
+You need to change value of the local `cc_file_name` in the [main.tf](./main.tf#L22) file to use the new sample file:
 
 ```hcl
 locals {
@@ -84,7 +84,6 @@ since the Batch Dataflow job ends when the pipeline finishes .
 | controller\_service\_account | The Service Account email that will be used to identify the VMs in which the jobs are running. |
 | dataflow\_temp\_bucket\_name | The name of the dataflow temporary bucket. |
 | df\_job\_network | The URI of the VPC being created. |
-| df\_job\_region | The region of the newly created Dataflow job. |
 | df\_job\_subnetwork | The name of the subnetwork used for create Dataflow job. |
 | project\_id | The data ingestion project's ID. |
 | scheduler\_id | Cloud Scheduler Job id created. |

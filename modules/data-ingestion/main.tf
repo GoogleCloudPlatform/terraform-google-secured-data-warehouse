@@ -33,10 +33,6 @@ module "data_ingestion_bucket" {
   encryption = {
     default_kms_key_name = var.data_ingestion_encryption_key
   }
-
-  labels = {
-    "enterprise_data_ingestion_bucket" = "true"
-  }
 }
 
 module "dataflow_bucket" {
@@ -53,11 +49,6 @@ module "dataflow_bucket" {
   encryption = {
     default_kms_key_name = var.data_ingestion_encryption_key
   }
-
-  labels = {
-    "dataflow_data_ingestion_bucket" = "true"
-  }
-
 }
 
 //pub/sub data ingestion topic
@@ -68,7 +59,7 @@ module "data_ingestion_topic" {
   project_id             = var.data_ingestion_project_id
   topic                  = "tpc-data-ingestion-${random_id.suffix.hex}"
   topic_kms_key_name     = var.data_ingestion_encryption_key
-  message_storage_policy = { allowed_persistence_regions : [var.region] }
+  message_storage_policy = { allowed_persistence_regions : [var.pubsub_resource_location] }
 }
 
 //BigQuery dataset
@@ -84,9 +75,4 @@ module "bigquery_dataset" {
   encryption_key              = var.bigquery_encryption_key
   delete_contents_on_destroy  = var.delete_contents_on_destroy
   default_table_expiration_ms = var.dataset_default_table_expiration_ms
-
-  dataset_labels = {
-    purpose  = "data-ingestion"
-    billable = "true"
-  }
 }

@@ -9,10 +9,13 @@ In this folder we have:
 - A folder for [Python](./python/) code samples for de-identification and re-identification
 - In the Python folder we also have a [Cloud build file](./python/modules/cloudbuild.yaml) to populate the Python Artifact Registry Repository.
 
-The Data Warehouse Secure Blueprint main module [creates](../README.md#outputs) a user-managed Dataflow [controller service account](https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_worker_service_account).
-This service account is used to stage and run the Dataflow job.
+The Secured Data Warehouse Blueprint main module [creates](../README.md#outputs) two user-managed Dataflow [controller service accounts](https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_worker_service_account).
+These service accounts are used to stage and run the Dataflow job.
 
 To be able to deploy this Flex template you need to grant to the Dataflow controller service account the following roles in the resources create in the infrastructure script:
 
 - Artifact Registry Reader (`roles/artifactregistry.reader`) in the Artifact Registry Repository,
 - Storage Object Viewer (`roles/storage.objectViewer`) in the Storage Bucket.
+
+See the [main.tf](../test/setup/template-project/main.tf) file of the test setup for an example of usage,
+this example needs Cloud Build api to be enabled in the project of the `service_account_email` input.

@@ -41,7 +41,14 @@ to wait for the first job to deploy, process the 10k records, and write to the B
 The re-identification step is typically a separate deliberate action (with change control) to re-identify and limit
 who can read the data but is executed automatically in the example to showcase the BigQuery security controls.
 
-This example will be deployed at the `us-east4` location, to deploy in another location, change the local `location` in the example [main.tf](./main.tf#L18) file.
+## Google Cloud Locations
+
+This example will be deployed at the `us-east4` location, to deploy in another location,
+change the local `location` in the example [main.tf](./main.tf#L18) file.
+By default, the Secured Data Warehouse module has an [Organization Policy](https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations)
+that only allows the creation of resource in `us-locations`.
+To deploy in other locations, update the input [trusted_locations](../../README.md#inputs) with
+the appropriated location in the call to the [main module](./main.tf#L33).
 
 ## Usage
 
