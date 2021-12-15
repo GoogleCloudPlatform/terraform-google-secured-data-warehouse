@@ -33,7 +33,7 @@ module "secured_data_warehouse" {
   terraform_service_account        = TERRAFORM_SERVICE_ACCOUNT
   access_context_manager_policy_id = ACCESS_CONTEXT_MANAGER_POLICY_ID
   bucket_name                      = DATA_INGESTION_BUCKET_NAME
-  region                           = REGION
+  pubsub_resource_location         = PUBSUB_RESOURCE_LOCATION
   location                         = LOCATION
   trusted_locations                = TRUSTED_LOCATIONS
   dataset_id                       = DATASET_ID
