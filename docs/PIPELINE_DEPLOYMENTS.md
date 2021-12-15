@@ -11,12 +11,19 @@ It is necessary configure some controls for the deployment of the Secured Data W
 
 The Secured Data Warehouse module uses [VPC Service Controls](https://cloud.google.com/vpc-service-controls/docs/service-perimeters).
 
-The identity deploying the Dataflow job must be in the [access level](https://cloud.google.com/access-context-manager/docs/create-basic-access-level#members-example) of the perimeter. You can add it using the input `perimeter_additional_members` of the *Secured Data Warehouse Module*.
+The identity deploying the Dataflow pipeline must be in the [access level](https://cloud.google.com/access-context-manager/docs/create-basic-access-level#members-example) of the perimeter.
+You can add it using the input `perimeter_additional_members` of the *Secured Data Warehouse Module*.
 
-To use a private template repository outside of the perimeter, the identity deploying the Dataflow job must be in a egress rule that allow the Dataflow templates to be fetched. In the *Secured Data Warehouse Module* you configure it using the appropriated list below.
+To use a private template repository outside of the perimeter, the identity deploying the Dataflow pipeline must be in a *egress rule* that
+allows the Dataflow templates to be fetched. In the *Secured Data Warehouse Module* you configure it using the appropriated list below.
 
 - For the **confidential perimeter**, the identity needs to be added in the input `confidential_data_dataflow_deployer_identities` of the *Secured Data Warehouse Module*.
 - For the **data ingestion perimeter**, the identity needs to be added in the input `data_ingestion_dataflow_deployer_identities` of the *Secured Data Warehouse Module*.
+
+You also need to add the private template repository project to the *egress rule*.
+You must use the variable `sdx_project_number` to provide the *project number* of project.
+
+This version only supports one external project for both confidential and data ingestion templates.
 
 ## Requirements
 
@@ -153,7 +160,7 @@ Examples using Java De-Identification Dataflow Flex Template:
 - [Dataflow with DLP](../examples/dataflow-with-dlp/README.md)
 - [Tutorial Standalone Example](../examples/tutorial-standalone/README.md)
 
-If you are using any of our examples, the Dataflow job deployed has hardcoded the file name as the `inputFilePattern` parameter.
+If you are using any of our examples, the Dataflow pipeline deployed has hardcoded the file name as the `inputFilePattern` parameter.
 
 You must change the pattern for some who is more usable for you, for example: `*.csv`for all CSV files in the storage
 or `*2021-12-14-0000.csv` for any files in the date and hour in the bucket.
@@ -192,11 +199,21 @@ If you are using any of our examples, the re-identification Dataflow deployed ha
 You must change the pattern for the table name or pattern you want to ingest.
 After change the `inputBigQueryTable` you must re-deploy the job.
 
-__Note:__ All Batch Dataflow Jobs will stop at the end of execution.
+__Note:__ All Batch dataflow pipeline will stop at the end of execution.
 If you want to trigger again, you must do a new deploy of the Batch Dataflow Job.
 
 ### How do I check if my data have been de-identified?
 
+After the Dataflow Pipeline successfully runs, you can check the data in the
+[Bigquery table](https://cloud.google.com/bigquery/docs/quickstarts/quickstart-cloud-console#preview_table_data) created in the dataset provided
+in the Non-Confidential project.
+All the sensible data must be de-identified.
+
+__Note:__ The provided [Java De-Identification Flex Template sample](../flex-templates/java/regional_dlp_de_identification/README.md) sample creates one table for each file processed with the same name of the file.
+
 ### How do I check if my data have been re-identified?
 
-### What if I have my own flex templates in a different project?
+After the Dataflow Pipeline successfully runs, you can check the data in the
+[Bigquery table](https://cloud.google.com/bigquery/docs/quickstarts/quickstart-cloud-console#preview_table_data) created in the dataset provided in the Confidential Project.
+
+All the sensible data must be re-identified.
