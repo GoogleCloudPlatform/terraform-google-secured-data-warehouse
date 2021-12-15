@@ -145,9 +145,9 @@ For more details about `gcloud dataflow flex-template` see the command [document
 
 ##### Storage to Bigquery
 
-If you are using our [Java De-Identification Flex Template sample](../flex-templates/java/regional_dlp_de_identification/README.md), you can provide a pattern as value to `inputFilePattern`.
+If you are using our [Java De-Identification Flex Template sample](../flex-templates/java/regional_dlp_de_identification/README.md), you can provide a pattern as value for the `inputFilePattern` parameter.
 
-Examples using [Java De-Identification Dataflow Flex Template](../flex-templates/java/regional_dlp_de_identification/README.md):
+Examples using Java De-Identification Dataflow Flex Template:
 
 - [Bigquery Confidential Data Example](../examples/bigquery-confidential-data/README.md)
 - [Dataflow with DLP](../examples/dataflow-with-dlp/README.md)
@@ -161,11 +161,14 @@ After change the `inputFilePattern` you must re-deploy the job.
 
 Since the de-identification Dataflow is a streaming one, any new file match the pattern will be ingested.
 
+__Note__: The [Java De-Identification Flex Template sample](../flex-templates/java/regional_dlp_de_identification/README.md)
+generates a new table for each file consumed.
+
 ##### Pub/Sub to Bigquery
 
-If you are using our [Python De-Identification Flex Template sample](../flex-templates/java/regional_dlp_de_identification/README.md), you can provide a topic as value to `input_topic`.
+If you are using our [Python De-Identification Flex Template sample](../flex-templates/java/regional_dlp_de_identification/README.md), you can provide a topic as value for the `input_topic` parameter.
 
-Examples using [Python De-Identification Flex Template](../flex-templates/java/regional_dlp_de_identification/README.md):
+Examples using Python De-Identification Flex Template:
 
 - [Regional DLP](../examples/regional-dlp/README.md)
 
@@ -177,9 +180,9 @@ expected by the template. You can check how publishing messages [here](https://c
 
 ##### Bigquery to Bigquery
 
-If you are using our [Java Re-Identification Flex Template sample](../flex-templates/java/regional_dlp_de_identification/README.md), you can provide a pattern as value to `inputBigQueryTable`.
+If you are using our [Java Re-Identification Flex Template sample](../flex-templates/java/regional_dlp_de_identification/README.md), you can provide a pattern as value for the `inputBigQueryTable` parameter.
 
-Examples using [Java De-Identification Dataflow Flex Template](../flex-templates/java/regional_dlp_de_identification/README.md):
+Examples using Java De-Identification Dataflow Flex Template:
 
 - [Bigquery Confidential Data Example](../examples/bigquery-confidential-data/README.md)
 - [Tutorial Standalone Example](../examples/tutorial-standalone/README.md)
