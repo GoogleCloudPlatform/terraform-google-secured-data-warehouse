@@ -31,11 +31,6 @@ module "dataflow_bucket" {
   encryption = {
     default_kms_key_name = var.cmek_reidentification_crypto_key
   }
-
-  labels = {
-    "dataflow_data_ingestion_bucket" = "true"
-  }
-
 }
 
 module "bigquery_confidential_data" {
@@ -49,5 +44,4 @@ module "bigquery_confidential_data" {
   delete_contents_on_destroy  = var.delete_contents_on_destroy
   encryption_key              = var.cmek_confidential_bigquery_crypto_key
   default_table_expiration_ms = var.dataset_default_table_expiration_ms
-  dataset_labels              = var.dataset_labels
 }

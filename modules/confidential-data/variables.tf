@@ -25,12 +25,6 @@ variable "delete_contents_on_destroy" {
   default     = false
 }
 
-variable "dataset_labels" {
-  description = "Key value pairs in a map for dataset labels."
-  type        = map(string)
-  default     = {}
-}
-
 variable "data_governance_project_id" {
   description = "The ID of the project in which the KMS, Datacatalog, and DLP resources are created."
   type        = string
