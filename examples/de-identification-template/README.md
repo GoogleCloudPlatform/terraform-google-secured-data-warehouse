@@ -4,10 +4,10 @@ This example illustrates how to use the [de-identification template](../../modul
 
 ## Prerequisites
 
+1. The [De-identification template](../../modules/de-identification-template/README.md#requirements) submodule requirements to using the submodule.
 1. A `crypto_key` and `wrapped_key` pair. Contact your Security Team to obtain the `crypto_key` and `wrapped_key` pair.
 The `crypto_key` location must be the same location used for the `dlp_location`.
 There is a [Wrapped Key Helper](../../helpers/wrapped-key/README.md) python script which generates a wrapped key.
-1. An Existing GCP Project
 1. The identity deploying the example must have permission to grant roles "roles/cloudkms.cryptoKeyDecrypter" and "roles/cloudkms.cryptoKeyEncrypter" in the KMS `crypto_key`. It will be granted to the `dataflow_service_account`.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
