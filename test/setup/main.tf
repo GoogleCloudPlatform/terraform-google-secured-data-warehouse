@@ -43,9 +43,11 @@ locals {
 #  1) Create a new project group and add it to the "project_groups" local,
 #  1.1) Add a new existing Google IAM group in "test/setup/outputs.tf#group_email",
 #  2) In "test/setup/iam.tf" create a new set of "google_project_iam_member" resources for the new group,
-#  3) In your new test fixture use the projects from the new group like "var.data_ingestion_project_id[1]",
+#  3) In your new test fixture use the projects from the new group like "var.data_ingestion_project_id[2]",
 #  4) Update "build/int.cloudbuild.yaml" to create a new sequence of build steps for the new group. The
 #     initial step of the new groups must "waitFor:" the "prepare" step.
+#  5) include a new "PROJECT_ID" in the terraform validator policy constraints, like
+#     "organizations/**/projects/DATA_INGESTION_PROJECT_ID_3"
 #
 # See "build/int.cloudbuild.yaml" file for the build of these groups linked by "waitFor:"
 # ==========================================================================================================
