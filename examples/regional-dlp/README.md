@@ -13,8 +13,7 @@ It uses:
 1. The [Secured data warehouse](../../README.md#requirements) module requirements to create the Secured data warehouse infrastructure.
 1. A `crypto_key` and `wrapped_key` pair.  Contact your Security Team to obtain the pair. The `crypto_key` location must be the same location used for the `location` variable. There is a [Wrapped Key Helper](../../helpers/wrapped-key/README.md) python script which generates a wrapped key.
 1. The identity deploying the example must have permission to grant roles "roles/cloudkms.cryptoKeyDecrypter" and "roles/cloudkms.cryptoKeyEncrypter" in the KMS `crypto_key`. It will be granted to the Data ingestion Dataflow worker service account created by the Secured Data Warehouse module.
-1. An Existing GCP Project.
-1. A pre-build Python Regional DLP De-identification flex template. See [Flex templates](../../flex-templates/README.md).
+1. A pre-build Python Regional DLP De-identification flex template. See [Flex templates](../../flex-templates/README.md) on how to create them.
 1. The identity deploying the example must have permissions to grant role "roles/artifactregistry.reader" in the docker and python repos of the Flex templates.
 1. A network and subnetwork in the Data Ingestion project [configured for Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access).
 
