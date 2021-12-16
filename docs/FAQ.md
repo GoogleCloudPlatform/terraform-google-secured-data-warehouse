@@ -11,7 +11,7 @@ The Secured Data Warehouse has inputs to use an existing VPC-SC service perimete
 On your existing VPC-SC service perimeter:
 
 - Configure the additional [services](../service_control.tf#L47) from the Secured Data Warehouse that need to be protected
-- Add the terraform service account to the access level member list for this perimeter. The service Account must be in the access level member list **before** this perimeter can be used in this module.
+- Add the terraform service account to the access level member list for this perimeter. The service account must be in the access level member list **before** this perimeter can be used in this module.
 - Add an egress rule to allow access to external Dataflow templates using Cloud Storage API, see [How do I call a Google service protected by the perimeters from a project outside of the auto-created perimeters?](#how-do-i-call-a-google-service-protected-by-the-perimeters-from-a-project-outside-of-the-auto-created-perimeters).
 
 ## How do I add new projects to one of the auto-created perimeters?
@@ -24,7 +24,7 @@ Each auto-created perimeter has an output for its name:
 - `data_governance_service_perimeter_name`
 - `confidential_service_perimeter_name`
 
-example
+Example
 
 ```hcl
 resource "google_access_context_manager_service_perimeter_resource" "service-perimeter-resource" {
@@ -33,6 +33,8 @@ resource "google_access_context_manager_service_perimeter_resource" "service-per
 }
 
 ```
+
+As an alternative, the [Google Cloud Project Factory](https://github.com/terraform-google-modules/terraform-google-project-factory) Terraform Module also allows for the inclusion of a new project in an [existing perimeter](https://github.com/terraform-google-modules/terraform-google-project-factory/blob/e444e2ae47632bfc7f1c060be6db1ab15e1cfb9d/variables.tf#L250).
 
 **Note:** use the input `additional_restricted_services` for additional services from your project that need to be protected by the service perimeter.
 

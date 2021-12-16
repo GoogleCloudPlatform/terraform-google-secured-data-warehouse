@@ -1,5 +1,7 @@
 # Secured Data Warehouse Blueprint
 
+[FAQ](./docs/FAQ.md) | [Troubleshooting Guide](./docs/TROUBLESHOOTING.md).
+
 This repository contains Terraform configuration modules that allow Google Cloud customers to
 quickly deploy a secured [BigQuery](https://cloud.google.com/bigquery) data warehouse. The blueprint allows customers
 to use Google Cloud's core strengths in data analytics, and to overcome typical
