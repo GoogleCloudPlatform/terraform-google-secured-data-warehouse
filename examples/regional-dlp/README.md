@@ -2,6 +2,13 @@
 
 This example illustrates how to run a Flex Python Dataflow job in the Secured data warehouse.
 
+This example will deploy the Secured Data Warehouse module and a Python Dataflow flex template pipeline
+that reads from Pub/Sub and writes to BigQuery.
+
+To test the pipeline go to the [topic list page](https://console.cloud.google.com/cloudpubsub/topic/list)
+and [publish a message](https://cloud.google.com/pubsub/docs/publisher#console)
+with the content of the file [books.json](./files/books.json) in the data ingestion topic.
+
 It uses:
 
 - The [Secured data warehouse](../../README.md) module to create the Secured data warehouse infrastructure,
