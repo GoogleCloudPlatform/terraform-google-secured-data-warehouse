@@ -24,7 +24,6 @@ spec:
     target:
     - "organizations/**/projects/CONFIDENTIAL_PROJECT_ID_1"
     - "organizations/**/projects/CONFIDENTIAL_PROJECT_ID_2"
-    - "organizations/**/projects/CONFIDENTIAL_PROJECT_ID_3"
   parameters:
     mode: "allowlist"
     resource_type_list:
