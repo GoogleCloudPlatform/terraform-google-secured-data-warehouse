@@ -66,21 +66,21 @@ module "secured_data_warehouse" {
 | additional\_restricted\_services | The list of additional Google services to be protected by the VPC-SC service perimeters. | `list(string)` | `[]` | no |
 | bucket\_class | The storage class for the bucket being provisioned. | `string` | `"STANDARD"` | no |
 | bucket\_lifecycle\_rules | List of lifecycle rules to configure. Format is the same as described in provider documentation https://www.terraform.io/docs/providers/google/r/storage_bucket.html#lifecycle_rule except condition.matches\_storage\_class should be a comma delimited string. | <pre>set(object({<br>    action    = any<br>    condition = any<br>  }))</pre> | <pre>[<br>  {<br>    "action": {<br>      "type": "Delete"<br>    },<br>    "condition": {<br>      "age": 30,<br>      "matches_storage_class": [<br>        "STANDARD"<br>      ],<br>      "with_state": "ANY"<br>    }<br>  }<br>]</pre> | no |
-| bucket\_name | The name of for the bucket being provisioned. | `string` | n/a | yes |
+| bucket\_name | The name of the bucket being provisioned. | `string` | n/a | yes |
 | cmek\_keyring\_name | The Keyring prefix name for the KMS Customer Managed Encryption Keys being provisioned. | `string` | n/a | yes |
 | confidential\_data\_dataflow\_deployer\_identities | List of members in the standard GCP form: user:{email}, serviceAccount:{email} that will deploy Dataflow jobs in the Confidential Data project. These identities will be added to the VPC-SC secure data exchange egress rules. | `list(string)` | `[]` | no |
 | confidential\_data\_egress\_policies | A list of all [egress policies](https://cloud.google.com/vpc-service-controls/docs/ingress-egress-rules#egress-rules-reference) for the Confidential Data perimeter, each list object has a `from` and `to` value that describes egress\_from and egress\_to. See also [secure data exchange](https://cloud.google.com/vpc-service-controls/docs/secure-data-exchange#allow_access_to_a_google_cloud_resource_outside_the_perimeter) and the [VPC-SC](https://github.com/terraform-google-modules/terraform-google-vpc-service-controls/blob/v3.1.0/modules/regular_service_perimeter/README.md) module. | <pre>list(object({<br>    from = any<br>    to   = any<br>  }))</pre> | `[]` | no |
-| confidential\_data\_perimeter | Existing confidential data perimeter to be used instead of the auto-crated perimeter. The service account provided in the variable `terraform_service_account` must be in an access level member list for this perimeter **before** this perimeter can be used in this module. | `string` | `""` | no |
+| confidential\_data\_perimeter | Existing confidential data perimeter to be used instead of the auto-created perimeter. The service account provided in the variable `terraform_service_account` must be in an access level member list for this perimeter **before** this perimeter can be used in this module. | `string` | `""` | no |
 | confidential\_data\_project\_id | Project where the confidential datasets and tables are created. | `string` | n/a | yes |
 | confidential\_dataset\_id | Unique ID for the confidential dataset being provisioned. | `string` | `"secured_dataset"` | no |
 | data\_analyst\_group | Google Cloud IAM group that analyzes the data in the warehouse. | `string` | n/a | yes |
 | data\_engineer\_group | Google Cloud IAM group that sets up and maintains the data pipeline and warehouse. | `string` | n/a | yes |
 | data\_governance\_egress\_policies | A list of all [egress policies](https://cloud.google.com/vpc-service-controls/docs/ingress-egress-rules#egress-rules-reference) for the Data Governance perimeter, each list object has a `from` and `to` value that describes egress\_from and egress\_to. See also [secure data exchange](https://cloud.google.com/vpc-service-controls/docs/secure-data-exchange#allow_access_to_a_google_cloud_resource_outside_the_perimeter) and the [VPC-SC](https://github.com/terraform-google-modules/terraform-google-vpc-service-controls/blob/v3.1.0/modules/regular_service_perimeter/README.md) module. | <pre>list(object({<br>    from = any<br>    to   = any<br>  }))</pre> | `[]` | no |
-| data\_governance\_perimeter | Existing data governance perimeter to be used instead of the auto-crated perimeter. The service account provided in the variable `terraform_service_account` must be in an access level member list for this perimeter **before** this perimeter can be used in this module. | `string` | `""` | no |
+| data\_governance\_perimeter | Existing data governance perimeter to be used instead of the auto-created perimeter. The service account provided in the variable `terraform_service_account` must be in an access level member list for this perimeter **before** this perimeter can be used in this module. | `string` | `""` | no |
 | data\_governance\_project\_id | The ID of the project in which the data governance resources will be created. | `string` | n/a | yes |
 | data\_ingestion\_dataflow\_deployer\_identities | List of members in the standard GCP form: user:{email}, serviceAccount:{email} that will deploy Dataflow jobs in the Data Ingestion project. These identities will be added to the VPC-SC secure data exchange egress rules. | `list(string)` | `[]` | no |
 | data\_ingestion\_egress\_policies | A list of all [egress policies](https://cloud.google.com/vpc-service-controls/docs/ingress-egress-rules#egress-rules-reference) for the Data Ingestion perimeter, each list object has a `from` and `to` value that describes egress\_from and egress\_to. See also [secure data exchange](https://cloud.google.com/vpc-service-controls/docs/secure-data-exchange#allow_access_to_a_google_cloud_resource_outside_the_perimeter) and the [VPC-SC](https://github.com/terraform-google-modules/terraform-google-vpc-service-controls/blob/v3.1.0/modules/regular_service_perimeter/README.md) module. | <pre>list(object({<br>    from = any<br>    to   = any<br>  }))</pre> | `[]` | no |
-| data\_ingestion\_perimeter | Existing data ingestion perimeter to be used instead of the auto-crated perimeter. The service account provided in the variable `terraform_service_account` must be in an access level member list for this perimeter **before** this perimeter can be used in this module. | `string` | `""` | no |
+| data\_ingestion\_perimeter | Existing data ingestion perimeter to be used instead of the auto-created perimeter. The service account provided in the variable `terraform_service_account` must be in an access level member list for this perimeter **before** this perimeter can be used in this module. | `string` | `""` | no |
 | data\_ingestion\_project\_id | The ID of the project in which the data ingestion resources will be created | `string` | n/a | yes |
 | dataset\_default\_table\_expiration\_ms | TTL of tables using the dataset in MS. The default value is null. | `number` | `null` | no |
 | dataset\_description | Dataset description. | `string` | `"Data-ingestion dataset"` | no |
@@ -119,7 +119,7 @@ module "secured_data_warehouse" {
 | data\_governance\_service\_perimeter\_name | Access context manager service perimeter name. |
 | data\_ingestion\_access\_level\_name | Access context manager access level name. |
 | data\_ingestion\_bigquery\_dataset | The bigquery dataset created for data ingestion pipeline. |
-| data\_ingestion\_bucket\_name | The name of the bucket created for data ingestion pipeline. |
+| data\_ingestion\_bucket\_name | The name of the bucket created for the data ingestion pipeline. |
 | data\_ingestion\_dataflow\_bucket\_name | The name of the bucket created for dataflow in the data ingestion pipeline. |
 | data\_ingestion\_service\_perimeter\_name | Access context manager service perimeter name. |
 | data\_ingestion\_topic\_name | The topic created for data ingestion pipeline. |
@@ -299,7 +299,7 @@ resources of this module:
 - Dataflow API:`dataflow.googleapis.com`
 - Identity and Access Management (IAM) API:`iam.googleapis.com`
 
-You can use he [Project Factory module](https://github.com/terraform-google-modules/terraform-google-project-factory) to
+You can use the [Project Factory module](https://github.com/terraform-google-modules/terraform-google-project-factory) to
 provision the projects with the necessary APIs enabled.
 
 ## Security Disclosures
