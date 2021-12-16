@@ -63,14 +63,6 @@ output "group_email" {
   ]
 }
 
-output "java_de_identify_template_gs_path" {
-  value = module.template_project.java_de_identify_template_gs_path
-}
-
-output "java_re_identify_template_gs_path" {
-  value = module.template_project.java_re_identify_template_gs_path
-}
-
 output "python_de_identify_template_gs_path" {
   value = module.template_project.python_de_identify_template_gs_path
 }
