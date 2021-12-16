@@ -25,9 +25,7 @@ spec:
       target:
       - "organizations/**/projects/DATA_INGESTION_PROJECT_ID_1"
       - "organizations/**/projects/DATA_INGESTION_PROJECT_ID_2"
-      - "organizations/**/projects/DATA_INGESTION_PROJECT_ID_3"
   parameters:
     allowed:
     - "DATA_INGESTION_NETWORK_1"
     - "DATA_INGESTION_NETWORK_2"
-    - "DATA_INGESTION_NETWORK_3"
