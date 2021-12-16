@@ -58,3 +58,13 @@ module "vpc_subnetwork_policy" {
   allow             = var.trusted_subnetworks
   allow_list_length = length(var.trusted_subnetworks)
 }
+
+module "vm_external_ip_access" {
+  source      = "terraform-google-modules/org-policy/google"
+  version     = "~> 4.0"
+  policy_for  = "project"
+  project_id  = var.project_id
+  constraint  = "constraints/compute.vmExternalIpAccess"
+  policy_type = "list"
+  enforce     = "true"
+}
