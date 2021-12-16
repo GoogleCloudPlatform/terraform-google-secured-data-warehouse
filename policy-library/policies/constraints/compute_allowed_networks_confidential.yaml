@@ -25,9 +25,7 @@ spec:
       target:
       - "organizations/**/projects/CONFIDENTIAL_PROJECT_ID_1"
       - "organizations/**/projects/CONFIDENTIAL_PROJECT_ID_2"
-      - "organizations/**/projects/CONFIDENTIAL_PROJECT_ID_3"
   parameters:
     allowed:
     - "CONFIDENTIAL_NETWORK_1"
     - "CONFIDENTIAL_NETWORK_2"
-    - "CONFIDENTIAL_NETWORK_3"

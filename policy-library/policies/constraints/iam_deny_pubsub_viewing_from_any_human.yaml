@@ -24,7 +24,6 @@ spec:
     target:
     - "organizations/**/projects/DATA_INGESTION_PROJECT_ID_1"
     - "organizations/**/projects/DATA_INGESTION_PROJECT_ID_2"
-    - "organizations/**/projects/DATA_INGESTION_PROJECT_ID_3"
   parameters:
     mode: denylist
     role: "roles/pubsub**"

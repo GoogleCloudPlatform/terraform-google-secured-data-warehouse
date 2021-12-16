@@ -16,7 +16,7 @@
 
 output "data_governance_project_id" {
   description = "The project_id used to create infra."
-  value       = var.data_governance_project_id[2]
+  value       = var.data_governance_project_id[0]
 }
 
 output "de_identification_template_crypto_key" {
