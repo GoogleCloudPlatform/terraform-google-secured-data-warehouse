@@ -35,7 +35,7 @@ It uses:
 
 ### Route configuration
 
-- Static routes configured to *private* and *restricted* IPs.. For more information see [Routing options](https://cloud.google.com/vpc/docs/configure-private-google-access#config-routing) in the documentation.
+- Static routes configured to *private* and *restricted* IPs. For more information see [Routing options](https://cloud.google.com/vpc/docs/configure-private-google-access#config-routing) in the documentation.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
