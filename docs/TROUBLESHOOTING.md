@@ -44,9 +44,9 @@ In **VIEW DETAILS**:
 
 ```console
 Fail to process as Flex Template and Legacy Template. Flex Template Process result:(390ac373ef6bcb87):
-Template file failed to load: gs://<BUCKET-NAME>/flex-template-samples/regional-bq-dlp-bq-streaming.json.
+Template file failed to load: gs://<BUCKET-NAME>/flex-template-samples/regional-python-dlp-flex.json.
 Permissions denied. Request is prohibited by organization's policy. vpcServiceControlsUniqueIdentifier: <UNIQUE-IDENTIFIER>,
-Legacy Template Process result:(390ac373ef6bc2a5): Template file failed to load: gs://<BUCKET-NAME>/flex-template-samples/regional-bq-dlp-bq-streaming.json.
+Legacy Template Process result:(390ac373ef6bc2a5): Template file failed to load: gs://<BUCKET-NAME>/flex-template-samples/regional-python-dlp-flex.json.
 Permissions denied. Request is prohibited by organization's policy. vpcServiceControlsUniqueIdentifier: <UNIQUE-IDENTIFIER>
 ```
 
@@ -91,7 +91,7 @@ If the default network does not exist, you will get the 400 error.
 
 **Solution:**
 
-A valid **VPC subnetwork** must be declared as a job parameter in the creation of the Dataflow Job, as you can see in the dataflow-with-dlp [example](../examples/dataflow-with-dlp/main.tf#L86) that uses the dataflow-flex-job [module](../modules/dataflow-flex-job/README.md).
+A valid **VPC subnetwork** must be declared as a job parameter in the creation of the Dataflow Job, as you can see in the regional-dlp [example](../examples/regional-dlp/main.tf#L99) that uses the dataflow-flex-job [module](../modules/dataflow-flex-job/README.md).
 
 - **GCP Console**: Use the optional parameter `Subnetwork`.
 - **Gcloud CLI**: Use the optional flag [--subnetwork](https://cloud.google.com/sdk/gcloud/reference/dataflow/jobs/run#--subnetwork).
