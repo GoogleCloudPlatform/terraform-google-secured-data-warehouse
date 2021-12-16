@@ -14,6 +14,9 @@
 
 project_id = attribute('project_id')
 blueprint_type = attribute('blueprint_type')
+blueprint_type_semversion = blueprint_type.split('/')[-1]
+blueprint_type_base = blueprint_type.split('/').slice(0, 3).join('/')
+SEMVERSION_REGEX = /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/
 
 boolean_policy_constraints = [
   'constraints/iam.disableServiceAccountCreation',
@@ -85,8 +88,14 @@ control 'gcloud' do
   end
 
   describe "check blueprint_type #{blueprint_type}" do
-    it 'should have expected value' do
-      expect("#{blueprint_type}" ).to eq 'blueprints/terraform/terraform-google-secured-data-warehouse/v1.0.0'
+    it 'should have a valid base attribution' do
+      expect("#{blueprint_type_base}" ).to eq 'blueprints/terraform/terraform-google-secured-data-warehouse'
+    end
+  end
+
+  describe "check blueprint_type #{blueprint_type}" do
+    it 'should have a valid semversion' do
+      expect("#{blueprint_type_semversion}" ).to match SEMVERSION_REGEX
     end
   end
 end
