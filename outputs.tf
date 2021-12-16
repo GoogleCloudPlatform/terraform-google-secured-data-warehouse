@@ -52,7 +52,7 @@ output "pubsub_writer_service_account_email" {
 }
 
 output "data_ingestion_bucket_name" {
-  description = "The name of the bucket created for data ingestion pipeline."
+  description = "The name of the bucket created for the data ingestion pipeline."
   value       = module.data_ingestion.data_ingestion_bucket_name
 
   depends_on = [
