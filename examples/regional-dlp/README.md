@@ -32,6 +32,10 @@ It uses:
 - [Restricted gcr.io](https://cloud.google.com/vpc-service-controls/docs/set-up-gke#configure-dns).
 - [Restricted Artifact Registry](https://cloud.google.com/vpc-service-controls/docs/set-up-gke#configure-dns).
 
+### Route configuration
+
+- Static routes configured to *private* and *restricted* IPs. For more information see [Routing options](https://cloud.google.com/vpc/docs/configure-private-google-access#config-routing) in the documentation.
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
 
