@@ -55,7 +55,3 @@ terraform {
   }
 
 }
-
-locals {
-  blueprint_type = "blueprints/terraform/terraform-google-secured-data-warehouse/v1.0.0"
-}
