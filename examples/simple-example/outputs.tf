@@ -30,7 +30,7 @@ output "pubsub_writer_service_account_email" {
 }
 
 output "data_ingestion_bucket_name" {
-  description = "The name of the bucket created for data ingestion pipeline."
+  description = "The name of the bucket created for the data ingestion pipeline."
   value       = module.secured_data_warehouse.data_ingestion_bucket_name
 }
 

@@ -46,7 +46,7 @@ variable "confidential_data_project_id" {
 }
 
 variable "external_flex_template_project_id" {
-  description = "Project id of the external project that host the flex Dataflow templates."
+  description = "Project id of the external project that hosts the flex Dataflow templates."
   type        = string
 }
 
