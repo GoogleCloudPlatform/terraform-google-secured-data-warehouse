@@ -16,6 +16,6 @@
 
 
 output "template_full_path" {
-  description = "The full path of DLP de-identification template."
+  description = "The full path of the DLP de-identification template."
   value       = module.de_identification_template_example.template_full_path
 }
