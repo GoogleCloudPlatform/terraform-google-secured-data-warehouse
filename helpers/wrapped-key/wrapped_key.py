@@ -35,10 +35,7 @@ def encrypt_symmetric(project_id, location_id, key_ring_id, key_id):
     """
 
     # Generate random bytes
-    key = generate_random_bytes(project_id, location_id, 16)
-
-    # Encode key to b64
-    plaintext_bytes = base64.b64encode(key)
+    plaintext_bytes = generate_random_bytes(project_id, location_id, 32)
 
     # Optional, but recommended: compute plaintext's CRC32C.
     # See crc32c() function defined below.
