@@ -92,6 +92,14 @@ def run(argv=None, save_main_session=True):
             'the call to the Data Loss Prevention (DLP) API.'
         )
     )
+    parser.add_argument(
+        "--dlp_transform",
+        default='RE-IDENTIFY',
+        required=True,
+        help=(
+            'DLP transformation type.'
+        )
+    )
     known_args, pipeline_args = parser.parse_known_args(argv)
 
     options = PipelineOptions(
@@ -114,26 +122,45 @@ def run(argv=None, save_main_session=True):
             )
         )
 
-        re_identified_messages = (
-            messages
-            | "Batching" >> BatchElements(
-                min_batch_size=known_args.batch_size,
-                max_batch_size=known_args.batch_size
+        if known_args.dlp_transform == 'RE-IDENTIFY':
+            transformed_messages = (
+                messages
+                | "Batching" >> BatchElements(
+                    min_batch_size=known_args.batch_size,
+                    max_batch_size=known_args.batch_size
+                )
+                | 'Convert dicts to table' >>
+                beam.Map(from_list_dicts_to_table)
+                | 'Call DLP re-identification' >>
+                UnmaskDetectedDetails(
+                    project=known_args.dlp_project,
+                    location=known_args.dlp_location,
+                    template_name=known_args.deidentification_template_name
+                )
+                | 'Convert table to dicts' >>
+                beam.FlatMap(from_table_to_list_dict)
             )
-            | 'Convert dicts to table' >>
-            beam.Map(from_list_dicts_to_table)
-            | 'Call DLP re-identification' >>
-            UnmaskDetectedDetails(
-                project=known_args.dlp_project,
-                location=known_args.dlp_location,
-                template_name=known_args.deidentification_template_name
+        else:
+            transformed_messages = (
+                messages
+                | "Batching" >> BatchElements(
+                    min_batch_size=known_args.batch_size,
+                    max_batch_size=known_args.batch_size
+                )
+                | 'Convert dicts to table' >>
+                beam.Map(from_list_dicts_to_table)
+                | 'Call DLP de-identification' >>
+                MaskDetectedDetails(
+                    project=known_args.dlp_project,
+                    location=known_args.dlp_location,
+                    template_name=known_args.deidentification_template_name
+                )
+                | 'Convert table to dicts' >>
+                beam.FlatMap(from_table_to_list_dict)
             )
-            | 'Convert table to dicts' >>
-            beam.FlatMap(from_table_to_list_dict)
-        )
 
         # Write to BigQuery.
-        re_identified_messages | 'Write to BQ' >> beam.io.WriteToBigQuery(
+        transformed_messages | 'Write to BQ' >> beam.io.WriteToBigQuery(
             known_args.output_table,
             schema=known_args.bq_schema,
             create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED
@@ -262,6 +289,81 @@ class _ReidentifyFn(DoFn):
 
     def process(self, element, **kwargs):
         operation = self.client.reidentify_content(
+            item=element, **self.params)
+        yield operation.item
+
+
+@experimental()
+class MaskDetectedDetails(PTransform):
+
+    def __init__(
+            self,
+            project=None,
+            location="global",
+            template_name=None,
+            deidentification_config=None,
+            timeout=None):
+
+        self.config = {}
+        self.project = project
+        self.timeout = timeout
+        self.location = location
+
+        if template_name is not None:
+            self.config['deidentify_template_name'] = template_name
+        else:
+            self.config['deidentify_config'] = deidentification_config
+
+    def expand(self, pcoll):
+        if self.project is None:
+            self.project = pcoll.pipeline.options.view_as(
+                GoogleCloudOptions).project
+        if self.project is None:
+            raise ValueError(
+                'GCP project name needs to be specified '
+                'in "project" pipeline option')
+        return (
+            pcoll
+            | ParDo(_DeidentifyFn(
+                self.config,
+                self.timeout,
+                self.project,
+                self.location
+            )))
+
+
+class _DeidentifyFn(DoFn):
+
+    def __init__(
+        self,
+        config=None,
+        timeout=None,
+        project=None,
+        location=None,
+        client=None
+    ):
+        self.config = config
+        self.timeout = timeout
+        self.client = client
+        self.project = project
+        self.location = location
+        self.params = {}
+
+    def setup(self):
+        from google.cloud import dlp_v2
+        if self.client is None:
+            self.client = dlp_v2.DlpServiceClient()
+        self.params = {
+            'timeout': self.timeout,
+            'parent': "projects/{}/locations/{}".format(
+                self.project,
+                self.location
+            )
+        }
+        self.params.update(self.config)
+
+    def process(self, element, **kwargs):
+        operation = self.client.deidentify_content(
             item=element, **self.params)
         yield operation.item
 

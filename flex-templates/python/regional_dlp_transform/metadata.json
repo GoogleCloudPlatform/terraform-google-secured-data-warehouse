@@ -1,6 +1,6 @@
 {
-  "name": "Streaming BiqQuery data through DLP to reidentify data flex template",
-  "description": "Python flex template for streaming BiqQuery data through regional DLP to reidentify the data.",
+  "name": "Streaming BiqQuery data through DLP to transform data flex template",
+  "description": "Python flex template for streaming BiqQuery data through regional DLP to transform the data.",
   "parameters": [
     {
       "name": "input_table",
@@ -46,6 +46,14 @@
       "name": "output_table",
       "label": "BigQuery output table name.",
       "helpText": "Output BigQuery table with reidentified data as: PROJECT:DATASET.TABLE or DATASET.TABLE."
+    },
+    {
+      "name": "dlp_transform",
+      "label": "DLP transformation type.",
+      "helpText": "Choose between DLP DE-IDENTIFY or RE-IDENTIFY.",
+      "regexes": [
+        "RE-IDENTIFY|DE-IDENTIFY"
+      ]
     }
   ]
 }
