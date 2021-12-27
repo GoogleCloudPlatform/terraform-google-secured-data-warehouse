@@ -167,12 +167,3 @@ After the Dataflow Pipeline successfully runs, you can check the data in the
 [Bigquery table](https://cloud.google.com/bigquery/docs/quickstarts/quickstart-cloud-console#preview_table_data) created in the dataset provided
 in the Non-Confidential project.
 All the sensible data must be de-identified.
-
-__Note:__ The provided [Java De-Identification Flex Template sample](../flex-templates/java/regional_dlp_de_identification/README.md) sample creates one table for each file processed with the same name of the file.
-
-### How do I check if my data have been re-identified?
-
-After the Dataflow Pipeline successfully runs, you can check the data in the
-[Bigquery table](https://cloud.google.com/bigquery/docs/quickstarts/quickstart-cloud-console#preview_table_data) created in the dataset provided in the Confidential Project.
-
-All the sensible data must be re-identified.
