@@ -41,6 +41,8 @@ source kms_helper/bin/activate
 ### Install dependencies
 
 ```sh
+pip install --upgrade pip
+
 pip install -r requirements.txt
 ```
 
