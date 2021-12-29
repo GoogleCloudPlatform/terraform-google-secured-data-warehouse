@@ -100,7 +100,7 @@ A valid **VPC subnetwork** must be declared as a job parameter in the creation o
 
 ### Unable to open the Dataflow staging file
 
-An user deploys a new Dataflow job in the console and the job creation fails.
+After deploying a new Dataflow job in the console, the job creation fails.
 Looking at the **Job Logs** section, in the bottom part of the job detail page, there is an error with the message:
 
 **Error message:**
@@ -136,7 +136,7 @@ For more details about Dataflow staging files see [Resource usage and management
 
 ### No matching distribution found for apache-beam==2.30.0
 
-An user deploys a new Dataflow job in the console and the job creation fails.
+After deploying a new Dataflow job in the console, the job creation fails.
 Looking at the **Job Logs** section, in the bottom part of the job detail page, there is an error with the message:
 
 **Error message:**
@@ -184,10 +184,10 @@ Using terraform:
 resource "google_artifact_registry_repository_iam_member" "python_reader" {
   provider = google-beta
 
-  project    = <ARTIFACT-REGISTRY-PROJECT-ID>
-  location   = <ARTIFACT-REGISTRY-REPOSITORY-LOCATION>
+  project    = "ARTIFACT-REGISTRY-PROJECT-ID"
+  location   = "ARTIFACT-REGISTRY-REPOSITORY-LOCATION"
   repository = "python-modules"
   role       = "roles/artifactregistry.reader"
-  member     = "serviceAccount:<DATAFLOW-WORKER-SERVICE-ACCOUNT>"
+  member     = "serviceAccount:sa-dataflow-controller-reid@CONFIDENTIAL-DATA-PROJECT-ID.iam.gserviceaccount.com"
 }
 ```
