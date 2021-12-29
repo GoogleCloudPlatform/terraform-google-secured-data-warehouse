@@ -149,11 +149,11 @@ ERROR: No matching distribution found for apache-beam==2.30.0
 
 **Cause:**
 
-The Dataflow [Worker Service Account](https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#worker_service_account) is trying to access the [Artifact Registry](https://cloud.google.com/artifact-registry/docs/python/quickstart) to download the apache beam module but do not have the right permissions to access it.
+The Dataflow [Worker Service Account](https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#worker_service_account) is trying to access the [Artifact Registry](https://cloud.google.com/artifact-registry/docs/python/quickstart) to download the **Apache Beam module** but do not have the right permissions to access it.
 
 **Solution:**
 
-You must grant the role Artifact Registry Reader (`roles/artifactregistry.reader`) in the Artifact Registry Repository the has the python modules to the Dataflow Worker Service Account.
+You must grant the role Artifact Registry Reader (`roles/artifactregistry.reader`) in the Artifact Registry Repository, that hosts the Python modules, to the Dataflow Worker Service Account.
 
 You must use the appropriate Service Account created by the main module.
 
