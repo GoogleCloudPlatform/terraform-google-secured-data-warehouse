@@ -28,15 +28,23 @@ from apache_beam.utils.annotations import experimental
 def run(argv=None, save_main_session=True):
     """Build and run the pipeline."""
     parser = argparse.ArgumentParser()
-    parser.add_argument(
+    group = parser.add_argument_group()
+    group_exclusive = parser.add_mutually_exclusive_group(required=True)
+    group_exclusive.add_argument(
+        '--query',
+        help=(
+            'Input query to retrieve data from Dataset. '
+            'Example: `SELECT * FROM PROJECT:DATASET.TABLE LIMIT 100`.'
+        )
+    )
+    group_exclusive.add_argument(
         '--input_table',
-        required=True,
         help=(
             'Input BigQuery table for results specified as: '
             'PROJECT:DATASET.TABLE or DATASET.TABLE.'
         )
     )
-    parser.add_argument(
+    group.add_argument(
         '--output_table',
         required=True,
         help=(
@@ -44,7 +52,7 @@ def run(argv=None, save_main_session=True):
             'PROJECT:DATASET.TABLE or DATASET.TABLE.'
         )
     )
-    parser.add_argument(
+    group.add_argument(
         '--bq_schema',
         required=True,
         help=(
@@ -52,21 +60,21 @@ def run(argv=None, save_main_session=True):
             'FIELD_1:STRING,FIELD_2:STRING,...'
         )
     )
-    parser.add_argument(
+    group.add_argument(
         '--dlp_project',
         required=True,
         help=(
             'ID of the project that holds the DLP template.'
         )
     )
-    parser.add_argument(
+    group.add_argument(
         '--dlp_location',
         required=False,
         help=(
             'The Location of the DLP template resource.'
         )
     )
-    parser.add_argument(
+    group.add_argument(
         '--deidentification_template_name',
         required=True,
         help=(
@@ -75,7 +83,7 @@ def run(argv=None, save_main_session=True):
             '/deidentifyTemplates/<TEMPLATE_ID>"'
         )
     )
-    parser.add_argument(
+    group.add_argument(
         "--window_interval_sec",
         default=30,
         type=int,
@@ -83,7 +91,7 @@ def run(argv=None, save_main_session=True):
             'Window interval in seconds for grouping incoming messages.'
         )
     )
-    parser.add_argument(
+    group.add_argument(
         "--batch_size",
         default=1000,
         type=int,
@@ -92,7 +100,7 @@ def run(argv=None, save_main_session=True):
             'the call to the Data Loss Prevention (DLP) API.'
         )
     )
-    parser.add_argument(
+    group.add_argument(
         "--dlp_transform",
         default='RE-IDENTIFY',
         required=True,
@@ -111,16 +119,28 @@ def run(argv=None, save_main_session=True):
     with beam.Pipeline(options=options) as p:
 
         # Read from BigQuery into a PCollection.
-        messages = (
-            p
-            | 'Read from BigQuery Table' >>
-            beam.io.ReadFromBigQuery(
-                table=known_args.input_table
+        if known_args.query is not None:
+            messages = (
+                p
+                | 'Read from BigQuery Table' >>
+                beam.io.ReadFromBigQuery(
+                    query=known_args.query
+                )
+                | 'Apply window' >> beam.WindowInto(
+                    window.FixedWindows(known_args.window_interval_sec, 0)
+                )
             )
-            | 'Apply window' >> beam.WindowInto(
-                window.FixedWindows(known_args.window_interval_sec, 0)
+        else:
+            messages = (
+                p
+                | 'Read from BigQuery Table' >>
+                beam.io.ReadFromBigQuery(
+                    table=known_args.input_table
+                )
+                | 'Apply window' >> beam.WindowInto(
+                    window.FixedWindows(known_args.window_interval_sec, 0)
+                )
             )
-        )
 
         if known_args.dlp_transform == 'RE-IDENTIFY':
             transformed_messages = (
