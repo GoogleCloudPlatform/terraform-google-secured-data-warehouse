@@ -14,8 +14,8 @@ In the External Harness we have:
 - The Creation of an external Artifact Registry project for the dataflow flex templates and the build of the templates themselves, including:
   - A Docker Artifact registry.
   - Two Dataflow Templates:
-    - A Java Cloud storage to BigQuery dlp de-identification Dataflow flex template.
-    - A Java BigQuery to BigQuery dlp re-identification Dataflow flex template.
+    - A Python Pubsub to BigQuery dlp de-identification Dataflow flex template.
+    - A Python BigQuery to BigQuery dlp re-identification Dataflow flex template.
 - The Creation of two VPC Networks to deploy dataflow jobs, one in the Data Ingestion project and another one in the Confidential Data project, each network having:
   - A VPC Network with one subnetwork.
   - A set of Firewall rules.
@@ -29,11 +29,9 @@ In the External Harness we have:
 In the deploy of the Secured Data Warehouse and the Dataflow Jobs we have:
 
 - The deploy of the [main module](../../README.md) itself.
-- The creation of two Dataflow templates, one for [de-identification](../../flex-templates/java/regional_dlp_de_identification/README.md) and one for [re-identification](../../flex-templates/java/regional_dlp_transform/README.md) using the `wrapped_key` and `crypto_key` pair created in the harness.
+- The creation of two Dataflow templates, one for [de-identification](../../flex-templates/python/regional_dlp_de_identification/README.md) and one for [re-identification](../../flex-templates/python/regional_dlp_re_identification/README.md) using the `wrapped_key` and `crypto_key` pair created in the harness.
 - The creation of a Data Catalog taxonomy and [policy tags](https://cloud.google.com/bigquery/docs/best-practices-policy-tags) representing security levels
 - The creation of a BigQuery table with [column-level security](https://cloud.google.com/bigquery/docs/column-level-security) enabled using the Data Catalog policy tags
-- The deploy of a Dataflow flex Java pipeline that does de-identification of a sample CSV file with [credit card data](./assets/cc_10000_records.csv), read from a Google Cloud Storage bucket into a BigQuery table.
-- The deploy of a Dataflow flex Java pipeline that does re-identification from the BigQuery table which is the output from the first pipeline to the BigQuery table created with the column-level security.
 
 The example waits for 10 minutes between the deploy of the de-identification dataflow pipeline and the start of the re-identification dataflow pipeline,
 to wait for the first job to deploy, process the 10k records, and write to the BigQuery table that will be processed by the second job.
