@@ -13,9 +13,9 @@ In the External Harness we have:
   - Confidential Data project.
 - The Creation of an external Artifact Registry project for the dataflow flex templates and the build of the templates themselves, including:
   - A Docker Artifact registry.
-  - Two Dataflow Templates:
-    - A Python Pub/Sub to BigQuery dlp de-identification Dataflow flex template.
-    - A Python BigQuery to BigQuery dlp re-identification Dataflow flex template.
+  - A Python Artifact registry.
+  - A Python Pub/Sub to BigQuery dlp de-identification Dataflow flex template.
+  - A Python BigQuery to BigQuery dlp re-identification Dataflow flex template.
 - The Creation of two VPC Networks to deploy dataflow jobs, one in the Data Ingestion project and another one in the Confidential Data project, each network having:
   - A VPC Network with one subnetwork.
   - A set of Firewall rules.
@@ -29,7 +29,7 @@ In the External Harness we have:
 In the deploy of the Secured Data Warehouse and the Dataflow Jobs we have:
 
 - The deploy of the [main module](../../README.md) itself.
-- The creation of two Dataflow templates, one for [de-identification](../../flex-templates/python/regional_dlp_de_identification/README.md) and one for [re-identification](../../flex-templates/python/regional_dlp_re_identification/README.md) using the `wrapped_key` and `crypto_key` pair created in the harness.
+- The creation of two dataflow Jobs using the same [Dataflow template](../../flex-templates/python/regional_dlp_re_identification/README.md) that can do both de-identification and re-identification using the `wrapped_key` and `crypto_key` pair created in the harness.
 - The creation of a Data Catalog taxonomy and [policy tags](https://cloud.google.com/bigquery/docs/best-practices-policy-tags) representing security levels
 - The creation of a BigQuery table with [column-level security](https://cloud.google.com/bigquery/docs/column-level-security) enabled using the Data Catalog policy tags
 
