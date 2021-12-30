@@ -14,7 +14,7 @@ In the External Harness we have:
 - The Creation of an external Artifact Registry project for the dataflow flex templates and the build of the templates themselves, including:
   - A Docker Artifact registry.
   - Two Dataflow Templates:
-    - A Python Pubsub to BigQuery dlp de-identification Dataflow flex template.
+    - A Python Pub/Sub to BigQuery dlp de-identification Dataflow flex template.
     - A Python BigQuery to BigQuery dlp re-identification Dataflow flex template.
 - The Creation of two VPC Networks to deploy dataflow jobs, one in the Data Ingestion project and another one in the Confidential Data project, each network having:
   - A VPC Network with one subnetwork.
