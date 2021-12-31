@@ -6,6 +6,7 @@
 - [Template file failed to load](#template-file-failed-to-load)
 - [The referenced network resource cannot be found](#the-referenced-network-resource-cannot-be-found)
 - [Unable to open the Dataflow staging file](#unable-to-open-the-dataflow-staging-file)
+- [No matching distribution found for apache-beam==2.30.0](#no-matching-distribution-found-for-apache-beam2300)
 
 ### The server was only able to partially fulfill your request
 
@@ -99,7 +100,7 @@ A valid **VPC subnetwork** must be declared as a job parameter in the creation o
 
 ### Unable to open the Dataflow staging file
 
-An user deploys a new Dataflow job in the console and the job creation fails.
+After deploying a new Dataflow job in the console, the job creation fails.
 Looking at the **Job Logs** section, in the bottom part of the job detail page, there is an error with the message:
 
 **Error message:**
@@ -132,3 +133,61 @@ The **Service Account** must be declared as a job parameter.
 - **Terraform**: Use the input `service_account_email` from the [Dataflow Flex Job Module](../modules/dataflow-flex-job/README.md#inputs).
 
 For more details about Dataflow staging files see [Resource usage and management](https://cloud.google.com/dataflow/docs/guides/deploying-a-pipeline#resource-usage-and-management) documentation.
+
+### No matching distribution found for apache-beam==2.30.0
+
+After deploying a new Dataflow job in the console, the job creation fails.
+Looking at the **Job Logs** section, in the bottom part of the job detail page, there is an error with the message:
+
+**Error message:**
+
+```console
+https://LOCATION-python.pkg.dev/ARTIFACT-REGISTRY-PROJECT-ID/python-modules/simple/
+ERROR: Could not find a version that satisfies the requirement apache-beam==2.30.0 (from versions: none)
+ERROR: No matching distribution found for apache-beam==2.30.0
+```
+
+**Cause:**
+
+The Dataflow [Worker Service Account](https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#worker_service_account) is trying to access the [Artifact Registry](https://cloud.google.com/artifact-registry/docs/python/quickstart) to download the **Apache Beam module** but do not have the right permissions to access it.
+
+**Solution:**
+
+You must grant the role Artifact Registry Reader (`roles/artifactregistry.reader`) in the Artifact Registry Repository, that hosts the Python modules, to the Dataflow Worker Service Account.
+
+You must use the appropriate Service Account created by the main module.
+
+- Data ingestion:
+  - Module output: `dataflow_controller_service_account_email`
+  - Email format: `sa-dataflow-controller@<DATA-INGESTION-PROJECT-ID>.iam.gserviceaccount.com`
+- Confidential Data:
+  - Module output: `confidential_dataflow_controller_service_account_email`
+  - Email format: `sa-dataflow-controller-reid@<CONFIDENTIAL-DATA-PROJECT-ID>.iam.gserviceaccount.com`
+
+Using gcloud command:
+
+```console
+export project_id=<ARTIFACT-REGISTRY-PROJECT-ID>
+export location=<ARTIFACT-REGISTRY-REPOSITORY-LOCATION>
+export dataflow_worker_service_account=<DATAFLOW-WORKER-SERVICE-ACCOUNT>
+
+gcloud artifacts repositories add-iam-policy-binding python-modules \
+--member="serviceAccount:${dataflow_worker_service_account}"  \
+--role='roles/artifactregistry.reader' \
+--project=${project_id} \
+--location=${location}
+```
+
+Using terraform:
+
+```hcl
+resource "google_artifact_registry_repository_iam_member" "python_reader" {
+  provider = google-beta
+
+  project    = "ARTIFACT-REGISTRY-PROJECT-ID"
+  location   = "ARTIFACT-REGISTRY-REPOSITORY-LOCATION"
+  repository = "python-modules"
+  role       = "roles/artifactregistry.reader"
+  member     = "serviceAccount:sa-dataflow-controller-reid@CONFIDENTIAL-DATA-PROJECT-ID.iam.gserviceaccount.com"
+}
+```
