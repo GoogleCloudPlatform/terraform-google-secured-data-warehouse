@@ -1,13 +1,13 @@
 # Pipeline deployments
 
-The *Secured Data Warehouse Module* creates a secured Bigquery Data Warehouse infrastructure.
-To use this infrastructure to deploy new Dataflow Flex Pipelines use the instructions in the following sections.
+To use the infrastructure created by *Secured Data Warehouse Module* to deploy Dataflow Flex Pipelines,
+use the instructions in the following sections.
 
 We assume you are familiar with [Deploying a Pipeline](https://cloud.google.com/dataflow/docs/guides/deploying-a-pipeline).
 
 ## *Secured Data Warehouse Module* deployment
 
-It is necessary configure some controls for the deployment of the Secured Data Warehouse to allow user to create Dataflow Flex pipelines.
+It is necessary configure some controls for the deployment of the Secured Data Warehouse to allow a user to create Dataflow Flex pipelines.
 
 The Secured Data Warehouse module uses [VPC Service Controls](https://cloud.google.com/vpc-service-controls/docs/service-perimeters).
 
@@ -27,9 +27,9 @@ This version only supports one external project for both confidential and data i
 
 ## Requirements
 
-### Apis
+### APIs
 
-All the required APIs to deploy the module had to be enabled. See the list of [APIs](../README.md#apis) in the README file.
+All the required APIs to deploy the module need to be enabled. See the list of [APIs](../README.md#apis) in the README file.
 Ensured that all the *additional APIs* your Dataflow pipeline needs are enabled too.
 
 ### Service Accounts Roles
@@ -99,7 +99,7 @@ Use the appropriated [output](../README.md#outputs) of the main module as the [D
 
 ### Disable Public IPs
 
-[Disabling Public IPs helps to better secure you data processing infrastructure.](https://cloud.google.com/dataflow/docs/guides/routes-firewall#turn_off_external_ip_address).
+[Disabling Public IPs helps to better secure you data processing infrastructure](https://cloud.google.com/dataflow/docs/guides/routes-firewall#turn_off_external_ip_address).
 Make sure you have your subnetwork configured as [Subnetwork section](#subnetwork) details.
 
 ### Enable Streaming Engine
@@ -117,7 +117,9 @@ Use the Dataflow Flex Job Template [submodule](../modules/dataflow-flex-job/READ
 
 ### Deploying with `gcloud` Command
 
-You can run the following commands to create a **Java** Dataflow Flex Job using the **gcloud command**:
+You can run the following commands to create a **Java** Dataflow Flex Job using the **gcloud command**.
+
+You can check more infos about the variables needed in the previously section.
 
 ```sh
 
@@ -157,8 +159,8 @@ Examples using Python De-Identification Flex Template:
 
 - [Regional DLP](../examples/regional-dlp/README.md)
 
-If you are using our [Regional DLP Example](../examples/regional-dlp/README.md), the Dataflow deployed is
-already waiting for new input data in the topic. You just need do publish a new message with the format
+If you are using our [Regional DLP Example](../examples/regional-dlp/README.md), the Dataflow pipeline deployed is
+already waiting for new input data in the [data ingestion topic](../README.md#outputs) created by *Secured Data Warehouse Module*. You just need do publish a new message with the format
 expected by the template. You can check how publishing messages [here](https://cloud.google.com/pubsub/docs/publisher).
 
 ### How do I check if my data have been de-identified?
@@ -166,4 +168,4 @@ expected by the template. You can check how publishing messages [here](https://c
 After the Dataflow Pipeline successfully runs, you can check the data in the
 [Bigquery table](https://cloud.google.com/bigquery/docs/quickstarts/quickstart-cloud-console#preview_table_data) created in the dataset provided
 in the Non-Confidential project.
-All the sensible data must be de-identified.
+Observe that all sensitive data is de-identified..
