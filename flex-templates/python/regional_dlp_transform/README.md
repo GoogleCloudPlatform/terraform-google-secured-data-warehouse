@@ -1,4 +1,4 @@
-# Regional DLP de-identification Pub/Sub to BigQuery (Streaming) flex template
+# Regional DLP transform BigQuery to BigQuery (Streaming) flex template
 
 ## Build the flex template
 
@@ -41,3 +41,11 @@ gcloud dataflow flex-template build "$TEMPLATE_GS_PATH" \
   --project=$PROJECT \
   --metadata-file "./metadata.json"
 ```
+
+## Using flex-template
+
+ This flex-template supports processing the entire BigQuery table or just a query result. If you have a dataset to be entirely processed, use the `input_table` parameter. If you just want to read a piece of data of a dataset use the `query` parameter.
+
+ For example, to process public datasets it is recommended to use the `query` parameter instead of the `input_table` parameter. But if you want to process your own datasets and all of the data in it, use `input_table` parameter.
+
+ This flex-template only supports using one of the parameters at a time.

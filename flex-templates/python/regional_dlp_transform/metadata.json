@@ -5,13 +5,13 @@
     {
       "name": "query",
       "label": "SQL query to retrieve input data.",
-      "helpText": "Input query to retrieve data from Dataset. Example: `SELECT * FROM PROJECT.DATASET.TABLE LIMIT 100`.",
+      "helpText": "Input query to retrieve data from Dataset. Example: `SELECT * FROM PROJECT.DATASET.TABLE LIMIT 100`. You need to specify either an input-table or query. It is recommended to use query when you want to use a public dataset.",
       "isOptional": true
     },
     {
       "name": "input_table",
       "label": "BigQuery input table name.",
-      "helpText": "Input BigQuery table for results specified as: PROJECT:DATASET.TABLE or DATASET.TABLE.",
+      "helpText": "Input BigQuery table for results specified as: PROJECT:DATASET.TABLE or DATASET.TABLE. You need to specify either an input-table or query. It is recommended to use input-table for when you have your own dataset.",
       "isOptional": true
     },
     {
