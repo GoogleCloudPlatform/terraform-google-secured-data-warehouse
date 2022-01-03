@@ -14,14 +14,19 @@ The Secured Data Warehouse module uses [VPC Service Controls](https://cloud.goog
 The identity deploying the Dataflow pipeline must be in the [access level](https://cloud.google.com/access-context-manager/docs/create-basic-access-level#members-example) of the perimeter.
 You can add it using the input `perimeter_additional_members` of the *Secured Data Warehouse Module*.
 
-To use a private template repository outside of the perimeter, the identity deploying the Dataflow pipeline must be in a *egress rule* that
-allows the Dataflow templates to be fetched. In the *Secured Data Warehouse Module* you configure it using the appropriated list below.
+To use a private template repository outside of the perimeter, the identity deploying the Dataflow pipeline added to an *egress rule* that
+allows the Dataflow templates to be fetched. In the *Secured Data Warehouse Module*, you configure it using the appropriated list below.
 
 - For the **confidential perimeter**, the identity needs to be added in the input `confidential_data_dataflow_deployer_identities` of the *Secured Data Warehouse Module*.
 - For the **data ingestion perimeter**, the identity needs to be added in the input `data_ingestion_dataflow_deployer_identities` of the *Secured Data Warehouse Module*.
 
 You also need to add the private template repository project to the *egress rule*.
 You must use the variable `sdx_project_number` to provide the *project number* of project.
+You can get the project number of a project running `gcloud command`
+
+```sh
+gcloud projects describe <PROJECT_ID> --format="value(projectNumber)"
+```
 
 This version only supports one external project for both confidential and data ingestion templates.
 
