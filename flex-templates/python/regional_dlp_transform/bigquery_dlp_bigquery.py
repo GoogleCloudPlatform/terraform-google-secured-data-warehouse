@@ -195,6 +195,8 @@ def run(argv=None, save_main_session=True):
         transformed_messages | 'Write to BQ' >> beam.io.WriteToBigQuery(
             known_args.output_table,
             schema=known_args.bq_schema,
+            method=beam.io.WriteToBigQuery.Method.FILE_LOADS,
+            triggering_frequency=300,
             create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED
         )
 
