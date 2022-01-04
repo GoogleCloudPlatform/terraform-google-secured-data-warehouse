@@ -16,35 +16,35 @@
 
 locals {
   confidential_tags = {
-    card_number = {
-      display_name = "CREDIT_CARD_NUMBER"
-      description  = "A credit card number is 12 to 19 digits long. They are used for payment transactions globally."
-    }
-    cvv = {
-      display_name = "CARD_VERIFICATION_VALUE"
-      description  = "A card verification value is 3 to 4 digits long. Used for card not present transactions."
+    ein = {
+      display_name = "US_EMPLOYER_IDENTIFICATION_NUMBER"
+      description  = "The empolyer identification number."
     }
   }
 
   private_tags = {
-    card_holder_name = {
+    name = {
       display_name = "PERSON_NAME"
       description  = "A full person name, which can include first names, middle names or initials, and last names."
     }
-    card_pin = {
-      display_name = "CREDIT_CARD_PIN"
-      description  = "Card personal identification number."
+    street = {
+      display_name = "STREET_ADDRESS"
+      description  = "Street Address."
     }
-    card_expiry_date = {
-      display_name = "CARD_EXPIRY_DATE"
-      description  = "Card expiry date."
+    state = {
+      display_name = "US_STATE"
+      description  = "The state of person."
     }
   }
 
   sensitive_tags = {
-    credit_limit = {
-      display_name = "CREDIT_LIMIT"
-      description  = "Credit allowed to individual."
+    income_amt = {
+      display_name = "INCOME_AMT"
+      description  = "Income amount."
+    }
+    revenue_amt = {
+      display_name = "REVENUE_AMT"
+      description  = "Revenue amount."
     }
   }
 }
@@ -131,12 +131,12 @@ resource "google_bigquery_table" "re_id" {
 
   schema = templatefile("${path.module}/templates/schema.template",
     {
-      pt_card_number  = google_data_catalog_policy_tag.confidential_tags["card_number"].id,
-      pt_cvv          = google_data_catalog_policy_tag.confidential_tags["cvv"].id,
-      pt_name         = google_data_catalog_policy_tag.private_tags["card_holder_name"].id,
-      pt_card_pin     = google_data_catalog_policy_tag.private_tags["card_pin"].id,
-      pt_expiry_date  = google_data_catalog_policy_tag.private_tags["card_expiry_date"].id,
-      pt_credit_limit = google_data_catalog_policy_tag.sensitive_tags["credit_limit"].id
+      pt_ein          = google_data_catalog_policy_tag.confidential_tags["ein"].id,
+      pt_name         = google_data_catalog_policy_tag.private_tags["name"].id,
+      pt_street       = google_data_catalog_policy_tag.private_tags["street"].id,
+      pt_state        = google_data_catalog_policy_tag.private_tags["state"].id,
+      pt_income       = google_data_catalog_policy_tag.sensitive_tags["income_amt"].id,
+      pt_revenue      = google_data_catalog_policy_tag.sensitive_tags["revenue_amt"].id
   })
 
   lifecycle {

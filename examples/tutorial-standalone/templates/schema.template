@@ -1,77 +1,174 @@
 [
-  {
-    "name": "Card_Type_Code",
-    "mode": "NULLABLE",
-    "type": "STRING"
-  },
-  {
-    "name": "Card_Type_Full_Name",
-    "mode": "NULLABLE",
-    "type": "STRING"
-  },
-  {
-    "name": "Issuing_Bank",
-    "mode": "NULLABLE",
-    "type": "STRING"
-  },
-  {
-    "name": "Card_Number",
-    "mode": "NULLABLE",
-    "type": "STRING",
-    "policyTags": {
-      "names": ["${pt_card_number}"]
-    }
-  },
-  {
-    "name": "Card_Holders_Name",
-    "mode": "NULLABLE",
-    "type": "STRING",
-    "policyTags": {
-      "names": ["${pt_name}"]
-    }
-  },
-  {
-    "name": "CVVCVV2",
-    "mode": "NULLABLE",
-    "type": "STRING",
-    "policyTags": {
-      "names": ["${pt_cvv}"]
-    }
-  },
-  {
-    "name": "Issue_Date",
-    "mode": "NULLABLE",
-    "type": "STRING"
-  },
-  {
-    "name": "Expiry_Date",
-    "mode": "NULLABLE",
-    "type": "STRING",
-    "policyTags": {
-      "names": ["${pt_expiry_date}"]
-    }
-  },
-  {
-    "name": "Billing_Date",
-    "mode": "NULLABLE",
-    "type": "STRING"
-  },
-  {
-    "name": "Card_PIN",
-    "mode": "NULLABLE",
-    "type": "STRING",
-    "policyTags": {
-      "names": ["${pt_card_pin}"]
-    }
-  },
-  {
-    "name": "Credit_Limit",
-    "mode": "NULLABLE",
-    "type": "STRING",
-    "policyTags": {
-      "names": ["${pt_credit_limit}"]
-    }
-  }
+   {
+      "name":"ein",
+      "mode":"NULLABLE",
+      "type":"STRING",
+      "policyTags":{
+         "names":[
+            "${pt_ein}"
+         ]
+      }
+   },
+   {
+      "name":"name",
+      "mode":"NULLABLE",
+      "type":"STRING",
+      "policyTags":{
+         "names":[
+            "${pt_name}"
+         ]
+      }
+   },
+   {
+      "name":"ico",
+      "mode":"NULLABLE",
+      "type":"STRING"
+   },
+   {
+      "name":"street",
+      "mode":"NULLABLE",
+      "type":"STRING",
+      "policyTags":{
+         "names":[
+            "${pt_street}"
+         ]
+      }
+   },
+   {
+      "name":"city",
+      "mode":"NULLABLE",
+      "type":"STRING"
+   },
+   {
+      "name":"state",
+      "mode":"NULLABLE",
+      "type":"STRING",
+      "policyTags":{
+         "names":[
+            "${pt_state}"
+         ]
+      }
+   },
+   {
+      "name":"zip",
+      "mode":"NULLABLE",
+      "type":"STRING"
+   },
+   {
+      "name":"group",
+      "mode":"NULLABLE",
+      "type":"STRING"
+   },
+   {
+      "name":"subsection",
+      "mode":"NULLABLE",
+      "type":"STRING"
+   },
+   {
+      "name":"affiliation",
+      "mode":"NULLABLE",
+      "type":"STRING"
+   },
+   {
+      "name":"classification",
+      "mode":"NULLABLE",
+      "type":"STRING"
+   },
+   {
+      "name":"ruling",
+      "mode":"NULLABLE",
+      "type":"STRING"
+   },
+   {
+      "name":"deductibility",
+      "mode":"NULLABLE",
+      "type":"STRING"
+   },
+   {
+      "name":"foundation",
+      "mode":"NULLABLE",
+      "type":"STRING"
+   },
+   {
+      "name":"activity",
+      "mode":"NULLABLE",
+      "type":"STRING"
+   },
+   {
+      "name":"organization",
+      "mode":"NULLABLE",
+      "type":"STRING"
+   },
+   {
+      "name":"status",
+      "mode":"NULLABLE",
+      "type":"STRING"
+   },
+   {
+      "name":"tax_period",
+      "mode":"NULLABLE",
+      "type":"STRING"
+   },
+   {
+      "name":"asset_cd",
+      "mode":"NULLABLE",
+      "type":"STRING"
+   },
+   {
+      "name":"income_cd",
+      "mode":"NULLABLE",
+      "type":"STRING"
+   },
+   {
+      "name":"filing_req_cd",
+      "mode":"NULLABLE",
+      "type":"STRING"
+   },
+   {
+      "name":"pf_filing_req_cd",
+      "mode":"NULLABLE",
+      "type":"STRING"
+   },
+   {
+      "name":"acct_pd",
+      "mode":"NULLABLE",
+      "type":"STRING"
+   },
+   {
+      "name":"asset_amt",
+      "mode":"NULLABLE",
+      "type":"STRING"
+   },
+   {
+      "name":"income_amt",
+      "mode":"NULLABLE",
+      "type":"STRING",
+      "policyTags":{
+         "names":[
+            "${pt_income}"
+         ]
+      }
+   },
+   {
+      "name":"revenue_amt",
+      "mode":"NULLABLE",
+      "type":"STRING",
+      "policyTags":{
+         "names":[
+            "${pt_revenue}"
+         ]
+      }
+   },
+   {
+      "name":"ntee_cd",
+      "mode":"NULLABLE",
+      "type":"STRING"
+   },
+   {
+      "name":"sort_name",
+      "mode":"NULLABLE",
+      "type":"STRING"
+   }
 ]
 
 

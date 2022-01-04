@@ -21,9 +21,7 @@ locals {
   dlp_transformation_type     = "RE-IDENTIFY"
   taxonomy_name               = "secured_taxonomy"
   taxonomy_display_name       = "${local.taxonomy_name}-${random_id.suffix.hex}"
-  confidential_table_id       = "${trimsuffix(local.cc_file_name, ".csv")}_re_id"
-  cc_file_name                = "cc_10000_records.csv"
-  cc_file_path                = "${path.module}/assets"
+  confidential_table_id       = "irs_990_ein_re_id"
 }
 
 resource "random_id" "suffix" {
@@ -62,17 +60,6 @@ module "secured_data_warehouse" {
     module.centralized_logging,
     google_project_iam_binding.remove_owner_role,
     google_project_iam_binding.remove_owner_role_from_template
-  ]
-}
-
-resource "google_storage_bucket_object" "sample_file" {
-  name         = local.cc_file_name
-  source       = "${local.cc_file_path}/${local.cc_file_name}"
-  content_type = "text/csv"
-  bucket       = module.secured_data_warehouse.data_ingestion_bucket_name
-
-  depends_on = [
-    module.secured_data_warehouse
   ]
 }
 
