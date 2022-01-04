@@ -227,7 +227,7 @@ def from_list_dicts_to_table(list_item):
     for item in list_item:
         row = {"values": []}
         for item_key in sorted(item):
-            row["values"].append({"string_value": item[item_key]})
+            row["values"].append({"string_value": str(item[item_key])})
         rows.append(row)
     table_item = {"table": {"headers": headers, "rows": rows}}
     return table_item
