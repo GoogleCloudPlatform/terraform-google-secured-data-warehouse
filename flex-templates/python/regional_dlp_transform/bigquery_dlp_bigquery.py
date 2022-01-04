@@ -258,18 +258,13 @@ class UnmaskDetectedDetails(PTransform):
             project=None,
             location='us-east4',
             template_name=None,
-            reidentification_config=None,
             timeout=None):
 
         self.config = {}
         self.project = project
         self.timeout = timeout
         self.location = location
-
-        if template_name is not None:
-            self.config['reidentify_template_name'] = template_name
-        else:
-            self.config['reidentify_config'] = reidentification_config
+        self.config['reidentify_template_name'] = template_name
 
     def expand(self, pcoll):
         if self.project is None:
@@ -333,18 +328,13 @@ class MaskDetectedDetails(PTransform):
             project=None,
             location='us-east4',
             template_name=None,
-            deidentification_config=None,
             timeout=None):
 
         self.config = {}
         self.project = project
         self.timeout = timeout
         self.location = location
-
-        if template_name is not None:
-            self.config['deidentify_template_name'] = template_name
-        else:
-            self.config['deidentify_config'] = deidentification_config
+        self.config['deidentify_template_name'] = template_name
 
     def expand(self, pcoll):
         if self.project is None:
