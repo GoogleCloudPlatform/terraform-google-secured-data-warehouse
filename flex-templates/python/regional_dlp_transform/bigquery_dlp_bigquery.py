@@ -274,7 +274,7 @@ class UnmaskDetectedDetails(PTransform):
                 GoogleCloudOptions).project
         if self.project is None:
             raise ValueError(
-                'GCP project name needs to be specified'
+                'GCP project name needs to be specified '
                 'in "dlp_project" pipeline option.'
                 )
         return (
@@ -344,7 +344,7 @@ class MaskDetectedDetails(PTransform):
                 GoogleCloudOptions).project
         if self.project is None:
             raise ValueError(
-                'GCP project name needs to be specified'
+                'GCP project name needs to be specified '
                 'in "dlp_project" pipeline option.'
                 )
         return (
