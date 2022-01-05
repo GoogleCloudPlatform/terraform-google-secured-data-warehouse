@@ -8,6 +8,14 @@ and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 This changelog is generated automatically based on [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).
 
+### [0.1.1](https://www.github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/compare/v0.1.0...v0.1.1) (2022-01-05)
+
+
+### Bug Fixes
+
+* Python dataflow fixes for CMEK in streaming engine, network tags and user defined experiments ([#261](https://www.github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/261)) ([77be7ef](https://www.github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/commit/77be7ef31ff043c70e82c9eea83b2578bfdde54c))
+* Set key helper key length to 32 bytes ([#253](https://www.github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/253)) ([06b21ab](https://www.github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/commit/06b21ab98afdaadad4e679cd98066c1b33630160))
+
 ## [0.1.0](https://github.com/terraform-google-modules/terraform-google-secured-data-warehouse/releases/tag/v0.1.0) (2021-12-22)
 
 
