@@ -43,7 +43,7 @@ locals {
   network_tags_experiment            = local.network_tags != "" ? "use_network_tags=${local.network_tags},use_network_tags_for_flex_templates=${local.network_tags}" : ""
   kms_on_streaming_engine_experiment = var.kms_key_name != null && var.enable_streaming_engine ? "enable_kms_on_streaming_engine" : ""
   experiment_options                 = local.network_tags_experiment != "" || local.kms_on_streaming_engine_experiment != "" ? join(",", compact([local.kms_on_streaming_engine_experiment, local.network_tags_experiment])) : ""
-  experiments                        = local.experiment_options != "" ? { experiments = local.experiment_options } : {}
+  experiments                        = local.experiment_options != "" || var.additional_experiments != "" ? { experiments = join(",", compact([local.experiment_options, var.additional_experiments])) } : {}
 }
 
 resource "google_dataflow_flex_template_job" "dataflow_flex_template_job" {
