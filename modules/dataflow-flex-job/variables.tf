@@ -105,3 +105,9 @@ variable "kms_key_name" {
   description = "The name for the Cloud KMS key for the job. Key format is: `projects/PROJECT_ID/locations/LOCATION/keyRings/KEY_RING/cryptoKeys/KEY`."
   type        = string
 }
+
+variable "additional_experiments" {
+  description = "Comma separated list of additional experiments to be used by the job."
+  type        = string
+  default     = ""
+}
