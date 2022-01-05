@@ -64,7 +64,9 @@ the appropriated location in the call to the [main module](./main.tf#L33).
 To be able to see the resources protected by the VPC Service Controls [Perimeters](https://cloud.google.com/vpc-service-controls/docs/service-perimeters) in the Google Cloud Console
 you need to add your user in the variable `perimeter_additional_members` in the `terraform.tfvars` file.
 
-### Sample data
+### Public Bigquery
+
+**PLACE HOLDER FOR EXPLAIN THE PUBLIC BIGQUERY USAGE**
 
 The sample data used in this example is a [csv file](./assets/cc_10000_records.csv) with fake credit card data.
 For this example, the input file has 10k records.
@@ -93,18 +95,7 @@ The de-identification Dataflow job will apply these DLP Crypto-based tokenizatio
 - [Cryptographic hashing](https://cloud.google.com/dlp/docs/transformations-reference#crypto-hashing) Transformation:
   - Card PIN.
 
-### [optional] Generate sample credit card .csv file
-
-You can create new csv files with different sizes using the [sample-cc-generator](../../helpers/sample-cc-generator/README.md) helper.
-This new file must be placed in the [assets folder](./assets)
-You need to change the value of the local `cc_file_name` in the [main.tf](./main.tf#L25) file to use the new sample file:
-
-```hcl
-locals {
-  ...
-  cc_file_name = "cc_10000_records.csv"
-  ...
-```
+**PLACE HOLDER FOR EXPLAIN THE PUBLIC BIGQUERY USAGE**
 
 ### Taxonomy used
 
@@ -113,14 +104,14 @@ This example creates a Data Catalog taxonomy to enable [BigQuery column-level ac
 The taxonomy has three level: **Confidential**, **Private**, and **Sensitive** and access to a higher level grants also access to the lower levels
 
 - **3_Confidential:** Most sensitive data classification. Significant damage to enterprise.
-  - CREDIT_CARD_NUMBER.
-  - CARD_VERIFICATION_VALUE.
+  - US_EMPLOYER_IDENTIFICATION_NUMBER.
   - **2_Private:** Data meant to be private. Likely to cause damage to enterprise.
     - PERSON_NAME.
-    - CREDIT_CARD_PIN.
-    - CARD_EXPIRY_DATE.
+    - STREET_ADDRESS.
+    - US_STATE.
     - **1_Sensitive:** Data not meant to be public.
-      - CREDIT_LIMIT.
+      - INCOME_AMT.
+      - REVENUE_AMT.
 
 No user has access to read this data protected with column-level security.
 If they need access, the  [Fine-Grained Reader](https://cloud.google.com/bigquery/docs/column-level-security#fine_grained_reader) role needs to be added to the appropriate user or group.
