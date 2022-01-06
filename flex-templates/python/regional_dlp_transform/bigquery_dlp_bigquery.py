@@ -21,22 +21,37 @@ import apache_beam as beam
 import apache_beam.transforms.window as window
 from apache_beam.options.pipeline_options import (GoogleCloudOptions,
                                                   PipelineOptions)
-from apache_beam.transforms import DoFn, ParDo, PTransform, BatchElements
+from apache_beam.transforms import BatchElements, DoFn, ParDo, PTransform
 from apache_beam.utils.annotations import experimental
+from google.cloud import dlp_v2
 
 
 def run(argv=None, save_main_session=True):
     """Build and run the pipeline."""
     parser = argparse.ArgumentParser()
-    parser.add_argument(
+    group = parser.add_argument_group()
+    group_exclusive = parser.add_mutually_exclusive_group(required=True)
+    group_exclusive.add_argument(
+        '--query',
+        help=(
+            'Input query to retrieve data from Dataset. '
+            'Example: `SELECT * FROM PROJECT:DATASET.TABLE LIMIT 100`.'
+            'You need to specify either an input-table or query.'
+            'It is recommended to use query'
+            'when you want to use a public dataset.'
+        )
+    )
+    group_exclusive.add_argument(
         '--input_table',
-        required=True,
         help=(
             'Input BigQuery table for results specified as: '
             'PROJECT:DATASET.TABLE or DATASET.TABLE.'
+            'You need to specify either an input-table or query.'
+            'It is recommended to use input-table'
+            'for when you have your own dataset.'
         )
     )
-    parser.add_argument(
+    group.add_argument(
         '--output_table',
         required=True,
         help=(
@@ -44,7 +59,7 @@ def run(argv=None, save_main_session=True):
             'PROJECT:DATASET.TABLE or DATASET.TABLE.'
         )
     )
-    parser.add_argument(
+    group.add_argument(
         '--bq_schema',
         required=True,
         help=(
@@ -52,21 +67,21 @@ def run(argv=None, save_main_session=True):
             'FIELD_1:STRING,FIELD_2:STRING,...'
         )
     )
-    parser.add_argument(
+    group.add_argument(
         '--dlp_project',
         required=True,
         help=(
             'ID of the project that holds the DLP template.'
         )
     )
-    parser.add_argument(
+    group.add_argument(
         '--dlp_location',
         required=False,
         help=(
             'The Location of the DLP template resource.'
         )
     )
-    parser.add_argument(
+    group.add_argument(
         '--deidentification_template_name',
         required=True,
         help=(
@@ -75,7 +90,7 @@ def run(argv=None, save_main_session=True):
             '/deidentifyTemplates/<TEMPLATE_ID>"'
         )
     )
-    parser.add_argument(
+    group.add_argument(
         "--window_interval_sec",
         default=30,
         type=int,
@@ -83,13 +98,21 @@ def run(argv=None, save_main_session=True):
             'Window interval in seconds for grouping incoming messages.'
         )
     )
-    parser.add_argument(
+    group.add_argument(
         "--batch_size",
         default=1000,
         type=int,
         help=(
             'Number of records to be sent in a batch in ',
             'the call to the Data Loss Prevention (DLP) API.'
+        )
+    )
+    group.add_argument(
+        "--dlp_transform",
+        default='RE-IDENTIFY',
+        required=True,
+        help=(
+            'DLP transformation type.'
         )
     )
     known_args, pipeline_args = parser.parse_known_args(argv)
@@ -103,39 +126,77 @@ def run(argv=None, save_main_session=True):
     with beam.Pipeline(options=options) as p:
 
         # Read from BigQuery into a PCollection.
-        messages = (
-            p
-            | 'Read from BigQuery Table' >>
-            beam.io.ReadFromBigQuery(
-                table=known_args.input_table
+        if known_args.input_table is not None:
+            messages = (
+                p
+                | 'Read from BigQuery Table' >>
+                beam.io.ReadFromBigQuery(
+                    table=known_args.input_table
+                )
+                | 'Apply window' >> beam.WindowInto(
+                    window.FixedWindows(known_args.window_interval_sec, 0)
+                )
             )
-            | 'Apply window' >> beam.WindowInto(
-                window.FixedWindows(known_args.window_interval_sec, 0)
-            )
-        )
+        else:
+            if 'LIMIT' not in known_args.query:
+                logging.warning('The query has no LIMIT parameter set.'
+                                'This can lead to a pipeline processing'
+                                'taking more time.')
 
-        re_identified_messages = (
-            messages
-            | "Batching" >> BatchElements(
-                min_batch_size=known_args.batch_size,
-                max_batch_size=known_args.batch_size
+            messages = (
+                p
+                | 'Run SQL query to read data from BigQuery Table.' >>
+                beam.io.ReadFromBigQuery(
+                    query=known_args.query
+                )
+                | 'Apply window' >> beam.WindowInto(
+                    window.FixedWindows(known_args.window_interval_sec, 0)
+                )
             )
-            | 'Convert dicts to table' >>
-            beam.Map(from_list_dicts_to_table)
-            | 'Call DLP re-identification' >>
-            UnmaskDetectedDetails(
-                project=known_args.dlp_project,
-                location=known_args.dlp_location,
-                template_name=known_args.deidentification_template_name
+
+        if known_args.dlp_transform == 'RE-IDENTIFY':
+            transformed_messages = (
+                messages
+                | "Batching" >> BatchElements(
+                    min_batch_size=known_args.batch_size,
+                    max_batch_size=known_args.batch_size
+                )
+                | 'Convert dicts to table' >>
+                beam.Map(from_list_dicts_to_table)
+                | 'Call DLP re-identification' >>
+                UnmaskDetectedDetails(
+                    project=known_args.dlp_project,
+                    location=known_args.dlp_location,
+                    template_name=known_args.deidentification_template_name
+                )
+                | 'Convert table to dicts' >>
+                beam.FlatMap(from_table_to_list_dict)
             )
-            | 'Convert table to dicts' >>
-            beam.FlatMap(from_table_to_list_dict)
-        )
+        else:
+            transformed_messages = (
+                messages
+                | "Batching" >> BatchElements(
+                    min_batch_size=known_args.batch_size,
+                    max_batch_size=known_args.batch_size
+                )
+                | 'Convert dicts to table' >>
+                beam.Map(from_list_dicts_to_table)
+                | 'Call DLP de-identification' >>
+                MaskDetectedDetails(
+                    project=known_args.dlp_project,
+                    location=known_args.dlp_location,
+                    template_name=known_args.deidentification_template_name
+                )
+                | 'Convert table to dicts' >>
+                beam.FlatMap(from_table_to_list_dict)
+            )
 
         # Write to BigQuery.
-        re_identified_messages | 'Write to BQ' >> beam.io.WriteToBigQuery(
+        transformed_messages | 'Write to BQ' >> beam.io.WriteToBigQuery(
             known_args.output_table,
             schema=known_args.bq_schema,
+            method=beam.io.WriteToBigQuery.Method.FILE_LOADS,
+            triggering_frequency=300,
             create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED
         )
 
@@ -168,7 +229,7 @@ def from_list_dicts_to_table(list_item):
     for item in list_item:
         row = {"values": []}
         for item_key in sorted(item):
-            row["values"].append({"string_value": item[item_key]})
+            row["values"].append({"string_value": str(item[item_key])})
         rows.append(row)
     table_item = {"table": {"headers": headers, "rows": rows}}
     return table_item
@@ -197,20 +258,15 @@ class UnmaskDetectedDetails(PTransform):
     def __init__(
             self,
             project=None,
-            location="global",
+            location='us-east4',
             template_name=None,
-            reidentification_config=None,
             timeout=None):
 
         self.config = {}
         self.project = project
         self.timeout = timeout
         self.location = location
-
-        if template_name is not None:
-            self.config['reidentify_template_name'] = template_name
-        else:
-            self.config['reidentify_config'] = reidentification_config
+        self.config['reidentify_template_name'] = template_name
 
     def expand(self, pcoll):
         if self.project is None:
@@ -219,7 +275,8 @@ class UnmaskDetectedDetails(PTransform):
         if self.project is None:
             raise ValueError(
                 'GCP project name needs to be specified '
-                'in "project" pipeline option')
+                'in "dlp_project" pipeline option.'
+                )
         return (
             pcoll
             | ParDo(_ReidentifyFn(
@@ -248,7 +305,6 @@ class _ReidentifyFn(DoFn):
         self.params = {}
 
     def setup(self):
-        from google.cloud import dlp_v2
         if self.client is None:
             self.client = dlp_v2.DlpServiceClient()
         self.params = {
@@ -262,6 +318,76 @@ class _ReidentifyFn(DoFn):
 
     def process(self, element, **kwargs):
         operation = self.client.reidentify_content(
+            item=element, **self.params)
+        yield operation.item
+
+
+@experimental()
+class MaskDetectedDetails(PTransform):
+
+    def __init__(
+            self,
+            project=None,
+            location='us-east4',
+            template_name=None,
+            timeout=None):
+
+        self.config = {}
+        self.project = project
+        self.timeout = timeout
+        self.location = location
+        self.config['deidentify_template_name'] = template_name
+
+    def expand(self, pcoll):
+        if self.project is None:
+            self.project = pcoll.pipeline.options.view_as(
+                GoogleCloudOptions).project
+        if self.project is None:
+            raise ValueError(
+                'GCP project name needs to be specified '
+                'in "dlp_project" pipeline option.'
+                )
+        return (
+            pcoll
+            | ParDo(_DeidentifyFn(
+                self.config,
+                self.timeout,
+                self.project,
+                self.location
+            )))
+
+
+class _DeidentifyFn(DoFn):
+
+    def __init__(
+        self,
+        config=None,
+        timeout=None,
+        project=None,
+        location=None,
+        client=None
+    ):
+        self.config = config
+        self.timeout = timeout
+        self.client = client
+        self.project = project
+        self.location = location
+        self.params = {}
+
+    def setup(self):
+        if self.client is None:
+            self.client = dlp_v2.DlpServiceClient()
+        self.params = {
+            'timeout': self.timeout,
+            'parent': "projects/{}/locations/{}".format(
+                self.project,
+                self.location
+            )
+        }
+        self.params.update(self.config)
+
+    def process(self, element, **kwargs):
+        operation = self.client.deidentify_content(
             item=element, **self.params)
         yield operation.item
 

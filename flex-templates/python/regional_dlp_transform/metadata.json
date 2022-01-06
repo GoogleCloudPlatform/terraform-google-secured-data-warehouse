@@ -1,11 +1,18 @@
 {
-  "name": "Streaming BiqQuery data through DLP to reidentify data flex template",
-  "description": "Python flex template for streaming BiqQuery data through regional DLP to reidentify the data.",
+  "name": "Streaming BiqQuery data through DLP to transform data flex template",
+  "description": "Python flex template for streaming BiqQuery data through regional DLP to transform the data.",
   "parameters": [
+    {
+      "name": "query",
+      "label": "SQL query to retrieve input data.",
+      "helpText": "Input query to retrieve data from Dataset. Example: `SELECT * FROM PROJECT.DATASET.TABLE LIMIT 100`. You need to specify either an input-table or query. It is recommended to use query when you want to use a public dataset.",
+      "isOptional": true
+    },
     {
       "name": "input_table",
       "label": "BigQuery input table name.",
-      "helpText": "Input BigQuery table for results specified as: PROJECT:DATASET.TABLE or DATASET.TABLE."
+      "helpText": "Input BigQuery table for results specified as: PROJECT:DATASET.TABLE or DATASET.TABLE. You need to specify either an input-table or query. It is recommended to use input-table for when you have your own dataset.",
+      "isOptional": true
     },
     {
       "name": "deidentification_template_name",
@@ -46,6 +53,14 @@
       "name": "output_table",
       "label": "BigQuery output table name.",
       "helpText": "Output BigQuery table with reidentified data as: PROJECT:DATASET.TABLE or DATASET.TABLE."
+    },
+    {
+      "name": "dlp_transform",
+      "label": "DLP transformation type.",
+      "helpText": "Choose between DLP DE-IDENTIFY or RE-IDENTIFY.",
+      "regexes": [
+        "RE-IDENTIFY|DE-IDENTIFY"
+      ]
     }
   ]
 }
