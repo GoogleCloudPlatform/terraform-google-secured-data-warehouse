@@ -1,23 +1,17 @@
 {
     "deidentifyTemplate": {
-        displayName: "${display_name}",
-        description: "${description}",
+        "displayName": "${display_name}",
+        "description": "${description}",
         "deidentifyConfig": {
             "recordTransformations": {
                 "fieldTransformations": [
                     {
                         "fields": [
                             {
-                                "name": "Card Number"
+                                "name": "ein"
                             },
                             {
-                                "name": "Card Holder'\''s Name"
-                            },
-                            {
-                                "name": "CVV/CVV2"
-                            },
-                            {
-                                "name": "Expiry Date"
+                                "name": "street"
                             }
                         ],
                         "primitiveTransformation": {
@@ -34,20 +28,52 @@
                     {
                         "fields": [
                             {
-                                "name": "Card PIN"
+                                "name": "state"
                             }
                         ],
                         "primitiveTransformation": {
-                            "cryptoHashConfig": {
+                            "cryptoReplaceFfxFpeConfig": {
                                 "cryptoKey": {
                                     "kmsWrapped": {
                                         "cryptoKeyName": "${crypto_key}",
                                         "wrappedKey": "${wrapped_key}"
                                     }
-                                }
+                                },
+                                "customAlphabet": "abcdefghijklmnopqrstuvwxyz _-;:,.ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
                             }
                         }
                     },
+                    {
+                        "fields": [
+                            {
+                                "name": "name"
+                            }
+                        ],
+                        "infoTypeTransformations": {
+                            "transformations": [
+                                {
+                                    "infoTypes": [
+                                        {
+                                            "name": "PERSON_NAME"
+                                        }
+                                    ],
+                                    "primitiveTransformation": {
+                                        "cryptoDeterministicConfig": {
+                                            "cryptoKey": {
+                                                "kmsWrapped": {
+                                                    "cryptoKeyName": "${crypto_key}",
+                                                    "wrappedKey": "${wrapped_key}"
+                                                }
+                                            },
+                                            "surrogateInfoType": {
+                                                "name": "PERSON_NAME"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
                 ]
             }
         }
