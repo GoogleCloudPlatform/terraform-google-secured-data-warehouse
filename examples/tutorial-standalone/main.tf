@@ -18,12 +18,11 @@ locals {
   location                    = "us-east4"
   non_confidential_dataset_id = "non_confidential_dataset"
   confidential_dataset_id     = "secured_dataset"
-  dlp_transformation_type     = "RE-IDENTIFY"
   taxonomy_name               = "secured_taxonomy"
   taxonomy_display_name       = "${local.taxonomy_name}-${random_id.suffix.hex}"
   confidential_table_id       = "irs_990_ein_re_id"
   non_confidential_table_id   = "irs_990_ein_de_id"
-  bq_schema_irs_990_ein       = "ein:STRING, name:STRING, ico:STRING, street:STRING, city:STRING, state:STRING, zip:STRING, group:STRING, subsection:STRING, affiliation:STRING, classification:STRING, ruling:STRING, deductibility:STRING, foundation:STRING, activity:STRING, organization:STRING, status:STRING, tax_period:STRING, asset_cd:STRING, income_cd:STRING, filing_req_cd:STRING, pf_filing_req_cd:STRING, acct_pd:STRING, asset_amt:STRING, income_amt:STRING, revenue_amt:STRING, ntee_cd:STRING, sort_name:STRING"
+  bq_schema_irs_990_ein       = "ein:STRING, name:STRING, ico:STRING, street:STRING, city:STRING, state:STRING, zip:STRING,group:STRING, subsection:STRING, affiliation:STRING, classification:STRING, ruling:STRING, deductibility:STRING, foundation:STRING, activity:STRING, organization:STRING, status:STRING, tax_period:STRING, asset_cd:STRING, income_cd:STRING, filing_req_cd:STRING, pf_filing_req_cd:STRING, acct_pd:STRING, asset_amt:STRING, income_amt:STRING, revenue_amt:STRING, ntee_cd:STRING, sort_name:STRING"
 }
 
 resource "random_id" "suffix" {
@@ -163,5 +162,38 @@ resource "time_sleep" "wait_de_identify_job_execution" {
 
   depends_on = [
     module.regional_deid
+  ]
+}
+
+#####
+module "regional_reid" {
+  source = "../../modules/dataflow-flex-job"
+
+  project_id              = module.base_projects.confidential_data_project_id
+  name                    = "dataflow-flex-regional-dlp-reid-job-python-query"
+  container_spec_gcs_path = module.template_project.python_re_identify_template_gs_path
+  job_language            = "PYTHON"
+  region                  = local.location
+  service_account_email   = module.secured_data_warehouse.confidential_dataflow_controller_service_account_email
+  subnetwork_self_link    = module.base_projects.confidential_subnets_self_link
+  kms_key_name            = module.secured_data_warehouse.cmek_reidentification_crypto_key
+  temp_location           = "gs://${module.secured_data_warehouse.confidential_data_dataflow_bucket_name}/tmp/"
+  staging_location        = "gs://${module.secured_data_warehouse.confidential_data_dataflow_bucket_name}/staging/"
+
+  parameters = {
+    input_table                    = "${module.base_projects.non_confidential_data_project_id}:${local.non_confidential_dataset_id}.${local.non_confidential_table_id}"
+    deidentification_template_name = module.re_identification_template.template_full_path
+    window_interval_sec            = 30
+    batch_size                     = 1000
+    dlp_location                   = local.location
+    dlp_project                    = module.base_projects.data_governance_project_id
+    bq_schema                      = local.bq_schema_irs_990_ein
+    output_table                   = "${module.base_projects.confidential_data_project_id}:${local.confidential_dataset_id}.${local.confidential_table_id}"
+    dlp_transform                  = "RE-IDENTIFY"
+  }
+
+  depends_on = [
+    time_sleep.wait_de_identify_job_execution,
+    google_bigquery_table.re_id
   ]
 }
