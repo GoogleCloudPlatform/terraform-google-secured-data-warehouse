@@ -151,8 +151,8 @@ resource "null_resource" "python_re_identification_flex_template" {
       gcloud builds submit \
        --project=${local.project_id} \
        --gcs-source-staging-dir="gs://${google_storage_bucket.cloudbuild_bucket.name}/source" \
-       --config ${local.templates_path}/python/regional_dlp_re_identification/cloudbuild.yaml \
-       ${local.templates_path}/python/regional_dlp_re_identification \
+       --config ${local.templates_path}/python/regional_dlp_transform/cloudbuild.yaml \
+       ${local.templates_path}/python/regional_dlp_transform \
        --impersonate-service-account=${var.service_account_email} \
        --substitutions="_PROJECT=${local.project_id},_FLEX_TEMPLATE_IMAGE_TAG=${local.python_re_identify_flex_template_image_tag},_PIP_INDEX_URL=${local.pip_index_url},_TEMPLATE_GS_PATH=${local.python_re_identify_template_gs_path}"
 EOF

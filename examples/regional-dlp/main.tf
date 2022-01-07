@@ -100,7 +100,6 @@ module "regional_dlp" {
   kms_key_name            = module.data_ingestion.cmek_data_ingestion_crypto_key
   temp_location           = "gs://${module.data_ingestion.data_ingestion_dataflow_bucket_name}/tmp/"
   staging_location        = "gs://${module.data_ingestion.data_ingestion_dataflow_bucket_name}/staging/"
-  enable_streaming_engine = false
 
   parameters = {
     input_topic                    = "projects/${var.data_ingestion_project_id}/topics/${module.data_ingestion.data_ingestion_topic_name}"

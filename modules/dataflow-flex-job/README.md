@@ -72,6 +72,7 @@ module "dataflow-flex-job" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| additional\_experiments | Comma separated list of additional experiments to be used by the job. | `string` | `""` | no |
 | container\_spec\_gcs\_path | The GCS path to the Dataflow job flex template. | `string` | n/a | yes |
 | enable\_streaming\_engine | Enable/disable the use of Streaming Engine for the job. Note that Streaming Engine is enabled by default for pipelines developed against the Beam SDK for Python v2.21.0 or later when using Python 3. | `bool` | `true` | no |
 | job\_language | Language of the flex template code. Options are 'JAVA' or 'PYTHON'. | `string` | `"JAVA"` | no |
