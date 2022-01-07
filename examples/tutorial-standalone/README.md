@@ -1,12 +1,12 @@
 # Standalone Tutorial
 
-This examples deploys the Secured data warehouse blueprint module,
+This examples deploys the *Secured Data Warehouse* blueprint module,
 the required "external harness" needed to deploy it,
-and Dataflow Jobs that process sensitive data using the Secured data warehouse infrastructure.
+and Dataflow Pipelines that process sensitive data using the *Secured Data Warehouse* infrastructure.
 
 In the External Harness we have:
 
-- The creation of four GCP projects needed by the Secured Data Warehouse:
+- The creation of four GCP projects needed by the *Secured Data Warehouse*:
   - Data Ingestion project.
   - Non-confidential Data project.
   - Data Governance project.
@@ -14,36 +14,36 @@ In the External Harness we have:
 - The Creation of an external Artifact Registry project for the dataflow flex templates and the build of the templates themselves, including:
   - A Docker Artifact registry.
   - A Python Artifact registry.
-  - A Python Pub/Sub to BigQuery dlp de-identification Dataflow flex template.
-  - A Python BigQuery to BigQuery dlp re-identification Dataflow flex template.
-- The Creation of two VPC Networks to deploy dataflow jobs, one in the Data Ingestion project and another one in the Confidential Data project, each network having:
+  - A Python Pub/Sub to BigQuery DLP de-identification Dataflow Flex Template.
+  - A Python BigQuery to BigQuery DLP re-identification Dataflow Flex Template.
+- The Creation of two VPC Networks to deploy Dataflow Pipelines, one in the Data Ingestion project and another one in the Confidential Data project, each network having:
   - A VPC Network with one subnetwork.
   - A set of Firewall rules.
-  - The required DNS configuration for Google private access.
+  - The required DNS configuration for Google Private Access.
 - The configuration of Log Sinks in all projects with the creation of a related Logging bucket in the Data Governance project
 - The Cloud KMS infrastructure for the creation of a `wrapped_key` and `crypto_key` pair:
   - A Cloud KMS Keyring.
   - A Cloud KMS key encryption key (KEK).
   - A token encryption key (TEK) for DLP Templates.
 
-In the deploy of the Secured Data Warehouse and the Dataflow Jobs we have:
+In the deploy of the *Secured Data Warehouse* and the Dataflow Pipelines we have:
 
 - The deploy of the [main module](../../README.md) itself.
-- The creation of two dataflow Jobs using the same [Dataflow template](../../flex-templates/python/regional_dlp_re_identification/README.md) that can do both de-identification and re-identification using the `wrapped_key` and `crypto_key` pair created in the harness.
-- The creation of a Data Catalog taxonomy and [policy tags](https://cloud.google.com/bigquery/docs/best-practices-policy-tags) representing security levels
-- The creation of a BigQuery table with [column-level security](https://cloud.google.com/bigquery/docs/column-level-security) enabled using the Data Catalog policy tags
+- The creation of two Dataflow Pipelines using the same [Dataflow template](../../flex-templates/python/regional_dlp_re_identification/README.md) that can do both de-identification and re-identification using the `wrapped_key` and `crypto_key` pair created in the harness.
+- The creation of a Data Catalog taxonomy and [policy tags](https://cloud.google.com/bigquery/docs/best-practices-policy-tags) representing security levels.
+- The creation of a BigQuery table with [column-level security](https://cloud.google.com/bigquery/docs/column-level-security) enabled using the Data Catalog policy tags.
 
-The example waits for 10 minutes between the deploy of the de-identification dataflow pipeline and the start of the re-identification dataflow pipeline,
+The example waits for 10 minutes between the deploy of the de-identification Dataflow Pipeline and the start of the re-identification Dataflow Pipeline,
 to wait for the first job to deploy, process the 10k records, and write to the BigQuery table that will be processed by the second job.
 
-The re-identification step is typically a separate deliberate action (with change control) to re-identify and limit
+The re-identification step is typically a separate deliberated action (with change control) to re-identify and limit
 who can read the data but is executed automatically in the example to showcase the BigQuery security controls.
 
 ## Google Cloud Locations
 
 This example will be deployed at the `us-east4` location, to deploy in another location,
 change the local `location` in the example [main.tf](./main.tf#L18) file.
-By default, the Secured Data Warehouse module has an [Organization Policy](https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations)
+By default, the *Secured Data Warehouse* module has an [Organization Policy](https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations)
 that only allows the creation of resource in `us-locations`.
 To deploy in other locations, update the input [trusted_locations](../../README.md#inputs) with
 the appropriated location in the call to the [main module](./main.tf#L33).
@@ -66,36 +66,49 @@ you need to add your user in the variable `perimeter_additional_members` in the 
 
 ### Public Bigquery
 
-**PLACE HOLDER FOR EXPLAIN THE PUBLIC BIGQUERY USAGE**
+The sample data used in this example is a [Public BigQuery Dataset](https://console.cloud.google.com/bigquery?project=bigquery-public-data&d=irs_990&p=bigquery-public-data&page=dataset&ws=!1m4!1m3!3m2!1sbigquery-public-data!2sirs_990).
+The data [is a United States Internal Revenue Service form that provides the public with financial information about a nonprofit organization](https://en.wikipedia.org/wiki/Form_990).
+For this example, the input query will retrieve 10k records from the public dataset.
 
-The sample data used in this example is a [csv file](./assets/cc_10000_records.csv) with fake credit card data.
-For this example, the input file has 10k records.
+Bigquery table spec:
 
-Each record has these values:
+- ein.
+- name.
+- ico.
+- street.
+- city.
+- state.
+- zip.
+- group.
+- subsection.
+- affiliation.
+- classification.
+- ruling.
+- deductibility.
+- foundation.
+- activity.
+- organization.
+- status.
+- tax_period.
+- asset_cd.
+- income_cd.
+- filing_req_cd.
+- pf_filing_req_cd.
+- acct_pd.
+- asset_amt.
+- income_amt.
+- revenue_amt.
+- ntee_cd.
+- sort_name.
 
-- Card Type Code.
-- Card Type Full Name.
-- Issuing Bank.
-- Card Number.
-- Card Holder's Name.
-- CVV/CVV2.
-- Issue Date.
-- Expiry Date.
-- Billing Date.
-- Card PIN.
-- Credit Limit.
-
-The de-identification Dataflow job will apply these DLP Crypto-based tokenization transformations to encrypt the data:
+The de-identification Dataflow Pipeline will apply these DLP Crypto-based tokenization transformations to encrypt the data:
 
 - [Deterministic encryption](https://cloud.google.com/dlp/docs/transformations-reference#de) Transformation:
-  - Card Number.
-  - Card Holder's Name.
-  - CVV/CVV2.
-  - Expiry Date.
-- [Cryptographic hashing](https://cloud.google.com/dlp/docs/transformations-reference#crypto-hashing) Transformation:
-  - Card PIN.
-
-**PLACE HOLDER FOR EXPLAIN THE PUBLIC BIGQUERY USAGE**
+  - ein.
+  - street.
+  - name.
+- [Format-preserving encryption](https://cloud.google.com/dlp/docs/transformations-reference#fpe) Transformation:
+  - state.
 
 ### Taxonomy used
 
@@ -277,10 +290,10 @@ iam.googleapis.com \
 
 | Name | Description |
 |------|-------------|
-| confidential\_dataflow\_controller\_service\_account\_email | The confidential project Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
+| confidential\_dataflow\_controller\_service\_account\_email | The confidential project Dataflow controller service account email. See <https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account>. |
 | data\_ingestion\_bucket\_name | The name of the bucket created for data ingestion pipeline. |
 | data\_ingestion\_topic\_name | The topic created for data ingestion pipeline. |
-| dataflow\_controller\_service\_account\_email | The data ingestion project Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
+| dataflow\_controller\_service\_account\_email | The data ingestion project Dataflow controller service account email. See <https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account>. |
 | pubsub\_writer\_service\_account\_email | The PubSub writer service account email. Should be used to write data to the PubSub topics the data ingestion pipeline reads from. |
 | storage\_writer\_service\_account\_email | The Storage writer service account email. Should be used to write data to the buckets the data ingestion pipeline reads from. |
 
