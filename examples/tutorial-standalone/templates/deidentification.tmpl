@@ -49,30 +49,16 @@
                                 "name": "name"
                             }
                         ],
-                        "infoTypeTransformations": {
-                            "transformations": [
-                                {
-                                    "infoTypes": [
-                                        {
-                                            "name": "PERSON_NAME"
-                                        }
-                                    ],
-                                    "primitiveTransformation": {
-                                        "cryptoDeterministicConfig": {
-                                            "cryptoKey": {
-                                                "kmsWrapped": {
-                                                    "cryptoKeyName": "${crypto_key}",
-                                                    "wrappedKey": "${wrapped_key}"
-                                                }
-                                            },
-                                            "surrogateInfoType": {
-                                                "name": "PERSON_NAME"
-                                            }
-                                        }
+                    "primitiveTransformation": {
+                            "cryptoDeterministicConfig": {
+                                "cryptoKey": {
+                                    "kmsWrapped": {
+                                        "cryptoKeyName": "${crypto_key}",
+                                        "wrappedKey": "${wrapped_key}"
                                     }
-                                }
-                            ]
-                        }
+                                },
+                            }
+                    }
                     }
                 ]
             }
