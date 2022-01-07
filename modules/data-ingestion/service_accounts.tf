@@ -19,7 +19,10 @@ locals {
     "roles/pubsub.subscriber",
     "roles/pubsub.editor",
     "roles/storage.objectViewer",
-    "roles/dataflow.worker"
+    "roles/dataflow.worker",
+    "roles/bigquery.jobUser",
+    "roles/bigquery.dataEditor",
+    "roles/serviceusage.serviceUsageConsumer"
   ]
 
   governance_project_roles = [
