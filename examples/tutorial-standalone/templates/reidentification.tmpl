@@ -3,6 +3,9 @@
         "displayName": "${display_name}",
         "description": "${description}",
         "deidentifyConfig": {
+            "transformationErrorHandling": {
+                "leaveUntransformed": {}
+            },
             "recordTransformations": {
                 "fieldTransformations": [
                     {
@@ -39,7 +42,7 @@
                                         "wrappedKey": "${wrapped_key}"
                                     }
                                 },
-                                "customAlphabet": "abcdefghijklmnopqrstuvwxyz _-;:,.ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+                                "customAlphabet": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
                             }
                         }
                     },
