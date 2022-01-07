@@ -131,12 +131,12 @@ resource "google_bigquery_table" "re_id" {
 
   schema = templatefile("${path.module}/templates/schema.template",
     {
-      pt_ein          = google_data_catalog_policy_tag.confidential_tags["ein"].id,
-      pt_name         = google_data_catalog_policy_tag.private_tags["name"].id,
-      pt_street       = google_data_catalog_policy_tag.private_tags["street"].id,
-      pt_state        = google_data_catalog_policy_tag.private_tags["state"].id,
-      pt_income       = google_data_catalog_policy_tag.sensitive_tags["income_amt"].id,
-      pt_revenue      = google_data_catalog_policy_tag.sensitive_tags["revenue_amt"].id
+      pt_ein     = google_data_catalog_policy_tag.confidential_tags["ein"].id,
+      pt_name    = google_data_catalog_policy_tag.private_tags["name"].id,
+      pt_street  = google_data_catalog_policy_tag.private_tags["street"].id,
+      pt_state   = google_data_catalog_policy_tag.private_tags["state"].id,
+      pt_income  = google_data_catalog_policy_tag.sensitive_tags["income_amt"].id,
+      pt_revenue = google_data_catalog_policy_tag.sensitive_tags["revenue_amt"].id
   })
 
   lifecycle {
