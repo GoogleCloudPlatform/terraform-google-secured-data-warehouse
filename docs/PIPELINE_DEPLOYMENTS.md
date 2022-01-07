@@ -122,7 +122,7 @@ Use the Dataflow Flex Job Template [submodule](../modules/dataflow-flex-job/READ
 
 ### Deploying with `gcloud` Command
 
-You can run the following commands to create a **Java** Dataflow Flex Job using the **gcloud command**.
+You can run the following commands to create a Dataflow Flex Job using the **gcloud command**.
 
 You can check more infos about the variables needed in the previously section.
 
@@ -156,9 +156,9 @@ For more details about `gcloud dataflow flex-template` see the command [document
 
 #### Streaming Dataflow
 
-##### Pub/Sub to Bigquery
+##### Pub/Sub to BigQuery
 
-If you are using our [Python De-Identification Flex Template sample](../flex-templates/java/regional_dlp_de_identification/README.md), you can provide a topic as value for the `input_topic` parameter.
+If you are using our [Python De-Identification Flex Template sample](../flex-templates/python/regional_dlp_de_identification/README.md), you can provide a topic as value for the `input_topic` parameter.
 
 Examples using Python De-Identification Flex Template:
 
@@ -168,9 +168,24 @@ If you are using our [Regional DLP Example](../examples/regional-dlp/README.md),
 already waiting for new input data in the [data ingestion topic](../README.md#outputs) created by *Secured Data Warehouse Module*. You just need do publish a new message with the format
 expected by the template. You can check how publishing messages [here](https://cloud.google.com/pubsub/docs/publisher).
 
-### How do I check if my data have been de-identified?
+##### BigQuery to BigQuery
 
-After the Dataflow Pipeline successfully runs, you can check the data in the
-[Bigquery table](https://cloud.google.com/bigquery/docs/quickstarts/quickstart-cloud-console#preview_table_data) created in the dataset provided
-in the Non-Confidential project.
-Observe that all sensitive data is de-identified..
+If you are using our [Python Transform Flex Template sample](../flex-templates/python/regional_dlp_transform/README.md), you can provide a BigQuery table ID for the `input_table` parameter or a SQL query for the `query` parameter. For more details about these parameters see [Using flex-template](../flex-templates/python/regional_dlp_transform/README.md#using-flex-template) on the Python Transform Flex Template documentation.
+
+You need also provide the transformation type, 'RE-IDENTIFY' or 'DE-IDENTIFY' for `dlp_transform` parameter.
+
+Examples using Python Transform Flex Template:
+
+- [Tutorial Standalone](../examples/tutorial-standalone/README.md)
+
+If you are using our [Tutorial Standalone Example](../examples/tutorial-standalone/README.md), two Dataflow pipelines are deployed, one with de-identification and another with re-identification, that finish after processing all data. To ingest more data you need to create another Dataflow pipeline.
+
+### How do I check if my data have been de-identified or re-identified?
+
+After the Dataflow Pipeline successfully runs, you can check the data in the correct
+[Bigquery table](https://cloud.google.com/bigquery/docs/quickstarts/quickstart-cloud-console#preview_table_data) created in the dataset provided:
+
+- in the Non-Confidential project in case of de-identified data
+- in the Confidential project in case of re-identified data
+
+Observe that all sensitive data is transformed.
