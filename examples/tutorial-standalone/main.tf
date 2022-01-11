@@ -59,8 +59,7 @@ module "secured_data_warehouse" {
     module.base_projects,
     module.iam_projects,
     module.centralized_logging,
-    google_project_iam_binding.remove_owner_role,
-    google_project_iam_binding.remove_owner_role_from_template
+    google_project_iam_binding.remove_owner_role
   ]
 }
 

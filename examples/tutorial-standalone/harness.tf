@@ -79,24 +79,6 @@ module "template_project" {
   service_account_email = var.terraform_service_account
 }
 
-resource "time_sleep" "wait_60_seconds" {
-  create_duration = "60s"
-
-  depends_on = [
-    module.template_project
-  ]
-}
-
-resource "google_project_iam_binding" "remove_owner_role_from_template" {
-  project = module.template_project.project_id
-  role    = "roles/owner"
-  members = []
-
-  depends_on = [
-    time_sleep.wait_60_seconds
-  ]
-}
-
 module "tek_wrapping_key" {
   source  = "terraform-google-modules/kms/google"
   version = "~> 1.2"
