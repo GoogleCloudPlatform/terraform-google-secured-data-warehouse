@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ locals {
   kek_key_name                = "kek_key_${random_id.suffix.hex}"
   key_rotation_period_seconds = "2592000s" #30 days
   secret_name                 = "wrapped_key"
-  wrapped_key_secret_data     = chomp(data.google_secret_manager_secret_version.wrapped_key.secret_data)
 
   projects_ids = {
     data_ingestion   = module.base_projects.data_ingestion_project_id,

@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ variable "terraform_service_account" {
 }
 
 variable "perimeter_additional_members" {
-  description = "The list of all members to be added on perimeter access, except the service accounts created by this module. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required."
+  description = "The list of members to be added on perimeter access. To be able to see the resources protected by the VPC Service Controls add your user must be in this list. The service accounts created by this module do not need to be added to this list. Entries must be in the standard GCP form: `user:email@email.com` or `serviceAccount:my-service-account@email.com`."
   type        = list(string)
 }
 
@@ -49,7 +49,7 @@ variable "delete_contents_on_destroy" {
 }
 
 variable "kms_key_protection_level" {
-  description = "The protection level to use when creating a key. Possible values: [\"SOFTWARE\", \"HSM\"]"
+  description = "(Optional) The protection level to use when creating a key. Possible values: [\"SOFTWARE\", \"HSM\"]"
   type        = string
   default     = "HSM"
 }

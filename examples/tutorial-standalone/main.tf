@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ locals {
   confidential_table_id       = "irs_990_ein_re_id"
   non_confidential_table_id   = "irs_990_ein_de_id"
   bq_schema_irs_990_ein       = "ein:STRING, name:STRING, ico:STRING, street:STRING, city:STRING, state:STRING, zip:STRING,group:STRING, subsection:STRING, affiliation:STRING, classification:STRING, ruling:STRING, deductibility:STRING, foundation:STRING, activity:STRING, organization:STRING, status:STRING, tax_period:STRING, asset_cd:STRING, income_cd:STRING, filing_req_cd:STRING, pf_filing_req_cd:STRING, acct_pd:STRING, asset_amt:STRING, income_amt:STRING, revenue_amt:STRING, ntee_cd:STRING, sort_name:STRING"
+  wrapped_key_secret_data     = chomp(data.google_secret_manager_secret_version.wrapped_key.secret_data)
 }
 
 resource "random_id" "suffix" {
@@ -129,7 +130,7 @@ resource "google_artifact_registry_repository_iam_member" "confidential_python_r
   member     = "serviceAccount:${module.secured_data_warehouse.confidential_dataflow_controller_service_account_email}"
 }
 
-module "regional_deid" {
+module "regional_deid_pipeline" {
   source = "../../modules/dataflow-flex-job"
 
   project_id              = module.base_projects.data_ingestion_project_id
@@ -160,12 +161,11 @@ resource "time_sleep" "wait_de_identify_job_execution" {
   create_duration = "600s"
 
   depends_on = [
-    module.regional_deid
+    module.regional_deid_pipeline
   ]
 }
 
-#####
-module "regional_reid" {
+module "regional_reid_pipeline" {
   source = "../../modules/dataflow-flex-job"
 
   project_id              = module.base_projects.confidential_data_project_id
