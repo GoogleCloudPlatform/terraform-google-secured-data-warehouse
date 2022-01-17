@@ -50,96 +50,6 @@
       }
    },
    {
-      "name":"zip",
-      "mode":"NULLABLE",
-      "type":"STRING"
-   },
-   {
-      "name":"group",
-      "mode":"NULLABLE",
-      "type":"STRING"
-   },
-   {
-      "name":"subsection",
-      "mode":"NULLABLE",
-      "type":"STRING"
-   },
-   {
-      "name":"affiliation",
-      "mode":"NULLABLE",
-      "type":"STRING"
-   },
-   {
-      "name":"classification",
-      "mode":"NULLABLE",
-      "type":"STRING"
-   },
-   {
-      "name":"ruling",
-      "mode":"NULLABLE",
-      "type":"STRING"
-   },
-   {
-      "name":"deductibility",
-      "mode":"NULLABLE",
-      "type":"STRING"
-   },
-   {
-      "name":"foundation",
-      "mode":"NULLABLE",
-      "type":"STRING"
-   },
-   {
-      "name":"activity",
-      "mode":"NULLABLE",
-      "type":"STRING"
-   },
-   {
-      "name":"organization",
-      "mode":"NULLABLE",
-      "type":"STRING"
-   },
-   {
-      "name":"status",
-      "mode":"NULLABLE",
-      "type":"STRING"
-   },
-   {
-      "name":"tax_period",
-      "mode":"NULLABLE",
-      "type":"STRING"
-   },
-   {
-      "name":"asset_cd",
-      "mode":"NULLABLE",
-      "type":"STRING"
-   },
-   {
-      "name":"income_cd",
-      "mode":"NULLABLE",
-      "type":"STRING"
-   },
-   {
-      "name":"filing_req_cd",
-      "mode":"NULLABLE",
-      "type":"STRING"
-   },
-   {
-      "name":"pf_filing_req_cd",
-      "mode":"NULLABLE",
-      "type":"STRING"
-   },
-   {
-      "name":"acct_pd",
-      "mode":"NULLABLE",
-      "type":"STRING"
-   },
-   {
-      "name":"asset_amt",
-      "mode":"NULLABLE",
-      "type":"STRING"
-   },
-   {
       "name":"income_amt",
       "mode":"NULLABLE",
       "type":"STRING",
@@ -158,15 +68,5 @@
             "${pt_revenue}"
          ]
       }
-   },
-   {
-      "name":"ntee_cd",
-      "mode":"NULLABLE",
-      "type":"STRING"
-   },
-   {
-      "name":"sort_name",
-      "mode":"NULLABLE",
-      "type":"STRING"
    }
 ]

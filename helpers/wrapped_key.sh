@@ -20,18 +20,15 @@
 
 set -e
 
-project_id=$1
-location=$2
-terraform_service_account=$3
-keyring=$4
-key=$5
-secret_name=$6
+terraform_service_account=$1
+key=$2
+secret_name=$3
 
 access_token=$(gcloud auth print-access-token --impersonate-service-account="${terraform_service_account}")
 
 data=$(python -c "import os,base64; key=os.urandom(32); encoded_key = base64.b64encode(key).decode('utf-8'); print(encoded_key)")
 
-response_kms=$(curl -s -X POST "https://cloudkms.googleapis.com/v1/projects/${project_id}/locations/${location}/keyRings/${keyring}/cryptoKeys/${key}:encrypt" \
+response_kms=$(curl -s -X POST "https://cloudkms.googleapis.com/v1/${key}:encrypt" \
  -d '{"plaintext":"'"$data"'"}' \
  -H "Authorization:Bearer ${access_token}" \
  -H "Content-Type:application/json" \

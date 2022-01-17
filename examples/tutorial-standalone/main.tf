@@ -22,8 +22,8 @@ locals {
   taxonomy_display_name       = "${local.taxonomy_name}-${random_id.suffix.hex}"
   confidential_table_id       = "irs_990_ein_re_id"
   non_confidential_table_id   = "irs_990_ein_de_id"
-  bq_schema_irs_990_ein       = "ein:STRING, name:STRING, ico:STRING, street:STRING, city:STRING, state:STRING, zip:STRING,group:STRING, subsection:STRING, affiliation:STRING, classification:STRING, ruling:STRING, deductibility:STRING, foundation:STRING, activity:STRING, organization:STRING, status:STRING, tax_period:STRING, asset_cd:STRING, income_cd:STRING, filing_req_cd:STRING, pf_filing_req_cd:STRING, acct_pd:STRING, asset_amt:STRING, income_amt:STRING, revenue_amt:STRING, ntee_cd:STRING, sort_name:STRING"
   wrapped_key_secret_data     = chomp(data.google_secret_manager_secret_version.wrapped_key.secret_data)
+  bq_schema_irs_990_ein       = "ein:STRING, name:STRING, ico:STRING, street:STRING, city:STRING, state:STRING, income_amt:STRING, revenue_amt:STRING"
 }
 
 resource "random_id" "suffix" {
@@ -130,6 +130,10 @@ resource "google_artifact_registry_repository_iam_member" "confidential_python_r
   member     = "serviceAccount:${module.secured_data_warehouse.confidential_dataflow_controller_service_account_email}"
 }
 
+// The sample data we are using is a Public Bigquery Dataset Table
+// that contains a United States Internal Revenue Service form
+// that provides the public with financial information about a nonprofit organization
+// (https://console.cloud.google.com/bigquery?project=bigquery-public-data&d=irs_990&p=bigquery-public-data&page=table&ws=!1m9!1m3!3m2!1sbigquery-public-data!2sirs_990!1m4!4m3!1sbigquery-public-data!2sirs_990!3sirs_990_ein&t=irs_990_ein)
 module "regional_deid_pipeline" {
   source = "../../modules/dataflow-flex-job"
 
@@ -145,7 +149,7 @@ module "regional_deid_pipeline" {
   staging_location        = "gs://${module.secured_data_warehouse.data_ingestion_dataflow_bucket_name}/staging/"
 
   parameters = {
-    query                          = "SELECT * FROM [bigquery-public-data:irs_990.irs_990_ein] LIMIT 10000"
+    query                          = "SELECT ein, name, ico, street, city, state, income_amt, revenue_amt FROM [bigquery-public-data:irs_990.irs_990_ein] LIMIT 10000"
     deidentification_template_name = module.de_identification_template.template_full_path
     window_interval_sec            = 30
     batch_size                     = 1000

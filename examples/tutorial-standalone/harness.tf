@@ -87,7 +87,7 @@ module "tek_wrapping_key" {
   keyring              = local.kek_keyring
   key_rotation_period  = local.key_rotation_period_seconds
   keys                 = [local.kek_key_name]
-  key_protection_level = "HSM"
+  key_protection_level = var.kms_key_protection_level
   prevent_destroy      = !var.delete_contents_on_destroy
 }
 
@@ -115,18 +115,13 @@ resource "null_resource" "wrapped_key" {
   provisioner "local-exec" {
     command = <<EOF
     ${path.module}/../../helpers/wrapped_key.sh \
-    ${module.base_projects.data_governance_project_id} \
-    ${local.location} \
     ${var.terraform_service_account} \
-    ${local.kek_keyring} \
-    ${local.kek_key_name} \
-    ${local.secret_name}
+    ${module.tek_wrapping_key.keys[local.kek_key_name]} \
+    ${google_secret_manager_secret.wrapped_key_secret.name}
 EOF
   }
 
   depends_on = [
-    module.tek_wrapping_key,
-    google_secret_manager_secret.wrapped_key_secret,
     google_project_iam_binding.remove_owner_role
   ]
 }

@@ -64,9 +64,9 @@ the appropriated location in the call to the [main module](./main.tf#L33).
 To be able to see the resources protected by the VPC Service Controls [Perimeters](https://cloud.google.com/vpc-service-controls/docs/service-perimeters) in the Google Cloud Console
 you need to add your user in the variable `perimeter_additional_members` in the `terraform.tfvars` file.
 
-### Public Bigquery
+### Sample Data
 
-The sample data used in this example is a [Public BigQuery Dataset](https://console.cloud.google.com/bigquery?project=bigquery-public-data&d=irs_990&p=bigquery-public-data&page=dataset&ws=!1m4!1m3!3m2!1sbigquery-public-data!2sirs_990).
+The sample data used in this example is a [Public BigQuery Table](https://console.cloud.google.com/bigquery?project=bigquery-public-data&d=irs_990&p=bigquery-public-data&page=table&ws=!1m9!1m3!3m2!1sbigquery-public-data!2sirs_990!1m4!4m3!1sbigquery-public-data!2sirs_990!3sirs_990_ein&t=irs_990_ein).
 The data [is a United States Internal Revenue Service form that provides the public with financial information about a nonprofit organization](https://en.wikipedia.org/wiki/Form_990).
 For this example, the input query will retrieve 10k records from the public dataset.
 
