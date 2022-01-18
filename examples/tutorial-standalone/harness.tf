@@ -117,7 +117,8 @@ resource "null_resource" "wrapped_key" {
     ${path.module}/../../helpers/wrapped_key.sh \
     ${var.terraform_service_account} \
     ${module.tek_wrapping_key.keys[local.kek_key_name]} \
-    ${google_secret_manager_secret.wrapped_key_secret.name}
+    ${google_secret_manager_secret.wrapped_key_secret.name} \
+    ${module.base_projects.data_governance_project_id}
 EOF
   }
 

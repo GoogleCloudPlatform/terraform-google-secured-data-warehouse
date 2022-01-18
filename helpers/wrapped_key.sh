@@ -23,6 +23,7 @@ set -e
 terraform_service_account=$1
 key=$2
 secret_name=$3
+project_id=$4
 
 access_token=$(gcloud auth print-access-token --impersonate-service-account="${terraform_service_account}")
 
