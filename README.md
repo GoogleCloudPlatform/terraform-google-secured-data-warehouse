@@ -92,6 +92,7 @@ module "secured_data_warehouse" {
 | key\_rotation\_period\_seconds | Rotation period for keys. The default value is 30 days. | `string` | `"2592000s"` | no |
 | kms\_key\_protection\_level | The protection level to use when creating a key. Possible values: ["SOFTWARE", "HSM"] | `string` | `"HSM"` | no |
 | location | The location for the KMS Customer Managed Encryption Keys, Cloud Storage Buckets, and Bigquery datasets. This location can be a multi-region. | `string` | `"us-east4"` | no |
+| make\_dataflow\_controller\_service\_account\_read\_bigquery | (Optional) If set to true, it will grant the necessary roles to read from a bigquery (`roles/bigquery.jobUser`, `roles/bigquery.dataEditor`, and `roles/serviceusage.serviceUsageConsumer`) to the `dataflow_controller_service_account_email`. | `bool` | `false` | no |
 | network\_administrator\_group | Google Cloud IAM group that reviews network configuration. Typically, this includes members of the networking team. | `string` | n/a | yes |
 | non\_confidential\_data\_project\_id | The ID of the project in which the Bigquery will be created. | `string` | n/a | yes |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |

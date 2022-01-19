@@ -45,24 +45,25 @@ module "data_governance" {
 module "data_ingestion" {
   source = "./modules/data-ingestion"
 
-  dataset_default_table_expiration_ms = var.dataset_default_table_expiration_ms
-  bucket_name                         = var.bucket_name
-  bucket_class                        = var.bucket_class
-  bucket_lifecycle_rules              = var.bucket_lifecycle_rules
-  delete_contents_on_destroy          = var.delete_contents_on_destroy
-  dataset_id                          = var.dataset_id
-  dataset_name                        = var.dataset_name
-  dataset_description                 = var.dataset_description
-  org_id                              = var.org_id
-  data_ingestion_project_id           = var.data_ingestion_project_id
-  non_confidential_data_project_id    = var.non_confidential_data_project_id
-  data_governance_project_id          = var.data_governance_project_id
-  terraform_service_account           = var.terraform_service_account
-  pubsub_resource_location            = local.pubsub_resource_location
-  dataset_location                    = local.location
-  bucket_location                     = local.location
-  data_ingestion_encryption_key       = module.data_governance.cmek_data_ingestion_crypto_key
-  bigquery_encryption_key             = module.data_governance.cmek_bigquery_crypto_key
+  dataset_default_table_expiration_ms                    = var.dataset_default_table_expiration_ms
+  bucket_name                                            = var.bucket_name
+  bucket_class                                           = var.bucket_class
+  bucket_lifecycle_rules                                 = var.bucket_lifecycle_rules
+  delete_contents_on_destroy                             = var.delete_contents_on_destroy
+  dataset_id                                             = var.dataset_id
+  dataset_name                                           = var.dataset_name
+  dataset_description                                    = var.dataset_description
+  org_id                                                 = var.org_id
+  data_ingestion_project_id                              = var.data_ingestion_project_id
+  non_confidential_data_project_id                       = var.non_confidential_data_project_id
+  data_governance_project_id                             = var.data_governance_project_id
+  terraform_service_account                              = var.terraform_service_account
+  pubsub_resource_location                               = local.pubsub_resource_location
+  dataset_location                                       = local.location
+  bucket_location                                        = local.location
+  data_ingestion_encryption_key                          = module.data_governance.cmek_data_ingestion_crypto_key
+  bigquery_encryption_key                                = module.data_governance.cmek_bigquery_crypto_key
+  make_dataflow_controller_service_account_read_bigquery = var.make_dataflow_controller_service_account_read_bigquery
 }
 
 module "bigquery_confidential_data" {

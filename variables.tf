@@ -253,3 +253,9 @@ variable "confidential_data_perimeter" {
   type        = string
   default     = ""
 }
+
+variable "make_dataflow_controller_service_account_read_bigquery" {
+  description = "(Optional) If set to true, it will grant the necessary roles to read from a bigquery (`roles/bigquery.jobUser`, `roles/bigquery.dataEditor`, and `roles/serviceusage.serviceUsageConsumer`) to the `dataflow_controller_service_account_email`."
+  type        = bool
+  default     = false
+}
