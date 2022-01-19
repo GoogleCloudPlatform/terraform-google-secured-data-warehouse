@@ -19,6 +19,10 @@ that incorporates and documents best practices for a performant and scalable des
 security by default for control, logging and evidence generation. It can be  simply deployed by
 customers through a Terraform workflow.
 
+## Disclaimer
+
+To ensure a safe environment we highly recommend you remove all owners roles in the projects used as inputs for *Data Warehouse module*.
+
 ## Usage
 
 Basic usage of this module is as follows:
