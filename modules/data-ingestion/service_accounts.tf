@@ -15,22 +15,22 @@
  */
 
 locals {
-  data_ingestion_project_roles_standard = [
+  default_data_ingestion_project_roles = [
     "roles/pubsub.subscriber",
     "roles/pubsub.editor",
     "roles/storage.objectViewer",
     "roles/dataflow.worker"
   ]
 
-  data_ingestion_project_roles_for_read_bigquery = [
+  bigquery_read_roles = [
     "roles/bigquery.jobUser",
     "roles/bigquery.dataEditor",
     "roles/serviceusage.serviceUsageConsumer"
   ]
 
-  conditional_data_ingestion_project_roles = var.make_dataflow_controller_service_account_read_bigquery ? local.data_ingestion_project_roles_for_read_bigquery : []
+  additional_project_roles = var.enable_bigquery_read_roles ? local.bigquery_read_roles : []
 
-  data_ingestion_project_roles = distinct(concat(local.conditional_data_ingestion_project_roles, local.data_ingestion_project_roles_standard))
+  data_ingestion_project_roles = distinct(concat(local.additional_project_roles, local.default_data_ingestion_project_roles))
 
   governance_project_roles = [
     "roles/dlp.user",
