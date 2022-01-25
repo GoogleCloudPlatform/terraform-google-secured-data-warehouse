@@ -24,6 +24,7 @@ terraform_service_account=$1
 key=$2
 secret_name=$3
 project_id=$4
+exe_path=$(dirname $0)
 
 
 python3 -m pip install --user --upgrade pip
@@ -32,13 +33,14 @@ python3 -m pip install --user virtualenv
 
 python3 -m venv kms_helper
 
-. kms_helper/bin/activate
+# shellcheck source=/dev/null
+source kms_helper/bin/activate
 
 pip install --upgrade pip
 
-pip install -r ../../helpers/wrapped-key/requirements.txt
+pip install -r $exe_path/wrapped-key/requirements.txt
 
-response_kms=$(python3 ../../helpers/wrapped-key/wrapped_key.py --crypto_key_path ${key} --service_account ${terraform_service_account})
+response_kms=$(python3 $exe_path/wrapped-key/wrapped_key.py --crypto_key_path ${key} --service_account ${terraform_service_account})
 
 echo "${response_kms}" | \
     gcloud secrets versions add "${secret_name}" \
