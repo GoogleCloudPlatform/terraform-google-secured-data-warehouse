@@ -62,8 +62,8 @@ locals {
     "roles/dlp.inspectTemplatesEditor",
     "roles/dlp.user",
     "roles/serviceusage.serviceUsageAdmin",
-    "roles/cloudkms.cryptoKeyEncrypter",
     "roles/iam.serviceAccountTokenCreator",
+    "roles/cloudkms.cryptoOperator",
     "roles/secretmanager.admin"
   ]
 }
