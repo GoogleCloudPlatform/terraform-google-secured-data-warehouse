@@ -65,6 +65,7 @@ python3 wrapped_key.py \
 --location_id ${location_id} \
 --key_ring_id ${key_ring_id} \
 --key_id ${key_id} \
+--se
 ```
 
 OR
@@ -77,3 +78,5 @@ python3 wrapped_key.py \
 ```
 
 The `crypto-key-path` format is `projects/PROJECT-ID/locations/LOCATION-ID/keyRings/KEY-RING-ID/cryptoKeys/KEY-ID`
+
+**Note:** By default, the script will be executed with the account chosen in the `gcloud auth application-default login` command. If you want to run the script impersonating the Service Account, you need to use the `--service_account <service-account-email>` parameter in the examples above.
