@@ -64,8 +64,7 @@ python3 wrapped_key.py \
 --project_id ${project_id} \
 --location_id ${location_id} \
 --key_ring_id ${key_ring_id} \
---key_id ${key_id} \
---se
+--key_id ${key_id}
 ```
 
 OR
