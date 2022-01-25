@@ -31,10 +31,10 @@ python3 -m pip install --user --upgrade pip
 
 python3 -m pip install --user virtualenv
 
-python3 -m venv kms_helper
+python3 -m venv kms_helper_venv
 
 # shellcheck source=/dev/null
-source kms_helper/bin/activate
+source kms_helper_venv/bin/activate
 
 pip install --upgrade pip
 
