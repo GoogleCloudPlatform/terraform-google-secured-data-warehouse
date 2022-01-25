@@ -187,7 +187,6 @@ Grant the following roles to the service account.
   - Data governance project
     - Cloud KMS Admin:`roles/cloudkms.admin`
     - Cloud KMS CryptoKey Encrypter:`roles/cloudkms.cryptoKeyEncrypter`
-    - Cloud KMS Crypto Operator: `roles/cloudkms.cryptoOperator`
     - DLP De-identify Templates Editor:`roles/dlp.deidentifyTemplatesEditor`
     - DLP Inspect Templates Editor:`roles/dlp.inspectTemplatesEditor`
     - DLP User:`roles/dlp.user`
