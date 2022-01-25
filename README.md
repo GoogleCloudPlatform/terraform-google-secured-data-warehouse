@@ -21,7 +21,7 @@ customers through a Terraform workflow.
 
 ## Disclaimer
 
-To ensure a safe environment we highly recommend you remove all owners roles in the projects used as inputs for *Data Warehouse module*.
+To ensure a safe environment we highly recommend you remove all owners roles in the projects used as inputs for *Data Warehouse module*, respecting the principle of [separation of duties](https://cloud.google.com/kms/docs/separation-of-duties).
 
 ## Usage
 
