@@ -140,6 +140,8 @@ module "secured_data_warehouse" {
 
 These sections describe requirements for using this module.
 
+**Note:** Please see the [Disclaimer](#disclaimer) regarding **project owners** before creating projects.
+
 ### Software
 
 Install the following dependencies:
