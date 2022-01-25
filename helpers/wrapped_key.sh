@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2021 Google LLC
+# Copyright 2022 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,15 +25,20 @@ key=$2
 secret_name=$3
 project_id=$4
 
-access_token=$(gcloud auth print-access-token --impersonate-service-account="${terraform_service_account}")
 
-data=$(python -c "import os,base64; key=os.urandom(32); encoded_key = base64.b64encode(key).decode('utf-8'); print(encoded_key)")
+python3 -m pip install --user --upgrade pip
 
-response_kms=$(curl -s -X POST "https://cloudkms.googleapis.com/v1/${key}:encrypt" \
- -d '{"plaintext":"'"$data"'"}' \
- -H "Authorization:Bearer ${access_token}" \
- -H "Content-Type:application/json" \
- | python -c "import sys, json; print(\"\".join(json.load(sys.stdin)['ciphertext']))")
+python3 -m pip install --user virtualenv
+
+python3 -m venv kms_helper
+
+. kms_helper/bin/activate
+
+pip install --upgrade pip
+
+pip install -r ../../helpers/wrapped-key/requirements.txt
+
+response_kms=$(python3 ../../helpers/wrapped-key/wrapped_key.py --crypto_key_path ${key} --service_account ${terraform_service_account})
 
 echo "${response_kms}" | \
     gcloud secrets versions add "${secret_name}" \
