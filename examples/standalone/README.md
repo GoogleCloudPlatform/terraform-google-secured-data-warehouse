@@ -1,4 +1,4 @@
-# Standalone Tutorial
+# Standalone
 
 This examples deploys the *Secured Data Warehouse* blueprint module,
 the required "external harness" needed to deploy it,
