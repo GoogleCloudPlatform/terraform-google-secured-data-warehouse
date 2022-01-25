@@ -7,6 +7,7 @@
 - [The referenced network resource cannot be found](#the-referenced-network-resource-cannot-be-found)
 - [Unable to open the Dataflow staging file](#unable-to-open-the-dataflow-staging-file)
 - [No matching distribution found for apache-beam==2.30.0](#no-matching-distribution-found-for-apache-beam2300)
+- [`Bad syntax for dict argument` when deploying Dataflow Jobs using gcloud command](#bad-syntax-for-dict-argument-when-deploying-dataflow-jobs-using-gcloud-command)
 
 ### The server was only able to partially fulfill your request
 
@@ -190,4 +191,47 @@ resource "google_artifact_registry_repository_iam_member" "python_reader" {
   role       = "roles/artifactregistry.reader"
   member     = "serviceAccount:sa-dataflow-controller-reid@CONFIDENTIAL-DATA-PROJECT-ID.iam.gserviceaccount.com"
 }
+```
+
+### `Bad syntax for dict argument` when deploying Dataflow Jobs using gcloud command
+
+When the user does the deploy of a new Dataflow job using the gcloud command `gcloud dataflow flex-template run`, they get an error when providing a `--parameters ` that has a comma (`,`) in the value
+
+The error message shown in the **terminal** when trying to run the gcloud command to deploy a new Dataflow Job using parameters that the argument passed have a comma. This case in specific occurred running the [Python Dataflow pipeline bq-to-bq](../flex-templates/python/regional_dlp_transform/README.md).
+
+**Error message:**
+
+```console
+(gcloud.dataflow.flex-template.run) argument --parameters: Bad syntax for dict arg: [<KEY>:<VALUE>]. Please see `gcloud topic flags-file` or `gcloud topic escaping` for information on providing list or dictionary flag values with special characters.
+Usage: gcloud dataflow flex-template run JOB_NAME --template-file-gcs-location=TEMPLATE_FILE_GCS_LOCATION [optional flags]
+  optional flags may be  --additional-experiments | --additional-user-labels |
+                         --dataflow-kms-key | --disable-public-ips |
+                         --enable-streaming-engine | --flexrs-goal | --help |
+                         --max-workers | --network | --num-workers |
+                         --parameters | --region | --service-account-email |
+                         --staging-location | --subnetwork | --temp-location |
+                         --transform-name-mappings | --update |
+                         --worker-machine-type | --worker-region | --worker-zone
+
+For detailed information on this command and its flags, run:
+  gcloud dataflow flex-template run --help
+```
+
+**Cause:**
+
+If you do not specify an [**alternative delimiter**](https://cloud.google.com/sdk/gcloud/reference/topic/escaping) in the parameters, gcloud will use the default, the comma. The gcloud will interpret the argument with comma as multiple parameters instead of one, or infer that a dictionary is being passed without the default syntax.
+
+**Solution:**
+
+An **alternative delimiter**, between **^**, must be declared before a parameter with its argument being passed with comma. The **alternative delimiter** must be different from all characters in the argument passed.
+
+Still with the example running the Python Dataflow pipeline bq-to-bq, this Dataflow flex template has several parameters, one of them is a **bq_schema**, a dict. The **alternative delimiter** chosen was the `*`, as it does not appear in the passed argument. The correct way to specify this argument is seen below:
+```console
+gcloud dataflow flex-template run "<PIPELINE-NAME>" \
+…
+--parameters query=”<SQL-QUERY>” \
+--parameters deidentification_template_name="<DEID-TEMPLATE-NAME>” \
+…
+--parameters ^*^bq_schema="key1:value1, key2:value2, key3:value3" \
+…
 ```

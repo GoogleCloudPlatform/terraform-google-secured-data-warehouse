@@ -33,29 +33,29 @@ resource "random_id" "suffix" {
 module "secured_data_warehouse" {
   source = "../.."
 
-  org_id                                                 = var.org_id
-  data_governance_project_id                             = module.base_projects.data_governance_project_id
-  confidential_data_project_id                           = module.base_projects.confidential_data_project_id
-  non_confidential_data_project_id                       = module.base_projects.non_confidential_data_project_id
-  data_ingestion_project_id                              = module.base_projects.data_ingestion_project_id
-  sdx_project_number                                     = module.template_project.sdx_project_number
-  terraform_service_account                              = var.terraform_service_account
-  access_context_manager_policy_id                       = var.access_context_manager_policy_id
-  bucket_name                                            = "data-ingestion"
-  pubsub_resource_location                               = local.location
-  location                                               = local.location
-  trusted_locations                                      = ["us-locations"]
-  dataset_id                                             = local.non_confidential_dataset_id
-  confidential_dataset_id                                = local.confidential_dataset_id
-  cmek_keyring_name                                      = "cmek_keyring"
-  delete_contents_on_destroy                             = var.delete_contents_on_destroy
-  perimeter_additional_members                           = var.perimeter_additional_members
-  data_engineer_group                                    = var.data_engineer_group
-  data_analyst_group                                     = var.data_analyst_group
-  security_analyst_group                                 = var.security_analyst_group
-  network_administrator_group                            = var.network_administrator_group
-  security_administrator_group                           = var.security_administrator_group
-  make_dataflow_controller_service_account_read_bigquery = true
+  org_id                                       = var.org_id
+  data_governance_project_id                   = module.base_projects.data_governance_project_id
+  confidential_data_project_id                 = module.base_projects.confidential_data_project_id
+  non_confidential_data_project_id             = module.base_projects.non_confidential_data_project_id
+  data_ingestion_project_id                    = module.base_projects.data_ingestion_project_id
+  sdx_project_number                           = module.template_project.sdx_project_number
+  terraform_service_account                    = var.terraform_service_account
+  access_context_manager_policy_id             = var.access_context_manager_policy_id
+  bucket_name                                  = "data-ingestion"
+  pubsub_resource_location                     = local.location
+  location                                     = local.location
+  trusted_locations                            = ["us-locations"]
+  dataset_id                                   = local.non_confidential_dataset_id
+  confidential_dataset_id                      = local.confidential_dataset_id
+  cmek_keyring_name                            = "cmek_keyring"
+  delete_contents_on_destroy                   = var.delete_contents_on_destroy
+  perimeter_additional_members                 = var.perimeter_additional_members
+  data_engineer_group                          = var.data_engineer_group
+  data_analyst_group                           = var.data_analyst_group
+  security_analyst_group                       = var.security_analyst_group
+  network_administrator_group                  = var.network_administrator_group
+  security_administrator_group                 = var.security_administrator_group
+  enable_bigquery_read_roles_in_data_ingestion = true
 
   depends_on = [
     module.base_projects,

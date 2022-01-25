@@ -89,10 +89,10 @@ module "secured_data_warehouse" {
 | dataset\_id | Unique ID for the dataset being provisioned. | `string` | n/a | yes |
 | dataset\_name | Friendly name for the dataset being provisioned. | `string` | `"Data-ingestion dataset"` | no |
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `false` | no |
+| enable\_bigquery\_read\_roles\_in\_data\_ingestion | (Optional) If set to true, it will grant to the dataflow controller service account created in the data ingestion project the necessary roles to read from a bigquery table. | `bool` | `false` | no |
 | key\_rotation\_period\_seconds | Rotation period for keys. The default value is 30 days. | `string` | `"2592000s"` | no |
 | kms\_key\_protection\_level | The protection level to use when creating a key. Possible values: ["SOFTWARE", "HSM"] | `string` | `"HSM"` | no |
 | location | The location for the KMS Customer Managed Encryption Keys, Cloud Storage Buckets, and Bigquery datasets. This location can be a multi-region. | `string` | `"us-east4"` | no |
-| make\_dataflow\_controller\_service\_account\_read\_bigquery | (Optional) If set to true, it will grant the necessary roles to read from a bigquery (`roles/bigquery.jobUser`, `roles/bigquery.dataEditor`, and `roles/serviceusage.serviceUsageConsumer`) to the `dataflow_controller_service_account_email`. | `bool` | `false` | no |
 | network\_administrator\_group | Google Cloud IAM group that reviews network configuration. Typically, this includes members of the networking team. | `string` | n/a | yes |
 | non\_confidential\_data\_project\_id | The ID of the project in which the Bigquery will be created. | `string` | n/a | yes |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
