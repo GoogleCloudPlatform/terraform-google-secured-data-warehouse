@@ -36,8 +36,9 @@ def encrypt_symmetric(project_id, location_id, key_ring_id, key_id, client):
         bytes: Encrypted ciphertext.
     """
 
-    # Generate random bytes
-    plaintext_bytes = generate_random_bytes(project_id, location_id, 32, client)
+    # Generate random bytes.
+    plaintext_bytes = generate_random_bytes(
+        project_id, location_id, 32, client)
 
     # Optional, but recommended: compute plaintext's CRC32C.
     # See crc32c() function defined below.
@@ -146,7 +147,7 @@ if __name__ == '__main__':
     if args.service_account is not None:
         target_scopes = ['https://www.googleapis.com/auth/cloud-platform']
 
-        source_credentials , project = google.auth.default(
+        source_credentials, project = google.auth.default(
             scopes=target_scopes)
 
         target_credentials = impersonated_credentials.Credentials(
