@@ -21,7 +21,7 @@ locals {
   template_display_name       = "De-identification template using a KMS wrapped CMEK"
   template_description        = "De-identifies sensitive content defined in the template with a KMS wrapped CMEK."
   wrapped_key_secret_data     = chomp(data.google_secret_manager_secret_version.wrapped_key.secret_data)
-  secret_name                 = "wrapped_key"
+  secret_name                 = "wrapped_key_de_identification"
   location                    = "us-east4"
 }
 

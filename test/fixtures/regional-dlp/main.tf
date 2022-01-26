@@ -19,7 +19,7 @@ locals {
   kek_key_name                = "kek_key_${random_id.random_suffix.hex}"
   key_rotation_period_seconds = "2592000s"
   wrapped_key_secret_data     = chomp(data.google_secret_manager_secret_version.wrapped_key.secret_data)
-  secret_name                 = "wrapped_key"
+  secret_name                 = "wrapped_key_regional_dlp"
   location                    = "us-east4"
 }
 
