@@ -20,6 +20,9 @@ locals {
   key_rotation_period_seconds = "2592000s"
   template_display_name       = "De-identification template using a KMS wrapped CMEK"
   template_description        = "De-identifies sensitive content defined in the template with a KMS wrapped CMEK."
+  wrapped_key_secret_data     = chomp(data.google_secret_manager_secret_version.wrapped_key.secret_data)
+  secret_name                 = "wrapped_key"
+  location                    = "us-east4"
 }
 
 module "kms" {
@@ -27,7 +30,7 @@ module "kms" {
   version = "~> 1.2"
 
   project_id           = var.data_governance_project_id[0]
-  location             = "us-east4"
+  location             = local.location
   keyring              = local.keyring
   keys                 = [local.key_name]
   key_protection_level = "HSM"
@@ -35,13 +38,49 @@ module "kms" {
   prevent_destroy      = false
 }
 
-resource "random_id" "original_key" {
-  byte_length = 16
+resource "google_secret_manager_secret" "wrapped_key_secret" {
+  provider = google-beta
+
+  secret_id = local.secret_name
+  project   = var.data_governance_project_id[0]
+
+  replication {
+    user_managed {
+      replicas {
+        location = local.location
+      }
+    }
+  }
 }
 
-resource "google_kms_secret_ciphertext" "wrapped_key" {
-  crypto_key = module.kms.keys[local.key_name]
-  plaintext  = random_id.original_key.b64_std
+resource "null_resource" "wrapped_key" {
+
+  triggers = {
+    secret_id = google_secret_manager_secret.wrapped_key_secret.id
+  }
+
+  provisioner "local-exec" {
+    command = <<EOF
+    ${path.module}/../../../helpers/wrapped_key.sh \
+    ${var.terraform_service_account} \
+    ${module.kms.keys[local.key_name]} \
+    ${google_secret_manager_secret.wrapped_key_secret.name} \
+    ${var.data_governance_project_id[0]}
+EOF
+  }
+
+  depends_on = [
+    google_project_iam_binding.remove_owner_role
+  ]
+}
+
+data "google_secret_manager_secret_version" "wrapped_key" {
+  project = module.base_projects.data_governance_project_id
+  secret  = google_secret_manager_secret.wrapped_key_secret.id
+
+  depends_on = [
+    null_resource.wrapped_key
+  ]
 }
 
 module "de_identification_template" {
@@ -53,7 +92,7 @@ module "de_identification_template" {
   terraform_service_account = var.terraform_service_account
   dataflow_service_account  = var.terraform_service_account
   crypto_key                = module.kms.keys[local.key_name]
-  wrapped_key               = google_kms_secret_ciphertext.wrapped_key.ciphertext
+  wrapped_key               = local.wrapped_key_secret_data
   template_file             = "${path.module}/deidentification.tmpl"
-  dlp_location              = "us-east4"
+  dlp_location              = local.location
 }

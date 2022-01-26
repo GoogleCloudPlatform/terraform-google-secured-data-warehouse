@@ -18,6 +18,9 @@ locals {
   kek_keyring                 = "kek_keyring_${random_id.random_suffix.hex}"
   kek_key_name                = "kek_key_${random_id.random_suffix.hex}"
   key_rotation_period_seconds = "2592000s"
+  wrapped_key_secret_data     = chomp(data.google_secret_manager_secret_version.wrapped_key.secret_data)
+  secret_name                 = "wrapped_key"
+  location                    = "us-east4"
 }
 
 resource "random_id" "random_suffix" {
@@ -29,7 +32,7 @@ module "kek" {
   version = "~> 1.2"
 
   project_id           = var.data_governance_project_id[1]
-  location             = "us-east4"
+  location             = local.location
   keyring              = local.kek_keyring
   keys                 = [local.kek_key_name]
   key_protection_level = "HSM"
@@ -37,13 +40,49 @@ module "kek" {
   prevent_destroy      = false
 }
 
-resource "random_id" "original_key" {
-  byte_length = 16
+resource "google_secret_manager_secret" "wrapped_key_secret" {
+  provider = google-beta
+
+  secret_id = local.secret_name
+  project   = var.data_governance_project_id[0]
+
+  replication {
+    user_managed {
+      replicas {
+        location = local.location
+      }
+    }
+  }
 }
 
-resource "google_kms_secret_ciphertext" "wrapped_key" {
-  crypto_key = module.kek.keys[local.kek_key_name]
-  plaintext  = random_id.original_key.b64_std
+resource "null_resource" "wrapped_key" {
+
+  triggers = {
+    secret_id = google_secret_manager_secret.wrapped_key_secret.id
+  }
+
+  provisioner "local-exec" {
+    command = <<EOF
+    ${path.module}/../../../helpers/wrapped_key.sh \
+    ${var.terraform_service_account} \
+    ${module.kek.keys[local.kek_key_name]} \
+    ${google_secret_manager_secret.wrapped_key_secret.name} \
+    ${var.data_governance_project_id[0]}
+EOF
+  }
+
+  depends_on = [
+    google_project_iam_binding.remove_owner_role
+  ]
+}
+
+data "google_secret_manager_secret_version" "wrapped_key" {
+  project = module.base_projects.data_governance_project_id
+  secret  = google_secret_manager_secret.wrapped_key_secret.id
+
+  depends_on = [
+    null_resource.wrapped_key
+  ]
 }
 
 module "regional_dlp_example" {
@@ -69,5 +108,5 @@ module "regional_dlp_example" {
   security_administrator_group      = var.group_email[1]
 
   crypto_key  = module.kek.keys[local.kek_key_name]
-  wrapped_key = google_kms_secret_ciphertext.wrapped_key.ciphertext
+  wrapped_key = local.wrapped_key_secret_data
 }

@@ -26,7 +26,7 @@ output "de_identification_template_crypto_key" {
 
 output "de_identification_template_wrapped_key" {
   description = "The base64 encoded data crypto key wrapped by KMS."
-  value       = google_kms_secret_ciphertext.wrapped_key.ciphertext
+  value       = local.wrapped_key_secret_data
 }
 
 output "de_identification_template_template_id" {
