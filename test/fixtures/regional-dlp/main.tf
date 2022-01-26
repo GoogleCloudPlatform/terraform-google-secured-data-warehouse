@@ -70,10 +70,6 @@ resource "null_resource" "wrapped_key" {
     ${var.data_governance_project_id[0]}
 EOF
   }
-
-  depends_on = [
-    google_project_iam_binding.remove_owner_role
-  ]
 }
 
 data "google_secret_manager_secret_version" "wrapped_key" {
