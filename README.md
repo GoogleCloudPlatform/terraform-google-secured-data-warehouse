@@ -19,9 +19,19 @@ that incorporates and documents best practices for a performant and scalable des
 security by default for control, logging and evidence generation. It can be  simply deployed by
 customers through a Terraform workflow.
 
-## Disclaimer
+## Security Recomendations
 
-To ensure a safe environment we highly recommend you remove all owners roles in the projects used as inputs for *Data Warehouse module*, respecting the principle of [separation of duties](https://cloud.google.com/kms/docs/separation-of-duties).
+We recommend you remove all primitive `owner` roles in the projects used as inputs for the *Data Warehouse module*.
+
+- This recommendation aligns with the principle of [separation of duties](https://cloud.google.com/kms/docs/separation-of-duties).
+
+You can check the current situation of your project:
+
+- Using [Security Health Analytics](https://cloud.google.com/security-command-center/docs/concepts-vulnerabilities-findings#security-health-analytics-detectors), checking the [KMS vulnerability findings](https://cloud.google.com/security-command-center/docs/concepts-vulnerabilities-findings#kms-findings), for the Detector `KMS_PROJECT_HAS_OWNER`. This is a *Premium* tier detector.
+  - You can search for the SHA findings with category `KMS_PROJECT_HAS_OWNER` in the Security Command Center in the  Google Cloud Console.
+- You can also use Cloud Asset Inventory [search-all-iam-policies](https://cloud.google.com/asset-inventory/docs/searching-iam-policies#search_policies) gcloud command doing a [Query by role](https://cloud.google.com/asset-inventory/docs/searching-iam-policies#examples_query_by_role) to search for owner of the project.
+
+See the [terraform-example-foundation](https://github.com/terraform-google-modules/terraform-example-foundation) for additional good practices.
 
 ## Usage
 
