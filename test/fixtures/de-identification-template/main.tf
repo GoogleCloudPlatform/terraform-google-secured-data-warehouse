@@ -71,7 +71,7 @@ EOF
 }
 
 data "google_secret_manager_secret_version" "wrapped_key" {
-  project = module.base_projects.data_governance_project_id
+  project = var.data_governance_project_id[0]
   secret  = google_secret_manager_secret.wrapped_key_secret.id
 
   depends_on = [
