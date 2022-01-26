@@ -64,7 +64,7 @@ override.tf.json
 **/tmp_plan
 **/tmp-plan
 # Venv files
-**/kms_helper/
+**/kms_helper_venv/
 
 credentials.json
 **/.credentials/
