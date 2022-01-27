@@ -141,6 +141,20 @@ Install the following dependencies:
 - [Terraform](https://www.terraform.io/downloads.html) version 0.13.7 or later.
 - [curl](https://curl.haxx.se/) version 7.68.0 or later.
 
+### Cloud SDK configurations
+
+Acquire your user credentials to use for **Application Default Credentials**:
+
+```sh
+gcloud auth application-default login
+```
+
+Unset the project in the core section to avoid errors in the deploy with deleted or unavailable projects, and billings on inappropriate projects:
+
+```sh
+gcloud config unset project
+```
+
 ### Service Account
 
 To provision the resources of this example, create a privileged service account,
