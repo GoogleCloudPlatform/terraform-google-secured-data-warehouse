@@ -19,7 +19,7 @@ that incorporates and documents best practices for a performant and scalable des
 security by default for control, logging and evidence generation. It can be  simply deployed by
 customers through a Terraform workflow.
 
-## Security Recomendations
+## Disclaimer
 
 We recommend you remove all primitive `owner` roles in the projects used as inputs for the *Data Warehouse module*.
 
