@@ -21,13 +21,15 @@ customers through a Terraform workflow.
 
 ## Disclaimer
 
-We recommend you remove all primitive `owner` roles in the projects used as inputs for the *Data Warehouse module*.
+When using this blueprint, it is important to understand how you manage [separation of duties](https://cloud.google.com/kms/docs/separation-of-duties). We recommend you remove all primitive `owner` roles in the projects used as inputs for the *Data Warehouse module*. The secured data warehouse itself does not need any primitive owner roles for correct operations.
 
-- This recommendation aligns with the principle of [separation of duties](https://cloud.google.com/kms/docs/separation-of-duties).
+When using this blueprint in the example mode or when using this blueprint to create the new projects with default configurations for the deployment, we automatically remove the owner role as it has too broad access.
 
-You can check the current situation of your project:
+However, if you choose to use this blueprint with pre-existing projects in your organization, we will not proactively remove any pre-existing owner role assignments, as we won’t know your intent for or dependency on these role assignments in your pre-existing workloads. The pre-existing presence of these roles does expand the attack and risk surface of the resulting deployment. Therefore, we highly recommend you review your use of owner roles in these pre-existing cases and see if you can eliminate them to improve your resulting security posture. Only you can determine the appropriate trade-off to meet your business requirements.
 
-- Using [Security Health Analytics](https://cloud.google.com/security-command-center/docs/concepts-vulnerabilities-findings#security-health-analytics-detectors), checking the [KMS vulnerability findings](https://cloud.google.com/security-command-center/docs/concepts-vulnerabilities-findings#kms-findings), for the Detector `KMS_PROJECT_HAS_OWNER`. This is a *Premium* tier detector.
+You can check the current situation of your project with either of the following methods:
+
+- Using [Security Health Analytics](https://cloud.google.com/security-command-center/docs/concepts-vulnerabilities-findings#security-health-analytics-detectors) (SHA), checking the [KMS vulnerability findings](https://cloud.google.com/security-command-center/docs/concepts-vulnerabilities-findings#kms-findings), for the Detector `KMS_PROJECT_HAS_OWNER`.
   - You can search for the SHA findings with category `KMS_PROJECT_HAS_OWNER` in the Security Command Center in the  Google Cloud Console.
 - You can also use Cloud Asset Inventory [search-all-iam-policies](https://cloud.google.com/asset-inventory/docs/searching-iam-policies#search_policies) gcloud command doing a [Query by role](https://cloud.google.com/asset-inventory/docs/searching-iam-policies#examples_query_by_role) to search for owner of the project.
 
