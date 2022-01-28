@@ -95,6 +95,8 @@ Use the appropriated [output](../README.md#outputs) of the main module as the
 - Data ingestion project: `dataflow_controller_service_account_email`.
 - Confidential Data project: `confidential_dataflow_controller_service_account_email`.
 
+__Note:__ The account being used to deploy Dataflow Jobs must have `roles/iam.serviceAccountUser` to the **Dataflow Controller Service Account**.
+
 ### Customer Managed Encryption Key
 
 Use the appropriated [output](../README.md#outputs) of the main module as the [Dataflow KMS Key](https://cloud.google.com/dataflow/docs/guides/customer-managed-encryption-keys):
