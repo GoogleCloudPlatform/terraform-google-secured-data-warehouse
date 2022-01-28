@@ -18,7 +18,7 @@ locals {
   confidential_tags = {
     ein = {
       display_name = "US_EMPLOYER_IDENTIFICATION_NUMBER"
-      description  = "The empolyer identification number."
+      description  = "The employer identification number."
     }
   }
 
@@ -33,7 +33,7 @@ locals {
     }
     state = {
       display_name = "US_STATE"
-      description  = "The state of person."
+      description  = "Name of the state."
     }
   }
 

@@ -108,6 +108,7 @@ module "external_flex_template_infrastructure" {
   ]
 }
 
+// It's necessary to use the wait_60_seconds to guarantee the infrastructure is fully built before removing the owner role.
 resource "time_sleep" "wait_60_seconds" {
   create_duration = "60s"
 

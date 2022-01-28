@@ -66,40 +66,7 @@ you need to add your user in the variable `perimeter_additional_members` in the 
 
 ### Sample Data
 
-The sample data used in this example is a [Public BigQuery Table](https://console.cloud.google.com/bigquery?project=bigquery-public-data&d=irs_990&p=bigquery-public-data&page=table&ws=!1m9!1m3!3m2!1sbigquery-public-data!2sirs_990!1m4!4m3!1sbigquery-public-data!2sirs_990!3sirs_990_ein&t=irs_990_ein).
-The data [is a United States Internal Revenue Service form that provides the public with financial information about a nonprofit organization](https://en.wikipedia.org/wiki/Form_990).
-For this example, the input query will retrieve 10k records from the public dataset.
-
-Bigquery table spec:
-
-- ein.
-- name.
-- ico.
-- street.
-- city.
-- state.
-- zip.
-- group.
-- subsection.
-- affiliation.
-- classification.
-- ruling.
-- deductibility.
-- foundation.
-- activity.
-- organization.
-- status.
-- tax_period.
-- asset_cd.
-- income_cd.
-- filing_req_cd.
-- pf_filing_req_cd.
-- acct_pd.
-- asset_amt.
-- income_amt.
-- revenue_amt.
-- ntee_cd.
-- sort_name.
+The sample data used in this example is a [Public BigQuery Table](https://console.cloud.google.com/bigquery?project=bigquery-public-data&d=irs_990&p=bigquery-public-data&page=table&ws=!1m5!1m4!4m3!1sbigquery-public-data!2sirs_990!3sirs_990_ein&t=irs_990_ein) that belongs to the [IRS 990 public dataset](https://console.cloud.google.com/marketplace/product/internal-revenue-service/irs-990?project=bigquery-public-data).
 
 The de-identification Dataflow Pipeline will apply these DLP Crypto-based tokenization transformations to encrypt the data:
 
