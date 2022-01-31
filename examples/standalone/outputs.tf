@@ -14,32 +14,22 @@
  * limitations under the License.
  */
 
-output "dataflow_controller_service_account_email" {
+// depends_on is necessary to ensure that the bigquery table is already created
+output "bigquery_confidential_table" {
   description = "The data ingestion project Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account."
-  value       = module.secured_data_warehouse.dataflow_controller_service_account_email
+  value       = local.bigquery_confidential_table
+
+  depends_on = [
+    module.regional_deid_pipeline
+  ]
 }
 
-output "confidential_dataflow_controller_service_account_email" {
-  description = "The confidential project Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account."
-  value       = module.secured_data_warehouse.confidential_dataflow_controller_service_account_email
-}
+// depends_on is necessary to ensure that the bigquery table is already created
+output "bigquery_non_confidential_table" {
+  description = "The data ingestion project Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account."
+  value       = local.bigquery_non_confidential_table
 
-output "storage_writer_service_account_email" {
-  description = "The Storage writer service account email. Should be used to write data to the buckets the data ingestion pipeline reads from."
-  value       = module.secured_data_warehouse.storage_writer_service_account_email
-}
-
-output "pubsub_writer_service_account_email" {
-  description = "The PubSub writer service account email. Should be used to write data to the PubSub topics the data ingestion pipeline reads from."
-  value       = module.secured_data_warehouse.pubsub_writer_service_account_email
-}
-
-output "data_ingestion_bucket_name" {
-  description = "The name of the bucket created for data ingestion pipeline."
-  value       = module.secured_data_warehouse.data_ingestion_bucket_name
-}
-
-output "data_ingestion_topic_name" {
-  description = "The topic created for data ingestion pipeline."
-  value       = module.secured_data_warehouse.data_ingestion_topic_name
+  depends_on = [
+    module.regional_reid_pipeline
+  ]
 }

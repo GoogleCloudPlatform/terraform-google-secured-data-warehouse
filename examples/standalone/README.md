@@ -271,11 +271,7 @@ iam.googleapis.com \
 
 | Name | Description |
 |------|-------------|
-| confidential\_dataflow\_controller\_service\_account\_email | The confidential project Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
-| data\_ingestion\_bucket\_name | The name of the bucket created for data ingestion pipeline. |
-| data\_ingestion\_topic\_name | The topic created for data ingestion pipeline. |
-| dataflow\_controller\_service\_account\_email | The data ingestion project Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
-| pubsub\_writer\_service\_account\_email | The PubSub writer service account email. Should be used to write data to the PubSub topics the data ingestion pipeline reads from. |
-| storage\_writer\_service\_account\_email | The Storage writer service account email. Should be used to write data to the buckets the data ingestion pipeline reads from. |
+| bigquery\_confidential\_table | The data ingestion project Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
+| bigquery\_non\_confidential\_table | The data ingestion project Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

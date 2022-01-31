@@ -15,15 +15,17 @@
  */
 
 locals {
-  location                    = "us-east4"
-  non_confidential_dataset_id = "non_confidential_dataset"
-  confidential_dataset_id     = "secured_dataset"
-  taxonomy_name               = "secured_taxonomy"
-  taxonomy_display_name       = "${local.taxonomy_name}-${random_id.suffix.hex}"
-  confidential_table_id       = "irs_990_ein_re_id"
-  non_confidential_table_id   = "irs_990_ein_de_id"
-  wrapped_key_secret_data     = chomp(data.google_secret_manager_secret_version.wrapped_key.secret_data)
-  bq_schema_irs_990_ein       = "ein:STRING, name:STRING, ico:STRING, street:STRING, city:STRING, state:STRING, income_amt:STRING, revenue_amt:STRING"
+  location                        = "us-east4"
+  non_confidential_dataset_id     = "non_confidential_dataset"
+  confidential_dataset_id         = "secured_dataset"
+  taxonomy_name                   = "secured_taxonomy"
+  taxonomy_display_name           = "${local.taxonomy_name}-${random_id.suffix.hex}"
+  confidential_table_id           = "irs_990_ein_re_id"
+  non_confidential_table_id       = "irs_990_ein_de_id"
+  wrapped_key_secret_data         = chomp(data.google_secret_manager_secret_version.wrapped_key.secret_data)
+  bq_schema_irs_990_ein           = "ein:STRING, name:STRING, ico:STRING, street:STRING, city:STRING, state:STRING, income_amt:STRING, revenue_amt:STRING"
+  bigquery_non_confidential_table = "${module.base_projects.non_confidential_data_project_id}:${local.non_confidential_dataset_id}.${local.non_confidential_table_id}"
+  bigquery_confidential_table     = "${module.base_projects.confidential_data_project_id}:${local.confidential_dataset_id}.${local.confidential_table_id}"
 }
 
 resource "random_id" "suffix" {
@@ -160,7 +162,7 @@ module "regional_deid_pipeline" {
     dlp_location                   = local.location
     dlp_project                    = module.base_projects.data_governance_project_id
     bq_schema                      = local.bq_schema_irs_990_ein
-    output_table                   = "${module.base_projects.non_confidential_data_project_id}:${local.non_confidential_dataset_id}.${local.non_confidential_table_id}"
+    output_table                   = local.bigquery_non_confidential_table
     dlp_transform                  = "DE-IDENTIFY"
   }
 }
@@ -195,7 +197,7 @@ module "regional_reid_pipeline" {
     dlp_location                   = local.location
     dlp_project                    = module.base_projects.data_governance_project_id
     bq_schema                      = local.bq_schema_irs_990_ein
-    output_table                   = "${module.base_projects.confidential_data_project_id}:${local.confidential_dataset_id}.${local.confidential_table_id}"
+    output_table                   = local.bigquery_confidential_table
     dlp_transform                  = "RE-IDENTIFY"
   }
 
