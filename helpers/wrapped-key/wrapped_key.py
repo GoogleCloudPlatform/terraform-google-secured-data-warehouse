@@ -154,7 +154,7 @@ if __name__ == '__main__':
             source_credentials=source_credentials,
             target_principal=args.service_account,
             target_scopes=target_scopes,
-            lifetime=500)
+            lifetime=10)
         client = kms.KeyManagementServiceClient(credentials=target_credentials)
     else:
         client = kms.KeyManagementServiceClient()
