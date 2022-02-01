@@ -38,9 +38,9 @@ source kms_helper_venv/bin/activate
 
 pip install --upgrade pip
 
-pip install -r $exe_path/wrapped-key/requirements.txt
+pip install -r ${exe_path}/wrapped-key/requirements.txt
 
-response_kms=$(python3 $exe_path/wrapped-key/wrapped_key.py --crypto_key_path ${key} --service_account ${terraform_service_account})
+response_kms=$(python3 ${exe_path}/wrapped-key/wrapped_key.py --crypto_key_path ${key} --service_account ${terraform_service_account})
 
 echo "${response_kms}" | \
     gcloud secrets versions add "${secret_name}" \
