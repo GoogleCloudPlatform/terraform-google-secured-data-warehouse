@@ -182,7 +182,7 @@ If you are using our [Tutorial Standalone Example](../examples/tutorial-standalo
 
 ### How do I check if my data have been de-identified or re-identified?
 
-After the Dataflow Pipeline successfully runs, you can check the data in the correct
+After the Dataflow Pipeline successfully runs, you can preview the data in the correct
 [Bigquery table](https://cloud.google.com/bigquery/docs/quickstarts/quickstart-cloud-console#preview_table_data) created in the dataset provided:
 
 - in the Non-Confidential project in case of de-identified data
