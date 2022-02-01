@@ -83,19 +83,6 @@ module "de_identification_template" {
   dataflow_service_account  = module.secured_data_warehouse.dataflow_controller_service_account_email
 }
 
-module "re_identification_template" {
-  source = "../..//modules/de-identification-template"
-
-  project_id                = module.base_projects.data_governance_project_id
-  terraform_service_account = var.terraform_service_account
-  crypto_key                = module.tek_wrapping_key.keys[local.kek_key_name]
-  wrapped_key               = local.wrapped_key_secret_data
-  dlp_location              = local.location
-  template_id_prefix        = "re_identification"
-  template_file             = "${path.module}/templates/reidentification.tmpl"
-  dataflow_service_account  = module.secured_data_warehouse.confidential_dataflow_controller_service_account_email
-}
-
 resource "google_artifact_registry_repository_iam_member" "docker_reader" {
   provider = google-beta
 
@@ -191,7 +178,7 @@ module "regional_reid_pipeline" {
 
   parameters = {
     input_table                    = "${module.base_projects.non_confidential_data_project_id}:${local.non_confidential_dataset_id}.${local.non_confidential_table_id}"
-    deidentification_template_name = module.re_identification_template.template_full_path
+    deidentification_template_name = module.de_identification_template.template_full_path
     window_interval_sec            = 30
     batch_size                     = 1000
     dlp_location                   = local.location
