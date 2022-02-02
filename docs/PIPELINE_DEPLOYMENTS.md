@@ -176,9 +176,15 @@ You need also provide the transformation type, 'RE-IDENTIFY' or 'DE-IDENTIFY' fo
 
 Examples using Python Transform Flex Template:
 
-- [Tutorial Standalone](../examples/tutorial-standalone/README.md)
+- [Standalone](../examples/standalone/README.md)
 
-If you are using our [Tutorial Standalone Example](../examples/tutorial-standalone/README.md), two Dataflow pipelines are deployed, one with de-identification and another with re-identification, that finish after processing all data. To ingest more data you need to create another Dataflow pipeline.
+If you are using our [Standalone Example](../examples/standalone/README.md), two streaming Dataflow jobs are deployed, the first one in the data ingestion project, which de-identifies the data and save it in the non-confidential project.
+
+The second one in the confidential project, which re-identifies the data from non-confidential project.
+
+Both of the Dataflow jobs stop the execution at the end of the Pipeline.
+
+To ingest new data you must deploy a new [Dataflow Flex Job](#deploying-dataflow-flex-jobs) using the Flex Template BigQuery to BigQuery. Currently, only the [Classic Template](https://cloud.google.com/dataflow/docs/concepts/dataflow-templates#templated-dataflow-jobs) can be cloned, it is not possible to clone a `Flex Template Job` yet.
 
 ### How do I check if my data have been de-identified or re-identified?
 
