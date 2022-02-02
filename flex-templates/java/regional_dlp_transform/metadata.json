@@ -1,0 +1,53 @@
+{
+  "name": "Streaming BiqQuery data through DLP to reidentify data flex template",
+  "description": "Java flex template for streaming BiqQuery data through regional DLP to reidentify the data.",
+  "parameters": [
+    {
+      "name": "inputBigQueryTable",
+      "label": "BigQuery input table name.",
+      "helpText": "Input BigQuery table for results specified as: PROJECT:DATASET.TABLE or DATASET.TABLE."
+    },
+    {
+      "name": "outputBigQueryDataset",
+      "label": "BigQuery output dataset name.",
+      "helpText": "Output BigQuery table with reidentified data as: DATASET"
+    },
+    {
+      "name": "deidentifyTemplateName",
+      "label": "DLP structured de-identification template name.",
+      "helpText": "Name of the DLP structured de-identification template that was used to deidentify data in the BiqQuery source. Format is 'projects/<PROJECT>/locations/<LOCATION>/deidentifyTemplates/<TEMPLATE_ID>'",
+      "regexes": [
+        "projects/[^/]+/locations/[^/]+/deidentifyTemplates/[-_a-zA-Z0-9]+"
+      ]
+    },
+    {
+      "name": "dlpLocation",
+      "label": "DLP location.",
+      "helpText": "The location of the DLP template resource."
+    },
+    {
+      "name": "dlpProjectId",
+      "label": "DLP project.",
+      "helpText": "ID of the project that holds the DLP template."
+    },
+    {
+      "name": "confidentialDataProjectId",
+      "label": "Project for output BigQuery that has confidential data.",
+      "helpText": "ID of the project that holds the confidential data in BigQuery."
+    },
+    {
+      "name": "dlpTransform",
+      "label": "DLP transformation type.",
+      "helpText": "Choose between DLP DE-IDENTIFY or RE-IDENTIFY.",
+      "regexes": [
+        "RE-IDENTIFY|DE-IDENTIFY"
+      ]
+    },
+    {
+      "name": "batchSize",
+      "label": "DLP batch size.",
+      "helpText": "Number of records to be sent in a batch in the call to the DLP API. Default is 100",
+      "isOptional": true
+    }
+  ]
+}
