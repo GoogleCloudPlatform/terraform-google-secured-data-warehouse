@@ -31,7 +31,7 @@ def encrypt_symmetric(project_id, location_id, key_ring_id, key_id, client):
         location_id (string): Cloud KMS location.
         key_ring_id (string): ID of the Cloud KMS key ring.
         key_id (string): ID of the key to use.
-
+        client (KeyManagementServiceClient): Google Cloud Key Management Service.
     Returns:
         bytes: Encrypted ciphertext.
     """
@@ -78,6 +78,7 @@ def generate_random_bytes(project_id, location_id, num_bytes, client):
         project_id (string): Google Cloud project ID (e.g. 'my-project').
         location_id (string): Cloud KMS location (e.g. 'us-east1').
         num_bytes (integer): number of bytes of random data.
+        client (KeyManagementServiceClient): Google Cloud Key Management Service.
 
     Returns:
         bytes: Encrypted ciphertext.
