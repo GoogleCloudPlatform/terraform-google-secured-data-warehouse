@@ -26,24 +26,38 @@ secret_name=$3
 project_id=$4
 exe_path=$(dirname $0)
 
+trap 'catch $? $LINENO' EXIT
+catch() {
+  if [ "$1" != "0" ]; then
+    echo "Error $1 occurred on $2"
+    gcloud projects remove-iam-policy-binding $project_id --member=serviceAccount:${terraform_service_account} --role=roles/cloudkms.cryptoOperator
+  fi
+}
 
-python3 -m pip install --user --upgrade pip
+simple() {
+    gcloud projects add-iam-policy-binding $project_id --member=serviceAccount:${terraform_service_account} --role=roles/cloudkms.cryptoOperator
 
-python3 -m pip install --user virtualenv
+    python3 -m pip install --user --upgrade pip
 
-python3 -m venv kms_helper_venv
+    python3 -m pip install --user virtualenv
 
-# shellcheck source=/dev/null
-source kms_helper_venv/bin/activate
+    python3 -m venv kms_helper_venv
 
-pip install --upgrade pip
+    # shellcheck source=/dev/null
+    source kms_helper_venv/bin/activate
 
-pip install -r ${exe_path}/wrapped-key/requirements.txt
+    pip install --upgrade pip
 
-response_kms=$(python3 ${exe_path}/wrapped-key/wrapped_key.py --crypto_key_path ${key} --service_account ${terraform_service_account})
+    pip install -r $exe_path/wrapped-key/requirements.txt
 
-echo "${response_kms}" | \
+    response_kms=$(python3 $exe_path/wrapped-key/wrapped_key.py --crypto_key_path ${key} --service_account ${terraform_service_account})
+
+    echo "${response_kms}" | \
     gcloud secrets versions add "${secret_name}" \
     --data-file=- \
     --impersonate-service-account="${terraform_service_account}" \
     --project="${project_id}"
+
+    gcloud projects remove-iam-policy-binding $project_id --member=serviceAccount:${terraform_service_account} --role=roles/cloudkms.cryptoOperator
+}
+simple
