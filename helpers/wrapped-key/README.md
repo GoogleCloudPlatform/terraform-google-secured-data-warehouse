@@ -78,4 +78,6 @@ python3 wrapped_key.py \
 
 The `crypto-key-path` format is `projects/PROJECT-ID/locations/LOCATION-ID/keyRings/KEY-RING-ID/cryptoKeys/KEY-ID`
 
-**Note:** By default, the script will be executed with the account chosen in the `gcloud auth application-default login` command. If you want to run the script impersonating the Service Account, you need to use the `--service_account <service-account-email>` parameter in the examples above.
+**Note 1:** By default, the script will be executed with the account chosen in the `gcloud auth application-default login` command. If you want to run the script impersonating the Service Account, you need to use the `--service_account <service-account-email>` parameter in the examples above.
+
+**Note 2:** The script `wrapped_key.sh` will grant the  `cloudkms.cryptoOperator` role for the Terraform Service Account during the KMS `wrapped_key` creation. This role provides permission for the `wrapped_key.sh` script to use the [Generate Random Bytes](https://cloud.google.com/kms/docs/generate-random#kms-generate-random-bytes-python) functionality which is necessary to generate the token that will be used in the KMS `wrapped_key`. The `cloudkms.cryptoOperator` role will be removed from the Terraform Service Account once the KMS `wrapped_key` has been created.

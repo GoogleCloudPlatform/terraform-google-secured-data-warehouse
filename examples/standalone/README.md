@@ -212,6 +212,9 @@ add-iam-policy-binding ${FOLDER_ID} \
 --role="roles/serviceusage.serviceUsageAdmin"
 ```
 
+**Note:** The script `wrapped_key.sh` will grant the  `cloudkms.cryptoOperator` role for the Terraform Service Account during the KMS `wrapped_key` creation. This role provides permission for the `wrapped_key.sh` script to use the [Generate Random Bytes](https://cloud.google.com/kms/docs/generate-random#kms-generate-random-bytes-python) functionality which is necessary to generate the token that will be used in the KMS `wrapped_key`. The `cloudkms.cryptoOperator` role will be removed from the Terraform Service Account once the KMS `wrapped_key` has been created.
+
+
 ### APIs
 
 The following APIs must be enabled in the project where the service account was created:
