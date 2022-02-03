@@ -80,7 +80,7 @@ resource "google_project_iam_member" "crypto_operator" {
 
   project = module.base_projects[each.key].data_governance_project_id
   role    = "roles/cloudkms.cryptoOperator"
-  member  = "serviceAccount:${var.terraform_service_account}"
+  member  = "serviceAccount:${google_service_account.int_ci_service_account.email}"
 
   depends_on = [
     module.iam_projects
