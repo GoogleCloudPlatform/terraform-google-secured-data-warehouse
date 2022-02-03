@@ -55,12 +55,6 @@ resource "google_secret_manager_secret" "wrapped_key_secret" {
   }
 }
 
-resource "google_project_iam_member" "crypto_operator" {
-  project = var.data_governance_project_id[0]
-  role    = "roles/cloudkms.cryptoOperator"
-  member  = "serviceAccount:${var.terraform_service_account}"
-}
-
 resource "null_resource" "wrapped_key" {
 
   triggers = {
@@ -76,10 +70,6 @@ resource "null_resource" "wrapped_key" {
     ${var.data_governance_project_id[0]}
 EOF
   }
-
-  depends_on = [
-    google_project_iam_member.crypto_operator
-  ]
 }
 
 data "google_secret_manager_secret_version" "wrapped_key" {

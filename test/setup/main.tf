@@ -74,11 +74,24 @@ module "iam_projects" {
   service_account_email            = google_service_account.int_ci_service_account.email
 }
 
+resource "google_project_iam_member" "crypto_operator" {
+  for_each = local.project_groups
+
+
+  project = module.base_projects[each.key].data_governance_project_id
+  role    = "roles/cloudkms.cryptoOperator"
+  member  = "serviceAccount:${var.terraform_service_account}"
+
+  depends_on = [
+    module.iam_projects
+  ]
+}
+
 resource "time_sleep" "wait_90_seconds" {
   create_duration = "90s"
 
   depends_on = [
-    module.iam_projects
+    google_project_iam_member.crypto_operator
   ]
 }
 
