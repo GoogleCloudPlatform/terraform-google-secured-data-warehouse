@@ -15,14 +15,15 @@
  */
 
 locals {
-  keyring                     = "keyring_kek"
-  key_name                    = "key_name_kek"
-  key_rotation_period_seconds = "2592000s"
-  template_display_name       = "De-identification template using a KMS wrapped CMEK"
-  template_description        = "De-identifies sensitive content defined in the template with a KMS wrapped CMEK."
-  wrapped_key_secret_data     = chomp(data.google_secret_manager_secret_version.wrapped_key.secret_data)
-  secret_name                 = "wrapped_key_de_identification"
-  location                    = "us-east4"
+  keyring                            = "keyring_kek"
+  key_name                           = "key_name_kek"
+  key_rotation_period_seconds        = "2592000s"
+  template_display_name              = "De-identification template using a KMS wrapped CMEK"
+  template_description               = "De-identifies sensitive content defined in the template with a KMS wrapped CMEK."
+  wrapped_key_secret_data            = chomp(data.google_secret_manager_secret_version.wrapped_key.secret_data)
+  secret_name                        = "wrapped_key_de_identification"
+  location                           = "us-east4"
+  use_temporary_crypto_operator_role = false
 }
 
 module "kms" {
@@ -65,7 +66,8 @@ resource "null_resource" "wrapped_key" {
     ${var.terraform_service_account} \
     ${module.kms.keys[local.key_name]} \
     ${google_secret_manager_secret.wrapped_key_secret.name} \
-    ${var.data_governance_project_id[0]}
+    ${var.data_governance_project_id[0]} \
+    ${local.use_temporary_crypto_operator_role}
 EOF
   }
 }

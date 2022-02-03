@@ -15,10 +15,11 @@
  */
 
 locals {
-  kek_keyring                 = "kek_keyring_${random_id.suffix.hex}"
-  kek_key_name                = "kek_key_${random_id.suffix.hex}"
-  key_rotation_period_seconds = "2592000s" #30 days
-  secret_name                 = "wrapped_key"
+  kek_keyring                        = "kek_keyring_${random_id.suffix.hex}"
+  kek_key_name                       = "kek_key_${random_id.suffix.hex}"
+  key_rotation_period_seconds        = "2592000s" #30 days
+  secret_name                        = "wrapped_key"
+  use_temporary_crypto_operator_role = true
 
   projects_ids = {
     data_ingestion   = module.base_projects.data_ingestion_project_id,
@@ -118,7 +119,8 @@ resource "null_resource" "wrapped_key" {
     ${var.terraform_service_account} \
     ${module.tek_wrapping_key.keys[local.kek_key_name]} \
     ${google_secret_manager_secret.wrapped_key_secret.name} \
-    ${module.base_projects.data_governance_project_id}
+    ${module.base_projects.data_governance_project_id} \
+    ${local.use_temporary_crypto_operator_role}
 EOF
   }
 

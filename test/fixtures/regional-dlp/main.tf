@@ -15,12 +15,13 @@
  */
 
 locals {
-  kek_keyring                 = "kek_keyring_${random_id.random_suffix.hex}"
-  kek_key_name                = "kek_key_${random_id.random_suffix.hex}"
-  key_rotation_period_seconds = "2592000s"
-  wrapped_key_secret_data     = chomp(data.google_secret_manager_secret_version.wrapped_key.secret_data)
-  secret_name                 = "wrapped_key_regional_dlp"
-  location                    = "us-east4"
+  kek_keyring                        = "kek_keyring_${random_id.random_suffix.hex}"
+  kek_key_name                       = "kek_key_${random_id.random_suffix.hex}"
+  key_rotation_period_seconds        = "2592000s"
+  wrapped_key_secret_data            = chomp(data.google_secret_manager_secret_version.wrapped_key.secret_data)
+  secret_name                        = "wrapped_key_regional_dlp"
+  location                           = "us-east4"
+  use_temporary_crypto_operator_role = false
 }
 
 resource "random_id" "random_suffix" {
@@ -67,7 +68,8 @@ resource "null_resource" "wrapped_key" {
     ${var.terraform_service_account} \
     ${module.kek.keys[local.kek_key_name]} \
     ${google_secret_manager_secret.wrapped_key_secret.name} \
-    ${var.data_governance_project_id[0]}
+    ${var.data_governance_project_id[0]} \
+    ${local.use_temporary_crypto_operator_role}
 EOF
   }
 }

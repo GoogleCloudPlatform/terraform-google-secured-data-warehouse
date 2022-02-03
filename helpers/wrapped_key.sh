@@ -24,18 +24,21 @@ terraform_service_account=$1
 key=$2
 secret_name=$3
 project_id=$4
+temporary_crypto_operator_role=$5
 exe_path=$(dirname $0)
 
 trap 'catch $? $LINENO' EXIT
 catch() {
-  if [ "$1" != "0" ]; then
-    echo "Error $1 occurred on $2"
-    gcloud projects remove-iam-policy-binding $project_id --member=serviceAccount:${terraform_service_account} --role=roles/cloudkms.cryptoOperator
+  if [ ${temporary_crypto_operator_role} == "true" ]; then
+    echo "Error ${1} occurred on ${2}"
+    gcloud projects remove-iam-policy-binding ${project_id} --member=serviceAccount:${terraform_service_account} --role=roles/cloudkms.cryptoOperator
   fi
 }
 
 simple() {
-    gcloud projects add-iam-policy-binding $project_id --member=serviceAccount:${terraform_service_account} --role=roles/cloudkms.cryptoOperator
+    if [ ${temporary_crypto_operator_role} == "true" ]; then
+      gcloud projects add-iam-policy-binding ${project_id} --member=serviceAccount:${terraform_service_account} --role=roles/cloudkms.cryptoOperator
+    fi
 
     python3 -m pip install --user --upgrade pip
 
@@ -58,6 +61,8 @@ simple() {
     --impersonate-service-account="${terraform_service_account}" \
     --project="${project_id}"
 
-    gcloud projects remove-iam-policy-binding $project_id --member=serviceAccount:${terraform_service_account} --role=roles/cloudkms.cryptoOperator
+    if [ ${temporary_crypto_operator_role} == "true" ]; then
+      gcloud projects remove-iam-policy-binding $project_id --member=serviceAccount:${terraform_service_account} --role=roles/cloudkms.cryptoOperator
+    fi
 }
 simple
