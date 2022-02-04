@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
+variable "remove_owner_role" {
+  description = "(Optional) If set to true, remove all owner roles in all projects in case it has been found in some project."
+  type        = bool
+  default     = false
+}
+
 variable "trusted_locations" {
   description = "This is a list of trusted regions where location-based GCP resources can be created."
   type        = list(string)
