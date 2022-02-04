@@ -45,7 +45,7 @@ resource "google_secret_manager_secret" "wrapped_key_secret" {
   provider = google-beta
 
   secret_id = local.secret_name
-  project   = var.data_governance_project_id[0]
+  project   = var.data_governance_project_id[1]
 
   replication {
     user_managed {
@@ -68,14 +68,14 @@ resource "null_resource" "wrapped_key" {
     ${var.terraform_service_account} \
     ${module.kek.keys[local.kek_key_name]} \
     ${google_secret_manager_secret.wrapped_key_secret.name} \
-    ${var.data_governance_project_id[0]} \
+    ${var.data_governance_project_id[1]} \
     ${local.use_temporary_crypto_operator_role}
 EOF
   }
 }
 
 data "google_secret_manager_secret_version" "wrapped_key" {
-  project = var.data_governance_project_id[0]
+  project = var.data_governance_project_id[1]
   secret  = google_secret_manager_secret.wrapped_key_secret.id
 
   depends_on = [
