@@ -29,7 +29,8 @@ exe_path=$(dirname $0)
 
 trap 'catch $? $LINENO' EXIT
 catch() {
-  if [ ${temporary_crypto_operator_role} == "true" ]; then
+  if    [ "${1}" != "0" ] \
+     && [ ${temporary_crypto_operator_role} == "true" ]; then
     echo "Error ${1} occurred on ${2}"
     gcloud projects remove-iam-policy-binding ${project_id} --member=serviceAccount:${terraform_service_account} --role=roles/cloudkms.cryptoOperator
   fi
