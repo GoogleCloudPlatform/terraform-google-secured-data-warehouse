@@ -32,7 +32,7 @@ module "kek" {
   source  = "terraform-google-modules/kms/google"
   version = "~> 1.2"
 
-  project_id           = var.data_governance_project_id[0]
+  project_id           = var.data_governance_project_id[1]
   location             = local.location
   keyring              = local.kek_keyring
   keys                 = [local.kek_key_name]
