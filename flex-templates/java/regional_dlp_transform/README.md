@@ -10,7 +10,8 @@ Set the following environment variables based in the resources create in the inf
 export LOCATION=<REPOSITORY-LOCATION>
 export PROJECT=<YOUR-PROJECT>
 export BUCKET=<YOUR-FLEX-TEMPLATE-BUCKET>
-export FLEX_REPO_URL=$LOCATION-docker.pkg.dev/$PROJECT/flex-templates
+export TEMPLATE_IMAGE_TAG="$LOCATION-docker.pkg.dev/$PROJECT/flex-templates/samples/regional-bq-dlp-bq-streaming:latest"
+export TEMPLATE_GS_PATH="gs://$BUCKET/flex-template-samples/regional-bq-dlp-bq-streaming.json"
 ```
 
 ```shell
@@ -19,7 +20,7 @@ export FLEX_REPO_URL=$LOCATION-docker.pkg.dev/$PROJECT/flex-templates
 gcloud beta builds submit \
  --project=$PROJECT \
  --config ./cloudbuild.yaml . \
- --substitutions="_BUCKET=$BUCKET,_PROJECT=$PROJECT,_FLEX_REPO_URL=$FLEX_REPO_URL"
+ --substitutions="_PROJECT=$PROJECT,_FLEX_TEMPLATE_IMAGE_TAG=$TEMPLATE_IMAGE_TAG,_TEMPLATE_GS_PATH=$TEMPLATE_GS_PATH"
  ```
 
 **Note:** It is possible to migrate the maven image used to a Artifact Registry in your organization.
@@ -37,11 +38,11 @@ steps:
 
 ## Run the flex template manually
 
-1.  Follow the instructions in [Using Flex Templates:Setting up your development environment](https://cloud.google.com/dataflow/docs/guides/templates/using-flex-templates#setting_up_your_development_environment) to configure your environment to build the images.
-2.  Build the flex template
-3.  make sure you have input BigQuery table available with correct data (and corresponding DLP template)
-4.  apply the `example/bigquery-confidential-data`
-5.  run the dataflow job
+1. Follow the instructions in [Using Flex Templates:Setting up your development environment](https://cloud.google.com/dataflow/docs/guides/templates/using-flex-templates#setting_up_your_development_environment) to configure your environment to build the images.
+2. Build the flex template
+3. make sure you have input BigQuery table available with correct data (and corresponding DLP template)
+4. apply the `example/bigquery-confidential-data`
+5. run the dataflow job
 
 ```shell
 export LOCATION=<REPOSITORY-LOCATION>
