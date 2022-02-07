@@ -87,22 +87,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The {@link DLPTextToBigQueryStreaming} is a streaming pipeline that reads CSV files from a
- * storage location (e.g. Google Cloud Storage), uses Cloud DLP API to inspect, classify, and mask
- * sensitive information (e.g. PII Data like passport or SIN number) and at the end stores
- * obfuscated data in BigQuery (Dynamic Table Creation) to be used for various purposes. e.g. data
- * analytics, ML model. Cloud DLP inspection and masking can be configured by the user and can make
- * use of over 90 built in detectors and masking techniques like tokenization, secure hashing, date
+ * The {@link DLPTextToBigQueryStreaming} is a streaming pipeline that reads CSV
+ * files from a
+ * storage location (e.g. Google Cloud Storage), uses Cloud DLP API to inspect,
+ * classify, and mask
+ * sensitive information (e.g. PII Data like passport or SIN number) and at the
+ * end stores
+ * obfuscated data in BigQuery (Dynamic Table Creation) to be used for various
+ * purposes. e.g. data
+ * analytics, ML model. Cloud DLP inspection and masking can be configured by
+ * the user and can make
+ * use of over 90 built in detectors and masking techniques like tokenization,
+ * secure hashing, date
  * shifting, partial masking, and more.
  *
- * <p><b>Pipeline Requirements</b>
+ * <p>
+ * <b>Pipeline Requirements</b>
  *
  * <ul>
- *   <li>DLP Templates exist (e.g. deidentifyTemplate, InspectTemplate)
- *   <li>The BigQuery Dataset exists
+ * <li>DLP Templates exist (e.g. deidentifyTemplate, InspectTemplate)
+ * <li>The BigQuery Dataset exists
  * </ul>
  *
- * <p><b>Example Usage</b>
+ * <p>
+ * <b>Example Usage</b>
  *
  * <pre>
  * # Set the pipeline vars
@@ -154,17 +162,19 @@ public class DLPTextToBigQueryStreaming {
   private static final Duration WINDOW_INTERVAL = Duration.standardSeconds(30);
 
   /**
-   * Main entry point for executing the pipeline. This will run the pipeline asynchronously. If
+   * Main entry point for executing the pipeline. This will run the pipeline
+   * asynchronously. If
    * blocking execution is required, use the {@link
-   * DLPTextToBigQueryStreaming#run(TokenizePipelineOptions)} method to start the pipeline and
+   * DLPTextToBigQueryStreaming#run(TokenizePipelineOptions)} method to start the
+   * pipeline and
    * invoke {@code result.waitUntilFinish()} on the {@link PipelineResult}
    *
    * @param args The command-line arguments to the pipeline.
    */
   public static void main(String[] args) {
 
-    TokenizePipelineOptions options =
-        PipelineOptionsFactory.fromArgs(args).withValidation().as(TokenizePipelineOptions.class);
+    TokenizePipelineOptions options = PipelineOptionsFactory.fromArgs(args).withValidation()
+        .as(TokenizePipelineOptions.class);
     run(options);
   }
 
@@ -313,13 +323,16 @@ public class DLPTextToBigQueryStreaming {
             .withWriteDisposition(BigQueryIO.Write.WriteDisposition.WRITE_APPEND)
             .withCreateDisposition(BigQueryIO.Write.CreateDisposition.CREATE_IF_NEEDED)
             .withoutValidation()
-            .withFailedInsertRetryPolicy(InsertRetryPolicy.retryTransientErrors()));
+            .withMethod(BigQueryIO.Write.Method.FILE_LOADS)
+            .withTriggeringFrequency(Duration.standardMinutes(5))
+            .withAutoSharding());
 
     return p.run();
   }
 
   /**
-   * The {@link TokenizePipelineOptions} interface provides the custom execution options passed by
+   * The {@link TokenizePipelineOptions} interface provides the custom execution
+   * options passed by
    * the executor at the command-line.
    */
   public interface TokenizePipelineOptions extends DataflowPipelineOptions {
@@ -329,26 +342,23 @@ public class DLPTextToBigQueryStreaming {
 
     void setInputFilePattern(ValueProvider<String> value);
 
-    @Description(
-        "DLP Deidentify Template to be used for API request "
-            + "(e.g.projects/{project_id}/deidentifyTemplates/{deIdTemplateId}")
+    @Description("DLP Deidentify Template to be used for API request "
+        + "(e.g.projects/{project_id}/deidentifyTemplates/{deIdTemplateId}")
     @Required
     ValueProvider<String> getDeidentifyTemplateName();
 
     void setDeidentifyTemplateName(ValueProvider<String> value);
 
-    @Description(
-        "DLP Inspect Template to be used for API request "
-            + "(e.g.projects/{project_id}/inspectTemplates/{inspectTemplateId}")
+    @Description("DLP Inspect Template to be used for API request "
+        + "(e.g.projects/{project_id}/inspectTemplates/{inspectTemplateId}")
     ValueProvider<String> getInspectTemplateName();
 
     void setInspectTemplateName(ValueProvider<String> value);
 
-    @Description(
-        "DLP API has a limit for payload size of 524KB /api call. "
-            + "That's why dataflow process will need to chunk it. User will have to decide "
-            + "on how they would like to batch the request depending on number of rows "
-            + "and how big each row is.")
+    @Description("DLP API has a limit for payload size of 524KB /api call. "
+        + "That's why dataflow process will need to chunk it. User will have to decide "
+        + "on how they would like to batch the request depending on number of rows "
+        + "and how big each row is.")
     @Required
     ValueProvider<Integer> getBatchSize();
 
@@ -376,16 +386,21 @@ public class DLPTextToBigQueryStreaming {
   }
 
   /**
-   * The {@link CSVReader} class uses experimental Split DoFn to split each csv file contents in
-   * chunks and process it in non-monolithic fashion. For example: if a CSV file has 100 rows and
-   * batch size is set to 15, then initial restrictions for the SDF will be 1 to 7 and split
+   * The {@link CSVReader} class uses experimental Split DoFn to split each csv
+   * file contents in
+   * chunks and process it in non-monolithic fashion. For example: if a CSV file
+   * has 100 rows and
+   * batch size is set to 15, then initial restrictions for the SDF will be 1 to 7
+   * and split
    * restriction will be {{1-2},{2-3}..{7-8}} for parallel executions.
    */
   static class CSVReader extends DoFn<KV<String, ReadableFile>, KV<String, Table>> {
 
     private ValueProvider<Integer> batchSize;
     private PCollectionView<List<KV<String, List<String>>>> headerMap;
-    /** This counter is used to track number of lines processed against batch size. */
+    /**
+     * This counter is used to track number of lines processed against batch size.
+     */
     private Integer lineCount;
 
     List<String> csvHeaders;
@@ -408,10 +423,9 @@ public class DLPTextToBigQueryStreaming {
 
           csvHeaders = getHeaders(c.sideInput(headerMap), fileKey);
           if (csvHeaders != null) {
-            List<FieldId> dlpTableHeaders =
-                csvHeaders.stream()
-                    .map(header -> FieldId.newBuilder().setName(header).build())
-                    .collect(Collectors.toList());
+            List<FieldId> dlpTableHeaders = csvHeaders.stream()
+                .map(header -> FieldId.newBuilder().setName(header).build())
+                .collect(Collectors.toList());
             List<Table.Row> rows = new ArrayList<>();
             Table dlpTable = null;
             /** finding out EOL for this restriction so that we know the SOL */
@@ -419,14 +433,15 @@ public class DLPTextToBigQueryStreaming {
             int startOfLine = (endOfLine - batchSize.get().intValue());
             /** skipping all the rows that's not part of this restriction */
             br.readLine();
-            Iterator<CSVRecord> csvRows =
-                CSVFormat.DEFAULT.withSkipHeaderRecord().parse(br).iterator();
+            Iterator<CSVRecord> csvRows = CSVFormat.DEFAULT.withSkipHeaderRecord().parse(br).iterator();
             for (int line = 0; line < startOfLine; line++) {
               if (csvRows.hasNext()) {
                 csvRows.next();
               }
             }
-            /** looping through buffered reader and creating DLP Table Rows equals to batch */
+            /**
+             * looping through buffered reader and creating DLP Table Rows equals to batch
+             */
             while (csvRows.hasNext() && lineCount <= batchSize.get()) {
 
               CSVRecord csvRow = csvRows.next();
@@ -455,9 +470,12 @@ public class DLPTextToBigQueryStreaming {
     }
 
     /**
-     * SDF needs to define a @GetInitialRestriction method that can create a restriction describing
-     * the complete work for a given element. For our case this would be the total number of rows
-     * for each CSV file. We will calculate the number of split required based on total number of
+     * SDF needs to define a @GetInitialRestriction method that can create a
+     * restriction describing
+     * the complete work for a given element. For our case this would be the total
+     * number of rows
+     * for each CSV file. We will calculate the number of split required based on
+     * total number of
      * rows and batch size provided.
      *
      * @throws IOException
@@ -475,8 +493,10 @@ public class DLPTextToBigQueryStreaming {
         totalSplit = rowCount / batchSize.get().intValue();
         int remaining = rowCount % batchSize.get().intValue();
         /**
-         * Adjusting the total number of split based on remaining rows. For example: batch size of
-         * 15 for 100 rows will have total 7 splits. As it's a range last split will have offset
+         * Adjusting the total number of split based on remaining rows. For example:
+         * batch size of
+         * 15 for 100 rows will have total 7 splits. As it's a range last split will
+         * have offset
          * range {7,8}
          */
         if (remaining > 0) {
@@ -492,8 +512,10 @@ public class DLPTextToBigQueryStreaming {
     }
 
     /**
-     * SDF needs to define a @SplitRestriction method that can split the intital restricton to a
-     * number of smaller restrictions. For example: a intital rewstriction of (x, N) as input and
+     * SDF needs to define a @SplitRestriction method that can split the intital
+     * restricton to a
+     * number of smaller restrictions. For example: a intital rewstriction of (x, N)
+     * as input and
      * produces pairs (x, 0), (x, 1), …, (x, N-1) as output.
      */
     @SplitRestriction
@@ -538,9 +560,12 @@ public class DLPTextToBigQueryStreaming {
   }
 
   /**
-   * The {@link DLPTokenizationDoFn} class executes tokenization request by calling DLP api. It uses
-   * DLP table as a content item as CSV file contains fully structured data. DLP templates (e.g.
-   * de-identify, inspect) need to exist before this pipeline runs. As response from the API is
+   * The {@link DLPTokenizationDoFn} class executes tokenization request by
+   * calling DLP api. It uses
+   * DLP table as a content item as CSV file contains fully structured data. DLP
+   * templates (e.g.
+   * de-identify, inspect) need to exist before this pipeline runs. As response
+   * from the API is
    * received, this DoFn ouptputs KV of new table with table id as key.
    */
   static class DLPTokenizationDoFn extends DoFn<KV<String, Table>, KV<String, Table>> {
@@ -551,10 +576,10 @@ public class DLPTextToBigQueryStreaming {
     private ValueProvider<String> inspectTemplateName;
     private boolean inspectTemplateExist;
     private Builder requestBuilder;
-    private final Distribution numberOfRowsTokenized =
-        Metrics.distribution(DLPTokenizationDoFn.class, "numberOfRowsTokenizedDistro");
-    private final Distribution numberOfBytesTokenized =
-        Metrics.distribution(DLPTokenizationDoFn.class, "numberOfBytesTokenizedDistro");
+    private final Distribution numberOfRowsTokenized = Metrics.distribution(DLPTokenizationDoFn.class,
+        "numberOfRowsTokenizedDistro");
+    private final Distribution numberOfBytesTokenized = Metrics.distribution(DLPTokenizationDoFn.class,
+        "numberOfBytesTokenizedDistro");
 
     public DLPTokenizationDoFn(
         ValueProvider<String> dlpProjectId,
@@ -578,10 +603,9 @@ public class DLPTextToBigQueryStreaming {
       }
       if (this.deIdentifyTemplateName.isAccessible()) {
         if (this.deIdentifyTemplateName.get() != null) {
-          this.requestBuilder =
-              DeidentifyContentRequest.newBuilder()
-                  .setParent(LocationName.of(this.dlpProjectId.get(),this.dlpLocation.get()).toString())
-                  .setDeidentifyTemplateName(this.deIdentifyTemplateName.get());
+          this.requestBuilder = DeidentifyContentRequest.newBuilder()
+              .setParent(LocationName.of(this.dlpProjectId.get(), this.dlpLocation.get()).toString())
+              .setDeidentifyTemplateName(this.deIdentifyTemplateName.get());
           if (this.inspectTemplateExist) {
             this.requestBuilder.setInspectTemplateName(this.inspectTemplateName.get());
           }
@@ -614,8 +638,7 @@ public class DLPTextToBigQueryStreaming {
       Table nonEncryptedData = c.element().getValue();
       ContentItem tableItem = ContentItem.newBuilder().setTable(nonEncryptedData).build();
       this.requestBuilder.setItem(tableItem);
-      DeidentifyContentResponse response =
-          dlpServiceClient.deidentifyContent(this.requestBuilder.build());
+      DeidentifyContentResponse response = dlpServiceClient.deidentifyContent(this.requestBuilder.build());
       Table tokenizedData = response.getItem().getTable();
       numberOfRowsTokenized.update(tokenizedData.getRowsList().size());
       numberOfBytesTokenized.update(tokenizedData.toByteArray().length);
@@ -624,7 +647,8 @@ public class DLPTextToBigQueryStreaming {
   }
 
   /**
-   * The {@link TableRowProcessorDoFn} class process tokenized DLP tables and convert them to
+   * The {@link TableRowProcessorDoFn} class process tokenized DLP tables and
+   * convert them to
    * BigQuery Table Row.
    */
   public static class TableRowProcessorDoFn extends DoFn<KV<String, Table>, KV<String, TableRow>> {
@@ -633,10 +657,9 @@ public class DLPTextToBigQueryStreaming {
     public void processElement(ProcessContext c) {
 
       Table tokenizedData = c.element().getValue();
-      List<String> headers =
-          tokenizedData.getHeadersList().stream()
-              .map(fid -> fid.getName())
-              .collect(Collectors.toList());
+      List<String> headers = tokenizedData.getHeadersList().stream()
+          .map(fid -> fid.getName())
+          .collect(Collectors.toList());
       List<Table.Row> outputRows = tokenizedData.getRowsList();
       if (outputRows.size() > 0) {
         for (Table.Row outputRow : outputRows) {
@@ -660,8 +683,7 @@ public class DLPTextToBigQueryStreaming {
           .getValuesList()
           .forEach(
               value -> {
-                String checkedHeaderName =
-                    checkHeaderName(headers[headerIndex.getAndIncrement()].toString());
+                String checkedHeaderName = checkHeaderName(headers[headerIndex.getAndIncrement()].toString());
                 bqRow.set(checkedHeaderName, value.getStringValue());
                 cells.add(new TableCell().set(checkedHeaderName, value.getStringValue()));
               });
@@ -671,8 +693,10 @@ public class DLPTextToBigQueryStreaming {
   }
 
   /**
-   * The {@link BQDestination} class creates BigQuery table destination and table schema based on
-   * the CSV file processed in earlier transformations. Table id is same as filename Table schema is
+   * The {@link BQDestination} class creates BigQuery table destination and table
+   * schema based on
+   * the CSV file processed in earlier transformations. Table id is same as
+   * filename Table schema is
    * same as file header columns.
    */
   public static class BQDestination
@@ -696,8 +720,7 @@ public class DLPTextToBigQueryStreaming {
 
     @Override
     public TableDestination getTable(KV<String, TableRow> destination) {
-      TableDestination dest =
-          new TableDestination(destination.getKey(), "pii-tokenized output data from dataflow");
+      TableDestination dest = new TableDestination(destination.getKey(), "pii-tokenized output data from dataflow");
       LOG.debug("Table Destination {}", dest.getTableSpec());
       return dest;
     }
@@ -775,7 +798,9 @@ public class DLPTextToBigQueryStreaming {
   }
 
   private static String checkHeaderName(String name) {
-    /** some checks to make sure BQ column names don't fail e.g. special characters */
+    /**
+     * some checks to make sure BQ column names don't fail e.g. special characters
+     */
     String checkedHeader = name.replaceAll("\\s", "_");
     checkedHeader = checkedHeader.replaceAll("'", "");
     checkedHeader = checkedHeader.replaceAll("/", "");

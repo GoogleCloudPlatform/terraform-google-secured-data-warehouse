@@ -33,6 +33,7 @@ import org.apache.beam.sdk.transforms.PTransform;
 import org.apache.beam.sdk.values.KV;
 import org.apache.beam.sdk.values.PCollection;
 import org.apache.beam.sdk.values.ValueInSingleWindow;
+import org.joda.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,10 +72,11 @@ public abstract class BigQueryDynamicWriteTransform
                   return element.getValue();
                 })
             .withWriteDisposition(BigQueryIO.Write.WriteDisposition.WRITE_APPEND)
+            .withCreateDisposition(BigQueryIO.Write.CreateDisposition.CREATE_IF_NEEDED)
             .withoutValidation()
-            .ignoreInsertIds()
             .withMethod(BigQueryIO.Write.Method.FILE_LOADS)
-            .withCreateDisposition(BigQueryIO.Write.CreateDisposition.CREATE_IF_NEEDED));
+            .withTriggeringFrequency(Duration.standardMinutes(5))
+            .withAutoSharding());
   }
 
   public class BQDestination

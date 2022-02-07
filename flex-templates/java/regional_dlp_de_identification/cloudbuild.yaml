@@ -13,7 +13,7 @@
 # limitations under the License.
 
 steps:
-- name: 'maven:3.8.2-jdk-11'
+- name: 'maven:3.8.4-jdk-11'
   entrypoint: 'mvn'
   args: ['clean', 'package']
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -22,13 +22,13 @@ steps:
   entrypoint: 'gcloud'
   args: [
     'dataflow', 'flex-template', 'build', '${_TEMPLATE_GS_PATH}',
-  '--image-gcr-path', '${_FLEX_TEMPLATE_IMAGE_TAG}',
-  '--sdk-language', 'JAVA',
-  '--project', '${_PROJECT}',
-  '--flex-template-base-image', 'JAVA11',
-  '--metadata-file', './metadata.json',
-  '--jar', './target/regional-txt-dlp-bq-streaming-1.0.0.jar',
-  '--env', 'FLEX_TEMPLATE_JAVA_MAIN_CLASS="org.apache.beam.samples.DLPTextToBigQueryStreaming"',
+    '--image-gcr-path', '${_FLEX_TEMPLATE_IMAGE_TAG}',
+    '--sdk-language', 'JAVA',
+    '--project', '${_PROJECT}',
+    '--flex-template-base-image', 'gcr.io/dataflow-templates-base/java11-template-launcher-base@sha256:51956e690f6bcfe36b3204dc885afd72062c9c6d1fe43154b2cb434e9f8d07dd',
+    '--metadata-file', './metadata.json',
+    '--jar', './target/regional-txt-dlp-bq-streaming-1.0.0.jar',
+    '--env', 'FLEX_TEMPLATE_JAVA_MAIN_CLASS="org.apache.beam.samples.DLPTextToBigQueryStreaming"',
   ]
 substitutions:
   _PROJECT: 'PROJECT'

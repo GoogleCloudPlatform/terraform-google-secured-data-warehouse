@@ -72,6 +72,8 @@ credentials.json
 
 demo/
 
+**venv
+
 # File to populate env vars used by Docker test runs
 .envrc
 
