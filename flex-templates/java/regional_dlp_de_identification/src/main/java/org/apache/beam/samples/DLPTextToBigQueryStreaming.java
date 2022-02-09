@@ -16,6 +16,14 @@
 
 package org.apache.beam.samples;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+
 import com.google.api.services.bigquery.model.TableCell;
 import com.google.api.services.bigquery.model.TableFieldSchema;
 import com.google.api.services.bigquery.model.TableRow;
@@ -43,6 +51,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.beam.runners.dataflow.options.DataflowPipelineOptions;
+import org.apache.beam.sdk.coders.Coder;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.PipelineResult;
 import org.apache.beam.sdk.coders.KvCoder;
@@ -53,12 +62,10 @@ import org.apache.beam.sdk.io.FileIO.ReadableFile;
 import org.apache.beam.sdk.io.ReadableFileCoder;
 import org.apache.beam.sdk.io.gcp.bigquery.BigQueryIO;
 import org.apache.beam.sdk.io.gcp.bigquery.DynamicDestinations;
-import org.apache.beam.sdk.io.gcp.bigquery.InsertRetryPolicy;
 import org.apache.beam.sdk.io.gcp.bigquery.TableDestination;
 import org.apache.beam.sdk.io.range.OffsetRange;
 import org.apache.beam.sdk.metrics.Distribution;
 import org.apache.beam.sdk.metrics.Metrics;
-import org.apache.beam.sdk.options.Default;
 import org.apache.beam.sdk.options.Description;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
 import org.apache.beam.sdk.options.Validation.Required;
@@ -161,6 +168,39 @@ public class DLPTextToBigQueryStreaming {
   /** Default window interval to create side inputs for header records. */
   private static final Duration WINDOW_INTERVAL = Duration.standardSeconds(30);
 
+  private static final String jsonSchema =
+              //   "{"
+              // + "\"fields\":["
+              // + "{ \"description\": \"Card_Type_Code\", \"mode\": \"REQUIRED\", \"name\": \"Card_Type_Code\", \"type\": \"STRING\"},"
+              // + "{ \"description\": \"Card_Type_Full_Name\", \"mode\": \"REQUIRED\", \"name\": \"Card_Type_Full_Name\", \"type\": \"STRING\"},"
+              // + "{ \"description\": \"Issuing_Bank\", \"mode\": \"REQUIRED\", \"name\": \"Issuing_Bank\", \"type\": \"STRING\" },"
+              // + "{ \"description\": \"Card_Number\", \"mode\": \"REQUIRED\", \"name\": \"Card_Number\", \"type\": \"STRING\" },"
+              // + "{ \"description\": \"Card_Holders_Name\", \"mode\": \"REQUIRED\", \"name\": \"Card_Holders_Name\", \"type\": \"STRING\"},"
+              // + "{ \"description\": \"CVV2\", \"mode\": \"REQUIRED\", \"name\": \"CVVCVV2\", \"type\": \"STRING\"},"
+              // + "{ \"description\": \"Issue_Date\", \"mode\": \"REQUIRED\", \"name\": \"Issue_Date\", \"type\": \"STRING\"},"
+              // + "{ \"description\": \"Expiry_Date\", \"mode\": \"REQUIRED\", \"name\": \"Expiry_Date\", \"type\": \"STRING\"},"
+              // + "{ \"description\": \"Billing_Date\", \"mode\": \"REQUIRED\", \"name\": \"Billing_Date\", \"type\": \"STRING\"},"
+              // + "{ \"description\": \"Card_PIN\", \"mode\": \"REQUIRED\", \"name\": \"Card_PIN\", \"type\": \"STRING\"},"
+              // + "{ \"description\": \"Credit_Limit\", \"mode\": \"REQUIRED\", \"name\": \"Credit_Limit\", \"type\": \"STRING\"}"
+              // + "]"
+              // + "}";
+                "["
+              + "\n"
+              + "{ \"name\": \"Card_Type_Code\", \"type\": \"STRING\"}\n"
+              + "{ \"name\": \"Card_Type_Full_Name\", \"type\": \"STRING\"}\n"
+              + "{ \"name\": \"Issuing_Bank\", \"type\": \"STRING\" }\n"
+              + "{ \"name\": \"Card_Number\", \"type\": \"STRING\" }\n"
+              + "{ \"name\": \"Card_Holders_Name\", \"type\": \"STRING\"}\n"
+              + "{ \"name\": \"CVVCVV2\", \"type\": \"STRING\"}\n"
+              + "{ \"name\": \"Issue_Date\", \"type\": \"STRING\"}\n"
+              + "{ \"name\": \"Expiry_Date\", \"type\": \"STRING\"}\n"
+              + "{ \"name\": \"Billing_Date\", \"type\": \"STRING\"\n"
+              + "{ \"name\": \"Card_PIN\", \"type\": \"STRING\"}\n"
+              + "{ \"name\": \"Credit_Limit\", \"type\": \"STRING\"}\n"
+              + "]";
+              // + "}";
+  // private static final String jsonSchema = "Card_Type_Code:STRING, Card_Type_Full_Name:STRING, Issuing_Bank:STRING, Card_Number:STRING, Card_Holders_Name:STRING, CVVCVV2:STRING, Issue_Date:STRING, Expiry_Date:STRING, Billing_Date:STRING, Card_PIN:STRING, Credit_Limit:STRING";
+
   /**
    * Main entry point for executing the pipeline. This will run the pipeline
    * asynchronously. If
@@ -189,143 +229,158 @@ public class DLPTextToBigQueryStreaming {
     Pipeline p = Pipeline.create(options);
     /*
      * Steps:
-     *   1) Read from the text source continuously based on default interval e.g. 30 seconds
-     *       - Setup a window for 30 secs to capture the list of files emited.
-     *       - Group by file name as key and ReadableFile as a value.
-     *   2) Create a side input for the window containing list of headers par file.
-     *   3) Output each readable file for content processing.
-     *   4) Split file contents based on batch size for parallel processing.
-     *   5) Process each split as a DLP table content request to invoke API.
-     *   6) Convert DLP Table Rows to BQ Table Row.
-     *   7) Create dynamic table and insert successfully converted records into BQ.
+     * 1) Read from the text source continuously based on default interval e.g. 30
+     * seconds
+     * - Setup a window for 30 secs to capture the list of files emited.
+     * - Group by file name as key and ReadableFile as a value.
+     * 2) Create a side input for the window containing list of headers par file.
+     * 3) Output each readable file for content processing.
+     * 4) Split file contents based on batch size for parallel processing.
+     * 5) Process each split as a DLP table content request to invoke API.
+     * 6) Convert DLP Table Rows to BQ Table Row.
+     * 7) Create dynamic table and insert successfully converted records into BQ.
      */
 
-    PCollection<KV<String, Iterable<ReadableFile>>> csvFiles =
-        p
-            /*
-             * 1) Read from the text source continuously based on default interval e.g. 300 seconds
-             *     - Setup a window for 30 secs to capture the list of files emited.
-             *     - Group by file name as key and ReadableFile as a value.
-             */
-            .apply(
-                "Poll Input Files",
-                FileIO.match()
-                    .filepattern(options.getInputFilePattern())
-                    .continuously(DEFAULT_POLL_INTERVAL, Watch.Growth.never()))
-            .apply("Find Pattern Match", FileIO.readMatches().withCompression(Compression.AUTO))
-            .apply("Add File Name as Key", WithKeys.of(file -> getFileName(file)))
-            .setCoder(KvCoder.of(StringUtf8Coder.of(), ReadableFileCoder.of()))
-            .apply(
-                "Fixed Window(30 Sec)",
-                Window.<KV<String, ReadableFile>>into(FixedWindows.of(WINDOW_INTERVAL))
-                    .triggering(
-                        Repeatedly.forever(
-                            AfterProcessingTime.pastFirstElementInPane()
-                                .plusDelayOf(Duration.ZERO)))
-                    .discardingFiredPanes()
-                    .withAllowedLateness(Duration.ZERO))
-            .apply(GroupByKey.create());
+    PCollection<KV<String, Iterable<ReadableFile>>> csvFiles = p
+        /*
+         * 1) Read from the text source continuously based on default interval e.g. 300
+         * seconds
+         * - Setup a window for 30 secs to capture the list of files emited.
+         * - Group by file name as key and ReadableFile as a value.
+         */
+        .apply(
+            "Poll Input Files",
+            FileIO.match()
+                .filepattern(options.getInputFilePattern())
+                .continuously(DEFAULT_POLL_INTERVAL, Watch.Growth.never()))
+        .apply("Find Pattern Match", FileIO.readMatches().withCompression(Compression.AUTO))
+        .apply("Add File Name as Key", WithKeys.of(file -> getFileName(file)))
+        .setCoder(KvCoder.of(StringUtf8Coder.of(), ReadableFileCoder.of()))
+        .apply(
+            "Fixed Window(30 Sec)",
+            Window.<KV<String, ReadableFile>>into(FixedWindows.of(WINDOW_INTERVAL))
+                .triggering(
+                    Repeatedly.forever(
+                        AfterProcessingTime.pastFirstElementInPane()
+                            .plusDelayOf(Duration.ZERO)))
+                .discardingFiredPanes()
+                .withAllowedLateness(Duration.ZERO))
+        .apply(GroupByKey.create());
 
     /*
-     * Side input for the window to capture list of headers for each file emited so that it can be
+     * Side input for the window to capture list of headers for each file emited so
+     * that it can be
      * used in the next transform.
      */
-    final PCollectionView<List<KV<String, List<String>>>> headerMap =
-        csvFiles
+    final PCollectionView<List<KV<String, List<String>>>> headerMap = csvFiles
 
-            // 2) Create a side input for the window containing list of headers par file.
-            .apply(
-                "Create Header Map",
-                ParDo.of(
-                    new DoFn<KV<String, Iterable<ReadableFile>>, KV<String, List<String>>>() {
+        // 2) Create a side input for the window containing list of headers par file.
+        .apply(
+            "Create Header Map",
+            ParDo.of(
+                new DoFn<KV<String, Iterable<ReadableFile>>, KV<String, List<String>>>() {
 
-                      @ProcessElement
-                      public void processElement(ProcessContext c) {
-                        String fileKey = c.element().getKey();
-                        c.element()
-                            .getValue()
-                            .forEach(
-                                file -> {
-                                  try (BufferedReader br = getReader(file)) {
-                                    c.output(KV.of(fileKey, getFileHeaders(br)));
+                  @ProcessElement
+                  public void processElement(ProcessContext c) {
+                    String fileKey = c.element().getKey();
+                    c.element()
+                        .getValue()
+                        .forEach(
+                            file -> {
+                              try (BufferedReader br = getReader(file)) {
+                                c.output(KV.of(fileKey, getFileHeaders(br)));
 
-                                  } catch (IOException e) {
-                                    LOG.error("Failed to Read File {}", e.getMessage());
-                                    throw new RuntimeException(e);
-                                  }
-                                });
-                      }
-                    }))
-            .apply("View As List", View.asList());
+                              } catch (IOException e) {
+                                LOG.error("Failed to Read File {}", e.getMessage());
+                                throw new RuntimeException(e);
+                              }
+                            });
+                  }
+                }))
+        .apply("View As List", View.asList());
 
-    PCollection<KV<String, TableRow>> bqDataMap =
-        csvFiles
+    PCollection<KV<String, TableRow>> bqDataMap = csvFiles
 
-            // 3) Output each readable file for content processing.
-            .apply(
-                "File Handler",
-                ParDo.of(
-                    new DoFn<KV<String, Iterable<ReadableFile>>, KV<String, ReadableFile>>() {
-                      @ProcessElement
-                      public void processElement(ProcessContext c) {
-                        String fileKey = c.element().getKey();
-                        c.element()
-                            .getValue()
-                            .forEach(
-                                file -> {
-                                  c.output(KV.of(fileKey, file));
-                                });
-                      }
-                    }))
+        // 3) Output each readable file for content processing.
+        .apply(
+            "File Handler",
+            ParDo.of(
+                new DoFn<KV<String, Iterable<ReadableFile>>, KV<String, ReadableFile>>() {
+                  @ProcessElement
+                  public void processElement(ProcessContext c) {
+                    String fileKey = c.element().getKey();
+                    c.element()
+                        .getValue()
+                        .forEach(
+                            file -> {
+                              c.output(KV.of(fileKey, file));
+                            });
+                  }
+                }))
 
-            // 4) Split file contents based on batch size for parallel processing.
-            .apply(
-                "Process File Contents",
-                ParDo.of(
-                        new CSVReader(
-                            NestedValueProvider.of(
-                                options.getBatchSize(),
-                                batchSize -> {
-                                  if (batchSize != null) {
-                                    return batchSize;
-                                  } else {
-                                    return DEFAULT_BATCH_SIZE;
-                                  }
-                                }),
-                            headerMap))
-                    .withSideInputs(headerMap))
+        // 4) Split file contents based on batch size for parallel processing.
+        .apply(
+            "Process File Contents",
+            ParDo.of(
+                new CSVReader(
+                    NestedValueProvider.of(
+                        options.getBatchSize(),
+                        batchSize -> {
+                          if (batchSize != null) {
+                            return batchSize;
+                          } else {
+                            return DEFAULT_BATCH_SIZE;
+                          }
+                        }),
+                    headerMap))
+                .withSideInputs(headerMap))
 
-            // 5) Create a DLP Table content request and invoke DLP API for each processsing
-            .apply(
-                "DLP-Tokenization",
-                ParDo.of(
-                    new DLPTokenizationDoFn(
-                        options.getDlpProjectId(),
-                        options.getDlpLocation(),
-                        options.getDeidentifyTemplateName(),
-                        options.getInspectTemplateName())))
+        // 5) Create a DLP Table content request and invoke DLP API for each processing
+        .apply(
+            "DLP-Tokenization",
+            ParDo.of(
+                new DLPTokenizationDoFn(
+                    options.getDlpProjectId(),
+                    options.getDlpLocation(),
+                    options.getDeidentifyTemplateName(),
+                    options.getInspectTemplateName())))
 
-            // 6) Convert DLP Table Rows to BQ Table Row
-            .apply(
-                "Process Tokenized Data",
-                ParDo.of(
-                    new TableRowProcessorDoFn()));
+        // 6) Convert DLP Table Rows to BQ Table Row
+        .apply(
+            "Process Tokenized Data",
+            ParDo.of(
+                new TableRowProcessorDoFn()));
 
     // 7) Create dynamic table and insert successfully converted records into BQ.
+    // bqDataMap.apply(
+    // "Write To BQ",
+    // BigQueryIO.<KV<String, TableRow>>write()
+    // .to(new BQDestination(options.getDatasetName(), options.getBqProjectId()))
+    // .withFormatFunction(
+      // element -> {
+      // return element.getValue();
+    // })
+    // .withWriteDisposition(BigQueryIO.Write.WriteDisposition.WRITE_APPEND)
+    // .withCreateDisposition(BigQueryIO.Write.CreateDisposition.CREATE_IF_NEEDED)
+    // .withoutValidation()
+    // .withFailedInsertRetryPolicy(InsertRetryPolicy.retryTransientErrors()));
+
     bqDataMap.apply(
         "Write To BQ",
         BigQueryIO.<KV<String, TableRow>>write()
-            .to(new BQDestination(options.getDatasetName(), options.getBqProjectId()))
+            //.to(new BQDestination(options.getDatasetName(), options.getBqProjectId()))
+            .to(options.getBqProjectId() + ":" + options.getDatasetName() + "." + "tabletest")
             .withFormatFunction(
-                element -> {
-                  return element.getValue();
-                })
+                 element -> {
+                   return element.getValue();
+                 })
             .withWriteDisposition(BigQueryIO.Write.WriteDisposition.WRITE_APPEND)
-            .withCreateDisposition(BigQueryIO.Write.CreateDisposition.CREATE_IF_NEEDED)
-            .withoutValidation()
+            .withJsonSchema(jsonSchema)
             .withMethod(BigQueryIO.Write.Method.FILE_LOADS)
-            .withTriggeringFrequency(Duration.standardMinutes(5))
-            .withAutoSharding());
+            .withTriggeringFrequency(Duration.standardSeconds(10))
+            .withCreateDisposition(BigQueryIO.Write.CreateDisposition.CREATE_IF_NEEDED));
+            //.withoutValidation()
+            //.withAutoSharding());
 
     return p.run();
   }
