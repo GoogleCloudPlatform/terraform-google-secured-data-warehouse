@@ -51,6 +51,22 @@ public abstract class BigQueryDynamicWriteTransform
     return new AutoValue_BigQueryDynamicWriteTransform.Builder();
   }
 
+  private static final String jsonSchema = "{"
+      + "\"fields\":["
+      + "{ \"description\": \"Card_Type_Code\", \"mode\": \"REQUIRED\", \"name\": \"Card_Type_Code\", \"type\": \"STRING\"},"
+      + "{ \"description\": \"Card_Type_Full_Name\", \"mode\": \"REQUIRED\", \"name\": \"Card_Type_Full_Name\", \"type\": \"STRING\"},"
+      + "{ \"description\": \"Issuing_Bank\", \"mode\": \"REQUIRED\", \"name\": \"Issuing_Bank\", \"type\": \"STRING\" },"
+      + "{ \"description\": \"Card_Number\", \"mode\": \"REQUIRED\", \"name\": \"Card_Number\", \"type\": \"STRING\" },"
+      + "{ \"description\": \"Card_Holders_Name\", \"mode\": \"REQUIRED\", \"name\": \"Card_Holders_Name\", \"type\": \"STRING\"},"
+      + "{ \"description\": \"CVV2\", \"mode\": \"REQUIRED\", \"name\": \"CVVCVV2\", \"type\": \"STRING\"},"
+      + "{ \"description\": \"Issue_Date\", \"mode\": \"REQUIRED\", \"name\": \"Issue_Date\", \"type\": \"STRING\"},"
+      + "{ \"description\": \"Expiry_Date\", \"mode\": \"REQUIRED\", \"name\": \"Expiry_Date\", \"type\": \"STRING\"},"
+      + "{ \"description\": \"Billing_Date\", \"mode\": \"REQUIRED\", \"name\": \"Billing_Date\", \"type\": \"STRING\"},"
+      + "{ \"description\": \"Card_PIN\", \"mode\": \"REQUIRED\", \"name\": \"Card_PIN\", \"type\": \"STRING\"},"
+      + "{ \"description\": \"Credit_Limit\", \"mode\": \"REQUIRED\", \"name\": \"Credit_Limit\", \"type\": \"STRING\"}"
+      + "]"
+      + "}";
+
   @AutoValue.Builder
   public abstract static class Builder {
     public abstract Builder setDatasetId(String projectId);
@@ -66,7 +82,8 @@ public abstract class BigQueryDynamicWriteTransform
     return input.apply(
         "BQ Write",
         BigQueryIO.<KV<String, TableRow>>write()
-            .to(new BQDestination(datasetId(), projectId()))
+            // .to(new BQDestination(datasetId(), projectId()))
+            .to(projectId() + ":" + datasetId() + "." + "cc_10000_records")
             .withFormatFunction(
                 element -> {
                   return element.getValue();
@@ -75,8 +92,8 @@ public abstract class BigQueryDynamicWriteTransform
             .withCreateDisposition(BigQueryIO.Write.CreateDisposition.CREATE_IF_NEEDED)
             .withoutValidation()
             .withMethod(BigQueryIO.Write.Method.FILE_LOADS)
-            .withTriggeringFrequency(Duration.standardMinutes(5))
-            .withAutoSharding());
+            .withTriggeringFrequency(Duration.standardSeconds(10))
+            .withNumFileShards(1));
   }
 
   public class BQDestination
@@ -91,8 +108,7 @@ public abstract class BigQueryDynamicWriteTransform
 
     @Override
     public TableDestination getTable(KV<String, TableRow> destination) {
-      TableDestination dest =
-          new TableDestination(destination.getKey(), "DLP Transformation Storage Table");
+      TableDestination dest = new TableDestination(destination.getKey(), "DLP Transformation Storage Table");
       LOG.debug("Table Destination {}", dest.getTableSpec());
       return dest;
     }

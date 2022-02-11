@@ -210,7 +210,7 @@ public class Util {
   public static TableRow createBqRow(Table.Row tokenizedValue, String[] headers) {
     TableRow bqRow = new TableRow();
     AtomicInteger headerIndex = new AtomicInteger(0);
-    List<TableCell> cells = new ArrayList<>();
+    // List<TableCell> cells = new ArrayList<>();
     tokenizedValue
         .getValuesList()
         .forEach(
@@ -218,9 +218,9 @@ public class Util {
               String checkedHeaderName =
                   Util.checkHeaderName(headers[headerIndex.getAndIncrement()].toString());
               bqRow.set(checkedHeaderName, value.getStringValue());
-              cells.add(new TableCell().set(checkedHeaderName, value.getStringValue()));
+              // cells.add(new TableCell().set(checkedHeaderName, value.getStringValue()));
             });
-    bqRow.setF(cells);
+    // bqRow.setF(cells);
     return bqRow;
   }
 

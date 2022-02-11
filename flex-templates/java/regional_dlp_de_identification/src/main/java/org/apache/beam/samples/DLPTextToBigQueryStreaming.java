@@ -93,6 +93,8 @@ import org.joda.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.ImmutableList;
+
 /**
  * The {@link DLPTextToBigQueryStreaming} is a streaming pipeline that reads CSV
  * files from a
@@ -168,38 +170,21 @@ public class DLPTextToBigQueryStreaming {
   /** Default window interval to create side inputs for header records. */
   private static final Duration WINDOW_INTERVAL = Duration.standardSeconds(30);
 
-  private static final String jsonSchema =
-              //   "{"
-              // + "\"fields\":["
-              // + "{ \"description\": \"Card_Type_Code\", \"mode\": \"REQUIRED\", \"name\": \"Card_Type_Code\", \"type\": \"STRING\"},"
-              // + "{ \"description\": \"Card_Type_Full_Name\", \"mode\": \"REQUIRED\", \"name\": \"Card_Type_Full_Name\", \"type\": \"STRING\"},"
-              // + "{ \"description\": \"Issuing_Bank\", \"mode\": \"REQUIRED\", \"name\": \"Issuing_Bank\", \"type\": \"STRING\" },"
-              // + "{ \"description\": \"Card_Number\", \"mode\": \"REQUIRED\", \"name\": \"Card_Number\", \"type\": \"STRING\" },"
-              // + "{ \"description\": \"Card_Holders_Name\", \"mode\": \"REQUIRED\", \"name\": \"Card_Holders_Name\", \"type\": \"STRING\"},"
-              // + "{ \"description\": \"CVV2\", \"mode\": \"REQUIRED\", \"name\": \"CVVCVV2\", \"type\": \"STRING\"},"
-              // + "{ \"description\": \"Issue_Date\", \"mode\": \"REQUIRED\", \"name\": \"Issue_Date\", \"type\": \"STRING\"},"
-              // + "{ \"description\": \"Expiry_Date\", \"mode\": \"REQUIRED\", \"name\": \"Expiry_Date\", \"type\": \"STRING\"},"
-              // + "{ \"description\": \"Billing_Date\", \"mode\": \"REQUIRED\", \"name\": \"Billing_Date\", \"type\": \"STRING\"},"
-              // + "{ \"description\": \"Card_PIN\", \"mode\": \"REQUIRED\", \"name\": \"Card_PIN\", \"type\": \"STRING\"},"
-              // + "{ \"description\": \"Credit_Limit\", \"mode\": \"REQUIRED\", \"name\": \"Credit_Limit\", \"type\": \"STRING\"}"
-              // + "]"
-              // + "}";
-                "["
-              + "\n"
-              + "{ \"name\": \"Card_Type_Code\", \"type\": \"STRING\"}\n"
-              + "{ \"name\": \"Card_Type_Full_Name\", \"type\": \"STRING\"}\n"
-              + "{ \"name\": \"Issuing_Bank\", \"type\": \"STRING\" }\n"
-              + "{ \"name\": \"Card_Number\", \"type\": \"STRING\" }\n"
-              + "{ \"name\": \"Card_Holders_Name\", \"type\": \"STRING\"}\n"
-              + "{ \"name\": \"CVVCVV2\", \"type\": \"STRING\"}\n"
-              + "{ \"name\": \"Issue_Date\", \"type\": \"STRING\"}\n"
-              + "{ \"name\": \"Expiry_Date\", \"type\": \"STRING\"}\n"
-              + "{ \"name\": \"Billing_Date\", \"type\": \"STRING\"\n"
-              + "{ \"name\": \"Card_PIN\", \"type\": \"STRING\"}\n"
-              + "{ \"name\": \"Credit_Limit\", \"type\": \"STRING\"}\n"
-              + "]";
-              // + "}";
-  // private static final String jsonSchema = "Card_Type_Code:STRING, Card_Type_Full_Name:STRING, Issuing_Bank:STRING, Card_Number:STRING, Card_Holders_Name:STRING, CVVCVV2:STRING, Issue_Date:STRING, Expiry_Date:STRING, Billing_Date:STRING, Card_PIN:STRING, Credit_Limit:STRING";
+  private static final String jsonSchema = "{"
+      + "\"fields\":["
+      + "{ \"description\": \"Card_Type_Code\", \"mode\": \"REQUIRED\", \"name\": \"Card_Type_Code\", \"type\": \"STRING\"},"
+      + "{ \"description\": \"Card_Type_Full_Name\", \"mode\": \"REQUIRED\", \"name\": \"Card_Type_Full_Name\", \"type\": \"STRING\"},"
+      + "{ \"description\": \"Issuing_Bank\", \"mode\": \"REQUIRED\", \"name\": \"Issuing_Bank\", \"type\": \"STRING\" },"
+      + "{ \"description\": \"Card_Number\", \"mode\": \"REQUIRED\", \"name\": \"Card_Number\", \"type\": \"STRING\" },"
+      + "{ \"description\": \"Card_Holders_Name\", \"mode\": \"REQUIRED\", \"name\": \"Card_Holders_Name\", \"type\": \"STRING\"},"
+      + "{ \"description\": \"CVV2\", \"mode\": \"REQUIRED\", \"name\": \"CVVCVV2\", \"type\": \"STRING\"},"
+      + "{ \"description\": \"Issue_Date\", \"mode\": \"REQUIRED\", \"name\": \"Issue_Date\", \"type\": \"STRING\"},"
+      + "{ \"description\": \"Expiry_Date\", \"mode\": \"REQUIRED\", \"name\": \"Expiry_Date\", \"type\": \"STRING\"},"
+      + "{ \"description\": \"Billing_Date\", \"mode\": \"REQUIRED\", \"name\": \"Billing_Date\", \"type\": \"STRING\"},"
+      + "{ \"description\": \"Card_PIN\", \"mode\": \"REQUIRED\", \"name\": \"Card_PIN\", \"type\": \"STRING\"},"
+      + "{ \"description\": \"Credit_Limit\", \"mode\": \"REQUIRED\", \"name\": \"Credit_Limit\", \"type\": \"STRING\"}"
+      + "]"
+      + "}";
 
   /**
    * Main entry point for executing the pipeline. This will run the pipeline
@@ -352,35 +337,22 @@ public class DLPTextToBigQueryStreaming {
                 new TableRowProcessorDoFn()));
 
     // 7) Create dynamic table and insert successfully converted records into BQ.
-    // bqDataMap.apply(
-    // "Write To BQ",
-    // BigQueryIO.<KV<String, TableRow>>write()
-    // .to(new BQDestination(options.getDatasetName(), options.getBqProjectId()))
-    // .withFormatFunction(
-      // element -> {
-      // return element.getValue();
-    // })
-    // .withWriteDisposition(BigQueryIO.Write.WriteDisposition.WRITE_APPEND)
-    // .withCreateDisposition(BigQueryIO.Write.CreateDisposition.CREATE_IF_NEEDED)
-    // .withoutValidation()
-    // .withFailedInsertRetryPolicy(InsertRetryPolicy.retryTransientErrors()));
-
     bqDataMap.apply(
         "Write To BQ",
         BigQueryIO.<KV<String, TableRow>>write()
-            //.to(new BQDestination(options.getDatasetName(), options.getBqProjectId()))
-            .to(options.getBqProjectId() + ":" + options.getDatasetName() + "." + "tabletest")
+            .to(new BQDestination(options.getDatasetName(), options.getBqProjectId()))
+            // .to(options.getBqProjectId() + ":" + options.getDatasetName() + "." + "cc_10000_records")
+            // .withJsonSchema(jsonSchema)
             .withFormatFunction(
-                 element -> {
-                   return element.getValue();
-                 })
+                element -> {
+                  return element.getValue();
+                })
             .withWriteDisposition(BigQueryIO.Write.WriteDisposition.WRITE_APPEND)
-            .withJsonSchema(jsonSchema)
             .withMethod(BigQueryIO.Write.Method.FILE_LOADS)
             .withTriggeringFrequency(Duration.standardSeconds(10))
-            .withCreateDisposition(BigQueryIO.Write.CreateDisposition.CREATE_IF_NEEDED));
-            //.withoutValidation()
-            //.withAutoSharding());
+            .withCreateDisposition(BigQueryIO.Write.CreateDisposition.CREATE_IF_NEEDED)
+            .withoutValidation()
+            .withAutoSharding());
 
     return p.run();
   }
@@ -733,16 +705,13 @@ public class DLPTextToBigQueryStreaming {
     private static TableRow createBqRow(Table.Row tokenizedValue, String[] headers) {
       TableRow bqRow = new TableRow();
       AtomicInteger headerIndex = new AtomicInteger(0);
-      List<TableCell> cells = new ArrayList<>();
       tokenizedValue
           .getValuesList()
           .forEach(
               value -> {
                 String checkedHeaderName = checkHeaderName(headers[headerIndex.getAndIncrement()].toString());
                 bqRow.set(checkedHeaderName, value.getStringValue());
-                cells.add(new TableCell().set(checkedHeaderName, value.getStringValue()));
               });
-      bqRow.setF(cells);
       return bqRow;
     }
   }
@@ -797,6 +766,19 @@ public class DLPTextToBigQueryStreaming {
       schema.setFields(fields);
       return schema;
     }
+
+  }
+
+  private static String getJsonSchema(KV<String, TableRow> element) {
+    String jsonSchema = "{ \"fields\": [";
+
+    for (int i = 0; i < element.getValue().size(); i++) {
+      jsonSchema += String.format("{\"name\": \"%s\", \"type\": \"%s\"}%s", element.getValue().getF().get(i), "STRING",
+          i == element.getValue().size() - 1 ? "": ",");
+    }
+    jsonSchema += "]}";
+    LOG.debug(jsonSchema);
+    return jsonSchema;
   }
 
   private static String getFileName(ReadableFile file) {
