@@ -8,7 +8,7 @@ Set the following environment variables based in the resources create in the inf
 export LOCATION=<REPOSITORY-LOCATION>
 export PROJECT=<YOUR-PROJECT>
 export BUCKET=<YOUR-FLEX-TEMPLATE-BUCKET>
-export TEMPLATE_IMAGE_TAG="$LOCATION-docker.pkg.dev/$PROJECT/flex-templates/samples/regional_bqhttps://meet.google.com/mqt-ffcx-uoc_dlp_bq_flex:latest"
+export TEMPLATE_IMAGE_TAG="$LOCATION-docker.pkg.dev/$PROJECT/flex-templates/samples/regional_bq_dlp_bq_flex:latest"
 export TEMPLATE_GS_PATH="gs://$BUCKET/flex-template-samples/regional_bq_dlp_bq_flex.json"
 export PIP_INDEX_URL="https://$LOCATION-python.pkg.dev/$PROJECT/python-modules/simple/"
 ```
