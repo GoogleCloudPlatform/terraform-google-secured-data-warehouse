@@ -36,6 +36,7 @@ catch() {
   fi
 }
 generate_wrapped_key() {
+    set -e
     if [ ${temporary_crypto_operator_role} == "true" ]; then
       gcloud projects add-iam-policy-binding ${project_id} --member=serviceAccount:${terraform_service_account} --role=roles/cloudkms.cryptoOperator
     fi

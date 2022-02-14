@@ -278,7 +278,7 @@ iam.googleapis.com \
 
 | Name | Description |
 |------|-------------|
-| bigquery\_confidential\_table | The data ingestion project Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
-| bigquery\_non\_confidential\_table | The data ingestion project Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account. |
+| bigquery\_confidential\_table | The bigquery table created for the confidential project. |
+| bigquery\_non\_confidential\_table | The bigquery table created for the non confidential project. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
