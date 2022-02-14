@@ -87,4 +87,9 @@ public interface BigQueryTransformPipelineOptions extends DataflowPipelineOption
   Character getColumnDelimiter();
 
   void setColumnDelimiter(Character value);
+
+  @Description("Output BigQuery table schema")
+  String getBqSchema();
+
+  void setBqSchema(String value);
 }

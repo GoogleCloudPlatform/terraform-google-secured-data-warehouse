@@ -88,12 +88,11 @@ public abstract class BigQueryDynamicWriteTransform
                 element -> {
                   return element.getValue();
                 })
+            .withJsonSchema(jsonSchema)
             .withWriteDisposition(BigQueryIO.Write.WriteDisposition.WRITE_APPEND)
             .withCreateDisposition(BigQueryIO.Write.CreateDisposition.CREATE_IF_NEEDED)
             .withoutValidation()
-            .withMethod(BigQueryIO.Write.Method.FILE_LOADS)
-            .withTriggeringFrequency(Duration.standardSeconds(10))
-            .withNumFileShards(1));
+            .withMethod(BigQueryIO.Write.Method.FILE_LOADS));
   }
 
   public class BQDestination

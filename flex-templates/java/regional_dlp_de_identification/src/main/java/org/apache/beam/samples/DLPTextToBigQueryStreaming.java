@@ -16,13 +16,7 @@
 
 package org.apache.beam.samples;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 import com.google.api.services.bigquery.model.TableCell;
 import com.google.api.services.bigquery.model.TableFieldSchema;
@@ -51,7 +45,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.beam.runners.dataflow.options.DataflowPipelineOptions;
-import org.apache.beam.sdk.coders.Coder;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.PipelineResult;
 import org.apache.beam.sdk.coders.KvCoder;
@@ -93,7 +86,6 @@ import org.joda.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.ImmutableList;
 
 /**
  * The {@link DLPTextToBigQueryStreaming} is a streaming pipeline that reads CSV
@@ -169,22 +161,6 @@ public class DLPTextToBigQueryStreaming {
   private static final Pattern COLUMN_NAME_REGEXP = Pattern.compile("^[A-Za-z_]+[A-Za-z_0-9]*$");
   /** Default window interval to create side inputs for header records. */
   private static final Duration WINDOW_INTERVAL = Duration.standardSeconds(30);
-
-  private static final String jsonSchema = "{"
-      + "\"fields\":["
-      + "{ \"description\": \"Card_Type_Code\", \"mode\": \"REQUIRED\", \"name\": \"Card_Type_Code\", \"type\": \"STRING\"},"
-      + "{ \"description\": \"Card_Type_Full_Name\", \"mode\": \"REQUIRED\", \"name\": \"Card_Type_Full_Name\", \"type\": \"STRING\"},"
-      + "{ \"description\": \"Issuing_Bank\", \"mode\": \"REQUIRED\", \"name\": \"Issuing_Bank\", \"type\": \"STRING\" },"
-      + "{ \"description\": \"Card_Number\", \"mode\": \"REQUIRED\", \"name\": \"Card_Number\", \"type\": \"STRING\" },"
-      + "{ \"description\": \"Card_Holders_Name\", \"mode\": \"REQUIRED\", \"name\": \"Card_Holders_Name\", \"type\": \"STRING\"},"
-      + "{ \"description\": \"CVV2\", \"mode\": \"REQUIRED\", \"name\": \"CVVCVV2\", \"type\": \"STRING\"},"
-      + "{ \"description\": \"Issue_Date\", \"mode\": \"REQUIRED\", \"name\": \"Issue_Date\", \"type\": \"STRING\"},"
-      + "{ \"description\": \"Expiry_Date\", \"mode\": \"REQUIRED\", \"name\": \"Expiry_Date\", \"type\": \"STRING\"},"
-      + "{ \"description\": \"Billing_Date\", \"mode\": \"REQUIRED\", \"name\": \"Billing_Date\", \"type\": \"STRING\"},"
-      + "{ \"description\": \"Card_PIN\", \"mode\": \"REQUIRED\", \"name\": \"Card_PIN\", \"type\": \"STRING\"},"
-      + "{ \"description\": \"Credit_Limit\", \"mode\": \"REQUIRED\", \"name\": \"Credit_Limit\", \"type\": \"STRING\"}"
-      + "]"
-      + "}";
 
   /**
    * Main entry point for executing the pipeline. This will run the pipeline
@@ -340,9 +316,10 @@ public class DLPTextToBigQueryStreaming {
     bqDataMap.apply(
         "Write To BQ",
         BigQueryIO.<KV<String, TableRow>>write()
-            .to(new BQDestination(options.getDatasetName(), options.getBqProjectId()))
-            // .to(options.getBqProjectId() + ":" + options.getDatasetName() + "." + "cc_10000_records")
-            // .withJsonSchema(jsonSchema)
+            // .to(new BQDestination(options.getDatasetName(), options.getBqProjectId()))
+             .to(options.getBqProjectId() + ":" + options.getDatasetName() + "." + getFileNameFromPattern(options.getInputFilePattern()))
+             .withJsonSchema(
+                getJsonSchema(options.getBqSchema()))
             .withFormatFunction(
                 element -> {
                   return element.getValue();
@@ -410,6 +387,11 @@ public class DLPTextToBigQueryStreaming {
     ValueProvider<String> getDlpLocation();
 
     void setDlpLocation(ValueProvider<String> value);
+
+    @Description("Output BigQuery table schema")
+    ValueProvider<String> getBqSchema();
+
+    void setBqSchema(ValueProvider<String> value);
   }
 
   /**
@@ -769,12 +751,13 @@ public class DLPTextToBigQueryStreaming {
 
   }
 
-  private static String getJsonSchema(KV<String, TableRow> element) {
+  private static String getJsonSchema(ValueProvider<String> inputSchema) {
+    String []fields = inputSchema.get().split(",");
     String jsonSchema = "{ \"fields\": [";
 
-    for (int i = 0; i < element.getValue().size(); i++) {
-      jsonSchema += String.format("{\"name\": \"%s\", \"type\": \"%s\"}%s", element.getValue().getF().get(i), "STRING",
-          i == element.getValue().size() - 1 ? "": ",");
+    for (int i = 0; i < fields.length; i++) {
+      jsonSchema += String.format("{\"name\": \"%s\", \"type\": \"%s\"}%s", fields[i].split(":")[0].trim(), fields[i].split(":")[1].trim(),
+          i == fields.length - 1 ? "": ",");
     }
     jsonSchema += "]}";
     LOG.debug(jsonSchema);
@@ -796,6 +779,14 @@ public class DLPTextToBigQueryStreaming {
               + "]");
     }
     /** returning file name without extension */
+    return fileKey[0];
+  }
+
+  private static String getFileNameFromPattern(ValueProvider<String> filePath) {
+    String[] splitFilePath = filePath.get().split("/");
+    String csvFileName = splitFilePath[splitFilePath.length -1];
+    /** taking out .csv extension from file name e.g fileName.csv->fileName */
+    String[] fileKey = csvFileName.split("\\.", 2);
     return fileKey[0];
   }
 

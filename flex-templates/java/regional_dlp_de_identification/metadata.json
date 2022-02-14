@@ -40,6 +40,11 @@
       "name": "datasetName",
       "label": "Dataset name.",
       "helpText": "Output BigQuery dataset name."
+    },
+    {
+      "name": "bqSchema",
+      "label": "BigQuery table schema.",
+      "helpText": "Output BigQuery table schema specified as string with format: FIELD_1:STRING,FIELD_2:STRING,..."
     }
   ]
 }

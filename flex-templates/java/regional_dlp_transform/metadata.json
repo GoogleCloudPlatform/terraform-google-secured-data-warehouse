@@ -48,6 +48,11 @@
       "label": "DLP batch size.",
       "helpText": "Number of records to be sent in a batch in the call to the DLP API. Default is 100",
       "isOptional": true
+    },
+    {
+      "name": "bqSchema",
+      "label": "BigQuery table schema.",
+      "helpText": "Output BigQuery table schema specified as string with format: FIELD_1:STRING,FIELD_2:STRING,..."
     }
   ]
 }
