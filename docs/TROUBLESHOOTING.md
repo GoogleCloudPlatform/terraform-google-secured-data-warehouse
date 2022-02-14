@@ -195,9 +195,9 @@ resource "google_artifact_registry_repository_iam_member" "python_reader" {
 
 ### `Bad syntax for dict argument` when deploying Dataflow Jobs using gcloud command
 
-When the user does the deploy of a new Dataflow job using the gcloud command `gcloud dataflow flex-template run`, they get an error when providing a `--parameters ` that has a comma (`,`) in the value
+When the user does the deploy of a new Dataflow job using the gcloud command `gcloud dataflow flex-template run`, they get an error when providing a `--parameters ` that has a comma (`,`) in the value.
 
-The error message shown in the **terminal** when trying to run the gcloud command to deploy a new Dataflow Job using parameters that the argument passed have a comma. This case in specific occurred running the [Python Dataflow pipeline bq-to-bq](../flex-templates/python/regional_dlp_transform/README.md).
+The error message shown in the **terminal** when trying to run the gcloud command to deploy a new Dataflow Job using parameters that the argument passed have a comma (`,`). This case in specific occurred running the [Python Dataflow pipeline bq-to-bq](../flex-templates/python/regional_dlp_transform/README.md).
 
 **Error message:**
 
@@ -218,14 +218,15 @@ For detailed information on this command and its flags, run:
 ```
 
 **Cause:**
-
-If you do not specify an [**alternative delimiter**](https://cloud.google.com/sdk/gcloud/reference/topic/escaping) in the parameters, gcloud will use the default, the comma. The gcloud will interpret the argument with comma as multiple parameters instead of one, or infer that a dictionary is being passed without the default syntax.
+If you do not specify an [**alternative delimiter**](https://cloud.google.com/sdk/gcloud/reference/topic/escaping) in the parameters, gcloud will use the default, the comma.
+The gcloud will incorrectly interpret the argument with comma either as multiple parameters instead of one, or that a dictionary is being passed without the default syntax.
 
 **Solution:**
 
 An **alternative delimiter**, between **^**, must be declared before a parameter with its argument being passed with comma. The **alternative delimiter** must be different from all characters in the argument passed.
 
-Still with the example running the Python Dataflow pipeline bq-to-bq, this Dataflow flex template has several parameters, one of them is a **bq_schema**, a dict. The **alternative delimiter** chosen was the `*`, as it does not appear in the passed argument. The correct way to specify this argument is seen below:
+This Dataflow flex template has several parameters, one of them is a **bq_schema**, a dict. The **alternative delimiter** chosen was the `*`, as it does not appear in the passed argument. The correct way to specify this argument is seen below:
+
 ```console
 gcloud dataflow flex-template run "<PIPELINE-NAME>" \
 …

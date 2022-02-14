@@ -16,7 +16,7 @@
 
 // depends_on is necessary to ensure that the bigquery table is already created
 output "bigquery_confidential_table" {
-  description = "The data ingestion project Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account."
+  description = "The bigquery table created for the confidential project."
   value       = local.bigquery_confidential_table
 
   depends_on = [
@@ -26,7 +26,7 @@ output "bigquery_confidential_table" {
 
 // depends_on is necessary to ensure that the bigquery table is already created
 output "bigquery_non_confidential_table" {
-  description = "The data ingestion project Dataflow controller service account email. See https://cloud.google.com/dataflow/docs/concepts/security-and-permissions#specifying_a_user-managed_controller_service_account."
+  description = "The bigquery table created for the non confidential project."
   value       = local.bigquery_non_confidential_table
 
   depends_on = [

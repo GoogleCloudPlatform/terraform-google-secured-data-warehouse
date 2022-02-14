@@ -178,15 +178,18 @@ Examples using Python Transform Flex Template:
 
 - [Standalone](../examples/standalone/README.md)
 
-If you are using our [Standalone Example](../examples/standalone/README.md), two streaming Dataflow jobs are deployed, the first one in the data ingestion project, which de-identifies the data and save it in the non-confidential project.
+If you are using our [Standalone Example](../examples/standalone/README.md), two streaming Dataflow jobs are deployed:
+
+- De-identification job:  located in ingestion project and stores output into BQ in the non-confidential project
+- Re-identification job:  located in the confidential project and loads data from the non-confidential project
 
 The second one in the confidential project, which re-identifies the data from non-confidential project.
 
-Both of the Dataflow jobs stop the execution at the end of the Pipeline.
+Both of the Dataflow jobs stop executing at the end of the Pipeline.
 
-To ingest new data you must deploy a new [Dataflow Flex Job](#deploying-dataflow-flex-jobs) using the Flex Template BigQuery to BigQuery. Currently, only the [Classic Template](https://cloud.google.com/dataflow/docs/concepts/dataflow-templates#templated-dataflow-jobs) can be cloned, it is not possible to clone a `Flex Template Job` yet.
+To ingest new data you must deploy a new [Dataflow Flex Job](#deploying-dataflow-flex-jobs) using the Flex Template.
 
-### How do I check if my data have been de-identified or re-identified?
+### How do I check if my data has been de-identified or re-identified?
 
 After the Dataflow Pipeline successfully runs, you can preview the data in the correct
 [Bigquery table](https://cloud.google.com/bigquery/docs/quickstarts/quickstart-cloud-console#preview_table_data) created in the dataset provided:

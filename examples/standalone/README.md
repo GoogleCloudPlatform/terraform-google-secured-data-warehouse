@@ -66,7 +66,7 @@ you need to add your user in the variable `perimeter_additional_members` in the 
 
 ### Sample Data
 
-The sample data used in this example is a [Public BigQuery Table](https://console.cloud.google.com/bigquery?project=bigquery-public-data&d=irs_990&p=bigquery-public-data&page=table&ws=!1m5!1m4!4m3!1sbigquery-public-data!2sirs_990!3sirs_990_ein&t=irs_990_ein) that belongs to the [IRS 990 public dataset](https://console.cloud.google.com/marketplace/product/internal-revenue-service/irs-990?project=bigquery-public-data).
+The sample data used in this example is a Public BigQuery Table that belongs to the [IRS 990 public dataset](https://console.cloud.google.com/marketplace/product/internal-revenue-service/irs-990?project=bigquery-public-data).
 
 The de-identification Dataflow Pipeline will apply these DLP Crypto-based tokenization transformations to encrypt the data:
 
@@ -81,7 +81,7 @@ The de-identification Dataflow Pipeline will apply these DLP Crypto-based tokeni
 
 This example creates a Data Catalog taxonomy to enable [BigQuery column-level access controls](https://cloud.google.com/bigquery/docs/column-level-security-intro).
 
-The taxonomy has three level: **Confidential**, **Private**, and **Sensitive** and access to a higher level grants also access to the lower levels
+The taxonomy has four levels: **Confidential**, **Private**, **Sensitive**, and **Public** and access to a higher level grants also access to the lower levels
 
 - **3_Confidential:** Most sensitive data classification. Significant damage to enterprise.
   - US_EMPLOYER_IDENTIFICATION_NUMBER.
@@ -92,6 +92,7 @@ The taxonomy has three level: **Confidential**, **Private**, and **Sensitive** a
     - **1_Sensitive:** Data not meant to be public.
       - INCOME_AMT.
       - REVENUE_AMT.
+      - **4_Public:** Data is freely accessible to the public.
 
 No user has access to read this data protected with column-level security.
 If they need access, the  [Fine-Grained Reader](https://cloud.google.com/bigquery/docs/column-level-security#fine_grained_reader) role needs to be added to the appropriate user or group.
@@ -110,13 +111,16 @@ Install the following dependencies:
 
 ### Cloud SDK configurations
 
-Acquire your user credentials to use for **Application Default Credentials**:
+The standalone example uses a python script to generate the [wrapped_key](../../helpers/wrapped-key/README.md) that will be used in the DLP template to encrypt and decrypt the information. This script will run using the [Application Default Credentials](https://cloud.google.com/sdk/gcloud/reference/auth/application-default).
+
+So it is important to guarantee that the **Application Default Credentials** are correct, to acquire yours:
 
 ```sh
 gcloud auth application-default login
 ```
 
-Unset the project in the core section to avoid errors in the deploy with deleted or unavailable projects, and billings on inappropriate projects:
+To avoid errors in the deployment, you must also guarantee that the `gcloud command` is not using a project that has been deleted or is unavailable.
+We recommend to unset the project:
 
 ```sh
 gcloud config unset project
