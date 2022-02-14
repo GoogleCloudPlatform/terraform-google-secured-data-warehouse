@@ -40,6 +40,11 @@ variable "bucket_name" {
   type        = string
 }
 
+variable "parent_folder" {
+  description = "The folder id that will be logged."
+  type        = string
+}
+
 variable "logging_location" {
   description = "A valid location for the bucket and KMS key that will be deployed."
   type        = string
@@ -68,4 +73,10 @@ variable "kms_key_protection_level" {
   description = "The protection level to use when creating a key. Possible values: [\"SOFTWARE\", \"HSM\"]"
   type        = string
   default     = "HSM"
+}
+
+variable "data_access_logs_enabled" {
+  description = "Enable Data Access logs of types DATA_READ, DATA_WRITE for all GCP services. Enabling Data Access logs might result in your organization being charged for the additional logs usage. See https://cloud.google.com/logging/docs/audit#data-access The ADMIN_READ logs are enabled by default."
+  type        = bool
+  default     = false
 }
