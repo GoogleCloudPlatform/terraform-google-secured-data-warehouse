@@ -83,16 +83,17 @@ This example creates a Data Catalog taxonomy to enable [BigQuery column-level ac
 
 The taxonomy has four levels: **Confidential**, **Private**, **Sensitive**, and **Public** and access to a higher level grants also access to the lower levels
 
-- **3_Confidential:** Most sensitive data classification. Significant damage to enterprise.
+- **4_Confidential:** Most sensitive data classification. Significant damage to enterprise.
   - US_EMPLOYER_IDENTIFICATION_NUMBER.
-  - **2_Private:** Data meant to be private. Likely to cause damage to enterprise.
+  - **3_Private:** Data meant to be private. Likely to cause damage to enterprise.
     - PERSON_NAME.
     - STREET_ADDRESS.
     - US_STATE.
-    - **1_Sensitive:** Data not meant to be public.
+    - **2_Sensitive:** Data not meant to be public.
       - INCOME_AMT.
       - REVENUE_AMT.
-      - **4_Public:** Data is freely accessible to the public.
+      - **1_Public:** Data is freely accessible to the public.
+        - Not tagged fields.
 
 No user has access to read this data protected with column-level security.
 If they need access, the  [Fine-Grained Reader](https://cloud.google.com/bigquery/docs/column-level-security#fine_grained_reader) role needs to be added to the appropriate user or group.
@@ -113,7 +114,7 @@ Install the following dependencies:
 
 The standalone example uses a python script to generate the [wrapped_key](../../helpers/wrapped-key/README.md) that will be used in the DLP template to encrypt and decrypt the information. This script will run using the [Application Default Credentials](https://cloud.google.com/sdk/gcloud/reference/auth/application-default).
 
-So it is important to guarantee that the **Application Default Credentials** are correct, to acquire yours:
+So it is important to guarantee that the **Application Default Credentials** are correctly configured, to acquire yours:
 
 ```sh
 gcloud auth application-default login

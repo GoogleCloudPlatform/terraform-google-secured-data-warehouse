@@ -7,7 +7,7 @@
 - [The referenced network resource cannot be found](#the-referenced-network-resource-cannot-be-found)
 - [Unable to open the Dataflow staging file](#unable-to-open-the-dataflow-staging-file)
 - [No matching distribution found for apache-beam==2.30.0](#no-matching-distribution-found-for-apache-beam2300)
-- [`Bad syntax for dict argument` when deploying Dataflow Jobs using gcloud command](#bad-syntax-for-dict-argument-when-deploying-dataflow-jobs-using-gcloud-command)
+- [`Bad syntax for dict argument` when deploying Dataflow Jobs using `gcloud` command](#bad-syntax-for-dict-argument-when-deploying-dataflow-jobs-using-gcloud-command)
 
 ### The server was only able to partially fulfill your request
 
@@ -165,7 +165,7 @@ You must use the appropriate Service Account created by the main module.
   - Module output: `confidential_dataflow_controller_service_account_email`
   - Email format: `sa-dataflow-controller-reid@<CONFIDENTIAL-DATA-PROJECT-ID>.iam.gserviceaccount.com`
 
-Using gcloud command:
+Using `gcloud` command:
 
 ```console
 export project_id=<ARTIFACT-REGISTRY-PROJECT-ID>
@@ -193,11 +193,9 @@ resource "google_artifact_registry_repository_iam_member" "python_reader" {
 }
 ```
 
-### `Bad syntax for dict argument` when deploying Dataflow Jobs using gcloud command
+### `Bad syntax for dict argument` when deploying Dataflow Jobs using `gcloud` command
 
-When the user does the deploy of a new Dataflow job using the gcloud command `gcloud dataflow flex-template run`, they get an error when providing a `--parameters ` that has a comma (`,`) in the value.
-
-The error message shown in the **terminal** when trying to run the gcloud command to deploy a new Dataflow Job using parameters that the argument passed have a comma (`,`). This case in specific occurred running the [Python Dataflow pipeline bq-to-bq](../flex-templates/python/regional_dlp_transform/README.md).
+This error happens when you are running the `gcloud` command to deploy a new Dataflow Job and there is at least one comma (`,`) in the parameter's value. You may face this error when running the [Python Dataflow pipeline bq-to-bq](../flex-templates/python/regional_dlp_transform/README.md).
 
 **Error message:**
 
@@ -218,8 +216,8 @@ For detailed information on this command and its flags, run:
 ```
 
 **Cause:**
-If you do not specify an [**alternative delimiter**](https://cloud.google.com/sdk/gcloud/reference/topic/escaping) in the parameters, gcloud will use the default, the comma.
-The gcloud will incorrectly interpret the argument with comma either as multiple parameters instead of one, or that a dictionary is being passed without the default syntax.
+
+If you do not specify an [**alternative delimiter**](https://cloud.google.com/sdk/gcloud/reference/topic/escaping) in the `parameters`, `gcloud` will use a comma as default, interpreting either as multiple parameters instead of one or as a dictionary.
 
 **Solution:**
 
