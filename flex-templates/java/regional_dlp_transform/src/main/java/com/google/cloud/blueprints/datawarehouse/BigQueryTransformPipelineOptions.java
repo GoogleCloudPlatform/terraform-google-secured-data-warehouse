@@ -35,12 +35,12 @@ public interface BigQueryTransformPipelineOptions extends DataflowPipelineOption
 
   void setInputBigQueryTable(String value);
 
-  @Description("Output BigQuery Dataset to hold re-identified data; specified as "
+  @Description("Output BigQuery Table to hold re-identified data; specified as "
       + "<project_id>:<dataset_id>.<table_id>. ")
   @Required
-  String getOutputBigQueryDataset();
+  String getOutputBigQueryTable();
 
-  void setOutputBigQueryDataset(String value);
+  void setOutputBigQueryTable(String value);
 
   @Description("DLP Deidentify Template to be used for API request. "
         + "Should match the de-identification table used to de-id the input table. "

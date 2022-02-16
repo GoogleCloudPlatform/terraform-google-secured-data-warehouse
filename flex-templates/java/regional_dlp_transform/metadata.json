@@ -8,9 +8,9 @@
       "helpText": "Input BigQuery table for results specified as: PROJECT:DATASET.TABLE or DATASET.TABLE."
     },
     {
-      "name": "outputBigQueryDataset",
-      "label": "BigQuery output dataset name.",
-      "helpText": "Output BigQuery table with reidentified data as: DATASET"
+      "name": "outputBigQueryTable",
+      "label": "BigQuery output table name.",
+      "helpText": "Output BigQuery table with reidentified data as: PROJECT:DATASET.TABLE or DATASET.TABLE"
     },
     {
       "name": "deidentifyTemplateName",

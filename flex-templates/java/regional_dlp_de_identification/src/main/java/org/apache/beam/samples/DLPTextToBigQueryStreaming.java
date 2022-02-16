@@ -16,12 +16,7 @@
 
 package org.apache.beam.samples;
 
-import java.util.Arrays;
-
-import com.google.api.services.bigquery.model.TableCell;
-import com.google.api.services.bigquery.model.TableFieldSchema;
 import com.google.api.services.bigquery.model.TableRow;
-import com.google.api.services.bigquery.model.TableSchema;
 import com.google.cloud.dlp.v2.DlpServiceClient;
 import com.google.common.base.Charsets;
 import com.google.privacy.dlp.v2.ContentItem;
@@ -40,7 +35,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -54,8 +48,6 @@ import org.apache.beam.sdk.io.FileIO;
 import org.apache.beam.sdk.io.FileIO.ReadableFile;
 import org.apache.beam.sdk.io.ReadableFileCoder;
 import org.apache.beam.sdk.io.gcp.bigquery.BigQueryIO;
-import org.apache.beam.sdk.io.gcp.bigquery.DynamicDestinations;
-import org.apache.beam.sdk.io.gcp.bigquery.TableDestination;
 import org.apache.beam.sdk.io.range.OffsetRange;
 import org.apache.beam.sdk.metrics.Distribution;
 import org.apache.beam.sdk.metrics.Metrics;
@@ -79,7 +71,6 @@ import org.apache.beam.sdk.transforms.windowing.Window;
 import org.apache.beam.sdk.values.KV;
 import org.apache.beam.sdk.values.PCollection;
 import org.apache.beam.sdk.values.PCollectionView;
-import org.apache.beam.sdk.values.ValueInSingleWindow;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.joda.time.Duration;
@@ -316,7 +307,6 @@ public class DLPTextToBigQueryStreaming {
     bqDataMap.apply(
         "Write To BQ",
         BigQueryIO.<KV<String, TableRow>>write()
-            // .to(new BQDestination(options.getDatasetName(), options.getBqProjectId()))
              .to(options.getBqProjectId() + ":" + options.getDatasetName() + "." + getFileNameFromPattern(options.getInputFilePattern()))
              .withJsonSchema(
                 getJsonSchema(options.getBqSchema()))
@@ -326,7 +316,7 @@ public class DLPTextToBigQueryStreaming {
                 })
             .withWriteDisposition(BigQueryIO.Write.WriteDisposition.WRITE_APPEND)
             .withMethod(BigQueryIO.Write.Method.FILE_LOADS)
-            .withTriggeringFrequency(Duration.standardSeconds(10))
+            .withTriggeringFrequency(Duration.standardSeconds(options.getTrigFrequency().get()))
             .withCreateDisposition(BigQueryIO.Write.CreateDisposition.CREATE_IF_NEEDED)
             .withoutValidation()
             .withAutoSharding());
@@ -392,6 +382,11 @@ public class DLPTextToBigQueryStreaming {
     ValueProvider<String> getBqSchema();
 
     void setBqSchema(ValueProvider<String> value);
+
+    @Description("Triggering Frequency which file writes are triggered in seconds")
+    ValueProvider<Integer> getTrigFrequency();
+
+    void setTrigFrequency(ValueProvider<Integer> value);
   }
 
   /**
@@ -696,59 +691,6 @@ public class DLPTextToBigQueryStreaming {
               });
       return bqRow;
     }
-  }
-
-  /**
-   * The {@link BQDestination} class creates BigQuery table destination and table
-   * schema based on
-   * the CSV file processed in earlier transformations. Table id is same as
-   * filename Table schema is
-   * same as file header columns.
-   */
-  public static class BQDestination
-      extends DynamicDestinations<KV<String, TableRow>, KV<String, TableRow>> {
-
-    private ValueProvider<String> datasetName;
-    private ValueProvider<String> projectId;
-
-    public BQDestination(ValueProvider<String> datasetName, ValueProvider<String> projectId) {
-      this.datasetName = datasetName;
-      this.projectId = projectId;
-    }
-
-    @Override
-    public KV<String, TableRow> getDestination(ValueInSingleWindow<KV<String, TableRow>> element) {
-      String key = element.getValue().getKey();
-      String tableName = String.format("%s:%s.%s", projectId.get(), datasetName.get(), key);
-      LOG.debug("Table Name {}", tableName);
-      return KV.of(tableName, element.getValue().getValue());
-    }
-
-    @Override
-    public TableDestination getTable(KV<String, TableRow> destination) {
-      TableDestination dest = new TableDestination(destination.getKey(), "pii-tokenized output data from dataflow");
-      LOG.debug("Table Destination {}", dest.getTableSpec());
-      return dest;
-    }
-
-    @Override
-    public TableSchema getSchema(KV<String, TableRow> destination) {
-
-      TableRow bqRow = destination.getValue();
-      TableSchema schema = new TableSchema();
-      List<TableFieldSchema> fields = new ArrayList<TableFieldSchema>();
-      List<TableCell> cells = bqRow.getF();
-      for (int i = 0; i < cells.size(); i++) {
-        Map<String, Object> object = cells.get(i);
-        String header = object.keySet().iterator().next();
-        /** currently all BQ data types are set to String */
-        fields.add(new TableFieldSchema().setName(checkHeaderName(header)).setType("STRING"));
-      }
-
-      schema.setFields(fields);
-      return schema;
-    }
-
   }
 
   private static String getJsonSchema(ValueProvider<String> inputSchema) {

@@ -142,14 +142,13 @@ public class BigQueryDLPBigQuery {
         )
         .get(Util.jobSuccess);
 
-
-
     // BQ insert
     transformData.apply(
         "BigQueryInsert",
-        BigQueryDynamicWriteTransform.newBuilder()
-          .setDatasetId(options.getOutputBigQueryDataset())
+        BigQueryWriteTransform.newBuilder()
           .setProjectId(options.getProject())
+          .setBqSchema(options.getBqSchema())
+          .setTableName(options.getOutputBigQueryTable())
           .build()
     );
 

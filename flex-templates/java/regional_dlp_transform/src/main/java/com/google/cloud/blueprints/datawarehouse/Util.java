@@ -18,12 +18,10 @@ package com.google.cloud.blueprints.datawarehouse;
 
 import static org.apache.beam.sdk.schemas.Schema.toSchema;
 
-import com.google.api.services.bigquery.model.TableCell;
 import com.google.api.services.bigquery.model.TableRow;
 import com.google.gson.Gson;
 import com.google.privacy.dlp.v2.InspectContentResponse;
 import com.google.privacy.dlp.v2.Table;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
@@ -210,7 +208,6 @@ public class Util {
   public static TableRow createBqRow(Table.Row tokenizedValue, String[] headers) {
     TableRow bqRow = new TableRow();
     AtomicInteger headerIndex = new AtomicInteger(0);
-    // List<TableCell> cells = new ArrayList<>();
     tokenizedValue
         .getValuesList()
         .forEach(
@@ -218,9 +215,7 @@ public class Util {
               String checkedHeaderName =
                   Util.checkHeaderName(headers[headerIndex.getAndIncrement()].toString());
               bqRow.set(checkedHeaderName, value.getStringValue());
-              // cells.add(new TableCell().set(checkedHeaderName, value.getStringValue()));
             });
-    // bqRow.setF(cells);
     return bqRow;
   }
 
