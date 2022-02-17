@@ -21,7 +21,6 @@ locals {
   storage_sa           = data.google_storage_project_service_account.gcs_account.email_address
   logging_keyring_name = "logging_keyring_${random_id.suffix.hex}"
   logging_key_name     = "logging_key"
-  enabling_data_logs   = var.data_access_logs_enabled ? ["DATA_WRITE", "DATA_READ"] : []
   keys                 = [local.logging_key_name]
   parent_resource_ids  = [for parent_resource_id in local.log_exports[*].parent_resource_id : parent_resource_id]
 
@@ -92,24 +91,4 @@ resource "google_storage_bucket_iam_member" "storage_sink_member" {
   bucket = local.bucket_name
   role   = "roles/storage.objectCreator"
   member = each.value.writer_identity
-}
-
-resource "google_folder_iam_audit_config" "folder_config" {
-  folder  = "folders/${var.parent_folder}"
-  service = "allServices"
-
-  ###################################################################################################
-  ### Audit logs can generate costs, to know more about it,
-  ### check the official documentation: https://cloud.google.com/stackdriver/pricing#logging-costs
-  ### To know more about audit logs, you can find more infos
-  ### here https://cloud.google.com/logging/docs/audit/configure-data-access
-  ### To enable DATA_READ and DATA_WRITE audit logs, set `data_access_logs_enabled` to true
-  ### ADMIN_READ logs are enabled by default.
-  ####################################################################################################
-  dynamic "audit_log_config" {
-    for_each = setunion(local.enabling_data_logs, ["ADMIN_READ"])
-    content {
-      log_type = audit_log_config.key
-    }
-  }
 }
