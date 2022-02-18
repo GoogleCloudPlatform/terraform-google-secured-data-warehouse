@@ -5,12 +5,12 @@
     {
       "name": "inputBigQueryTable",
       "label": "BigQuery input table name.",
-      "helpText": "Input BigQuery table for results specified as: PROJECT:DATASET.TABLE or DATASET.TABLE."
+      "helpText": "Input BigQuery table for results specified as: PROJECT:DATASET.TABLE ."
     },
     {
       "name": "outputBigQueryTable",
       "label": "BigQuery output table name.",
-      "helpText": "Output BigQuery table with reidentified data as: PROJECT:DATASET.TABLE or DATASET.TABLE"
+      "helpText": "Output BigQuery table with transformed data as: PROJECT:DATASET.TABLE ."
     },
     {
       "name": "deidentifyTemplateName",

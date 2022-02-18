@@ -307,7 +307,7 @@ public class DLPTextToBigQueryStreaming {
     bqDataMap.apply(
         "Write To BQ",
         BigQueryIO.<KV<String, TableRow>>write()
-             .to(options.getBqProjectId() + ":" + options.getDatasetName() + "." + getFileNameFromPattern(options.getInputFilePattern()))
+             .to(options.getOutputBigQueryTable())
              .withJsonSchema(
                 getJsonSchema(options.getBqSchema()))
             .withFormatFunction(
@@ -335,6 +335,13 @@ public class DLPTextToBigQueryStreaming {
     ValueProvider<String> getInputFilePattern();
 
     void setInputFilePattern(ValueProvider<String> value);
+
+    @Description("Output BigQuery Table to hold de-identified data; specified as "
+      + "<project_id>:<dataset_id>.<table_id>. ")
+    @Required
+    String getOutputBigQueryTable();
+
+    void setOutputBigQueryTable(String value);
 
     @Description("DLP Deidentify Template to be used for API request "
         + "(e.g.projects/{project_id}/deidentifyTemplates/{deIdTemplateId}")
@@ -721,14 +728,6 @@ public class DLPTextToBigQueryStreaming {
               + "]");
     }
     /** returning file name without extension */
-    return fileKey[0];
-  }
-
-  private static String getFileNameFromPattern(ValueProvider<String> filePath) {
-    String[] splitFilePath = filePath.get().split("/");
-    String csvFileName = splitFilePath[splitFilePath.length -1];
-    /** taking out .csv extension from file name e.g fileName.csv->fileName */
-    String[] fileKey = csvFileName.split("\\.", 2);
     return fileKey[0];
   }
 

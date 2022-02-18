@@ -5,7 +5,12 @@
     {
       "name": "inputFilePattern",
       "label": "Input file pattern.",
-      "helpText": "Format gs://<bucketName>/<fileName>.csv ."
+      "helpText": "Format gs://<bucketName>/<fileName or regex>.csv ."
+    },
+    {
+      "name": "outputBigQueryTable",
+      "label": "BigQuery output table name.",
+      "helpText": "Output BigQuery table with de-identified data as: PROJECT:DATASET.TABLE ."
     },
     {
       "name": "deidentifyTemplateName",

@@ -35,7 +35,7 @@ public interface BigQueryTransformPipelineOptions extends DataflowPipelineOption
 
   void setInputBigQueryTable(String value);
 
-  @Description("Output BigQuery Table to hold re-identified data; specified as "
+  @Description("Output BigQuery Table to hold transformed data; specified as "
       + "<project_id>:<dataset_id>.<table_id>. ")
   @Required
   String getOutputBigQueryTable();
