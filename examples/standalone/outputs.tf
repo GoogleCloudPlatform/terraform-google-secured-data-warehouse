@@ -20,7 +20,7 @@ output "bigquery_confidential_table" {
   value       = local.bigquery_confidential_table
 
   depends_on = [
-    module.regional_deid_pipeline
+    module.regional_reid_pipeline
   ]
 }
 
@@ -30,6 +30,6 @@ output "bigquery_non_confidential_table" {
   value       = local.bigquery_non_confidential_table
 
   depends_on = [
-    module.regional_reid_pipeline
+    module.regional_deid_pipeline
   ]
 }
