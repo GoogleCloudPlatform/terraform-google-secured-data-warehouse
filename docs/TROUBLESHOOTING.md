@@ -7,7 +7,6 @@
 - [The referenced network resource cannot be found](#the-referenced-network-resource-cannot-be-found)
 - [Unable to open the Dataflow staging file](#unable-to-open-the-dataflow-staging-file)
 - [No matching distribution found for apache-beam==2.30.0](#no-matching-distribution-found-for-apache-beam2300)
-- [`Bad syntax for dict argument` when deploying Dataflow Jobs using `gcloud` command](#bad-syntax-for-dict-argument-when-deploying-dataflow-jobs-using-gcloud-command)
 
 ### The server was only able to partially fulfill your request
 
