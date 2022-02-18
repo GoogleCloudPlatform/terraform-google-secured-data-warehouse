@@ -150,6 +150,8 @@ gcloud dataflow flex-template run "TEMPLATE_NAME`date +%Y%m%d-%H%M%S`" \
 
 For more details about `gcloud dataflow flex-template` see the command [documentation](https://cloud.google.com/sdk/gcloud/reference/dataflow/flex-template/run).
 
+In some parameters used, you may need to use the comma `,` such as a table schema. On these cases you need to use [gcloud topic escaping](https://cloud.google.com/sdk/gcloud/reference/topic/escaping)
+
 ## Common tasks
 
 ### How do I rerun the Dataflow flex pipeline for new data?
