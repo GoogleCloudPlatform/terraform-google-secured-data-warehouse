@@ -27,18 +27,21 @@ project_id=${4}
 temporary_crypto_operator_role=${5}
 exe_path=$(dirname ${0})
 
+key_location=`echo ${key} |awk -F '/' '{print $4}'`
+key_name=`echo ${key} |awk -F '/' '{print $8}'`
+key_ring=`echo ${key} |awk -F '/' '{print $6}'`
+
 trap 'catch $? $LINENO' EXIT
 catch() {
   if    [ "${1}" != "0" ] \
      && [ ${temporary_crypto_operator_role} == "true" ]; then
     echo "Error ${1} occurred on ${2}"
-    gcloud projects remove-iam-policy-binding ${project_id} --member=serviceAccount:${terraform_service_account} --role=roles/cloudkms.cryptoOperator
+    gcloud kms keys remove-iam-policy-binding ${key_name} --keyring=${key_ring} --location=${key_location} --member=serviceAccount:${terraform_service_account} --role=roles/cloudkms.cryptoOperator --project=${project_id}
   fi
 }
 generate_wrapped_key() {
-    set -e
     if [ ${temporary_crypto_operator_role} == "true" ]; then
-      gcloud projects add-iam-policy-binding ${project_id} --member=serviceAccount:${terraform_service_account} --role=roles/cloudkms.cryptoOperator
+      gcloud kms keys add-iam-policy-binding ${key_name} --keyring=${key_ring} --location=${key_location} --member=serviceAccount:${terraform_service_account} --role=roles/cloudkms.cryptoOperator --project=${project_id}
     fi
 
     python3 -m pip install --user --upgrade pip
@@ -63,7 +66,7 @@ generate_wrapped_key() {
     --project="${project_id}"
 
     if [ ${temporary_crypto_operator_role} == "true" ]; then
-      gcloud projects remove-iam-policy-binding ${project_id} --member=serviceAccount:${terraform_service_account} --role=roles/cloudkms.cryptoOperator
+      gcloud kms keys remove-iam-policy-binding ${key_name} --keyring=${key_ring} --location=${key_location} --member=serviceAccount:${terraform_service_account} --role=roles/cloudkms.cryptoOperator --project=${project_id}
     fi
 }
 
