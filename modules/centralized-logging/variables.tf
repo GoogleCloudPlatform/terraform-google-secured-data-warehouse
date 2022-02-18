@@ -40,11 +40,6 @@ variable "bucket_name" {
   type        = string
 }
 
-variable "parent_folder" {
-  description = "The folder id that will be logged."
-  type        = string
-}
-
 variable "logging_location" {
   description = "A valid location for the bucket and KMS key that will be deployed."
   type        = string
