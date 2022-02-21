@@ -42,6 +42,7 @@ module "secured_data_warehouse" {
   data_ingestion_project_id        = module.base_projects.data_ingestion_project_id
   sdx_project_number               = module.template_project.sdx_project_number
   terraform_service_account        = var.terraform_service_account
+  access_context_manager_policy_id = var.access_context_manager_policy_id
   bucket_name                      = "data-ingestion"
   pubsub_resource_location         = local.location
   location                         = local.location
