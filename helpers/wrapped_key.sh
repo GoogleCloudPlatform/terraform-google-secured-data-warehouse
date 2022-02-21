@@ -37,6 +37,7 @@ catch() {
      && [ ${temporary_crypto_operator_role} == "true" ]; then
     echo "Error ${1} occurred on ${2}"
     gcloud kms keys remove-iam-policy-binding ${key_name} --keyring=${key_ring} --location=${key_location} --member=serviceAccount:${terraform_service_account} --role=roles/cloudkms.cryptoOperator --project=${project_id}
+    gcloud projects remove-iam-policy-binding $project_id --member=serviceAccount:${terraform_service_account} --role=roles/resourcemanager.organizationAdmin
   fi
 }
 generate_wrapped_key() {
@@ -67,6 +68,7 @@ generate_wrapped_key() {
 
     if [ ${temporary_crypto_operator_role} == "true" ]; then
       gcloud kms keys remove-iam-policy-binding ${key_name} --keyring=${key_ring} --location=${key_location} --member=serviceAccount:${terraform_service_account} --role=roles/cloudkms.cryptoOperator --project=${project_id}
+      gcloud projects remove-iam-policy-binding $project_id --member=serviceAccount:${terraform_service_account} --role=roles/resourcemanager.organizationAdmin
     fi
 }
 
