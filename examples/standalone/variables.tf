@@ -50,11 +50,11 @@ variable "delete_contents_on_destroy" {
   default     = false
 }
 
-variable "kms_key_protection_level" {
-  description = "(Optional) The protection level to use when creating a key. Possible values: [\"SOFTWARE\", \"HSM\"]"
-  type        = string
-  default     = "HSM"
-}
+#variable "kms_key_protection_level" {
+#  description = "(Optional) The protection level to use when creating a key. Possible values: [\"SOFTWARE\", \"HSM\"]"
+#  type        = string
+#  default     = "HSM"
+#}
 
 variable "security_administrator_group" {
   description = "Google Cloud IAM group that administers security configurations in the organization(org policies, KMS, VPC service perimeter)."
