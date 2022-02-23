@@ -124,3 +124,9 @@ variable "data_ingestion_encryption_key" {
   description = "Self-link of the encryption key to be used by Pub/Sub and Storage."
   type        = string
 }
+
+variable "enable_bigquery_read_roles" {
+  description = "(Optional) If set to true, it will grant to the `dataflow_controller_service_account` the necessary roles to read from a bigquery table."
+  type        = bool
+  default     = false
+}

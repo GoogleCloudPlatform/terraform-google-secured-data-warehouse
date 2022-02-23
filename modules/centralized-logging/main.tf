@@ -22,10 +22,11 @@ locals {
   logging_keyring_name = "logging_keyring_${random_id.suffix.hex}"
   logging_key_name     = "logging_key"
   keys                 = [local.logging_key_name]
+  parent_resource_ids  = [for parent_resource_id in local.log_exports[*].parent_resource_id : parent_resource_id]
+
   log_exports = toset([
     for value in module.log_export : value
   ])
-  parent_resource_ids = [for parent_resource_id in local.log_exports[*].parent_resource_id : parent_resource_id]
 }
 
 resource "random_id" "suffix" {

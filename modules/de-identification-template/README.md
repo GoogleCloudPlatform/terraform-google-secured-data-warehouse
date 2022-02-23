@@ -70,7 +70,7 @@ A functional example for a Record Transformation is included under the
 | dataflow\_service\_account | The Service Account email that will be used to identify the VMs in which the jobs are running. | `string` | n/a | yes |
 | dlp\_location | The location of DLP resources. See https://cloud.google.com/dlp/docs/locations. The 'global' KMS location is valid. | `string` | `"global"` | no |
 | project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
-| template\_description | A description for the DLP de-identification template. | `string` | `"De-identifies sensitive content defined in the template with a KMS wrapped CMEK."` | no |
+| template\_description | A description for the DLP de-identification template. | `string` | `"Transforms sensitive content defined in the template with a KMS wrapped CMEK."` | no |
 | template\_display\_name | The display name of the DLP de-identification template. | `string` | `"De-identification template using a KMS wrapped CMEK"` | no |
 | template\_file | the path to the DLP de-identification template file. | `string` | n/a | yes |
 | template\_id\_prefix | Prefix to be used in the creation of the ID of the DLP de-identification template. | `string` | `"de_identification"` | no |

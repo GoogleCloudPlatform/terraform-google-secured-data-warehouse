@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
+variable "remove_owner_role" {
+  description = "(Optional) If set to true, remove all owner roles in all projects in case it has been found in some project."
+  type        = bool
+  default     = false
+}
+
 variable "trusted_locations" {
   description = "This is a list of trusted regions where location-based GCP resources can be created."
   type        = list(string)
@@ -252,4 +258,10 @@ variable "confidential_data_perimeter" {
   description = "Existing confidential data perimeter to be used instead of the auto-created perimeter. The service account provided in the variable `terraform_service_account` must be in an access level member list for this perimeter **before** this perimeter can be used in this module."
   type        = string
   default     = ""
+}
+
+variable "enable_bigquery_read_roles_in_data_ingestion" {
+  description = "(Optional) If set to true, it will grant to the dataflow controller service account created in the data ingestion project the necessary roles to read from a bigquery table."
+  type        = bool
+  default     = false
 }

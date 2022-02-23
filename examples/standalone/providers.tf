@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,12 @@
  * limitations under the License.
  */
 
-variable "org_id" {
-  description = "The numeric organization id"
-  type        = string
+provider "google" {
+  impersonate_service_account = var.terraform_service_account
+  request_timeout             = "60s"
 }
 
-variable "folder_id" {
-  description = "The folder to deploy in"
-  type        = string
-}
-
-variable "billing_account" {
-  description = "The billing account id associated with the project, e.g. XXXXXX-YYYYYY-ZZZZZZ"
-  type        = string
-}
-
-variable "region" {
-  description = "The region in which the subnetwork and the App Engine application will be created."
-  type        = string
+provider "google-beta" {
+  impersonate_service_account = var.terraform_service_account
+  request_timeout             = "60s"
 }
