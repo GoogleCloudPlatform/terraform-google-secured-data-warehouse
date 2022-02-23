@@ -76,7 +76,7 @@ variable "kms_key_protection_level" {
 }
 
 variable "data_access_logs_enabled" {
-  description = "Enable Data Access logs of types DATA_READ, DATA_WRITE for all GCP services. Enabling Data Access logs might result in your organization being charged for the additional logs usage. See https://cloud.google.com/logging/docs/audit#data-access The ADMIN_READ logs are enabled by default."
+  description = "Enable Data Access logs of types DATA_READ, DATA_WRITE for all GCP services in the projects under the provided `parent_folder`. Enabling Data Access logs might result in your organization being charged for the additional logs usage. See https://cloud.google.com/logging/docs/audit#data-access The ADMIN_READ logs are enabled by default."
   type        = bool
   default     = false
 }
