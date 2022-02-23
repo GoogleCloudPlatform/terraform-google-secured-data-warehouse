@@ -41,7 +41,7 @@ variable "bucket_name" {
 }
 
 variable "parent_folder" {
-  description = "The folder id that will be logged."
+  description = "The folder id that will be configured so all its projects will add data logs for every resource."
   type        = string
 }
 
