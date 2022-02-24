@@ -18,6 +18,7 @@ locals {
   pubsub_resource_location = lower(var.pubsub_resource_location)
   location                 = lower(var.location)
   cmek_location            = local.location == "eu" ? "europe" : local.location
+  projects_to_remove_owner = var.remove_owner_role ? local.projects_ids : {}
 
   projects_ids = {
     data_ingestion   = var.data_ingestion_project_id
@@ -25,6 +26,14 @@ locals {
     non_confidential = var.non_confidential_data_project_id
     confidential     = var.confidential_data_project_id
   }
+}
+
+resource "google_project_iam_binding" "remove_owner_role" {
+  for_each = local.projects_to_remove_owner
+
+  project = each.value
+  role    = "roles/owner"
+  members = []
 }
 
 module "data_governance" {
@@ -63,6 +72,7 @@ module "data_ingestion" {
   bucket_location                     = local.location
   data_ingestion_encryption_key       = module.data_governance.cmek_data_ingestion_crypto_key
   bigquery_encryption_key             = module.data_governance.cmek_bigquery_crypto_key
+  enable_bigquery_read_roles          = var.enable_bigquery_read_roles_in_data_ingestion
 }
 
 module "bigquery_confidential_data" {

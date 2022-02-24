@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2021 Google LLC
+# Copyright 2022 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,25 +20,54 @@
 
 set -e
 
-project_id=$1
-location=$2
-terraform_service_account=$3
-keyring=$4
-key=$5
-secret_name=$6
+terraform_service_account=${1}
+key=${2}
+secret_name=${3}
+project_id=${4}
+temporary_crypto_operator_role=${5}
+exe_path=$(dirname ${0})
 
-access_token=$(gcloud auth print-access-token --impersonate-service-account="${terraform_service_account}")
+key_location=$(echo ${key} |awk -F '/' '{print $4}')
+key_name=$(echo ${key} |awk -F '/' '{print $8}')
+key_ring=$(echo ${key} |awk -F '/' '{print $6}')
 
-data=$(python -c "import os,base64; key=os.urandom(32); encoded_key = base64.b64encode(key).decode('utf-8'); print(encoded_key)")
+trap 'catch $? $LINENO' EXIT
+catch() {
+  if    [ "${1}" != "0" ] \
+     && [ ${temporary_crypto_operator_role} == "true" ]; then
+    echo "Error ${1} occurred on ${2}"
+    gcloud kms keys remove-iam-policy-binding ${key_name} --keyring=${key_ring} --location=${key_location} --member=serviceAccount:${terraform_service_account} --role=roles/cloudkms.cryptoOperator --project=${project_id}
+  fi
+}
+generate_wrapped_key() {
+    if [ ${temporary_crypto_operator_role} == "true" ]; then
+      gcloud kms keys add-iam-policy-binding ${key_name} --keyring=${key_ring} --location=${key_location} --member=serviceAccount:${terraform_service_account} --role=roles/cloudkms.cryptoOperator --project=${project_id}
+    fi
 
-response_kms=$(curl -s -X POST "https://cloudkms.googleapis.com/v1/projects/${project_id}/locations/${location}/keyRings/${keyring}/cryptoKeys/${key}:encrypt" \
- -d '{"plaintext":"'"$data"'"}' \
- -H "Authorization:Bearer ${access_token}" \
- -H "Content-Type:application/json" \
- | python -c "import sys, json; print(\"\".join(json.load(sys.stdin)['ciphertext']))")
+    python3 -m pip install --user --upgrade pip
 
-echo "${response_kms}" | \
+    python3 -m pip install --user virtualenv
+
+    python3 -m venv kms_helper_venv
+
+    # shellcheck source=/dev/null
+    source kms_helper_venv/bin/activate
+
+    pip install --upgrade pip
+
+    pip install -r ${exe_path}/wrapped-key/requirements.txt
+
+    response_kms=$(python3 ${exe_path}/wrapped-key/wrapped_key.py --crypto_key_path ${key} --service_account ${terraform_service_account})
+
+    echo "${response_kms}" | \
     gcloud secrets versions add "${secret_name}" \
     --data-file=- \
     --impersonate-service-account="${terraform_service_account}" \
     --project="${project_id}"
+
+    if [ ${temporary_crypto_operator_role} == "true" ]; then
+      gcloud kms keys remove-iam-policy-binding ${key_name} --keyring=${key_ring} --location=${key_location} --member=serviceAccount:${terraform_service_account} --role=roles/cloudkms.cryptoOperator --project=${project_id}
+    fi
+}
+
+generate_wrapped_key

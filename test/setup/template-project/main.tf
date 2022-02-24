@@ -108,6 +108,25 @@ module "external_flex_template_infrastructure" {
   ]
 }
 
+// It's necessary to use the wait_60_seconds to guarantee the infrastructure is fully built before removing the owner role.
+resource "time_sleep" "wait_60_seconds" {
+  create_duration = "60s"
+
+  depends_on = [
+    module.external_flex_template_infrastructure
+  ]
+}
+
+resource "google_project_iam_binding" "remove_owner_role_from_template" {
+  project = local.project_id
+  role    = "roles/owner"
+  members = []
+
+  depends_on = [
+    time_sleep.wait_60_seconds
+  ]
+}
+
 resource "null_resource" "python_de_identification_flex_template" {
 
   triggers = {

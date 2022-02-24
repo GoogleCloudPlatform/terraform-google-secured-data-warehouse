@@ -164,7 +164,7 @@ You must use the appropriate Service Account created by the main module.
   - Module output: `confidential_dataflow_controller_service_account_email`
   - Email format: `sa-dataflow-controller-reid@<CONFIDENTIAL-DATA-PROJECT-ID>.iam.gserviceaccount.com`
 
-Using gcloud command:
+Using `gcloud` command:
 
 ```console
 export project_id=<ARTIFACT-REGISTRY-PROJECT-ID>
