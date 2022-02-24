@@ -224,7 +224,7 @@ public class DLPTextToBigQueryStreaming {
      * that it can be
      * used in the next transform.
      */
-    final PCollectionView<List<KV<String, List<String>>>> headerMap = csvFiles
+    PCollectionView<List<KV<String, List<String>>>> headerMap = csvFiles
 
         // 2) Create a side input for the window containing list of headers par file.
         .apply(
@@ -419,7 +419,6 @@ public class DLPTextToBigQueryStreaming {
     public CSVReader(
         ValueProvider<Integer> batchSize,
         PCollectionView<List<KV<String, List<String>>>> headerMap) {
-      lineCount = 1;
       this.batchSize = batchSize;
       this.headerMap = headerMap;
       this.csvHeaders = new ArrayList<>();
@@ -429,6 +428,8 @@ public class DLPTextToBigQueryStreaming {
     public void processElement(ProcessContext c, RestrictionTracker<OffsetRange, Long> tracker)
         throws IOException {
       for (long i = tracker.currentRestriction().getFrom(); tracker.tryClaim(i); ++i) {
+        lineCount = 1;
+
         String fileKey = c.element().getKey();
         try (BufferedReader br = getReader(c.element().getValue())) {
 
@@ -666,7 +667,6 @@ public class DLPTextToBigQueryStreaming {
 
     @ProcessElement
     public void processElement(ProcessContext c) {
-
       Table tokenizedData = c.element().getValue();
       List<String> headers = tokenizedData.getHeadersList().stream()
           .map(fid -> fid.getName())
@@ -709,7 +709,6 @@ public class DLPTextToBigQueryStreaming {
           i == fields.length - 1 ? "": ",");
     }
     jsonSchema += "]}";
-    LOG.debug(jsonSchema);
     return jsonSchema;
   }
 
