@@ -41,7 +41,7 @@ steps:
 1. Follow the instructions in [Using Flex Templates:Setting up your development environment](https://cloud.google.com/dataflow/docs/guides/templates/using-flex-templates#setting_up_your_development_environment) to configure your environment to build the images.
 2. Build the flex template
 3. make sure you have input BigQuery table available with correct data (and corresponding DLP template)
-4. apply the `example/bigquery-confidential-data`
+4. apply the [example/standalone](../../../examples/standalone/README.md)
 5. run the dataflow job
 
 ```shell
@@ -56,16 +56,17 @@ Run the Flex Image:
 gcloud dataflow flex-template run "regional-bq-dlp-bq-`date +%Y%m%d-%H%M%S`" \
     --template-file-gcs-location "$TEMPLATE_PATH" \
     --parameters inputBigQueryTable="PROJECT:DATASET.TABLE" \
-    --parameters outputBigQueryDataset="DATASET_NAME" \
+    --parameters outputBigQueryTable="PROJECT:DATASET.TABLE" \
     --parameters deidentifyTemplateName="FULL_DEIDENTIFY_TEMPLATE_NAME" \
     --parameters dlpProjectId="DLP_PROJECT_ID" \
     --parameters dlpLocation="DLP_LOCATION" \
     --parameters confidentialDataProjectId="CONFIDENTIAL_DATA_PROJECT_ID" \
     --parameters dlpTransform="DLP_TRANSFORMATION_TYPE" \
+    --parameters batchSize="BATCH_SIZE" \
+    --parameters bqSchema="FIELD_1:STRING,FIELD_2:STRING,..." \
     --project=${PROJECT} \
     --service-account-email="DATAFLOW_SERVICE_ACCOUNT" \
-    --network="NETWORK" \
-    --subnetwork="SUBNET" \
+    --subnetwork="SUBNETWORK" \
     --region="${LOCATION}" \
     --disable-public-ips \
     --enable-streaming-engine
