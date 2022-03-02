@@ -1,6 +1,6 @@
 # Regional DLP Transformation BigQuery to BigQuery flex template
 
-## Build the flex template with Cloud Build
+## Build the flex template
 
 The java dataflow is inspired by the work captured by a DLP solution.  Learn more at [Migrate Sensitive Data in BigQuery Using Dataflow & Cloud DLP](https://github.com/GoogleCloudPlatform/dlp-dataflow-deidentification)
 
@@ -13,6 +13,8 @@ export BUCKET=<YOUR-FLEX-TEMPLATE-BUCKET>
 export TEMPLATE_IMAGE_TAG="$LOCATION-docker.pkg.dev/$PROJECT/flex-templates/samples/regional-bq-dlp-bq-streaming:latest"
 export TEMPLATE_GS_PATH="gs://$BUCKET/flex-template-samples/regional-bq-dlp-bq-streaming.json"
 ```
+
+### Create the template with Cloud Build
 
 ```shell
 # build the flex template
@@ -36,38 +38,28 @@ steps:
   entrypoint: 'mvn'
 ```
 
-## Run the flex template manually
+### Manually Create the template
 
-1. Follow the instructions in [Using Flex Templates:Setting up your development environment](https://cloud.google.com/dataflow/docs/guides/templates/using-flex-templates#setting_up_your_development_environment) to configure your environment to build the images.
-2. Build the flex template
-3. make sure you have input BigQuery table available with correct data (and corresponding DLP template)
-4. apply the [example/standalone](../../../examples/standalone/README.md)
-5. run the dataflow job
+Follow the instructions in [Using Flex Templates:Setting up your development environment](https://cloud.google.com/dataflow/docs/guides/templates/using-flex-templates#setting_up_your_development_environment) to configure your environment to build the images.
+
+After configuring your environment set the following environment variables based in the resources create in the infrastructure step:
+
+Run Maven to create the uber-jar file:
 
 ```shell
-export LOCATION=<REPOSITORY-LOCATION>
-export PROJECT=<YOUR-PROJECT>
-export TEMPLATE_PATH=<YOUR_GCS_PATH> # e.g "gs://BUCKET/flex-template-samples/regional-bq-dlp-bq-streaming.json"
+ mvn clean package
 ```
 
-Run the Flex Image:
+Build the Flex Image:
 
 ```shell
-gcloud dataflow flex-template run "regional-bq-dlp-bq-`date +%Y%m%d-%H%M%S`" \
-    --template-file-gcs-location "$TEMPLATE_PATH" \
-    --parameters inputBigQueryTable="PROJECT:DATASET.TABLE" \
-    --parameters outputBigQueryTable="PROJECT:DATASET.TABLE" \
-    --parameters deidentifyTemplateName="FULL_DEIDENTIFY_TEMPLATE_NAME" \
-    --parameters dlpProjectId="DLP_PROJECT_ID" \
-    --parameters dlpLocation="DLP_LOCATION" \
-    --parameters confidentialDataProjectId="CONFIDENTIAL_DATA_PROJECT_ID" \
-    --parameters dlpTransform="DLP_TRANSFORMATION_TYPE" \
-    --parameters batchSize="BATCH_SIZE" \
-    --parameters bqSchema="FIELD_1:STRING,FIELD_2:STRING,..." \
-    --project=${PROJECT} \
-    --service-account-email="DATAFLOW_SERVICE_ACCOUNT" \
-    --subnetwork="SUBNETWORK" \
-    --region="${LOCATION}" \
-    --disable-public-ips \
-    --enable-streaming-engine
+
+gcloud dataflow flex-template build $TEMPLATE_GS_PATH \
+  --image-gcr-path "$TEMPLATE_IMAGE_TAG" \
+  --sdk-language "JAVA" \
+  --project=$PROJECT \
+  --flex-template-base-image JAVA11 \
+  --metadata-file "./metadata.json" \
+  --jar "./target/regional-bq-dlp-bq-streaming-1.0.0.jar" \
+  --env FLEX_TEMPLATE_JAVA_MAIN_CLASS="com.google.cloud.blueprints.datawarehouse.BigQueryDLPBigQuery"
 ```
