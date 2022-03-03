@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-variable "create_projects" {
-  description = "(Optional) If set to true, will allow the customer to use its own projects."
-  type        = bool
-  default     = false
-}
+#variable "create_projects" {
+#  description = "(Optional) If set to true, will allow the customer to use its own projects."
+#  type        = bool
+#  default     = false
+#}
 
 variable "folder_id" {
   description = "The folder to deploy in."
