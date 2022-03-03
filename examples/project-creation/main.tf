@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,115 +14,6 @@
  * limitations under the License.
  */
 
-module "data_ingestion_project_id" {
-  source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.0"
-
-  name                    = var.data_ingestion_project_id
-  org_id                  = var.org_id
-  folder_id               = var.folder_id
-  billing_account         = var.billing_account
-  default_service_account = "deprivilege"
-
-  activate_apis = [
-    "datacatalog.googleapis.com",
-    "cloudresourcemanager.googleapis.com",
-    "storage-api.googleapis.com",
-    "serviceusage.googleapis.com",
-    "iam.googleapis.com",
-    "dns.googleapis.com",
-    "pubsub.googleapis.com",
-    "bigquery.googleapis.com",
-    "accesscontextmanager.googleapis.com",
-    "cloudbilling.googleapis.com",
-    "cloudkms.googleapis.com",
-    "dataflow.googleapis.com",
-    "dlp.googleapis.com",
-    "cloudscheduler.googleapis.com",
-    "cloudbuild.googleapis.com",
-    "appengine.googleapis.com",
-    "artifactregistry.googleapis.com",
-    "compute.googleapis.com"
-  ]
-}
-
-module "data_governance_project_id" {
-  source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.0"
-
-  name                    = var.data_governance_project_id
-  org_id                  = var.org_id
-  folder_id               = var.folder_id
-  billing_account         = var.billing_account
-  default_service_account = "deprivilege"
-
-  activate_apis = [
-    "datacatalog.googleapis.com",
-    "cloudresourcemanager.googleapis.com",
-    "storage-api.googleapis.com",
-    "serviceusage.googleapis.com",
-    "iam.googleapis.com",
-    "accesscontextmanager.googleapis.com",
-    "cloudbilling.googleapis.com",
-    "cloudkms.googleapis.com",
-    "dlp.googleapis.com",
-    "secretmanager.googleapis.com"
-  ]
-}
-
-module "confidential_data_project_id" {
-  source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.0"
-
-  name                    = var.confidential_data_project_id
-  org_id                  = var.org_id
-  folder_id               = var.folder_id
-  billing_account         = var.billing_account
-  default_service_account = "deprivilege"
-
-  activate_apis = [
-    "cloudresourcemanager.googleapis.com",
-    "storage-api.googleapis.com",
-    "serviceusage.googleapis.com",
-    "iam.googleapis.com",
-    "bigquery.googleapis.com",
-    "accesscontextmanager.googleapis.com",
-    "cloudbilling.googleapis.com",
-    "cloudkms.googleapis.com"
-  ]
-}
-
-module "non_confidential_data_project_id" {
-  source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.0"
-
-  name                    = var.non_confidential_data_project_id
-  org_id                  = var.org_id
-  folder_id               = var.folder_id
-  billing_account         = var.billing_account
-  default_service_account = "deprivilege"
-
-  activate_apis = [
-    "cloudresourcemanager.googleapis.com",
-    "storage-api.googleapis.com",
-    "serviceusage.googleapis.com",
-    "iam.googleapis.com",
-    "bigquery.googleapis.com",
-    "accesscontextmanager.googleapis.com",
-    "cloudbilling.googleapis.com",
-    "cloudkms.googleapis.com",
-    "dataflow.googleapis.com",
-    "dlp.googleapis.com",
-    "datacatalog.googleapis.com",
-    "dns.googleapis.com",
-    "compute.googleapis.com",
-    "cloudbuild.googleapis.com",
-    "artifactregistry.googleapis.com"
-  ]
-}
-
-###
-
 module "secured_data_warehouse" {
   source                           = "../.."
   org_id                           = var.org_id
@@ -133,9 +24,9 @@ module "secured_data_warehouse" {
   sdx_project_number               = var.sdx_project_number
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  bucket_name                      = "bucket_simple_example"
-  dataset_id                       = "dataset_simple_example"
-  cmek_keyring_name                = "key_name_simple_example"
+  bucket_name                      = "bucket_project_creation_example"
+  dataset_id                       = "dataset_project_creation_example"
+  cmek_keyring_name                = "key_name_project_creation_example"
   pubsub_resource_location         = "us-east4"
   location                         = "us-east4"
   delete_contents_on_destroy       = var.delete_contents_on_destroy
