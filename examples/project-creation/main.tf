@@ -25,7 +25,7 @@ module "secured_data_warehouse" {
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
   bucket_name                      = "bucket_example"
-  dataset_id                       = "dataset_pexample"
+  dataset_id                       = "dataset_example"
   cmek_keyring_name                = "key_name_example"
   pubsub_resource_location         = "us-east4"
   location                         = "us-east4"
