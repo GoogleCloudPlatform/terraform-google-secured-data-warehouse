@@ -24,9 +24,9 @@ module "secured_data_warehouse" {
   sdx_project_number               = var.sdx_project_number
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  bucket_name                      = "bucket_project_creation_example"
-  dataset_id                       = "dataset_project_creation_example"
-  cmek_keyring_name                = "key_name_project_creation_example"
+  bucket_name                      = "bucket_example"
+  dataset_id                       = "dataset_pexample"
+  cmek_keyring_name                = "key_name_example"
   pubsub_resource_location         = "us-east4"
   location                         = "us-east4"
   delete_contents_on_destroy       = var.delete_contents_on_destroy

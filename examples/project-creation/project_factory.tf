@@ -18,6 +18,8 @@ module "data_ingestion_project_id" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
 
+  count = var.create_projects ? 1 : 0
+
   name                    = var.data_ingestion_project_id
   org_id                  = var.org_id
   folder_id               = var.folder_id
@@ -49,6 +51,8 @@ module "data_ingestion_project_id" {
 module "data_governance_project_id" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
+  
+  count = var.create_projects ? 1 : 0
 
   name                    = var.data_governance_project_id
   org_id                  = var.org_id
@@ -73,6 +77,8 @@ module "data_governance_project_id" {
 module "confidential_data_project_id" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
+  
+  count = var.create_projects ? 1 : 0
 
   name                    = var.confidential_data_project_id
   org_id                  = var.org_id
@@ -95,6 +101,8 @@ module "confidential_data_project_id" {
 module "non_confidential_data_project_id" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
+  
+  count = var.create_projects ? 1 : 0
 
   name                    = var.non_confidential_data_project_id
   org_id                  = var.org_id
