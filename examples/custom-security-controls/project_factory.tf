@@ -16,7 +16,7 @@
 
 module "data_ingestion_project_id" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 12.0.0"
+  version = "~> 10.0"
 
   count = var.create_projects ? 1 : 0
 
@@ -50,7 +50,7 @@ module "data_ingestion_project_id" {
 
 module "data_governance_project_id" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 12.0.0"
+  version = "~> 10.0"
   
   count = var.create_projects ? 1 : 0
 
@@ -76,7 +76,7 @@ module "data_governance_project_id" {
 
 module "confidential_data_project_id" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 12.0.0"
+  version = "~> 10.0"
   
   count = var.create_projects ? 1 : 0
 
@@ -100,7 +100,7 @@ module "confidential_data_project_id" {
 
 module "non_confidential_data_project_id" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 12.0.0"
+  version = "~> 10.0"
   
   count = var.create_projects ? 1 : 0
 
