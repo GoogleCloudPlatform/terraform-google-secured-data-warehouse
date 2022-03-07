@@ -17,7 +17,6 @@ There is a [Wrapped Key Helper](../../helpers/wrapped-key/README.md) python scri
 |------|-------------|------|---------|:--------:|
 | crypto\_key | The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP. | `string` | n/a | yes |
 | dataflow\_service\_account | The Service Account email that will be used to identify the VMs in which the jobs are running. | `string` | n/a | yes |
-| labels | (Optional) Default label used by Data Warehouse resources. | `map(string)` | <pre>{<br>  "environment": "default"<br>}</pre> | no |
 | project\_id | The ID of the project in which to provision resources. | `string` | n/a | yes |
 | terraform\_service\_account | The email address of the service account that will run the Terraform config. | `string` | n/a | yes |
 | wrapped\_key | The base64 encoded data crypto key wrapped by KMS. | `string` | n/a | yes |
