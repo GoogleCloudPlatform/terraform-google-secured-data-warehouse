@@ -17,9 +17,7 @@
 variable "labels" {
   description = "(Optional) Default label used by Data Warehouse resources."
   type        = map(string)
-  default = {
-    environment = ""
-  }
+  default = {}
 }
 
 variable "org_id" {
