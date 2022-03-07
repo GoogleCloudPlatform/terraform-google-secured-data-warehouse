@@ -141,6 +141,7 @@ data "google_secret_manager_secret_version" "wrapped_key" {
 module "centralized_logging" {
   source                      = "../../modules/centralized-logging"
   projects_ids                = local.projects_ids
+  labels                      = var.labels
   logging_project_id          = module.base_projects.data_governance_project_id
   kms_project_id              = module.base_projects.data_governance_project_id
   bucket_name                 = "bkt-logging-${module.base_projects.data_governance_project_id}"
