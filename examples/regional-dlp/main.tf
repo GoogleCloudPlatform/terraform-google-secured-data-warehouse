@@ -22,6 +22,7 @@ locals {
 module "data_ingestion" {
   source                           = "../.."
   org_id                           = var.org_id
+  labels                           = var.labels
   data_governance_project_id       = var.data_governance_project_id
   confidential_data_project_id     = var.confidential_data_project_id
   non_confidential_data_project_id = var.non_confidential_data_project_id
