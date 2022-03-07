@@ -24,6 +24,7 @@ module "data_ingestion_bucket" {
   version = "~> 2.0"
 
   project_id      = var.data_ingestion_project_id
+  labels          = var.labels
   name            = "bkt-${var.data_ingestion_project_id}-${var.bucket_name}-${random_id.suffix.hex}"
   location        = var.bucket_location
   storage_class   = var.bucket_class
@@ -40,6 +41,7 @@ module "dataflow_bucket" {
   version = "~> 2.0"
 
   project_id    = var.data_ingestion_project_id
+  labels        = var.labels
   name          = "bkt-${var.data_ingestion_project_id}-tmp-dataflow-${random_id.suffix.hex}"
   location      = var.bucket_location
   storage_class = "STANDARD"
@@ -57,6 +59,7 @@ module "data_ingestion_topic" {
   version = "~> 2.0"
 
   project_id             = var.data_ingestion_project_id
+  topic_labels           = var.labels
   topic                  = "tpc-data-ingestion-${random_id.suffix.hex}"
   topic_kms_key_name     = var.data_ingestion_encryption_key
   message_storage_policy = { allowed_persistence_regions : [var.pubsub_resource_location] }
@@ -68,6 +71,7 @@ module "bigquery_dataset" {
   version = "~> 5.2.0"
 
   project_id                  = var.non_confidential_data_project_id
+  dataset_labels              = var.labels
   dataset_id                  = var.dataset_id
   dataset_name                = var.dataset_name
   description                 = var.dataset_description

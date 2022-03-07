@@ -45,6 +45,7 @@ module "cmek" {
   count = var.create_bucket ? 1 : 0
 
   project_id           = var.kms_project_id
+  labels               = var.labels
   location             = var.logging_location
   keyring              = local.logging_keyring_name
   key_rotation_period  = var.key_rotation_period_seconds

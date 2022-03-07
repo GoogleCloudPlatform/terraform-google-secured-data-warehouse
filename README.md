@@ -108,6 +108,7 @@ module "secured_data_warehouse" {
 | enable\_bigquery\_read\_roles\_in\_data\_ingestion | (Optional) If set to true, it will grant to the dataflow controller service account created in the data ingestion project the necessary roles to read from a bigquery table. | `bool` | `false` | no |
 | key\_rotation\_period\_seconds | Rotation period for keys. The default value is 30 days. | `string` | `"2592000s"` | no |
 | kms\_key\_protection\_level | The protection level to use when creating a key. Possible values: ["SOFTWARE", "HSM"] | `string` | `"HSM"` | no |
+| labels | (Optional) Default label used by Data Warehouse resources. | `map(string)` | <pre>{<br>  "environment": "default"<br>}</pre> | no |
 | location | The location for the KMS Customer Managed Encryption Keys, Cloud Storage Buckets, and Bigquery datasets. This location can be a multi-region. | `string` | `"us-east4"` | no |
 | network\_administrator\_group | Google Cloud IAM group that reviews network configuration. Typically, this includes members of the networking team. | `string` | n/a | yes |
 | non\_confidential\_data\_project\_id | The ID of the project in which the Bigquery will be created. | `string` | n/a | yes |
