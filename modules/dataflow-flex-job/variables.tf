@@ -14,6 +14,14 @@
  * limitations under the License.
  */
 
+variable "labels" {
+  description = "(Optional) Default label used by Data Warehouse resources."
+  type        = map(string)
+  default = {
+    environment = "default"
+  }
+}
+
 variable "project_id" {
   description = "The project in which the resource belongs. If it is not provided, the provider project is used."
   type        = string

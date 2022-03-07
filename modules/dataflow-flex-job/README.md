@@ -77,6 +77,7 @@ module "dataflow-flex-job" {
 | enable\_streaming\_engine | Enable/disable the use of Streaming Engine for the job. Note that Streaming Engine is enabled by default for pipelines developed against the Beam SDK for Python v2.21.0 or later when using Python 3. | `bool` | `true` | no |
 | job\_language | Language of the flex template code. Options are 'JAVA' or 'PYTHON'. | `string` | `"JAVA"` | no |
 | kms\_key\_name | The name for the Cloud KMS key for the job. Key format is: `projects/PROJECT_ID/locations/LOCATION/keyRings/KEY_RING/cryptoKeys/KEY`. | `string` | n/a | yes |
+| labels | (Optional) Default label used by Data Warehouse resources. | `map(string)` | <pre>{<br>  "environment": "default"<br>}</pre> | no |
 | max\_workers | The number of workers permitted to work on the job. More workers may improve processing speed at additional cost. | `number` | `1` | no |
 | name | The name of the dataflow flex job. | `string` | n/a | yes |
 | network\_tags | Network TAGs to be added to the VM instances. Python flex template jobs are only able to set network tags for the launcher VM. For the harness VM it is necessary to configure your firewall rule to use the network tag 'dataflow'. | `list(string)` | `[]` | no |

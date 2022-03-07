@@ -14,6 +14,14 @@
  * limitations under the License.
  */
 
+variable "labels" {
+  description = "(Optional) Default label used by Data Warehouse resources."
+  type        = map(string)
+  default = {
+    environment = "default"
+  }
+}
+
 variable "terraform_service_account" {
   description = "The email address of the service account that will run the Terraform code."
   type        = string

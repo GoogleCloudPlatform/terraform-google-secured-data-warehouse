@@ -14,6 +14,14 @@
  * limitations under the License.
  */
 
+variable "labels" {
+  description = "(Optional) Default label used by Data Warehouse resources."
+  type        = map(string)
+  default = {
+    environment = "default"
+  }
+}
+
 variable "remove_owner_role" {
   description = "(Optional) If set to true, remove all owner roles in all projects in case it has been found in some project."
   type        = bool

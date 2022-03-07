@@ -124,6 +124,7 @@ module "cmek" {
   version = "~> 2.0.1"
 
   project_id           = var.data_governance_project_id
+  labels               = var.labels
   location             = var.cmek_location
   keyring              = local.data_ingestion_keyring_name
   key_rotation_period  = var.key_rotation_period_seconds

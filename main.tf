@@ -40,6 +40,7 @@ module "data_governance" {
   source = "./modules/data-governance"
 
   terraform_service_account        = var.terraform_service_account
+  labels                           = var.labels
   data_ingestion_project_id        = var.data_ingestion_project_id
   data_governance_project_id       = var.data_governance_project_id
   confidential_data_project_id     = var.confidential_data_project_id
@@ -55,6 +56,7 @@ module "data_ingestion" {
   source = "./modules/data-ingestion"
 
   dataset_default_table_expiration_ms = var.dataset_default_table_expiration_ms
+  labels                              = var.labels
   bucket_name                         = var.bucket_name
   bucket_class                        = var.bucket_class
   bucket_lifecycle_rules              = var.bucket_lifecycle_rules
@@ -79,6 +81,7 @@ module "bigquery_confidential_data" {
   source = "./modules/confidential-data"
 
   data_governance_project_id            = var.data_governance_project_id
+  labels                                = var.labels
   confidential_data_project_id          = var.confidential_data_project_id
   non_confidential_data_project_id      = var.non_confidential_data_project_id
   dataset_id                            = var.confidential_dataset_id
