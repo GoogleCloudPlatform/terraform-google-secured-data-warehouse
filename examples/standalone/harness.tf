@@ -97,6 +97,7 @@ resource "google_secret_manager_secret" "wrapped_key_secret" {
   provider = google-beta
 
   secret_id = local.secret_name
+  labels    = var.labels
   project   = module.base_projects.data_governance_project_id
 
   replication {
