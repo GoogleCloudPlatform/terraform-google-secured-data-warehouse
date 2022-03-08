@@ -85,6 +85,7 @@ module "tek_wrapping_key" {
   version = "~> 1.2"
 
   project_id           = module.base_projects.data_governance_project_id
+  labels               = var.labels
   location             = local.location
   keyring              = local.kek_keyring
   key_rotation_period  = local.key_rotation_period_seconds
