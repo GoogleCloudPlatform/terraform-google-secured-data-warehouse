@@ -1,6 +1,14 @@
 # Custom Security Control Example
 
-This example illustrates how to use the `secured-data-warehouse` module. Using this example you can choose between use your own projects or create new ones from scratch.
+This example illustrates how to use the `secured-data-warehouse` module. Using this example you can choose between using your own projects or creating new ones from scratch.
+
+If you
+switch the variable `create_projects` from false to true in the variables.tf file it will create four new projects:
+
+- Data Governance project.
+- Data Ingestion project.
+- Non-Confidential Data project.
+- Confidential Data project.
 
 It uses:
 
@@ -17,16 +25,16 @@ It uses:
 |------|-------------|------|---------|:--------:|
 | access\_context\_manager\_policy\_id | The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format="value(name)"`. | `string` | `""` | no |
 | billing\_account | The billing account id associated with the project, e.g. XXXXXX-YYYYYY-ZZZZZZ. | `string` | n/a | yes |
-| confidential\_data\_project\_id | Project where the confidential datasets and tables are created. | `string` | n/a | yes |
-| create\_projects | (Optional) If set to false, it will allow the customer to use its own projects, otherwise projects will be created from scratch. | `bool` | `false` | no |
+| confidential\_data\_project\_id | Project where the confidential datasets and tables are created. If the variable create\_projects is set to true then new projects will be created for the data warehouse, if set to false existing projects will be used. | `string` | n/a | yes |
+| create\_projects | (Optional) If set to true to create new projects for the data warehouse, if set to false existing projects will be used. | `bool` | `false` | no |
 | data\_analyst\_group | Google Cloud IAM group that analyzes the data in the warehouse. | `string` | n/a | yes |
 | data\_engineer\_group | Google Cloud IAM group that sets up and maintains the data pipeline and warehouse. | `string` | n/a | yes |
-| data\_governance\_project\_id | The ID of the project in which the data governance resources will be created. | `string` | n/a | yes |
-| data\_ingestion\_project\_id | The ID of the project in which the data ingestion resources will be created. | `string` | n/a | yes |
+| data\_governance\_project\_id | The ID of the project in which the data governance resources will be created. If the variable create\_projects is set to true then new projects will be created for the data warehouse, if set to false existing projects will be used. | `string` | n/a | yes |
+| data\_ingestion\_project\_id | The ID of the project in which the data ingestion resources will be created. If the variable create\_projects is set to true then new projects will be created for the data warehouse, if set to false existing projects will be used. | `string` | n/a | yes |
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `false` | no |
-| folder\_id | The folder to deploy in. | `string` | n/a | yes |
+| folder\_id | The folder where the projects will be deployed in case you set the variable create\_projects as true. | `string` | n/a | yes |
 | network\_administrator\_group | Google Cloud IAM group that reviews network configuration. Typically, this includes members of the networking team. | `string` | n/a | yes |
-| non\_confidential\_data\_project\_id | The ID of the project in which the Bigquery will be created. | `string` | n/a | yes |
+| non\_confidential\_data\_project\_id | The ID of the project in which the Bigquery will be created. If the variable create\_projects is set to true then new projects will be created for the data warehouse, if set to false existing projects will be used. | `string` | n/a | yes |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
 | perimeter\_additional\_members | The list of all members to be added on perimeter access, except the service accounts created by this module. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required. | `list(string)` | n/a | yes |
 | sdx\_project\_number | The Project Number to configure Secure data exchange with egress rule for the dataflow templates. | `string` | n/a | yes |

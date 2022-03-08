@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
- variable "create_projects" {
-   description = "(Optional) If set to false, it will allow the customer to use its own projects, otherwise projects will be created from scratch."
-   type        = bool
-   default     = false
- }
+variable "create_projects" {
+  description = "(Optional) If set to true to create new projects for the data warehouse, if set to false existing projects will be used."
+  type        = bool
+  default     = false
+}
 
 variable "folder_id" {
-  description = "The folder to deploy in."
+  description = "The folder where the projects will be deployed in case you set the variable create_projects as true."
   type        = string
 }
 
@@ -36,22 +36,22 @@ variable "org_id" {
 }
 
 variable "data_governance_project_id" {
-  description = "The ID of the project in which the data governance resources will be created."
+  description = "The ID of the project in which the data governance resources will be created. If the variable create_projects is set to true then new projects will be created for the data warehouse, if set to false existing projects will be used."
   type        = string
 }
 
 variable "data_ingestion_project_id" {
-  description = "The ID of the project in which the data ingestion resources will be created."
+  description = "The ID of the project in which the data ingestion resources will be created. If the variable create_projects is set to true then new projects will be created for the data warehouse, if set to false existing projects will be used."
   type        = string
 }
 
 variable "non_confidential_data_project_id" {
-  description = "The ID of the project in which the Bigquery will be created."
+  description = "The ID of the project in which the Bigquery will be created. If the variable create_projects is set to true then new projects will be created for the data warehouse, if set to false existing projects will be used."
   type        = string
 }
 
 variable "confidential_data_project_id" {
-  description = "Project where the confidential datasets and tables are created."
+  description = "Project where the confidential datasets and tables are created. If the variable create_projects is set to true then new projects will be created for the data warehouse, if set to false existing projects will be used."
   type        = string
 }
 
