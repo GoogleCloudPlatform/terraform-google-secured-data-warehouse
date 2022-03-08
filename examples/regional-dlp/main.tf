@@ -31,7 +31,7 @@ module "data_ingestion" {
   access_context_manager_policy_id = var.access_context_manager_policy_id
   bucket_name                      = "dlp-flex-data-ing"
   dataset_id                       = "dlp_flex_data_ing"
-  cmek_keyring_name                = "dlp_flex_data-ing"
+  cmek_keyring_name                = "dlp-flex-data-ing"
   pubsub_resource_location         = local.location
   location                         = local.location
   delete_contents_on_destroy       = var.delete_contents_on_destroy
