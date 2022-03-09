@@ -14,6 +14,45 @@
  * limitations under the License.
  */
 
+locals {
+  projects_ids = {
+    data_ingestion   = var.data_ingestion_project_id,
+    governance       = var.data_governance_project_id,
+    non_confidential = var.non_confidential_data_project_id,
+    confidential     = var.confidential_data_project_id
+  }
+}
+
+resource "time_sleep" "wait_60_seconds_projects" {
+  create_duration = "60s"
+
+  depends_on = [
+    module.iam_projects
+  ]
+}
+
+resource "google_project_iam_binding" "remove_owner_role" {
+  for_each = local.projects_ids
+
+  project = each.value
+  role    = "roles/owner"
+  members = []
+
+  depends_on = [
+    time_sleep.wait_60_seconds_projects
+  ]
+}
+
+module "iam_projects" {
+  source = "../../test//setup/iam-projects"
+
+  data_ingestion_project_id        = var.data_ingestion_project_id
+  non_confidential_data_project_id = var.non_confidential_data_project_id
+  data_governance_project_id       = var.data_governance_project_id
+  confidential_data_project_id     = var.confidential_data_project_id
+  service_account_email            = var.terraform_service_account
+}
+
 module "data_ingestion_project_id" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
@@ -46,6 +85,11 @@ module "data_ingestion_project_id" {
     "artifactregistry.googleapis.com",
     "compute.googleapis.com"
   ]
+
+  depends_on = [
+    module.iam_projects,
+    google_project_iam_binding.remove_owner_role
+  ]
 }
 
 module "data_governance_project_id" {
@@ -72,6 +116,11 @@ module "data_governance_project_id" {
     "dlp.googleapis.com",
     "secretmanager.googleapis.com"
   ]
+
+  depends_on = [
+    module.iam_projects,
+    google_project_iam_binding.remove_owner_role
+  ]
 }
 
 module "confidential_data_project_id" {
@@ -95,6 +144,11 @@ module "confidential_data_project_id" {
     "accesscontextmanager.googleapis.com",
     "cloudbilling.googleapis.com",
     "cloudkms.googleapis.com"
+  ]
+
+  depends_on = [
+    module.iam_projects,
+    google_project_iam_binding.remove_owner_role
   ]
 }
 
@@ -126,5 +180,10 @@ module "non_confidential_data_project_id" {
     "compute.googleapis.com",
     "cloudbuild.googleapis.com",
     "artifactregistry.googleapis.com"
+  ]
+
+  depends_on = [
+    module.iam_projects,
+    google_project_iam_binding.remove_owner_role
   ]
 }
