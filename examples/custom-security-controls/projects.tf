@@ -51,6 +51,13 @@ module "iam_projects" {
   data_governance_project_id       = var.data_governance_project_id
   confidential_data_project_id     = var.confidential_data_project_id
   service_account_email            = var.terraform_service_account
+
+  depends_on = [
+    module.data_ingestion_project_id,
+    module.data_governance_project_id,
+    module.confidential_data_project_id,
+    module.non_confidential_data_project_id
+  ]
 }
 
 module "data_ingestion_project_id" {
@@ -85,11 +92,6 @@ module "data_ingestion_project_id" {
     "artifactregistry.googleapis.com",
     "compute.googleapis.com"
   ]
-
-  depends_on = [
-    module.iam_projects,
-    google_project_iam_binding.remove_owner_role
-  ]
 }
 
 module "data_governance_project_id" {
@@ -116,11 +118,6 @@ module "data_governance_project_id" {
     "dlp.googleapis.com",
     "secretmanager.googleapis.com"
   ]
-
-  depends_on = [
-    module.iam_projects,
-    google_project_iam_binding.remove_owner_role
-  ]
 }
 
 module "confidential_data_project_id" {
@@ -144,11 +141,6 @@ module "confidential_data_project_id" {
     "accesscontextmanager.googleapis.com",
     "cloudbilling.googleapis.com",
     "cloudkms.googleapis.com"
-  ]
-
-  depends_on = [
-    module.iam_projects,
-    google_project_iam_binding.remove_owner_role
   ]
 }
 
@@ -180,10 +172,5 @@ module "non_confidential_data_project_id" {
     "compute.googleapis.com",
     "cloudbuild.googleapis.com",
     "artifactregistry.googleapis.com"
-  ]
-
-  depends_on = [
-    module.iam_projects,
-    google_project_iam_binding.remove_owner_role
   ]
 }
