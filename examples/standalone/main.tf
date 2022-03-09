@@ -49,7 +49,7 @@ module "secured_data_warehouse" {
   trusted_locations                = ["us-locations"]
   dataset_id                       = local.non_confidential_dataset_id
   confidential_dataset_id          = local.confidential_dataset_id
-  cmek_keyring_name                = "cmek_keyring"
+  cmek_keyring_name                = "cmek-keyring"
   delete_contents_on_destroy       = var.delete_contents_on_destroy
   perimeter_additional_members     = var.perimeter_additional_members
   data_engineer_group              = var.data_engineer_group
