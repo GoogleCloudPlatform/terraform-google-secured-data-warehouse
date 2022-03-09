@@ -1,22 +1,60 @@
 # Custom Security Control Example
 
-This example illustrates how to use the `secured-data-warehouse` module. Using this example you can choose between using your own projects or creating new ones from scratch.
+This examples deploys the *Secured Data Warehouse* blueprint [module](../../README.md).
+Using this example you can choose between using existing projects or
+letting the example create the required projects needed to deploy it.
 
-If you
-switch the variable `create_projects` from false to true in the variables.tf file it will create four new projects:
+Setting the variable `create_projects` to `true` will make the example create the four projects needed by the *Secured Data Warehouse*:
 
 - Data Governance project.
 - Data Ingestion project.
 - Non-Confidential Data project.
 - Confidential Data project.
 
-It uses:
+## Usage
 
-- The [Secured data warehouse](../../README.md) module to create the Secured data warehouse infrastructure.
+To provision this example, run the following from within this directory:
+
+- `terraform init` to get the plugins
+- `terraform plan` to see the infrastructure plan
+- `terraform apply` to apply the infrastructure build
+- `terraform destroy` to destroy the built infrastructure
+
+### Clean up
+
+- Run `terraform destroy` to clean up your environment.
+
+### Perimeter members list
+
+To be able to see the resources protected by the VPC Service Controls [Perimeters](https://cloud.google.com/vpc-service-controls/docs/service-perimeters) in the Google Cloud Console
+you need to add your user in the variable `perimeter_additional_members`.
 
 ## Requirements
 
 1. The [Secured data warehouse](../../README.md#requirements) module requirements to create the Secured data warehouse infrastructure.
+
+If the projects are created by the example, instead of the project level roles listed in the main module [README](../../README.md#service_account) you will need the following roles in the folder in which the projects will be created:
+
+- Logging Admin: `roles/logging.admin`
+- Project Creator: `roles/resourcemanager.projectCreator`
+- Project Deleter: `roles/resourcemanager.projectDeleter`
+- Project IAM Admin: `roles/resourcemanager.projectIamAdmin`
+- Service Usage Admin: `roles/serviceusage.serviceUsageAdmin`
+
+It will also be necessary to grant the `Billing Account User` role to the [service account](https://cloud.google.com/billing/docs/how-to/billing-access#update-cloud-billing-permissions).
+
+You can run the following `gcloud` command to assign `Billing Account User` role to the service account.
+
+```sh
+export SA_EMAIL=<YOUR-SA-EMAIL>
+export BILLING_ACCOUNT=<YOUR-BILLING-ACCOUNT>
+
+gcloud beta billing accounts add-iam-policy-binding "${BILLING_ACCOUNT}" \
+--member="serviceAccount:${SA_EMAIL}" \
+--role="roles/billing.user"
+```
+
+The user using this service account must have the necessary roles, `Service Account User` and `Service Account Token Creator`, to [impersonate](https://cloud.google.com/iam/docs/impersonating-service-accounts) the service account.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
@@ -65,10 +103,3 @@ It uses:
 | storage\_writer\_service\_account\_email | The Storage writer service account email. Should be used to write data to the buckets the data ingestion pipeline reads from. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
-
-To provision this example, run the following from within this directory:
-
-- `terraform init` to get the plugins
-- `terraform plan` to see the infrastructure plan
-- `terraform apply` to apply the infrastructure build
-- `terraform destroy` to destroy the built infrastructure
