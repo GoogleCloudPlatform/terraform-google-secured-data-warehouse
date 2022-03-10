@@ -43,6 +43,7 @@ module "secured_data_warehouse" {
     module.confidential_data_project_id,
     module.non_confidential_data_project_id,
     module.iam_projects,
+    module.centralized_logging,
     google_project_iam_binding.remove_owner_role
   ]
 }
