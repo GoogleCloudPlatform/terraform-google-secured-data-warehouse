@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+locals {
+  key_rotation_period_seconds = "2592000s" #30 days
+  location                    = "us-east4"
+}
+
 module "secured_data_warehouse" {
   source                           = "../.."
   org_id                           = var.org_id
@@ -27,8 +32,8 @@ module "secured_data_warehouse" {
   bucket_name                      = "bucket_example"
   dataset_id                       = "dataset_example"
   cmek_keyring_name                = "key_name_example"
-  pubsub_resource_location         = "us-east4"
-  location                         = "us-east4"
+  pubsub_resource_location         = local.location
+  location                         = local.location
   delete_contents_on_destroy       = var.delete_contents_on_destroy
   perimeter_additional_members     = var.perimeter_additional_members
   data_engineer_group              = var.data_engineer_group

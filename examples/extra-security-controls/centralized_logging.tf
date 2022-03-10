@@ -14,11 +14,6 @@
  * limitations under the License.
  */
 
-locals {
-  key_rotation_period_seconds = "2592000s" #30 days
-  location                    = "us-east4"
-}
-
 module "centralized_logging" {
   source                      = "../../modules/centralized-logging"
   projects_ids                = local.projects_ids
