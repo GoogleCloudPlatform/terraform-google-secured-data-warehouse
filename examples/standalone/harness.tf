@@ -33,7 +33,7 @@ module "base_projects" {
   source = "../../test//setup/base-projects"
 
   org_id          = var.org_id
-  labels          = var.labels
+  labels          = { environment = "dev" }
   folder_id       = var.folder_id
   billing_account = var.billing_account
   region          = local.location
@@ -85,7 +85,7 @@ module "tek_wrapping_key" {
   version = "~> 1.2"
 
   project_id           = module.base_projects.data_governance_project_id
-  labels               = var.labels
+  labels               = { environment = "dev" }
   location             = local.location
   keyring              = local.kek_keyring
   key_rotation_period  = local.key_rotation_period_seconds
@@ -98,7 +98,7 @@ resource "google_secret_manager_secret" "wrapped_key_secret" {
   provider = google-beta
 
   secret_id = local.secret_name
-  labels    = var.labels
+  labels    = { environment = "dev" }
   project   = module.base_projects.data_governance_project_id
 
   replication {
@@ -144,7 +144,7 @@ data "google_secret_manager_secret_version" "wrapped_key" {
 module "centralized_logging" {
   source                      = "../../modules/centralized-logging"
   projects_ids                = local.projects_ids
-  labels                      = var.labels
+  labels                      = { environment = "dev" }
   logging_project_id          = module.base_projects.data_governance_project_id
   kms_project_id              = module.base_projects.data_governance_project_id
   bucket_name                 = "bkt-logging-${module.base_projects.data_governance_project_id}"

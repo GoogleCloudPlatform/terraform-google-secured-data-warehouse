@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-variable "labels" {
-  description = "(Optional) Label attached to by Data Warehouse resources."
-  type        = map(string)
-  default     = {}
-}
 
 variable "org_id" {
   description = "GCP Organization ID."

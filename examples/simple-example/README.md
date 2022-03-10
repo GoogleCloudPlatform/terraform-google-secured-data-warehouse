@@ -22,7 +22,6 @@ It uses:
 | data\_governance\_project\_id | The ID of the project in which the data governance resources will be created. | `string` | n/a | yes |
 | data\_ingestion\_project\_id | The ID of the project in which the data ingestion resources will be created. | `string` | n/a | yes |
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `false` | no |
-| labels | (Optional) Default label used by Data Warehouse resources. | `map(string)` | `{}` | no |
 | network\_administrator\_group | Google Cloud IAM group that reviews network configuration. Typically, this includes members of the networking team. | `string` | n/a | yes |
 | non\_confidential\_data\_project\_id | The ID of the project in which the Bigquery will be created. | `string` | n/a | yes |
 | org\_id | GCP Organization ID. | `string` | n/a | yes |
