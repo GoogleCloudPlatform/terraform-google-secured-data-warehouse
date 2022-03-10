@@ -41,6 +41,8 @@ module "secured_data_warehouse" {
     module.data_ingestion_project_id,
     module.data_governance_project_id,
     module.confidential_data_project_id,
-    module.non_confidential_data_project_id
+    module.non_confidential_data_project_id,
+    module.iam_projects,
+    google_project_iam_binding.remove_owner_role
   ]
 }
