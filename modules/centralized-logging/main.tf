@@ -94,8 +94,10 @@ resource "google_storage_bucket_iam_member" "storage_sink_member" {
   member = each.value.writer_identity
 }
 
-resource "google_folder_iam_audit_config" "folder_config" {
-  folder  = "folders/${var.parent_folder}"
+resource "google_project_iam_audit_config" "project_config" {
+  for_each = var.projects_ids
+
+  project = "projects/${each.value}"
   service = "allServices"
 
   ###################################################################################################
