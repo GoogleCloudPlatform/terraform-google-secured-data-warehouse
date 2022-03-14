@@ -66,6 +66,50 @@ locals {
 
   actual_policy = var.access_context_manager_policy_id != "" ? var.access_context_manager_policy_id : google_access_context_manager_access_policy.access_policy[0].name
 
+  data_ingestion_default_egress_rule = var.sdx_project_number == "" ? [] : [
+    {
+      "from" = {
+        "identity_type" = ""
+        "identities" = distinct(concat(
+          var.data_ingestion_dataflow_deployer_identities,
+          ["serviceAccount:${var.terraform_service_account}"]
+        ))
+      },
+      "to" = {
+        "resources" = ["projects/${var.sdx_project_number}"]
+        "operations" = {
+          "storage.googleapis.com" = {
+            "methods" = [
+              "google.storage.objects.get"
+            ]
+          }
+        }
+      }
+    },
+  ]
+
+  confidential_data_default_egress_rule = var.sdx_project_number == "" ? [] : [
+    {
+      "from" = {
+        "identity_type" = ""
+        "identities" = distinct(concat(
+          var.confidential_data_dataflow_deployer_identities,
+          ["serviceAccount:${var.terraform_service_account}"]
+        ))
+      },
+      "to" = {
+        "resources" = ["projects/${var.sdx_project_number}"]
+        "operations" = {
+          "storage.googleapis.com" = {
+            "methods" = [
+              "google.storage.objects.get"
+            ]
+          }
+        }
+      }
+    }
+  ]
+
 }
 
 resource "google_access_context_manager_access_policy" "access_policy" {
@@ -122,27 +166,10 @@ module "data_ingestion_vpc_sc" {
   perimeter_members                = local.perimeter_members_data_ingestion
   restricted_services              = local.restricted_services
 
-  egress_policies = distinct(concat([
-    {
-      "from" = {
-        "identity_type" = ""
-        "identities" = distinct(concat(
-          var.data_ingestion_dataflow_deployer_identities,
-          ["serviceAccount:${var.terraform_service_account}"]
-        ))
-      },
-      "to" = {
-        "resources" = ["projects/${var.sdx_project_number}"]
-        "operations" = {
-          "storage.googleapis.com" = {
-            "methods" = [
-              "google.storage.objects.get"
-            ]
-          }
-        }
-      }
-    },
-  ], var.data_ingestion_egress_policies))
+  egress_policies = distinct(concat(
+    local.data_ingestion_default_egress_rule,
+    var.data_ingestion_egress_policies
+  ))
 
   # depends_on needed to prevent intermittent errors
   # when the VPC-SC is created but perimeter member
@@ -231,27 +258,10 @@ module "confidential_data_vpc_sc" {
   perimeter_members                = local.perimeter_members_confidential
   restricted_services              = local.restricted_services
 
-  egress_policies = distinct(concat([
-    {
-      "from" = {
-        "identity_type" = ""
-        "identities" = distinct(concat(
-          var.confidential_data_dataflow_deployer_identities,
-          ["serviceAccount:${var.terraform_service_account}"]
-        ))
-      },
-      "to" = {
-        "resources" = ["projects/${var.sdx_project_number}"]
-        "operations" = {
-          "storage.googleapis.com" = {
-            "methods" = [
-              "google.storage.objects.get"
-            ]
-          }
-        }
-      }
-    }
-  ], var.confidential_data_egress_policies))
+  egress_policies = distinct(concat(
+    local.confidential_data_default_egress_rule,
+    var.confidential_data_egress_policies
+  ))
 
   # depends_on needed to prevent intermittent errors
   # when the VPC-SC is created but perimeter member
