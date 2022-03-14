@@ -11,6 +11,20 @@ Setting the variable `create_projects` to `true` will make the example create th
 - Non-Confidential Data project.
 - Confidential Data project.
 
+### Organization Policies
+
+This example will apply 4 organization policies in the project level:
+
+- [org_domain_restricted_sharing](https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains):
+The Resource Manager provides a domain restriction constraint that can be used in organization policies to limit resource sharing based on domain.
+
+- [org_enforce_bucket_level_access](https://cloud.google.com/storage/docs/uniform-bucket-level-access): Allows you to uniformly control access to your Cloud Storage resources. When you enable uniform bucket-level access on a bucket, Access Control Lists (ACLs) are disabled, and only bucket-level Identity and Access Management (IAM) permissions grant access to that bucket and the objects it contains.
+
+- [org_enforce_detailed_audit_logging_mode](https://cloud.google.com/storage/docs/org-policy-constraints): When you apply the detailedAuditLoggingMode constraint, Cloud Audit Logs logs associated with Cloud Storage operations contain detailed request and response information. This constraint is recommended to be used in conjunction with Bucket Lock when seeking various compliances such as SEC Rule 17a-4(f), CFTC Rule 1.31(c)-(d), and FINRA Rule 4511(c).
+
+- [org_enforce_public_access_prevention](https://cloud.google.com/storage/docs/public-access-prevention): Public access prevention protects Cloud Storage buckets and objects from being accidentally exposed to the public.
+
+
 ## Usage
 
 To provision this example, run the following from within this directory:
