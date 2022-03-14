@@ -15,7 +15,7 @@
  */
 
 variable "labels" {
-  description = "(Optional) Default label used by Data Warehouse resources."
+  description = "(Optional) Labels attached to Data Warehouse resources."
   type        = map(string)
   default     = {}
 }
