@@ -332,6 +332,7 @@ public class DLPTextToBigQueryStreaming {
   public interface TokenizePipelineOptions extends DataflowPipelineOptions {
 
     @Description("The file pattern to read records from (e.g. gs://bucket/file-*.csv)")
+    @Required
     ValueProvider<String> getInputFilePattern();
 
     void setInputFilePattern(ValueProvider<String> value);
@@ -352,6 +353,7 @@ public class DLPTextToBigQueryStreaming {
 
     @Description("DLP Inspect Template to be used for API request "
         + "(e.g.projects/{project_id}/inspectTemplates/{inspectTemplateId}")
+    @Required
     ValueProvider<String> getInspectTemplateName();
 
     void setInspectTemplateName(ValueProvider<String> value);
@@ -366,31 +368,37 @@ public class DLPTextToBigQueryStreaming {
     void setBatchSize(ValueProvider<Integer> value);
 
     @Description("Project id to be used for Big Query output")
+    @Required
     ValueProvider<String> getBqProjectId();
 
     void setBqProjectId(ValueProvider<String> value);
 
     @Description("Big Query data set must exist before the pipeline runs (e.g. pii-dataset")
+    @Required
     ValueProvider<String> getDatasetName();
 
     void setDatasetName(ValueProvider<String> value);
 
     @Description("Project id to be used for DLP Tokenization")
+    @Required
     ValueProvider<String> getDlpProjectId();
 
     void setDlpProjectId(ValueProvider<String> value);
 
     @Description("Location to be used for DLP Tokenization")
+    @Required
     ValueProvider<String> getDlpLocation();
 
     void setDlpLocation(ValueProvider<String> value);
 
     @Description("Output BigQuery table schema")
+    @Required
     ValueProvider<String> getBqSchema();
 
     void setBqSchema(ValueProvider<String> value);
 
     @Description("Triggering Frequency which file writes are triggered in seconds")
+    @Required
     ValueProvider<Integer> getTrigFrequency();
 
     void setTrigFrequency(ValueProvider<Integer> value);

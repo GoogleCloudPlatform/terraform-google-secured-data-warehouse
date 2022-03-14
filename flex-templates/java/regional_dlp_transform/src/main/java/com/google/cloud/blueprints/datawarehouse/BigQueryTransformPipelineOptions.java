@@ -63,6 +63,7 @@ public interface BigQueryTransformPipelineOptions extends DataflowPipelineOption
   void setDlpProjectId(String value);
 
   @Description("Location to be used for DLP Tokenization")
+  @Required
   String getDlpLocation();
 
   void setDlpLocation(String value);
@@ -89,6 +90,7 @@ public interface BigQueryTransformPipelineOptions extends DataflowPipelineOption
   void setColumnDelimiter(Character value);
 
   @Description("Output BigQuery table schema")
+  @Required
   String getBqSchema();
 
   void setBqSchema(String value);
