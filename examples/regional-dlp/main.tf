@@ -29,9 +29,9 @@ module "data_ingestion" {
   sdx_project_number               = var.sdx_project_number
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  bucket_name                      = "dlp-flex-data-ing"
-  dataset_id                       = "dlp_flex_data_ing"
-  cmek_keyring_name                = "dlp-flex-data-ing"
+  bucket_name                      = "reg-dlp-data-ing"
+  dataset_id                       = "reg_dlp_data_ing"
+  cmek_keyring_name                = "reg-dlp-data-ing"
   pubsub_resource_location         = local.location
   location                         = local.location
   delete_contents_on_destroy       = var.delete_contents_on_destroy
