@@ -94,6 +94,11 @@ variable "perimeter_additional_members" {
 variable "bucket_name" {
   description = "The name of the bucket being provisioned."
   type        = string
+
+  validation {
+    condition     = length(var.bucket_name) < 20
+    error_message = "The bucket_name must contain less than 20 characters. This ensures the name can be prefixed with the project-id and suffixed with 8 random characters."
+  }
 }
 
 variable "bucket_class" {
