@@ -453,7 +453,7 @@ public class DLPTextToBigQueryStreaming {
             int startOfLine = (endOfLine - batchSize.get().intValue());
             /** skipping all the rows that's not part of this restriction */
             br.readLine();
-            Iterator<CSVRecord> csvRows = CSVFormat.DEFAULT.withSkipHeaderRecord().parse(br).iterator();
+            Iterator<CSVRecord> csvRows = CSVFormat.Builder.create(CSVFormat.DEFAULT).setSkipHeaderRecord(true).build().parse(br).iterator();
             for (int line = 0; line < startOfLine; line++) {
               if (csvRows.hasNext()) {
                 csvRows.next();
