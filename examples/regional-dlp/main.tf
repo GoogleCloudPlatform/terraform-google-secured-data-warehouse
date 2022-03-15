@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ locals {
 module "data_ingestion" {
   source                           = "../.."
   org_id                           = var.org_id
+  labels                           = { environment = "dev" }
   data_governance_project_id       = var.data_governance_project_id
   confidential_data_project_id     = var.confidential_data_project_id
   non_confidential_data_project_id = var.non_confidential_data_project_id

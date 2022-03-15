@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
+variable "labels" {
+  description = "(Optional) Labels attached to Data Warehouse resources."
+  type        = map(string)
+  default     = {}
+}
+
 variable "org_id" {
   description = "GCP Organization ID."
   type        = string

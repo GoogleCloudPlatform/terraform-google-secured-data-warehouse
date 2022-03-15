@@ -36,6 +36,7 @@ module "secured_data_warehouse" {
   source = "../.."
 
   org_id                           = var.org_id
+  labels                           = { environment = "dev" }
   data_governance_project_id       = module.base_projects.data_governance_project_id
   confidential_data_project_id     = module.base_projects.confidential_data_project_id
   non_confidential_data_project_id = module.base_projects.non_confidential_data_project_id

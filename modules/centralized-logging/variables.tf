@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
+variable "labels" {
+  description = "(Optional) Labels attached to Data Warehouse resources."
+  type        = map(string)
+  default     = {}
+}
+
 variable "projects_ids" {
   description = "Export logs from the specified list of project IDs."
   type        = map(string)
