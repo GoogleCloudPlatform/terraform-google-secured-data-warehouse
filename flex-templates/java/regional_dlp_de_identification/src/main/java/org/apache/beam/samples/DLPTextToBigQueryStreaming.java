@@ -200,7 +200,7 @@ public class DLPTextToBigQueryStreaming {
                 .filepattern(options.getInputFilePattern())
                 .continuously(DEFAULT_POLL_INTERVAL, Watch.Growth.never()))
         .apply("Find Pattern Match", FileIO.readMatches().withCompression(Compression.AUTO))
-        .apply("Add File Name as Key", WithKeys.of(file -> getFileName(file)))
+        .apply("Add File Name as Key", WithKeys.of(file -> getAndValidateFileAttributes(file)))
         .setCoder(KvCoder.of(StringUtf8Coder.of(), ReadableFileCoder.of()))
         .apply(
             "Fixed Window(30 Sec)",
@@ -702,12 +702,12 @@ public class DLPTextToBigQueryStreaming {
     return jsonSchema;
   }
 
-  private static String getFileName(ReadableFile file) {
+  private static String getAndValidateFileAttributes(ReadableFile file) {
     String csvFileName = file.getMetadata().resourceId().getFilename().toString();
     /** taking out .csv extension from file name e.g fileName.csv->fileName */
     String[] fileKey = csvFileName.split("\\.", 2);
 
-    if (!fileKey[1].equals(ALLOWED_FILE_EXTENSION) || !TABLE_REGEXP.matcher(fileKey[0]).matches()) {
+    if (!fileKey[1].matches(ALLOWED_FILE_EXTENSION) || !TABLE_REGEXP.matcher(fileKey[0]).matches()) {
       throw new RuntimeException(
           "[Filename must contain a CSV extension "
               + " BQ table name must contain only letters, numbers, or underscores ["
