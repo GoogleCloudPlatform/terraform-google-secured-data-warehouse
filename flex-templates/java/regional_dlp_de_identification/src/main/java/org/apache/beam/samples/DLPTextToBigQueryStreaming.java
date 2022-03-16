@@ -80,18 +80,13 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The {@link DLPTextToBigQueryStreaming} is a streaming pipeline that reads CSV
- * files from a
- * storage location (e.g. Google Cloud Storage), uses Cloud DLP API to inspect,
- * classify, and mask
- * sensitive information (e.g. PII Data like passport or SIN number) and at the
- * end stores
- * obfuscated data in BigQuery (Dynamic Table Creation) to be used for various
- * purposes. e.g. data
- * analytics, ML model. Cloud DLP inspection and masking can be configured by
- * the user and can make
- * use of over 90 built in detectors and masking techniques like tokenization,
- * secure hashing, date
- * shifting, partial masking, and more.
+ * files from a storage location (e.g. Google Cloud Storage), uses Cloud DLP API
+ * to inspect, classify, and mask sensitive information (e.g. PII Data like
+ * passport or SIN number) and at the end stores obfuscated data in BigQuery
+ * (Dynamic Table Creation) to be used for various purposes. e.g. data analytics,
+ * ML model. Cloud DLP inspection and masking can be configured by the user and
+ * can make use of over 90 built in detectors and masking techniques like
+ * tokenization, secure hashing, date shifting, partial masking, and more.
  *
  * <p>
  * <b>Pipeline Requirements</b>
@@ -155,11 +150,10 @@ public class DLPTextToBigQueryStreaming {
 
   /**
    * Main entry point for executing the pipeline. This will run the pipeline
-   * asynchronously. If
-   * blocking execution is required, use the {@link
+   * asynchronously. If blocking execution is required, use the {@link
    * DLPTextToBigQueryStreaming#run(TokenizePipelineOptions)} method to start the
-   * pipeline and
-   * invoke {@code result.waitUntilFinish()} on the {@link PipelineResult}
+   * pipeline and invoke {@code result.waitUntilFinish()} on the {@link
+   * PipelineResult}
    *
    * @param args The command-line arguments to the pipeline.
    */
@@ -183,7 +177,7 @@ public class DLPTextToBigQueryStreaming {
      * Steps:
      * 1) Read from the text source continuously based on default interval e.g. 30
      * seconds
-     * - Setup a window for 30 secs to capture the list of files emited.
+     * - Setup a window for 30 secs to capture the list of files emitted.
      * - Group by file name as key and ReadableFile as a value.
      * 2) Create a side input for the window containing list of headers par file.
      * 3) Output each readable file for content processing.
@@ -197,7 +191,7 @@ public class DLPTextToBigQueryStreaming {
         /*
          * 1) Read from the text source continuously based on default interval e.g. 300
          * seconds
-         * - Setup a window for 30 secs to capture the list of files emited.
+         * - Setup a window for 30 secs to capture the list of files emitted.
          * - Group by file name as key and ReadableFile as a value.
          */
         .apply(
@@ -220,9 +214,8 @@ public class DLPTextToBigQueryStreaming {
         .apply(GroupByKey.create());
 
     /*
-     * Side input for the window to capture list of headers for each file emited so
-     * that it can be
-     * used in the next transform.
+     * Side input for the window to capture list of headers for each file emitted so
+     * that it can be used in the next transform.
      */
     PCollectionView<List<KV<String, List<String>>>> headerMap = csvFiles
 
@@ -326,8 +319,7 @@ public class DLPTextToBigQueryStreaming {
 
   /**
    * The {@link TokenizePipelineOptions} interface provides the custom execution
-   * options passed by
-   * the executor at the command-line.
+   * options passed by the executor at the command-line.
    */
   public interface TokenizePipelineOptions extends DataflowPipelineOptions {
 
@@ -406,12 +398,10 @@ public class DLPTextToBigQueryStreaming {
 
   /**
    * The {@link CSVReader} class uses experimental Split DoFn to split each csv
-   * file contents in
-   * chunks and process it in non-monolithic fashion. For example: if a CSV file
-   * has 100 rows and
-   * batch size is set to 15, then initial restrictions for the SDF will be 1 to 7
-   * and split
-   * restriction will be {{1-2},{2-3}..{7-8}} for parallel executions.
+   * file contents in chunks and process it in non-monolithic fashion.
+   * For example: if a CSV file has 100 rows and batch size is set to 15, then
+   * initial restrictions for the SDF will be 1 to 7 and split restriction will
+   * be {{1-2},{2-3}..{7-8}} for parallel executions.
    */
   static class CSVReader extends DoFn<KV<String, ReadableFile>, KV<String, Table>> {
 
@@ -491,12 +481,10 @@ public class DLPTextToBigQueryStreaming {
 
     /**
      * SDF needs to define a @GetInitialRestriction method that can create a
-     * restriction describing
-     * the complete work for a given element. For our case this would be the total
-     * number of rows
-     * for each CSV file. We will calculate the number of split required based on
-     * total number of
-     * rows and batch size provided.
+     * restriction describing the complete work for a given element. For our
+     * case this would be the total number of rows for each CSV file. We will
+     * calculate the number of split required based on total number of rows
+     * and batch size provided.
      *
      * @throws IOException
      */
@@ -514,10 +502,8 @@ public class DLPTextToBigQueryStreaming {
         int remaining = rowCount % batchSize.get().intValue();
         /**
          * Adjusting the total number of split based on remaining rows. For example:
-         * batch size of
-         * 15 for 100 rows will have total 7 splits. As it's a range last split will
-         * have offset
-         * range {7,8}
+         * batch size of 15 for 100 rows will have total 7 splits. As it's a range
+         * last split will have offset range {7,8}.
          */
         if (remaining > 0) {
           totalSplit = totalSplit + 2;
@@ -532,11 +518,10 @@ public class DLPTextToBigQueryStreaming {
     }
 
     /**
-     * SDF needs to define a @SplitRestriction method that can split the intital
-     * restricton to a
-     * number of smaller restrictions. For example: a intital rewstriction of (x, N)
-     * as input and
-     * produces pairs (x, 0), (x, 1), …, (x, N-1) as output.
+     * SDF needs to define a @SplitRestriction method that can split the initial
+     * restriction to a number of smaller restrictions. For example: a initial
+     * restriction of (x, N) as input and produces pairs (x, 0), (x, 1), …,
+     * (x, N-1) as output.
      */
     @SplitRestriction
     public void splitRestriction(
@@ -581,12 +566,10 @@ public class DLPTextToBigQueryStreaming {
 
   /**
    * The {@link DLPTokenizationDoFn} class executes tokenization request by
-   * calling DLP api. It uses
-   * DLP table as a content item as CSV file contains fully structured data. DLP
-   * templates (e.g.
-   * de-identify, inspect) need to exist before this pipeline runs. As response
-   * from the API is
-   * received, this DoFn ouptputs KV of new table with table id as key.
+   * calling DLP api. It uses DLP table as a content item as CSV file contains
+   * fully structured data. DLP templates (e.g. de-identify, inspect) need to
+   * exist before this pipeline runs. As response from the API is received,
+   * this DoFn outputs KV of new table with table id as key.
    */
   static class DLPTokenizationDoFn extends DoFn<KV<String, Table>, KV<String, Table>> {
     private ValueProvider<String> dlpProjectId;
@@ -668,8 +651,7 @@ public class DLPTextToBigQueryStreaming {
 
   /**
    * The {@link TableRowProcessorDoFn} class process tokenized DLP tables and
-   * convert them to
-   * BigQuery Table Row.
+   * convert them to BigQuery Table Row.
    */
   public static class TableRowProcessorDoFn extends DoFn<KV<String, Table>, KV<String, TableRow>> {
 
