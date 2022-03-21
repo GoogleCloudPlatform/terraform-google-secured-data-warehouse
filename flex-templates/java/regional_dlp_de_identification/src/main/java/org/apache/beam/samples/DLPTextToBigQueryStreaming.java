@@ -487,6 +487,9 @@ public class DLPTextToBigQueryStreaming {
      * and batch size provided.
      *
      * @throws IOException
+     *
+     * @param  csvFile CSV file
+     * @return         Initial Restriction range from 1 to totalSplit
      */
     @GetInitialRestriction
     public OffsetRange getInitialRestriction(@Element KV<String, ReadableFile> csvFile)
@@ -522,6 +525,11 @@ public class DLPTextToBigQueryStreaming {
      * restriction to a number of smaller restrictions. For example: a initial
      * restriction of (x, N) as input and produces pairs (x, 0), (x, 1), …,
      * (x, N-1) as output.
+     *
+     * @param  csvFile  the CSV file
+     * @param  range    range of the split
+     * @param  out      object to return
+     * @return          split of the initial restriction to a number of smaller restrictions
      */
     @SplitRestriction
     public void splitRestriction(
@@ -676,6 +684,15 @@ public class DLPTextToBigQueryStreaming {
       }
     }
 
+    /**
+    * The {@CreateBqRow} creates a BigQuery row using the tokenized values by DLP passed. The function
+    * connects the headers to respective values that are transformed to Strings.
+    *
+    * @param  tokenizedValue Table row tokenized by DLP API
+    * @param  headers        Headers of the table
+    * @return                BigQuery row
+    */
+    @CreateBqRow
     private static TableRow createBqRow(Table.Row tokenizedValue, String[] headers) {
       TableRow bqRow = new TableRow();
       AtomicInteger headerIndex = new AtomicInteger(0);
@@ -690,6 +707,14 @@ public class DLPTextToBigQueryStreaming {
     }
   }
 
+  /**
+  * The {@GetJsonSchema} transform the input schema passed by the user in the format:
+  * FIELD1:VALUE1, FI:VALUE2..., to the JSON formatting.
+  *
+  * @param  inputSchema input schema passed by the user in the format: FIELD1:VALUE1, FI:VALUE2...
+  * @return             the schema in the JSON formatting
+  */
+  @GetJsonSchema
   private static String getJsonSchema(ValueProvider<String> inputSchema) {
     String []fields = inputSchema.get().split(",");
     String jsonSchema = "{ \"fields\": [";
@@ -702,6 +727,15 @@ public class DLPTextToBigQueryStreaming {
     return jsonSchema;
   }
 
+  /**
+  * The {@GetAndValidateFileAttributes} function receives a csv and returns a string with the name of the file, without
+  * the .csv extension. The function also validates the file to match with the permitted extension, and the name is in
+  * accordance with <a href="https://cloud.google.com/bigquery/docs/datasets#dataset-naming">BigQuery's naming restrictions</a>.
+  *
+  * @param  file CSV file
+  * @return      the CSV file name without the extension .csv
+  */
+  @GetAndValidateFileAttributes
   private static String getAndValidateFileAttributes(ReadableFile file) {
     String csvFileName = file.getMetadata().resourceId().getFilename().toString();
     /** taking out .csv extension from file name e.g fileName.csv->fileName */
@@ -720,6 +754,13 @@ public class DLPTextToBigQueryStreaming {
     return fileKey[0];
   }
 
+  /**
+  * The {@GetReader} receives the CSV file and returns his reader.
+  *
+  * @param  csvFile CSV file
+  * @return         reader of the CSV file
+  */
+  @GetReader
   private static BufferedReader getReader(ReadableFile csvFile) {
     BufferedReader br = null;
     ReadableByteChannel channel = null;
@@ -740,6 +781,13 @@ public class DLPTextToBigQueryStreaming {
     return br;
   }
 
+  /**
+  * The {@GetFileHeaders} receives a CSV file reader and returns his headers.
+  *
+  * @param  reader file reader
+  * @return        headers of the file
+  */
+  @GetFileHeaders
   private static List<String> getFileHeaders(BufferedReader reader) {
     List<String> headers = new ArrayList<>();
     try {
@@ -755,6 +803,14 @@ public class DLPTextToBigQueryStreaming {
     return headers;
   }
 
+  /**
+  * The {@CheckHeaderName} receives a header name and transform it to be in accordance with
+  * <a href="https://cloud.google.com/bigquery/docs/schemas#column_names">BigQuery's naming header restrictions</a>.
+  *
+  * @param  name header name
+  * @return      header name according with BigQuery's restrictions
+  */
+  @CheckHeaderName
   private static String checkHeaderName(String name) {
     /**
      * some checks to make sure BQ column names don't fail e.g. special characters
