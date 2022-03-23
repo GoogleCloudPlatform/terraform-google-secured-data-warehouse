@@ -73,24 +73,17 @@ module "data_ingestion_project_id" {
   default_service_account = "deprivilege"
 
   activate_apis = [
-    "datacatalog.googleapis.com",
     "cloudresourcemanager.googleapis.com",
     "storage-api.googleapis.com",
     "serviceusage.googleapis.com",
     "iam.googleapis.com",
-    "dns.googleapis.com",
     "pubsub.googleapis.com",
     "bigquery.googleapis.com",
     "accesscontextmanager.googleapis.com",
     "cloudbilling.googleapis.com",
     "cloudkms.googleapis.com",
-    "dataflow.googleapis.com",
-    "dlp.googleapis.com",
-    "cloudscheduler.googleapis.com",
     "cloudbuild.googleapis.com",
-    "appengine.googleapis.com",
-    "artifactregistry.googleapis.com",
-    "compute.googleapis.com"
+    "artifactregistry.googleapis.com"
   ]
 }
 
@@ -107,16 +100,13 @@ module "data_governance_project_id" {
   default_service_account = "deprivilege"
 
   activate_apis = [
-    "datacatalog.googleapis.com",
     "cloudresourcemanager.googleapis.com",
     "storage-api.googleapis.com",
     "serviceusage.googleapis.com",
     "iam.googleapis.com",
     "accesscontextmanager.googleapis.com",
     "cloudbilling.googleapis.com",
-    "cloudkms.googleapis.com",
-    "dlp.googleapis.com",
-    "secretmanager.googleapis.com"
+    "cloudkms.googleapis.com"
   ]
 }
 
@@ -165,11 +155,6 @@ module "non_confidential_data_project_id" {
     "accesscontextmanager.googleapis.com",
     "cloudbilling.googleapis.com",
     "cloudkms.googleapis.com",
-    "dataflow.googleapis.com",
-    "dlp.googleapis.com",
-    "datacatalog.googleapis.com",
-    "dns.googleapis.com",
-    "compute.googleapis.com",
     "cloudbuild.googleapis.com",
     "artifactregistry.googleapis.com"
   ]
