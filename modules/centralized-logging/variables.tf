@@ -40,6 +40,12 @@ variable "bucket_name" {
   type        = string
 }
 
+variable "parent_folder" {
+  description = "(Deprecated) The folder id that would be configured so that all its projects would add data logs for every resource. Data logs are now configured at the projects from the `projects_ids` variable."
+  type        = string
+  default     = ""
+}
+
 variable "logging_location" {
   description = "A valid location for the bucket and KMS key that will be deployed."
   type        = string
