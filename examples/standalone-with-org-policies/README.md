@@ -1,4 +1,4 @@
-# Standalone With Org Policies Example
+# Additional Org Policies to Standalone Example
 
 This examples deploys the *Secured Data Warehouse* blueprint [module](../../README.md).
 Using this example you can choose between using existing projects or
