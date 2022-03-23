@@ -71,7 +71,7 @@ This error message is shown in the Dataflow jobs details page for the deployed D
 **Error message:**
 
 ```console
-Failed to start the VM, launcher-2021120604300713065380799072320283, used for launching because of status code: INVALID_ARGUMENT, reason:
+Failed to start the VM, launcher-2022120604300713065380799072320283, used for launching because of status code: INVALID_ARGUMENT, reason:
 Error: Message: Invalid value for field 'resource.networkInterfaces[0].network': 'global/networks/default'.
 The referenced network resource cannot be found. HTTP Code: 400.
 ```
@@ -79,7 +79,7 @@ The referenced network resource cannot be found. HTTP Code: 400.
 or
 
 ```console
-Failed to start the VM, launcher-2021120906191814752290113584255576, used for launching because of
+Failed to start the VM, launcher-2022120906191814752290113584255576, used for launching because of
 status code: INVALID_ARGUMENT, reason:
 Error: Message: Invalid value for field 'resource.networkInterfaces[0]': '{ "network": "global/networks/default", "accessConfig": [{ "type": "ONE_TO_ONE_NAT", "name":...'.
 Subnetwork should be specified for custom subnetmode network HTTP Code: 400.
@@ -106,9 +106,9 @@ Looking at the **Job Logs** section, in the bottom part of the job detail page, 
 **Error message:**
 
 ```console
-Failed to read the result file : gs://<BUCKET-NAME>/staging/template_launches/ 2021-12-06_04_37_18-105494327517795773/
+Failed to read the result file : gs://<BUCKET-NAME>/staging/template_launches/ 2022-12-06_04_37_18-105494327517795773/
 operation_result with error message: (59b58cff2e1b7caf): Unable to open template file:
-gs://<BUCKET-NAME>/staging/template_launches/ 2021-12-06_04_37_18-105494327517795773/ operation_result..
+gs://<BUCKET-NAME>/staging/template_launches/ 2022-12-06_04_37_18-105494327517795773/ operation_result..
 ```
 
 **Cause:**
