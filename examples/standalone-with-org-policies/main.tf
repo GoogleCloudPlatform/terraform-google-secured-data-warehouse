@@ -29,9 +29,9 @@ module "secured_data_warehouse" {
   sdx_project_number               = var.sdx_project_number
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  bucket_name                      = "stand-org-pol-data-ing"
-  dataset_id                       = "stand_org_pol_dataset"
-  cmek_keyring_name                = "stand-org-pol-data-ing"
+  bucket_name                      = "standalone-pol-ing"
+  dataset_id                       = "standalone_pol_dataset"
+  cmek_keyring_name                = "standalone-pol-data-ing"
   pubsub_resource_location         = local.location
   location                         = local.location
   delete_contents_on_destroy       = var.delete_contents_on_destroy
