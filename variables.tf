@@ -81,8 +81,9 @@ variable "confidential_data_project_id" {
 }
 
 variable "sdx_project_number" {
-  description = "The Project Number to configure Secure data exchange with egress rule for the dataflow templates."
+  description = "The Project Number to configure Secure data exchange with egress rule for dataflow templates. Required if using a dataflow job template from a private storage bucket outside of the perimeter."
   type        = string
+  default     = ""
 }
 
 variable "access_context_manager_policy_id" {
