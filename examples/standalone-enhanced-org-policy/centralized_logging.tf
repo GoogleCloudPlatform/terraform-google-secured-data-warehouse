@@ -23,7 +23,6 @@ module "centralized_logging" {
   logging_location            = local.location
   delete_contents_on_destroy  = var.delete_contents_on_destroy
   key_rotation_period_seconds = local.key_rotation_period_seconds
-  parent_folder               = var.folder_id
 
   depends_on = [
     module.iam_projects
