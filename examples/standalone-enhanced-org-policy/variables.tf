@@ -56,7 +56,7 @@ variable "confidential_data_project_id" {
 }
 
 variable "sdx_project_number" {
-  description = "The Project Number to configure Secure data exchange with egress rule for the dataflow templates."
+  description = "(Optional) The Project Number to configure Secure data exchange with egress rule for the dataflow templates."
   type        = string
   default     = ""
 }
