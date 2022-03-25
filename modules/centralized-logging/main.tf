@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,6 +45,7 @@ module "cmek" {
   count = var.create_bucket ? 1 : 0
 
   project_id           = var.kms_project_id
+  labels               = var.labels
   location             = var.logging_location
   keyring              = local.logging_keyring_name
   key_rotation_period  = var.key_rotation_period_seconds
@@ -94,8 +95,10 @@ resource "google_storage_bucket_iam_member" "storage_sink_member" {
   member = each.value.writer_identity
 }
 
-resource "google_folder_iam_audit_config" "folder_config" {
-  folder  = "folders/${var.parent_folder}"
+resource "google_project_iam_audit_config" "project_config" {
+  for_each = var.projects_ids
+
+  project = "projects/${each.value}"
   service = "allServices"
 
   ###################################################################################################

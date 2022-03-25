@@ -107,4 +107,8 @@ module "regional_dlp_example" {
 
   crypto_key  = module.kek.keys[local.kek_key_name]
   wrapped_key = local.wrapped_key_secret_data
+
+  depends_on = [
+    data.google_secret_manager_secret_version.wrapped_key
+  ]
 }

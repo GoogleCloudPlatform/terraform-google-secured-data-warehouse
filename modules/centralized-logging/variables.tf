@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
+variable "labels" {
+  description = "(Optional) Labels attached to Data Warehouse resources."
+  type        = map(string)
+  default     = {}
+}
+
 variable "projects_ids" {
   description = "Export logs from the specified list of project IDs."
   type        = map(string)
@@ -41,8 +47,9 @@ variable "bucket_name" {
 }
 
 variable "parent_folder" {
-  description = "The folder id that will be configured so all its projects will add data logs for every resource."
+  description = "(Deprecated) The folder id that would be configured so that all its projects would add data logs for every resource. Data logs are now configured at the projects from the `projects_ids` variable."
   type        = string
+  default     = ""
 }
 
 variable "logging_location" {
@@ -76,7 +83,7 @@ variable "kms_key_protection_level" {
 }
 
 variable "data_access_logs_enabled" {
-  description = "Enable Data Access logs of types DATA_READ, DATA_WRITE for all GCP services in the projects under the provided `parent_folder`. Enabling Data Access logs might result in your organization being charged for the additional logs usage. See https://cloud.google.com/logging/docs/audit#data-access The ADMIN_READ logs are enabled by default."
+  description = "Enable Data Access logs of types DATA_READ, DATA_WRITE for all GCP services in the projects specified in the provided `projects_ids` map. Enabling Data Access logs might result in your organization being charged for the additional logs usage. See https://cloud.google.com/logging/docs/audit#data-access The ADMIN_READ logs are enabled by default."
   type        = bool
   default     = false
 }

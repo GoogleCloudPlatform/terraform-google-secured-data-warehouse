@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,11 +36,6 @@ variable "non_confidential_data_project_id" {
 
 variable "confidential_data_project_id" {
   description = "Project where the confidential datasets and tables are created."
-  type        = string
-}
-
-variable "sdx_project_number" {
-  description = "The Project Number to configure Secure data exchange with egress rule for the dataflow templates."
   type        = string
 }
 

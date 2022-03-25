@@ -58,6 +58,7 @@ module "base_projects" {
   for_each = local.project_groups
 
   org_id          = var.org_id
+  labels          = var.labels
   folder_id       = var.folder_id
   billing_account = var.billing_account
   region          = "us-east4"

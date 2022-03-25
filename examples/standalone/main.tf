@@ -36,6 +36,7 @@ module "secured_data_warehouse" {
   source = "../.."
 
   org_id                           = var.org_id
+  labels                           = { environment = "dev" }
   data_governance_project_id       = module.base_projects.data_governance_project_id
   confidential_data_project_id     = module.base_projects.confidential_data_project_id
   non_confidential_data_project_id = module.base_projects.non_confidential_data_project_id
@@ -43,13 +44,13 @@ module "secured_data_warehouse" {
   sdx_project_number               = module.template_project.sdx_project_number
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  bucket_name                      = "data-ingestion"
+  bucket_name                      = "standalone-data-ing"
   pubsub_resource_location         = local.location
   location                         = local.location
   trusted_locations                = ["us-locations"]
   dataset_id                       = local.non_confidential_dataset_id
   confidential_dataset_id          = local.confidential_dataset_id
-  cmek_keyring_name                = "cmek_keyring"
+  cmek_keyring_name                = "standalone-data-ing"
   delete_contents_on_destroy       = var.delete_contents_on_destroy
   perimeter_additional_members     = var.perimeter_additional_members
   data_engineer_group              = var.data_engineer_group

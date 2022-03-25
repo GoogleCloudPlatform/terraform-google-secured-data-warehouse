@@ -29,6 +29,7 @@ module "data_ingestion_project" {
   name                    = "sdw-data-ing-${random_id.project_id_suffix.hex}"
   random_project_id       = "true"
   org_id                  = var.org_id
+  labels                  = var.labels
   folder_id               = var.folder_id
   billing_account         = var.billing_account
   default_service_account = "deprivilege"
@@ -67,6 +68,7 @@ module "data_governance_project" {
   name                    = "sdw-data-gov-${random_id.project_id_suffix.hex}"
   random_project_id       = "true"
   org_id                  = var.org_id
+  labels                  = var.labels
   folder_id               = var.folder_id
   billing_account         = var.billing_account
   default_service_account = "deprivilege"
@@ -92,6 +94,7 @@ module "non_confidential_data_project" {
   name                    = "sdw-non-conf-${random_id.project_id_suffix.hex}"
   random_project_id       = "true"
   org_id                  = var.org_id
+  labels                  = var.labels
   folder_id               = var.folder_id
   billing_account         = var.billing_account
   default_service_account = "deprivilege"
@@ -116,6 +119,7 @@ module "confidential_data_project" {
   name                    = "sdw-conf-${random_id.project_id_suffix.hex}"
   random_project_id       = "true"
   org_id                  = var.org_id
+  labels                  = var.labels
   folder_id               = var.folder_id
   billing_account         = var.billing_account
   default_service_account = "deprivilege"
