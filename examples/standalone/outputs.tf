@@ -39,14 +39,19 @@ output "blueprint_type" {
   value       = module.secured_data_warehouse.blueprint_type
 }
 
-output "cmek_data_ingestion_crypto_key" {
-  description = "The Customer Managed Crypto Key for the data ingestion crypto boundary."
-  value       = module.secured_data_warehouse.cmek_data_ingestion_crypto_key
-}
-
 output "cmek_bigquery_crypto_key" {
   description = "The Customer Managed Crypto Key for the BigQuery service."
   value       = module.secured_data_warehouse.cmek_bigquery_crypto_key
+}
+
+output "cmek_confidential_bigquery_crypto_key" {
+  description = "The Customer Managed Crypto Key for the confidential BigQuery service."
+  value       = module.secured_data_warehouse.cmek_confidential_bigquery_crypto_key
+}
+
+output "cmek_data_ingestion_crypto_key" {
+  description = "The Customer Managed Crypto Key for the data ingestion crypto boundary."
+  value       = module.secured_data_warehouse.cmek_data_ingestion_crypto_key
 }
 
 output "cmek_reidentification_crypto_key" {
@@ -54,10 +59,6 @@ output "cmek_reidentification_crypto_key" {
   value       = module.secured_data_warehouse.cmek_reidentification_crypto_key
 }
 
-output "cmek_confidential_bigquery_crypto_key" {
-  description = "The Customer Managed Crypto Key for the confidential BigQuery service."
-  value       = module.secured_data_warehouse.cmek_confidential_bigquery_crypto_key
-}
 output "tek_wrapping_keyring" {
   description = "The name of tek wrapping key"
   value       = module.tek_wrapping_key.keyring
@@ -68,8 +69,18 @@ output "centralized_logging_bucket_name" {
   value       = module.centralized_logging.bucket_name
 }
 
+output "confidential_data_dataflow_bucket_name" {
+  description = "The name of the bucket created for dataflow in the confidential data pipeline."
+  value       = module.secured_data_warehouse.confidential_data_dataflow_bucket_name
+}
+
 output "data_ingestion_bucket_name" {
   description = "The name of the bucket created for the data ingestion pipeline."
+  value       = module.secured_data_warehouse.data_ingestion_dataflow_bucket_name
+}
+
+output "data_ingestion_dataflow_bucket_name" {
+  description = "The name of the bucket created for dataflow in the data ingestion pipeline."
   value       = module.secured_data_warehouse.data_ingestion_dataflow_bucket_name
 }
 
@@ -109,6 +120,11 @@ output "non_confidential_data_project_id" {
   ]
 }
 
+output "template_project_id" {
+  description = "The id of the flex template created."
+  value       = module.template_project.project_id
+}
+
 output "data_ingestion_topic_name" {
   description = "The topic created for data ingestion pipeline."
   value       = module.secured_data_warehouse.data_ingestion_topic_name
@@ -118,19 +134,9 @@ output "data_ingestion_topic_name" {
   ]
 }
 
-output "template_project_id" {
-  description = "The id of the flex template created."
-  value       = module.template_project.project_id
-}
-
 output "pubsub_writer_service_account_email" {
   description = "The PubSub writer service account email. Should be used to write data to the PubSub topics the data ingestion pipeline reads from."
   value       = module.secured_data_warehouse.pubsub_writer_service_account_email
-}
-
-output "storage_writer_service_account_email" {
-  description = "The Storage writer service account email. Should be used to write data to the buckets the data ingestion pipeline reads from."
-  value       = module.secured_data_warehouse.storage_writer_service_account_email
 }
 
 output "dataflow_controller_service_account_email" {
@@ -138,10 +144,9 @@ output "dataflow_controller_service_account_email" {
   value       = module.secured_data_warehouse.dataflow_controller_service_account_email
 }
 
-
-output "data_ingestion_service_perimeter_name" {
-  description = "Access context manager service perimeter name."
-  value       = module.secured_data_warehouse.data_ingestion_service_perimeter_name
+output "storage_writer_service_account_email" {
+  description = "The Storage writer service account email. Should be used to write data to the buckets the data ingestion pipeline reads from."
+  value       = module.secured_data_warehouse.storage_writer_service_account_email
 }
 
 output "confidential_data_perimeter_name" {
@@ -154,19 +159,9 @@ output "data_governance_perimeter_name" {
   value       = module.secured_data_warehouse.data_governance_service_perimeter_name
 }
 
-output "data_ingestion_network_name" {
-  description = "The name of the data ingestion VPC being created."
-  value       = module.base_projects.data_ingestion_network_name
-}
-
-output "data_ingestion_network_self_link" {
-  description = "The URI of the data ingestion VPC being created."
-  value       = module.base_projects.data_ingestion_network_self_link
-}
-
-output "data_ingestion_subnets_self_link" {
-  description = "The self-links of data ingestion subnets being created."
-  value       = module.base_projects.data_ingestion_subnets_self_link
+output "data_ingestion_service_perimeter_name" {
+  description = "Access context manager service perimeter name."
+  value       = module.secured_data_warehouse.data_ingestion_service_perimeter_name
 }
 
 output "confidential_network_name" {
@@ -184,14 +179,19 @@ output "confidential_subnets_self_link" {
   value       = module.base_projects.confidential_subnets_self_link
 }
 
-output "confidential_data_dataflow_bucket_name" {
-  description = "The name of the bucket created for dataflow in the confidential data pipeline."
-  value       = module.secured_data_warehouse.confidential_data_dataflow_bucket_name
+output "data_ingestion_network_name" {
+  description = "The name of the data ingestion VPC being created."
+  value       = module.base_projects.data_ingestion_network_name
 }
 
-output "data_ingestion_dataflow_bucket_name" {
-  description = "The name of the bucket created for dataflow in the data ingestion pipeline."
-  value       = module.secured_data_warehouse.data_ingestion_dataflow_bucket_name
+output "data_ingestion_network_self_link" {
+  description = "The URI of the data ingestion VPC being created."
+  value       = module.base_projects.data_ingestion_network_self_link
+}
+
+output "data_ingestion_subnets_self_link" {
+  description = "The self-links of data ingestion subnets being created."
+  value       = module.base_projects.data_ingestion_subnets_self_link
 }
 
 output "taxonomy_display_name" {
