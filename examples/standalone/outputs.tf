@@ -34,18 +34,38 @@ output "bigquery_non_confidential_table" {
   ]
 }
 
+output "blueprint_type" {
+  description = "Type of blueprint this module represents."
+  value       = module.secured_data_warehouse.blueprint_type
+}
+
+output "cmek_data_ingestion_crypto_key" {
+  description = "The Customer Managed Crypto Key for the data ingestion crypto boundary."
+  value       = module.secured_data_warehouse.cmek_data_ingestion_crypto_key
+}
+
+output "cmek_bigquery_crypto_key" {
+  description = "The Customer Managed Crypto Key for the BigQuery service."
+  value       = module.secured_data_warehouse.cmek_bigquery_crypto_key
+}
+
+output "cmek_reidentification_crypto_key" {
+  description = "The Customer Managed Crypto Key for the reidentification crypto boundary."
+  value       = module.secured_data_warehouse.cmek_reidentification_crypto_key
+}
+
+output "cmek_confidential_bigquery_crypto_key" {
+  description = "The Customer Managed Crypto Key for the confidential BigQuery service."
+  value       = module.secured_data_warehouse.cmek_confidential_bigquery_crypto_key
+}
+output "tek_wrapping_keyring" {
+  description = "The name of tek wrapping key"
+  value       = module.tek_wrapping_key.keyring
+}
+
 output "centralized_logging_bucket_name" {
   description = "The name of the bucket created for storage logging."
   value       = module.centralized_logging.bucket_name
-}
-
-output "confidential_data_project_name" {
-  description = "The Project where the confidential datasets and tables are created.confidential data."
-  value       = module.base_projects.confidential_data_project_id
-
-  depends_on = [
-    module.secured_data_warehouse
-  ]
 }
 
 output "data_ingestion_bucket_name" {
@@ -53,8 +73,26 @@ output "data_ingestion_bucket_name" {
   value       = module.secured_data_warehouse.data_ingestion_dataflow_bucket_name
 }
 
-output "data_ingestion_project_name" {
-  description = "The name of the project created for the data ingstion pipeline."
+output "confidential_data_project_id" {
+  description = "The Project where the confidential datasets and tables are created."
+  value       = module.base_projects.confidential_data_project_id
+
+  depends_on = [
+    module.secured_data_warehouse
+  ]
+}
+
+output "data_governance_project_id" {
+  description = "The id of the project created for data governance."
+  value       = module.base_projects.data_governance_project_id
+
+  depends_on = [
+    module.secured_data_warehouse
+  ]
+}
+
+output "data_ingestion_project_id" {
+  description = "The id of the project created for the data ingstion pipeline."
   value       = module.base_projects.data_ingestion_project_id
 
   depends_on = [
@@ -62,19 +100,27 @@ output "data_ingestion_project_name" {
   ]
 }
 
-output "data_ingestion_pubsub_topic" {
-  description = "The PubSub topic used for the data ingestion pipeline."
-  value       = module.secured_data_warehouse.pubsub_resource_location
+output "non_confidential_data_project_id" {
+  description = "The id of the project created for non-confidential data."
+  value       = module.base_projects.non_confidential_data_project_id
+
+  depends_on = [
+    module.secured_data_warehouse
+  ]
 }
 
-output "data_governance_project_name" {
-  description = "The name of the project created for data governance."
-  value       = module.secured_data_warehouse.data_governance_project_name
+output "data_ingestion_topic_name" {
+  description = "The topic created for data ingestion pipeline."
+  value       = module.secured_data_warehouse.data_ingestion_topic_name
+
+  depends_on = [
+    module.secured_data_warehouse
+  ]
 }
 
-output "non_confidential_data_project_name" {
-  description = "The name of the project created for non-confidential data."
-  value       = module.secured_data_warehouse.non_confidential_data_project_name
+output "template_project_id" {
+  description = "The id of the flex template created."
+  value       = module.template_project.project_id
 }
 
 output "pubsub_writer_service_account_email" {
@@ -87,25 +133,11 @@ output "storage_writer_service_account_email" {
   value       = module.secured_data_warehouse.storage_writer_service_account_email
 }
 
-output "taxonomy_display_name" {
-  description = "The name of the taxonomy."
-  value       = resource.secure_taxonomy.display_name
-}
-
 output "dataflow_controller_service_account_email" {
   description = "The regional de identification pipeline service account."
-  value       = module.de_identification_template.dataflow_controller_service_account_email
+  value       = module.secured_data_warehouse.dataflow_controller_service_account_email
 }
 
-output "cmek_keyring_name" {
-  description = "The name of the customer manager encrypted key keyring created in standalone example."
-  value       = module.secured_data_warehouse.cmek_keyring_name
-}
-
-output "tek_wrapping_key_name" {
-  description = "The name of tek wrapping key"
-  value       = module.tek_wrapping_key.keyring
-}
 
 output "data_ingestion_service_perimeter_name" {
   description = "Access context manager service perimeter name."
@@ -114,7 +146,7 @@ output "data_ingestion_service_perimeter_name" {
 
 output "confidential_data_perimeter_name" {
   description = "Access context manager service perimeter name."
-  value       = module.secured_data_warehouse.confidential_data_perimeter_name
+  value       = module.secured_data_warehouse.confidential_service_perimeter_name
 }
 
 output "data_governance_perimeter_name" {
@@ -122,19 +154,34 @@ output "data_governance_perimeter_name" {
   value       = module.secured_data_warehouse.data_governance_service_perimeter_name
 }
 
-output "cmek_confidential_bigquery_crypto_key" {
-  description = "The Customer Managed Crypto Key for the BigQuery service."
-  value       = module.secured_data_warehouse.cmek_bigquery_crypto_key
+output "data_ingestion_network_name" {
+  description = "The name of the data ingestion VPC being created."
+  value       = module.base_projects.data_ingestion_network_name
 }
 
-output "regional_reid_pipeline_subnetwork_self_link" {
-  description = "The subnetwork link created for regional re-identification pipeline."
-  value       = module.regional_reid_pipeline.subnetwork_self_link
+output "data_ingestion_network_self_link" {
+  description = "The URI of the data ingestion VPC being created."
+  value       = module.base_projects.data_ingestion_network_self_link
 }
 
-output "regional_deid_pipeline_subnetwork_self_link" {
-  description = "The subnetwork link created for regional de-identification pipeline."
-  value       = module.regional_deid_pipeline.subnetwork_self_link
+output "data_ingestion_subnets_self_link" {
+  description = "The self-links of data ingestion subnets being created."
+  value       = module.base_projects.data_ingestion_subnets_self_link
+}
+
+output "confidential_network_name" {
+  description = "The name of the confidential VPC being created."
+  value       = module.base_projects.confidential_network_name
+}
+
+output "confidential_network_self_link" {
+  description = "The URI of the confidential VPC being created."
+  value       = module.base_projects.confidential_network_self_link
+}
+
+output "confidential_subnets_self_link" {
+  description = "The self-links of confidential subnets being created."
+  value       = module.base_projects.confidential_subnets_self_link
 }
 
 output "confidential_data_dataflow_bucket_name" {
@@ -147,48 +194,8 @@ output "data_ingestion_dataflow_bucket_name" {
   value       = module.secured_data_warehouse.data_ingestion_dataflow_bucket_name
 }
 
-output "vpc_sc_bridge_confidential_data_ingestion_name" {
-  description = "VPC-SC bridge between confidential data and data ingestion"
-  value       = module.secured_data_warehouse.vpc_sc_bridge_confidential_data_ingestion
+output "taxonomy_display_name" {
+  description = "The name of the taxonomy."
+  value       = google_data_catalog_taxonomy.secure_taxonomy.display_name
 }
 
-output "vpc_sc_bridge_confidential_governance_name" {
-  description = "VPC-SC bridge between confidential data and data governance"
-  value       = module.secured_data_warehouse.vpc_sc_bridge_confidential_governance
-}
-
-output "vpc_sc_bridge_data_ingestion_governance_name" {
-  description = "VPC-SC bridge between data ingestion and data governance"
-  value       = module.secured_data_warehouse.vpc_sc_bridge_data_ingestion_governance
-}
-
-output "artifact_registry_python_reader" {
-  description = "All attributes of the created resource according to the mode."
-  value       = module.secured_data_warehouse.google_artifact_registry_repository_iam_member.python_reader
-}
-
-
-output "artifact_registry_confidential_python_reader" {
-  description = "All attributes of the created resource according to the mode."
-  value       = module.secured_data_warehouse.google_artifact_registry_repository_iam_member.confidential_python_reader
-}
-
-output "artifact_registry_docker_reader" {
-  description = "All attributes of the created resource according to the mode."
-  value       = module.secured_data_warehouse.google_artifact_registry_repository_iam_member.docker_reader
-}
-
-output "artifact_registry_confidential_docker_reader" {
-  description = "All attributes of the created resource according to the mode."
-  value       = module.secured_data_warehouse.google_artifact_registry_repository_iam_member.confidential_docker_reader
-}
-
-output "gs_path_reid_template" {
-  description = "The storage path to reid template"
-  value       = module.regional_reid_pipeline.container_spec_gcs_path
-}
-
-output "gs_path_deid_template" {
-  description = "The storage path to deid template"
-  value       = module.regional_deid_pipeline.container_spec_gcs_path
-}
