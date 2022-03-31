@@ -16,7 +16,9 @@
 
 package org.apache.beam.samples;
 
+import com.google.api.services.bigquery.model.TableFieldSchema;
 import com.google.api.services.bigquery.model.TableRow;
+import com.google.api.services.bigquery.model.TableSchema;
 import com.google.cloud.dlp.v2.DlpServiceClient;
 import com.google.common.base.Charsets;
 import com.google.privacy.dlp.v2.ContentItem;
@@ -35,6 +37,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -47,6 +50,7 @@ import org.apache.beam.sdk.io.Compression;
 import org.apache.beam.sdk.io.FileIO;
 import org.apache.beam.sdk.io.FileIO.ReadableFile;
 import org.apache.beam.sdk.io.ReadableFileCoder;
+import static org.apache.beam.sdk.io.gcp.bigquery.BigQueryHelpers.toJsonString;
 import org.apache.beam.sdk.io.gcp.bigquery.BigQueryIO;
 import org.apache.beam.sdk.io.range.OffsetRange;
 import org.apache.beam.sdk.metrics.Distribution;
@@ -66,6 +70,7 @@ import org.apache.beam.sdk.transforms.splittabledofn.OffsetRangeTracker;
 import org.apache.beam.sdk.transforms.splittabledofn.RestrictionTracker;
 import org.apache.beam.sdk.transforms.windowing.AfterProcessingTime;
 import org.apache.beam.sdk.transforms.windowing.FixedWindows;
+import org.apache.beam.sdk.transforms.windowing.GlobalWindows;
 import org.apache.beam.sdk.transforms.windowing.Repeatedly;
 import org.apache.beam.sdk.transforms.windowing.Window;
 import org.apache.beam.sdk.values.KV;
@@ -180,11 +185,12 @@ public class DLPTextToBigQueryStreaming {
      * - Setup a window for 30 secs to capture the list of files emitted.
      * - Group by file name as key and ReadableFile as a value.
      * 2) Create a side input for the window containing list of headers par file.
-     * 3) Output each readable file for content processing.
-     * 4) Split file contents based on batch size for parallel processing.
-     * 5) Process each split as a DLP table content request to invoke API.
-     * 6) Convert DLP Table Rows to BQ Table Row.
-     * 7) Create dynamic table and insert successfully converted records into BQ.
+     * 3) Create the BigQuery schema from file headers
+     * 4) Output each readable file for content processing.
+     * 5) Split file contents based on batch size for parallel processing.
+     * 6) Process each split as a DLP table content request to invoke API.
+     * 7) Convert DLP Table Rows to BQ Table Row.
+     * 8) Create dynamic table and insert successfully converted records into BQ.
      */
 
     PCollection<KV<String, Iterable<ReadableFile>>> csvFiles = p
@@ -244,9 +250,19 @@ public class DLPTextToBigQueryStreaming {
                 }))
         .apply("View As List", View.asList());
 
+    PCollectionView<Map<String, String>> schemaView = csvFiles
+
+        // 3) Create the BigQuery schema from file headers
+        .apply(
+            "Create Schema",
+            ParDo.of(
+                new GenerateTableSchema(options.getOutputBigQueryTable())))
+        .apply("To Global Window", Window.into(new GlobalWindows()))
+        .apply("ViewSchemaAsMap", View.asMap());
+
     PCollection<KV<String, TableRow>> bqDataMap = csvFiles
 
-        // 3) Output each readable file for content processing.
+        // 4) Output each readable file for content processing.
         .apply(
             "File Handler",
             ParDo.of(
@@ -263,7 +279,7 @@ public class DLPTextToBigQueryStreaming {
                   }
                 }))
 
-        // 4) Split file contents based on batch size for parallel processing.
+        // 5) Split file contents based on batch size for parallel processing.
         .apply(
             "Process File Contents",
             ParDo.of(
@@ -280,7 +296,7 @@ public class DLPTextToBigQueryStreaming {
                     headerMap))
                 .withSideInputs(headerMap))
 
-        // 5) Create a DLP Table content request and invoke DLP API for each processing
+        // 6) Create a DLP Table content request and invoke DLP API for each processing
         .apply(
             "DLP-Tokenization",
             ParDo.of(
@@ -288,21 +304,20 @@ public class DLPTextToBigQueryStreaming {
                     options.getDlpProjectId(),
                     options.getDlpLocation(),
                     options.getDeidentifyTemplateName(),
-                    options.getInspectTemplateName())))
+                    options.getInspectTemplateName())))//;
 
-        // 6) Convert DLP Table Rows to BQ Table Row
+        // 7) Convert DLP Table Rows to BQ Table Row
         .apply(
             "Process Tokenized Data",
             ParDo.of(
                 new TableRowProcessorDoFn()));
 
-    // 7) Create dynamic table and insert successfully converted records into BQ.
+    // 8) Create dynamic table and insert successfully converted records into BQ.
     bqDataMap.apply(
         "Write To BQ",
         BigQueryIO.<KV<String, TableRow>>write()
-             .to(options.getOutputBigQueryTable())
-             .withJsonSchema(
-                getJsonSchema(options.getBqSchema()))
+            .to(options.getOutputBigQueryTable())
+            .withSchemaFromView(schemaView)
             .withFormatFunction(
                 element -> {
                   return element.getValue();
@@ -382,12 +397,6 @@ public class DLPTextToBigQueryStreaming {
     ValueProvider<String> getDlpLocation();
 
     void setDlpLocation(ValueProvider<String> value);
-
-    @Description("Output BigQuery table schema")
-    @Required
-    ValueProvider<String> getBqSchema();
-
-    void setBqSchema(ValueProvider<String> value);
 
     @Description("Triggering Frequency which file writes are triggered in seconds")
     @Required
@@ -685,14 +694,14 @@ public class DLPTextToBigQueryStreaming {
     }
 
     /**
-    * The {@CreateBqRow} creates a BigQuery row using the tokenized values by DLP passed. The function
+    * Creates a BigQuery row using the tokenized values by DLP passed. The function
     * connects the headers to respective values that are transformed to Strings.
     *
     * @param  tokenizedValue Table row tokenized by DLP API
     * @param  headers        Headers of the table
     * @return                BigQuery row
     */
-    @CreateBqRow
+    //@CreateBqRow
     private static TableRow createBqRow(Table.Row tokenizedValue, String[] headers) {
       TableRow bqRow = new TableRow();
       AtomicInteger headerIndex = new AtomicInteger(0);
@@ -707,35 +716,50 @@ public class DLPTextToBigQueryStreaming {
     }
   }
 
-  /**
-  * The {@GetJsonSchema} transform the input schema passed by the user in the format:
-  * FIELD1:VALUE1, FI:VALUE2..., to the JSON formatting.
-  *
-  * @param  inputSchema input schema passed by the user in the format: FIELD1:VALUE1, FI:VALUE2...
-  * @return             the schema in the JSON formatting
-  */
-  @GetJsonSchema
-  private static String getJsonSchema(ValueProvider<String> inputSchema) {
-    String []fields = inputSchema.get().split(",");
-    String jsonSchema = "{ \"fields\": [";
+  public static class GenerateTableSchema extends DoFn<KV<String, Iterable<ReadableFile>>, KV<String, String>> {
+  private String outputBQTable;
 
-    for (int i = 0; i < fields.length; i++) {
-      jsonSchema += String.format("{\"name\": \"%s\", \"type\": \"%s\"}%s", fields[i].split(":")[0].trim(), fields[i].split(":")[1].trim(),
-          i == fields.length - 1 ? "": ",");
+  public GenerateTableSchema(
+      String outputBQTable) {
+    this.outputBQTable = outputBQTable;
+  }
+
+  @ProcessElement
+  public void processElement(ProcessContext c) {
+    c.element()
+        .getValue()
+        .forEach(
+            file -> {
+                try (BufferedReader br = getReader(file)) {
+                  List<String> headers = getFileHeaders(br);
+
+                  TableSchema schema = new TableSchema();
+                  List<TableFieldSchema> fields = new ArrayList<TableFieldSchema>();
+
+                  for (int i = 0; i < headers.size(); i++) {
+                    fields.add(new TableFieldSchema().setName(checkHeaderName(headers.get(i))).setType("STRING"));
+                  }
+
+                  schema.setFields(fields);
+                  c.output(KV.of(this.outputBQTable, toJsonString(schema)));
+
+                } catch (IOException e) {
+                  LOG.error("Failed to Read File {}", e.getMessage());
+                  throw new RuntimeException(e);
+                }
+            }
+        );
     }
-    jsonSchema += "]}";
-    return jsonSchema;
   }
 
   /**
-  * The {@GetAndValidateFileAttributes} function receives a csv and returns a string with the name of the file, without
+  * Receives a csv and returns a string with the name of the file, without
   * the .csv extension. The function also validates the file to match with the permitted extension, and the name is in
   * accordance with <a href="https://cloud.google.com/bigquery/docs/datasets#dataset-naming">BigQuery's naming restrictions</a>.
   *
   * @param  file CSV file
   * @return      the CSV file name without the extension .csv
   */
-  @GetAndValidateFileAttributes
   private static String getAndValidateFileAttributes(ReadableFile file) {
     String csvFileName = file.getMetadata().resourceId().getFilename().toString();
     /** taking out .csv extension from file name e.g fileName.csv->fileName */
@@ -755,12 +779,11 @@ public class DLPTextToBigQueryStreaming {
   }
 
   /**
-  * The {@GetReader} receives the CSV file and returns his reader.
+  * Receives the CSV file and returns his reader.
   *
   * @param  csvFile CSV file
   * @return         reader of the CSV file
   */
-  @GetReader
   private static BufferedReader getReader(ReadableFile csvFile) {
     BufferedReader br = null;
     ReadableByteChannel channel = null;
@@ -782,12 +805,11 @@ public class DLPTextToBigQueryStreaming {
   }
 
   /**
-  * The {@GetFileHeaders} receives a CSV file reader and returns his headers.
+  * Receives a CSV file reader and returns his headers.
   *
   * @param  reader file reader
   * @return        headers of the file
   */
-  @GetFileHeaders
   private static List<String> getFileHeaders(BufferedReader reader) {
     List<String> headers = new ArrayList<>();
     try {
@@ -804,13 +826,12 @@ public class DLPTextToBigQueryStreaming {
   }
 
   /**
-  * The {@CheckHeaderName} receives a header name and transform it to be in accordance with
+  * Receives a header name and transform it to be in accordance with
   * <a href="https://cloud.google.com/bigquery/docs/schemas#column_names">BigQuery's naming header restrictions</a>.
   *
   * @param  name header name
   * @return      header name according with BigQuery's restrictions
   */
-  @CheckHeaderName
   private static String checkHeaderName(String name) {
     /**
      * some checks to make sure BQ column names don't fail e.g. special characters
