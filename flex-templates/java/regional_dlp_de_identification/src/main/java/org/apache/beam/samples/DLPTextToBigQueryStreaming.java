@@ -303,8 +303,7 @@ public class DLPTextToBigQueryStreaming {
                 new DLPTokenizationDoFn(
                     options.getDlpProjectId(),
                     options.getDlpLocation(),
-                    options.getDeidentifyTemplateName(),
-                    options.getInspectTemplateName())))//;
+                    options.getDeidentifyTemplateName())))
 
         // 7) Convert DLP Table Rows to BQ Table Row
         .apply(
@@ -357,13 +356,6 @@ public class DLPTextToBigQueryStreaming {
     ValueProvider<String> getDeidentifyTemplateName();
 
     void setDeidentifyTemplateName(ValueProvider<String> value);
-
-    @Description("DLP Inspect Template to be used for API request "
-        + "(e.g.projects/{project_id}/inspectTemplates/{inspectTemplateId}")
-    @Required
-    ValueProvider<String> getInspectTemplateName();
-
-    void setInspectTemplateName(ValueProvider<String> value);
 
     @Description("DLP API has a limit for payload size of 524KB /api call. "
         + "That's why dataflow process will need to chunk it. User will have to decide "
@@ -593,7 +585,7 @@ public class DLPTextToBigQueryStreaming {
     private ValueProvider<String> dlpLocation;
     private DlpServiceClient dlpServiceClient;
     private ValueProvider<String> deIdentifyTemplateName;
-    private ValueProvider<String> inspectTemplateName;
+    //private ValueProvider<String> inspectTemplateName;
     private boolean inspectTemplateExist;
     private Builder requestBuilder;
     private final Distribution numberOfRowsTokenized = Metrics.distribution(DLPTokenizationDoFn.class,
@@ -604,31 +596,21 @@ public class DLPTextToBigQueryStreaming {
     public DLPTokenizationDoFn(
         ValueProvider<String> dlpProjectId,
         ValueProvider<String> dlpLocation,
-        ValueProvider<String> deIdentifyTemplateName,
-        ValueProvider<String> inspectTemplateName) {
+        ValueProvider<String> deIdentifyTemplateName) {
       this.dlpProjectId = dlpProjectId;
       this.dlpLocation = dlpLocation;
       this.dlpServiceClient = null;
       this.deIdentifyTemplateName = deIdentifyTemplateName;
-      this.inspectTemplateName = inspectTemplateName;
       this.inspectTemplateExist = false;
     }
 
     @Setup
     public void setup() {
-      if (this.inspectTemplateName.isAccessible()) {
-        if (this.inspectTemplateName.get() != null) {
-          this.inspectTemplateExist = true;
-        }
-      }
       if (this.deIdentifyTemplateName.isAccessible()) {
         if (this.deIdentifyTemplateName.get() != null) {
           this.requestBuilder = DeidentifyContentRequest.newBuilder()
               .setParent(LocationName.of(this.dlpProjectId.get(), this.dlpLocation.get()).toString())
               .setDeidentifyTemplateName(this.deIdentifyTemplateName.get());
-          if (this.inspectTemplateExist) {
-            this.requestBuilder.setInspectTemplateName(this.inspectTemplateName.get());
-          }
         }
       }
     }
