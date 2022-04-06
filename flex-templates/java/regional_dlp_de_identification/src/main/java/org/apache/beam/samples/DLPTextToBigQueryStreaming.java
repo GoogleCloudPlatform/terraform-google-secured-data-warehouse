@@ -16,31 +16,14 @@
 
 package org.apache.beam.samples;
 
-import com.google.api.services.bigquery.model.TableFieldSchema;
-import com.google.api.services.bigquery.model.TableRow;
-import com.google.api.services.bigquery.model.TableSchema;
-import com.google.cloud.dlp.v2.DlpServiceClient;
-import com.google.common.base.Charsets;
-import com.google.privacy.dlp.v2.ContentItem;
-import com.google.privacy.dlp.v2.DeidentifyContentRequest;
-import com.google.privacy.dlp.v2.DeidentifyContentRequest.Builder;
-import com.google.privacy.dlp.v2.DeidentifyContentResponse;
-import com.google.privacy.dlp.v2.FieldId;
-import com.google.privacy.dlp.v2.LocationName;
-import com.google.privacy.dlp.v2.Table;
-import com.google.privacy.dlp.v2.Value;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+
+import com.google.api.services.bigquery.model.TableRow;
+
 import org.apache.beam.runners.dataflow.options.DataflowPipelineOptions;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.PipelineResult;
@@ -50,11 +33,7 @@ import org.apache.beam.sdk.io.Compression;
 import org.apache.beam.sdk.io.FileIO;
 import org.apache.beam.sdk.io.FileIO.ReadableFile;
 import org.apache.beam.sdk.io.ReadableFileCoder;
-import static org.apache.beam.sdk.io.gcp.bigquery.BigQueryHelpers.toJsonString;
 import org.apache.beam.sdk.io.gcp.bigquery.BigQueryIO;
-import org.apache.beam.sdk.io.range.OffsetRange;
-import org.apache.beam.sdk.metrics.Distribution;
-import org.apache.beam.sdk.metrics.Metrics;
 import org.apache.beam.sdk.options.Description;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
 import org.apache.beam.sdk.options.Validation.Required;
@@ -66,8 +45,6 @@ import org.apache.beam.sdk.transforms.ParDo;
 import org.apache.beam.sdk.transforms.View;
 import org.apache.beam.sdk.transforms.Watch;
 import org.apache.beam.sdk.transforms.WithKeys;
-import org.apache.beam.sdk.transforms.splittabledofn.OffsetRangeTracker;
-import org.apache.beam.sdk.transforms.splittabledofn.RestrictionTracker;
 import org.apache.beam.sdk.transforms.windowing.AfterProcessingTime;
 import org.apache.beam.sdk.transforms.windowing.FixedWindows;
 import org.apache.beam.sdk.transforms.windowing.GlobalWindows;
@@ -76,8 +53,6 @@ import org.apache.beam.sdk.transforms.windowing.Window;
 import org.apache.beam.sdk.values.KV;
 import org.apache.beam.sdk.values.PCollection;
 import org.apache.beam.sdk.values.PCollectionView;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVRecord;
 import org.joda.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -142,14 +117,8 @@ public class DLPTextToBigQueryStreaming {
   public static final Logger LOG = LoggerFactory.getLogger(DLPTextToBigQueryStreaming.class);
   /** Default interval for polling files in GCS. */
   private static final Duration DEFAULT_POLL_INTERVAL = Duration.standardSeconds(30);
-  /** Expected only CSV file in GCS bucket. */
-  private static final String ALLOWED_FILE_EXTENSION = String.valueOf("csv");
-  /** Regular expression that matches valid BQ table IDs. */
-  private static final Pattern TABLE_REGEXP = Pattern.compile("[-\\w$@]{1,1024}");
   /** Default batch size if value not provided in execution. */
   private static final Integer DEFAULT_BATCH_SIZE = 100;
-  /** Regular expression that matches valid BQ column name . */
-  private static final Pattern COLUMN_NAME_REGEXP = Pattern.compile("^[A-Za-z_]+[A-Za-z_0-9]*$");
   /** Default window interval to create side inputs for header records. */
   private static final Duration WINDOW_INTERVAL = Duration.standardSeconds(30);
 
@@ -206,7 +175,7 @@ public class DLPTextToBigQueryStreaming {
                 .filepattern(options.getInputFilePattern())
                 .continuously(DEFAULT_POLL_INTERVAL, Watch.Growth.never()))
         .apply("Find Pattern Match", FileIO.readMatches().withCompression(Compression.AUTO))
-        .apply("Add File Name as Key", WithKeys.of(file -> getAndValidateFileAttributes(file)))
+        .apply("Add File Name as Key", WithKeys.of(file -> Util.getAndValidateFileAttributes(file)))
         .setCoder(KvCoder.of(StringUtf8Coder.of(), ReadableFileCoder.of()))
         .apply(
             "Fixed Window(30 Sec)",
@@ -238,8 +207,8 @@ public class DLPTextToBigQueryStreaming {
                         .getValue()
                         .forEach(
                             file -> {
-                              try (BufferedReader br = getReader(file)) {
-                                c.output(KV.of(fileKey, getFileHeaders(br)));
+                              try (BufferedReader br = Util.getReader(file)) {
+                                c.output(KV.of(fileKey, Util.getFileHeaders(br)));
 
                               } catch (IOException e) {
                                 LOG.error("Failed to Read File {}", e.getMessage());
@@ -395,435 +364,5 @@ public class DLPTextToBigQueryStreaming {
     ValueProvider<Integer> getTrigFrequency();
 
     void setTrigFrequency(ValueProvider<Integer> value);
-  }
-
-  /**
-   * The {@link CSVReader} class uses experimental Split DoFn to split each csv
-   * file contents in chunks and process it in non-monolithic fashion.
-   * For example: if a CSV file has 100 rows and batch size is set to 15, then
-   * initial restrictions for the SDF will be 1 to 7 and split restriction will
-   * be {{1-2},{2-3}..{7-8}} for parallel executions.
-   */
-  static class CSVReader extends DoFn<KV<String, ReadableFile>, KV<String, Table>> {
-
-    private ValueProvider<Integer> batchSize;
-    private PCollectionView<List<KV<String, List<String>>>> headerMap;
-    /**
-     * This counter is used to track number of lines processed against batch size.
-     */
-    private Integer lineCount;
-
-    List<String> csvHeaders;
-
-    public CSVReader(
-        ValueProvider<Integer> batchSize,
-        PCollectionView<List<KV<String, List<String>>>> headerMap) {
-      this.batchSize = batchSize;
-      this.headerMap = headerMap;
-      this.csvHeaders = new ArrayList<>();
-    }
-
-    @ProcessElement
-    public void processElement(ProcessContext c, RestrictionTracker<OffsetRange, Long> tracker)
-        throws IOException {
-      for (long i = tracker.currentRestriction().getFrom(); tracker.tryClaim(i); ++i) {
-        lineCount = 1;
-
-        String fileKey = c.element().getKey();
-        try (BufferedReader br = getReader(c.element().getValue())) {
-
-          csvHeaders = getHeaders(c.sideInput(headerMap), fileKey);
-          if (csvHeaders != null) {
-            List<FieldId> dlpTableHeaders = csvHeaders.stream()
-                .map(header -> FieldId.newBuilder().setName(header).build())
-                .collect(Collectors.toList());
-            List<Table.Row> rows = new ArrayList<>();
-            Table dlpTable = null;
-            /** finding out EOL for this restriction so that we know the SOL */
-            int endOfLine = (int) (i * batchSize.get().intValue());
-            int startOfLine = (endOfLine - batchSize.get().intValue());
-            /** skipping all the rows that's not part of this restriction */
-            br.readLine();
-            Iterator<CSVRecord> csvRows = CSVFormat.Builder.create(CSVFormat.DEFAULT).setSkipHeaderRecord(true).build().parse(br).iterator();
-            for (int line = 0; line < startOfLine; line++) {
-              if (csvRows.hasNext()) {
-                csvRows.next();
-              }
-            }
-            /**
-             * looping through buffered reader and creating DLP Table Rows equals to batch
-             */
-            while (csvRows.hasNext() && lineCount <= batchSize.get()) {
-
-              CSVRecord csvRow = csvRows.next();
-              rows.add(convertCsvRowToTableRow(csvRow));
-              lineCount += 1;
-            }
-            /** creating DLP table and output for next transformation */
-            dlpTable = Table.newBuilder().addAllHeaders(dlpTableHeaders).addAllRows(rows).build();
-            c.output(KV.of(fileKey, dlpTable));
-
-            LOG.debug(
-                "Current Restriction From: {}, Current Restriction To: {},"
-                    + " StartofLine: {}, End Of Line {}, BatchData {}",
-                tracker.currentRestriction().getFrom(),
-                tracker.currentRestriction().getTo(),
-                startOfLine,
-                endOfLine,
-                dlpTable.getRowsCount());
-
-          } else {
-
-            throw new RuntimeException("Header Values Can't be found For file Key " + fileKey);
-          }
-        }
-      }
-    }
-
-    /**
-     * SDF needs to define a @GetInitialRestriction method that can create a
-     * restriction describing the complete work for a given element. For our
-     * case this would be the total number of rows for each CSV file. We will
-     * calculate the number of split required based on total number of rows
-     * and batch size provided.
-     *
-     * @throws IOException
-     *
-     * @param  csvFile CSV file
-     * @return         Initial Restriction range from 1 to totalSplit
-     */
-    @GetInitialRestriction
-    public OffsetRange getInitialRestriction(@Element KV<String, ReadableFile> csvFile)
-        throws IOException {
-
-      int rowCount = 0;
-      int totalSplit = 0;
-      try (BufferedReader br = getReader(csvFile.getValue())) {
-        /** assume first row is header */
-        int checkRowCount = (int) br.lines().count() - 1;
-        rowCount = (checkRowCount < 1) ? 1 : checkRowCount;
-        totalSplit = rowCount / batchSize.get().intValue();
-        int remaining = rowCount % batchSize.get().intValue();
-        /**
-         * Adjusting the total number of split based on remaining rows. For example:
-         * batch size of 15 for 100 rows will have total 7 splits. As it's a range
-         * last split will have offset range {7,8}.
-         */
-        if (remaining > 0) {
-          totalSplit = totalSplit + 2;
-
-        } else {
-          totalSplit = totalSplit + 1;
-        }
-      }
-
-      LOG.debug("Initial Restriction range from 1 to: {}", totalSplit);
-      return new OffsetRange(1, totalSplit);
-    }
-
-    /**
-     * SDF needs to define a @SplitRestriction method that can split the initial
-     * restriction to a number of smaller restrictions. For example: a initial
-     * restriction of (x, N) as input and produces pairs (x, 0), (x, 1), …,
-     * (x, N-1) as output.
-     *
-     * @param  csvFile  the CSV file
-     * @param  range    range of the split
-     * @param  out      object to return
-     * @return          split of the initial restriction to a number of smaller restrictions
-     */
-    @SplitRestriction
-    public void splitRestriction(
-        @Element KV<String, ReadableFile> csvFile,
-        @Restriction OffsetRange range,
-        OutputReceiver<OffsetRange> out) {
-      /** split the initial restriction by 1 */
-      for (final OffsetRange p : range.split(1, 1)) {
-        out.output(p);
-      }
-    }
-
-    @NewTracker
-    public OffsetRangeTracker newTracker(@Restriction OffsetRange range) {
-      return new OffsetRangeTracker(new OffsetRange(range.getFrom(), range.getTo()));
-    }
-
-    private Table.Row convertCsvRowToTableRow(CSVRecord csvRow) {
-      /** convert from CSV row to DLP Table Row */
-      Iterator<String> valueIterator = csvRow.iterator();
-      Table.Row.Builder tableRowBuilder = Table.Row.newBuilder();
-      while (valueIterator.hasNext()) {
-        String value = valueIterator.next();
-        if (value != null) {
-          tableRowBuilder.addValues(Value.newBuilder().setStringValue(value.toString()).build());
-        } else {
-          tableRowBuilder.addValues(Value.newBuilder().setStringValue("").build());
-        }
-      }
-
-      return tableRowBuilder.build();
-    }
-
-    private List<String> getHeaders(List<KV<String, List<String>>> headerMap, String fileKey) {
-      return headerMap.stream()
-          .filter(map -> map.getKey().equalsIgnoreCase(fileKey))
-          .findFirst()
-          .map(e -> e.getValue())
-          .orElse(null);
-    }
-  }
-
-  /**
-   * The {@link DLPTokenizationDoFn} class executes tokenization request by
-   * calling DLP api. It uses DLP table as a content item as CSV file contains
-   * fully structured data. DLP templates (e.g. de-identify, inspect) need to
-   * exist before this pipeline runs. As response from the API is received,
-   * this DoFn outputs KV of new table with table id as key.
-   */
-  static class DLPTokenizationDoFn extends DoFn<KV<String, Table>, KV<String, Table>> {
-    private ValueProvider<String> dlpProjectId;
-    private ValueProvider<String> dlpLocation;
-    private DlpServiceClient dlpServiceClient;
-    private ValueProvider<String> deIdentifyTemplateName;
-    //private ValueProvider<String> inspectTemplateName;
-    private boolean inspectTemplateExist;
-    private Builder requestBuilder;
-    private final Distribution numberOfRowsTokenized = Metrics.distribution(DLPTokenizationDoFn.class,
-        "numberOfRowsTokenizedDistro");
-    private final Distribution numberOfBytesTokenized = Metrics.distribution(DLPTokenizationDoFn.class,
-        "numberOfBytesTokenizedDistro");
-
-    public DLPTokenizationDoFn(
-        ValueProvider<String> dlpProjectId,
-        ValueProvider<String> dlpLocation,
-        ValueProvider<String> deIdentifyTemplateName) {
-      this.dlpProjectId = dlpProjectId;
-      this.dlpLocation = dlpLocation;
-      this.dlpServiceClient = null;
-      this.deIdentifyTemplateName = deIdentifyTemplateName;
-      this.inspectTemplateExist = false;
-    }
-
-    @Setup
-    public void setup() {
-      if (this.deIdentifyTemplateName.isAccessible()) {
-        if (this.deIdentifyTemplateName.get() != null) {
-          this.requestBuilder = DeidentifyContentRequest.newBuilder()
-              .setParent(LocationName.of(this.dlpProjectId.get(), this.dlpLocation.get()).toString())
-              .setDeidentifyTemplateName(this.deIdentifyTemplateName.get());
-        }
-      }
-    }
-
-    @StartBundle
-    public void startBundle() throws SQLException {
-
-      try {
-        this.dlpServiceClient = DlpServiceClient.create();
-
-      } catch (IOException e) {
-        LOG.error("Failed to create DLP Service Client", e.getMessage());
-        throw new RuntimeException(e);
-      }
-    }
-
-    @FinishBundle
-    public void finishBundle() throws Exception {
-      if (this.dlpServiceClient != null) {
-        this.dlpServiceClient.close();
-      }
-    }
-
-    @ProcessElement
-    public void processElement(ProcessContext c) {
-      String key = c.element().getKey();
-      Table nonEncryptedData = c.element().getValue();
-      ContentItem tableItem = ContentItem.newBuilder().setTable(nonEncryptedData).build();
-      this.requestBuilder.setItem(tableItem);
-      DeidentifyContentResponse response = dlpServiceClient.deidentifyContent(this.requestBuilder.build());
-      Table tokenizedData = response.getItem().getTable();
-      numberOfRowsTokenized.update(tokenizedData.getRowsList().size());
-      numberOfBytesTokenized.update(tokenizedData.toByteArray().length);
-      c.output(KV.of(key, tokenizedData));
-    }
-  }
-
-  /**
-   * The {@link TableRowProcessorDoFn} class process tokenized DLP tables and
-   * convert them to BigQuery Table Row.
-   */
-  public static class TableRowProcessorDoFn extends DoFn<KV<String, Table>, KV<String, TableRow>> {
-
-    @ProcessElement
-    public void processElement(ProcessContext c) {
-      Table tokenizedData = c.element().getValue();
-      List<String> headers = tokenizedData.getHeadersList().stream()
-          .map(fid -> fid.getName())
-          .collect(Collectors.toList());
-      List<Table.Row> outputRows = tokenizedData.getRowsList();
-      if (outputRows.size() > 0) {
-        for (Table.Row outputRow : outputRows) {
-          if (outputRow.getValuesCount() != headers.size()) {
-            throw new IllegalArgumentException(
-                "CSV file's header count must exactly match with data element count");
-          }
-          c.output(
-              KV.of(
-                  c.element().getKey(),
-                  createBqRow(outputRow, headers.toArray(new String[headers.size()]))));
-        }
-      }
-    }
-
-    /**
-    * Creates a BigQuery row using the tokenized values by DLP passed. The function
-    * connects the headers to respective values that are transformed to Strings.
-    *
-    * @param  tokenizedValue Table row tokenized by DLP API
-    * @param  headers        Headers of the table
-    * @return                BigQuery row
-    */
-    //@CreateBqRow
-    private static TableRow createBqRow(Table.Row tokenizedValue, String[] headers) {
-      TableRow bqRow = new TableRow();
-      AtomicInteger headerIndex = new AtomicInteger(0);
-      tokenizedValue
-          .getValuesList()
-          .forEach(
-              value -> {
-                String checkedHeaderName = checkHeaderName(headers[headerIndex.getAndIncrement()].toString());
-                bqRow.set(checkedHeaderName, value.getStringValue());
-              });
-      return bqRow;
-    }
-  }
-
-  public static class GenerateTableSchema extends DoFn<KV<String, Iterable<ReadableFile>>, KV<String, String>> {
-  private String outputBQTable;
-
-  public GenerateTableSchema(
-      String outputBQTable) {
-    this.outputBQTable = outputBQTable;
-  }
-
-  @ProcessElement
-  public void processElement(ProcessContext c) {
-    c.element()
-        .getValue()
-        .forEach(
-            file -> {
-                try (BufferedReader br = getReader(file)) {
-                  List<String> headers = getFileHeaders(br);
-
-                  TableSchema schema = new TableSchema();
-                  List<TableFieldSchema> fields = new ArrayList<TableFieldSchema>();
-
-                  for (int i = 0; i < headers.size(); i++) {
-                    fields.add(new TableFieldSchema().setName(checkHeaderName(headers.get(i))).setType("STRING"));
-                  }
-
-                  schema.setFields(fields);
-                  c.output(KV.of(this.outputBQTable, toJsonString(schema)));
-
-                } catch (IOException e) {
-                  LOG.error("Failed to Read File {}", e.getMessage());
-                  throw new RuntimeException(e);
-                }
-            }
-        );
-    }
-  }
-
-  /**
-  * Receives a csv and returns a string with the name of the file, without
-  * the .csv extension. The function also validates the file to match with the permitted extension, and the name is in
-  * accordance with <a href="https://cloud.google.com/bigquery/docs/datasets#dataset-naming">BigQuery's naming restrictions</a>.
-  *
-  * @param  file CSV file
-  * @return      the CSV file name without the extension .csv
-  */
-  private static String getAndValidateFileAttributes(ReadableFile file) {
-    String csvFileName = file.getMetadata().resourceId().getFilename().toString();
-    /** taking out .csv extension from file name e.g fileName.csv->fileName */
-    String[] fileKey = csvFileName.split("\\.", 2);
-
-    if (!fileKey[1].matches(ALLOWED_FILE_EXTENSION) || !TABLE_REGEXP.matcher(fileKey[0]).matches()) {
-      throw new RuntimeException(
-          "[Filename must contain a CSV extension "
-              + " BQ table name must contain only letters, numbers, or underscores ["
-              + fileKey[1]
-              + "], ["
-              + fileKey[0]
-              + "]");
-    }
-    /** returning file name without extension */
-    return fileKey[0];
-  }
-
-  /**
-  * Receives the CSV file and returns his reader.
-  *
-  * @param  csvFile CSV file
-  * @return         reader of the CSV file
-  */
-  private static BufferedReader getReader(ReadableFile csvFile) {
-    BufferedReader br = null;
-    ReadableByteChannel channel = null;
-    /** read the file and create buffered reader */
-    try {
-      channel = csvFile.openSeekable();
-
-    } catch (IOException e) {
-      LOG.error("Failed to Read File {}", e.getMessage());
-      throw new RuntimeException(e);
-    }
-
-    if (channel != null) {
-
-      br = new BufferedReader(Channels.newReader(channel, Charsets.UTF_8.name()));
-    }
-
-    return br;
-  }
-
-  /**
-  * Receives a CSV file reader and returns his headers.
-  *
-  * @param  reader file reader
-  * @return        headers of the file
-  */
-  private static List<String> getFileHeaders(BufferedReader reader) {
-    List<String> headers = new ArrayList<>();
-    try {
-      CSVRecord csvHeader = CSVFormat.DEFAULT.parse(reader).getRecords().get(0);
-      csvHeader.forEach(
-          headerValue -> {
-            headers.add(headerValue);
-          });
-    } catch (IOException e) {
-      LOG.error("Failed to get csv header values}", e.getMessage());
-      throw new RuntimeException(e);
-    }
-    return headers;
-  }
-
-  /**
-  * Receives a header name and transform it to be in accordance with
-  * <a href="https://cloud.google.com/bigquery/docs/schemas#column_names">BigQuery's naming header restrictions</a>.
-  *
-  * @param  name header name
-  * @return      header name according with BigQuery's restrictions
-  */
-  private static String checkHeaderName(String name) {
-    /**
-     * some checks to make sure BQ column names don't fail e.g. special characters
-     */
-    String checkedHeader = name.replaceAll("\\s", "_");
-    checkedHeader = checkedHeader.replaceAll("'", "");
-    checkedHeader = checkedHeader.replaceAll("/", "");
-    if (!COLUMN_NAME_REGEXP.matcher(checkedHeader).matches()) {
-      throw new IllegalArgumentException("Column name can't be matched to a valid format " + name);
-    }
-    return checkedHeader;
   }
 }
