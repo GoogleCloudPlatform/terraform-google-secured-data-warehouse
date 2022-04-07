@@ -29,53 +29,53 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
-   * The {@link TableRowProcessorDoFn} class process tokenized DLP tables and
-   * convert them to BigQuery Table Row.
-   */
-  public class TableRowProcessorDoFn extends DoFn<KV<String, Table>, KV<String, TableRow>> {
+ * The {@link TableRowProcessorDoFn} class process tokenized DLP tables and
+ * convert them to BigQuery Table Row.
+ */
+public class TableRowProcessorDoFn extends DoFn<KV<String, Table>, KV<String, TableRow>> {
 
-    public static final Logger LOG = LoggerFactory.getLogger(TableRowProcessorDoFn.class);
+  public static final Logger LOG = LoggerFactory.getLogger(TableRowProcessorDoFn.class);
 
-    @ProcessElement
-    public void processElement(ProcessContext c) {
-      Table tokenizedData = c.element().getValue();
-      List<String> headers = tokenizedData.getHeadersList().stream()
-          .map(fid -> fid.getName())
-          .collect(Collectors.toList());
-      List<Table.Row> outputRows = tokenizedData.getRowsList();
-      if (outputRows.size() > 0) {
-        for (Table.Row outputRow : outputRows) {
-          if (outputRow.getValuesCount() != headers.size()) {
-            throw new IllegalArgumentException(
-                "CSV file's header count must exactly match with data element count");
-          }
-          c.output(
-              KV.of(
-                  c.element().getKey(),
-                  createBqRow(outputRow, headers.toArray(new String[headers.size()]))));
+  @ProcessElement
+  public void processElement(ProcessContext c) {
+    Table tokenizedData = c.element().getValue();
+    List<String> headers = tokenizedData.getHeadersList().stream()
+        .map(fid -> fid.getName())
+        .collect(Collectors.toList());
+    List<Table.Row> outputRows = tokenizedData.getRowsList();
+    if (outputRows.size() > 0) {
+      for (Table.Row outputRow : outputRows) {
+        if (outputRow.getValuesCount() != headers.size()) {
+          throw new IllegalArgumentException(
+              "CSV file's header count must exactly match with data element count");
         }
+        c.output(
+            KV.of(
+                c.element().getKey(),
+                createBqRow(outputRow, headers.toArray(new String[headers.size()]))));
       }
     }
-
-    /**
-    * Creates a BigQuery row using the tokenized values by DLP passed. The function
-    * connects the headers to respective values that are transformed to Strings.
-    *
-    * @param  tokenizedValue Table row tokenized by DLP API
-    * @param  headers        Headers of the table
-    * @return                BigQuery row
-    */
-    //@CreateBqRow
-    private static TableRow createBqRow(Table.Row tokenizedValue, String[] headers) {
-      TableRow bqRow = new TableRow();
-      AtomicInteger headerIndex = new AtomicInteger(0);
-      tokenizedValue
-          .getValuesList()
-          .forEach(
-              value -> {
-                String checkedHeaderName = Util.checkHeaderName(headers[headerIndex.getAndIncrement()].toString());
-                bqRow.set(checkedHeaderName, value.getStringValue());
-              });
-      return bqRow;
-    }
   }
+
+  /**
+  * Creates a BigQuery row using the tokenized values by DLP passed. The function
+  * connects the headers to respective values that are transformed to Strings.
+  *
+  * @param  tokenizedValue Table row tokenized by DLP API
+  * @param  headers        Headers of the table
+  * @return                BigQuery row
+  */
+  //@CreateBqRow
+  private static TableRow createBqRow(Table.Row tokenizedValue, String[] headers) {
+    TableRow bqRow = new TableRow();
+    AtomicInteger headerIndex = new AtomicInteger(0);
+    tokenizedValue
+        .getValuesList()
+        .forEach(
+            value -> {
+              String checkedHeaderName = Util.checkHeaderName(headers[headerIndex.getAndIncrement()].toString());
+              bqRow.set(checkedHeaderName, value.getStringValue());
+            });
+    return bqRow;
+  }
+}

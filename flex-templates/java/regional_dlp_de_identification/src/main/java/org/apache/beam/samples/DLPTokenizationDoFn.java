@@ -36,79 +36,78 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
-   * The {@link DLPTokenizationDoFn} class executes tokenization request by
-   * calling DLP api. It uses DLP table as a content item as CSV file contains
-   * fully structured data. DLP templates (e.g. de-identify, inspect) need to
-   * exist before this pipeline runs. As response from the API is received,
-   * this DoFn outputs KV of new table with table id as key.
-   */
-  public class DLPTokenizationDoFn extends DoFn<KV<String, Table>, KV<String, Table>> {
+ * The {@link DLPTokenizationDoFn} class executes tokenization request by
+ * calling DLP api. It uses DLP table as a content item as CSV file contains
+ * fully structured data. DLP templates (e.g. de-identify, inspect) need to
+ * exist before this pipeline runs. As response from the API is received,
+ * this DoFn outputs KV of new table with table id as key.
+ */
+public class DLPTokenizationDoFn extends DoFn<KV<String, Table>, KV<String, Table>> {
 
-    public static final Logger LOG = LoggerFactory.getLogger(DLPTokenizationDoFn.class);
+  public static final Logger LOG = LoggerFactory.getLogger(DLPTokenizationDoFn.class);
 
-    private ValueProvider<String> dlpProjectId;
-    private ValueProvider<String> dlpLocation;
-    private DlpServiceClient dlpServiceClient;
-    private ValueProvider<String> deIdentifyTemplateName;
-    //private ValueProvider<String> inspectTemplateName;
-    private boolean inspectTemplateExist;
-    private Builder requestBuilder;
-    private final Distribution numberOfRowsTokenized = Metrics.distribution(DLPTokenizationDoFn.class,
-        "numberOfRowsTokenizedDistro");
-    private final Distribution numberOfBytesTokenized = Metrics.distribution(DLPTokenizationDoFn.class,
-        "numberOfBytesTokenizedDistro");
+  private ValueProvider<String> dlpProjectId;
+  private ValueProvider<String> dlpLocation;
+  private DlpServiceClient dlpServiceClient;
+  private ValueProvider<String> deIdentifyTemplateName;
+  //private ValueProvider<String> inspectTemplateName;
+  private boolean inspectTemplateExist;
+  private Builder requestBuilder;
+  private final Distribution numberOfRowsTokenized = Metrics.distribution(DLPTokenizationDoFn.class,
+      "numberOfRowsTokenizedDistro");
+  private final Distribution numberOfBytesTokenized = Metrics.distribution(DLPTokenizationDoFn.class,
+      "numberOfBytesTokenizedDistro");
 
-    public DLPTokenizationDoFn(
-        ValueProvider<String> dlpProjectId,
-        ValueProvider<String> dlpLocation,
-        ValueProvider<String> deIdentifyTemplateName) {
+  public DLPTokenizationDoFn(
+    ValueProvider<String> dlpProjectId,
+    ValueProvider<String> dlpLocation,
+    ValueProvider<String> deIdentifyTemplateName) {
       this.dlpProjectId = dlpProjectId;
       this.dlpLocation = dlpLocation;
       this.dlpServiceClient = null;
       this.deIdentifyTemplateName = deIdentifyTemplateName;
       this.inspectTemplateExist = false;
-    }
+  }
 
-    @Setup
-    public void setup() {
-      if (this.deIdentifyTemplateName.isAccessible()) {
-        if (this.deIdentifyTemplateName.get() != null) {
-          this.requestBuilder = DeidentifyContentRequest.newBuilder()
-              .setParent(LocationName.of(this.dlpProjectId.get(), this.dlpLocation.get()).toString())
-              .setDeidentifyTemplateName(this.deIdentifyTemplateName.get());
-        }
+  @Setup
+  public void setup() {
+    if (this.deIdentifyTemplateName.isAccessible()) {
+      if (this.deIdentifyTemplateName.get() != null) {
+        this.requestBuilder = DeidentifyContentRequest.newBuilder()
+            .setParent(LocationName.of(this.dlpProjectId.get(), this.dlpLocation.get()).toString())
+            .setDeidentifyTemplateName(this.deIdentifyTemplateName.get());
       }
-    }
-
-    @StartBundle
-    public void startBundle() throws SQLException {
-
-      try {
-        this.dlpServiceClient = DlpServiceClient.create();
-
-      } catch (IOException e) {
-        LOG.error("Failed to create DLP Service Client", e.getMessage());
-        throw new RuntimeException(e);
-      }
-    }
-
-    @FinishBundle
-    public void finishBundle() throws Exception {
-      if (this.dlpServiceClient != null) {
-        this.dlpServiceClient.close();
-      }
-    }
-
-    @ProcessElement
-    public void processElement(ProcessContext c) {
-      String key = c.element().getKey();
-      Table nonEncryptedData = c.element().getValue();
-      ContentItem tableItem = ContentItem.newBuilder().setTable(nonEncryptedData).build();
-      this.requestBuilder.setItem(tableItem);
-      DeidentifyContentResponse response = dlpServiceClient.deidentifyContent(this.requestBuilder.build());
-      Table tokenizedData = response.getItem().getTable();
-      numberOfRowsTokenized.update(tokenizedData.getRowsList().size());
-      numberOfBytesTokenized.update(tokenizedData.toByteArray().length);
-      c.output(KV.of(key, tokenizedData));
     }
   }
+
+  @StartBundle
+  public void startBundle() throws SQLException {
+    try {
+      this.dlpServiceClient = DlpServiceClient.create();
+
+    } catch (IOException e) {
+      LOG.error("Failed to create DLP Service Client", e.getMessage());
+      throw new RuntimeException(e);
+    }
+  }
+
+  @FinishBundle
+  public void finishBundle() throws Exception {
+    if (this.dlpServiceClient != null) {
+      this.dlpServiceClient.close();
+    }
+  }
+
+  @ProcessElement
+  public void processElement(ProcessContext c) {
+    String key = c.element().getKey();
+    Table nonEncryptedData = c.element().getValue();
+    ContentItem tableItem = ContentItem.newBuilder().setTable(nonEncryptedData).build();
+    this.requestBuilder.setItem(tableItem);
+    DeidentifyContentResponse response = dlpServiceClient.deidentifyContent(this.requestBuilder.build());
+    Table tokenizedData = response.getItem().getTable();
+    numberOfRowsTokenized.update(tokenizedData.getRowsList().size());
+    numberOfBytesTokenized.update(tokenizedData.toByteArray().length);
+    c.output(KV.of(key, tokenizedData));
+  }
+}
