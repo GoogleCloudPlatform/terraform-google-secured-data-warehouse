@@ -15,27 +15,22 @@
  */
 
 variable "org_id" {
-  description = "GCP Organization ID."
+  description = "The numeric organization id."
   type        = string
 }
 
-variable "data_governance_project_id" {
-  description = "The ID of the project in which the data governance resources will be created."
+variable "folder_id" {
+  description = "The folder to deploy in."
   type        = string
 }
 
-variable "data_ingestion_project_id" {
-  description = "The ID of the project in which the data ingestion resources will be created."
+variable "billing_account" {
+  description = "The billing account id associated with the projects, e.g. XXXXXX-YYYYYY-ZZZZZZ."
   type        = string
 }
 
-variable "non_confidential_data_project_id" {
-  description = "The ID of the project in which the Bigquery will be created."
-  type        = string
-}
-
-variable "confidential_data_project_id" {
-  description = "Project where the confidential datasets and tables are created."
+variable "access_context_manager_policy_id" {
+  description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
   type        = string
 }
 
@@ -44,14 +39,8 @@ variable "terraform_service_account" {
   type        = string
 }
 
-variable "access_context_manager_policy_id" {
-  description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format=\"value(name)\"`."
-  type        = string
-  default     = ""
-}
-
 variable "perimeter_additional_members" {
-  description = "The list of all members to be added on perimeter access, except the service accounts created by this module. Prefix user: (user:email@email.com) or serviceAccount: (serviceAccount:my-service-account@email.com) is required."
+  description = "The list of members to be added on perimeter access. To be able to see the resources protected by the VPC Service Controls add your user must be in this list. The service accounts created by this module do not need to be added to this list. Entries must be in the standard GCP form: `user:email@email.com` or `serviceAccount:my-service-account@email.com`."
   type        = list(string)
 }
 

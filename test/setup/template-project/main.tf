@@ -31,10 +31,6 @@ locals {
   python_repository_id                       = "python-modules"
   project_id                                 = module.external_flex_template_project.project_id
   bucket_name                                = module.external_flex_template_infrastructure.flex_template_bucket_name
-  java_de_identify_flex_template_image_tag   = "${local.location}-docker.pkg.dev/${local.project_id}/${local.docker_repository_id}/samples/regional-txt-dlp-bq-streaming:latest"
-  java_de_identify_template_gs_path          = "gs://${local.bucket_name}/flex-template-samples/regional-txt-dlp-bq-streaming.json"
-  java_re_identify_flex_template_image_tag   = "${local.location}-docker.pkg.dev/${local.project_id}/${local.docker_repository_id}/samples/regional-bq-dlp-bq-streaming:latest"
-  java_re_identify_template_gs_path          = "gs://${local.bucket_name}/flex-template-samples/regional-bq-dlp-bq-streaming.json"
   pip_index_url                              = "https://${local.location}-python.pkg.dev/${local.project_id}/${local.python_repository_id}/simple/"
   python_de_identify_flex_template_image_tag = "${local.location}-docker.pkg.dev/${local.project_id}/${local.docker_repository_id}/samples/regional-python-dlp-flex:latest"
   python_de_identify_template_gs_path        = "gs://${local.bucket_name}/flex-template-samples/regional-python-dlp-flex.json"
@@ -112,59 +108,22 @@ module "external_flex_template_infrastructure" {
   ]
 }
 
-resource "null_resource" "java_de_identification_flex_template" {
-
-  triggers = {
-    project_id                = local.project_id
-    terraform_service_account = var.service_account_email
-    template_image_tag        = local.java_de_identify_flex_template_image_tag
-    template_gs_path          = local.java_de_identify_template_gs_path
-  }
-
-  provisioner "local-exec" {
-    when    = create
-    command = <<EOF
-      gcloud builds submit \
-       --project=${local.project_id} \
-       --gcs-source-staging-dir="gs://${google_storage_bucket.cloudbuild_bucket.name}/source" \
-       --config ${local.templates_path}/java/regional_dlp_de_identification/cloudbuild.yaml \
-       ${local.templates_path}/java/regional_dlp_de_identification \
-       --impersonate-service-account=${var.service_account_email} \
-       --substitutions="_PROJECT=${local.project_id},_FLEX_TEMPLATE_IMAGE_TAG=${local.java_de_identify_flex_template_image_tag},_TEMPLATE_GS_PATH=${local.java_de_identify_template_gs_path}"
-EOF
-
-  }
+// It's necessary to use the wait_60_seconds to guarantee the infrastructure is fully built before removing the owner role.
+resource "time_sleep" "wait_60_seconds" {
+  create_duration = "60s"
 
   depends_on = [
     module.external_flex_template_infrastructure
   ]
 }
 
-resource "null_resource" "java_re_identification_flex_template" {
-
-  triggers = {
-    project_id                = local.project_id
-    terraform_service_account = var.service_account_email
-    template_image_tag        = local.java_re_identify_flex_template_image_tag
-    template_gs_path          = local.java_re_identify_template_gs_path
-  }
-
-  provisioner "local-exec" {
-    when    = create
-    command = <<EOF
-      gcloud builds submit \
-       --project=${local.project_id} \
-       --gcs-source-staging-dir="gs://${google_storage_bucket.cloudbuild_bucket.name}/source" \
-       --config ${local.templates_path}/java/regional_dlp_transform/cloudbuild.yaml \
-       ${local.templates_path}/java/regional_dlp_transform \
-       --impersonate-service-account=${var.service_account_email} \
-       --substitutions="_PROJECT=${local.project_id},_FLEX_TEMPLATE_IMAGE_TAG=${local.java_re_identify_flex_template_image_tag},_TEMPLATE_GS_PATH=${local.java_re_identify_template_gs_path}"
-EOF
-
-  }
+resource "google_project_iam_binding" "remove_owner_role_from_template" {
+  project = local.project_id
+  role    = "roles/owner"
+  members = []
 
   depends_on = [
-    module.external_flex_template_infrastructure
+    time_sleep.wait_60_seconds
   ]
 }
 

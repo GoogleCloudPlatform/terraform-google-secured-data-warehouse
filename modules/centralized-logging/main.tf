@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,12 @@ locals {
   logging_keyring_name = "logging_keyring_${random_id.suffix.hex}"
   logging_key_name     = "logging_key"
   keys                 = [local.logging_key_name]
+  enabling_data_logs   = var.data_access_logs_enabled ? ["DATA_WRITE", "DATA_READ"] : []
+  parent_resource_ids  = [for parent_resource_id in local.log_exports[*].parent_resource_id : parent_resource_id]
+
   log_exports = toset([
     for value in module.log_export : value
   ])
-  parent_resource_ids = [for parent_resource_id in local.log_exports[*].parent_resource_id : parent_resource_id]
 }
 
 resource "random_id" "suffix" {
@@ -43,6 +45,7 @@ module "cmek" {
   count = var.create_bucket ? 1 : 0
 
   project_id           = var.kms_project_id
+  labels               = var.labels
   location             = var.logging_location
   keyring              = local.logging_keyring_name
   key_rotation_period  = var.key_rotation_period_seconds
@@ -90,4 +93,26 @@ resource "google_storage_bucket_iam_member" "storage_sink_member" {
   bucket = local.bucket_name
   role   = "roles/storage.objectCreator"
   member = each.value.writer_identity
+}
+
+resource "google_project_iam_audit_config" "project_config" {
+  for_each = var.projects_ids
+
+  project = "projects/${each.value}"
+  service = "allServices"
+
+  ###################################################################################################
+  ### Audit logs can generate costs, to know more about it,
+  ### check the official documentation: https://cloud.google.com/stackdriver/pricing#logging-costs
+  ### To know more about audit logs, you can find more infos
+  ### here https://cloud.google.com/logging/docs/audit/configure-data-access
+  ### To enable DATA_READ and DATA_WRITE audit logs, set `data_access_logs_enabled` to true
+  ### ADMIN_READ logs are enabled by default.
+  ####################################################################################################
+  dynamic "audit_log_config" {
+    for_each = setunion(local.enabling_data_logs, ["ADMIN_READ"])
+    content {
+      log_type = audit_log_config.key
+    }
+  }
 }

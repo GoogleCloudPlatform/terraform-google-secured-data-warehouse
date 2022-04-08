@@ -1,4 +1,4 @@
-# Copyright 2021 Google LLC
+# Copyright 2022 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,9 +17,11 @@ import base64
 import crcmod
 import six
 from google.cloud import kms
+import google.auth
+from google.auth import impersonated_credentials
 
 
-def encrypt_symmetric(project_id, location_id, key_ring_id, key_id):
+def encrypt_symmetric(project_id, location_id, key_ring_id, key_id, client):
     """
     Encrypt securely generated random bytes using a confidential
     computing symmetric key.
@@ -29,20 +31,19 @@ def encrypt_symmetric(project_id, location_id, key_ring_id, key_id):
         location_id (string): Cloud KMS location.
         key_ring_id (string): ID of the Cloud KMS key ring.
         key_id (string): ID of the key to use.
-
+        client (KeyManagementServiceClient):
+        Google Cloud Key Management Service.
     Returns:
         bytes: Encrypted ciphertext.
     """
 
-    # Generate random bytes
-    plaintext_bytes = generate_random_bytes(project_id, location_id, 32)
+    # Generate random bytes.
+    plaintext_bytes = generate_random_bytes(
+        project_id, location_id, 32, client)
 
     # Optional, but recommended: compute plaintext's CRC32C.
     # See crc32c() function defined below.
     plaintext_crc32c = crc32c(plaintext_bytes)
-
-    # Create the client.
-    client = kms.KeyManagementServiceClient()
 
     # Build the key name.
     key_name = client.crypto_key_path(
@@ -70,7 +71,7 @@ def encrypt_symmetric(project_id, location_id, key_ring_id, key_id):
     return encrypt_response
 
 
-def generate_random_bytes(project_id, location_id, num_bytes):
+def generate_random_bytes(project_id, location_id, num_bytes, client):
     """
     Generate random bytes with entropy sourced from the given location.
 
@@ -78,14 +79,13 @@ def generate_random_bytes(project_id, location_id, num_bytes):
         project_id (string): Google Cloud project ID (e.g. 'my-project').
         location_id (string): Cloud KMS location (e.g. 'us-east1').
         num_bytes (integer): number of bytes of random data.
+        client (KeyManagementServiceClient):
+        Google Cloud Key Management Service.
 
     Returns:
         bytes: Encrypted ciphertext.
 
     """
-
-    # Create the client.
-    client = kms.KeyManagementServiceClient()
 
     # Build the location name.
     location_name = client.common_location_path(project_id, location_id)
@@ -121,6 +121,7 @@ if __name__ == '__main__':
                     'using a symmetric key.')
     group1 = parser.add_argument_group("Crypto Key Self link")
     group2 = parser.add_argument_group("Crypto Key parameters")
+    group3 = parser.add_argument_group("Service Account to be impersonated")
 
     group2.add_argument('--project_id', dest='project_id',
                         help='project_id (string): Google Cloud project ID.')
@@ -139,9 +140,29 @@ if __name__ == '__main__':
                         'locations/LOCATION-ID'
                         '/keyRings/KEY-RING-ID/cryptoKeys/KEY-ID')
 
+    group3.add_argument('--service_account', dest='service_account',
+                        help='service_account (string): '
+                        'Service Account to be impersonated.')
+
     args = parser.parse_args()
-    if args.crypto_key_path is not None:
+
+    # Create the client.
+    if args.service_account is not None:
+        target_scopes = ['https://www.googleapis.com/auth/cloud-platform']
+
+        source_credentials, project = google.auth.default(
+            scopes=target_scopes)
+
+        target_credentials = impersonated_credentials.Credentials(
+            source_credentials=source_credentials,
+            target_principal=args.service_account,
+            target_scopes=target_scopes,
+            lifetime=10)
+        client = kms.KeyManagementServiceClient(credentials=target_credentials)
+    else:
         client = kms.KeyManagementServiceClient()
+
+    if args.crypto_key_path is not None:
         key_ring_args = client.parse_crypto_key_path(args.crypto_key_path)
         project_id = key_ring_args['project']
         location_id = key_ring_args['location']
@@ -154,5 +175,5 @@ if __name__ == '__main__':
         key_id = args.key_id
 
     encrypt_response = encrypt_symmetric(project_id, location_id,
-                                         key_ring_id, key_id)
+                                         key_ring_id, key_id, client)
     print(base64.b64encode(encrypt_response.ciphertext).decode("utf-8"))

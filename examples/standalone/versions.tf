@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,19 +34,15 @@ terraform {
       version = "~> 2.1"
     }
 
+    time = {
+      source  = "hashicorp/time"
+      version = "~> 0.7"
+    }
+
     random = {
       source  = "hashicorp/random"
       version = "~> 2.3"
     }
 
   }
-
-  provider_meta "google" {
-    module_name = "blueprints/terraform/terraform-google-secured-data-warehouse:dataflow-flex-job/v0.2.0"
-  }
-
-  provider_meta "google-beta" {
-    module_name = "blueprints/terraform/terraform-google-secured-data-warehouse:dataflow-flex-job/v0.2.0"
-  }
-
 }

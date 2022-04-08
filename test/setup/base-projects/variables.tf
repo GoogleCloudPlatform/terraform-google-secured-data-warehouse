@@ -14,16 +14,25 @@
  * limitations under the License.
  */
 
+variable "labels" {
+  description = "(Optional) Labels attached to Data Warehouse resources."
+  type        = map(string)
+  default     = {}
+}
+
 variable "org_id" {
   description = "The numeric organization id"
+  type        = string
 }
 
 variable "folder_id" {
   description = "The folder to deploy in"
+  type        = string
 }
 
 variable "billing_account" {
   description = "The billing account id associated with the project, e.g. XXXXXX-YYYYYY-ZZZZZZ"
+  type        = string
 }
 
 variable "region" {

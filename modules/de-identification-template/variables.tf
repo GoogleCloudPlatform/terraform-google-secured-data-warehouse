@@ -60,7 +60,7 @@ variable "template_display_name" {
 variable "template_description" {
   description = "A description for the DLP de-identification template."
   type        = string
-  default     = "De-identifies sensitive content defined in the template with a KMS wrapped CMEK."
+  default     = "Transforms sensitive content defined in the template with a KMS wrapped CMEK."
 }
 
 variable "dataflow_service_account" {

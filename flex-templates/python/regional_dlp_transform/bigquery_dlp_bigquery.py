@@ -35,9 +35,9 @@ def run(argv=None, save_main_session=True):
         '--query',
         help=(
             'Input query to retrieve data from Dataset. '
-            'Example: `SELECT * FROM PROJECT:DATASET.TABLE LIMIT 100`.'
-            'You need to specify either an input-table or query.'
-            'It is recommended to use query'
+            'Example: `SELECT * FROM PROJECT:DATASET.TABLE LIMIT 100`. '
+            'You need to specify either an input-table or query. '
+            'It is recommended to use query '
             'when you want to use a public dataset.'
         )
     )
@@ -45,9 +45,9 @@ def run(argv=None, save_main_session=True):
         '--input_table',
         help=(
             'Input BigQuery table for results specified as: '
-            'PROJECT:DATASET.TABLE or DATASET.TABLE.'
-            'You need to specify either an input-table or query.'
-            'It is recommended to use input-table'
+            'PROJECT:DATASET.TABLE or DATASET.TABLE. '
+            'You need to specify either an input-table or query. '
+            'It is recommended to use input-table '
             'for when you have your own dataset.'
         )
     )
@@ -139,8 +139,8 @@ def run(argv=None, save_main_session=True):
             )
         else:
             if 'LIMIT' not in known_args.query:
-                logging.warning('The query has no LIMIT parameter set.'
-                                'This can lead to a pipeline processing'
+                logging.warning('The query has no LIMIT parameter set. '
+                                'This can lead to a pipeline processing '
                                 'taking more time.')
 
             messages = (

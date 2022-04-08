@@ -58,6 +58,7 @@ module "base_projects" {
   for_each = local.project_groups
 
   org_id          = var.org_id
+  labels          = var.labels
   folder_id       = var.folder_id
   billing_account = var.billing_account
   region          = "us-east4"
@@ -74,11 +75,24 @@ module "iam_projects" {
   service_account_email            = google_service_account.int_ci_service_account.email
 }
 
+resource "google_project_iam_member" "crypto_operator" {
+  for_each = local.project_groups
+
+
+  project = module.base_projects[each.key].data_governance_project_id
+  role    = "roles/cloudkms.cryptoOperator"
+  member  = "serviceAccount:${google_service_account.int_ci_service_account.email}"
+
+  depends_on = [
+    module.iam_projects
+  ]
+}
+
 resource "time_sleep" "wait_90_seconds" {
   create_duration = "90s"
 
   depends_on = [
-    module.iam_projects
+    google_project_iam_member.crypto_operator
   ]
 }
 

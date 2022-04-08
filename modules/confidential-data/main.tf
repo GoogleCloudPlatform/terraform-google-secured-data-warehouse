@@ -23,6 +23,7 @@ module "dataflow_bucket" {
   version = "~> 2.0"
 
   project_id    = var.confidential_data_project_id
+  labels        = var.labels
   name          = "bkt-${var.confidential_data_project_id}-tmp-dataflow-${random_id.suffix.hex}"
   location      = var.location
   storage_class = "STANDARD"
@@ -38,6 +39,7 @@ module "bigquery_confidential_data" {
   version = "~> 5.2.0"
 
   dataset_id                  = var.dataset_id
+  dataset_labels              = var.labels
   description                 = "Dataset for BigQuery Sensitive Data"
   project_id                  = var.confidential_data_project_id
   location                    = var.location

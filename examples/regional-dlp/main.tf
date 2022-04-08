@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ locals {
 module "data_ingestion" {
   source                           = "../.."
   org_id                           = var.org_id
+  labels                           = { environment = "dev" }
   data_governance_project_id       = var.data_governance_project_id
   confidential_data_project_id     = var.confidential_data_project_id
   non_confidential_data_project_id = var.non_confidential_data_project_id
@@ -29,9 +30,9 @@ module "data_ingestion" {
   sdx_project_number               = var.sdx_project_number
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  bucket_name                      = "dlp-flex-data-ingestion"
-  dataset_id                       = "dlp_flex_data_ingestion"
-  cmek_keyring_name                = "dlp_flex_data-ingestion"
+  bucket_name                      = "reg-dlp-data-ing"
+  dataset_id                       = "reg_dlp_data_ing"
+  cmek_keyring_name                = "reg-dlp-data-ing"
   pubsub_resource_location         = local.location
   location                         = local.location
   delete_contents_on_destroy       = var.delete_contents_on_destroy
