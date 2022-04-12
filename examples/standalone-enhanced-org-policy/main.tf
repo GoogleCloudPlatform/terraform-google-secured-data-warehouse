@@ -28,9 +28,9 @@ module "secured_data_warehouse" {
   data_ingestion_project_id        = var.data_ingestion_project_id
   terraform_service_account        = var.terraform_service_account
   access_context_manager_policy_id = var.access_context_manager_policy_id
-  bucket_name                      = "standalone-pol-ing"
-  dataset_id                       = "standalone_pol_dataset"
-  cmek_keyring_name                = "standalone-pol-data-ing"
+  bucket_name                      = "standalone-policy"
+  dataset_id                       = "standalone_policy"
+  cmek_keyring_name                = "standalone-policy"
   pubsub_resource_location         = local.location
   location                         = local.location
   delete_contents_on_destroy       = var.delete_contents_on_destroy
