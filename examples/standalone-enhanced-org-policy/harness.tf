@@ -81,9 +81,7 @@ module "data_ingestion_project_id" {
     "bigquery.googleapis.com",
     "accesscontextmanager.googleapis.com",
     "cloudbilling.googleapis.com",
-    "cloudkms.googleapis.com",
-    "cloudbuild.googleapis.com",
-    "artifactregistry.googleapis.com"
+    "cloudkms.googleapis.com"
   ]
 }
 
