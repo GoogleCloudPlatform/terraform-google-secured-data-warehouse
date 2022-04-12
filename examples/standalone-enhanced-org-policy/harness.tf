@@ -122,7 +122,6 @@ module "confidential_data_project_id" {
 
   activate_apis = [
     "cloudresourcemanager.googleapis.com",
-    "storage-api.googleapis.com",
     "serviceusage.googleapis.com",
     "iam.googleapis.com",
     "bigquery.googleapis.com",
@@ -146,15 +145,12 @@ module "non_confidential_data_project_id" {
 
   activate_apis = [
     "cloudresourcemanager.googleapis.com",
-    "storage-api.googleapis.com",
     "serviceusage.googleapis.com",
     "iam.googleapis.com",
     "bigquery.googleapis.com",
     "accesscontextmanager.googleapis.com",
     "cloudbilling.googleapis.com",
-    "cloudkms.googleapis.com",
-    "cloudbuild.googleapis.com",
-    "artifactregistry.googleapis.com"
+    "cloudkms.googleapis.com"
   ]
 }
 
