@@ -33,3 +33,13 @@ module "service_account_key_policy" {
   policy_type = "boolean"
   enforce     = true
 }
+
+module "service_account_key_creation_policy" {
+  source      = "terraform-google-modules/org-policy/google"
+  version     = "~> 5.0"
+  policy_for  = "project"
+  project_id  = var.project_id
+  constraint  = "iam.disableServiceAccountKeyCreation"
+  policy_type = "boolean"
+  enforce     = true
+}
