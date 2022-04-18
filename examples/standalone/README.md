@@ -264,7 +264,6 @@ iam.googleapis.com \
 These outputs can be interesting for all user:
 
 - Blueprint type
-- Data ingestion bucket name
 - Data ingestion dataflow bucket name
 - Confidential data project id
 - Data governance project id
@@ -274,14 +273,19 @@ These outputs can be interesting for all user:
 
 These outputs can be interesting for data analyst group:
 
-- Data ingestion topic name
-- Pubsub writer service account email
-- Storage writer service account email
+- Bigquery non confidential table
+- Bigquery confidential table
+- Confidential data project id
+- Non-confidential data project id
+- Data ingestion dataflow bucket name
+- Taxonomy
 
 These outputs can be interesting for data engineer group:
 
-- Confidential data dataflow bucket name
-- Template project id
+- Data ingestion topic name
+- Pubsub writer service account email
+- Storage writer service account email
+- Tek wrapping keyring
 
 These outputs can be interesting for network administrator group:
 
@@ -340,23 +344,24 @@ These outputs can be interesting for security analyst group:
 | cmek\_reidentification\_crypto\_key | The Customer Managed Crypto Key for the reidentification crypto boundary. |
 | confidential\_data\_dataflow\_bucket\_name | The name of the bucket created for dataflow in the confidential data pipeline. |
 | confidential\_data\_perimeter\_name | Access context manager service perimeter name. |
-| confidential\_data\_project\_id | The Project where the confidential datasets and tables are created. |
+| confidential\_data\_project\_id | The ID of the project created for confidential datasets and tables. |
 | confidential\_network\_name | The name of the confidential VPC being created. |
 | confidential\_network\_self\_link | The URI of the confidential VPC being created. |
 | confidential\_subnets\_self\_link | The self-links of confidential subnets being created. |
 | data\_governance\_perimeter\_name | Access context manager service perimeter name. |
-| data\_governance\_project\_id | The id of the project created for data governance. |
-| data\_ingestion\_bucket\_name | The name of the bucket created for the data ingestion pipeline. |
+| data\_governance\_project\_id | The ID of the project created for data governance. |
 | data\_ingestion\_dataflow\_bucket\_name | The name of the bucket created for dataflow in the data ingestion pipeline. |
 | data\_ingestion\_network\_name | The name of the data ingestion VPC being created. |
 | data\_ingestion\_network\_self\_link | The URI of the data ingestion VPC being created. |
-| data\_ingestion\_project\_id | The id of the project created for the data ingstion pipeline. |
+| data\_ingestion\_project\_id | The ID of the project created for the data ingstion pipeline. |
 | data\_ingestion\_service\_perimeter\_name | Access context manager service perimeter name. |
 | data\_ingestion\_subnets\_self\_link | The self-links of data ingestion subnets being created. |
 | data\_ingestion\_topic\_name | The topic created for data ingestion pipeline. |
 | dataflow\_controller\_service\_account\_email | The regional de identification pipeline service account. |
 | non\_confidential\_data\_project\_id | The id of the project created for non-confidential data. |
 | pubsub\_writer\_service\_account\_email | The PubSub writer service account email. Should be used to write data to the PubSub topics the data ingestion pipeline reads from. |
+| regional\_deid\_pipeline\_job\_id | The unique ID of this job. |
+| regional\_reid\_pipeline\_job\_id | The unique ID of this job. |
 | storage\_writer\_service\_account\_email | The Storage writer service account email. Should be used to write data to the buckets the data ingestion pipeline reads from. |
 | taxonomy\_display\_name | The name of the taxonomy. |
 | tek\_wrapping\_keyring | The name of tek wrapping key |
