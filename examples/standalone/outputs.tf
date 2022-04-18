@@ -74,30 +74,25 @@ output "confidential_data_dataflow_bucket_name" {
   value       = module.secured_data_warehouse.confidential_data_dataflow_bucket_name
 }
 
-output "data_ingestion_bucket_name" {
-  description = "The name of the bucket created for the data ingestion pipeline."
-  value       = module.secured_data_warehouse.data_ingestion_dataflow_bucket_name
-}
-
 output "data_ingestion_dataflow_bucket_name" {
   description = "The name of the bucket created for dataflow in the data ingestion pipeline."
   value       = module.secured_data_warehouse.data_ingestion_dataflow_bucket_name
 }
 
 output "confidential_data_project_id" {
-  description = "The Project where the confidential datasets and tables are created."
+  description = "The ID of the project created for confidential datasets and tables."
   value       = module.base_projects.confidential_data_project_id
 
 }
 
 output "data_governance_project_id" {
-  description = "The id of the project created for data governance."
+  description = "The ID of the project created for data governance."
   value       = module.base_projects.data_governance_project_id
 
 }
 
 output "data_ingestion_project_id" {
-  description = "The id of the project created for the data ingstion pipeline."
+  description = "The ID of the project created for the data ingstion pipeline."
   value       = module.base_projects.data_ingestion_project_id
 
 }
@@ -182,4 +177,14 @@ output "data_ingestion_subnets_self_link" {
 output "taxonomy_display_name" {
   description = "The name of the taxonomy."
   value       = google_data_catalog_taxonomy.secure_taxonomy.display_name
+}
+
+output "regional_reid_pipeline_job_id" {
+  description = "The unique ID of this job."
+  value       = module.regional_reid_pipeline.job_id
+}
+
+output "regional_deid_pipeline_job_id" {
+  description = "The unique ID of this job."
+  value       = module.regional_deid_pipeline.job_id
 }
