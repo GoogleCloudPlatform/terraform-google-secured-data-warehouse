@@ -21,7 +21,7 @@
   <modelVersion>4.0.0</modelVersion>
 
 
-  <groupId>com.google.cloud.blueprints.datawarehouse</groupId>
+  <groupId>com.google.cloud.blueprints.datawarehouse.transform</groupId>
   <artifactId>regional-bq-dlp-bq-streaming</artifactId>
   <version>1.0.0</version>
 

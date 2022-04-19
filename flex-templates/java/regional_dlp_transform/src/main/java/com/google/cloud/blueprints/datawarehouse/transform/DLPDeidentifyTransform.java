@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.google.cloud.blueprints.datawarehouse;
+package com.google.cloud.blueprints.datawarehouse.transform;
 
 import com.google.api.services.bigquery.model.TableRow;
 import com.google.auto.value.AutoValue;
-import com.google.privacy.dlp.v2.ReidentifyContentResponse;
+import com.google.privacy.dlp.v2.DeidentifyContentResponse;
 import com.google.privacy.dlp.v2.Table;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,9 +40,9 @@ import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("serial")
 @AutoValue
-public abstract class DLPReidentifyTransform
+public abstract class DLPDeidentifyTransform
     extends PTransform<PCollection<KV<String, Table.Row>>, PCollectionTuple> {
-  public static final Logger LOG = LoggerFactory.getLogger(DLPReidentifyTransform.class);
+  public static final Logger LOG = LoggerFactory.getLogger(DLPDeidentifyTransform.class);
 
   @Nullable
   public abstract String deidTemplateName();
@@ -73,49 +73,49 @@ public abstract class DLPReidentifyTransform
 
     public abstract Builder setColumnDelimiter(Character columnDelimiter);
 
-    public abstract DLPReidentifyTransform build();
+    public abstract DLPDeidentifyTransform build();
   }
 
   public static Builder newBuilder() {
-    return new AutoValue_DLPReidentifyTransform.Builder();
+    return new AutoValue_DLPDeidentifyTransform.Builder();
   }
 
 
   @Override
   public PCollectionTuple expand(PCollection<KV<String, Table.Row>> input) {
+      return input
+          .apply(
+              "DeIdTransform",
+              DLPDeidentifyText.newBuilder()
+                  .setBatchSizeBytes(batchSize())
+                  .setColumnDelimiter(columnDelimiter())
+                  .setHeaderColumns(header())
+                  .setDeidentifyTemplateName(deidTemplateName())
+                  .setProjectId(projectId())
+                  .setDlpLocation(dlpLocation())
+                  .build())
+          .apply(
+              "ConvertDeidResponse",
+              ParDo.of(new ConvertDeidResponse())
+                  .withOutputTags(Util.jobSuccess, TupleTagList.of(Util.jobFailure)));
+    }
 
-    return input
-        .apply(
-            "ReIdTransform",
-            DLPReidentifyText.newBuilder()
-                .setBatchSizeBytes(batchSize())
-                .setColumnDelimiter(columnDelimiter())
-                .setHeaderColumns(header())
-                .setReidentifyTemplateName(deidTemplateName())
-                .setProjectId(projectId())
-                .setDlpLocation(dlpLocation())
-                .build())
-        .apply(
-            "ConvertReidResponse",
-            ParDo.of(new ConvertReidResponse())
-                .withOutputTags(Util.jobSuccess, TupleTagList.of(Util.jobFailure)));
-  }
+  static class ConvertDeidResponse
+      extends DoFn<KV<String, DeidentifyContentResponse>, KV<String, TableRow>> {
 
-  static class ConvertReidResponse
-      extends DoFn<KV<String, ReidentifyContentResponse>, KV<String, TableRow>> {
-
-    private final Counter numberOfBytesReidentified =
-        Metrics.counter(ConvertReidResponse.class, "NumberOfBytesReidentified");
+    private final Counter numberOfBytesDeidentified =
+        Metrics.counter(ConvertDeidResponse.class, "NumberOfBytesDeidentified");
 
     @ProcessElement
     public void processElement(
-        @Element KV<String, ReidentifyContentResponse> element, MultiOutputReceiver out) {
+        @Element KV<String, DeidentifyContentResponse> element, MultiOutputReceiver out) {
 
       String deidTableName = BigQueryHelpers.parseTableSpec(element.getKey()).getTableId();
-      String tableName = String.format("%s_%s", deidTableName, Util.BQ_REID_TABLE_EXT);
+      String tableName = String.format("%s_%s", deidTableName, Util.BQ_DEID_TABLE_EXT);
       LOG.info("Table Ref {}", tableName);
+
       Table originalData = element.getValue().getItem().getTable();
-      numberOfBytesReidentified.inc(originalData.toByteArray().length);
+      numberOfBytesDeidentified.inc(originalData.toByteArray().length);
       List<String> headers =
           originalData.getHeadersList().stream()
               .map(fid -> fid.getName())

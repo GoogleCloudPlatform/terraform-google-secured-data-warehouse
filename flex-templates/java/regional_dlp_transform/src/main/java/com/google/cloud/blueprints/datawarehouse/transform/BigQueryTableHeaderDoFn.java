@@ -14,28 +14,32 @@
  * limitations under the License.
  */
 
-package com.google.cloud.blueprints.datawarehouse;
+package com.google.cloud.blueprints.datawarehouse.transform;
 
 import com.google.api.services.bigquery.model.TableRow;
-import com.google.privacy.dlp.v2.Table;
-import com.google.privacy.dlp.v2.Value;
+import java.util.Iterator;
 import org.apache.beam.sdk.transforms.DoFn;
 import org.apache.beam.sdk.values.KV;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("serial")
-public class MergeBigQueryRowToDlpRow extends DoFn<KV<String, TableRow>, KV<String, Table.Row>> {
+public class BigQueryTableHeaderDoFn extends DoFn<KV<String, Iterable<TableRow>>, String> {
+  public static final Logger LOG = LoggerFactory.getLogger(BigQueryTableHeaderDoFn.class);
 
   @ProcessElement
   public void processElement(ProcessContext c) {
-    TableRow bigqueryRow = c.element().getValue();
-    Table.Row.Builder rowBuilder = Table.Row.newBuilder();
-    bigqueryRow
-        .entrySet()
-        .forEach(
-            element -> {
-              String value = element.getValue().toString();
-              rowBuilder.addValues(Value.newBuilder().setStringValue(value).build());
-            });
-    c.output(KV.of(c.element().getKey(), rowBuilder.build()));
+
+    Iterator<TableRow> rows = c.element().getValue().iterator();
+
+    while (rows.hasNext()) {
+      rows.next()
+          .entrySet()
+          .forEach(
+              value -> {
+                c.output(value.getKey());
+              });
+      break;
+    }
   }
 }

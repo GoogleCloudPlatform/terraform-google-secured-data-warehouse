@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.apache.beam.samples;
+package com.google.cloud.blueprints.datawarehouse.deid;
 
 import org.apache.beam.runners.dataflow.options.DataflowPipelineOptions;
 import org.apache.beam.sdk.options.Description;

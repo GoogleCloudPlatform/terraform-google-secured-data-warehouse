@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package com.google.cloud.blueprints.datawarehouse;
+package com.google.cloud.blueprints.datawarehouse.transform;
 
 import com.google.auto.value.AutoValue;
 import com.google.cloud.dlp.v2.DlpServiceClient;
 import com.google.privacy.dlp.v2.ContentItem;
 import com.google.privacy.dlp.v2.DeidentifyConfig;
+import com.google.privacy.dlp.v2.DeidentifyContentRequest.Builder;
+import com.google.privacy.dlp.v2.DeidentifyContentRequest;
+import com.google.privacy.dlp.v2.DeidentifyContentResponse;
 import com.google.privacy.dlp.v2.FieldId;
 import com.google.privacy.dlp.v2.InspectConfig;
 import com.google.privacy.dlp.v2.LocationName;
-import com.google.privacy.dlp.v2.ReidentifyContentRequest;
-import com.google.privacy.dlp.v2.ReidentifyContentResponse;
 import com.google.privacy.dlp.v2.Table;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,8 +34,8 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.apache.beam.sdk.annotations.Experimental;
 import org.apache.beam.sdk.transforms.DoFn;
-import org.apache.beam.sdk.transforms.PTransform;
 import org.apache.beam.sdk.transforms.ParDo;
+import org.apache.beam.sdk.transforms.PTransform;
 import org.apache.beam.sdk.values.KV;
 import org.apache.beam.sdk.values.PCollection;
 import org.apache.beam.sdk.values.PCollectionView;
@@ -55,11 +56,11 @@ import org.slf4j.LoggerFactory;
  *
  * <p>The transform consumes {@link KV} of {@link String}s (assumed to be filename as key and
  * contents as value) and outputs {@link KV} of {@link String} (eg. filename) and {@link
- * ReidentifyContentResponse}, which will contain {@link Table} of results for the user to consume.
+ * DeidentifyContentResponse}, which will contain {@link Table} of results for the user to consume.
  *
  * <p>Batch size defines how big are batches sent to DLP at once in bytes.
  *
- * <p>Either reidentifyTemplateName {@link String} or reidentifyConfig {@link DeidentifyConfig} need
+ * <p>Either deidentifyTemplateName {@link String} or deidentifyConfig {@link DeidentifyConfig} need
  * to be set. inspectConfig {@link InspectConfig} and inspectTemplateName {@link String} are
  * optional.
  *
@@ -68,28 +69,28 @@ import org.slf4j.LoggerFactory;
 @Experimental
 @SuppressWarnings("serial")
 @AutoValue
-public abstract class DLPReidentifyText
+public abstract class DLPDeidentifyText
     extends PTransform<
-        PCollection<KV<String, Table.Row>>, PCollection<KV<String, ReidentifyContentResponse>>> {
+        PCollection<KV<String, Table.Row>>, PCollection<KV<String, DeidentifyContentResponse>>> {
 
   public static final Integer DLP_PAYLOAD_LIMIT_BYTES = 524000;
 
   /**
-   * Reidentify template.
+   * Deidentify template.
    *
-   * @return Template name for data reidentification.
+   * @return Template name for data deidentification.
   **/
   @Nullable
-  public abstract String getReidentifyTemplateName();
+  public abstract String getDeidentifyTemplateName();
 
   /**
-   * Reidentify configuration.
+   * Deidentify configuration.
    * Prefer using template.
    *
-   * @return Configuration object for reidentification. If present, supersedes the template.
+   * @return Configuration object for deidentification. If present, supersedes the template.
   **/
   @Nullable
-  public abstract DeidentifyConfig getReidentifyConfig();
+  public abstract DeidentifyConfig getDeidentifyConfig();
 
   /**
    * Hold column separator.  Default is ","
@@ -119,117 +120,116 @@ public abstract class DLPReidentifyText
   public abstract static class Builder {
 
     /**
-     * @param reidentifyConfig Configuration object for data deidentification. If present,
+     * @param deidentifyConfig Configuration object for data deidentification. If present,
      *     supersedes the template settings.
      */
-    public abstract DLPReidentifyText.Builder setReidentifyConfig(
-        DeidentifyConfig reidentifyConfig);
+    public abstract DLPDeidentifyText.Builder setDeidentifyConfig(
+        DeidentifyConfig deidentifyConfig);
 
-    /** @param reidentifyTemplateName Template name for data deidentification. */
-    public abstract DLPReidentifyText.Builder setReidentifyTemplateName(
-        String reidentifyTemplateName);
+    /** @param deidentifyTemplateName Template name for data deidentification. */
+    public abstract DLPDeidentifyText.Builder setDeidentifyTemplateName(
+        String deidentifyTemplateName);
 
     /**
      * @param batchSize Size of input elements batch to be sent to Cloud DLP service in one request.
      */
-    public abstract DLPReidentifyText.Builder setBatchSizeBytes(Integer batchSize);
+    public abstract DLPDeidentifyText.Builder setBatchSizeBytes(Integer batchSize);
     /** @param headerColumns List of column names if the input KV value is a delimited row. */
-    public abstract DLPReidentifyText.Builder setHeaderColumns(
+    public abstract DLPDeidentifyText.Builder setHeaderColumns(
         PCollectionView<List<String>> headerColumns);
 
     /**
      * @param delimiter Delimiter to be used when splitting values from input strings into columns.
      */
-    public abstract DLPReidentifyText.Builder setColumnDelimiter(Character delimiter);
+    public abstract DLPDeidentifyText.Builder setColumnDelimiter(Character delimiter);
 
     /** @param projectId ID of Google Cloud project to be used when deidentifying data. */
-    public abstract DLPReidentifyText.Builder setProjectId(String projectId);
+    public abstract DLPDeidentifyText.Builder setProjectId(String projectId);
 
     /** @param location for DLP. */
-    public abstract DLPReidentifyText.Builder setDlpLocation(String dlpLocation);
+    public abstract DLPDeidentifyText.Builder setDlpLocation(String dlpLocation);
 
-    abstract DLPReidentifyText autoBuild();
+    abstract DLPDeidentifyText autoBuild();
 
-    public DLPReidentifyText build() {
-      DLPReidentifyText dlpReidentifyText = autoBuild();
-      if (dlpReidentifyText.getReidentifyConfig() == null
-          && dlpReidentifyText.getReidentifyTemplateName() == null) {
+    public DLPDeidentifyText build() {
+      DLPDeidentifyText dlpDeidentifyText = autoBuild();
+      if (dlpDeidentifyText.getDeidentifyConfig() == null
+          && dlpDeidentifyText.getDeidentifyTemplateName() == null) {
         throw new IllegalArgumentException(
-            "Either reidentifyConfig or reidentifyTemplateName need to be set!");
+            "Either deidentifyConfig or deidentifyTemplateName need to be set!");
       }
-      if (dlpReidentifyText.getBatchSizeBytes() > DLP_PAYLOAD_LIMIT_BYTES) {
+      if (dlpDeidentifyText.getBatchSizeBytes() > DLP_PAYLOAD_LIMIT_BYTES) {
         throw new IllegalArgumentException(
             String.format(
                 "Batch size is too large! It should be smaller or equal than %d.",
                 DLP_PAYLOAD_LIMIT_BYTES));
       }
-      if (dlpReidentifyText.getColumnDelimiter() == null
-          && dlpReidentifyText.getHeaderColumns() != null) {
+      if (dlpDeidentifyText.getColumnDelimiter() == null
+          && dlpDeidentifyText.getHeaderColumns() != null) {
         throw new IllegalArgumentException(
             "Column delimiter should be set if headers are present.");
       }
-      if (dlpReidentifyText.getHeaderColumns() == null
-          && dlpReidentifyText.getColumnDelimiter() != null) {
+      if (dlpDeidentifyText.getHeaderColumns() == null
+          && dlpDeidentifyText.getColumnDelimiter() != null) {
         throw new IllegalArgumentException(
             "Column headers should be supplied when delimiter is present.");
       }
 
-      return dlpReidentifyText;
+      return dlpDeidentifyText;
     }
   }
 
-  public static DLPReidentifyText.Builder newBuilder() {
-    return new AutoValue_DLPReidentifyText.Builder();
+  public static DLPDeidentifyText.Builder newBuilder() {
+    return new AutoValue_DLPDeidentifyText.Builder();
   }
 
   /**
    * The transform converts the contents of input PCollection into {@link Table.Row}s and then calls
-   * Cloud DLP service to perform the reidentification according to provided settings.
+   * Cloud DLP service to perform the deidentification according to provided settings.
    *
    * @param input input PCollection
    * @return PCollection after transformations
    */
   @Override
-  public PCollection<KV<String, ReidentifyContentResponse>> expand(
+  public PCollection<KV<String, DeidentifyContentResponse>> expand(
       PCollection<KV<String, Table.Row>> input) {
     return input
         .apply("Batch Contents", ParDo.of(new BatchRequestForDLP(getBatchSizeBytes())))
         .apply(
-            "DLPReidentify",
+            "DLPDeidentify",
             ParDo.of(
-                    new DLPReidentifyText.ReidentifyText(
+                    new DLPDeidentifyText.DeidentifyText(
                         getProjectId(),
                         getDlpLocation(),
-                        getReidentifyTemplateName(),
-                        getReidentifyConfig(),
+                        getDeidentifyTemplateName(),
+                        getDeidentifyConfig(),
                         getHeaderColumns()))
                 .withSideInputs(getHeaderColumns()));
   }
 
   /** Performs the calls to Cloud DLP service on GCP. */
-  static class ReidentifyText
-      extends DoFn<KV<String, Iterable<Table.Row>>, KV<String, ReidentifyContentResponse>> {
+  static class DeidentifyText
+      extends DoFn<KV<String, Iterable<Table.Row>>, KV<String, DeidentifyContentResponse>> {
 
-    public static final Logger LOG = LoggerFactory.getLogger(ReidentifyText.class);
+    public static final Logger LOG = LoggerFactory.getLogger(DeidentifyText.class);
     private final String projectId;
     private final String dlpLocation;
-    private final String reidentifyTemplateName;
-    private final DeidentifyConfig reidentifyConfig;
+    private final String deidentifyTemplateName;
+    private final DeidentifyConfig deidentifyConfig;
     private final PCollectionView<List<String>> headerColumns;
-    private transient ReidentifyContentRequest.Builder requestBuilder;
+    private transient DeidentifyContentRequest.Builder requestBuilder;
     private transient DlpServiceClient dlpServiceClient;
 
     @Setup
     public void setup() throws IOException {
-      requestBuilder = ReidentifyContentRequest.newBuilder()
-        .setParent(LocationName.of(this.projectId,this.dlpLocation).toString());
+      requestBuilder = DeidentifyContentRequest.newBuilder().setParent(LocationName.of(this.projectId,this.dlpLocation).toString());
       LOG.debug("DLP location {}", LocationName.of(this.projectId,this.dlpLocation).toString());
 
-      if (reidentifyConfig != null) {
-        requestBuilder.setReidentifyConfig(reidentifyConfig);
+      if (deidentifyConfig != null) {
+        requestBuilder.setDeidentifyConfig(deidentifyConfig);
       }
-      if (reidentifyTemplateName != null) {
-        requestBuilder.setReidentifyTemplateName(reidentifyTemplateName);
+      if (deidentifyTemplateName != null) {
+        requestBuilder.setDeidentifyTemplateName(deidentifyTemplateName);
       }
       dlpServiceClient = DlpServiceClient.create();
     }
@@ -240,27 +240,27 @@ public abstract class DLPReidentifyText
     }
 
     /**
-     * Send text to DLP for reidentification.
+     * Send text to DLP for deidentification.
      *
      * @param projectId ID of GCP project that should be used for deidentification.
      * @param inspectTemplateName Template name for inspection. Optional.
-     * @param reidentifyTemplateName Template name for reidentification. Either this or
-     *     reidentifyConfig is required.
+     * @param deidentifyTemplateName Template name for deidentification. Either this or
+     *     deidentifyConfig is required.
      * @param inspectConfig Configuration object for inspection. Optional.
-     * @param reidentifyConfig Reidentification config containing data transformations. Either this
-     *     or reidentifyTemplateName is required.
+     * @param deidentifyConfig Reidentification config containing data transformations. Either this
+     *     or deidentifyTemplateName is required.
      * @param headerColumns Header row of the table if applicable.
      */
-    public ReidentifyText(
+    public DeidentifyText(
         String projectId,
         String dlpLocation,
-        String reidentifyTemplateName,
-        DeidentifyConfig reidentifyConfig,
+        String deidentifyTemplateName,
+        DeidentifyConfig deidentifyConfig,
         PCollectionView<List<String>> headerColumns) {
       this.projectId = projectId;
       this.dlpLocation = dlpLocation;
-      this.reidentifyTemplateName = reidentifyTemplateName;
-      this.reidentifyConfig = reidentifyConfig;
+      this.deidentifyTemplateName = deidentifyTemplateName;
+      this.deidentifyConfig = deidentifyConfig;
       this.headerColumns = headerColumns;
     }
 
@@ -284,8 +284,8 @@ public abstract class DLPReidentifyText
               .build();
       ContentItem contentItem = ContentItem.newBuilder().setTable(table).build();
       this.requestBuilder.setItem(contentItem);
-      ReidentifyContentResponse response =
-          dlpServiceClient.reidentifyContent(requestBuilder.build());
+      DeidentifyContentResponse response =
+          dlpServiceClient.deidentifyContent(requestBuilder.build());
       context.output(KV.of(context.element().getKey(), response));
     }
   }

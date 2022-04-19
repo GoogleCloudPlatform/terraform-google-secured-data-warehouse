@@ -28,7 +28,7 @@ steps:
     '--flex-template-base-image', 'gcr.io/dataflow-templates-base/java11-template-launcher-base@sha256:51956e690f6bcfe36b3204dc885afd72062c9c6d1fe43154b2cb434e9f8d07dd',
     '--metadata-file', './metadata.json',
     '--jar', './target/regional-bq-dlp-bq-streaming-1.0.0.jar',
-    '--env', 'FLEX_TEMPLATE_JAVA_MAIN_CLASS="com.google.cloud.blueprints.datawarehouse.BigQueryDLPBigQuery"',
+    '--env', 'FLEX_TEMPLATE_JAVA_MAIN_CLASS="com.google.cloud.blueprints.datawarehouse.transform.BigQueryDLPBigQuery"',
   ]
 substitutions:
   _PROJECT: 'PROJECT'

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.apache.beam.samples;
+package com.google.cloud.blueprints.datawarehouse.deid;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;

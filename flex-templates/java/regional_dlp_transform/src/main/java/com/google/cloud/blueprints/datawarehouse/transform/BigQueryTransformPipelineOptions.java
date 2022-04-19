@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.cloud.blueprints.datawarehouse;
+package com.google.cloud.blueprints.datawarehouse.transform;
 
 import org.apache.beam.runners.dataflow.options.DataflowPipelineOptions;
 import org.apache.beam.sdk.options.Default;

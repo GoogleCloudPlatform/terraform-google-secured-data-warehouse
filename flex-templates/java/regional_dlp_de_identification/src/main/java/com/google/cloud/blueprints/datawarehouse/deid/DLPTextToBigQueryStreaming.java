@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.apache.beam.samples;
+package com.google.cloud.blueprints.datawarehouse.deid;
 
 import java.io.BufferedReader;
 import java.io.IOException;

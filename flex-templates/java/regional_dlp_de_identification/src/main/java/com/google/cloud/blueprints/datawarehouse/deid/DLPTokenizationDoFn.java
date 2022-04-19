@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.apache.beam.samples;
+package com.google.cloud.blueprints.datawarehouse.deid;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -27,13 +27,15 @@ import com.google.privacy.dlp.v2.DeidentifyContentResponse;
 import com.google.privacy.dlp.v2.LocationName;
 import com.google.privacy.dlp.v2.Table;
 
+import org.apache.beam.sdk.options.ValueProvider;
 import org.apache.beam.sdk.metrics.Distribution;
 import org.apache.beam.sdk.metrics.Metrics;
-import org.apache.beam.sdk.options.ValueProvider;
 import org.apache.beam.sdk.transforms.DoFn;
 import org.apache.beam.sdk.values.KV;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+//import io.opencensus.metrics.Metrics;
 
 /**
  * The {@link DLPTokenizationDoFn} class executes tokenization request by

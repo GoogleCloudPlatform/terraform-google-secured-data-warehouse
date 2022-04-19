@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.cloud.blueprints.datawarehouse;
+package com.google.cloud.blueprints.datawarehouse.transform;
 
 import static org.apache.beam.sdk.schemas.Schema.toSchema;
 
