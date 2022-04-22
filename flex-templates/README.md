@@ -5,6 +5,7 @@ These are Dataflow [Flex Template](https://cloud.google.com/dataflow/docs/guides
 In this folder we have:
 
 - A [terraform infrastructure script](./template-artifact-storage) to create a pair of a Docker Artifact Registry Repository and a Google Cloud Storage Bucket to store the flex templates and a Python Artifact Registry Repository to host Python modules needed by the Python flex templates when they are staged by dataflow.
+- A folder for [Java](./java/) code samples for de-identification and re-identification
 - A folder for [Python](./python/) code samples for de-identification and re-identification
 - In the Python folder we also have a [Cloud build file](./python/modules/cloudbuild.yaml) to populate the Python Artifact Registry Repository.
 
