@@ -18,11 +18,11 @@ terraform {
   required_version = ">= 0.13"
 
   provider_meta "google" {
-    module_name = "blueprints/terraform/terraform-google-secured-data-warehouse:org_policy/v0.2.0"
+    module_name = "blueprints/terraform/terraform-google-secured-data-warehouse:org_policy/v0.3.0"
   }
 
   provider_meta "google-beta" {
-    module_name = "blueprints/terraform/terraform-google-secured-data-warehouse:org_policy/v0.2.0"
+    module_name = "blueprints/terraform/terraform-google-secured-data-warehouse:org_policy/v0.3.0"
   }
 
 }
