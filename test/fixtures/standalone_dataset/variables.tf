@@ -14,28 +14,16 @@
  * limitations under the License.
  */
 
-variable "data_ingestion_project_id" {
-  description = "The ID of the project in which the data ingestion resources will be created"
+variable "confidential_dataset_id" {
+  description = "Unique ID for the confidential dataset being provisioned."
   type        = string
-  default     = "data_ingestion_standalone"
+  default     = "secured_dataset"
 }
 
-variable "data_governance_project_id" {
-  description = "The ID of the project in which the data governance resources will be created."
+variable "dataset_id" {
+  description = "Unique ID for the dataset being provisioned."
   type        = string
-  default     = "data_governance_standalone"
-}
-
-variable "non_confidential_data_project_id" {
-  description = "The ID of the project in which the Bigquery will be created."
-  type        = string
-  default     = "non_confidential_data_standalone"
-}
-
-variable "confidential_data_project_id" {
-  description = "Project where the confidential datasets and tables are created."
-  type        = string
-  default     = "confidential_data_standalone"
+  default     = "secured_dataset"
 }
 
 variable "org_id" {
