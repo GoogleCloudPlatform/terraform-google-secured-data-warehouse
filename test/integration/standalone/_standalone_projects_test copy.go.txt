@@ -23,16 +23,16 @@ func TestStandaloneProjects(t *testing.T) {
 		gcloudArgs := gcloud.WithCommonArgs([]string{"--format", "json"})
 
 		opdataGov := gcloud.Run(t, fmt.Sprintf("projects describe %s", dataGovprojectID), gcloudArgs)
-		assert.Equal(t, fmt.Sprintf("data_governance_standalone"), opdataGov.Get("projectId").String(), "should have expected projectID ")
+		assert.Equal(fmt.Sprintf("data_governance_standalone"), opdataGov.Get("projectId").String(), "should have expected projectID ")
 
 		opdataIng := gcloud.Run(t, fmt.Sprintf("projects describe %s", dataIngprojectID), gcloudArgs)
-		assert.Equal(t, fmt.Sprintf("data_ingestion_standalone"), opdataIng.Get("projectId").String(), "should have expected projectID ")
+		assert.Equal(fmt.Sprintf("data_ingestion_standalone"), opdataIng.Get("projectId").String(), "should have expected projectID ")
 
 		opnonConf := gcloud.Run(t, fmt.Sprintf("projects describe %s", nonConfprojectID), gcloudArgs)
-		assert.Equal(t, fmt.Sprintf("non_confidential_data_standalone"), opnonConf.Get("projectId").String(), "should have expected projectID ")
+		assert.Equal(fmt.Sprintf("non_confidential_data_standalone"), opnonConf.Get("projectId").String(), "should have expected projectID ")
 
 		opConf := gcloud.Run(t, fmt.Sprintf("projects describe %s", ConfprojectID), gcloudArgs)
-		assert.Equal(t, fmt.Sprintf("confidential_data_standalone"), opConf.Get("projectId").String(), "should have expected projectID ")
+		assert.Equal(fmt.Sprintf("confidential_data_standalone"), opConf.Get("projectId").String(), "should have expected projectID ")
 	})
 
 	projects.Test()
