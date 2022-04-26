@@ -1,4 +1,4 @@
-# Copyright 2021 Google LLC
+# Copyright 2021-2022 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ SEMVERSION_REGEX = /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*
 
 boolean_policy_constraints = [
   'constraints/iam.disableServiceAccountCreation',
+  'constraints/iam.disableServiceAccountKeyCreation',
   'constraints/compute.requireOsLogin',
   'constraints/compute.disableSerialPortLogging'
 ]
