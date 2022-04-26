@@ -84,14 +84,11 @@ output "confidential_data_dataflow_bucket_name" {
   value       = module.secured_data_warehouse.confidential_data_dataflow_bucket_name
 }
 
-<<<<<<< HEAD
 output "data_ingestion_bucket_name" {
   description = "The name of the bucket created for the data ingestion pipeline."
   value       = module.secured_data_warehouse.data_ingestion_bucket_name
 }
 
-=======
->>>>>>> main
 output "data_ingestion_dataflow_bucket_name" {
   description = "The name of the bucket created for dataflow in the data ingestion pipeline."
   value       = module.secured_data_warehouse.data_ingestion_dataflow_bucket_name
