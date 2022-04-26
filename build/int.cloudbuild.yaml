@@ -34,7 +34,8 @@ steps:
   waitFor:
     - ensure-access-policy
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source_test_env && init_credentials &&  ./test/prepare-providers.sh  && sleep 90 && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && cd test/integration && RUN_STAGE=init go test -v -run TestStandalone ./... -p 1 -timeout 0']
+  #args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source_test_env && init_credentials &&  ./test/prepare-providers.sh  && sleep 90 && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && cd test/integration && RUN_STAGE=init go test -v -run TestStandalone ./... -p 1 -timeout 0']
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source_test_env && init_credentials  && sleep 90  && cd test/integration && RUN_STAGE=init go test -v -run TestStandalone ./... -p 1 -timeout 0']
 
 - id: converge-standalone
   waitFor:
