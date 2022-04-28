@@ -30,9 +30,6 @@ def run(argv=None, save_main_session=True):
     """Build and run the pipeline."""
     parser = argparse.ArgumentParser()
     group = parser.add_argument_group()
-    subparsers = parser.add_subparsers(
-        dest="content", help="Select how to submit content to the API."
-    )
     group_exclusive = parser.add_mutually_exclusive_group(required=True)
     group_exclusive.add_argument(
         '--query',
@@ -103,7 +100,7 @@ def run(argv=None, save_main_session=True):
     )
     group.add_argument(
         "--batch_size",
-        default=1,
+        default=1000,
         type=int,
         help=(
             'Number of records to be sent in a batch in ',
@@ -118,23 +115,6 @@ def run(argv=None, save_main_session=True):
             'DLP transformation type.'
         )
     )
-    mask_parser = subparsers.add_parser(
-        "deid_mask",
-        help="Deidentify sensitive data in a string by masking it with a " "character.",
-    )
-    mask_parser.add_argument(
-        "project", help="The Google Cloud project id to use as a parent resource.",
-    )
-    mask_parser.add_argument(
-        '--deidentification_template_name',
-        required=True,
-        help=(
-            'Name of the DLP Structured De-identification Template '
-            'of the form "projects/<PROJECT>/locations/<LOCATION>'
-            '/deidentifyTemplates/<TEMPLATE_ID>"'
-        )
-    )
-    mask_parser.add_argument("item", help="The string to deidentify.")
     
     known_args, pipeline_args = parser.parse_known_args(argv)
 
@@ -339,7 +319,13 @@ class _ReidentifyFn(DoFn):
 
     def process(self, element, **kwargs):
         operation = self.client.reidentify_content(
-            item=element, **self.params)
+            timeout = self.timeout,
+            request={
+                'parent': self.params['parent'],
+                'reidentify_template_name': self.config['reidentify_template_name'],
+                'item': element,
+            }
+        )
         yield operation.item
 
 
@@ -400,7 +386,6 @@ class _DeidentifyFn(DoFn):
             self.client = dlp_v2.DlpServiceClient()
         self.params = {
             'timeout': self.timeout,
-            'deidentify_template_name': self.config['deidentify_template_name'],
             'parent': "projects/{}/locations/{}".format(
                 self.project,
                 self.location
@@ -410,9 +395,10 @@ class _DeidentifyFn(DoFn):
 
     def process(self, element, **kwargs):
         operation = self.client.deidentify_content(
-            request={
+            timeout = self.timeout,
+            request = {
                 'parent': self.params['parent'],
-                'deidentify_template_name': self.params['deidentify_template_name'],
+                'deidentify_template_name': self.config['deidentify_template_name'],
                 'item': element
             }
         )
