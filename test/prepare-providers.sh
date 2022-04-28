@@ -14,13 +14,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 config1="examples/standalone/providers.tf"
 config2="test/fixtures/standalone/providers.tf"
 if cmp -s "$config1" "$config2"; then
-    echo "${config1} and ${config2} are the same"
+    echo "${config1} and ${config2} are the same."
     mv examples/standalone/providers.tf examples/standalone/providers.tf.disabled
 else
-    echo "${config1} and ${config2} differ"
+    echo "${config1} and ${config2} differ."
     cat examples/standalone/providers.tf > test/fixtures/standalone/providers.tf
     mv examples/standalone/providers.tf examples/standalone/providers.tf.disabled
 fi
