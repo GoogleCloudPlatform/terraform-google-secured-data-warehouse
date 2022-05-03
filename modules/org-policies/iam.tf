@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 Google LLC
+ * Copyright 2021-2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,16 @@ module "service_account_key_policy" {
   policy_for  = "project"
   project_id  = var.project_id
   constraint  = "iam.disableServiceAccountCreation"
+  policy_type = "boolean"
+  enforce     = true
+}
+
+module "service_account_key_creation_policy" {
+  source      = "terraform-google-modules/org-policy/google"
+  version     = "~> 5.0"
+  policy_for  = "project"
+  project_id  = var.project_id
+  constraint  = "iam.disableServiceAccountKeyCreation"
   policy_type = "boolean"
   enforce     = true
 }
