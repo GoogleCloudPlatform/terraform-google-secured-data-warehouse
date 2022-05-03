@@ -54,22 +54,20 @@ func TestStandalone(t *testing.T) {
 			standalone.DefineVerify(func(assert *assert.Assertions) {
 				standalone.DefaultVerify(assert)
 
-				gcloudArgs := gcloud.WithCommonArgs([]string{"--format", "json"})
-
 				dataGovprojectID := standalone.GetStringOutput("data_governance_project_id")
-				opdataGov := gcloud.Run(t, fmt.Sprintf("projects describe %s", dataGovprojectID), gcloudArgs)
+				opdataGov := gcloud.Run(t, fmt.Sprintf("projects describe %s", dataGovprojectID))
 				assert.Equal(dataGovprojectID, opdataGov.Get("projectId").String(), "should have expected projectID ")
 
 				dataIngprojectID := standalone.GetStringOutput("data_ingestion_project_id")
-				opdataIng := gcloud.Run(t, fmt.Sprintf("projects describe %s", dataIngprojectID), gcloudArgs)
+				opdataIng := gcloud.Run(t, fmt.Sprintf("projects describe %s", dataIngprojectID))
 				assert.Equal(dataIngprojectID, opdataIng.Get("projectId").String(), "should have expected projectID ")
 
 				nonConfprojectID := standalone.GetStringOutput("non_confidential_data_project_id")
-				opnonConf := gcloud.Run(t, fmt.Sprintf("projects describe %s", nonConfprojectID), gcloudArgs)
+				opnonConf := gcloud.Run(t, fmt.Sprintf("projects describe %s", nonConfprojectID))
 				assert.Equal(nonConfprojectID, opnonConf.Get("projectId").String(), "should have expected projectID ")
 
 				confprojectID := standalone.GetStringOutput("confidential_data_project_id")
-				opConf := gcloud.Run(t, fmt.Sprintf("projects describe %s", confprojectID), gcloudArgs)
+				opConf := gcloud.Run(t, fmt.Sprintf("projects describe %s", confprojectID))
 				assert.Equal(confprojectID, opConf.Get("projectId").String(), "should have expected projectID ")
 
 				gcloudArgsBucket := gcloud.WithCommonArgs([]string{"--project", dataIngprojectID, "--json"})
@@ -83,12 +81,12 @@ func TestStandalone(t *testing.T) {
 
 				nonConfTableName := standalone.GetStringOutput("bigquery_non_confidential_table")
 				nonConfdatasetID := standalone.GetStringOutput("non_confidential_dataset")
-				opnonConfdataset := gcloud.Run(t, fmt.Sprintf("alpha bq tables describe %s --dataset %s", nonConfTableName, nonConfdatasetID), gcloudArgs)
+				opnonConfdataset := gcloud.Run(t, fmt.Sprintf("alpha bq tables describe %s --dataset %s", nonConfTableName, nonConfdatasetID))
 				assert.Equal(fmt.Sprintf("%s:%s.%s", nonConfprojectID, nonConfdatasetID, nonConfTableName), opnonConfdataset.Get("id").String(), "has expected name")
 
 				confTableName := standalone.GetStringOutput("bigquery_confidential_table")
 				confdatasetID := standalone.GetStringOutput("confidential_dataset")
-				opconfdataset := gcloud.Run(t, fmt.Sprintf("alpha bq tables describe %s --dataset %s", confTableName, confdatasetID), gcloudArgs)
+				opconfdataset := gcloud.Run(t, fmt.Sprintf("alpha bq tables describe %s --dataset %s", confTableName, confdatasetID))
 				assert.Equal(fmt.Sprintf("%s:%s.%s", confprojectID, confdatasetID, confTableName), opconfdataset.Get("id").String(), "has expected name")
 			})
 
