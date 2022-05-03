@@ -16,7 +16,7 @@
 
 locals {
   new_bucket_name      = "${var.bucket_name}-${random_id.suffix.hex}"
-  bucket_name          = var.create_bucket ? module.logging_bucket[0].bucket.name : var.bucket_name
+  bucket_name          = var.create_bucket ? module.logging_bucket[0].resource_name : var.bucket_name
   destination_uri      = "storage.googleapis.com/${local.bucket_name}"
   storage_sa           = data.google_storage_project_service_account.gcs_account.email_address
   logging_keyring_name = "logging_keyring_${random_id.suffix.hex}"
@@ -40,7 +40,7 @@ data "google_storage_project_service_account" "gcs_account" {
 
 module "cmek" {
   source  = "terraform-google-modules/kms/google"
-  version = "~> 2.0.1"
+  version = "~> 2.1.0"
 
   count = var.create_bucket ? 1 : 0
 
@@ -59,23 +59,24 @@ module "cmek" {
 }
 
 module "logging_bucket" {
-  source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
-  version = "~> 2.1"
+  source  = "terraform-google-modules/log-export/google//modules/storage"
+  version = "~> 7.3.0"
 
-  count = var.create_bucket ? 1 : 0
-
-  name          = local.new_bucket_name
-  project_id    = var.logging_project_id
-  location      = var.logging_location
-  force_destroy = true
-  encryption = {
-    default_kms_key_name = module.cmek[0].keys[local.logging_key_name]
-  }
+  count                       = var.create_bucket ? 1 : 0
+  project_id                  = var.logging_project_id
+  storage_bucket_name         = local.new_bucket_name
+  log_sink_writer_identity    = module.log_export[keys(var.projects_ids)[0]].writer_identity
+  kms_key_name                = module.cmek[0].keys[local.logging_key_name]
+  uniform_bucket_level_access = true
+  force_destroy               = var.delete_contents_on_destroy
+  lifecycle_rules             = var.lifecycle_rules
+  retention_policy            = var.retention_policy
+  location                    = var.logging_location
 }
 
 module "log_export" {
   source  = "terraform-google-modules/log-export/google"
-  version = "~> 7.1.0"
+  version = "~> 7.3.0"
 
   for_each = var.projects_ids
 
