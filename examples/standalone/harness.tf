@@ -153,8 +153,6 @@ module "centralized_logging" {
   key_rotation_period_seconds = local.key_rotation_period_seconds
   parent_folder               = var.folder_id
 
-  retention_policy = null
-
   depends_on = [
     module.iam_projects
   ]
