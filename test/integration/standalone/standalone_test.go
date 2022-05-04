@@ -34,59 +34,49 @@ func TestStandalone(t *testing.T) {
 	orgID := utils.ValFromEnv(t, "TF_VAR_org_id")
 	policyID := getPolicyID(t, orgID)
 
-	for _, tt := range []struct {
-		name string
-	}{
-		{
-			name: "standalone",
-		},
-	} {
-		t.Run(tt.name, func(t *testing.T) {
-
-			vars := map[string]interface{}{
-				"access_context_manager_policy_id": policyID,
-			}
-
-			standalone := tft.NewTFBlueprintTest(t,
-				tft.WithVars(vars),
-			)
-
-			standalone.DefineVerify(func(assert *assert.Assertions) {
-				standalone.DefaultVerify(assert)
-
-				dataGovprojectID := standalone.GetStringOutput("data_governance_project_id")
-				dataIngprojectID := standalone.GetStringOutput("data_ingestion_project_id")
-				nonConfprojectID := standalone.GetStringOutput("non_confidential_data_project_id")
-				confprojectID := standalone.GetStringOutput("confidential_data_project_id")
-
-				projects := []string{dataGovprojectID, dataIngprojectID, nonConfprojectID, confprojectID}
-
-				for _, project := range projects {
-					opProject := gcloud.Runf(t, "projects describe %s", project)
-					assert.Equal(project, opProject.Get("projectId").String(), "should have expected projectID ")
-				}
-
-				gcloudArgsBucket := gcloud.WithCommonArgs([]string{"--project", dataIngprojectID, "--json"})
-				bucketName := standalone.GetStringOutput("data_ingestion_bucket_name")
-				opBucket := gcloud.Runf(t, "alpha storage ls --buckets gs://%s", bucketName, gcloudArgsBucket)
-				assert.Equal(fmt.Sprintf("standalone-data-ing"), opBucket.Get("metadata.name").String(), "has expected name ")
-
-				dataIngTopicName := standalone.GetStringOutput("data_ingestion_topic_name")
-				opPubsub := gcloud.Runf(t, "pubsub topics describe %s --project=%s", dataIngTopicName, dataIngprojectID)
-				assert.Equal(fmt.Sprintf("projects/%s/topics/%s", dataIngprojectID, dataIngTopicName), opPubsub.Get("name").String(), "has expected name")
-
-				nonConfTableName := standalone.GetStringOutput("bigquery_non_confidential_table")
-				nonConfdatasetID := standalone.GetStringOutput("non_confidential_dataset")
-				opnonConfdataset := gcloud.Runf(t, "alpha bq tables describe %s --dataset %s", nonConfTableName, nonConfdatasetID)
-				assert.Equal(fmt.Sprintf("%s:%s.%s", nonConfprojectID, nonConfdatasetID, nonConfTableName), opnonConfdataset.Get("id").String(), "has expected name")
-
-				confTableName := standalone.GetStringOutput("bigquery_confidential_table")
-				confdatasetID := standalone.GetStringOutput("confidential_dataset")
-				opconfdataset := gcloud.Runf(t, "alpha bq tables describe %s --dataset %s", confTableName, confdatasetID)
-				assert.Equal(fmt.Sprintf("%s:%s.%s", confprojectID, confdatasetID, confTableName), opconfdataset.Get("id").String(), "has expected name")
-			})
-
-			standalone.Test()
-		})
+	vars := map[string]interface{}{
+		"access_context_manager_policy_id": policyID,
 	}
+
+	standalone := tft.NewTFBlueprintTest(t,
+		tft.WithVars(vars),
+	)
+
+	standalone.DefineVerify(func(assert *assert.Assertions) {
+		standalone.DefaultVerify(assert)
+
+		dataGovprojectID := standalone.GetStringOutput("data_governance_project_id")
+		dataIngprojectID := standalone.GetStringOutput("data_ingestion_project_id")
+		nonConfprojectID := standalone.GetStringOutput("non_confidential_data_project_id")
+		confprojectID := standalone.GetStringOutput("confidential_data_project_id")
+
+		projects := []string{dataGovprojectID, dataIngprojectID, nonConfprojectID, confprojectID}
+
+		for _, project := range projects {
+			opProject := gcloud.Runf(t, "projects describe %s", project)
+			assert.Equal(project, opProject.Get("projectId").String(), "should have expected projectID ")
+		}
+
+		gcloudArgsBucket := gcloud.WithCommonArgs([]string{"--project", dataIngprojectID, "--json"})
+		bucketName := standalone.GetStringOutput("data_ingestion_bucket_name")
+		opBucket := gcloud.Runf(t, "alpha storage ls --buckets gs://%s", bucketName, gcloudArgsBucket)
+		assert.Equal(fmt.Sprintf("standalone-data-ing"), opBucket.Get("metadata.name").String(), "has expected name ")
+
+		dataIngTopicName := standalone.GetStringOutput("data_ingestion_topic_name")
+		opPubsub := gcloud.Runf(t, "pubsub topics describe %s --project=%s", dataIngTopicName, dataIngprojectID)
+		assert.Equal(fmt.Sprintf("projects/%s/topics/%s", dataIngprojectID, dataIngTopicName), opPubsub.Get("name").String(), "has expected name")
+
+		nonConfTableName := standalone.GetStringOutput("bigquery_non_confidential_table")
+		nonConfdatasetID := standalone.GetStringOutput("non_confidential_dataset")
+		opnonConfdataset := gcloud.Runf(t, "alpha bq tables describe %s --dataset %s", nonConfTableName, nonConfdatasetID)
+		assert.Equal(fmt.Sprintf("%s:%s.%s", nonConfprojectID, nonConfdatasetID, nonConfTableName), opnonConfdataset.Get("id").String(), "has expected name")
+
+		confTableName := standalone.GetStringOutput("bigquery_confidential_table")
+		confdatasetID := standalone.GetStringOutput("confidential_dataset")
+		opconfdataset := gcloud.Runf(t, "alpha bq tables describe %s --dataset %s", confTableName, confdatasetID)
+		assert.Equal(fmt.Sprintf("%s:%s.%s", confprojectID, confdatasetID, confTableName), opconfdataset.Get("id").String(), "has expected name")
+	})
+
+	standalone.Test()
+
 }
