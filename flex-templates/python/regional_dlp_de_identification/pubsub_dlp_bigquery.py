@@ -299,8 +299,20 @@ class _DeidentifyFn(DoFn):
         self.params.update(self.config)
 
     def process(self, element, **kwargs):
+        request = {
+            'parent': self.params['parent'],
+            'item': element
+        }
+
+        if self.config['deidentify_template_name'] is not None:
+            request['deidentify_template_name'] = self.config['deidentify_template_name'] 
+        else:
+            request['deidentify_config'] = self.config['deidentify_config']
+
         operation = self.client.deidentify_content(
-            item=element, **self.params)
+            timeout = self.timeout,
+            request = request
+        )
         yield operation.item
 
 
