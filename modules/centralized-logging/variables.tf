@@ -147,6 +147,6 @@ variable "retention_policy" {
   })
   default = {
     is_locked             = true
-    retention_period_days = 90
+    retention_period_days = 400
   }
 }
