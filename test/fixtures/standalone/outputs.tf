@@ -41,30 +41,30 @@ output "name" {
   value       = google_folder.folders.name
 }
 
-output "blueprint_type" {
-  description = "Type of blueprint this module represents."
-  value       = module.example.blueprint_type
-}
+# output "blueprint_type" {
+#   description = "Type of blueprint this module represents."
+#   value       = module.example.blueprint_type
+# }
 
-output "cmek_bigquery_crypto_key" {
-  description = "The Customer Managed Crypto Key for the BigQuery service."
-  value       = module.example.cmek_bigquery_crypto_key
-}
+# output "cmek_bigquery_crypto_key" {
+#   description = "The Customer Managed Crypto Key for the BigQuery service."
+#   value       = module.example.cmek_bigquery_crypto_key
+# }
 
-output "cmek_confidential_bigquery_crypto_key" {
-  description = "The Customer Managed Crypto Key for the confidential BigQuery service."
-  value       = module.example.cmek_confidential_bigquery_crypto_key
-}
+# output "cmek_confidential_bigquery_crypto_key" {
+#   description = "The Customer Managed Crypto Key for the confidential BigQuery service."
+#   value       = module.example.cmek_confidential_bigquery_crypto_key
+# }
 
-output "cmek_data_ingestion_crypto_key" {
-  description = "The Customer Managed Crypto Key for the data ingestion crypto boundary."
-  value       = module.example.cmek_data_ingestion_crypto_key
-}
+# output "cmek_data_ingestion_crypto_key" {
+#   description = "The Customer Managed Crypto Key for the data ingestion crypto boundary."
+#   value       = module.example.cmek_data_ingestion_crypto_key
+# }
 
-output "cmek_reidentification_crypto_key" {
-  description = "The Customer Managed Crypto Key for the reidentification crypto boundary."
-  value       = module.example.cmek_reidentification_crypto_key
-}
+# output "cmek_reidentification_crypto_key" {
+#   description = "The Customer Managed Crypto Key for the reidentification crypto boundary."
+#   value       = module.example.cmek_reidentification_crypto_key
+# }
 
 output "confidential_data_dataflow_bucket_name" {
   description = "The name of the bucket created for dataflow in the confidential data pipeline."
@@ -111,47 +111,47 @@ output "data_ingestion_topic_name" {
 
 }
 
-output "pubsub_writer_service_account_email" {
-  description = "The PubSub writer service account email. Should be used to write data to the PubSub topics the data ingestion pipeline reads from."
-  value       = module.example.pubsub_writer_service_account_email
-}
+# output "pubsub_writer_service_account_email" {
+#   description = "The PubSub writer service account email. Should be used to write data to the PubSub topics the data ingestion pipeline reads from."
+#   value       = module.example.pubsub_writer_service_account_email
+# }
 
-output "dataflow_controller_service_account_email" {
-  description = "The regional de identification pipeline service account."
-  value       = module.example.dataflow_controller_service_account_email
-}
+# output "dataflow_controller_service_account_email" {
+#   description = "The regional de identification pipeline service account."
+#   value       = module.example.dataflow_controller_service_account_email
+# }
 
-output "storage_writer_service_account_email" {
-  description = "The Storage writer service account email. Should be used to write data to the buckets the data ingestion pipeline reads from."
-  value       = module.example.storage_writer_service_account_email
-}
+# output "storage_writer_service_account_email" {
+#   description = "The Storage writer service account email. Should be used to write data to the buckets the data ingestion pipeline reads from."
+#   value       = module.example.storage_writer_service_account_email
+# }
 
-output "confidential_network_name" {
-  description = "The name of the confidential VPC being created."
-  value       = module.example.confidential_network_name
-}
+# output "confidential_network_name" {
+#   description = "The name of the confidential VPC being created."
+#   value       = module.example.confidential_network_name
+# }
 
-output "confidential_network_self_link" {
-  description = "The URI of the confidential VPC being created."
-  value       = module.example.confidential_network_self_link
-}
+# output "confidential_network_self_link" {
+#   description = "The URI of the confidential VPC being created."
+#   value       = module.example.confidential_network_self_link
+# }
 
-output "confidential_subnets_self_link" {
-  description = "The self-links of confidential subnets being created."
-  value       = module.example.confidential_subnets_self_link
-}
+# output "confidential_subnets_self_link" {
+#   description = "The self-links of confidential subnets being created."
+#   value       = module.example.confidential_subnets_self_link
+# }
 
-output "data_ingestion_network_name" {
-  description = "The name of the data ingestion VPC being created."
-  value       = module.example.data_ingestion_network_name
-}
+# output "data_ingestion_network_name" {
+#   description = "The name of the data ingestion VPC being created."
+#   value       = module.example.data_ingestion_network_name
+# }
 
-output "data_ingestion_network_self_link" {
-  description = "The URI of the data ingestion VPC being created."
-  value       = module.example.data_ingestion_network_self_link
-}
+# output "data_ingestion_network_self_link" {
+#   description = "The URI of the data ingestion VPC being created."
+#   value       = module.example.data_ingestion_network_self_link
+# }
 
-output "data_ingestion_subnets_self_link" {
-  description = "The self-links of data ingestion subnets being created."
-  value       = module.example.data_ingestion_subnets_self_link
-}
+# output "data_ingestion_subnets_self_link" {
+#   description = "The self-links of data ingestion subnets being created."
+#   value       = module.example.data_ingestion_subnets_self_link
+# }
