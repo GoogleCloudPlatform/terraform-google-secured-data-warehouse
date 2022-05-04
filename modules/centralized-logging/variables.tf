@@ -104,7 +104,7 @@ variable "lifecycle_rules" {
     # - days_since_custom_time - (Optional) The number of days from the Custom-Time metadata attribute after which this condition becomes true.
     condition = map(string)
   }))
-  description = "List of lifecycle rules to configure. Format is the same as described in provider documentation https://www.terraform.io/docs/providers/google/r/storage_bucket.html#lifecycle_rule except condition.matches_storage_class should be a comma delimited string."
+  description = "List of lifecycle rules to configure. Format is the same as described in provider documentation https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket#lifecycle_rule except condition.matches_storage_class should be a comma delimited string."
   default = [
 
     {
@@ -147,6 +147,6 @@ variable "retention_policy" {
   })
   default = {
     is_locked             = true
-    retention_period_days = 30
+    retention_period_days = 90
   }
 }
