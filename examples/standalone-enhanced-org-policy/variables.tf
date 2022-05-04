@@ -1,5 +1,5 @@
 /**
- * Copyright 2021-2022 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,29 +14,51 @@
  * limitations under the License.
  */
 
+variable "create_projects" {
+  description = "(Optional) If set to true to create new projects for the data warehouse, if set to false existing projects will be used."
+  type        = bool
+  default     = false
+}
+
+variable "folder_id" {
+  description = "The folder where the projects will be deployed in case you set the variable create_projects as true."
+  type        = string
+}
+
+variable "billing_account" {
+  description = "The billing account id associated with the project, e.g. XXXXXX-YYYYYY-ZZZZZZ."
+  type        = string
+}
+
 variable "org_id" {
   description = "GCP Organization ID."
   type        = string
 }
 
 variable "data_governance_project_id" {
-  description = "The ID of the project in which the data governance resources will be created."
+  description = "The ID of the project in which the data governance resources will be created. If the variable create_projects is set to true then new projects will be created for the data warehouse, if set to false existing projects will be used."
   type        = string
 }
 
 variable "data_ingestion_project_id" {
-  description = "The ID of the project in which the data ingestion resources will be created."
+  description = "The ID of the project in which the data ingestion resources will be created. If the variable create_projects is set to true then new projects will be created for the data warehouse, if set to false existing projects will be used."
   type        = string
 }
 
 variable "non_confidential_data_project_id" {
-  description = "The ID of the project in which the Bigquery will be created."
+  description = "The ID of the project in which the Bigquery will be created. If the variable create_projects is set to true then new projects will be created for the data warehouse, if set to false existing projects will be used."
   type        = string
 }
 
 variable "confidential_data_project_id" {
-  description = "Project where the confidential datasets and tables are created."
+  description = "Project where the confidential datasets and tables are created. If the variable create_projects is set to true then new projects will be created for the data warehouse, if set to false existing projects will be used."
   type        = string
+}
+
+variable "sdx_project_number" {
+  description = "(Optional) The Project Number to configure Secure data exchange with egress rule for the dataflow templates."
+  type        = string
+  default     = ""
 }
 
 variable "terraform_service_account" {
@@ -59,6 +81,11 @@ variable "delete_contents_on_destroy" {
   description = "(Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present."
   type        = bool
   default     = false
+}
+
+variable "domains_to_allow" {
+  description = "The list of domains to allow users from in IAM. Used by Domain Restricted Sharing Organization Policy. Must include the domain of the organization you are deploying the blueprint. To add other domains you must also grant access to these domains to the terraform service account used in the deploy."
+  type        = list(string)
 }
 
 variable "security_administrator_group" {
