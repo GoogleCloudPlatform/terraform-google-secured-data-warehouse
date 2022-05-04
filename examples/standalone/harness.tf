@@ -153,43 +153,7 @@ module "centralized_logging" {
   key_rotation_period_seconds = local.key_rotation_period_seconds
   parent_folder               = var.folder_id
 
-  lifecycle_rules = [
-
-    {
-      action = {
-        type          = "SetStorageClass"
-        storage_class = "COLDLINE"
-      }
-      condition = {
-        age        = 90
-        with_state = "ANY"
-      }
-    },
-    {
-      action = {
-        type          = "SetStorageClass"
-        storage_class = "ARCHIVE"
-      }
-      condition = {
-        age        = 365
-        with_state = "ANY"
-      }
-    },
-    {
-      action = {
-        type = "Delete"
-      }
-      condition = {
-        age        = 400
-        with_state = "ANY"
-      }
-    },
-  ]
-
-  retention_policy = {
-    is_locked             = true
-    retention_period_days = 30
-  }
+  retention_policy = null
 
   depends_on = [
     module.iam_projects

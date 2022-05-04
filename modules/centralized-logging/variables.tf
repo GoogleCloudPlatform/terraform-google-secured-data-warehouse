@@ -105,7 +105,38 @@ variable "lifecycle_rules" {
     condition = map(string)
   }))
   description = "List of lifecycle rules to configure. Format is the same as described in provider documentation https://www.terraform.io/docs/providers/google/r/storage_bucket.html#lifecycle_rule except condition.matches_storage_class should be a comma delimited string."
-  default     = []
+  default = [
+
+    {
+      action = {
+        type          = "SetStorageClass"
+        storage_class = "COLDLINE"
+      }
+      condition = {
+        age        = 90
+        with_state = "ANY"
+      }
+    },
+    {
+      action = {
+        type          = "SetStorageClass"
+        storage_class = "ARCHIVE"
+      }
+      condition = {
+        age        = 365
+        with_state = "ANY"
+      }
+    },
+    {
+      action = {
+        type = "Delete"
+      }
+      condition = {
+        age        = 400
+        with_state = "ANY"
+      }
+    },
+  ]
 }
 
 variable "retention_policy" {
@@ -114,5 +145,8 @@ variable "retention_policy" {
     is_locked             = bool
     retention_period_days = number
   })
-  default = null
+  default = {
+    is_locked             = true
+    retention_period_days = 30
+  }
 }
