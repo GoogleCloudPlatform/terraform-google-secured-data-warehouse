@@ -115,7 +115,6 @@ def run(argv=None, save_main_session=True):
             'DLP transformation type.'
         )
     )
-    
     known_args, pipeline_args = parser.parse_known_args(argv)
 
     options = PipelineOptions(
@@ -319,10 +318,11 @@ class _ReidentifyFn(DoFn):
 
     def process(self, element, **kwargs):
         operation = self.client.reidentify_content(
-            timeout = self.timeout,
+            timeout=self.timeout,
             request={
                 'parent': self.params['parent'],
-                'reidentify_template_name': self.config['reidentify_template_name'],
+                'reidentify_template_name':
+                    self.config['reidentify_template_name'],
                 'item': element,
             }
         )
@@ -395,10 +395,11 @@ class _DeidentifyFn(DoFn):
 
     def process(self, element, **kwargs):
         operation = self.client.deidentify_content(
-            timeout = self.timeout,
-            request = {
+            timeout=self.timeout,
+            request={
                 'parent': self.params['parent'],
-                'deidentify_template_name': self.config['deidentify_template_name'],
+                'deidentify_template_name':
+                    self.config['deidentify_template_name'],
                 'item': element
             }
         )

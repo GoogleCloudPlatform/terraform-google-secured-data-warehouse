@@ -305,13 +305,14 @@ class _DeidentifyFn(DoFn):
         }
 
         if self.config['deidentify_template_name'] is not None:
-            request['deidentify_template_name'] = self.config['deidentify_template_name'] 
+            request['deidentify_template_name'] = \
+                self.config['deidentify_template_name']
         else:
             request['deidentify_config'] = self.config['deidentify_config']
 
         operation = self.client.deidentify_content(
-            timeout = self.timeout,
-            request = request
+            timeout=self.timeout,
+            request=request
         )
         yield operation.item
 
