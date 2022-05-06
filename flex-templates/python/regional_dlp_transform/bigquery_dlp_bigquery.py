@@ -318,7 +318,14 @@ class _ReidentifyFn(DoFn):
 
     def process(self, element, **kwargs):
         operation = self.client.reidentify_content(
-            item=element, **self.params)
+            timeout=self.timeout,
+            request={
+                'parent': self.params['parent'],
+                'reidentify_template_name':
+                    self.config['reidentify_template_name'],
+                'item': element,
+            }
+        )
         yield operation.item
 
 
@@ -388,7 +395,14 @@ class _DeidentifyFn(DoFn):
 
     def process(self, element, **kwargs):
         operation = self.client.deidentify_content(
-            item=element, **self.params)
+            timeout=self.timeout,
+            request={
+                'parent': self.params['parent'],
+                'deidentify_template_name':
+                    self.config['deidentify_template_name'],
+                'item': element
+            }
+        )
         yield operation.item
 
 
