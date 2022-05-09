@@ -35,24 +35,28 @@ steps:
     - ensure-access-policy
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
   args: ['/bin/bash', '-c', './test/prepare-providers.sh && sleep 90  && cft test run TestStandalone --stage init --verbose']
+timeout: 900s
 
 - id: converge-standalone
   waitFor:
     - create-standalone
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
   args: ['/bin/bash', '-c', 'cft test run TestStandalone --stage apply --verbose']
+timeout: 900s
 
 - id: validate-standalone
   waitFor:
     - converge-standalone
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source_test_env && init_credentials && export TF_VAR_access_context_manager_policy_id=$(gcloud access-context-manager policies list --organization="${TF_VAR_org_id:?}" --format="value(name)") && source ./test/terraform-validator.sh standalone']
+timeout: 900s
 
 - id: verify-standalone
   waitFor:
     - converge-standalone
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
   args: ['/bin/bash', '-c', 'cft test run TestStandalone --stage verify --verbose']
+timeout: 900s
 
 - id: destroy-standalone
   waitFor:
@@ -60,7 +64,7 @@ steps:
     - validate-standalone
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
   args: ['/bin/bash', '-c', 'cft test run TestStandalone --stage teardown --verbose']
-
+timeout: 900s
 
 - id: create-de-identification-template
   waitFor:
