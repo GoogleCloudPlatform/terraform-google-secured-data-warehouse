@@ -14,6 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Note:
+# The test/fixture/standalone requires a provider.tf to run. As we already have a provider.tf in examples/standalone, we will hit in a loop and then in an error when the test is being executed.
+# As a workaround, this script is being used to disable the provider.tf from examples/standalone when the Go test is being executed for Standalone.
+
 config1="examples/standalone/providers.tf"
 config2="test/fixtures/standalone/providers.tf"
 if cmp -s "$config1" "$config2"; then
