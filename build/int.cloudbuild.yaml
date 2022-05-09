@@ -34,13 +34,13 @@ steps:
   waitFor:
     - ensure-access-policy
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source_test_env && init_credentials && ./test/prepare-providers.sh && sleep 90  && cft test run TestStandalone --stage init --verbose']
+  args: ['/bin/bash', '-c', './test/prepare-providers.sh && sleep 90  && cft test run TestStandalone --stage init --verbose']
 
 - id: converge-standalone
   waitFor:
     - create-standalone
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source_test_env && init_credentials && cft test run TestStandalone --stage apply --verbose']
+  args: ['/bin/bash', '-c', 'cft test run TestStandalone --stage apply --verbose']
 
 - id: validate-standalone
   waitFor:
@@ -52,14 +52,14 @@ steps:
   waitFor:
     - converge-standalone
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source_test_env && init_credentials && cft test run TestStandalone --stage verify --verbose']
+  args: ['/bin/bash', '-c', 'cft test run TestStandalone --stage verify --verbose']
 
 - id: destroy-standalone
   waitFor:
     - verify-standalone
     - validate-standalone
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source_test_env && init_credentials && cft test run TestStandalone --stage teardown --verbose']
+  args: ['/bin/bash', '-c', 'cft test run TestStandalone --stage teardown --verbose']
 
 
 - id: create-de-identification-template
