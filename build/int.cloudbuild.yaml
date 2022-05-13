@@ -57,7 +57,7 @@ steps:
 - id: destroy-standalone
   waitFor:
     - verify-standalone
-    - validate-standalone
+  #  - validate-standalone
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
   args: ['/bin/bash', '-c', 'cft test run TestStandalone --stage teardown --verbose']
 
