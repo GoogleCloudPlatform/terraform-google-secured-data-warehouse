@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+output "folder_id" {
+  value = var.folder_id
+}
+
 output "data_ingestion_project_id" {
   value = values(module.base_projects)[*].data_ingestion_project_id
 }

@@ -34,6 +34,16 @@ output "bigquery_non_confidential_table" {
   ]
 }
 
+output "non_confidential_dataset" {
+  description = "The bigquery dataset created for non-confidential data."
+  value       = local.non_confidential_dataset_id
+}
+
+output "confidential_dataset" {
+  description = "The bigquery dataset created for confidential data."
+  value       = local.confidential_dataset_id
+}
+
 output "blueprint_type" {
   description = "Type of blueprint this module represents."
   value       = module.secured_data_warehouse.blueprint_type
@@ -72,6 +82,11 @@ output "centralized_logging_bucket_name" {
 output "confidential_data_dataflow_bucket_name" {
   description = "The name of the bucket created for dataflow in the confidential data pipeline."
   value       = module.secured_data_warehouse.confidential_data_dataflow_bucket_name
+}
+
+output "data_ingestion_bucket_name" {
+  description = "The name of the bucket created for the data ingestion pipeline."
+  value       = module.secured_data_warehouse.data_ingestion_bucket_name
 }
 
 output "data_ingestion_dataflow_bucket_name" {

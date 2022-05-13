@@ -345,11 +345,13 @@ These outputs can be interesting for security analyst group:
 | confidential\_data\_dataflow\_bucket\_name | The name of the bucket created for dataflow in the confidential data pipeline. |
 | confidential\_data\_perimeter\_name | Access context manager service perimeter name. |
 | confidential\_data\_project\_id | The ID of the project created for confidential datasets and tables. |
+| confidential\_dataset | The bigquery dataset created for confidential data. |
 | confidential\_network\_name | The name of the confidential VPC being created. |
 | confidential\_network\_self\_link | The URI of the confidential VPC being created. |
 | confidential\_subnets\_self\_link | The self-links of confidential subnets being created. |
 | data\_governance\_perimeter\_name | Access context manager service perimeter name. |
 | data\_governance\_project\_id | The ID of the project created for data governance. |
+| data\_ingestion\_bucket\_name | The name of the bucket created for the data ingestion pipeline. |
 | data\_ingestion\_dataflow\_bucket\_name | The name of the bucket created for dataflow in the data ingestion pipeline. |
 | data\_ingestion\_network\_name | The name of the data ingestion VPC being created. |
 | data\_ingestion\_network\_self\_link | The URI of the data ingestion VPC being created. |
@@ -359,6 +361,7 @@ These outputs can be interesting for security analyst group:
 | data\_ingestion\_topic\_name | The topic created for data ingestion pipeline. |
 | dataflow\_controller\_service\_account\_email | The regional de identification pipeline service account. |
 | non\_confidential\_data\_project\_id | The id of the project created for non-confidential data. |
+| non\_confidential\_dataset | The bigquery dataset created for non-confidential data. |
 | pubsub\_writer\_service\_account\_email | The PubSub writer service account email. Should be used to write data to the PubSub topics the data ingestion pipeline reads from. |
 | regional\_deid\_pipeline\_job\_id | The unique ID of this job. |
 | regional\_reid\_pipeline\_job\_id | The unique ID of this job. |
