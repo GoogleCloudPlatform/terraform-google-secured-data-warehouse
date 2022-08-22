@@ -57,7 +57,7 @@ func TestStandalone(t *testing.T) {
 			assert.Equal(project, opProject.Get("projectId").String(), "should have expected projectID ")
 		}
 
-		gcloudArgsBucket := gcloud.WithCommonArgs([]string{"--project", dataIngprojectID, "--json"})
+		gcloudArgsBucket := gcloud.WithCommonArgs([]string{"--project", dataIngprojectID, "--format=gsutil"})
 		bucketName := standalone.GetStringOutput("data_ingestion_bucket_name")
 		opBucket := gcloud.Runf(t, "alpha storage ls --buckets gs://%s", bucketName, gcloudArgsBucket)
 		assert.Equal(fmt.Sprintf("standalone-data-ing"), opBucket.Get("metadata.name").String(), "has expected name ")
