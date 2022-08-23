@@ -69,12 +69,12 @@ func TestStandalone(t *testing.T) {
 		nonConfTableName := standalone.GetStringOutput("bigquery_non_confidential_table")
 		nonConfdatasetID := standalone.GetStringOutput("non_confidential_dataset")
 		opnonConfdataset := gcloud.Runf(t, "alpha bq tables describe irs_990_ein_de_id --dataset %s --project %s", nonConfdatasetID, nonConfprojectID)
-		assert.Equal("%s", nonConfTableName, opnonConfdataset.Get("id").String(), "has expected name")
+		assert.Equal(nonConfTableName, opnonConfdataset.Get("id").String(), "has expected name")
 
 		confTableName := standalone.GetStringOutput("bigquery_confidential_table")
 		confdatasetID := standalone.GetStringOutput("confidential_dataset")
 		opconfdataset := gcloud.Runf(t, "alpha bq tables describe irs_990_ein_re_id --dataset %s --project %s", confdatasetID, confprojectID)
-		assert.Equal("%s", confTableName, opconfdataset.Get("id").String(), "has expected name")
+		assert.Equal(confTableName, opconfdataset.Get("id").String(), "has expected name")
 	})
 
 	standalone.Test()
