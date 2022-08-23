@@ -24,7 +24,7 @@ resource "random_id" "project_id_suffix" {
 
 module "data_ingestion_project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.0"
+  version = "~> 13.1"
 
   name                    = "sdw-data-ing-${random_id.project_id_suffix.hex}"
   random_project_id       = "true"
@@ -63,7 +63,7 @@ resource "google_app_engine_application" "app" {
 
 module "data_governance_project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.0"
+  version = "~> 13.1"
 
   name                    = "sdw-data-gov-${random_id.project_id_suffix.hex}"
   random_project_id       = "true"
@@ -89,7 +89,7 @@ module "data_governance_project" {
 
 module "non_confidential_data_project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.0"
+  version = "~> 13.1"
 
   name                    = "sdw-non-conf-${random_id.project_id_suffix.hex}"
   random_project_id       = "true"
@@ -114,7 +114,7 @@ module "non_confidential_data_project" {
 
 module "confidential_data_project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.0"
+  version = "~> 13.1"
 
   name                    = "sdw-conf-${random_id.project_id_suffix.hex}"
   random_project_id       = "true"

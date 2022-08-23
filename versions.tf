@@ -31,17 +31,17 @@ terraform {
 
     null = {
       source  = "hashicorp/null"
-      version = "~> 2.1"
+      version = ">= 2.1"
     }
 
     time = {
       source  = "hashicorp/time"
-      version = "~> 0.7"
+      version = "~> 0.8"
     }
 
     random = {
       source  = "hashicorp/random"
-      version = "~> 2.3"
+      version = ">= 2.2"
     }
 
   }
