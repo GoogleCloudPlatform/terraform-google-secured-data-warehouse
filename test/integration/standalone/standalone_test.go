@@ -43,7 +43,6 @@ func TestStandalone(t *testing.T) {
 	)
 
 	standalone.DefineVerify(func(assert *assert.Assertions) {
-		standalone.DefaultVerify(assert)
 
 		dataGovprojectID := standalone.GetStringOutput("data_governance_project_id")
 		dataIngprojectID := standalone.GetStringOutput("data_ingestion_project_id")
