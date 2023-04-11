@@ -18,6 +18,7 @@
 locals {
   int_proj_required_roles = [
     "roles/storage.admin",
+    "roles/storage.objectCreator",
     "roles/browser",
     "roles/artifactregistry.admin",
     "roles/iam.serviceAccountCreator",
