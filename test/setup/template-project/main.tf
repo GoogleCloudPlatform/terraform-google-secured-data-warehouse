@@ -152,7 +152,8 @@ EOF
   }
 
   depends_on = [
-    module.external_flex_template_infrastructure
+    module.external_flex_template_infrastructure,
+    google_project_iam_member.int_permission_artifact_registry_test
   ]
 }
 
@@ -180,7 +181,8 @@ EOF
   }
 
   depends_on = [
-    module.external_flex_template_infrastructure
+    module.external_flex_template_infrastructure,
+    google_project_iam_member.int_permission_artifact_registry_test
   ]
 }
 
@@ -208,6 +210,7 @@ EOF
   }
 
   depends_on = [
-    module.external_flex_template_infrastructure
+    module.external_flex_template_infrastructure,
+    google_project_iam_member.int_permission_artifact_registry_test
   ]
 }
