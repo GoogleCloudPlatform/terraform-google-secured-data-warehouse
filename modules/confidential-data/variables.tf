@@ -71,9 +71,3 @@ variable "dataset_default_table_expiration_ms" {
   type        = number
   default     = null
 }
-
-variable "key_rotation_period_seconds" {
-  description = "Rotation period for keys. The default value is 30 days."
-  type        = string
-  default     = "2592000s"
-}

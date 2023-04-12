@@ -20,11 +20,6 @@ variable "labels" {
   default     = {}
 }
 
-variable "org_id" {
-  description = "GCP Organization ID."
-  type        = string
-}
-
 variable "pubsub_resource_location" {
   description = "The locaiton in which Pub/Sub message will be stored."
   type        = string
