@@ -153,7 +153,8 @@ EOF
 
   depends_on = [
     module.external_flex_template_infrastructure,
-    google_project_iam_member.int_permission_artifact_registry_test
+    google_project_iam_member.int_permission_artifact_registry_test,
+    time_sleep.wait_60_seconds
   ]
 }
 
@@ -182,7 +183,8 @@ EOF
 
   depends_on = [
     module.external_flex_template_infrastructure,
-    google_project_iam_member.int_permission_artifact_registry_test
+    google_project_iam_member.int_permission_artifact_registry_test,
+    time_sleep.wait_60_seconds
   ]
 }
 
@@ -211,6 +213,7 @@ EOF
 
   depends_on = [
     module.external_flex_template_infrastructure,
-    google_project_iam_member.int_permission_artifact_registry_test
+    google_project_iam_member.int_permission_artifact_registry_test,
+    time_sleep.wait_60_seconds
   ]
 }
