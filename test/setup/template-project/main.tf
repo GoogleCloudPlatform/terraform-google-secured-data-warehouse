@@ -151,7 +151,8 @@ EOF
   }
 
   depends_on = [
-    module.external_flex_template_infrastructure
+    module.external_flex_template_infrastructure,
+    time_sleep.wait_60_seconds
   ]
 }
 
@@ -179,7 +180,8 @@ EOF
   }
 
   depends_on = [
-    module.external_flex_template_infrastructure
+    module.external_flex_template_infrastructure,
+    time_sleep.wait_60_seconds
   ]
 }
 
@@ -207,6 +209,7 @@ EOF
   }
 
   depends_on = [
-    module.external_flex_template_infrastructure
+    module.external_flex_template_infrastructure,
+    time_sleep.wait_60_seconds
   ]
 }
