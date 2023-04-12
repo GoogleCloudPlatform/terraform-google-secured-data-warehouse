@@ -59,12 +59,6 @@ resource "google_project_iam_member" "cloud_build_builder" {
   member  = "serviceAccount:${google_project_service_identity.cloudbuild_sa.email}"
 }
 
-resource "google_project_iam_member" "storage_object_viewer" {
-  project = var.project_id
-  role    = "roles/storage.objectViewer"
-  member  = "serviceAccount:${google_project_service_identity.cloudbuild_sa.email}"
-}
-
 resource "google_artifact_registry_repository" "flex_templates" {
   provider = google-beta
 

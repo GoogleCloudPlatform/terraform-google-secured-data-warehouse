@@ -27,7 +27,8 @@ locals {
     "roles/iam.serviceAccountAdmin",
     "roles/cloudscheduler.admin",
     "roles/appengine.appCreator",
-    "roles/iam.serviceAccountTokenCreator"
+    "roles/iam.serviceAccountTokenCreator",
+    "roles/serviceusage.serviceUsageConsumer"
   ]
 
   confidential_proj_required_roles = [
