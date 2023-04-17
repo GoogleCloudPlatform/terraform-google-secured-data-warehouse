@@ -57,9 +57,9 @@ output "billing_account" {
 
 output "group_email" {
   value = [
-    "test-gcp-developers@test.infra.cft.tips",
-    "test-gcp-qa@test.infra.cft.tips",
-    "test-gcp-ops@test.infra.cft.tips"
+    "test-gcp-developers@test.blueprints.joonix.net",
+    "test-gcp-qa@test.blueprints.joonix.net",
+    "test-gcp-ops@test.blueprints.joonix.net"
   ]
 }
 
