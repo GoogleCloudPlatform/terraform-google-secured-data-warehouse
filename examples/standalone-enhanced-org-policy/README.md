@@ -11,6 +11,13 @@ Setting the variable `create_projects` to `true` will make the example create th
 - Non-Confidential Data project.
 - Confidential Data project.
 
+**Note:** To deploy this example it is also necessary to have *an existing project* on which the [Service Account](#service-account)
+used to deploy this example needs to be created and have the required IAM Roles granted to it.
+This project should not be on the same folder used to deploy the *Secured Data Warehouse*  in accordance with the separation of concerns principle.
+You can use the [Project Factory module](https://github.com/terraform-google-modules/terraform-google-project-factory) and the
+[IAM module](https://github.com/terraform-google-modules/terraform-google-iam) in combination to provision a
+service account with the necessary roles applied.
+
 ### Organization Policies
 
 This example will apply 4 organization policies at the project level for all projects.
@@ -29,15 +36,38 @@ The Resource Manager provides a domain restriction constraint that can be used i
 
 To provision this example, run the following from within this directory:
 
-- Copy `tfvars` by running `cp terraform.example.tfvars terraform.tfvars` and update `terraform.tfvars` with values from your environment.
-- `terraform init` to get the plugins
-- `terraform plan` to see the infrastructure plan
-- `terraform apply` to apply the infrastructure build
-- `terraform destroy` to destroy the built infrastructure
+- Rename the `tfvars` file by running `mv terraform.example.tfvars terraform.tfvars` and update `terraform.tfvars` with values from your environment.
+
+    ```bash
+    mv terraform.example.tfvars terraform.tfvars
+    ```
+
+- Run `terraform init` to get the plugins.
+
+    ```bash
+    terraform init
+    ```
+
+- Run `terraform plan` to see the infrastructure plan.
+
+    ```bash
+    terraform plan
+    ```
+
+- Run `terraform apply` to apply the infrastructure build.
+
+    ```bash
+    terraform apply
+    ```
 
 ### Clean up
 
 - Run `terraform destroy` to clean up your environment.
+The input `delete_contents_on_destroy` must have been set to `true` in the original `apply` for the `terraform destroy` command to work.
+
+    ```bash
+    terraform destroy
+    ```
 
 ### Perimeter members list
 
@@ -48,7 +78,9 @@ you need to add your user in the variable `perimeter_additional_members`.
 
 1. The [Secured data warehouse](../../README.md#requirements) module requirements to create the Secured data warehouse infrastructure.
 
-If the projects are created by the example, instead of the project level roles listed in the main module [README](../../README.md#service_account) you will need the following roles in the folder in which the projects will be created:
+If the projects are created by the example, the organization level roles required by the service account are the same
+but instead of the project level roles listed in the main module [README](../../README.md#service_account),
+the service account will need the following roles in the folder in which the projects will be created:
 
 - Logging Admin: `roles/logging.admin`
 - Project Creator: `roles/resourcemanager.projectCreator`
@@ -68,6 +100,10 @@ gcloud beta billing accounts add-iam-policy-binding "${BILLING_ACCOUNT}" \
 --member="serviceAccount:${SA_EMAIL}" \
 --role="roles/billing.user"
 ```
+
+You can use the [Project Factory module](https://github.com/terraform-google-modules/terraform-google-project-factory) and the
+[IAM module](https://github.com/terraform-google-modules/terraform-google-iam) in combination to provision a
+service account with the necessary roles applied.
 
 The user using this service account must have the necessary roles, `Service Account User` and `Service Account Token Creator`, to [impersonate](https://cloud.google.com/iam/docs/impersonating-service-accounts) the service account.
 
