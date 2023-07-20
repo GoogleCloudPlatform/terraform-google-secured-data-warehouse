@@ -29,55 +29,55 @@ tf_example=$1
 # gets the project id for data ingestion projects created by setup which return an array
 # and get project number for each one
 IFS=',' read -ra data_ingestion_projects <<< "${TF_VAR_data_ingestion_project_id:?}"
-data_ingestion_project_id_1=$(echo "${data_ingestion_projects[0]}" | tr -d \" | tr -d \[| tr -d\])
+data_ingestion_project_id_1=$(echo "${data_ingestion_projects[0]}" | tr -d \" | tr -d '['| tr -d ']')
 data_ingestion_project_number_1=$(get_project_number "${data_ingestion_project_id_1}")
-data_ingestion_project_id_2=$(echo "${data_ingestion_projects[1]}"| tr -d \" | tr -d \[| tr -d\])
+data_ingestion_project_id_2=$(echo "${data_ingestion_projects[1]}"| tr -d \" | tr -d '['| tr -d ']')
 data_ingestion_project_number_2=$(get_project_number "${data_ingestion_project_id_2}")
-data_ingestion_project_id_3=$(echo "${data_ingestion_projects[2]}" | tr -d \" | tr -d \[| tr -d\])
+data_ingestion_project_id_3=$(echo "${data_ingestion_projects[2]}" | tr -d \" | tr -d '['| tr -d ']')
 data_ingestion_project_number_3=$(get_project_number "${data_ingestion_project_id_3}")
 
 # gets the network self-links for confidential project created by setup which return an array
 # and get project number for each one
 IFS=',' read -ra data_ingestion_networks <<< "${TF_VAR_data_ingestion_network_self_link:?}"
-data_ingestion_network_1=$(echo "${data_ingestion_networks[0]}" | tr -d \" | tr -d \[| tr -d\])
-data_ingestion_network_2=$(echo "${data_ingestion_networks[1]}" | tr -d \" | tr -d \[| tr -d\])
-data_ingestion_network_3=$(echo "${data_ingestion_networks[2]}" | tr -d \" | tr -d \[| tr -d\])
+data_ingestion_network_1=$(echo "${data_ingestion_networks[0]}" | tr -d \" | tr -d '['| tr -d ']')
+data_ingestion_network_2=$(echo "${data_ingestion_networks[1]}" | tr -d \" | tr -d '['| tr -d ']')
+data_ingestion_network_3=$(echo "${data_ingestion_networks[2]}" | tr -d \" | tr -d '['| tr -d ']')
 
 # gets the project id for data governance created by setup which return an array
 # and get project number for each one
 IFS=',' read -ra data_governance_projects <<< "${TF_VAR_data_governance_project_id:?}"
-data_governance_project_id_1=$(echo "${data_governance_projects[0]}" | tr -d \" | tr -d \[| tr -d\])
+data_governance_project_id_1=$(echo "${data_governance_projects[0]}" | tr -d \" | tr -d '['| tr -d ']')
 data_governance_project_number_1=$(get_project_number "${data_governance_project_id_1}")
-data_governance_project_id_2=$(echo "${data_governance_projects[1]}" | tr -d \" | tr -d \[| tr -d\])
+data_governance_project_id_2=$(echo "${data_governance_projects[1]}" | tr -d \" | tr -d '['| tr -d ']')
 data_governance_project_number_2=$(get_project_number "${data_governance_project_id_2}")
-data_governance_project_id_3=$(echo "${data_governance_projects[2]}" | tr -d \" | tr -d \[| tr -d\])
+data_governance_project_id_3=$(echo "${data_governance_projects[2]}" | tr -d \" | tr -d '['| tr -d ']')
 data_governance_project_number_3=$(get_project_number "${data_governance_project_id_3}")
 
 # gets the project id for non-confidential data created by setup which return an array
 # and get project number for each one
 IFS=',' read -ra non_confidential_data_projects <<< "${TF_VAR_non_confidential_data_project_id:?}"
-non_confidential_data_project_id_1=$(echo "${non_confidential_data_projects[0]}" | tr -d \" | tr -d \[| tr -d\])
+non_confidential_data_project_id_1=$(echo "${non_confidential_data_projects[0]}" | tr -d \" | tr -d '['| tr -d ']')
 non_confidential_data_project_number_1=$(get_project_number "${non_confidential_data_project_id_1}")
-non_confidential_data_project_id_2=$(echo "${non_confidential_data_projects[1]}" | tr -d \" | tr -d \[| tr -d\])
+non_confidential_data_project_id_2=$(echo "${non_confidential_data_projects[1]}" | tr -d \" | tr -d '['| tr -d ']')
 non_confidential_data_project_number_2=$(get_project_number "${non_confidential_data_project_id_2}")
-non_confidential_data_project_id_3=$(echo "${non_confidential_data_projects[2]}" | tr -d \" | tr -d \[| tr -d\])
+non_confidential_data_project_id_3=$(echo "${non_confidential_data_projects[2]}" | tr -d \" | tr -d '['| tr -d ']')
 non_confidential_data_project_number_3=$(get_project_number "${non_confidential_data_project_id_3}")
 
 # gets the project id for confidential data created by setup which return an array
 # and get project number for each one
 IFS=',' read -ra confidential_projects <<< "${TF_VAR_confidential_data_project_id:?}"
-confidential_project_id_1=$(echo "${confidential_projects[0]}" | tr -d \" | tr -d \[| tr -d\])
+confidential_project_id_1=$(echo "${confidential_projects[0]}" | tr -d \" | tr -d '['| tr -d ']')
 confidential_project_number_1=$(get_project_number "${confidential_project_id_1}")
-confidential_project_id_2=$(echo "${confidential_projects[1]}" | tr -d \" | tr -d \[| tr -d\])
+confidential_project_id_2=$(echo "${confidential_projects[1]}" | tr -d \" | tr -d '['| tr -d ']')
 confidential_project_number_2=$(get_project_number "${confidential_project_id_2}")
-confidential_project_id_3=$(echo "${confidential_projects[2]}" | tr -d \" | tr -d \[| tr -d\])
+confidential_project_id_3=$(echo "${confidential_projects[2]}" | tr -d \" | tr -d '['| tr -d ']')
 confidential_project_number_3=$(get_project_number "${confidential_project_id_3}")
 
 # gets the network self-link for confidential data project created by setup which return an array
 IFS=',' read -ra confidential_networks <<< "${TF_VAR_confidential_network_self_link:?}"
-confidential_network_1=$(echo "${confidential_networks[0]}" | tr -d \" | tr -d \[| tr -d\])
-confidential_network_2=$(echo "${confidential_networks[1]}" | tr -d \" | tr -d \[| tr -d\])
-confidential_network_3=$(echo "${confidential_networks[2]}" | tr -d \" | tr -d \[| tr -d\])
+confidential_network_1=$(echo "${confidential_networks[0]}" | tr -d \" | tr -d '['| tr -d ']')
+confidential_network_2=$(echo "${confidential_networks[1]}" | tr -d \" | tr -d '['| tr -d ']')
+confidential_network_3=$(echo "${confidential_networks[2]}" | tr -d \" | tr -d '['| tr -d ']')
 
 
 policy_file_path="$(pwd)/policy-library"
