@@ -94,7 +94,7 @@ These sections describe the requirements for using this module.
 
 Install the following dependencies:
 
-- [gcloud SDK](https://cloud.google.com/sdk/install) >= 281.0.0
+- [gcloud SDK](https://cloud.google.com/sdk/install) ~> 2.1.0.0
 - [Terraform](https://www.terraform.io/downloads.html) >= 0.13.0
 - [Terraform Provider for GCP](https://github.com/terraform-providers/terraform-provider-google) plugin ~> 3.77
 - [Terraform Provider Beta for GCP](https://github.com/terraform-providers/terraform-provider-google) plugin ~> 3.77
