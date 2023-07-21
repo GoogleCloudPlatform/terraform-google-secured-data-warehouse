@@ -133,3 +133,6 @@ options:
   machineType: 'N1_HIGHCPU_8'
   env:
   - 'TF_VAR_org_id=$_ORG_ID'
+  - 'TF_PLUGIN_CACHE_DIR=""'
+
+
