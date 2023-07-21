@@ -85,7 +85,8 @@ module "data_governance_project" {
     "cloudkms.googleapis.com",
     "dlp.googleapis.com",
     "secretmanager.googleapis.com",
-    "monitoring.googleapis.com"
+    "monitoring.googleapis.com",
+    "logging.googleapis.com"
   ]
 }
 
@@ -110,7 +111,8 @@ module "non_confidential_data_project" {
     "accesscontextmanager.googleapis.com",
     "cloudbilling.googleapis.com",
     "cloudkms.googleapis.com",
-    "monitoring.googleapis.com"
+    "monitoring.googleapis.com",
+    "logging.googleapis.com"
   ]
 }
 
