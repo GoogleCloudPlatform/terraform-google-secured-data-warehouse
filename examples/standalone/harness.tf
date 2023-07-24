@@ -82,7 +82,7 @@ module "template_project" {
 
 module "tek_wrapping_key" {
   source  = "terraform-google-modules/kms/google"
-  version = "~> 1.2"
+  version = "~> 2.2"
 
   project_id           = module.base_projects.data_governance_project_id
   labels               = { environment = "dev" }

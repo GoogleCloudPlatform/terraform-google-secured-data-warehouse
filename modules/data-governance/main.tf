@@ -121,7 +121,7 @@ resource "google_project_service_identity" "confidential_dataflow_sa" {
 
 module "cmek" {
   source  = "terraform-google-modules/kms/google"
-  version = "~> 2.0.1"
+  version = "~> 2.2"
 
   project_id           = var.data_governance_project_id
   labels               = var.labels

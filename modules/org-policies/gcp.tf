@@ -16,7 +16,7 @@
 
 module "location_restriction_policy" {
   source            = "terraform-google-modules/org-policy/google"
-  version           = "~> 4.0"
+  version           = "~> 5.2"
   constraint        = "gcp.resourceLocations"
   policy_for        = "project"
   project_id        = var.project_id
