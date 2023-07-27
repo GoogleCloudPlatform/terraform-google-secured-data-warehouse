@@ -3,8 +3,8 @@
 Upload to the Python artifact registry the modules that will be used when the Python Dataflow jobs is staged.
 
 ```shell
-export LOCATION=<REPOSITORY-LOCATION>
-export PROJECT=<YOUR-PROJECT>
+export LOCATION="us-west1"
+export PROJECT="pjr-seed-serverless-test"
 
 gcloud beta builds submit \
  --project=$PROJECT \
