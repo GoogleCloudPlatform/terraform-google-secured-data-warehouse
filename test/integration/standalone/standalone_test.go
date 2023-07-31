@@ -65,15 +65,27 @@ func TestStandalone(t *testing.T) {
 		opPubsub := gcloud.Runf(t, "pubsub topics describe %s --project=%s", dataIngTopicName, dataIngprojectID)
 		assert.Equal(fmt.Sprintf("projects/%s/topics/%s", dataIngprojectID, dataIngTopicName), opPubsub.Get("name").String(), "has expected name")
 
+		taxonomyLocation := "us-east4"
+		taxonomyName := standalone.GetStringOutput("taxonomy_display_name")
+		optaxonomy := gcloud.Runf(t, "data-catalog taxonomies list --location=%s --project=%s", taxonomyLocation, dataGovprojectID)
+		assert.Equal(taxonomyName, optaxonomy.Get("displayName").String(), "has expected name")
+		assert.NotEqual("0", optaxonomy.Get("policyTagCount").String(), "taxonomy contains policy tags")
+
 		nonConfTableName := standalone.GetStringOutput("bigquery_non_confidential_table")
 		nonConfdatasetID := standalone.GetStringOutput("non_confidential_dataset")
 		opnonConfdataset := gcloud.Runf(t, "alpha bq tables describe irs_990_ein_de_id --dataset %s --project %s", nonConfdatasetID, nonConfprojectID)
 		assert.Equal(nonConfTableName, opnonConfdataset.Get("id").String(), "has expected name")
 
+		opnonconftabledata := gcloud.Runf(t, "alpha bq show --format=prettyjson %s:%s.%s", nonConfprojectID, nonConfdatasetID, nonConfTableName)
+		assert.NotEqual("0", opnonconftabledata.Get("numRows").String(), "table contains data")
+
 		confTableName := standalone.GetStringOutput("bigquery_confidential_table")
 		confdatasetID := standalone.GetStringOutput("confidential_dataset")
 		opconfdataset := gcloud.Runf(t, "alpha bq tables describe irs_990_ein_re_id --dataset %s --project %s", confdatasetID, confprojectID)
 		assert.Equal(confTableName, opconfdataset.Get("id").String(), "has expected name")
+
+		opconftabledata := gcloud.Runf(t, "alpha bq show --format=prettyjson %s:%s.%s", confprojectID, confdatasetID, confTableName)
+		assert.NotEqual("0", opconftabledata.Get("numRows").String(), "table contains data")
 	})
 
 	standalone.Test()
