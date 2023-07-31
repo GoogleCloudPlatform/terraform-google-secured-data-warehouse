@@ -1,2 +1,2 @@
-apache-beam==2.48.0
+apache-beam==2.49.0
 google-cloud-dlp==3.12.1

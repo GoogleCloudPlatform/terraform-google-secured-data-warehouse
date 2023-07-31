@@ -9,9 +9,9 @@ The Apache Beam Cloud CLP Transform has been changed to allow regional structure
 Set the following environment variables based in the resources create in the infrastructure step:
 
 ```shell
-export LOCATION="us-west1"
-export PROJECT="pjr-seed-serverless-test"
-export BUCKET="pjr-seed-serverless-test_cloudbuild"
+export LOCATION=<REPOSITORY-LOCATION>
+export PROJECT=<YOUR-PROJECT>
+export BUCKET=<YOUR-FLEX-TEMPLATE-BUCKET>
 export TEMPLATE_IMAGE_TAG="$LOCATION-docker.pkg.dev/$PROJECT/flex-templates/samples/regional-python-dlp-flex:latest"
 export TEMPLATE_GS_PATH="gs://$BUCKET/flex-template-samples/regional-python-dlp-flex.json"
 export PIP_INDEX_URL="https://$LOCATION-python.pkg.dev/$PROJECT/python-modules/simple/"

@@ -22,7 +22,6 @@ import apache_beam.transforms.window as window
 from apache_beam.options.pipeline_options import (GoogleCloudOptions,
                                                   PipelineOptions)
 from apache_beam.transforms import BatchElements, DoFn, ParDo, PTransform
-from apache_beam.utils.annotations import experimental
 from google.cloud import dlp_v2
 
 
@@ -252,7 +251,6 @@ def from_table_to_list_dict(content_item):
     return result
 
 
-@experimental()
 class UnmaskDetectedDetails(PTransform):
 
     def __init__(
@@ -329,7 +327,6 @@ class _ReidentifyFn(DoFn):
         yield operation.item
 
 
-@experimental()
 class MaskDetectedDetails(PTransform):
 
     def __init__(

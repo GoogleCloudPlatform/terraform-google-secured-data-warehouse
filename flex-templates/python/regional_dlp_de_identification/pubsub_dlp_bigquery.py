@@ -23,7 +23,6 @@ import apache_beam.transforms.window as window
 from apache_beam.options.pipeline_options import (GoogleCloudOptions,
                                                   PipelineOptions)
 from apache_beam.transforms import DoFn, ParDo, PTransform, BatchElements
-from apache_beam.utils.annotations import experimental
 
 
 def run(argv=None, save_main_session=True):
@@ -229,7 +228,6 @@ def from_table_to_list_dict(content_item):
     return result
 
 
-@experimental()
 class MaskDetectedDetails(PTransform):
 
     def __init__(
