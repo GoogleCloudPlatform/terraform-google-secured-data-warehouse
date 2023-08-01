@@ -109,3 +109,7 @@ output "confidential_subnets_self_link" {
   description = "The self-links of confidential subnets being created."
   value       = values(module.base_projects)[*].confidential_subnets_self_link
 }
+
+output "folder_id" {
+  value = google_folder.ci-iam-folder.folder_id
+}
