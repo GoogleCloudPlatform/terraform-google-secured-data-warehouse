@@ -14,15 +14,6 @@
  * limitations under the License.
  */
 
-variable "org_id" {
-  description = "The GCP Organization ID."
-  type        = string
-}
-
-variable "project_id" {
-  description = "The ID of the project in which the service account will be created."
-  type        = string
-}
 
 variable "resources" {
   description = "A list of GCP resources that are inside of the service perimeter. Currently only projects are allowed."

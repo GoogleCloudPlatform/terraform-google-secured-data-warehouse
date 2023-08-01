@@ -152,8 +152,11 @@ tags:
 - 'integration'
 substitutions:
   _DOCKER_IMAGE_DEVELOPER_TOOLS: 'cft/developer-tools'
-  _DOCKER_TAG_VERSION_DEVELOPER_TOOLS: '1.5'
+  _DOCKER_TAG_VERSION_DEVELOPER_TOOLS: '1.13'
 options:
   machineType: 'N1_HIGHCPU_8'
   env:
   - 'TF_VAR_org_id=$_ORG_ID'
+  - 'TF_PLUGIN_CACHE_DIR=""'
+
+

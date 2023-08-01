@@ -39,7 +39,6 @@ resource "google_project_iam_binding" "remove_owner_role" {
 module "data_governance" {
   source = "./modules/data-governance"
 
-  terraform_service_account        = var.terraform_service_account
   labels                           = var.labels
   data_ingestion_project_id        = var.data_ingestion_project_id
   data_governance_project_id       = var.data_governance_project_id
@@ -64,7 +63,6 @@ module "data_ingestion" {
   dataset_id                          = var.dataset_id
   dataset_name                        = var.dataset_name
   dataset_description                 = var.dataset_description
-  org_id                              = var.org_id
   data_ingestion_project_id           = var.data_ingestion_project_id
   non_confidential_data_project_id    = var.non_confidential_data_project_id
   data_governance_project_id          = var.data_governance_project_id
