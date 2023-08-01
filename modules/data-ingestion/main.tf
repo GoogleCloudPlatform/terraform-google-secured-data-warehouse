@@ -40,12 +40,13 @@ module "dataflow_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 4.0"
 
-  project_id    = var.data_ingestion_project_id
-  labels        = var.labels
-  name          = "bkt-${var.data_ingestion_project_id}-tmp-dataflow-${random_id.suffix.hex}"
-  location      = var.bucket_location
-  storage_class = "STANDARD"
-  force_destroy = var.delete_contents_on_destroy
+  project_id      = var.data_ingestion_project_id
+  labels          = var.labels
+  name            = "bkt-${var.data_ingestion_project_id}-tmp-dataflow-${random_id.suffix.hex}"
+  location        = var.bucket_location
+  storage_class   = "STANDARD"
+  lifecycle_rules = var.bucket_lifecycle_rules
+  force_destroy   = var.delete_contents_on_destroy
 
 
   encryption = {
