@@ -30,7 +30,7 @@ resource "random_id" "random_suffix" {
 
 module "kek" {
   source  = "terraform-google-modules/kms/google"
-  version = "~> 1.2"
+  version = "~> 2.2"
 
   project_id           = var.data_governance_project_id[1]
   location             = local.location

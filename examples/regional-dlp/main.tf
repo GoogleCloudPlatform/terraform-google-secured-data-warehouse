@@ -104,7 +104,7 @@ module "regional_dlp" {
 
   parameters = {
     input_topic                    = "projects/${var.data_ingestion_project_id}/topics/${module.data_ingestion.data_ingestion_topic_name}"
-    deidentification_template_name = "${module.de_identification_template_example.template_full_path}"
+    deidentification_template_name = module.de_identification_template_example.template_full_path
     dlp_location                   = local.location
     dlp_project                    = var.data_governance_project_id
     bq_schema                      = local.bq_schema

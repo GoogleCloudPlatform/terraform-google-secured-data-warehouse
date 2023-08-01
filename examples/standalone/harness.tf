@@ -82,7 +82,7 @@ module "template_project" {
 
 module "tek_wrapping_key" {
   source  = "terraform-google-modules/kms/google"
-  version = "~> 1.2"
+  version = "~> 2.2"
 
   project_id           = module.base_projects.data_governance_project_id
   labels               = { environment = "dev" }
@@ -151,7 +151,6 @@ module "centralized_logging" {
   logging_location            = local.location
   delete_contents_on_destroy  = var.delete_contents_on_destroy
   key_rotation_period_seconds = local.key_rotation_period_seconds
-  parent_folder               = var.folder_id
 
   depends_on = [
     module.iam_projects

@@ -65,12 +65,6 @@ variable "subnetwork_self_link" {
   type        = string
 }
 
-variable "location" {
-  description = "The location of Artifact registry. Run `gcloud artifacts locations list` to list available locations."
-  type        = string
-  default     = "us-east4"
-}
-
 variable "crypto_key" {
   description = "The full resource name of the Cloud KMS key that wraps the data crypto key used by DLP."
   type        = string
