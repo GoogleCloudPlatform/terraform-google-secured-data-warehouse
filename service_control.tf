@@ -157,8 +157,6 @@ module "data_ingestion_vpc_sc" {
 
   count = var.data_ingestion_perimeter == "" ? 1 : 0
 
-  org_id                           = var.org_id
-  project_id                       = var.data_ingestion_project_id
   access_context_manager_policy_id = local.actual_policy
   common_name                      = "data_ingestion"
   common_suffix                    = random_id.suffix.hex
@@ -210,8 +208,6 @@ module "data_governance_vpc_sc" {
 
   count = var.data_governance_perimeter == "" ? 1 : 0
 
-  org_id                           = var.org_id
-  project_id                       = var.data_governance_project_id
   access_context_manager_policy_id = local.actual_policy
   common_name                      = "data_governance"
   common_suffix                    = random_id.suffix.hex
@@ -249,8 +245,6 @@ module "confidential_data_vpc_sc" {
 
   count = var.confidential_data_perimeter == "" ? 1 : 0
 
-  org_id                           = var.org_id
-  project_id                       = var.confidential_data_project_id
   access_context_manager_policy_id = local.actual_policy
   common_name                      = "confidential_data"
   common_suffix                    = random_id.suffix.hex
