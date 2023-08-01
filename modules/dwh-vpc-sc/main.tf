@@ -25,10 +25,6 @@ resource "random_id" "suffix" {
   byte_length = 4
 }
 
-data "google_project" "target_project" {
-  project_id = var.project_id
-}
-
 module "access_level_policy" {
   source      = "terraform-google-modules/vpc-service-controls/google//modules/access_level"
   version     = "~> 3.0"
