@@ -70,14 +70,6 @@ data "google_project" "data_ingestion_project" {
   project_id = var.data_ingestion_project_id
 }
 
-data "google_project" "governance_project" {
-  project_id = var.data_governance_project_id
-}
-
-data "google_project" "non_confidential_data_project" {
-  project_id = var.non_confidential_data_project_id
-}
-
 data "google_storage_project_service_account" "gcs_account" {
   project = var.data_ingestion_project_id
 }

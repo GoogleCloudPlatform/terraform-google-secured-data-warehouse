@@ -25,23 +25,23 @@ key=${2}
 secret_name=${3}
 project_id=${4}
 temporary_crypto_operator_role=${5}
-exe_path=$(dirname ${0})
+exe_path=$(dirname "${0}")
 
-key_location=$(echo ${key} |awk -F '/' '{print $4}')
-key_name=$(echo ${key} |awk -F '/' '{print $8}')
-key_ring=$(echo ${key} |awk -F '/' '{print $6}')
+key_location=$(echo "${key}" |awk -F '/' '{print "$4"}')
+key_name=$(echo "${key}" |awk -F '/' '{print "$8"}')
+key_ring=$(echo "${key}" |awk -F '/' '{print "$6"}')
 
 trap 'catch $? $LINENO' EXIT
 catch() {
   if    [ "${1}" != "0" ] \
-     && [ ${temporary_crypto_operator_role} == "true" ]; then
-    echo "Error ${1} occurred on ${2}"
-    gcloud kms keys remove-iam-policy-binding ${key_name} --keyring=${key_ring} --location=${key_location} --member=serviceAccount:${terraform_service_account} --role=roles/cloudkms.cryptoOperator --project=${project_id}
+     && [ "${temporary_crypto_operator_role}" == "true" ]; then
+    echo "Error \"${1}\" occurred on \"${2}\""
+    gcloud kms keys remove-iam-policy-binding "${key_name}" --keyring="${key_ring}" --location="${key_location}" --member=serviceAccount:"${terraform_service_account}" --role=roles/cloudkms.cryptoOperator --project="${project_id}"
   fi
 }
 generate_wrapped_key() {
-    if [ ${temporary_crypto_operator_role} == "true" ]; then
-      gcloud kms keys add-iam-policy-binding ${key_name} --keyring=${key_ring} --location=${key_location} --member=serviceAccount:${terraform_service_account} --role=roles/cloudkms.cryptoOperator --project=${project_id}
+    if [ "${temporary_crypto_operator_role}" == "true" ]; then
+      gcloud kms keys add-iam-policy-binding "${key_name}" --keyring="${key_ring}" --location="${key_location}" --member=serviceAccount:"${terraform_service_account}" --role=roles/cloudkms.cryptoOperator --project="${project_id}"
     fi
 
     python3 -m pip install --user --upgrade pip
@@ -55,9 +55,9 @@ generate_wrapped_key() {
 
     pip install --upgrade pip
 
-    pip install -r ${exe_path}/wrapped-key/requirements.txt
+    pip install -r "${exe_path}"/wrapped-key/requirements.txt
 
-    response_kms=$(python3 ${exe_path}/wrapped-key/wrapped_key.py --crypto_key_path ${key} --service_account ${terraform_service_account})
+    response_kms=$(python3 "${exe_path}"/wrapped-key/wrapped_key.py --crypto_key_path "${key}" --service_account "${terraform_service_account}")
 
     echo "${response_kms}" | \
     gcloud secrets versions add "${secret_name}" \
@@ -65,8 +65,8 @@ generate_wrapped_key() {
     --impersonate-service-account="${terraform_service_account}" \
     --project="${project_id}"
 
-    if [ ${temporary_crypto_operator_role} == "true" ]; then
-      gcloud kms keys remove-iam-policy-binding ${key_name} --keyring=${key_ring} --location=${key_location} --member=serviceAccount:${terraform_service_account} --role=roles/cloudkms.cryptoOperator --project=${project_id}
+    if [ "${temporary_crypto_operator_role}" == "true" ]; then
+      gcloud kms keys remove-iam-policy-binding "${key_name}" --keyring="${key_ring}" --location="${key_location}" --member=serviceAccount:"${terraform_service_account}" --role=roles/cloudkms.cryptoOperator --project="${project_id}"
     fi
 }
 

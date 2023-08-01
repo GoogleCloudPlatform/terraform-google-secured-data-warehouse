@@ -65,7 +65,7 @@ module "data_ingestion_topic" {
   message_storage_policy = { allowed_persistence_regions : [var.pubsub_resource_location] }
 }
 
-//BigQuery dataset
+//BigQuery org_id
 module "bigquery_dataset" {
   source  = "terraform-google-modules/bigquery/google"
   version = "~> 6.1"
