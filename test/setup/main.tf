@@ -35,7 +35,12 @@ locals {
     "roles/resourcemanager.projectDeleter",
     "roles/compute.xpnAdmin",
     "roles/vpcaccess.admin",
-    "roles/iam.serviceAccountTokenCreator"
+    "roles/iam.serviceAccountTokenCreator",
+    "roles/compute.networkAdmin",
+    "roles/cloudkms.cryptoOperator",
+    "roles/logging.admin",
+    "roles/resourcemanager.projectIamAdmin",
+    "roles/serviceusage.serviceUsageAdmin",
   ]
 }
 
