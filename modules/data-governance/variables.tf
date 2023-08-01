@@ -20,11 +20,6 @@ variable "labels" {
   default     = {}
 }
 
-variable "terraform_service_account" {
-  description = "The email address of the service account that will run the Terraform code."
-  type        = string
-}
-
 variable "data_ingestion_project_id" {
   description = "The ID of the project in which the data ingestion resources will be created."
   type        = string
