@@ -191,3 +191,37 @@ resource "google_artifact_registry_repository_iam_member" "python_reader" {
   member     = "serviceAccount:sa-dataflow-controller-reid@CONFIDENTIAL-DATA-PROJECT-ID.iam.gserviceaccount.com"
 }
 ```
+
+**Error message:**
+
+```text
+Error when reading or editing GCS service account not found: googleapi: Error 400: Unknown project id: <PROJECT-ID>, invalid.
+The user does not have permission to access Project <PROJECT-ID> or it may not exist.
+```
+
+**Cause:**
+
+Terraform is trying to fetch the IAM policy of the given project **PROJECT-ID** but the project was not created in the first execution.
+
+What was created in the first execution was the project id that will be used to create the project. The project id  is a composition of a fixed prefix and a random suffix.
+
+Possible causes of the project creation failure in the first execution are:
+
+- The service account does not have Billing Account User role in the billing account
+- The service account does not have Project Creator role in the Google Resource Manager folder
+- The service account has reached the project creation quota
+
+**Solution:**
+
+Grant any missing required role to the service account. See the full list of roles in the [README.md](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/blob/main/examples/standalone/README.md#service-account).
+
+If the cause is the project creation quota issue. Follow instruction in the Terraform Example Foundation [troubleshooting](https://github.com/terraform-google-modules/terraform-example-foundation/blob/master/docs/TROUBLESHOOTING.md#billing-quota-exceeded)
+
+After doing this fixes you need to force the recreation of the random suffix used in the project ID.
+To force the creation run
+
+```bash
+terraform taint module.base_projects.random_id.project_id_suffix
+```
+
+And try again to do the deployment.

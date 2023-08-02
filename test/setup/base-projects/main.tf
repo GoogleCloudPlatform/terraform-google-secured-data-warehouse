@@ -16,6 +16,13 @@
 
 locals {
   app_engine_location = lookup({ "europe-west1" = "europe-west", "us-central1" = "us-central" }, var.region, var.region)
+
+  data_ingestion_project_name        = var.data_ingestion_project_name != "" ? var.data_ingestion_project_name : "sdw-data-ing-${random_id.project_id_suffix.hex}"
+  data_governance_project_name       = var.data_governance_project_name != "" ? var.data_governance_project_name : "sdw-data-gov-${random_id.project_id_suffix.hex}"
+  non_confidential_data_project_name = var.non_confidential_data_project_name != "" ? var.non_confidential_data_project_name : "sdw-non-conf-${random_id.project_id_suffix.hex}"
+  confidential_data_project_name     = var.confidential_data_project_name != "" ? var.confidential_data_project_name : "sdw-conf-${random_id.project_id_suffix.hex}"
+
+
 }
 
 resource "random_id" "project_id_suffix" {
@@ -26,7 +33,7 @@ module "data_ingestion_project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
 
-  name                    = "sdw-data-ing-${random_id.project_id_suffix.hex}"
+  name                    = local.data_ingestion_project_name
   random_project_id       = "true"
   org_id                  = var.org_id
   labels                  = var.labels
@@ -66,7 +73,7 @@ module "data_governance_project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
 
-  name                    = "sdw-data-gov-${random_id.project_id_suffix.hex}"
+  name                    = local.data_governance_project_name
   random_project_id       = "true"
   org_id                  = var.org_id
   labels                  = var.labels
@@ -94,7 +101,7 @@ module "non_confidential_data_project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
 
-  name                    = "sdw-non-conf-${random_id.project_id_suffix.hex}"
+  name                    = local.non_confidential_data_project_name
   random_project_id       = "true"
   org_id                  = var.org_id
   labels                  = var.labels
@@ -121,7 +128,7 @@ module "confidential_data_project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0"
 
-  name                    = "sdw-conf-${random_id.project_id_suffix.hex}"
+  name                    = local.confidential_data_project_name
   random_project_id       = "true"
   org_id                  = var.org_id
   labels                  = var.labels

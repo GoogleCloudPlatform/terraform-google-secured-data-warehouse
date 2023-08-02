@@ -26,11 +26,43 @@ locals {
     "roles/orgpolicy.policyAdmin",
     "roles/accesscontextmanager.policyAdmin",
     "roles/resourcemanager.organizationAdmin",
-    "roles/vpcaccess.admin",
-    "roles/compute.xpnAdmin",
     "roles/billing.user"
   ]
+
+  folder_required_roles = [
+    "roles/resourcemanager.folderAdmin",
+    "roles/resourcemanager.projectCreator",
+    "roles/resourcemanager.projectDeleter",
+    "roles/compute.xpnAdmin",
+    "roles/vpcaccess.admin",
+    "roles/iam.serviceAccountTokenCreator"
+  ]
 }
+
+resource "random_id" "folder-rand" {
+  byte_length = 2
+}
+
+resource "google_folder" "ci-iam-folder" {
+  display_name = "ci-dwt-${random_id.folder-rand.hex}"
+  parent       = "folders/${var.folder_id}"
+}
+
+resource "google_organization_iam_member" "org_admins_group" {
+  for_each = toset(local.int_org_required_roles)
+  org_id   = var.org_id
+  role     = each.value
+  member   = "serviceAccount:${google_service_account.int_ci_service_account.email}"
+}
+
+resource "google_folder_iam_member" "folder_test" {
+  for_each = toset(local.folder_required_roles)
+
+  folder = google_folder.ci-iam-folder.id
+  role   = each.value
+  member = "serviceAccount:${google_service_account.int_ci_service_account.email}"
+}
+
 
 # ====================== Examples to project groups mapping ================================================
 # Examples "de-identification-template" and "simple-example" are together in one group.
@@ -59,7 +91,7 @@ module "base_projects" {
 
   org_id          = var.org_id
   labels          = var.labels
-  folder_id       = var.folder_id
+  folder_id       = google_folder.ci-iam-folder.id
   billing_account = var.billing_account
   region          = "us-east4"
 }
@@ -108,13 +140,6 @@ resource "google_service_account_iam_member" "cloud_build_iam" {
   member             = "serviceAccount:${var.build_project_number}@cloudbuild.gserviceaccount.com"
 }
 
-resource "google_organization_iam_member" "org_admins_group" {
-  for_each = toset(local.int_org_required_roles)
-  org_id   = var.org_id
-  role     = each.value
-  member   = "serviceAccount:${google_service_account.int_ci_service_account.email}"
-}
-
 resource "google_service_account_key" "int_test" {
   service_account_id = google_service_account.int_ci_service_account.id
 }
@@ -124,11 +149,12 @@ resource "google_billing_account_iam_member" "tf_billing_user" {
   role               = "roles/billing.admin"
   member             = "serviceAccount:${google_service_account.int_ci_service_account.email}"
 }
+
 module "template_project" {
   source = "./template-project"
 
   org_id                = var.org_id
-  folder_id             = var.folder_id
+  folder_id             = google_folder.ci-iam-folder.id
   billing_account       = var.billing_account
   location              = "us-east4"
   service_account_email = google_service_account.int_ci_service_account.email
