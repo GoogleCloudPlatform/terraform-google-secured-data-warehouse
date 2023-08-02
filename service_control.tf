@@ -44,26 +44,6 @@ locals {
     confidential = data.google_project.confidential_project.number
   }
 
-  base_restricted_services = [
-    "bigquery.googleapis.com",
-    "cloudasset.googleapis.com",
-    "cloudfunctions.googleapis.com",
-    "cloudkms.googleapis.com",
-    "compute.googleapis.com",
-    "datacatalog.googleapis.com",
-    "dataflow.googleapis.com",
-    "dlp.googleapis.com",
-    "logging.googleapis.com",
-    "monitoring.googleapis.com",
-    "pubsub.googleapis.com",
-    "secretmanager.googleapis.com",
-    "sts.googleapis.com",
-    "iam.googleapis.com",
-    "storage.googleapis.com"
-  ]
-
-  restricted_services = distinct(concat(local.base_restricted_services, var.additional_restricted_services))
-
   actual_policy = var.access_context_manager_policy_id != "" ? var.access_context_manager_policy_id : google_access_context_manager_access_policy.access_policy[0].name
 
   data_ingestion_default_egress_rule = var.sdx_project_number == "" ? [] : [
@@ -72,7 +52,7 @@ locals {
         "identity_type" = ""
         "identities" = distinct(concat(
           var.data_ingestion_dataflow_deployer_identities,
-          ["serviceAccount:${var.terraform_service_account}"]
+          ["serviceAccount:${var.terraform_service_account}", "serviceAccount:${module.data_ingestion.dataflow_controller_service_account_email}"]
         ))
       },
       "to" = {
@@ -81,6 +61,30 @@ locals {
           "storage.googleapis.com" = {
             "methods" = [
               "google.storage.objects.get"
+            ]
+          },
+          "artifactregistry.googleapis.com" = {
+            "methods" = [
+              "*"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "from" = {
+        "identity_type" = ""
+        "identities" = distinct(concat(
+          var.data_ingestion_dataflow_deployer_identities,
+          ["serviceAccount:${var.terraform_service_account}", "serviceAccount:${module.data_ingestion.dataflow_controller_service_account_email}"]
+        ))
+      },
+      "to" = {
+        "resources" = ["projects/1057666841514"]
+        "operations" = {
+          "bigquery.googleapis.com" = {
+            "methods" = [
+              "*"
             ]
           }
         }
@@ -103,6 +107,11 @@ locals {
           "storage.googleapis.com" = {
             "methods" = [
               "google.storage.objects.get"
+            ]
+          },
+          "artifactregistry.googleapis.com" = {
+            "methods" = [
+              "*"
             ]
           }
         }
@@ -162,12 +171,13 @@ module "data_ingestion_vpc_sc" {
   common_suffix                    = random_id.suffix.hex
   resources                        = local.data_ingestion_vpc_sc_resources
   perimeter_members                = local.perimeter_members_data_ingestion
-  restricted_services              = local.restricted_services
 
   egress_policies = distinct(concat(
     local.data_ingestion_default_egress_rule,
     var.data_ingestion_egress_policies
   ))
+
+  ingress_policies = var.data_ingestion_ingress_policies
 
   # depends_on needed to prevent intermittent errors
   # when the VPC-SC is created but perimeter member
@@ -180,7 +190,7 @@ module "data_ingestion_vpc_sc" {
 # Adding project to an existing VPC Service Controls Perimeter
 # instead of the default VPC Service Controls perimeter.
 # The default VPC Service Controls perimeter and access list will not be created.
-resource "google_access_context_manager_service_perimeter_resource" "ingestion-perimeter-resource" {
+resource "google_access_context_manager_service_perimeter_resource" "ingestion_perimeter_resource" {
   count = var.data_ingestion_perimeter != "" ? 1 : 0
 
   perimeter_name = "accessPolicies/${local.actual_policy}/servicePerimeters/${var.data_ingestion_perimeter}"
@@ -191,7 +201,7 @@ resource "google_access_context_manager_service_perimeter_resource" "ingestion-p
   ]
 }
 
-resource "google_access_context_manager_service_perimeter_resource" "non-confidential-perimeter-resource" {
+resource "google_access_context_manager_service_perimeter_resource" "non_confidential_perimeter_resource" {
   count = var.data_ingestion_perimeter != "" ? 1 : 0
 
   perimeter_name = "accessPolicies/${local.actual_policy}/servicePerimeters/${var.data_ingestion_perimeter}"
@@ -213,9 +223,9 @@ module "data_governance_vpc_sc" {
   common_suffix                    = random_id.suffix.hex
   resources                        = local.data_governance_vpc_sc_resources
   perimeter_members                = local.perimeter_members_governance
-  restricted_services              = local.restricted_services
 
-  egress_policies = var.data_governance_egress_policies
+  egress_policies  = var.data_governance_egress_policies
+  ingress_policies = var.data_governance_ingress_policies
 
   # depends_on needed to prevent intermittent errors
   # when the VPC-SC is created but perimeter member
@@ -228,7 +238,7 @@ module "data_governance_vpc_sc" {
 # Adding project to an existing VPC Service Controls Perimeter
 # instead of the default VPC Service Controls perimeter.
 # The default VPC Service Controls perimeter and access list will not be created.
-resource "google_access_context_manager_service_perimeter_resource" "governance-perimeter-resource" {
+resource "google_access_context_manager_service_perimeter_resource" "governance_perimeter_resource" {
   count = var.data_governance_perimeter != "" ? 1 : 0
 
   perimeter_name = "accessPolicies/${local.actual_policy}/servicePerimeters/${var.data_governance_perimeter}"
@@ -250,12 +260,13 @@ module "confidential_data_vpc_sc" {
   common_suffix                    = random_id.suffix.hex
   resources                        = local.confidential_data_vpc_sc_resources
   perimeter_members                = local.perimeter_members_confidential
-  restricted_services              = local.restricted_services
 
   egress_policies = distinct(concat(
     local.confidential_data_default_egress_rule,
     var.confidential_data_egress_policies
   ))
+
+  ingress_policies = var.confidential_ingress_policies
 
   # depends_on needed to prevent intermittent errors
   # when the VPC-SC is created but perimeter member
@@ -268,7 +279,7 @@ module "confidential_data_vpc_sc" {
 # Adding project to an existing VPC Service Controls Perimeter
 # instead of the default VPC Service Controls perimeter.
 # The default VPC Service Controls perimeter and access list will not be created.
-resource "google_access_context_manager_service_perimeter_resource" "confidential-perimeter-resource" {
+resource "google_access_context_manager_service_perimeter_resource" "confidential_perimeter_resource" {
   count = var.confidential_data_perimeter != "" ? 1 : 0
 
   perimeter_name = "accessPolicies/${local.actual_policy}/servicePerimeters/${var.confidential_data_perimeter}"
@@ -297,9 +308,9 @@ module "vpc_sc_bridge_data_ingestion_governance" {
     time_sleep.forces_wait_propagation,
     module.data_governance_vpc_sc,
     module.data_ingestion_vpc_sc,
-    google_access_context_manager_service_perimeter_resource.ingestion-perimeter-resource,
-    google_access_context_manager_service_perimeter_resource.governance-perimeter-resource,
-    google_access_context_manager_service_perimeter_resource.non-confidential-perimeter-resource,
+    google_access_context_manager_service_perimeter_resource.ingestion_perimeter_resource,
+    google_access_context_manager_service_perimeter_resource.governance_perimeter_resource,
+    google_access_context_manager_service_perimeter_resource.non_confidential_perimeter_resource,
   ]
 }
 
@@ -320,8 +331,8 @@ module "vpc_sc_bridge_confidential_governance" {
     time_sleep.forces_wait_propagation,
     module.confidential_data_vpc_sc,
     module.data_governance_vpc_sc,
-    google_access_context_manager_service_perimeter_resource.confidential-perimeter-resource,
-    google_access_context_manager_service_perimeter_resource.governance-perimeter-resource
+    google_access_context_manager_service_perimeter_resource.confidential_perimeter_resource,
+    google_access_context_manager_service_perimeter_resource.governance_perimeter_resource
   ]
 }
 
@@ -342,9 +353,9 @@ module "vpc_sc_bridge_confidential_data_ingestion" {
     time_sleep.forces_wait_propagation,
     module.confidential_data_vpc_sc,
     module.data_ingestion_vpc_sc,
-    google_access_context_manager_service_perimeter_resource.confidential-perimeter-resource,
-    google_access_context_manager_service_perimeter_resource.non-confidential-perimeter-resource,
-    google_access_context_manager_service_perimeter_resource.ingestion-perimeter-resource
+    google_access_context_manager_service_perimeter_resource.confidential_perimeter_resource,
+    google_access_context_manager_service_perimeter_resource.non_confidential_perimeter_resource,
+    google_access_context_manager_service_perimeter_resource.ingestion_perimeter_resource
   ]
 }
 
