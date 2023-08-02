@@ -26,6 +26,17 @@ In the External Harness we have:
   - A Cloud KMS key encryption key (KEK).
   - A token encryption key (TEK) for DLP Templates.
 
+[Custom names](#inputs) can be provided for the five projects created in this example.
+If custom names are not provided, the names of the projects will be:
+
+- `ext-harness`
+- `sdw-data-ing`
+- `sdw-data-gov`
+- `sdw-non-conf`
+- `sdw-conf`
+
+A random suffix will be added to the end of the names to create the project ID to prevent collisions with existing projects.
+
 In the deploy of the *Secured Data Warehouse* and the Dataflow Pipelines we have:
 
 - The deploy of the [main module](../../README.md) itself.
@@ -39,6 +50,14 @@ to wait for the first job to deploy, process the 10k records, and write to the B
 The re-identification step is typically a separate deliberated action (with change control) to re-identify and limit
 who can read the data but is executed automatically in the example to showcase the BigQuery security controls.
 
+**Note:** To deploy this example it is also necessary to have *an existing project* on which the [Service Account](#service-account)
+used to deploy this example needs to be created and have the required IAM Roles granted to it.
+This project should not be on the same folder used to deploy the *Secured Data Warehouse*  in accordance with the separation of concerns principle.
+You can use the [Project Factory module](https://github.com/terraform-google-modules/terraform-google-project-factory) and the
+[IAM module](https://github.com/terraform-google-modules/terraform-google-iam) in combination to provision a
+service account with the necessary roles applied.
+
+
 ## Google Cloud Locations
 
 This example will be deployed at the `us-east4` location, to deploy in another location,
@@ -50,14 +69,39 @@ the appropriated location in the call to the [main module](./main.tf#L33).
 
 ## Usage
 
-- Copy `tfvars` by running `cp terraform.example.tfvars terraform.tfvars` and update `terraform.tfvars` with values from your environment.
-- Run `terraform init`.
+- Rename the `tfvars` file by running `mv terraform.example.tfvars terraform.tfvars` and update `terraform.tfvars` with values from your environment.
+
+  ```bash
+  mv terraform.example.tfvars terraform.tfvars
+  ```
+
+- Run `terraform init` to get the plugins.
+
+  ```bash
+  terraform init
+  ```
+
 - Run `terraform plan` and review the plan.
-- Run `terraform apply`.
+
+  ```bash
+  terraform plan
+  ```
+
+- Run `terraform apply` to apply the infrastructure build.
+
+  ```bash
+  terraform apply
+  ```
+
 
 ### Clean up
 
 - Run `terraform destroy` to clean up your environment.
+The input `delete_contents_on_destroy` must have been set to `true` in the original `apply` for the `terraform destroy` command to work.
+
+  ```bash
+  terraform destroy
+  ```
 
 ### Perimeter members list
 
@@ -319,15 +363,20 @@ These outputs can be interesting for security analyst group:
 |------|-------------|------|---------|:--------:|
 | access\_context\_manager\_policy\_id | The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR-ORGANIZATION_ID --format="value(name)"`. | `string` | n/a | yes |
 | billing\_account | The billing account id associated with the projects, e.g. XXXXXX-YYYYYY-ZZZZZZ. | `string` | n/a | yes |
+| confidential\_data\_project\_name | Custom project name for the confidential data project. | `string` | `""` | no |
 | data\_analyst\_group | Google Cloud IAM group that analyzes the data in the warehouse. | `string` | n/a | yes |
 | data\_engineer\_group | Google Cloud IAM group that sets up and maintains the data pipeline and warehouse. | `string` | n/a | yes |
+| data\_governance\_project\_name | Custom project name for the data governance project. | `string` | `""` | no |
+| data\_ingestion\_project\_name | Custom project name for the data ingestion project. | `string` | `""` | no |
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `false` | no |
 | folder\_id | The folder to deploy in. | `string` | n/a | yes |
 | network\_administrator\_group | Google Cloud IAM group that reviews network configuration. Typically, this includes members of the networking team. | `string` | n/a | yes |
+| non\_confidential\_data\_project\_name | Custom project name for the non confidential data project. | `string` | `""` | no |
 | org\_id | The numeric organization id. | `string` | n/a | yes |
 | perimeter\_additional\_members | The list of members to be added on perimeter access. To be able to see the resources protected by the VPC Service Controls add your user must be in this list. The service accounts created by this module do not need to be added to this list. Entries must be in the standard GCP form: `user:email@email.com` or `serviceAccount:my-service-account@email.com`. | `list(string)` | n/a | yes |
 | security\_administrator\_group | Google Cloud IAM group that administers security configurations in the organization(org policies, KMS, VPC service perimeter). | `string` | n/a | yes |
 | security\_analyst\_group | Google Cloud IAM group that monitors and responds to security incidents. | `string` | n/a | yes |
+| template\_project\_name | Custom project name for the template project. | `string` | `""` | no |
 | terraform\_service\_account | The email address of the service account that will run the Terraform code. | `string` | n/a | yes |
 
 ## Outputs

@@ -49,6 +49,61 @@ variable "delete_contents_on_destroy" {
   default     = false
 }
 
+variable "template_project_name" {
+  description = "Custom project name for the template project."
+  type        = string
+  default     = ""
+
+  validation {
+    condition     = length(var.template_project_name) < 26
+    error_message = "The template_project_name must contain less than to 26 characters. This ensures the name can be suffixed with 4 random characters to create the project ID."
+  }
+}
+
+variable "data_ingestion_project_name" {
+  description = "Custom project name for the data ingestion project."
+  type        = string
+  default     = ""
+
+  validation {
+    condition     = length(var.data_ingestion_project_name) < 26
+    error_message = "The data_ingestion_project_name must contain less than to 26 characters. This ensures the name can be suffixed with 4 random characters to create the project ID."
+  }
+}
+
+variable "data_governance_project_name" {
+  description = "Custom project name for the data governance project."
+  type        = string
+  default     = ""
+
+  validation {
+    condition     = length(var.data_governance_project_name) < 26
+    error_message = "The data_governance_project_name must contain less than to 26 characters. This ensures the name can be suffixed with 4 random characters to create the project ID."
+  }
+}
+
+variable "confidential_data_project_name" {
+  description = "Custom project name for the confidential data project."
+  type        = string
+  default     = ""
+
+  validation {
+    condition     = length(var.confidential_data_project_name) < 26
+    error_message = "The confidential_data_project_name must contain less than to 26 characters. This ensures the name can be suffixed with 4 random characters to create the project ID."
+  }
+}
+
+variable "non_confidential_data_project_name" {
+  description = "Custom project name for the non confidential data project."
+  type        = string
+  default     = ""
+
+  validation {
+    condition     = length(var.non_confidential_data_project_name) < 26
+    error_message = "The non_confidential_data_project_name must contain less than to 26 characters. This ensures the name can be suffixed with 4 random characters to create the project ID."
+  }
+}
+
 variable "security_administrator_group" {
   description = "Google Cloud IAM group that administers security configurations in the organization(org policies, KMS, VPC service perimeter)."
   type        = string

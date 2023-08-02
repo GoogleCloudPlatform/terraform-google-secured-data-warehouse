@@ -39,3 +39,27 @@ variable "region" {
   description = "The region in which the subnetwork and the App Engine application will be created."
   type        = string
 }
+
+variable "data_ingestion_project_name" {
+  description = "Custom project name for the data ingestion project."
+  type        = string
+  default     = ""
+}
+
+variable "data_governance_project_name" {
+  description = "Custom project name for the data governance project."
+  type        = string
+  default     = ""
+}
+
+variable "non_confidential_data_project_name" {
+  description = "Custom project name for the non confidential data project."
+  type        = string
+  default     = ""
+}
+
+variable "confidential_data_project_name" {
+  description = "Custom project name for the confidential data project."
+  type        = string
+  default     = ""
+}
