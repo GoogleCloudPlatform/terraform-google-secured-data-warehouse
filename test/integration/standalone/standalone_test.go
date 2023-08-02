@@ -79,9 +79,13 @@ func TestStandalone(t *testing.T) {
 		opconftabledata := gcloud.Runf(t, "alpha bq show --format=prettyjson %s:%s.%s", confprojectID, confdatasetID, confTableName)
 		assert.NotEqual("0", opconftabledata.Get("numRows").String(), "table contains data")
 
-		nonConfdatasetID := standalone.GetStringOutput("non_confidential_dataset")
-		opnonConfdataset := gcloud.Runf(t, "alpha bq datasets describe %s --project %s", nonConfdatasetID, nonConfprojectID)
-		assert.Equal(nonConfdatasetID, opnonConfdataset.Get("datasetReference.datasetId").String(), "has expected name")
+		nonconfTableName := standalone.GetStringOutput("bigquery_non_confidential_table")
+		nonconfdatasetID := standalone.GetStringOutput("non_confidential_dataset")
+		opnonconfdataset := gcloud.Runf(t, "alpha bq tables describe irs_990_ein_re_id --dataset %s --project %s", nonconfdatasetID, nonconfprojectID)
+		assert.Equal(nonconfTableName, opnonconfdataset.Get("id").String(), "has expected name")
+
+		opnonconftabledata := gcloud.Runf(t, "alpha bq show --format=prettyjson %s:%s.%s", nonConfprojectID, nonconfdatasetID, nonconfTableName)
+		assert.NotEqual("0", opnonconftabledata.Get("numRows").String(), "table contains data")
 	})
 
 	standalone.Test()

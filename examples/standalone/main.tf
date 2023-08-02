@@ -59,6 +59,26 @@ module "secured_data_warehouse" {
   network_administrator_group      = var.network_administrator_group
   security_administrator_group     = var.security_administrator_group
 
+  data_ingestion_egress_policies = [{
+    "from" = {
+      "identity_type" = ""
+      "identities" = distinct(concat(
+        var.data_ingestion_dataflow_deployer_identities,
+        ["serviceAccount:${var.terraform_service_accouint}", "serviceAccount:${module.secured_data_warehouse.dataflow_controller_service_account_email}"]
+      ))
+    },
+    "to" = {
+      "resources" = ["projects/1057666841514"]
+      "operations" = {
+        "bigquery.googleapis.com" = {
+          "methods" = [
+            "*"
+          ]
+        }
+      }
+    }
+  }, ]
+
   // Set the enable_bigquery_read_roles_in_data_ingestion to true, it will grant to the dataflow controller
   // service account created in the data ingestion project the necessary roles to read from a bigquery table.
   enable_bigquery_read_roles_in_data_ingestion = true
