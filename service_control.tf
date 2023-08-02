@@ -292,6 +292,7 @@ module "vpc_sc_bridge_data_ingestion_governance" {
     data.google_project.governance_project.number,
     data.google_project.non_confidential_data_project.number
   ]
+  resource_keys = [0, 1, 2]
 
   depends_on = [
     time_sleep.forces_wait_propagation,
@@ -315,6 +316,7 @@ module "vpc_sc_bridge_confidential_governance" {
     data.google_project.confidential_project.number,
     data.google_project.governance_project.number
   ]
+  resource_keys = [0, 1]
 
   depends_on = [
     time_sleep.forces_wait_propagation,
@@ -337,6 +339,8 @@ module "vpc_sc_bridge_confidential_data_ingestion" {
     data.google_project.confidential_project.number,
     data.google_project.non_confidential_data_project.number
   ]
+
+  resource_keys = [0, 1]
 
   depends_on = [
     time_sleep.forces_wait_propagation,
