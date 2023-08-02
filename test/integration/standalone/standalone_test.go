@@ -71,11 +71,6 @@ func TestStandalone(t *testing.T) {
 		assert.Equal(taxonomyName, optaxonomy[0].Get("displayName").String(), "has expected name")
 		assert.NotEqual("0", optaxonomy[0].Get("policyTagCount").String(), "taxonomy contains policy tags")
 
-		nonConfTableName := standalone.GetStringOutput("bigquery_non_confidential_table")
-		nonConfdatasetID := standalone.GetStringOutput("non_confidential_dataset")
-		opnonConfdataset := gcloud.Runf(t, "alpha bq tables describe irs_990_ein_de_id --dataset %s --project %s", nonConfdatasetID, nonConfprojectID)
-		assert.Equal(nonConfTableName, opnonConfdataset.Get("id").String(), "has expected name")
-
 		confTableName := standalone.GetStringOutput("bigquery_confidential_table")
 		confdatasetID := standalone.GetStringOutput("confidential_dataset")
 		opconfdataset := gcloud.Runf(t, "alpha bq tables describe irs_990_ein_re_id --dataset %s --project %s", confdatasetID, confprojectID)
@@ -83,6 +78,10 @@ func TestStandalone(t *testing.T) {
 
 		opconftabledata := gcloud.Runf(t, "alpha bq show --format=prettyjson %s:%s.%s", confprojectID, confdatasetID, confTableName)
 		assert.NotEqual("0", opconftabledata.Get("numRows").String(), "table contains data")
+
+		nonConfdatasetID := standalone.GetStringOutput("non_confidential_dataset")
+		opnonConfdataset := gcloud.Runf(t, "alpha bq datasets describe %s --project %s", nonConfdatasetID, nonConfprojectID)
+		assert.Equal(nonConfdatasetID, opnonConfdataset.Get("datasetReference.datasetId").String(), "has expected name")
 	})
 
 	standalone.Test()
