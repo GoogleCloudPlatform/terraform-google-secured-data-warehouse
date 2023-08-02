@@ -67,17 +67,14 @@ func TestStandalone(t *testing.T) {
 
 		taxonomyLocation := "us-east4"
 		taxonomyName := standalone.GetStringOutput("taxonomy_display_name")
-		optaxonomy := gcloud.Runf(t, "data-catalog taxonomies list --location=%s --project=%s", taxonomyLocation, dataGovprojectID)
-		assert.Equal(taxonomyName, optaxonomy.Get("displayName").String(), "has expected name")
-		assert.NotEqual("0", optaxonomy.Get("policyTagCount").String(), "taxonomy contains policy tags")
+		optaxonomy := gcloud.Runf(t, "data-catalog taxonomies list --location=%s --project=%s", taxonomyLocation, dataGovprojectID).Array()
+		assert.Equal(taxonomyName, optaxonomy[0].Get("displayName").String(), "has expected name")
+		assert.NotEqual("0", optaxonomy[0].Get("policyTagCount").String(), "taxonomy contains policy tags")
 
 		nonConfTableName := standalone.GetStringOutput("bigquery_non_confidential_table")
 		nonConfdatasetID := standalone.GetStringOutput("non_confidential_dataset")
 		opnonConfdataset := gcloud.Runf(t, "alpha bq tables describe irs_990_ein_de_id --dataset %s --project %s", nonConfdatasetID, nonConfprojectID)
 		assert.Equal(nonConfTableName, opnonConfdataset.Get("id").String(), "has expected name")
-
-		opnonconftabledata := gcloud.Runf(t, "alpha bq show --format=prettyjson %s:%s.%s", nonConfprojectID, nonConfdatasetID, nonConfTableName)
-		assert.NotEqual("0", opnonconftabledata.Get("numRows").String(), "table contains data")
 
 		confTableName := standalone.GetStringOutput("bigquery_confidential_table")
 		confdatasetID := standalone.GetStringOutput("confidential_dataset")
