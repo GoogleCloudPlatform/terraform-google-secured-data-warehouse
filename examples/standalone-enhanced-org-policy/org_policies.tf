@@ -18,7 +18,7 @@ module "org_domain_restricted_sharing" {
   for_each = local.projects_ids
 
   source           = "terraform-google-modules/org-policy/google//modules/domain_restricted_sharing"
-  version          = "~> 3.0"
+  version          = "~> 5.2"
   project_id       = each.value
   policy_for       = "project"
   domains_to_allow = var.domains_to_allow
@@ -32,7 +32,7 @@ module "org_enforce_bucket_level_access" {
   for_each = local.projects_ids
 
   source      = "terraform-google-modules/org-policy/google"
-  version     = "~> 3.0"
+  version     = "~> 5.2"
   project_id  = each.value
   policy_for  = "project"
   policy_type = "boolean"
@@ -48,7 +48,7 @@ module "org_enforce_detailed_audit_logging_mode" {
   for_each = local.projects_ids
 
   source      = "terraform-google-modules/org-policy/google"
-  version     = "~> 3.0"
+  version     = "~> 5.2"
   project_id  = each.value
   policy_for  = "project"
   policy_type = "boolean"
@@ -64,7 +64,7 @@ module "org_enforce_public_access_prevention" {
   for_each = local.projects_ids
 
   source      = "terraform-google-modules/org-policy/google"
-  version     = "~> 3.0"
+  version     = "~> 5.2"
   project_id  = each.value
   policy_for  = "project"
   policy_type = "boolean"
