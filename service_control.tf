@@ -71,25 +71,6 @@ locals {
         }
       }
     },
-    {
-      "from" = {
-        "identity_type" = ""
-        "identities" = distinct(concat(
-          var.data_ingestion_dataflow_deployer_identities,
-          ["serviceAccount:${var.terraform_service_account}", "serviceAccount:${module.data_ingestion.dataflow_controller_service_account_email}"]
-        ))
-      },
-      "to" = {
-        "resources" = ["projects/1057666841514"]
-        "operations" = {
-          "bigquery.googleapis.com" = {
-            "methods" = [
-              "*"
-            ]
-          }
-        }
-      }
-    },
   ]
 
   confidential_data_default_egress_rule = var.sdx_project_number == "" ? [] : [
