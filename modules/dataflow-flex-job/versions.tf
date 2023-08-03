@@ -21,26 +21,31 @@ terraform {
 
     google = {
       source  = "hashicorp/google"
-      version = "~> 3.77"
+      version = ">= 4.61.0, < 5.0"
     }
 
     google-beta = {
       source  = "hashicorp/google-beta"
-      version = "~> 3.77"
+      version = "< 5.0"
     }
 
     null = {
       source  = "hashicorp/null"
-      version = "~> 2.1"
+      version = "3.2.0"
+    }
+
+    time = {
+      source  = "hashicorp/time"
+      version = "0.9.1"
     }
 
     random = {
       source  = "hashicorp/random"
-      version = "~> 2.3"
+      version = "3.4.3"
     }
-
   }
 
+  #changed_meta
   provider_meta "google" {
     module_name = "blueprints/terraform/terraform-google-secured-data-warehouse:dataflow-flex-job/v0.2.0"
   }
@@ -48,5 +53,4 @@ terraform {
   provider_meta "google-beta" {
     module_name = "blueprints/terraform/terraform-google-secured-data-warehouse:dataflow-flex-job/v0.2.0"
   }
-
 }

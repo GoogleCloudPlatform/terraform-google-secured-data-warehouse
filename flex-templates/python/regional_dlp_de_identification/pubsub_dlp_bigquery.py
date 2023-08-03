@@ -23,7 +23,6 @@ import apache_beam.transforms.window as window
 from apache_beam.options.pipeline_options import (GoogleCloudOptions,
                                                   PipelineOptions)
 from apache_beam.transforms import DoFn, ParDo, PTransform, BatchElements
-from apache_beam.utils.annotations import experimental
 
 
 def run(argv=None, save_main_session=True):
@@ -229,7 +228,6 @@ def from_table_to_list_dict(content_item):
     return result
 
 
-@experimental()
 class MaskDetectedDetails(PTransform):
 
     def __init__(
@@ -299,8 +297,21 @@ class _DeidentifyFn(DoFn):
         self.params.update(self.config)
 
     def process(self, element, **kwargs):
+        request = {
+            'parent': self.params['parent'],
+            'item': element
+        }
+
+        if self.config['deidentify_template_name'] is not None:
+            request['deidentify_template_name'] = \
+                self.config['deidentify_template_name']
+        else:
+            request['deidentify_config'] = self.config['deidentify_config']
+
         operation = self.client.deidentify_content(
-            item=element, **self.params)
+            timeout=self.timeout,
+            request=request
+        )
         yield operation.item
 
 

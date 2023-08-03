@@ -29,6 +29,7 @@ locals {
   templates_path                             = "${path.module}/../../../flex-templates"
   docker_repository_id                       = "flex-templates"
   python_repository_id                       = "python-modules"
+  project_name                               = var.project_name != "" ? var.project_name : "ext-harness-${random_id.project_id_suffix.hex}"
   project_id                                 = module.external_flex_template_project.project_id
   bucket_name                                = module.external_flex_template_infrastructure.flex_template_bucket_name
   pip_index_url                              = "https://${local.location}-python.pkg.dev/${local.project_id}/${local.python_repository_id}/simple/"
@@ -46,9 +47,9 @@ resource "random_id" "project_id_suffix" {
 
 module "external_flex_template_project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.0"
+  version = "~> 14.2"
 
-  name                    = "ci-sdw-ext-flx-${random_id.project_id_suffix.hex}"
+  name                    = local.project_name
   random_project_id       = "true"
   org_id                  = var.org_id
   folder_id               = var.folder_id
@@ -152,7 +153,8 @@ EOF
 
   depends_on = [
     module.external_flex_template_infrastructure,
-    time_sleep.wait_60_seconds
+    time_sleep.wait_60_seconds,
+    null_resource.upload_modules
   ]
 }
 
@@ -181,7 +183,8 @@ EOF
 
   depends_on = [
     module.external_flex_template_infrastructure,
-    time_sleep.wait_60_seconds
+    time_sleep.wait_60_seconds,
+    null_resource.upload_modules
   ]
 }
 

@@ -26,7 +26,7 @@
 
 module "service_account_key_policy" {
   source      = "terraform-google-modules/org-policy/google"
-  version     = "~> 5.0"
+  version     = "~> 5.2"
   policy_for  = "project"
   project_id  = var.project_id
   constraint  = "iam.disableServiceAccountCreation"
@@ -36,7 +36,7 @@ module "service_account_key_policy" {
 
 module "service_account_key_creation_policy" {
   source      = "terraform-google-modules/org-policy/google"
-  version     = "~> 5.0"
+  version     = "~> 5.2"
   policy_for  = "project"
   project_id  = var.project_id
   constraint  = "iam.disableServiceAccountKeyCreation"

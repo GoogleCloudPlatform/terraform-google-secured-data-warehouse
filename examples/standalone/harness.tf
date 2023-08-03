@@ -32,11 +32,15 @@ locals {
 module "base_projects" {
   source = "../../test//setup/base-projects"
 
-  org_id          = var.org_id
-  labels          = { environment = "dev" }
-  folder_id       = var.folder_id
-  billing_account = var.billing_account
-  region          = local.location
+  org_id                             = var.org_id
+  labels                             = { environment = "dev" }
+  folder_id                          = var.folder_id
+  billing_account                    = var.billing_account
+  region                             = local.location
+  data_ingestion_project_name        = var.data_ingestion_project_name
+  data_governance_project_name       = var.data_governance_project_name
+  confidential_data_project_name     = var.confidential_data_project_name
+  non_confidential_data_project_name = var.non_confidential_data_project_name
 }
 
 module "iam_projects" {
@@ -75,6 +79,7 @@ module "template_project" {
 
   org_id                = var.org_id
   folder_id             = var.folder_id
+  project_name          = var.template_project_name
   billing_account       = var.billing_account
   location              = local.location
   service_account_email = var.terraform_service_account
@@ -82,7 +87,7 @@ module "template_project" {
 
 module "tek_wrapping_key" {
   source  = "terraform-google-modules/kms/google"
-  version = "~> 1.2"
+  version = "~> 2.2"
 
   project_id           = module.base_projects.data_governance_project_id
   labels               = { environment = "dev" }
@@ -151,7 +156,7 @@ module "centralized_logging" {
   logging_location            = local.location
   delete_contents_on_destroy  = var.delete_contents_on_destroy
   key_rotation_period_seconds = local.key_rotation_period_seconds
-  parent_folder               = var.folder_id
+  retention_policy            = null
 
   depends_on = [
     module.iam_projects

@@ -16,6 +16,13 @@
 
 locals {
   app_engine_location = lookup({ "europe-west1" = "europe-west", "us-central1" = "us-central" }, var.region, var.region)
+
+  data_ingestion_project_name        = var.data_ingestion_project_name != "" ? var.data_ingestion_project_name : "sdw-data-ing-${random_id.project_id_suffix.hex}"
+  data_governance_project_name       = var.data_governance_project_name != "" ? var.data_governance_project_name : "sdw-data-gov-${random_id.project_id_suffix.hex}"
+  non_confidential_data_project_name = var.non_confidential_data_project_name != "" ? var.non_confidential_data_project_name : "sdw-non-conf-${random_id.project_id_suffix.hex}"
+  confidential_data_project_name     = var.confidential_data_project_name != "" ? var.confidential_data_project_name : "sdw-conf-${random_id.project_id_suffix.hex}"
+
+
 }
 
 resource "random_id" "project_id_suffix" {
@@ -24,9 +31,9 @@ resource "random_id" "project_id_suffix" {
 
 module "data_ingestion_project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.0"
+  version = "~> 14.2"
 
-  name                    = "sdw-data-ing-${random_id.project_id_suffix.hex}"
+  name                    = local.data_ingestion_project_name
   random_project_id       = "true"
   org_id                  = var.org_id
   labels                  = var.labels
@@ -52,7 +59,9 @@ module "data_ingestion_project" {
     "cloudbuild.googleapis.com",
     "appengine.googleapis.com",
     "artifactregistry.googleapis.com",
-    "compute.googleapis.com"
+    "compute.googleapis.com",
+    "monitoring.googleapis.com",
+    "logging.googleapis.com"
   ]
 }
 
@@ -63,9 +72,9 @@ resource "google_app_engine_application" "app" {
 
 module "data_governance_project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.0"
+  version = "~> 14.2"
 
-  name                    = "sdw-data-gov-${random_id.project_id_suffix.hex}"
+  name                    = local.data_governance_project_name
   random_project_id       = "true"
   org_id                  = var.org_id
   labels                  = var.labels
@@ -83,15 +92,17 @@ module "data_governance_project" {
     "cloudbilling.googleapis.com",
     "cloudkms.googleapis.com",
     "dlp.googleapis.com",
-    "secretmanager.googleapis.com"
+    "secretmanager.googleapis.com",
+    "monitoring.googleapis.com",
+    "logging.googleapis.com"
   ]
 }
 
 module "non_confidential_data_project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.0"
+  version = "~> 14.2"
 
-  name                    = "sdw-non-conf-${random_id.project_id_suffix.hex}"
+  name                    = local.non_confidential_data_project_name
   random_project_id       = "true"
   org_id                  = var.org_id
   labels                  = var.labels
@@ -107,16 +118,18 @@ module "non_confidential_data_project" {
     "bigquery.googleapis.com",
     "accesscontextmanager.googleapis.com",
     "cloudbilling.googleapis.com",
-    "cloudkms.googleapis.com"
+    "cloudkms.googleapis.com",
+    "monitoring.googleapis.com",
+    "logging.googleapis.com"
   ]
 }
 
 
 module "confidential_data_project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.0"
+  version = "~> 14.2"
 
-  name                    = "sdw-conf-${random_id.project_id_suffix.hex}"
+  name                    = local.confidential_data_project_name
   random_project_id       = "true"
   org_id                  = var.org_id
   labels                  = var.labels
