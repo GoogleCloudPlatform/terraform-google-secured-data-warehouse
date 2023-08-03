@@ -24,6 +24,12 @@ variable "folder_id" {
   type        = string
 }
 
+variable "project_name" {
+  description = "Custom project name for the template project."
+  type        = string
+  default     = ""
+}
+
 variable "billing_account" {
   description = "The billing account id associated with the project, e.g. XXXXXX-YYYYYY-ZZZZZZ."
   type        = string
