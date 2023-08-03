@@ -27,7 +27,7 @@ Each auto-created perimeter has an output for its name:
 Example
 
 ```hcl
-resource "google_access_context_manager_service_perimeter_resource" "service-perimeter-resource" {
+resource "google_access_context_manager_service_perimeter_resource" "service_perimeter_resource" {
   perimeter_name = "accessPolicies/ACCESS-CONTEXT-MANAGER-POLICY-ID/servicePerimeters/PERIMETER-NAME"
   resource       = "projects/PROJECT-NUMBER"
 }
@@ -36,7 +36,7 @@ resource "google_access_context_manager_service_perimeter_resource" "service-per
 
 As an alternative, the [Google Cloud Project Factory](https://github.com/terraform-google-modules/terraform-google-project-factory) Terraform Module also allows for the inclusion of a new project in an [existing perimeter](https://github.com/terraform-google-modules/terraform-google-project-factory/blob/e444e2ae47632bfc7f1c060be6db1ab15e1cfb9d/variables.tf#L250).
 
-**Note:** use the input `additional_restricted_services` for additional services from your project that need to be protected by the service perimeter.
+**Note:** all the services supported by VPC-SC are included as restricted at perimeter.
 
 ## How do I call a Google service protected by the perimeters from a project outside of the auto-created perimeters?
 

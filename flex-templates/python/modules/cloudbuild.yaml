@@ -16,12 +16,12 @@ steps:
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   args: ['/bin/bash', '-c', './py-modules.sh ${_APACHE_BEAM_VERSION} https://${_DEFAULT_REGION}-python.pkg.dev/$PROJECT_ID/${_REPOSITORY_ID}/ ${_PYTHON_VERSION} ${_IMPLEMENTATION} ${_APPLICATION_BINARY_INTERFACE} ${_PLATFORM}']
 substitutions:
-  _APACHE_BEAM_VERSION: '2.30.0' # default value
+  _APACHE_BEAM_VERSION: '2.49.0' # default value
   _DEFAULT_REGION: 'us-east4' # default value
   _REPOSITORY_ID: 'python-modules' # default value
-  _PYTHON_VERSION: '37' # default value
+  _PYTHON_VERSION: '38' # default value
   _IMPLEMENTATION: 'cp' # default value
-  _APPLICATION_BINARY_INTERFACE: 'cp37m' # default value
-  _PLATFORM: 'manylinux1_x86_64' # default value
+  _APPLICATION_BINARY_INTERFACE: 'cp38' # default value
+  _PLATFORM: 'manylinux_2_17_x86_64' # default value
 options:
   logging: CLOUD_LOGGING_ONLY
