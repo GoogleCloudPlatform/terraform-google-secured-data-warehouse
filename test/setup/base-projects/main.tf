@@ -31,7 +31,7 @@ resource "random_id" "project_id_suffix" {
 
 module "data_ingestion_project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.0"
+  version = "~> 14.2"
 
   name                    = local.data_ingestion_project_name
   random_project_id       = "true"
@@ -60,6 +60,7 @@ module "data_ingestion_project" {
     "appengine.googleapis.com",
     "artifactregistry.googleapis.com",
     "compute.googleapis.com",
+    "monitoring.googleapis.com",
     "logging.googleapis.com"
   ]
 }
@@ -71,7 +72,7 @@ resource "google_app_engine_application" "app" {
 
 module "data_governance_project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.0"
+  version = "~> 14.2"
 
   name                    = local.data_governance_project_name
   random_project_id       = "true"
@@ -92,13 +93,14 @@ module "data_governance_project" {
     "cloudkms.googleapis.com",
     "dlp.googleapis.com",
     "secretmanager.googleapis.com",
+    "monitoring.googleapis.com",
     "logging.googleapis.com"
   ]
 }
 
 module "non_confidential_data_project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.0"
+  version = "~> 14.2"
 
   name                    = local.non_confidential_data_project_name
   random_project_id       = "true"
@@ -117,6 +119,7 @@ module "non_confidential_data_project" {
     "accesscontextmanager.googleapis.com",
     "cloudbilling.googleapis.com",
     "cloudkms.googleapis.com",
+    "monitoring.googleapis.com",
     "logging.googleapis.com"
   ]
 }
@@ -124,7 +127,7 @@ module "non_confidential_data_project" {
 
 module "confidential_data_project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.0"
+  version = "~> 14.2"
 
   name                    = local.confidential_data_project_name
   random_project_id       = "true"
@@ -149,7 +152,6 @@ module "confidential_data_project" {
     "dns.googleapis.com",
     "compute.googleapis.com",
     "cloudbuild.googleapis.com",
-    "artifactregistry.googleapis.com",
-    "logging.googleapis.com"
+    "artifactregistry.googleapis.com"
   ]
 }

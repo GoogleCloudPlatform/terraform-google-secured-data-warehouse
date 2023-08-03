@@ -27,7 +27,7 @@ resource "random_id" "suffix" {
 
 module "access_level_policy" {
   source      = "terraform-google-modules/vpc-service-controls/google//modules/access_level"
-  version     = "~> 3.0"
+  version     = "~> 5.1"
   policy      = var.access_context_manager_policy_id
   name        = local.access_policy_name
   description = "policy with all available options to configure"

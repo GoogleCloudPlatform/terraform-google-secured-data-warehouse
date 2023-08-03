@@ -21,7 +21,7 @@ resource "random_id" "suffix" {
 //storage data ingestion bucket
 module "data_ingestion_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
-  version = "~> 2.0"
+  version = "~> 4.0"
 
   project_id      = var.data_ingestion_project_id
   labels          = var.labels
@@ -38,14 +38,15 @@ module "data_ingestion_bucket" {
 
 module "dataflow_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
-  version = "~> 2.0"
+  version = "~> 4.0"
 
-  project_id    = var.data_ingestion_project_id
-  labels        = var.labels
-  name          = "bkt-${var.data_ingestion_project_id}-tmp-dataflow-${random_id.suffix.hex}"
-  location      = var.bucket_location
-  storage_class = "STANDARD"
-  force_destroy = var.delete_contents_on_destroy
+  project_id      = var.data_ingestion_project_id
+  labels          = var.labels
+  name            = "bkt-${var.data_ingestion_project_id}-tmp-dataflow-${random_id.suffix.hex}"
+  location        = var.bucket_location
+  storage_class   = "STANDARD"
+  lifecycle_rules = var.bucket_lifecycle_rules
+  force_destroy   = var.delete_contents_on_destroy
 
 
   encryption = {
@@ -56,7 +57,7 @@ module "dataflow_bucket" {
 //pub/sub data ingestion topic
 module "data_ingestion_topic" {
   source  = "terraform-google-modules/pubsub/google"
-  version = "~> 2.0"
+  version = "~> 5.0"
 
   project_id             = var.data_ingestion_project_id
   topic_labels           = var.labels
@@ -68,7 +69,7 @@ module "data_ingestion_topic" {
 //BigQuery org_id
 module "bigquery_dataset" {
   source  = "terraform-google-modules/bigquery/google"
-  version = "~> 5.2.0"
+  version = "~> 6.1"
 
   project_id                  = var.non_confidential_data_project_id
   dataset_labels              = var.labels
