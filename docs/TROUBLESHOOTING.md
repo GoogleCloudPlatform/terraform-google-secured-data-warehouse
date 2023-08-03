@@ -6,7 +6,7 @@
 - [Template file failed to load](#template-file-failed-to-load)
 - [The referenced network resource cannot be found](#the-referenced-network-resource-cannot-be-found)
 - [Unable to open the Dataflow staging file](#unable-to-open-the-dataflow-staging-file)
-- [No matching distribution found for apache-beam==2.30.0](#no-matching-distribution-found-for-apache-beam2300)
+- [No matching distribution found for apache-beam==2.49.0](#no-matching-distribution-found-for-apache-beam2480)
 
 ### The server was only able to partially fulfill your request
 
@@ -134,7 +134,7 @@ The **Service Account** must be declared as a job parameter.
 
 For more details about Dataflow staging files see [Resource usage and management](https://cloud.google.com/dataflow/docs/guides/deploying-a-pipeline#resource-usage-and-management) documentation.
 
-### No matching distribution found for apache-beam==2.30.0
+### No matching distribution found for apache-beam==2.49.0
 
 After deploying a new Dataflow job in the console, the job creation fails.
 Looking at the **Job Logs** section, in the bottom part of the job detail page, there is an error with the message:
@@ -143,8 +143,8 @@ Looking at the **Job Logs** section, in the bottom part of the job detail page, 
 
 ```console
 https://LOCATION-python.pkg.dev/ARTIFACT-REGISTRY-PROJECT-ID/python-modules/simple/
-ERROR: Could not find a version that satisfies the requirement apache-beam==2.30.0 (from versions: none)
-ERROR: No matching distribution found for apache-beam==2.30.0
+ERROR: Could not find a version that satisfies the requirement apache-beam==2.49.0 (from versions: none)
+ERROR: No matching distribution found for apache-beam==2.49.0
 ```
 
 **Cause:**

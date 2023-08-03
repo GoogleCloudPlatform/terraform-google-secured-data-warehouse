@@ -59,7 +59,8 @@ module "data_ingestion_project" {
     "cloudbuild.googleapis.com",
     "appengine.googleapis.com",
     "artifactregistry.googleapis.com",
-    "compute.googleapis.com"
+    "compute.googleapis.com",
+    "monitoring.googleapis.com"
   ]
 }
 
@@ -90,7 +91,9 @@ module "data_governance_project" {
     "cloudbilling.googleapis.com",
     "cloudkms.googleapis.com",
     "dlp.googleapis.com",
-    "secretmanager.googleapis.com"
+    "secretmanager.googleapis.com",
+    "monitoring.googleapis.com",
+    "logging.googleapis.com"
   ]
 }
 
@@ -114,7 +117,9 @@ module "non_confidential_data_project" {
     "bigquery.googleapis.com",
     "accesscontextmanager.googleapis.com",
     "cloudbilling.googleapis.com",
-    "cloudkms.googleapis.com"
+    "cloudkms.googleapis.com",
+    "monitoring.googleapis.com",
+    "logging.googleapis.com"
   ]
 }
 
@@ -146,6 +151,7 @@ module "confidential_data_project" {
     "dns.googleapis.com",
     "compute.googleapis.com",
     "cloudbuild.googleapis.com",
-    "artifactregistry.googleapis.com"
+    "artifactregistry.googleapis.com",
+    "monitoring.googleapis.com"
   ]
 }

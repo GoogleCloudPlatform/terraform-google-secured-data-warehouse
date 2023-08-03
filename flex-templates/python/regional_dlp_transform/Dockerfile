@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM gcr.io/dataflow-templates-base/python3-template-launcher-base
+FROM gcr.io/dataflow-templates-base/python38-template-launcher-base
 
 ARG ARG_PIP_INDEX_URL=https://us-east4-python.pkg.dev/project-id/python-modules/simple/
 
@@ -25,6 +25,7 @@ COPY . /template
 RUN apt-get update \
     && apt-get install -y libffi-dev git \
     && rm -rf /var/lib/apt/lists/* \
+    && python3 --version \
     # Upgrade pip and install the requirements.
     && pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir twine keyrings.google-artifactregistry-auth \
