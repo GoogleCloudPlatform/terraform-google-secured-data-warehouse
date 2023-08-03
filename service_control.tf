@@ -98,7 +98,7 @@ locals {
         "identity_type" = ""
         "identities" = distinct(concat(
           var.confidential_data_dataflow_deployer_identities,
-          ["serviceAccount:${var.terraform_service_account}"]
+          ["serviceAccount:${var.terraform_service_account}", "serviceAccount:${module.bigquery_confidential_data.confidential_dataflow_controller_service_account_email}"]
         ))
       },
       "to" = {
