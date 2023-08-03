@@ -153,7 +153,8 @@ EOF
 
   depends_on = [
     module.external_flex_template_infrastructure,
-    time_sleep.wait_60_seconds
+    time_sleep.wait_60_seconds,
+    null_resource.upload_modules
   ]
 }
 
@@ -182,7 +183,8 @@ EOF
 
   depends_on = [
     module.external_flex_template_infrastructure,
-    time_sleep.wait_60_seconds
+    time_sleep.wait_60_seconds,
+    null_resource.upload_modules
   ]
 }
 
