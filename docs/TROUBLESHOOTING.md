@@ -6,7 +6,8 @@
 - [Template file failed to load](#template-file-failed-to-load)
 - [The referenced network resource cannot be found](#the-referenced-network-resource-cannot-be-found)
 - [Unable to open the Dataflow staging file](#unable-to-open-the-dataflow-staging-file)
-- [No matching distribution found for apache-beam==2.49.0](#no-matching-distribution-found-for-apache-beam2480)
+- [No matching distribution found for apache-beam==2.49.0](#no-matching-distribution-found-for-apache-beam2490)
+- [The user does not have permission to access Project or it may not exist](#the-user-does-not-have-permission-to-access-project-or-it-may-not-exist)
 
 ### The server was only able to partially fulfill your request
 
@@ -191,6 +192,8 @@ resource "google_artifact_registry_repository_iam_member" "python_reader" {
   member     = "serviceAccount:sa-dataflow-controller-reid@CONFIDENTIAL-DATA-PROJECT-ID.iam.gserviceaccount.com"
 }
 ```
+
+### The user does not have permission to access Project or it may not exist
 
 **Error message:**
 
