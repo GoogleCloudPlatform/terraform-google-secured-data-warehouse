@@ -17,7 +17,7 @@
 
 module "protocol_forwarding_creation" {
   source            = "terraform-google-modules/org-policy/google"
-  version           = "~> 4.0"
+  version           = "~> 5.2"
   constraint        = "compute.restrictProtocolForwardingCreationForTypes"
   policy_for        = "project"
   project_id        = var.project_id
@@ -29,7 +29,7 @@ module "protocol_forwarding_creation" {
 
 module "serial_port_logging_policy" {
   source      = "terraform-google-modules/org-policy/google"
-  version     = "~> 4.0"
+  version     = "~> 5.2"
   policy_for  = "project"
   project_id  = var.project_id
   constraint  = "compute.disableSerialPortLogging"
@@ -39,7 +39,7 @@ module "serial_port_logging_policy" {
 
 module "ssh_policy" {
   source      = "terraform-google-modules/org-policy/google"
-  version     = "~> 4.0"
+  version     = "~> 5.2"
   policy_for  = "project"
   project_id  = var.project_id
   constraint  = "compute.requireOsLogin"
@@ -50,7 +50,7 @@ module "ssh_policy" {
 module "vpc_subnetwork_policy" {
   count             = length(var.trusted_subnetworks) > 0 ? 1 : 0
   source            = "terraform-google-modules/org-policy/google"
-  version           = "~> 4.0"
+  version           = "~> 5.2"
   constraint        = "compute.restrictSharedVpcSubnetworks"
   policy_for        = "project"
   project_id        = var.project_id
@@ -61,7 +61,7 @@ module "vpc_subnetwork_policy" {
 
 module "vm_external_ip_access" {
   source      = "terraform-google-modules/org-policy/google"
-  version     = "~> 4.0"
+  version     = "~> 5.2"
   policy_for  = "project"
   project_id  = var.project_id
   constraint  = "constraints/compute.vmExternalIpAccess"
