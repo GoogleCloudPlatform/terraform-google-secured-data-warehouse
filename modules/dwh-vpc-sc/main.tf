@@ -34,8 +34,18 @@ module "access_level_policy" {
 
   members = var.perimeter_members
 
-  ip_subnetworks = var.access_level_ip_subnetworks
-  regions        = var.access_level_regions
+  ip_subnetworks                   = var.access_level_ip_subnetworks
+  regions                          = var.access_level_regions
+  combining_function               = var.access_level_combining_function
+  negate                           = var.access_level_negate
+  require_screen_lock              = var.access_level_require_screen_lock
+  require_corp_owned               = var.access_level_require_corp_owned
+  allowed_encryption_statuses      = var.access_level_allowed_encryption_statuses
+  allowed_device_management_levels = var.access_level_allowed_device_management_levels
+  minimum_version                  = var.access_level_minimum_version
+  os_type                          = var.access_level_os_type
+  required_access_levels           = var.required_access_levels
+
 }
 
 module "regular_service_perimeter" {

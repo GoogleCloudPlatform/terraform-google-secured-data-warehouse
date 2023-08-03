@@ -166,11 +166,24 @@ module "data_ingestion_vpc_sc" {
 
   count = var.data_ingestion_perimeter == "" ? 1 : 0
 
-  access_context_manager_policy_id = local.actual_policy
-  common_name                      = "data_ingestion"
-  common_suffix                    = random_id.suffix.hex
-  resources                        = local.data_ingestion_vpc_sc_resources
-  perimeter_members                = local.perimeter_members_data_ingestion
+  access_context_manager_policy_id              = local.actual_policy
+  common_name                                   = "data_ingestion"
+  common_suffix                                 = random_id.suffix.hex
+  resources                                     = local.data_ingestion_vpc_sc_resources
+  perimeter_members                             = local.perimeter_members_data_ingestion
+  access_level_combining_function               = var.data_ingestion_access_level_combining_function
+  access_level_ip_subnetworks                   = var.data_ingestion_access_level_ip_subnetworks
+  access_level_negate                           = var.data_ingestion_access_level_negate
+  access_level_require_screen_lock              = var.data_ingestion_access_level_require_screen_lock
+  access_level_require_corp_owned               = var.data_ingestion_access_level_require_corp_owned
+  access_level_allowed_encryption_statuses      = var.data_ingestion_access_level_allowed_encryption_statuses
+  access_level_allowed_device_management_levels = var.data_ingestion_access_level_allowed_device_management_levels
+  access_level_minimum_version                  = var.data_ingestion_access_level_minimum_version
+  access_level_os_type                          = var.data_ingestion_access_level_os_type
+  required_access_levels                        = var.data_ingestion_required_access_levels
+  access_level_regions                          = var.data_ingestion_access_level_regions
+
+
 
   egress_policies = distinct(concat(
     local.data_ingestion_default_egress_rule,
@@ -227,6 +240,18 @@ module "data_governance_vpc_sc" {
   egress_policies  = var.data_governance_egress_policies
   ingress_policies = var.data_governance_ingress_policies
 
+  access_level_combining_function               = var.data_governance_access_level_combining_function
+  access_level_ip_subnetworks                   = var.data_governance_access_level_ip_subnetworks
+  access_level_negate                           = var.data_governance_access_level_negate
+  access_level_require_screen_lock              = var.data_governance_access_level_require_screen_lock
+  access_level_require_corp_owned               = var.data_governance_access_level_require_corp_owned
+  access_level_allowed_encryption_statuses      = var.data_governance_access_level_allowed_encryption_statuses
+  access_level_allowed_device_management_levels = var.data_governance_access_level_allowed_device_management_levels
+  access_level_minimum_version                  = var.data_governance_access_level_minimum_version
+  access_level_os_type                          = var.data_governance_access_level_os_type
+  required_access_levels                        = var.data_governance_required_access_levels
+  access_level_regions                          = var.data_governance_access_level_regions
+
   # depends_on needed to prevent intermittent errors
   # when the VPC-SC is created but perimeter member
   # not yet propagated.
@@ -266,7 +291,19 @@ module "confidential_data_vpc_sc" {
     var.confidential_data_egress_policies
   ))
 
-  ingress_policies = var.confidential_ingress_policies
+  ingress_policies = var.confidential_data_ingress_policies
+
+  access_level_combining_function               = var.confidential_data_access_level_combining_function
+  access_level_ip_subnetworks                   = var.confidential_data_access_level_ip_subnetworks
+  access_level_negate                           = var.confidential_data_access_level_negate
+  access_level_require_screen_lock              = var.confidential_data_access_level_require_screen_lock
+  access_level_require_corp_owned               = var.confidential_data_access_level_require_corp_owned
+  access_level_allowed_encryption_statuses      = var.confidential_data_access_level_allowed_encryption_statuses
+  access_level_allowed_device_management_levels = var.confidential_data_access_level_allowed_device_management_levels
+  access_level_minimum_version                  = var.confidential_data_access_level_minimum_version
+  access_level_os_type                          = var.confidential_data_access_level_os_type
+  required_access_levels                        = var.confidential_data_required_access_levels
+  access_level_regions                          = var.confidential_data_access_level_regions
 
   # depends_on needed to prevent intermittent errors
   # when the VPC-SC is created but perimeter member
