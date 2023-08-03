@@ -60,7 +60,7 @@ module "cmek" {
 
 module "logging_bucket" {
   source  = "terraform-google-modules/log-export/google//modules/storage"
-  version = "~> 7.3.0"
+  version = "~> 7.6"
 
   count                       = var.create_bucket ? 1 : 0
   project_id                  = var.logging_project_id

@@ -97,9 +97,30 @@ locals {
           }
         }
       }
-    }
+    },
   ]
 
+  confidential_data_bigquery_egress_rule = var.sdx_project_number == "" ? [] : [
+    {
+      "from" = {
+        "identity_type" = ""
+        "identities" = distinct(concat(
+          var.confidential_data_dataflow_deployer_identities,
+          ["serviceAccount:${var.terraform_service_account}", "serviceAccount:${module.bigquery_confidential_data.confidential_dataflow_controller_service_account_email}"]
+        ))
+      },
+      "to" = {
+        "resources" = ["projects/${var.sdx_project_number}"]
+        "operations" = {
+          "bigquery.googleapis.com" = {
+            "methods" = [
+              "*"
+            ]
+          }
+        }
+      }
+    }
+  ]
 }
 
 resource "google_access_context_manager_access_policy" "access_policy" {
@@ -269,6 +290,7 @@ module "confidential_data_vpc_sc" {
 
   egress_policies = distinct(concat(
     local.confidential_data_default_egress_rule,
+    local.confidential_data_bigquery_egress_rule,
     var.confidential_data_egress_policies
   ))
 
