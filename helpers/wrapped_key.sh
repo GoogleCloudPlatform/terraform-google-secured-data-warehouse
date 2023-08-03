@@ -27,9 +27,9 @@ project_id=${4}
 temporary_crypto_operator_role=${5}
 exe_path=$(dirname "${0}")
 
-key_location=$(echo "${key}" |awk -F '/' '{print "$4"}')
-key_name=$(echo "${key}" |awk -F '/' '{print "$8"}')
-key_ring=$(echo "${key}" |awk -F '/' '{print "$6"}')
+key_location=$(echo "${key}" |awk -F '/' '{print $4}')
+key_name=$(echo "${key}" |awk -F '/' '{print $8}')
+key_ring=$(echo "${key}" |awk -F '/' '{print $6}')
 
 trap 'catch $? $LINENO' EXIT
 catch() {
