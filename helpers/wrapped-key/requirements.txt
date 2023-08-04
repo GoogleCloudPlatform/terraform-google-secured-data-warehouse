@@ -5,7 +5,7 @@ crcmod==1.7
 google-api-core==2.2.2
 google-auth==2.3.3
 google-cloud-kms==2.10.1
-googleapis-common-protos==1.53.0
+googleapis-common-protos==1.59.1
 grpc-google-iam-v1==0.12.3
 grpcio==1.42.0
 grpcio-status==1.42.0
