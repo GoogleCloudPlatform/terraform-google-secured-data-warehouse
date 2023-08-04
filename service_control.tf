@@ -73,6 +73,38 @@ locals {
     },
   ]
 
+  data_ingestion_egress_policies = distinct(concat(
+    local.data_ingestion_default_egress_rule,
+    [
+      for k, a in var.data_ingestion_egress_policies : {
+        from = {
+          identity_type = lookup(a.from, "identity_type", null)
+          identities = try([
+            for item in a.from.identities : replace(
+              replace(item, "CONFIDENTIAL_DATA_DATAFLOW_CONTROLLER_SA", module.bigquery_confidential_data.confidential_dataflow_controller_service_account_email),
+            "DATA_INGESTION_DATAFLOW_CONTROLLER_SA", module.data_ingestion.dataflow_controller_service_account_email)
+          ], null)
+
+        }
+        to = a.to
+      }
+    ]
+  ))
+
+  data_ingestion_ingress_policies = [
+    for k, a in var.data_ingestion_ingress_policies : {
+      from = {
+        identity_type = lookup(a.from, "identity_type", null)
+        identities = try([
+          for item in a.from.identities : replace(
+            replace(item, "CONFIDENTIAL_DATA_DATAFLOW_CONTROLLER_SA", module.bigquery_confidential_data.confidential_dataflow_controller_service_account_email),
+          "DATA_INGESTION_DATAFLOW_CONTROLLER_SA", module.data_ingestion.dataflow_controller_service_account_email)
+        ], null)
+        sources = lookup(a.from, "sources", null)
+      }
+      to = a.to
+  }]
+
   confidential_data_default_egress_rule = var.sdx_project_number == "" ? [] : [
     {
       "from" = {
@@ -99,29 +131,64 @@ locals {
       }
     },
   ]
-
-  confidential_data_bigquery_egress_rule = var.sdx_project_number == "" ? [] : [
-    {
-      "from" = {
-        "identity_type" = ""
-        "identities" = distinct(concat(
-          var.confidential_data_dataflow_deployer_identities,
-          ["serviceAccount:${var.terraform_service_account}", "serviceAccount:${module.bigquery_confidential_data.confidential_dataflow_controller_service_account_email}"]
-        ))
-      },
-      "to" = {
-        "resources" = ["projects/${var.sdx_project_number}"]
-        "operations" = {
-          "bigquery.googleapis.com" = {
-            "methods" = [
-              "*"
-            ]
-          }
+  confidential_data_egress_policies = distinct(concat(
+    local.confidential_data_default_egress_rule,
+    [
+      for k, a in var.confidential_data_egress_policies : {
+        from = {
+          identity_type = lookup(a.from, "identity_type", null)
+          identities = try([
+            for item in a.from.identities : replace(
+              replace(item, "CONFIDENTIAL_DATA_DATAFLOW_CONTROLLER_SA", module.bigquery_confidential_data.confidential_dataflow_controller_service_account_email),
+            "DATA_INGESTION_DATAFLOW_CONTROLLER_SA", module.data_ingestion.dataflow_controller_service_account_email)
+          ], null)
         }
+        to = a.to
+    }]
+  ))
+
+  confidential_data_ingress_policies = [
+    for k, a in var.confidential_data_ingress_policies : {
+      from = {
+        identity_type = lookup(a.from, "identity_type", null)
+        identities = try([
+          for item in a.from.identities : replace(
+            replace(item, "CONFIDENTIAL_DATA_DATAFLOW_CONTROLLER_SA", module.bigquery_confidential_data.confidential_dataflow_controller_service_account_email),
+          "DATA_INGESTION_DATAFLOW_CONTROLLER_SA", module.data_ingestion.dataflow_controller_service_account_email)
+        ], null)
+        sources = lookup(a.from, "sources", null)
       }
-    }
-  ]
+      to = a.to
+  }]
+
+  data_governance_egress_policies = [
+    for k, a in var.data_governance_egress_policies : {
+      from = {
+        identity_type = lookup(a.from, "identity_type", null)
+        identities = try([
+          for item in a.from.identities : replace(
+            replace(item, "CONFIDENTIAL_DATA_DATAFLOW_CONTROLLER_SA", module.bigquery_confidential_data.confidential_dataflow_controller_service_account_email),
+          "DATA_INGESTION_DATAFLOW_CONTROLLER_SA", module.data_ingestion.dataflow_controller_service_account_email)
+        ], null)
+      }
+      to = a.to
+  }]
+
+  data_governance_ingress_policies = [
+    for k, a in var.data_governance_ingress_policies : {
+      from = {
+        identity_type = lookup(a.from, "identity_type", null)
+        identities = try([
+          for item in a.from.identities : replace(
+            replace(item, "CONFIDENTIAL_DATA_DATAFLOW_CONTROLLER_SA", module.bigquery_confidential_data.confidential_dataflow_controller_service_account_email),
+          "DATA_INGESTION_DATAFLOW_CONTROLLER_SA", module.data_ingestion.dataflow_controller_service_account_email)
+        ], null)
+        sources = lookup(a.from, "sources", null)
+      }
+      to = a.to
+  }]
 }
+
 
 resource "google_access_context_manager_access_policy" "access_policy" {
   count  = var.access_context_manager_policy_id != "" ? 0 : 1
@@ -149,8 +216,8 @@ resource "random_id" "suffix" {
   byte_length = 4
 }
 
-// It's necessary to use the forces_wait_propagation to guarantee the resources that use this VPC do not have issues related to the propagation.
-// See: https://cloud.google.com/vpc-service-controls/docs/manage-service-perimeters#update.
+# It's necessary to use the forces_wait_propagation to guarantee the resources that use this VPC do not have issues related to the propagation.
+# See: https://cloud.google.com/vpc-service-controls/docs/manage-service-perimeters#update.
 resource "time_sleep" "forces_wait_propagation" {
   destroy_duration = "330s"
 
@@ -187,12 +254,8 @@ module "data_ingestion_vpc_sc" {
 
 
 
-  egress_policies = distinct(concat(
-    local.data_ingestion_default_egress_rule,
-    var.data_ingestion_egress_policies
-  ))
-
-  ingress_policies = var.data_ingestion_ingress_policies
+  egress_policies  = local.data_ingestion_egress_policies
+  ingress_policies = local.data_ingestion_ingress_policies
 
   # depends_on needed to prevent intermittent errors
   # when the VPC-SC is created but perimeter member
@@ -239,8 +302,8 @@ module "data_governance_vpc_sc" {
   resources                        = local.data_governance_vpc_sc_resources
   perimeter_members                = local.perimeter_members_governance
 
-  egress_policies  = var.data_governance_egress_policies
-  ingress_policies = var.data_governance_ingress_policies
+  egress_policies  = local.data_governance_egress_policies
+  ingress_policies = local.data_governance_ingress_policies
 
   access_level_combining_function               = var.data_governance_access_level_combining_function
   access_level_ip_subnetworks                   = var.data_governance_access_level_ip_subnetworks
@@ -288,13 +351,8 @@ module "confidential_data_vpc_sc" {
   resources                        = local.confidential_data_vpc_sc_resources
   perimeter_members                = local.perimeter_members_confidential
 
-  egress_policies = distinct(concat(
-    local.confidential_data_default_egress_rule,
-    local.confidential_data_bigquery_egress_rule,
-    var.confidential_data_egress_policies
-  ))
-
-  ingress_policies = var.confidential_data_ingress_policies
+  egress_policies  = local.confidential_data_egress_policies
+  ingress_policies = local.confidential_data_ingress_policies
 
   access_level_combining_function               = var.confidential_data_access_level_combining_function
   access_level_ip_subnetworks                   = var.confidential_data_access_level_ip_subnetworks
