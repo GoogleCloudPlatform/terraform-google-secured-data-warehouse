@@ -59,6 +59,31 @@ module "secured_data_warehouse" {
   network_administrator_group      = var.network_administrator_group
   security_administrator_group     = var.security_administrator_group
 
+  data_ingestion_egress_policies = [{
+    "from" = {
+      "identity_type" = ""
+      "identities" = [
+        "serviceAccount:${var.terraform_service_account}",
+        "serviceAccount:DATA_INGESTION_DATAFLOW_CONTROLLER_SA"
+      ]
+    },
+    "to" = {
+      // The sample data we are using is a Public Bigquery Dataset Table
+      // that contains a United States Internal Revenue Service form
+      // that provides the public with financial information about a nonprofit organization
+      // (https://console.cloud.google.com/marketplace/product/internal-revenue-service/irs-990?project=bigquery-public-data)
+      "resources" = ["projects/1057666841514"]
+      "operations" = {
+        "bigquery.googleapis.com" = {
+          "methods" = [
+            "*"
+          ]
+        }
+      }
+    }
+    }
+  ]
+
   // Set the enable_bigquery_read_roles_in_data_ingestion to true, it will grant to the dataflow controller
   // service account created in the data ingestion project the necessary roles to read from a bigquery table.
   enable_bigquery_read_roles_in_data_ingestion = true
