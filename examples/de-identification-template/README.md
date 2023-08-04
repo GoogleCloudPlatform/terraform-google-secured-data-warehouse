@@ -10,6 +10,10 @@ The `crypto_key` location must be the same location used for the `dlp_location`.
 There is a [Wrapped Key Helper](../../helpers/wrapped-key/README.md) python script which generates a wrapped key.
 1. The identity deploying the example must have permission to grant roles "roles/cloudkms.cryptoKeyDecrypter" and "roles/cloudkms.cryptoKeyEncrypter" in the KMS `crypto_key`. It will be granted to the `dataflow_service_account`.
 
+### Troubleshooting
+
+If you encounter problems in the apply execution check the [Troubleshooting Guide](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/blob/main/docs/TROUBLESHOOTING.md).
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
 
