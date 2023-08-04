@@ -60,7 +60,8 @@ module "data_ingestion_project" {
     "appengine.googleapis.com",
     "artifactregistry.googleapis.com",
     "compute.googleapis.com",
-    "monitoring.googleapis.com"
+    "monitoring.googleapis.com",
+    "logging.googleapis.com"
   ]
 }
 
@@ -151,7 +152,6 @@ module "confidential_data_project" {
     "dns.googleapis.com",
     "compute.googleapis.com",
     "cloudbuild.googleapis.com",
-    "artifactregistry.googleapis.com",
-    "monitoring.googleapis.com"
+    "artifactregistry.googleapis.com"
   ]
 }
