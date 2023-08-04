@@ -43,6 +43,10 @@ It uses:
 
 - Static routes configured to *private* and *restricted* IPs. For more information see [Routing options](https://cloud.google.com/vpc/docs/configure-private-google-access#config-routing) in the documentation.
 
+### Troubleshooting
+
+If you encounter problems in the apply execution check the [Troubleshooting Guide](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/blob/main/docs/TROUBLESHOOTING.md).
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
 

@@ -107,6 +107,10 @@ service account with the necessary roles applied.
 
 The user using this service account must have the necessary roles, `Service Account User` and `Service Account Token Creator`, to [impersonate](https://cloud.google.com/iam/docs/impersonating-service-accounts) the service account.
 
+### Troubleshooting
+
+If you encounter problems in the apply execution check the [Troubleshooting Guide](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/blob/main/docs/TROUBLESHOOTING.md).
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
 

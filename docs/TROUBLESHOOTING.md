@@ -6,7 +6,9 @@
 - [Template file failed to load](#template-file-failed-to-load)
 - [The referenced network resource cannot be found](#the-referenced-network-resource-cannot-be-found)
 - [Unable to open the Dataflow staging file](#unable-to-open-the-dataflow-staging-file)
-- [No matching distribution found for apache-beam==2.49.0](#no-matching-distribution-found-for-apache-beam2480)
+- [No matching distribution found for apache-beam==2.49.0](#no-matching-distribution-found-for-apache-beam2490)
+- [The user does not have permission to access Project or it may not exist](#the-user-does-not-have-permission-to-access-project-or-it-may-not-exist)
+- [Cannot assign requested address error in Cloud Shell](#cannot-assign-requested-address-error-in-cloud-shell)
 
 ### The server was only able to partially fulfill your request
 
@@ -192,6 +194,8 @@ resource "google_artifact_registry_repository_iam_member" "python_reader" {
 }
 ```
 
+### The user does not have permission to access Project or it may not exist
+
 **Error message:**
 
 ```text
@@ -225,3 +229,7 @@ terraform taint module.base_projects.random_id.project_id_suffix
 ```
 
 And try again to do the deployment.
+
+### Cannot assign requested address error in Cloud Shell
+
+When using Terraform on Google Cloud Shell, check the [IPv6](https://github.com/terraform-google-modules/terraform-example-foundation/blob/master/docs/TROUBLESHOOTING.md#cannot-assign-requested-address-error-in-cloud-shell).
