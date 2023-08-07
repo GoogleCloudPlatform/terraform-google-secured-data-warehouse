@@ -416,11 +416,13 @@ If you encounter problems in the apply execution check the [Troubleshooting G
 | non\_confidential\_data\_project\_id | The id of the project created for non-confidential data. |
 | non\_confidential\_dataset | The bigquery dataset created for non-confidential data. |
 | pubsub\_writer\_service\_account\_email | The PubSub writer service account email. Should be used to write data to the PubSub topics the data ingestion pipeline reads from. |
+| random\_suffix | Suffix used in the name of resources. |
 | regional\_deid\_pipeline\_job\_id | The unique ID of this job. |
 | regional\_reid\_pipeline\_job\_id | The unique ID of this job. |
 | storage\_writer\_service\_account\_email | The Storage writer service account email. Should be used to write data to the buckets the data ingestion pipeline reads from. |
 | taxonomy\_display\_name | The name of the taxonomy. |
 | tek\_wrapping\_keyring | The name of tek wrapping key |
 | template\_project\_id | The id of the flex template created. |
+| terraform\_service\_account | Service account used in the Standalone example. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
