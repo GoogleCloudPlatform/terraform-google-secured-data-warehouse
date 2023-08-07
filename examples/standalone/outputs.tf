@@ -206,7 +206,7 @@ output "regional_deid_pipeline_job_id" {
 
 output "random_suffix" {
   description = "Suffix used in the name of resources."
-  value       = random_id.suffix.prefix
+  value       = random_id.suffix.result
 }
 
 output "terraform_service_account" {
