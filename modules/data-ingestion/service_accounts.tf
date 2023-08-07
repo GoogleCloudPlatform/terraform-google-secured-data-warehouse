@@ -47,7 +47,7 @@ locals {
 //Dataflow controller service account
 module "dataflow_controller_service_account" {
   source       = "terraform-google-modules/service-accounts/google"
-  version      = "~> 3.0"
+  version      = "~> 4.0"
   project_id   = var.data_ingestion_project_id
   names        = ["sa-dataflow-controller"]
   display_name = "Cloud Dataflow controller service account"
