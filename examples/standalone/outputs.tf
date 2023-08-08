@@ -204,11 +204,6 @@ output "regional_deid_pipeline_job_id" {
   value       = module.regional_deid_pipeline.job_id
 }
 
-output "random_suffix" {
-  description = "Suffix used in the name of resources."
-  value       = random_id.suffix.result
-}
-
 output "terraform_service_account" {
   description = "Service account used in the Standalone example."
   value       = var.terraform_service_account

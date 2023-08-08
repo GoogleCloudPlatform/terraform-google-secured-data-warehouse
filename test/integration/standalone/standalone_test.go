@@ -49,7 +49,6 @@ func TestStandalone(t *testing.T) {
 		nonConfprojectID := standalone.GetStringOutput("non_confidential_data_project_id")
 		confprojectID := standalone.GetStringOutput("confidential_data_project_id")
 		terraformSa := standalone.GetStringOutput("terraform_service_account")
-		random_suffix := standalone.GetStringOutput("random_suffix")
 		kmsKeyDataIngestion := standalone.GetStringOutput("cmek_data_ingestion_crypto_key")
 		bucketNameDataIngestion := standalone.GetStringOutput("data_ingestion_bucket_name")
 
@@ -60,7 +59,7 @@ func TestStandalone(t *testing.T) {
 			assert.Equal(project, opProject.Get("projectId").String(), "should have expected projectID ")
 		}
 
-		kmsKeyRingName := standalone.GetStringOutput("tek_wrapping_keyring")
+		kmsKeyRingName := "standalone-data-ing" 
 		kmsKeyDataBq := standalone.GetStringOutput("cmek_bigquery_crypto_key")
 		opKMSData := gcloud.Runf(t, "kms keys describe %s --keyring=%s --project=%s --location us-east4 --impersonate-service-account=%s", kmsKeyDataBq, kmsKeyRingName, dataGovprojectID, terraformSa)
 		assert.Equal(kmsKeyDataBq, opKMSData.Get("name").String(), fmt.Sprintf("should have key %s", kmsKeyDataBq))
