@@ -15,7 +15,7 @@
 steps:
 - id: create-standalone
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
-  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && ./test/prepare-providers.sh']
+  args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh']
 - name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
   id: 'lint'
   args: ['/bin/bash', '-c', '/usr/local/bin/test_lint.sh']
