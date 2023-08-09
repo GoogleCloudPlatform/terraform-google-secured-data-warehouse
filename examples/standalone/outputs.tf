@@ -49,6 +49,31 @@ output "blueprint_type" {
   value       = module.secured_data_warehouse.blueprint_type
 }
 
+output "cmek_keyring_name" {
+  description = "The Keyring name for the KMS Customer Managed Encryption Keys."
+  value       = module.secured_data_warehouse.cmek_keyring_name
+}
+
+output "cmek_data_ingestion_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the data ingestion crypto boundary."
+  value       = module.secured_data_warehouse.cmek_data_ingestion_crypto_key_name
+}
+
+output "cmek_bigquery_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the BigQuery service."
+  value       = module.secured_data_warehouse.cmek_bigquery_crypto_key_name
+}
+
+output "cmek_reidentification_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the reidentification crypto boundary."
+  value       = module.secured_data_warehouse.cmek_reidentification_crypto_key_name
+}
+
+output "cmek_confidential_bigquery_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the confidential BigQuery service."
+  value       = module.secured_data_warehouse.cmek_confidential_bigquery_crypto_key_name
+}
+
 output "cmek_bigquery_crypto_key" {
   description = "The Customer Managed Crypto Key for the BigQuery service."
   value       = module.secured_data_warehouse.cmek_bigquery_crypto_key

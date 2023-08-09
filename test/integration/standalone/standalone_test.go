@@ -49,7 +49,7 @@ func TestStandalone(t *testing.T) {
 		nonConfprojectID := standalone.GetStringOutput("non_confidential_data_project_id")
 		confprojectID := standalone.GetStringOutput("confidential_data_project_id")
 		terraformSa := standalone.GetStringOutput("terraform_service_account")
-		kmsKeyDataIngestion := standalone.GetStringOutput("cmek_data_ingestion_crypto_key")
+		kmsKeyRingName := standalone.GetStringOutput("cmek_keyring_name")
 		bucketNameDataIngestion := standalone.GetStringOutput("data_ingestion_bucket_name")
 
 		projects := []string{dataGovprojectID, dataIngprojectID, nonConfprojectID, confprojectID}
@@ -59,20 +59,25 @@ func TestStandalone(t *testing.T) {
 			assert.Equal(project, opProject.Get("projectId").String(), "should have expected projectID ")
 		}
 
-		kmsKeyRingName := "standalone-data-ing" 
-		kmsKeyDataBq := standalone.GetStringOutput("cmek_bigquery_crypto_key")
-		opKMSData := gcloud.Runf(t, "kms keys describe %s --keyring=%s --project=%s --location us-east4 --impersonate-service-account=%s", kmsKeyDataBq, kmsKeyRingName, dataGovprojectID, terraformSa)
-		assert.Equal(kmsKeyDataBq, opKMSData.Get("name").String(), fmt.Sprintf("should have key %s", kmsKeyDataBq))
+		kmsKeyDataBq := standalone.GetStringOutput("cmek_bigquery_crypto_key_name")
+		expectedKmsKeyDataBq := standalone.GetStringOutput("cmek_bigquery_crypto_key")
+		opKMSDataBq := gcloud.Runf(t, "kms keys describe %s --keyring=%s --project=%s --location us-east4 --impersonate-service-account=%s", kmsKeyDataBq, kmsKeyRingName, dataGovprojectID, terraformSa)
+		assert.Equal(expectedKmsKeyDataBq, opKMSDataBq.Get("name").String(), fmt.Sprintf("should have key %s", expectedKmsKeyDataBq))
 
-		opKMSIngestion := gcloud.Runf(t, "kms keys describe %s --keyring=%s --project=%s --location us-east4 --impersonate-service-account=%s", kmsKeyDataIngestion, kmsKeyRingName, dataGovprojectID, terraformSa)
-		assert.Equal(kmsKeyDataIngestion, opKMSIngestion.Get("name").String(), fmt.Sprintf("Should have key: %s", kmsKeyDataIngestion))
+		kmsKeyConfidentialBq := standalone.GetStringOutput("cmek_confidential_bigquery_crypto_key_name")
+		expectedKmsKeyConfidentialBq := standalone.GetStringOutput("cmek_confidential_bigquery_crypto_key")
+		opKMSDataConfBq := gcloud.Runf(t, "kms keys describe %s --keyring=%s --project=%s --location us-east4 --impersonate-service-account=%s", kmsKeyConfidentialBq, kmsKeyRingName, dataGovprojectID, terraformSa)
+		assert.Equal(expectedKmsKeyConfidentialBq, opKMSDataConfBq.Get("name").String(), fmt.Sprintf("should have key %s", expectedKmsKeyConfidentialBq))
 
-		expectedKeyName := fmt.Sprintf("kek_key_%s", random_suffix)
-		expectedKeyringName := fmt.Sprintf("kek_keyring_%s", random_suffix)
-		kek_Keyring := standalone.GetStringOutput("kek_wrapping_keyring")
-		expectedKekKey := fmt.Sprintf("%s/cryptoKeys/%s", kek_Keyring, expectedKeyName)
-		opKekKey := gcloud.Runf(t, "kms keys describe %s --keyring=%s --project=%s --location us-east4 --impersonate-service-account=%s", expectedKeyName, expectedKeyringName, dataGovprojectID, terraformSa)
-		assert.Equal(expectedKekKey, opKekKey.Get("name").String(), fmt.Sprintf("Should have key: %s", expectedKekKey))
+		kmsKeyDataIngestion := standalone.GetStringOutput("cmek_data_ingestion_crypto_key_name")
+		expectedKmsKeyDataIngestion := standalone.GetStringOutput("cmek_data_ingestion_crypto_key")
+		opKMSDataIngestion := gcloud.Runf(t, "kms keys describe %s --keyring=%s --project=%s --location us-east4 --impersonate-service-account=%s", kmsKeyDataIngestion, kmsKeyRingName, dataGovprojectID, terraformSa)
+		assert.Equal(expectedKmsKeyDataIngestion, opKMSDataIngestion.Get("name").String(), fmt.Sprintf("should have key %s", expectedKmsKeyDataIngestion))
+
+		kmsKeyReidentification := standalone.GetStringOutput("cmek_reidentification_crypto_key_name")
+		expectedKmsKeyReidentification := standalone.GetStringOutput("cmek_reidentification_crypto_key")
+		opKMSReidentification := gcloud.Runf(t, "kms keys describe %s --keyring=%s --project=%s --location us-east4 --impersonate-service-account=%s", kmsReidentification, kmsKeyRingName, dataGovprojectID, terraformSa)
+		assert.Equal(expectedKmsKeyReidentification, opKMSReidentification.Get("name").String(), fmt.Sprintf("should have key %s", expectedKmsKeyReidentification))
 
 		gcloudArgsBucketLog := gcloud.WithCommonArgs([]string{"--project", dataGovprojectID, "--json"})
 		bucketNameLog := standalone.GetStringOutput("centralized_logging_bucket_name")
@@ -163,4 +168,3 @@ func TestStandalone(t *testing.T) {
 	standalone.Test()
 
 }
-

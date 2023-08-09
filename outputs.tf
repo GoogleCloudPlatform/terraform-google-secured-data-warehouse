@@ -126,6 +126,51 @@ output "confidential_service_perimeter_name" {
   value       = var.confidential_data_perimeter == "" ? module.confidential_data_vpc_sc[0].service_perimeter_name : ""
 }
 
+output "cmek_keyring_name" {
+  description = "The Keyring name for the KMS Customer Managed Encryption Keys."
+  value       = module.data_governance.cmek_keyring_name
+
+  depends_on = [
+    time_sleep.wait_for_bridge_propagation
+  ]
+}
+
+output "cmek_data_ingestion_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the data ingestion crypto boundary."
+  value       = module.data_governance.cmek_data_ingestion_crypto_key_name
+
+  depends_on = [
+    time_sleep.wait_for_bridge_propagation
+  ]
+}
+
+output "cmek_bigquery_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the BigQuery service."
+  value       = module.data_governance.cmek_bigquery_crypto_key_name
+
+  depends_on = [
+    time_sleep.wait_for_bridge_propagation
+  ]
+}
+
+output "cmek_reidentification_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the reidentification crypto boundary."
+  value       = module.data_governance.cmek_reidentification_crypto_key_name
+
+  depends_on = [
+    time_sleep.wait_for_bridge_propagation
+  ]
+}
+
+output "cmek_confidential_bigquery_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the confidential BigQuery service."
+  value       = module.data_governance.cmek_confidential_bigquery_crypto_key_name
+
+  depends_on = [
+    time_sleep.wait_for_bridge_propagation
+  ]
+}
+
 output "cmek_data_ingestion_crypto_key" {
   description = "The Customer Managed Crypto Key for the data ingestion crypto boundary."
   value       = module.data_governance.cmek_data_ingestion_crypto_key
