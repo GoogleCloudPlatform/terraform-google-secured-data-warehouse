@@ -76,7 +76,7 @@ func TestStandalone(t *testing.T) {
 
 		kmsKeyReidentification := standalone.GetStringOutput("cmek_reidentification_crypto_key_name")
 		expectedKmsKeyReidentification := standalone.GetStringOutput("cmek_reidentification_crypto_key")
-		opKMSReidentification := gcloud.Runf(t, "kms keys describe %s --keyring=%s --project=%s --location us-east4 --impersonate-service-account=%s", kmsReidentification, kmsKeyRingName, dataGovprojectID, terraformSa)
+		opKMSReidentification := gcloud.Runf(t, "kms keys describe %s --keyring=%s --project=%s --location us-east4 --impersonate-service-account=%s", kmsKeyReidentification, kmsKeyRingName, dataGovprojectID, terraformSa)
 		assert.Equal(expectedKmsKeyReidentification, opKMSReidentification.Get("name").String(), fmt.Sprintf("should have key %s", expectedKmsKeyReidentification))
 
 		gcloudArgsBucketLog := gcloud.WithCommonArgs([]string{"--project", dataGovprojectID, "--json"})
