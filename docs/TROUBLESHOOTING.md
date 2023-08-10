@@ -232,4 +232,4 @@ And try again to do the deployment.
 
 ### Cannot assign requested address error in Cloud Shell
 
-When using Terraform on Google Cloud Shell, check the [IPv6](https://github.com/terraform-google-modules/terraform-example-foundation/blob/master/docs/TROUBLESHOOTING.md#cannot-assign-requested-address-error-in-cloud-shell).
+When deploying the blueprint using the Google Cloud Shell, check the [IPv6 entry](https://github.com/terraform-google-modules/terraform-example-foundation/blob/master/docs/TROUBLESHOOTING.md#cannot-assign-requested-address-error-in-cloud-shell) in the Troubleshooting Guide of the Terraform Example Foundation repository for possible errors.
