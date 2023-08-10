@@ -50,7 +50,12 @@ func TestStandalone(t *testing.T) {
 		confprojectID := standalone.GetStringOutput("confidential_data_project_id")
 		terraformSa := standalone.GetStringOutput("terraform_service_account")
 		kmsKeyRingName := standalone.GetStringOutput("cmek_keyring_name")
-		bucketNameDataIngestion := standalone.GetStringOutput("data_ingestion_bucket_name")
+		kmsKeyDataIngestion := standalone.GetStringOutput("cmek_data_ingestion_crypto_key")
+
+		//kmsKeyConfidentialBq := standalone.GetStringOutput("cmek_confidential_bigquery_crypto_key")
+		//kmsKeyDataBq := standalone.GetStringOutput("cmek_bigquery_crypto_key")
+		//kmsKeyReidentification := standalone.GetStringOutput("cmek_reidentification_crypto_key")
+		//kmsKeyDataIngestion := standalone.GetStringOutput("cmek_data_ingestion_crypto_key")
 
 		projects := []string{dataGovprojectID, dataIngprojectID, nonConfprojectID, confprojectID}
 
@@ -59,24 +64,24 @@ func TestStandalone(t *testing.T) {
 			assert.Equal(project, opProject.Get("projectId").String(), "should have expected projectID ")
 		}
 
-		kmsKeyDataBq := standalone.GetStringOutput("cmek_bigquery_crypto_key_name")
+		kmsKeyDataBqName := standalone.GetStringOutput("cmek_bigquery_crypto_key_name")
 		expectedKmsKeyDataBq := standalone.GetStringOutput("cmek_bigquery_crypto_key")
-		opKMSDataBq := gcloud.Runf(t, "kms keys describe %s --keyring=%s --project=%s --location us-east4 --impersonate-service-account=%s", kmsKeyDataBq, kmsKeyRingName, dataGovprojectID, terraformSa)
+		opKMSDataBq := gcloud.Runf(t, "kms keys describe %s --keyring=%s --project=%s --location us-east4 --impersonate-service-account=%s", kmsKeyDataBqName, kmsKeyRingName, dataGovprojectID, terraformSa)
 		assert.Equal(expectedKmsKeyDataBq, opKMSDataBq.Get("name").String(), fmt.Sprintf("should have key %s", expectedKmsKeyDataBq))
 
-		kmsKeyConfidentialBq := standalone.GetStringOutput("cmek_confidential_bigquery_crypto_key_name")
+		kmsKeyConfidentialBqName := standalone.GetStringOutput("cmek_confidential_bigquery_crypto_key_name")
 		expectedKmsKeyConfidentialBq := standalone.GetStringOutput("cmek_confidential_bigquery_crypto_key")
-		opKMSDataConfBq := gcloud.Runf(t, "kms keys describe %s --keyring=%s --project=%s --location us-east4 --impersonate-service-account=%s", kmsKeyConfidentialBq, kmsKeyRingName, dataGovprojectID, terraformSa)
+		opKMSDataConfBq := gcloud.Runf(t, "kms keys describe %s --keyring=%s --project=%s --location us-east4 --impersonate-service-account=%s", kmsKeyConfidentialBqName, kmsKeyRingName, dataGovprojectID, terraformSa)
 		assert.Equal(expectedKmsKeyConfidentialBq, opKMSDataConfBq.Get("name").String(), fmt.Sprintf("should have key %s", expectedKmsKeyConfidentialBq))
 
-		kmsKeyDataIngestion := standalone.GetStringOutput("cmek_data_ingestion_crypto_key_name")
+		kmsKeyDataIngestionName := standalone.GetStringOutput("cmek_data_ingestion_crypto_key_name")
 		expectedKmsKeyDataIngestion := standalone.GetStringOutput("cmek_data_ingestion_crypto_key")
-		opKMSDataIngestion := gcloud.Runf(t, "kms keys describe %s --keyring=%s --project=%s --location us-east4 --impersonate-service-account=%s", kmsKeyDataIngestion, kmsKeyRingName, dataGovprojectID, terraformSa)
+		opKMSDataIngestion := gcloud.Runf(t, "kms keys describe %s --keyring=%s --project=%s --location us-east4 --impersonate-service-account=%s", kmsKeyDataIngestionName, kmsKeyRingName, dataGovprojectID, terraformSa)
 		assert.Equal(expectedKmsKeyDataIngestion, opKMSDataIngestion.Get("name").String(), fmt.Sprintf("should have key %s", expectedKmsKeyDataIngestion))
 
-		kmsKeyReidentification := standalone.GetStringOutput("cmek_reidentification_crypto_key_name")
+		kmsKeyReidentificationName := standalone.GetStringOutput("cmek_reidentification_crypto_key_name")
 		expectedKmsKeyReidentification := standalone.GetStringOutput("cmek_reidentification_crypto_key")
-		opKMSReidentification := gcloud.Runf(t, "kms keys describe %s --keyring=%s --project=%s --location us-east4 --impersonate-service-account=%s", kmsKeyReidentification, kmsKeyRingName, dataGovprojectID, terraformSa)
+		opKMSReidentification := gcloud.Runf(t, "kms keys describe %s --keyring=%s --project=%s --location us-east4 --impersonate-service-account=%s", kmsKeyReidentificationName, kmsKeyRingName, dataGovprojectID, terraformSa)
 		assert.Equal(expectedKmsKeyReidentification, opKMSReidentification.Get("name").String(), fmt.Sprintf("should have key %s", expectedKmsKeyReidentification))
 
 		gcloudArgsBucketLog := gcloud.WithCommonArgs([]string{"--project", dataGovprojectID, "--json"})
@@ -87,10 +92,11 @@ func TestStandalone(t *testing.T) {
 
 		gcloudArgsBucketReid := gcloud.WithCommonArgs([]string{"--project", confprojectID, "--json"})
 		bucketNameDataflowReid := standalone.GetStringOutput("confidential_data_dataflow_bucket_name")
+		kmsKeyReidentification := standalone.GetStringOutput("cmek_reidentification_crypto_key")
 		opBucketDataflowReid := gcloud.Run(t, fmt.Sprintf("alpha storage ls --buckets gs://%s --impersonate-service-account=%s", bucketNameDataflowReid, terraformSa), gcloudArgsBucketReid).Array()
 		assert.Equal(bucketNameDataflowReid, opBucketDataflowReid[0].Get("metadata.name").String(), fmt.Sprintf("Should have the expected name:%s", bucketNameDataflowReid))
 		assert.Equal("US-EAST4", opBucketDataflowReid[0].Get("metadata.location").String(), "Should be in the US-EAST4 location.")
-		assert.Equal(kmsKeyDataIngestion, opBucketDataflowReid[0].Get("metadata.encryption.defaultKmsKeyName").String(), fmt.Sprintf("Should have kms key: %s", kmsKeyDataIngestion))
+		assert.Equal(kmsKeyReidentification, opBucketDataflowReid[0].Get("metadata.encryption.defaultKmsKeyName").String(), fmt.Sprintf("Should have kms key: %s", kmsKeyReidentification))
 
 		gcloudArgsBucketDataflowDeid := gcloud.WithCommonArgs([]string{"--project", dataIngprojectID, "--json"})
 		bucketNameDataflowDeid := standalone.GetStringOutput("data_ingestion_dataflow_bucket_name")
@@ -99,11 +105,12 @@ func TestStandalone(t *testing.T) {
 		assert.Equal("US-EAST4", opBucketDataflowDeid[0].Get("metadata.location").String(), "Should be in the US-EAST4 location.")
 		assert.Equal(kmsKeyDataIngestion, opBucketDataflowDeid[0].Get("metadata.encryption.defaultKmsKeyName").String(), fmt.Sprintf("Should have kms key: %s", kmsKeyDataIngestion))
 
-		gcloudArgsBucketCsv := gcloud.WithCommonArgs([]string{"--project", dataIngprojectID, "--json"})
-		opBucketCsv := gcloud.Run(t, fmt.Sprintf("alpha storage ls --buckets gs://%s --impersonate-service-account=%s", bucketNameDataIngestion, terraformSa), gcloudArgsBucketCsv).Array()
-		assert.Equal(bucketNameDataIngestion, opBucketCsv[0].Get("metadata.name").String(), fmt.Sprintf("Should have the expected name:%s", bucketNameDataIngestion))
-		assert.Equal("US-EAST4", opBucketCsv[0].Get("metadata.location").String(), "Should be in the US-EAST4 location.")
-		assert.Equal(kmsKeyDataIngestion, opBucketCsv[0].Get("metadata.encryption.defaultKmsKeyName").String(), fmt.Sprintf("Should have kms key: %s", kmsKeyDataIngestion))
+		gcloudArgsBucketDataingestion := gcloud.WithCommonArgs([]string{"--project", dataIngprojectID, "--json"})
+		bucketNameDataingestion := standalone.GetStringOutput("data_ingestion_bucket_name")
+		opBucketDataingestion := gcloud.Run(t, fmt.Sprintf("alpha storage ls --buckets gs://%s --impersonate-service-account=%s", bucketNameDataingestion, terraformSa), gcloudArgsBucketDataingestion).Array()
+		assert.Equal(bucketNameDataingestion, opBucketDataingestion[0].Get("metadata.name").String(), fmt.Sprintf("Should have the expected name:%s", bucketNameDataingestion))
+		assert.Equal("US-EAST4", opBucketDataingestion[0].Get("metadata.location").String(), "Should be in the US-EAST4 location.")
+		assert.Equal(kmsKeyDataIngestion, opBucketDataingestion[0].Get("metadata.encryption.defaultKmsKeyName").String(), fmt.Sprintf("Should have kms key: %s", kmsKeyDataIngestion))
 
 		dataIngTopicName := standalone.GetStringOutput("data_ingestion_topic_name")
 		opPubsub := gcloud.Runf(t, "pubsub topics describe %s --project=%s --impersonate-service-account=%s", dataIngTopicName, dataIngprojectID, terraformSa)
@@ -111,26 +118,28 @@ func TestStandalone(t *testing.T) {
 		assert.Equal(expectedTopicName, opPubsub.Get("name").String(), fmt.Sprintf("Should have topic name: %s", expectedTopicName))
 		assert.Equal(kmsKeyDataIngestion, opPubsub.Get("kmsKeyName").String(), fmt.Sprintf("Should have kms key: %s", kmsKeyDataIngestion))
 
+		confDatasetLocation := "us-east4"
 		opConfDataset := gcloud.Runf(t, "alpha bq tables describe irs_990_ein_re_id --dataset secured_dataset --project %s --impersonate-service-account=%s", confprojectID, terraformSa)
 		confFullTablePath := fmt.Sprintf("%s:secured_dataset.irs_990_ein_re_id", confprojectID)
 		assert.Equal(confFullTablePath, opConfDataset.Get("id").String(), fmt.Sprintf("Should have same id: %s", confFullTablePath))
-		assert.Equal("us-east4", opConfDataset.Get("location").String(), fmt.Sprintf("Should have same location: %s", "us-east4"))
+		assert.Equal(confDatasetLocation, opConfDataset.Get("location").String(), fmt.Sprintf("Should have same location: %s", confDatasetLocation))
 
+		nonConfDatasetLocation := "us-east4"
 		opNonConfDataset := gcloud.Runf(t, "alpha bq tables describe irs_990_ein_de_id --dataset non_confidential_dataset --project %s --impersonate-service-account=%s", nonConfprojectID, terraformSa)
 		nonconfFullTablePath := fmt.Sprintf("%s:non_confidential_dataset.irs_990_ein_de_id", nonConfprojectID)
 		assert.Equal(nonconfFullTablePath, opNonConfDataset.Get("id").String(), fmt.Sprintf("Should have same id: %s", nonconfFullTablePath))
-		assert.Equal("us-east4", opNonConfDataset.Get("location").String(), fmt.Sprintf("Should have same location: %s", "us-east4"))
+		assert.Equal(nonConfDatasetLocation, opNonConfDataset.Get("location").String(), fmt.Sprintf("Should have same location: %s", nonConfDatasetLocation))
 
-		taxonomyName := standalone.GetStringOutput("taxonomy_name")
+		taxonomyName := standalone.GetStringOutput("taxonomy_display_name")
 		opTaxonomies := gcloud.Runf(t, "data-catalog taxonomies list --location us-east4 --project %s  --impersonate-service-account=%s", dataGovprojectID, terraformSa).Array()
-		assert.Equal(taxonomyName, opTaxonomies[0].Get("name").String(), fmt.Sprintf("Should have same name: %s", taxonomyName))
-		assert.Equal("0", opTaxonomies[0].Get("policyTagCount").String(), fmt.Sprintf("Taxonomy should contains policy tags %s", opTaxonomies[0].Get("policyTagCount").String()))
+		assert.Equal(taxonomyName, opTaxonomies[0].Get("displayName").String(), fmt.Sprintf("Should have same name: %s", taxonomyName))
+		assert.NotEqual("0", opTaxonomies[0].Get("policyTagCount").String(), fmt.Sprintf("Taxonomy should contains policy tags %s", opTaxonomies[0].Get("policyTagCount").String()))
 
 		opconftabledata := gcloud.Runf(t, "bq show --format=prettyjson %s:secured_dataset.irs_990_ein_re_id", confprojectID)
-		assert.Equal("0", opconftabledata.Get("numRows").String(), fmt.Sprintf("Table should contains data: %s", opconftabledata.Get("numRows").String()))
+		assert.NotEqual("0", opconftabledata.Get("numRows").String(), fmt.Sprintf("Table should contains data: %s", opconftabledata.Get("numRows").String()))
 
 		opnonconftabledata := gcloud.Runf(t, "bq show --format=prettyjson %s:non_confidential_dataset.irs_990_ein_de_id", nonConfprojectID)
-		assert.Equal("0", opnonconftabledata.Get("numRows").String(), fmt.Sprintf("Table should contains data: %s", opnonconftabledata.Get("numRows").String()))
+		assert.NotEqual("0", opnonconftabledata.Get("numRows").String(), fmt.Sprintf("Table should contains data: %s", opnonconftabledata.Get("numRows").String()))
 
 		denyAllEgressName := "fw-e-shared-restricted-65535-e-d-all-all-all"
 		denyAllEgressRule := gcloud.Runf(t, "compute firewall-rules describe %s --project %s", denyAllEgressName, dataIngprojectID)
