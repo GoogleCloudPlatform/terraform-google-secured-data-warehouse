@@ -52,11 +52,6 @@ func TestStandalone(t *testing.T) {
 		kmsKeyRingName := standalone.GetStringOutput("cmek_keyring_name")
 		kmsKeyDataIngestion := standalone.GetStringOutput("cmek_data_ingestion_crypto_key")
 
-		//kmsKeyConfidentialBq := standalone.GetStringOutput("cmek_confidential_bigquery_crypto_key")
-		//kmsKeyDataBq := standalone.GetStringOutput("cmek_bigquery_crypto_key")
-		//kmsKeyReidentification := standalone.GetStringOutput("cmek_reidentification_crypto_key")
-		//kmsKeyDataIngestion := standalone.GetStringOutput("cmek_data_ingestion_crypto_key")
-
 		projects := []string{dataGovprojectID, dataIngprojectID, nonConfprojectID, confprojectID}
 
 		for _, project := range projects {
