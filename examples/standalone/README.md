@@ -372,7 +372,7 @@ If you encounter problems in the apply execution check the [Troubleshooting G
 | data\_engineer\_group | Google Cloud IAM group that sets up and maintains the data pipeline and warehouse. | `string` | n/a | yes |
 | data\_governance\_project\_name | Custom project name for the data governance project. | `string` | `""` | no |
 | data\_ingestion\_project\_name | Custom project name for the data ingestion project. | `string` | `""` | no |
-| delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `false` | no |
+| delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `true` | no |
 | folder\_id | The folder to deploy in. | `string` | n/a | yes |
 | network\_administrator\_group | Google Cloud IAM group that reviews network configuration. Typically, this includes members of the networking team. | `string` | n/a | yes |
 | non\_confidential\_data\_project\_name | Custom project name for the non confidential data project. | `string` | `""` | no |
