@@ -123,23 +123,19 @@ func TestStandalone(t *testing.T) {
 		confFullTablePath := fmt.Sprintf("%s:secured_dataset.irs_990_ein_re_id", confprojectID)
 		assert.Equal(confFullTablePath, opConfDataset.Get("id").String(), fmt.Sprintf("Should have same id: %s", confFullTablePath))
 		assert.Equal(confDatasetLocation, opConfDataset.Get("location").String(), fmt.Sprintf("Should have same location: %s", confDatasetLocation))
+		assert.NotEqual("0", opConfDataset.Get("numRows").String(), fmt.Sprintf("Table should contains data: %s", opConfDataset.Get("numRows").String()))
 
 		nonConfDatasetLocation := "us-east4"
 		opNonConfDataset := gcloud.Runf(t, "alpha bq tables describe irs_990_ein_de_id --dataset non_confidential_dataset --project %s --impersonate-service-account=%s", nonConfprojectID, terraformSa)
 		nonconfFullTablePath := fmt.Sprintf("%s:non_confidential_dataset.irs_990_ein_de_id", nonConfprojectID)
 		assert.Equal(nonconfFullTablePath, opNonConfDataset.Get("id").String(), fmt.Sprintf("Should have same id: %s", nonconfFullTablePath))
 		assert.Equal(nonConfDatasetLocation, opNonConfDataset.Get("location").String(), fmt.Sprintf("Should have same location: %s", nonConfDatasetLocation))
+		assert.NotEqual("0", opNonConfDataset.Get("numRows").String(), fmt.Sprintf("Table should contains data: %s", opNonConfDataset.Get("numRows").String()))
 
 		taxonomyName := standalone.GetStringOutput("taxonomy_display_name")
 		opTaxonomies := gcloud.Runf(t, "data-catalog taxonomies list --location us-east4 --project %s  --impersonate-service-account=%s", dataGovprojectID, terraformSa).Array()
 		assert.Equal(taxonomyName, opTaxonomies[0].Get("displayName").String(), fmt.Sprintf("Should have same name: %s", taxonomyName))
 		assert.NotEqual("0", opTaxonomies[0].Get("policyTagCount").String(), fmt.Sprintf("Taxonomy should contains policy tags %s", opTaxonomies[0].Get("policyTagCount").String()))
-
-		opconftabledata := gcloud.Runf(t, "bq show --format=prettyjson %s:secured_dataset.irs_990_ein_re_id", confprojectID)
-		assert.NotEqual("0", opconftabledata.Get("numRows").String(), fmt.Sprintf("Table should contains data: %s", opconftabledata.Get("numRows").String()))
-
-		opnonconftabledata := gcloud.Runf(t, "bq show --format=prettyjson %s:non_confidential_dataset.irs_990_ein_de_id", nonConfprojectID)
-		assert.NotEqual("0", opnonconftabledata.Get("numRows").String(), fmt.Sprintf("Table should contains data: %s", opnonconftabledata.Get("numRows").String()))
 
 		denyAllEgressName := "fw-e-shared-restricted-65535-e-d-all-all-all"
 		denyAllEgressRule := gcloud.Runf(t, "compute firewall-rules describe %s --project %s", denyAllEgressName, dataIngprojectID)
