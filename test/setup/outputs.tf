@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+
 output "data_ingestion_project_id" {
   value = values(module.base_projects)[*].data_ingestion_project_id
 }
@@ -41,6 +42,10 @@ output "sa_key" {
 
 output "terraform_service_account" {
   value = google_service_account.int_ci_service_account.email
+}
+
+output "perimeter_additional_members" {
+  value = ["serviceAccount:${google_service_account.int_ci_service_account.email}"]
 }
 
 output "org_project_creators" {

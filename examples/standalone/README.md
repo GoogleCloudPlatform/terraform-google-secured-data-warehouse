@@ -372,7 +372,7 @@ If you encounter problems in the apply execution check the [Troubleshooting G
 | data\_engineer\_group | Google Cloud IAM group that sets up and maintains the data pipeline and warehouse. | `string` | n/a | yes |
 | data\_governance\_project\_name | Custom project name for the data governance project. | `string` | `""` | no |
 | data\_ingestion\_project\_name | Custom project name for the data ingestion project. | `string` | `""` | no |
-| delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `false` | no |
+| delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `true` | no |
 | folder\_id | The folder to deploy in. | `string` | n/a | yes |
 | network\_administrator\_group | Google Cloud IAM group that reviews network configuration. Typically, this includes members of the networking team. | `string` | n/a | yes |
 | non\_confidential\_data\_project\_name | Custom project name for the non confidential data project. | `string` | `""` | no |
@@ -392,17 +392,24 @@ If you encounter problems in the apply execution check the [Troubleshooting G
 | blueprint\_type | Type of blueprint this module represents. |
 | centralized\_logging\_bucket\_name | The name of the bucket created for storage logging. |
 | cmek\_bigquery\_crypto\_key | The Customer Managed Crypto Key for the BigQuery service. |
+| cmek\_bigquery\_crypto\_key\_name | The Customer Managed Crypto Key name for the BigQuery service. |
 | cmek\_confidential\_bigquery\_crypto\_key | The Customer Managed Crypto Key for the confidential BigQuery service. |
+| cmek\_confidential\_bigquery\_crypto\_key\_name | The Customer Managed Crypto Key name for the confidential BigQuery service. |
 | cmek\_data\_ingestion\_crypto\_key | The Customer Managed Crypto Key for the data ingestion crypto boundary. |
+| cmek\_data\_ingestion\_crypto\_key\_name | The Customer Managed Crypto Key name for the data ingestion crypto boundary. |
+| cmek\_keyring\_name | The Keyring name for the KMS Customer Managed Encryption Keys. |
 | cmek\_reidentification\_crypto\_key | The Customer Managed Crypto Key for the reidentification crypto boundary. |
+| cmek\_reidentification\_crypto\_key\_name | The Customer Managed Crypto Key name for the reidentification crypto boundary. |
 | confidential\_data\_dataflow\_bucket\_name | The name of the bucket created for dataflow in the confidential data pipeline. |
 | confidential\_data\_perimeter\_name | Access context manager service perimeter name. |
 | confidential\_data\_project\_id | The ID of the project created for confidential datasets and tables. |
+| confidential\_dataset | The bigquery dataset created for confidential data. |
 | confidential\_network\_name | The name of the confidential VPC being created. |
 | confidential\_network\_self\_link | The URI of the confidential VPC being created. |
 | confidential\_subnets\_self\_link | The self-links of confidential subnets being created. |
 | data\_governance\_perimeter\_name | Access context manager service perimeter name. |
 | data\_governance\_project\_id | The ID of the project created for data governance. |
+| data\_ingestion\_bucket\_name | The name of the bucket created for the data ingestion pipeline. |
 | data\_ingestion\_dataflow\_bucket\_name | The name of the bucket created for dataflow in the data ingestion pipeline. |
 | data\_ingestion\_network\_name | The name of the data ingestion VPC being created. |
 | data\_ingestion\_network\_self\_link | The URI of the data ingestion VPC being created. |
@@ -412,6 +419,7 @@ If you encounter problems in the apply execution check the [Troubleshooting G
 | data\_ingestion\_topic\_name | The topic created for data ingestion pipeline. |
 | dataflow\_controller\_service\_account\_email | The regional de identification pipeline service account. |
 | non\_confidential\_data\_project\_id | The id of the project created for non-confidential data. |
+| non\_confidential\_dataset | The bigquery dataset created for non-confidential data. |
 | pubsub\_writer\_service\_account\_email | The PubSub writer service account email. Should be used to write data to the PubSub topics the data ingestion pipeline reads from. |
 | regional\_deid\_pipeline\_job\_id | The unique ID of this job. |
 | regional\_reid\_pipeline\_job\_id | The unique ID of this job. |
@@ -419,5 +427,6 @@ If you encounter problems in the apply execution check the [Troubleshooting G
 | taxonomy\_display\_name | The name of the taxonomy. |
 | tek\_wrapping\_keyring | The name of tek wrapping key |
 | template\_project\_id | The id of the flex template created. |
+| terraform\_service\_account | Service account used in the Standalone example. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

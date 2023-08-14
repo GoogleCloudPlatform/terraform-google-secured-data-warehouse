@@ -1,4 +1,4 @@
-# Copyright 2021 Google LLC
+# Copyright 2021-2022 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,6 +29,48 @@ steps:
     - prepare
   name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
   args: ['/bin/bash', '-c', 'source /usr/local/bin/task_helper_functions.sh && source_test_env && init_credentials && source ./test/ensure_access_policy.sh']
+
+- id: create-standalone
+  waitFor:
+    - ensure-access-policy
+  name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
+  args: ['/bin/bash', '-c', 'cft test run TestStandalone --stage init --verbose']
+
+- id: converge-standalone
+  waitFor:
+    - create-standalone
+  name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
+  args: ['/bin/bash', '-c', 'cft test run TestStandalone --stage apply --verbose']
+  env:
+  - 'TF_VAR_data_engineer_group=test-gcp-ops@test.blueprints.joonix.net'
+  - 'TF_VAR_data_analyst_group=test-gcp-ops@test.blueprints.joonix.net'
+  - 'TF_VAR_security_analyst_group=test-gcp-ops@test.blueprints.joonix.net'
+  - 'TF_VAR_network_administrator_group=test-gcp-ops@test.blueprints.joonix.net'
+  - 'TF_VAR_security_administrator_group=test-gcp-ops@test.blueprints.joonix.net'
+
+- id: verify-standalone
+  waitFor:
+    - converge-standalone
+  name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
+  args: ['/bin/bash', '-c', 'sleep 600 && cft test run TestStandalone --stage verify --verbose']
+  env:
+  - 'TF_VAR_data_engineer_group=test-gcp-ops@test.blueprints.joonix.net'
+  - 'TF_VAR_data_analyst_group=test-gcp-ops@test.blueprints.joonix.net'
+  - 'TF_VAR_security_analyst_group=test-gcp-ops@test.blueprints.joonix.net'
+  - 'TF_VAR_network_administrator_group=test-gcp-ops@test.blueprints.joonix.net'
+  - 'TF_VAR_security_administrator_group=test-gcp-ops@test.blueprints.joonix.net'
+
+- id: destroy-standalone
+  waitFor:
+    - verify-standalone
+  name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
+  args: ['/bin/bash', '-c', 'cft test run TestStandalone --stage teardown --verbose']
+  env:
+  - 'TF_VAR_data_engineer_group=test-gcp-ops@test.blueprints.joonix.net'
+  - 'TF_VAR_data_analyst_group=test-gcp-ops@test.blueprints.joonix.net'
+  - 'TF_VAR_security_analyst_group=test-gcp-ops@test.blueprints.joonix.net'
+  - 'TF_VAR_network_administrator_group=test-gcp-ops@test.blueprints.joonix.net'
+  - 'TF_VAR_security_administrator_group=test-gcp-ops@test.blueprints.joonix.net'
 
 - id: create-de-identification-template
   waitFor:

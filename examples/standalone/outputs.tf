@@ -34,9 +34,44 @@ output "bigquery_non_confidential_table" {
   ]
 }
 
+output "non_confidential_dataset" {
+  description = "The bigquery dataset created for non-confidential data."
+  value       = local.non_confidential_dataset_id
+}
+
+output "confidential_dataset" {
+  description = "The bigquery dataset created for confidential data."
+  value       = local.confidential_dataset_id
+}
+
 output "blueprint_type" {
   description = "Type of blueprint this module represents."
   value       = module.secured_data_warehouse.blueprint_type
+}
+
+output "cmek_keyring_name" {
+  description = "The Keyring name for the KMS Customer Managed Encryption Keys."
+  value       = module.secured_data_warehouse.cmek_keyring_name
+}
+
+output "cmek_data_ingestion_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the data ingestion crypto boundary."
+  value       = module.secured_data_warehouse.cmek_data_ingestion_crypto_key_name
+}
+
+output "cmek_bigquery_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the BigQuery service."
+  value       = module.secured_data_warehouse.cmek_bigquery_crypto_key_name
+}
+
+output "cmek_reidentification_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the reidentification crypto boundary."
+  value       = module.secured_data_warehouse.cmek_reidentification_crypto_key_name
+}
+
+output "cmek_confidential_bigquery_crypto_key_name" {
+  description = "The Customer Managed Crypto Key name for the confidential BigQuery service."
+  value       = module.secured_data_warehouse.cmek_confidential_bigquery_crypto_key_name
 }
 
 output "cmek_bigquery_crypto_key" {
@@ -72,6 +107,11 @@ output "centralized_logging_bucket_name" {
 output "confidential_data_dataflow_bucket_name" {
   description = "The name of the bucket created for dataflow in the confidential data pipeline."
   value       = module.secured_data_warehouse.confidential_data_dataflow_bucket_name
+}
+
+output "data_ingestion_bucket_name" {
+  description = "The name of the bucket created for the data ingestion pipeline."
+  value       = module.secured_data_warehouse.data_ingestion_bucket_name
 }
 
 output "data_ingestion_dataflow_bucket_name" {
@@ -188,3 +228,9 @@ output "regional_deid_pipeline_job_id" {
   description = "The unique ID of this job."
   value       = module.regional_deid_pipeline.job_id
 }
+
+output "terraform_service_account" {
+  description = "Service account used in the Standalone example."
+  value       = var.terraform_service_account
+}
+

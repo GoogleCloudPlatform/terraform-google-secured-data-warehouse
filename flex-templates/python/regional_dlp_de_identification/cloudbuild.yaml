@@ -39,3 +39,4 @@ substitutions:
   _PIP_INDEX_URL: 'https://us-east4-python.pkg.dev/PROJECT_ID/python-modules/simple/'
 options:
   logging: CLOUD_LOGGING_ONLY
+timeout: 900s

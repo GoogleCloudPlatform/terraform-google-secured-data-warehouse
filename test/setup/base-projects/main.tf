@@ -152,6 +152,8 @@ module "confidential_data_project" {
     "dns.googleapis.com",
     "compute.googleapis.com",
     "cloudbuild.googleapis.com",
-    "artifactregistry.googleapis.com"
+    "artifactregistry.googleapis.com",
+    "monitoring.googleapis.com",
+    "logging.googleapis.com"
   ]
 }

@@ -16,10 +16,10 @@
 
 provider "google" {
   impersonate_service_account = var.terraform_service_account
-  request_timeout             = "60s"
+  request_timeout             = "120s"
 }
 
 provider "google-beta" {
   impersonate_service_account = var.terraform_service_account
-  request_timeout             = "60s"
+  request_timeout             = "120s"
 }
