@@ -188,6 +188,9 @@ module "secured_data_warehouse" {
 | pubsub\_writer\_service\_account\_email | The PubSub writer service account email. Should be used to write data to the PubSub topics the data ingestion pipeline reads from. |
 | scheduler\_service\_account\_email | The Cloud Scheduler service account email, no roles granted. |
 | storage\_writer\_service\_account\_email | The Storage writer service account email. Should be used to write data to the buckets the data ingestion pipeline reads from. |
+| vpc\_sc\_bridge\_confidential\_data\_ingestion | Access context manager bridge name. |
+| vpc\_sc\_bridge\_confidential\_governance | Access context manager bridge name. |
+| vpc\_sc\_bridge\_data\_ingestion\_governance\_name | Access context manager bridge name. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
