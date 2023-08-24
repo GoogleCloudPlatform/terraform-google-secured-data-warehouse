@@ -1,0 +1,191 @@
+/**
+ * Copyright 2023 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+locals {
+  data_analyst_group                                     = data.terraform_remote_state.projects_env.outputs.data_analyst_group
+  app_infra_pipeline_service_accounts                    = data.terraform_remote_state.projects_shared.outputs.terraform_service_accounts
+  sdw_app_infra_sa                                       = local.app_infra_pipeline_service_accounts["bu1-sdw-app"]
+  data_ingestion_project_id                              = data.terraform_remote_state.projects_env.outputs.data_ingestion_project_id
+  dataflow_template_project_id                           = data.terraform_remote_state.projects_env.outputs.dataflow_template_project_id
+  cmek_data_ingestion_crypto_key                         = data.terraform_remote_state.projects_env.outputs.cmek_data_ingestion_crypto_key
+  cmek_confidential_crypto_key                           = data.terraform_remote_state.projects_env.outputs.cmek_confidential_crypto_key
+  data_ingestion_dataflow_controller_service_account     = data.terraform_remote_state.projects_env.outputs.data_ingestion_dataflow_controller_service_account
+  confidential_dataflow_controller_service_account_email = data.terraform_remote_state.projects_env.outputs.confidential_dataflow_controller_service_account
+  data_ingestion_dataflow_bucket_name                    = data.terraform_remote_state.projects_env.outputs.data_ingestion_dataflow_bucket_name
+  confidential_data_dataflow_bucket_name                 = data.terraform_remote_state.projects_env.outputs.confidential_data_dataflow_bucket_name
+  data_ingestion_subnets_self_link                       = data.terraform_remote_state.projects_env.outputs.restricted_subnets_selflinks[0]
+  confidential_subnet_self_link                          = data.terraform_remote_state.projects_env.outputs.confidential_subnets_self_link
+
+  data_governance_project_id       = data.terraform_remote_state.projects_env.outputs.data_governance_project_id
+  non_confidential_data_project_id = data.terraform_remote_state.projects_env.outputs.non_confidential_data_project_id
+  confidential_data_project_id     = data.terraform_remote_state.projects_env.outputs.confidential_data_project_id
+  data_ingestion_bucket_name       = data.terraform_remote_state.projects_env.outputs.data_ingestion_bucket_name
+  location                         = data.terraform_remote_state.projects_env.outputs.default_region
+  tek_wrapping_key                 = data.terraform_remote_state.projects_env.outputs.tek_wrapping_key
+  wrapped_key_secret_data          = chomp(data.google_secret_manager_secret_version.wrapped_key.secret_data)
+  templates_bucket_name            = data.terraform_remote_state.projects_env.outputs.flex_template_bucket_name
+
+  non_confidential_dataset_id = "non_confidential_dataset"
+  confidential_dataset_id     = "secured_dataset"
+  confidential_table_id       = "irs_990_ein_re_id"
+  non_confidential_table_id   = "irs_990_ein_de_id"
+
+  use_temporary_crypto_operator_role = true
+
+  bq_schema_irs_990_ein           = "ein:STRING, name:STRING, ico:STRING, street:STRING, city:STRING, state:STRING, income_amt:STRING, revenue_amt:STRING"
+  bigquery_non_confidential_table = "${local.non_confidential_data_project_id}:${local.non_confidential_dataset_id}.${local.non_confidential_table_id}"
+  bigquery_confidential_table     = "${local.confidential_data_project_id}:${local.confidential_dataset_id}.${local.confidential_table_id}"
+
+  masked_reader_groups = {
+    data_analyst = local.data_analyst_group
+  }
+
+  dataset_id = "data_dataset"
+  table_id   = "credit_card"
+}
+
+// remote state
+data "terraform_remote_state" "projects_env" {
+  backend = "gcs"
+
+  config = {
+    bucket = var.remote_state_bucket
+    prefix = "terraform/projects/business_unit_1/production"
+  }
+}
+
+data "terraform_remote_state" "projects_shared" {
+  backend = "gcs"
+
+  config = {
+    bucket = var.remote_state_bucket
+    prefix = "terraform/projects/business_unit_1/shared"
+  }
+}
+
+data "terraform_remote_state" "app_shared" {
+  backend = "gcs"
+
+  config = {
+    bucket = var.sdw_remote_state_bucket
+    prefix = "terraform/sdw-infra/business_unit_1/shared"
+  }
+}
+
+data "google_secret_manager_secret_version" "wrapped_key" {
+  project = local.data_governance_project_id
+  secret  = data.terraform_remote_state.app_shared.outputs.wrapped_key_secret_id
+}
+
+module "de_identification_template" {
+  source = "git::https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse.git//modules/de-identification-template?ref=release-please--branches--main"
+  # source  = "GoogleCloudPlatform/secured-data-warehouse/google//modules/de-identification-template"
+  # version = "~> 1.0"
+
+  project_id                = local.data_governance_project_id
+  terraform_service_account = local.sdw_app_infra_sa
+  crypto_key                = local.tek_wrapping_key
+  wrapped_key               = local.wrapped_key_secret_data
+  dlp_location              = local.location
+  template_id_prefix        = "de_identification"
+  template_file             = "${path.module}/templates/deidentification.tmpl"
+  dataflow_service_account  = local.data_ingestion_dataflow_controller_service_account
+}
+
+module "regional_deid_pipeline" {
+  source = "git::https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse.git//modules/dataflow-flex-job?ref=release-please--branches--main"
+  # source  = "GoogleCloudPlatform/secured-data-warehouse/google//modules/dataflow-flex-job"
+  # version = "~> 1.0"
+
+  project_id              = local.data_ingestion_project_id
+  name                    = "dataflow-flex-regional-dlp-deid-job-python-query"
+  container_spec_gcs_path = local.python_re_identify_template_gs_path
+  job_language            = "PYTHON"
+  region                  = local.location
+  service_account_email   = local.data_ingestion_dataflow_controller_service_account
+  subnetwork_self_link    = local.data_ingestion_subnets_self_link
+  kms_key_name            = local.cmek_data_ingestion_crypto_key
+  temp_location           = "gs://${local.data_ingestion_dataflow_bucket_name}/tmp/"
+  staging_location        = "gs://${local.data_ingestion_dataflow_bucket_name}/staging/"
+  network_tags            = ["allow-google-apis"]
+
+  parameters = {
+    query                          = "SELECT ein, name, ico, street, city, state, income_amt, revenue_amt FROM [bigquery-public-data:irs_990.irs_990_ein] LIMIT 10000"
+    deidentification_template_name = module.de_identification_template.template_full_path
+    window_interval_sec            = 30
+    batch_size                     = 1000
+    dlp_location                   = local.location
+    dlp_project                    = local.data_governance_project_id
+    bq_schema                      = local.bq_schema_irs_990_ein
+    output_table                   = local.bigquery_non_confidential_table
+    dlp_transform                  = "DE-IDENTIFY"
+  }
+  depends_on = [
+    null_resource.python_de_identification_flex_template
+  ]
+}
+
+
+resource "time_sleep" "wait_de_identify_job_execution" {
+  create_duration = "600s"
+
+  depends_on = [
+    module.regional_deid_pipeline
+  ]
+}
+
+module "regional_reid_pipeline" {
+  source = "git::https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse.git//modules/dataflow-flex-job?ref=release-please--branches--main"
+  # source  = "GoogleCloudPlatform/secured-data-warehouse/google//modules/dataflow-flex-job"
+  # version = "~> 1.0"
+
+  project_id              = local.confidential_data_project_id
+  name                    = "dataflow-flex-regional-dlp-reid-job-python-query"
+  container_spec_gcs_path = local.python_re_identify_template_gs_path
+  job_language            = "PYTHON"
+  region                  = local.location
+  service_account_email   = local.confidential_dataflow_controller_service_account_email
+  subnetwork_self_link    = local.confidential_subnet_self_link
+  kms_key_name            = local.cmek_confidential_crypto_key
+  temp_location           = "gs://${local.confidential_data_dataflow_bucket_name}/tmp/"
+  staging_location        = "gs://${local.confidential_data_dataflow_bucket_name}/staging/"
+  network_tags            = ["allow-google-apis"]
+
+  parameters = {
+    input_table                    = local.bigquery_non_confidential_table
+    deidentification_template_name = module.de_identification_template.template_full_path
+    window_interval_sec            = 30
+    batch_size                     = 1000
+    dlp_location                   = local.location
+    dlp_project                    = local.data_governance_project_id
+    bq_schema                      = local.bq_schema_irs_990_ein
+    output_table                   = local.bigquery_confidential_table
+    dlp_transform                  = "RE-IDENTIFY"
+  }
+
+  depends_on = [
+    time_sleep.wait_de_identify_job_execution,
+    google_bigquery_table.re_id
+  ]
+}
+
+resource "time_sleep" "wait_re_identify_job_execution" {
+  create_duration = "600s"
+
+  depends_on = [
+    module.regional_reid_pipeline
+  ]
+}

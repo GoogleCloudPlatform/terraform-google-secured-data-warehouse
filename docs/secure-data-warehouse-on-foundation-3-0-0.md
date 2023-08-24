@@ -222,7 +222,8 @@ will deployed in the Secured Data Warehouse that will be created in step 4.
         "iam.googleapis.com",
         "artifactregistry.googleapis.com",
         "cloudresourcemanager.googleapis.com",
-        "bigquery.googleapis.com"
+        "bigquery.googleapis.com",
+        "dataflow.googleapis.com",
       ]
     ```
 
@@ -283,6 +284,21 @@ will deployed in the Secured Data Warehouse that will be created in step 4.
         value       = var.enable_sdw ? module.confidential_data_project[0].project_number : ""
     }
 
+    output "confidential_network_name" {
+            description = "The name of the confidential VPC being created."
+            value       = var.enable_sdw ? module.dwh_networking_confidential[0].network_name : ""
+    }
+
+    output "confidential_network_self_link" {
+        description = "The URI of the confidential VPC being created."
+        value       = var.enable_sdw ? module.dwh_networking_confidential[0].network_self_link : ""
+    }
+
+    output "confidential_subnets_self_link" {
+        description = "The self-links of confidential subnets being created."
+        value       = var.enable_sdw ? module.dwh_networking_confidential[0].subnets_self_links[0] : ""
+    }
+
     output "default_region" {
         description = "Default region to create resources where applicable."
         value       = data.terraform_remote_state.bootstrap.outputs.common_config.default_region
@@ -337,307 +353,33 @@ will deployed in the Secured Data Warehouse that will be created in step 4.
         value       = module.env.non_confidential_data_project_number
     }
 
+    output "confidential_network_name" {
+        description = "The name of the confidential VPC being created."
+        value       = module.env.confidential_network_name
+    }
+
+    output "confidential_network_self_link" {
+        description = "The URI of the confidential VPC being created."
+        value       = module.env.confidential_network_self_link
+    }
+
+    output "confidential_subnets_self_link" {
+        description = "The self-links of confidential subnets being created."
+        value       = module.env.confidential_subnets_self_link
+    }
+
     output "default_region" {
       description = "Default region to create resources where applicable."
       value       = module.env.default_region
     }
     ```
 
-1. Create file `example_sdw_projects.tf` in folder `gcp-projects/modules/base_env` and copy the following code
+1. Copy the file `example_sdw_projects.tf` in folder `gcp-projects/modules/base_env` and copy the following code
 
-    ```hcl
-    /**
-    * Copyright 2023 Google LLC
-    *
-    * Licensed under the Apache License, Version 2.0 (the "License");
-    * you may not use this file except in compliance with the License.
-    * You may obtain a copy of the License at
-    *
-    *      http://www.apache.org/licenses/LICENSE-2.0
-    *
-    * Unless required by applicable law or agreed to in writing, software
-    * distributed under the License is distributed on an "AS IS" BASIS,
-    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    * See the License for the specific language governing permissions and
-    * limitations under the License.
-    */
-
-    module "data_governance_project" {
-        source = "../single_project"
-        count  = var.enable_sdw ? 1 : 0
-
-        org_id          = local.org_id
-        billing_account = local.billing_account
-        folder_id       = local.env_folder_name
-        environment     = var.env
-        project_budget  = var.project_budget
-        project_prefix  = local.project_prefix
-
-        enable_cloudbuild_deploy            = local.enable_cloudbuild_deploy
-        app_infra_pipeline_service_accounts = local.app_infra_pipeline_service_accounts
-
-        sa_roles = {
-            "${var.business_code}-sdw-app" = [
-            "roles/bigquery.jobUser",
-            "roles/cloudkms.admin",
-            "roles/storage.admin",
-            "roles/dlp.user",
-            "roles/bigquery.admin",
-            "roles/serviceusage.serviceUsageAdmin",
-            "roles/dlp.inspectTemplatesEditor",
-            "roles/iam.serviceAccountAdmin",
-            "roles/iam.serviceAccountUser",
-            ]
-        }
-
-        activate_apis = [
-            "cloudbuild.googleapis.com",
-            "datacatalog.googleapis.com",
-            "cloudresourcemanager.googleapis.com",
-            "storage-api.googleapis.com",
-            "serviceusage.googleapis.com",
-            "iam.googleapis.com",
-            "accesscontextmanager.googleapis.com",
-            "cloudbilling.googleapis.com",
-            "cloudkms.googleapis.com",
-            "dlp.googleapis.com",
-            "secretmanager.googleapis.com",
-            "bigquery.googleapis.com",
-        ]
-
-        # Metadata
-
-        project_suffix    = "data-gov"
-        application_name  = "${var.business_code}-data-gov"
-        billing_code      = "1234"
-        primary_contact   = "<example@example.com>"
-        secondary_contact = "<example2@example.com>"
-        business_code     = var.business_code
-        }
-
-        module "confidential_data_project" {
-        source = "../single_project"
-        count  = var.enable_sdw ? 1 : 0
-
-        org_id          = local.org_id
-        billing_account = local.billing_account
-        folder_id       = local.env_folder_name
-        environment     = var.env
-        project_budget  = var.project_budget
-        project_prefix  = local.project_prefix
-
-        enable_cloudbuild_deploy            = local.enable_cloudbuild_deploy
-        app_infra_pipeline_service_accounts = local.app_infra_pipeline_service_accounts
-
-        sa_roles = {
-            "${var.business_code}-sdw-app" = [
-            "roles/bigquery.jobUser",
-            "roles/cloudkms.admin",
-            "roles/storage.admin",
-            "roles/dlp.user",
-            "roles/bigquery.admin",
-            "roles/serviceusage.serviceUsageAdmin",
-            "roles/dlp.inspectTemplatesEditor",
-            "roles/iam.serviceAccountAdmin",
-            "roles/iam.serviceAccountUser",
-            ]
-        }
-
-        activate_apis = [
-            "cloudbuild.googleapis.com",
-            "datacatalog.googleapis.com",
-            "cloudresourcemanager.googleapis.com",
-            "storage-api.googleapis.com",
-            "serviceusage.googleapis.com",
-            "iam.googleapis.com",
-            "accesscontextmanager.googleapis.com",
-            "cloudbilling.googleapis.com",
-            "cloudkms.googleapis.com",
-            "dlp.googleapis.com",
-            "secretmanager.googleapis.com",
-            "bigquery.googleapis.com",
-        ]
-
-        # Metadata
-
-        project_suffix    = "conf-data"
-        application_name  = "${var.business_code}-conf-data"
-        billing_code      = "1234"
-        primary_contact   = "<example@example.com>"
-        secondary_contact = "<example2@example.com>"
-        business_code     = var.business_code
-    }
-
-    module "non_confidential_data_project" {
-        source = "../single_project"
-        count  = var.enable_sdw ? 1 : 0
-
-        org_id          = local.org_id
-        billing_account = local.billing_account
-        folder_id       = local.env_folder_name
-        environment     = var.env
-        project_budget  = var.project_budget
-        project_prefix  = local.project_prefix
-
-        enable_cloudbuild_deploy            = local.enable_cloudbuild_deploy
-        app_infra_pipeline_service_accounts = local.app_infra_pipeline_service_accounts
-
-        sa_roles = {
-            "${var.business_code}-sdw-app" = [
-            "roles/bigquery.jobUser",
-            "roles/storage.admin",
-            "roles/dlp.user",
-            "roles/bigquery.admin",
-            "roles/serviceusage.serviceUsageAdmin",
-            "roles/dlp.inspectTemplatesEditor",
-            "roles/iam.serviceAccountAdmin",
-            "roles/iam.serviceAccountUser",
-            ]
-        }
-
-        activate_apis = [
-            "cloudresourcemanager.googleapis.com",
-            "storage-api.googleapis.com",
-            "serviceusage.googleapis.com",
-            "iam.googleapis.com",
-            "bigquery.googleapis.com",
-            "accesscontextmanager.googleapis.com",
-            "cloudbilling.googleapis.com",
-            "cloudkms.googleapis.com",
-            "dataflow.googleapis.com",
-            "dlp.googleapis.com",
-            "datacatalog.googleapis.com",
-            "dns.googleapis.com",
-            "compute.googleapis.com",
-            "cloudbuild.googleapis.com",
-            "artifactregistry.googleapis.com",
-            "dlp.googleapis.com",
-        ]
-
-        # Metadata
-
-        project_suffix    = "non-conf-data"
-        application_name  = "${var.business_code}-non-conf-data"
-        billing_code      = "1234"
-        primary_contact   = "<example@example.com>"
-        secondary_contact = "<example2@example.com>"
-        business_code     = var.business_code
-        }
-
-        module "data_ingestion_project" {
-        source = "../single_project"
-        count  = var.enable_sdw ? 1 : 0
-
-        org_id                     = local.org_id
-        billing_account            = local.billing_account
-        folder_id                  = local.env_folder_name
-        environment                = var.env
-        vpc_type                   = "restricted"
-        shared_vpc_host_project_id = local.restricted_host_project_id
-        shared_vpc_subnets         = local.restricted_subnets_self_links
-        project_budget             = var.project_budget
-        project_prefix             = local.project_prefix
-
-        enable_cloudbuild_deploy            = local.enable_cloudbuild_deploy
-        app_infra_pipeline_service_accounts = local.app_infra_pipeline_service_accounts
-
-        sa_roles = {
-            "${var.business_code}-sdw-app" = [
-            "roles/bigquery.jobUser",
-            "roles/storage.admin",
-            "roles/dlp.user",
-            "roles/bigquery.admin",
-            "roles/serviceusage.serviceUsageAdmin",
-            "roles/iam.serviceAccountAdmin",
-            "roles/iam.serviceAccountUser",
-            "roles/resourcemanager.projectIamAdmin",
-            "roles/pubsub.admin",
-            ]
-        }
-
-        activate_apis = [
-            "accesscontextmanager.googleapis.com",
-            "cloudbuild.googleapis.com",
-            "cloudresourcemanager.googleapis.com",
-            "storage-api.googleapis.com",
-            "serviceusage.googleapis.com",
-            "iam.googleapis.com",
-            "dns.googleapis.com",
-            "bigquery.googleapis.com",
-            "cloudbilling.googleapis.com",
-            "cloudkms.googleapis.com",
-            "dataflow.googleapis.com",
-            "dlp.googleapis.com",
-            "appengine.googleapis.com",
-            "artifactregistry.googleapis.com",
-            "compute.googleapis.com",
-        ]
-
-        # Metadata
-
-        project_suffix    = "data-ing"
-        application_name  = "${var.business_code}-data-ing"
-        billing_code      = "1234"
-        primary_contact   = "<example@example.com>"
-        secondary_contact = "<example2@example.com>"
-        business_code     = var.business_code
-    }
-
-    module "dataflow_template_project" {
-        source = "../single_project"
-        count  = var.enable_sdw ? 1 : 0
-
-        org_id          = local.org_id
-        billing_account = local.billing_account
-        folder_id       = local.env_folder_name
-        environment     = var.env
-        project_budget  = var.project_budget
-        project_prefix  = local.project_prefix
-
-        enable_cloudbuild_deploy            = local.enable_cloudbuild_deploy
-        app_infra_pipeline_service_accounts = local.app_infra_pipeline_service_accounts
-
-        sa_roles = {
-            "${var.business_code}-sdw-app" = [
-            "roles/storage.admin",
-            "roles/storage.objectCreator",
-            "roles/browser",
-            "roles/artifactregistry.admin",
-            "roles/iam.serviceAccountCreator",
-            "roles/iam.serviceAccountDeleter",
-            "roles/cloudbuild.builds.editor",
-            ]
-        }
-
-        activate_apis = [
-            "cloudresourcemanager.googleapis.com",
-            "storage-api.googleapis.com",
-            "serviceusage.googleapis.com",
-            "iam.googleapis.com",
-            "cloudbilling.googleapis.com",
-            "artifactregistry.googleapis.com",
-            "cloudbuild.googleapis.com",
-            "compute.googleapis.com",
-        ]
-
-        # Metadata
-
-        project_suffix    = "dataflow"
-        application_name  = "${var.business_code}-dataflow"
-        billing_code      = "1234"
-        primary_contact   = "<example@example.com>"
-        secondary_contact = "<example2@example.com>"
-        business_code     = var.business_code
-    }
-
-    resource "google_project_iam_member" "iam_admin" {
-        count = var.enable_sdw ? 1 : 0
-
-        project = module.data_ingestion_project[0].project_id
-        role    = "roles/vpcaccess.admin"
-        member  = "serviceAccount:${data.terraform_remote_state.bootstrap.outputs.networks_step_terraform_service_account_email}"
-    }
-    ```
+  ```sh
+    export sdw_path="../terraform-google-secured-data-warehouse/docs/foundation_deploy/gcp-projects/modules/base_env"
+    cp "${sdw_path}/example_sdw_projects.example.tf" "./gcp-projects/modules/base_env/modules/base_env/example_sdw_projects.tf"
+  ```
 
 1. Update file `gcp-projects/business_unit_1/production/main.tf` to set the toggle to `true`:
 
@@ -706,18 +448,28 @@ will deployed in the Secured Data Warehouse that will be created in step 4.
 
     ```hcl
     output "data_ingestion_bucket_name" {
-      description = "The data ingestion bucket name."
-      value       = var.enable_sdw ? module.secured_data_warehouse[0].data_ingestion_bucket_name : ""
+        description = "The data ingestion bucket name."
+        value       = var.enable_sdw ? module.secured_data_warehouse[0].data_ingestion_bucket_name : ""
+    }
+
+    output "data_ingestion_dataflow_bucket_name" {
+        description = "The name of the bucket created for dataflow in the data ingestion pipeline."
+        value       = var.enable_sdw ? module.secured_data_warehouse[0].data_ingestion_dataflow_bucket_name : ""
+    }
+
+    output "confidential_data_dataflow_bucket_name" {
+        description = "The name of the bucket created for dataflow in the confidential data pipeline."
+        value       = var.enable_sdw ? module.secured_data_warehouse[0].confidential_data_dataflow_bucket_name : ""
     }
 
     output "cmek_data_ingestion_crypto_key" {
-      description = "Data ingestion crypto key."
-      value       = var.enable_sdw ? module.secured_data_warehouse[0].cmek_data_ingestion_crypto_key : ""
+        description = "Data ingestion crypto key."
+        value       = var.enable_sdw ? module.secured_data_warehouse[0].cmek_data_ingestion_crypto_key : ""
     }
 
     output "data_analyst_group" {
-      description = "Google Cloud IAM group that analyzes the data in the warehouse."
-      value       = var.data_analyst_group
+        description = "Google Cloud IAM group that analyzes the data in the warehouse."
+        value       = var.data_analyst_group
     }
 
     output "data_ingestion_dataflow_controller_service_account" {
@@ -729,24 +481,69 @@ will deployed in the Secured Data Warehouse that will be created in step 4.
         description = "The e-mail of the service account created to run Data Flow in Confidential Data project."
         value       = var.enable_sdw ? module.secured_data_warehouse[0].confidential_dataflow_controller_service_account_email : ""
     }
+
+    output "cmek_confidential_crypto_key" {
+        description = "Data confidential crypto key."
+        value       = var.enable_sdw ? module.secured_data_warehouse[0].cmek_reidentification_crypto_key : ""
+    }
+
+    output "tek_wrapping_key" {
+        description = "Data ingestion crypto key."
+        value       = var.enable_sdw ? module.tek_wrapping_key[0].keys[local.kek_key_name] : ""
+    }
+
+    output "flex_template_bucket_name" {
+        description = "The name of the bucket created to store the flex template."
+        value       = var.enable_sdw ? google_storage_bucket.templates_bucket[0].name : ""
+    }
+
+    output "flex_template_repository_name" {
+        description = "The name of the flex template artifact registry repository."
+        value       = var.enable_sdw ? google_artifact_registry_repository.flex_templates[0].name : ""
+    }
+
+    output "docker_flex_template_repository_url" {
+        description = "Docker Flex Template Repository URL."
+        value       = var.enable_sdw ? local.docker_repository_url : ""
+    }
+
+    output "python_flex_template_repository_url" {
+        description = "Python Flex Template Repository URL."
+        value       = var.enable_sdw ? local.python_repository_url : ""
+    }
     ```
 
 1. Update file `gcp-projects/business_unit_1/production/outputs.tf` to add the outputs related to the new projects:
 
     ```hcl
     output "data_ingestion_bucket_name" {
-      description = "The data ingestion bucket name."
-      value       = module.env.data_ingestion_bucket_name
+        description = "The data ingestion bucket name."
+        value       = module.env.data_ingestion_bucket_name
+    }
+
+    output "data_ingestion_dataflow_bucket_name" {
+        description = "The name of the bucket created for dataflow in the data ingestion pipeline."
+        value       = module.env.data_ingestion_dataflow_bucket_name
+    }
+
+    output "confidential_data_dataflow_bucket_name" {
+        description = "The name of the bucket created for dataflow in the confidential data pipeline."
+        value       = module.env.confidential_data_dataflow_bucket_name
     }
 
     output "cmek_data_ingestion_crypto_key" {
-      description = "Data ingestion crypto key."
-      value       = module.env.cmek_data_ingestion_crypto_key
+        description = "Data ingestion crypto key."
+        value       = module.env.cmek_data_ingestion_crypto_key
+    }
+
+    output "tek_wrapping_key" {
+        description = "Data ingestion crypto key."
+        value       = module.env.tek_wrapping_key
     }
 
     output "data_analyst_group" {
-      description = "Google Cloud IAM group that analyzes the data in the warehouse."
-      value       = module.env.data_analyst_group
+        description = "Google Cloud IAM group that analyzes the data in the warehouse."
+        value       = module.env.data_analyst_group
     }
 
     output "data_ingestion_dataflow_controller_service_account" {
@@ -758,264 +555,29 @@ will deployed in the Secured Data Warehouse that will be created in step 4.
         description = "The e-mail of the service account created to run Data Flow in Confidential Data project."
         value       = module.env.confidential_dataflow_controller_service_account
     }
-    ```
 
-1. Create file `/gcp-projects/modules/base_env/example_sdw_secured_data_warehouse.tf` and copy the following content:
-
-    ```hcl
-    /**
-    * Copyright 2023 Google LLC
-    *
-    * Licensed under the Apache License, Version 2.0 (the "License");
-    * you may not use this file except in compliance with the License.
-    * You may obtain a copy of the License at
-    *
-    *      <http://www.apache.org/licenses/LICENSE-2.0>
-    *
-    * Unless required by applicable law or agreed to in writing, software
-    * distributed under the License is distributed on an "AS IS" BASIS,
-    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    * See the License for the specific language governing permissions and
-    * limitations under the License.
-    */
-
-    locals {
-        sdw_app_infra_sa             = var.enable_sdw ? local.app_infra_pipeline_service_accounts["${var.business_code}-sdw-app"] : ""
-        perimeter_additional_members = concat(var.sdw_perimeter_additional_members, ["serviceAccount:${local.sdw_app_infra_sa}"])
-
-        location                    = data.terraform_remote_state.bootstrap.outputs.common_config.default_region
-        non_confidential_dataset_id = "non_confidential_dataset"
-        confidential_dataset_id     = "secured_dataset"
-        confidential_table_id       = "irs_990_ein_re_id"
-        non_confidential_table_id   = "irs_990_ein_de_id"
-
-        kek_keyring                        = "kek_keyring"
-        kek_key_name                       = "kek_key"
-        key_rotation_period_seconds        = "2592000s" #30 days
-        secret_name                        = "wrapped_key"
-        use_temporary_crypto_operator_role = true
+    output "cmek_confidential_crypto_key" {
+        description = "Data confidential crypto key."
+        value       = module.env.cmek_confidential_crypto_key
     }
 
-    module "secured_data_warehouse" {
-        source  = "GoogleCloudPlatform/secured-data-warehouse/google"
-        version = "~> 1.0"
-
-        count = var.enable_sdw ? 1 : 0
-
-        org_id                           = local.org_id
-        labels                           = { environment = "dev" }
-        data_governance_project_id       = module.data_governance_project[0].project_id
-        non_confidential_data_project_id = module.non_confidential_data_project_id[0].project_id
-        confidential_data_project_id     = module.confidential_data_project_id[0].project_id
-        data_ingestion_perimeter         = local.perimeter_name
-        data_ingestion_project_id        = module.data_ingestion_project[0].project_id
-        sdx_project_number               = module.dataflow_template_project[0].project_number
-        terraform_service_account        = data.terraform_remote_state.bootstrap.outputs.projects_step_terraform_service_account_email
-        access_context_manager_policy_id = local.access_context_manager_policy_id
-        bucket_name                      = "standalone-data-ing"
-        pubsub_resource_location         = local.location
-        location                         = local.location
-        trusted_locations                = ["us-locations"]
-        dataset_id                       = local.non_confidential_dataset_id
-        confidential_dataset_id          = local.confidential_dataset_id
-        cmek_keyring_name                = "standalone-data-ing"
-
-        // provide additional information
-        delete_contents_on_destroy   = true
-        perimeter_additional_members = local.perimeter_additional_members
-        data_engineer_group          = var.data_engineer_group
-        data_analyst_group           = var.data_analyst_group
-        security_analyst_group       = var.security_analyst_group
-        network_administrator_group  = var.network_administrator_group
-        security_administrator_group = var.security_administrator_group
-
-        // Set the enable_bigquery_read_roles_in_data_ingestion to true, it will grant to the dataflow controller
-        // service account created in the data ingestion project the necessary roles to read from a bigquery table.
-        enable_bigquery_read_roles_in_data_ingestion = true
-
-
-        depends_on = [
-            module.data_governance_project,
-            module.confidential_data_project_id,
-            module.non_confidential_data_project_id,
-            module.data_ingestion_project,
-            module.dataflow_template_project,
-        ]
+    output "flex_template_repository_name" {
+        description = "The name of the flex template artifact registry repository."
+        value       = module.env.flex_template_repository_name
     }
 
-    locals {
-        apis_to_enable = [
-            "cloudresourcemanager.googleapis.com",
-            "compute.googleapis.com",
-            "storage-api.googleapis.com",
-            "serviceusage.googleapis.com",
-            "iam.googleapis.com",
-            "cloudbilling.googleapis.com",
-            "artifactregistry.googleapis.com",
-            "cloudbuild.googleapis.com"
-        ]
-        docker_repository_url = "${var.location}-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.flex_templates.name}"
-        python_repository_url = "${var.location}-python.pkg.dev/${var.project_id}/${google_artifact_registry_repository.python_modules.name}"
-    }
-
-    resource "google_project_service" "apis_to_enable" {
-        for_each = toset(local.apis_to_enable)
-
-        project            = module.dataflow_template_project[0].project_id
-        service            = each.key
-        disable_on_destroy = false
-        }
-
-        resource "random_id" "suffix" {
-        byte_length = 2
-    }
-
-    resource "google_project_service_identity" "cloudbuild_sa" {
-        provider = google-beta
-
-        project = module.dataflow_template_project[0].project_id
-        service = "cloudbuild.googleapis.com"
-
-        depends_on = [
-            google_project_service.apis_to_enable
-        ]
-    }
-
-    resource "google_project_iam_member" "cloud_build_builder" {
-        project = module.dataflow_template_project[0].project_id
-        role    = "roles/cloudbuild.builds.builder"
-        member  = "serviceAccount:${google_project_service_identity.cloudbuild_sa.email}"
-    }
-
-    resource "google_artifact_registry_repository" "flex_templates" {
-        provider = google-beta
-
-        project       = module.dataflow_template_project[0].project_id
-        location      = local.location
-        repository_id = "flex-templates"
-        description   = "DataFlow Flex Templates"
-        format        = "DOCKER"
-
-        depends_on = [
-            google_project_service.apis_to_enable
-        ]
-    }
-
-    resource "google_artifact_registry_repository_iam_member" "docker_writer" {
-        provider = google-beta
-
-        project    = module.dataflow_template_project[0].project_id
-        location   = local.location
-        repository = "flex-templates"
-        role       = "roles/artifactregistry.writer"
-        member     = "serviceAccount:${google_project_service_identity.cloudbuild_sa.email}"
-
-        depends_on = [
-            google_artifact_registry_repository.flex_templates
-        ]
-    }
-
-    resource "google_artifact_registry_repository" "python_modules" {
-        provider = google-beta
-
-        project       = module.dataflow_template_project[0].project_id
-        location      = local.location
-        repository_id = "python-modules"
-        description   = "Repository for Python modules for Dataflow flex templates"
-        format        = "PYTHON"
-    }
-
-    resource "google_artifact_registry_repository_iam_member" "python_writer" {
-        provider = google-beta
-
-        project    = module.dataflow_template_project[0].project_id
-        location   = local.location
-        repository = "python-modules"
-        role       = "roles/artifactregistry.writer"
-        member     = "serviceAccount:${google_project_service_identity.cloudbuild_sa.email}"
-
-        depends_on = [
-            google_artifact_registry_repository.python_modules
-        ]
-    }
-
-    resource "google_storage_bucket" "templates_bucket" {
-        name     = "bkt-${var.project_id}-tpl-${random_id.suffix.hex}"
-        location = local.location
-        project  = module.dataflow_template_project[0].project_id
-
-        force_destroy               = true
-        uniform_bucket_level_access = true
-
-        depends_on = [
-            google_project_service.apis_to_enable
-        ]
-    }
-
-    resource "google_artifact_registry_repository_iam_member" "docker_reader" {
-        provider = google-beta
-
-        count = var.enable_sdw ? 1 : 0
-
-        project    = module.dataflow_template_project[0].project_id
-        location   = local.location
-        repository = "flex-templates"
-        role       = "roles/artifactregistry.reader"
-        member     = "serviceAccount:${module.secured_data_warehouse[0].dataflow_controller_service_account_email}"
-    }
-
-    resource "google_artifact_registry_repository_iam_member" "confidential_docker_reader" {
-        provider = google-beta
-
-        count = var.enable_sdw ? 1 : 0
-
-        project    = module.dataflow_template_project[0].project_id
-        location   = local.location
-        repository = "flex-templates"
-        role       = "roles/artifactregistry.reader"
-        member     = "serviceAccount:${module.secured_data_warehouse[0].confidential_dataflow_controller_service_account_email}"
-    }
-
-    resource "google_artifact_registry_repository_iam_member" "python_reader" {
-        provider = google-beta
-
-        count = var.enable_sdw ? 1 : 0
-
-        project    = module.dataflow_template_project[0].project_id
-        location   = local.location
-        repository = "python-modules"
-        role       = "roles/artifactregistry.reader"
-        member     = "serviceAccount:${module.secured_data_warehouse[0].dataflow_controller_service_account_email}"
-    }
-
-    resource "google_artifact_registry_repository_iam_member" "confidential_python_reader" {
-        provider = google-beta
-
-        count = var.enable_sdw ? 1 : 0
-
-        project    = module.dataflow_template_project[0].project_id
-        location   = local.location
-        repository = "python-modules"
-        role       = "roles/artifactregistry.reader"
-        member     = "serviceAccount:${module.secured_data_warehouse[0].confidential_dataflow_controller_service_account_email}"
-    }
-
-    module "tek_wrapping_key" {
-        source  = "terraform-google-modules/kms/google"
-        version = "~> 2.2"
-
-        count = var.enable_sdw ? 1 : 0
-
-        project_id           = module.data_governance_project[0].project_id
-        labels               = { environment = "dev" }
-        location             = local.location
-        keyring              = local.kek_keyring
-        key_rotation_period  = local.key_rotation_period_seconds
-        keys                 = [local.kek_key_name]
-        key_protection_level = "HSM"
-        prevent_destroy      = false
+    output "flex_template_bucket_name" {
+        description = "The name of the flex template bucket name."
+        value       = module.env.flex_template_bucket_name
     }
     ```
+
+1. Copy file `/gcp-projects/modules/base_env/example_sdw_secured_data_warehouse.tf`:
+
+  ```sh
+    export sdw_path="../terraform-google-secured-data-warehouse/docs/foundation_deploy/gcp-projects/modules/base_env"
+    cp "${sdw_path}/example_sdw_secured_data_warehouse.example.tf" "./gcp-projects/modules/base_env/modules/base_env/example_sdw_secured_data_warehouse.tf"
+  ```
 
 1. Update file `gcp-projects/business_unit_1/production/main.tf` to set values for the perimeter users and security groups:
 
@@ -1068,6 +630,7 @@ will deployed in the Secured Data Warehouse that will be created in step 4.
       members = distinct(concat([
         "serviceAccount:service-<DATA_INGESTION_PROJECT_NUMBER>@gcp-sa-pubsub.iam.gserviceaccount.com",
         "serviceAccount:service-<DATA_INGESTION_PROJECT_NUMBER>@gs-project-accounts.iam.gserviceaccount.com",
+        "serviceAccount:service-<DATA_INGESTION_PROJECT_NUMBER>@dataflow-service-producer-prod.iam.gserviceaccount.com",
         "serviceAccount:<DATA_FLOW_CONTROLLER>",
         "serviceAccount:<APP_INFRA_SA_EMAIL>",
       ], var.perimeter_additional_members))
@@ -1115,6 +678,7 @@ will deployed in the Secured Data Warehouse that will be created in step 4.
                     "identities" = [
                         "serviceAccount:<DATA_FLOW_CONTROLLER>",
                         "serviceAccount:<APP_INFRA_SA_EMAIL>",
+                        "serviceAccount:service-<DATA_INGESTION_PROJECT_NUMBER>@dataflow-service-producer-prod.iam.gserviceaccount.com",
                     ]
                 },
                 "to" = {
@@ -1136,9 +700,9 @@ will deployed in the Secured Data Warehouse that will be created in step 4.
         ])
     ```
 
-### 5-app-infra: Deploy De-identification Dataflow Job
+### 5-app-infra: Deploy Dataflow Jobs
 
-1. Clone the new repo created in step 4-projects/shared:
+1. Clone the new repo created in step gcp-projects/shared:
 
     ```bash
     terraform -chdir="gcp-projects/business_unit_1/shared/" init
@@ -1156,7 +720,7 @@ will deployed in the Secured Data Warehouse that will be created in step 4.
 
     export sdw_path="../../terraform-google-secured-data-warehouse/docs/foundation_deploy/bu1-sdw-app/business_unit_1"
 
-    mkdir -p business_unit_1/shared business_unit_1/production
+    mkdir -p business_unit_1/shared business_unit_1/shared
 
     cp ../terraform-example-foundation/build/cloudbuild-tf-* .
     cp ../terraform-example-foundation/build/tf-wrapper.sh .
@@ -1164,6 +728,9 @@ will deployed in the Secured Data Warehouse that will be created in step 4.
 
     cp -RT "${sdw_path}/shared/" "./business_unit_1/shared/"
     mv ./business_unit_1/shared/terraform.example.tfvars ./business_unit_1/shared/terraform.tfvars
+    mv ./business_unit_1/shared/main.tf.example ./business_unit_1/shared/main.tf
+    mv ./business_unit_1/shared/outputs.tf.example ./business_unit_1/shared/outputs.tf
+    mv ./business_unit_1/shared/variables.tf.example ./business_unit_1/shared/variables.tf
     ```
 
 1. Update terraform backend and remote state configuration:
@@ -1178,6 +745,7 @@ will deployed in the Secured Data Warehouse that will be created in step 4.
     echo "remote_state_bucket = ${remote_state_bucket}"
 
     sed -i "s/REMOTE_STATE_BUCKET/${remote_state_bucket}/" ./business_unit_1/shared/terraform.tfvars
+    sed -i "s/UPDATE_APP_INFRA_SDW_BUCKET/${remote_state_bucket}/" ./business_unit_1/shared/terraform.tfvars
     ```
 
 1. Commit changes in the `bu1-sdw-app` repository and push the code to the `production` branch.
@@ -1189,21 +757,45 @@ will deployed in the Secured Data Warehouse that will be created in step 4.
     terraform -chdir="./business_unit_1/shared/" init
     ```
 
-1. Copy the production configuration folder with the encrypted table creation:
+1. Generate wrapped key locally:
+
+    ```sh
+    export sdw_path="../terraform-google-secured-data-warehouse"
+
+    app_infra_sa=$(terraform -chdir="../gcp-projects/business_unit_1/shared" output -json terraform_service_accounts | jq '."bu1-sdw-app"' --raw-output)
+    tek_wrapping_key=$(terraform -chdir="../gcp-projects/business_unit_1/production" output -raw tek_wrapping_key)
+    data_governance_project_id=$(terraform -chdir="../gcp-projects/business_unit_1/production" output -raw data_governance_project_id)
+    wrapped_key_secret=$(terraform -chdir="../bu1-sdw-app/business_unit_1/shared" output -raw wrapped_key_secret_id)
+
+    echo "project_sa = ${app_infra_sa}"
+    echo "data_governance_project_id = ${data_governance_project_id}"
+    echo "wrapped_key_secret = ${wrapped_key_secret}"
+
+    ${sdw_path}/helpers/wrapped_key.sh \
+    ${app_infra_sa} \
+    ${tek_wrapping_key} \
+    ${wrapped_key_secret} \
+    ${data_governance_project_id} \
+    "true"
+    ```
+
+1. Copy the production configuration folder DataFlows creation:
 
     ```bash
     export sdw_path="../terraform-google-secured-data-warehouse/docs/foundation_deploy/bu1-sdw-app/business_unit_1"
     cp -RT "${sdw_path}/production/" "./business_unit_1/production/"
     mv ./business_unit_1/production/terraform.example.tfvars ./business_unit_1/production/terraform.tfvars
-    mv ./business_unit_1/production/example_sdw_encrypted_table.tf.example ./business_unit_1/production/example_sdw_encrypted_table.tf
+    mv ./business_unit_1/production/templates.tf.example ./business_unit_1/production/templates.tf
+    mv ./business_unit_1/production/de_identification.tf.example ./business_unit_1/production/de_identification.tf
+    mv ./business_unit_1/production/taxonomy.tf.example ./business_unit_1/production/taxonomy.tf
     mv ./business_unit_1/production/variables.tf.example ./business_unit_1/production/variables.tf
+    mv ./business_unit_1/production/backend.tf.example ./business_unit_1/production/backend.tf
+    mv ./business_unit_1/production/versions.tf.example ./business_unit_1/production/versions.tf
+    mv ./business_unit_1/production/providers.tf.example ./business_unit_1/production/providers.tf
 
-    export extra_sdw_path="../terraform-google-secured-data-warehouse/examples/standalone"
-
-    mkdir -p ./business_unit_1/production/assets ./business_unit_1/production/helpers ./business_unit_1/production/templates
-    cp -RT "${extra_sdw_path}/assets/" ./business_unit_1/production/assets/
-    cp -RT "${extra_sdw_path}/helpers/" ./business_unit_1/production/helpers/
-    cp -RT "${extra_sdw_path}/templates/" ./business_unit_1/production/templates/
+    export sdw_path="../terraform-google-secured-data-warehouse"
+    mkdir -p ./business_unit_1/flex-templates
+    cp -RT "${sdw_path}/flex-templates/" ./business_unit_1/flex-templates/
     ```
 
 1. Update terraform backend and remote state configuration:
