@@ -106,6 +106,15 @@ output "data_ingestion_service_perimeter_name" {
   value       = var.data_ingestion_perimeter == "" ? module.data_ingestion_vpc_sc[0].service_perimeter_name : ""
 }
 
+output "vpc_sc_bridge_data_ingestion_governance_name" {
+  description = "Access context manager bridge name."
+  value       = "accessPolicies/${local.actual_policy}/servicePerimeters/vpc_sc_bridge_data_ingestion_governance_${random_id.suffix.hex}"
+
+  depends_on = [
+    time_sleep.wait_for_bridge_propagation
+  ]
+}
+
 output "data_governance_access_level_name" {
   description = "Access context manager access level name."
   value       = var.data_governance_perimeter == "" ? module.data_governance_vpc_sc[0].access_level_name : ""
@@ -116,6 +125,15 @@ output "data_governance_service_perimeter_name" {
   value       = var.data_governance_perimeter == "" ? module.data_governance_vpc_sc[0].service_perimeter_name : ""
 }
 
+output "vpc_sc_bridge_confidential_governance" {
+  description = "Access context manager bridge name."
+  value       = "accessPolicies/${local.actual_policy}/servicePerimeters/vpc_sc_bridge_confidential_governance_${random_id.suffix.hex}"
+
+  depends_on = [
+    time_sleep.wait_for_bridge_propagation
+  ]
+}
+
 output "confidential_access_level_name" {
   description = "Access context manager access level name."
   value       = var.confidential_data_perimeter == "" ? module.confidential_data_vpc_sc[0].access_level_name : ""
@@ -124,6 +142,15 @@ output "confidential_access_level_name" {
 output "confidential_service_perimeter_name" {
   description = "Access context manager service perimeter name."
   value       = var.confidential_data_perimeter == "" ? module.confidential_data_vpc_sc[0].service_perimeter_name : ""
+}
+
+output "vpc_sc_bridge_confidential_data_ingestion" {
+  description = "Access context manager bridge name."
+  value       = "accessPolicies/${local.actual_policy}/servicePerimeters/vpc_sc_bridge_confidential_data_ingestion_${random_id.suffix.hex}"
+
+  depends_on = [
+    time_sleep.wait_for_bridge_propagation
+  ]
 }
 
 output "cmek_keyring_name" {
