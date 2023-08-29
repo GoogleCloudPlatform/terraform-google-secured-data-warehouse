@@ -17,7 +17,6 @@
 locals {
   sdw_app_infra_sa = var.enable_sdw ? local.app_infra_pipeline_service_accounts["${var.business_code}-sdw-app"] : ""
 
-  location                    = data.terraform_remote_state.bootstrap.outputs.common_config.default_region
   non_confidential_dataset_id = "non_confidential_dataset"
   confidential_dataset_id     = "secured_dataset"
   confidential_table_id       = "irs_990_ein_re_id"

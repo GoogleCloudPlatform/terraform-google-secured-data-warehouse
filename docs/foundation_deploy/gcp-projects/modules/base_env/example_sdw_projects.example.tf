@@ -14,6 +14,10 @@
     * limitations under the License.
     */
 
+locals {
+  location = data.terraform_remote_state.bootstrap.outputs.common_config.default_region
+}
+
 module "data_governance_project" {
   source = "../single_project"
   count  = var.enable_sdw ? 1 : 0
@@ -80,10 +84,6 @@ module "confidential_data_project" {
   environment     = var.env
   project_budget  = var.project_budget
   project_prefix  = local.project_prefix
-
-  vpc_type                   = "restricted"
-  shared_vpc_host_project_id = local.restricted_host_project_id
-  shared_vpc_subnets         = local.restricted_subnets_self_links
 
   enable_cloudbuild_deploy            = local.enable_cloudbuild_deploy
   app_infra_pipeline_service_accounts = local.app_infra_pipeline_service_accounts
@@ -154,9 +154,9 @@ module "non_confidential_data_project" {
   project_budget             = var.project_budget
   project_prefix             = local.project_prefix
 
-  vpc_type                   = "restricted"
-  shared_vpc_host_project_id = local.restricted_host_project_id
-  shared_vpc_subnets         = local.restricted_subnets_self_links
+  # vpc_type                   = "restricted"
+  # shared_vpc_host_project_id = local.restricted_host_project_id
+  # shared_vpc_subnets         = local.restricted_subnets_self_links
 
   enable_cloudbuild_deploy            = local.enable_cloudbuild_deploy
   app_infra_pipeline_service_accounts = local.app_infra_pipeline_service_accounts
@@ -192,10 +192,6 @@ module "non_confidential_data_project" {
     "cloudbuild.googleapis.com",
     "artifactregistry.googleapis.com"
   ]
-
-  vpc_service_control_attach_enabled = "false"
-  vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
-  vpc_service_control_sleep_duration = "60s"
 
   # Metadata
   project_suffix    = "non-conf-data"
@@ -255,10 +251,6 @@ module "data_ingestion_project" {
     "artifactregistry.googleapis.com",
     "compute.googleapis.com",
   ]
-
-  vpc_service_control_attach_enabled = "false"
-  vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
-  vpc_service_control_sleep_duration = "60s"
 
   # Metadata
   project_suffix    = "data-ing"

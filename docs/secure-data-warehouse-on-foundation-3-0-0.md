@@ -139,6 +139,12 @@ project step service account (`proj`) in the `granular_sa_org_level_roles` map.
 
 Environment step terraform service account needs to be added to the restricted VPC-SC perimeter because in the following step you will grant an additional role to the network service account only in the restricted shared VPC project.
 
+1. Change your branch to `production`:
+
+```sh
+git checkout production
+```
+
 1. Update file `gcp-networks/modules/base_env/main.tf` in the `production` branch adding the Environment step terraform service account to the perimeter by updating the value for the variable `members` in the `restricted_shared_vpc` module:
 
     ```hcl
@@ -157,6 +163,11 @@ Environment step terraform service account needs to be added to the restricted V
 1. Conditionally grant to the networks step terraform service account the project IAM Admin role in the restricted shared project.
 This is necessary for the serverless VPC access configuration.
 This role is granted here and not in the bootstrap step to limit the scope of this role effect.
+1. Change your branch to `production`:
+
+```sh
+git checkout production
+```
 
 1. Update file `gcp-environments/modules/env_baseline/variables.tf` to create a toggle for the deploy of the Secured Data Warehouse.
 
@@ -204,6 +215,12 @@ This role is granted here and not in the bootstrap step to limit the scope of th
 Create a new workspace in the business unit 1 shared environment to isolate the resources that
 will deployed in the Secured Data Warehouse that will be created in step 4.
 
+1. Change your branch to `production`:
+
+```sh
+git checkout production
+```
+
 1. Update file `gcp-projects/business_unit_1/shared/example_infra_pipeline.tf` to add a new repository in the locals:
 
     ```hcl
@@ -212,7 +229,7 @@ will deployed in the Secured Data Warehouse that will be created in step 4.
     }
     ```
 
-1. Add the `bigquery.googleapis.com` API to the list of `activate_apis` in the `app_infra_cloudbuild_project` module:
+1. Add the `bigquery.googleapis.com` and `dataflow.googleapis.com` APIs to the list of `activate_apis` in the `app_infra_cloudbuild_project` module:
 
     ```hcl
       activate_apis = [
@@ -231,6 +248,12 @@ will deployed in the Secured Data Warehouse that will be created in step 4.
 
 ### 4-projects: Create the projects for the Secured Data Warehouse in the production environment
 
+1. Change your branch to `production`:
+
+```sh
+git checkout production
+```
+
 1. Update file `gcp-projects/modules/base_env/variables.tf` to create a toggle for the deploy of the Secured Data Warehouse:
 
     ```hcl
@@ -244,6 +267,11 @@ will deployed in the Secured Data Warehouse that will be created in step 4.
 1. Update file `gcp-projects/modules/base_env/outputs.tf` to add the outputs related to the new projects:
 
     ```hcl
+    output "default_region" {
+        description = "Default region to create resources where applicable."
+        value       = data.terraform_remote_state.bootstrap.outputs.common_config.default_region
+    }
+
     output "data_ingestion_project_id" {
         description = "The ID of the project in which Secured Data Warehouse data ingestion resources will be created."
         value       = var.enable_sdw ? module.data_ingestion_project[0].project_id : ""
@@ -284,6 +312,16 @@ will deployed in the Secured Data Warehouse that will be created in step 4.
         value       = var.enable_sdw ? module.confidential_data_project[0].project_number : ""
     }
 
+    output "dataflow_template_project_id" {
+        description = "The ID of the project in which Secured Data Warehouse data flow templates will be created."
+        value       = var.enable_sdw ? module.dataflow_template_project[0].project_id : ""
+    }
+
+    output "dataflow_template_project_number" {
+        description = "The project number in which Secured Data Warehouse data flow templates will be created."
+        value       = var.enable_sdw ? module.dataflow_template_project[0].project_number : ""
+    }
+
     output "confidential_network_name" {
             description = "The name of the confidential VPC being created."
             value       = var.enable_sdw ? module.dwh_networking_confidential[0].network_name : ""
@@ -297,11 +335,6 @@ will deployed in the Secured Data Warehouse that will be created in step 4.
     output "confidential_subnets_self_link" {
         description = "The self-links of confidential subnets being created."
         value       = var.enable_sdw ? module.dwh_networking_confidential[0].subnets_self_links[0] : ""
-    }
-
-    output "default_region" {
-        description = "Default region to create resources where applicable."
-        value       = data.terraform_remote_state.bootstrap.outputs.common_config.default_region
     }
     ```
 
@@ -353,6 +386,16 @@ will deployed in the Secured Data Warehouse that will be created in step 4.
         value       = module.env.non_confidential_data_project_number
     }
 
+    output "dataflow_template_project_id" {
+        description = "The ID of the project in which Secured Data Warehouse data flow templates will be created."
+        value       = module.env.dataflow_template_project_id
+    }
+
+    output "dataflow_template_project_number" {
+        description = "The project number in which Secured Data Warehouse data flow templates will be created."
+        value       = module.env.dataflow_template_project_number
+    }
+
     output "confidential_network_name" {
         description = "The name of the confidential VPC being created."
         value       = module.env.confidential_network_name
@@ -367,18 +410,13 @@ will deployed in the Secured Data Warehouse that will be created in step 4.
         description = "The self-links of confidential subnets being created."
         value       = module.env.confidential_subnets_self_link
     }
-
-    output "default_region" {
-      description = "Default region to create resources where applicable."
-      value       = module.env.default_region
-    }
     ```
 
 1. Copy the file `example_sdw_projects.tf` in folder `gcp-projects/modules/base_env` and copy the following code
 
   ```sh
     export sdw_path="../terraform-google-secured-data-warehouse/docs/foundation_deploy/gcp-projects/modules/base_env"
-    cp "${sdw_path}/example_sdw_projects.example.tf" "./gcp-projects/modules/base_env/modules/base_env/example_sdw_projects.tf"
+    cp "${sdw_path}/example_sdw_projects.example.tf" "../gcp-projects/modules/base_env/example_sdw_projects.tf"
   ```
 
 1. Update file `gcp-projects/business_unit_1/production/main.tf` to set the toggle to `true`:
@@ -401,6 +439,37 @@ will deployed in the Secured Data Warehouse that will be created in step 4.
 
 1. Wait for the `gcp-projects` build from the previous step to finish.
 1. Commit changes in the `gcp-projects` repository and push the code to the `production` branch.
+
+### Add data ingestion services accounts to the perimeter
+
+1. Get the services accounts and project numbers to be used on perimeter:
+
+    ```bash
+    terraform -chdir="gcp-projects/business_unit_1/production/" init
+    export DATA_INGESTION_PROJECT_NUMBER=$(terraform -chdir="gcp-projects/business_unit_1/production/" output -raw data_ingestion_project_number)
+    export NON_CONFIDENTIAL_PROJECT_NUMBER=$(terraform -chdir="gcp-projects/business_unit_1/production/" output -raw non_confidential_data_project_number)
+
+    terraform -chdir="gcp-projects/business_unit_1/shared" init
+    export app_infra_sa=$(terraform -chdir="gcp-projects/business_unit_1/shared" output -json terraform_service_accounts | jq '."bu1-sdw-app"' --raw-output)
+
+    echo "DATA_INGESTION_PROJECT_NUMBER = ${DATA_INGESTION_PROJECT_NUMBER}"
+    echo "NON_CONFIDENTIAL_PROJECT_NUMBER = ${NON_CONFIDENTIAL_PROJECT_NUMBER}"
+    echo "APP_INFRA_SA_EMAIL = ${app_infra_sa}"
+    ```
+
+1. Update file `gcp-networks/envs/production/main.tf` in the `production` branch adding Data Ingestion and Environment step services accounts to the perimeter by updating the value for the variable `perimeter_additional_members`:
+
+    ```hcl
+      perimeter_additional_members = distinct(concat([
+        "serviceAccount:service-<DATA_INGESTION_PROJECT_NUMBER>@gcp-sa-pubsub.iam.gserviceaccount.com",
+        "serviceAccount:service-<DATA_INGESTION_PROJECT_NUMBER>@gs-project-accounts.iam.gserviceaccount.com",
+        "serviceAccount:service-<DATA_INGESTION_PROJECT_NUMBER>@dataflow-service-producer-prod.iam.gserviceaccount.com",
+        "serviceAccount:service-<NON_CONFIDENTIAL_PROJECT_NUMBER>@bigquery-encryption.iam.gserviceaccount.com",
+        "serviceAccount:<APP_INFRA_SA_EMAIL>",
+      ], var.perimeter_additional_members))
+    ```
+
+1. Commit changes in the `gcp-network` repository and push the code to the `production` branch.
 
 ### 4-projects: Deploy the Secured Data Warehouse
 
@@ -442,11 +511,29 @@ will deployed in the Secured Data Warehouse that will be created in step 4.
       type        = string
       default     = ""
     }
+
+    variable "docker_repository_id" {
+        description = "ID of the docker flex template repository."
+        type        = string
+        default     = "flex-templates"
+    }
+
+    variable "python_repository_id" {
+        description = "ID of the Python repository."
+        type        = string
+        default     = "python-modules"
+    }
     ```
 
 1. Update file `gcp-projects/modules/base_env/outputs.tf` to add the outputs related to the new projects:
 
     ```hcl
+
+    output "restricted_subnets_selflinks" {
+        description = "The restricted subnet self-links."
+        value       = local.restricted_subnets_self_links
+    }
+
     output "data_ingestion_bucket_name" {
         description = "The data ingestion bucket name."
         value       = var.enable_sdw ? module.secured_data_warehouse[0].data_ingestion_bucket_name : ""
@@ -516,6 +603,16 @@ will deployed in the Secured Data Warehouse that will be created in step 4.
 1. Update file `gcp-projects/business_unit_1/production/outputs.tf` to add the outputs related to the new projects:
 
     ```hcl
+    output "default_region" {
+        description = "Default region to create resources where applicable."
+        value       = module.env.default_region
+    }
+
+    output "restricted_subnets_selflinks" {
+        description = "The restricted subnet self-links."
+        value       = module.env.restricted_subnets_self_links
+    }
+
     output "data_ingestion_bucket_name" {
         description = "The data ingestion bucket name."
         value       = module.env.data_ingestion_bucket_name
@@ -576,7 +673,7 @@ will deployed in the Secured Data Warehouse that will be created in step 4.
 
   ```sh
     export sdw_path="../terraform-google-secured-data-warehouse/docs/foundation_deploy/gcp-projects/modules/base_env"
-    cp "${sdw_path}/example_sdw_secured_data_warehouse.example.tf" "./gcp-projects/modules/base_env/modules/base_env/example_sdw_secured_data_warehouse.tf"
+    cp "${sdw_path}/example_sdw_secured_data_warehouse.example.tf" "../gcp-projects/modules/base_env/example_sdw_secured_data_warehouse.tf"
   ```
 
 1. Update file `gcp-projects/business_unit_1/production/main.tf` to set values for the perimeter users and security groups:
@@ -607,41 +704,37 @@ will deployed in the Secured Data Warehouse that will be created in step 4.
 
 1. Commit changes in the `gcp-projects` repository and push the code to the `production` branch.
 
-### Add data ingestion services accounts to the perimeter
+### Add Data Ingestion and Non-Confidential project to the perimeter
+
+1. Uncomment the VPC-SC configuration at the file `example_sdw_projects.tf` in folder `gcp-projects/modules/base_env`, at module `non_confidential_data_project`:
+
+  ```sh
+    ...
+    vpc_type                   = "restricted"
+    shared_vpc_host_project_id = local.restricted_host_project_id
+    shared_vpc_subnets         = local.restricted_subnets_self_links
+    ...
+  ```
+
+### Add data ingestion egress rules
 
 1. Get the services accounts and project numbers to be used on perimeter:
 
     ```bash
-    terraform -chdir="gcp-projects/business_unit_1/production/" init
-    export DATA_FLOW_CONTROLLER=$(terraform -chdir="gcp-projects/business_unit_1/production/" output -raw data_ingestion_dataflow_controller_service_account)
-    echo ${DATA_FLOW_CONTROLLER}
-
     export DATA_INGESTION_PROJECT_NUMBER=$(terraform -chdir="gcp-projects/business_unit_1/production/" output -raw data_ingestion_project_number)
-    echo ${DATA_INGESTION_PROJECT_NUMBER}
+
+    export DATA_FLOW_CONTROLLER=$(terraform -chdir="gcp-projects/business_unit_1/production/" output -raw data_ingestion_dataflow_controller_service_account)
 
     terraform -chdir="gcp-projects/business_unit_1/shared" init
     export app_infra_sa=$(terraform -chdir="gcp-projects/business_unit_1/shared" output -json terraform_service_accounts | jq '."bu1-sdw-app"' --raw-output)
-    echo "APP_INFRA_SA_EMAIL = ${app_infra_sa}"
-    ```
 
-1. Update file `gcp-networks/envs/production/main.tf` in the `production` branch adding Data Ingestion and Environment step services accounts to the perimeter by updating the value for the variable `members` in the `restricted_shared_vpc` module:
-
-    ```hcl
-      members = distinct(concat([
-        "serviceAccount:service-<DATA_INGESTION_PROJECT_NUMBER>@gcp-sa-pubsub.iam.gserviceaccount.com",
-        "serviceAccount:service-<DATA_INGESTION_PROJECT_NUMBER>@gs-project-accounts.iam.gserviceaccount.com",
-        "serviceAccount:service-<DATA_INGESTION_PROJECT_NUMBER>@dataflow-service-producer-prod.iam.gserviceaccount.com",
-        "serviceAccount:<DATA_FLOW_CONTROLLER>",
-        "serviceAccount:<APP_INFRA_SA_EMAIL>",
-      ], var.perimeter_additional_members))
-    ```
-
-1. Get Data Flow templates project number:
-
-    ```bash
     terraform -chdir="gcp-projects/business_unit_1/production/" init
     export DATA_FLOW_TEMPLATE_PROJECT_NUMBER=$(terraform -chdir="gcp-projects/business_unit_1/production/" output -raw dataflow_template_project_number)
-    echo ${DATA_FLOW_TEMPLATE_PROJECT_NUMBER}
+
+    echo "APP_INFRA_SA_EMAIL = ${app_infra_sa}"
+    echo "DATA_INGESTION_PROJECT_NUMBER = ${data_ingestion_dataflow_controller}"
+    echo "DATA_FLOW_CONTROLLER = ${DATA_FLOW_CONTROLLER}"
+    echo "DATA_FLOW_TEMPLATE_PROJECT_NUMBER = ${DATA_FLOW_TEMPLATE_PROJECT_NUMBER}"
     ```
 
 1. Update file `gcp-networks/envs/production/main.tf` in the `production` branch VPC-SC Egress rules in the `restricted_shared_vpc` module:
@@ -700,6 +793,8 @@ will deployed in the Secured Data Warehouse that will be created in step 4.
         ])
     ```
 
+1. Commit changes in the `gcp-network` repository and push the code to the `production` branch.
+
 ### 5-app-infra: Deploy Dataflow Jobs
 
 1. Clone the new repo created in step gcp-projects/shared:
@@ -731,6 +826,8 @@ will deployed in the Secured Data Warehouse that will be created in step 4.
     mv ./business_unit_1/shared/main.tf.example ./business_unit_1/shared/main.tf
     mv ./business_unit_1/shared/outputs.tf.example ./business_unit_1/shared/outputs.tf
     mv ./business_unit_1/shared/variables.tf.example ./business_unit_1/shared/variables.tf
+
+    cp "${sdw_path}/.gitignore" .
     ```
 
 1. Update terraform backend and remote state configuration:
@@ -794,8 +891,8 @@ will deployed in the Secured Data Warehouse that will be created in step 4.
     mv ./business_unit_1/production/providers.tf.example ./business_unit_1/production/providers.tf
 
     export sdw_path="../terraform-google-secured-data-warehouse"
-    mkdir -p ./business_unit_1/flex-templates
-    cp -RT "${sdw_path}/flex-templates/" ./business_unit_1/flex-templates/
+    mkdir -p ./flex-templates
+    cp -RT "${sdw_path}/flex-templates/" ./flex-templates/
     ```
 
 1. Update terraform backend and remote state configuration:
