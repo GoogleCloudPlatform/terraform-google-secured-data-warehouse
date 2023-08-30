@@ -99,6 +99,17 @@ module "secured_data_warehouse" {
   ]
 }
 
+data "google_project" "restricted_shared_network" {
+  count      = var.enable_sdw ? 1 : 0
+  project_id = local.restricted_host_project_id
+}
+
+resource "google_access_context_manager_service_perimeter_resource" "shared_network_project_at_bridge" {
+  count          = var.enable_sdw ? 1 : 0
+  perimeter_name = module.secured_data_warehouse[0].vpc_sc_bridge_data_ingestion_governance_name
+  resource       = "projects/${data.google_project.restricted_shared_network[0].number}"
+}
+
 resource "google_project_service" "apis_to_enable" {
   for_each = var.enable_sdw ? toset(local.apis_to_enable) : []
 

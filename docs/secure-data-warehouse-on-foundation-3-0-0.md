@@ -416,7 +416,7 @@ git checkout production
 
   ```sh
     export sdw_path="../terraform-google-secured-data-warehouse/docs/foundation_deploy/gcp-projects/modules/base_env"
-    cp "${sdw_path}/example_sdw_projects.example.tf" "../gcp-projects/modules/base_env/example_sdw_projects.tf"
+    cp "${sdw_path}/example_sdw_projects.tf.example" "../gcp-projects/modules/base_env/example_sdw_projects.tf"
   ```
 
 1. Update file `gcp-projects/business_unit_1/production/main.tf` to set the toggle to `true`:
@@ -673,7 +673,7 @@ git checkout production
 
   ```sh
     export sdw_path="../terraform-google-secured-data-warehouse/docs/foundation_deploy/gcp-projects/modules/base_env"
-    cp "${sdw_path}/example_sdw_secured_data_warehouse.example.tf" "../gcp-projects/modules/base_env/example_sdw_secured_data_warehouse.tf"
+    cp "${sdw_path}/example_sdw_secured_data_warehouse.tf.example" "../gcp-projects/modules/base_env/example_sdw_secured_data_warehouse.tf"
   ```
 
 1. Update file `gcp-projects/business_unit_1/production/main.tf` to set values for the perimeter users and security groups:
