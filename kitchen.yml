@@ -48,6 +48,10 @@ suites:
     verifier:
       color: false
       systems:
+        - name: de-identification-template gcp
+          backend: gcp
+          controls:
+            - gcp
         - name: de-identification-template gcloud
           backend: local
           controls:
