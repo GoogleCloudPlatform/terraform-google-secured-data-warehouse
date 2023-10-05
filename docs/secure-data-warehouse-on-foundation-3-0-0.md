@@ -77,7 +77,7 @@ If you do not have this layout, please checkout the source repositories for the 
 
 - Also checkout the [terraform-google-secured-data-warehouse](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse) repository at the same level.
 
-The final layout should look like this:
+- The final layout should look like this:
 
     ```text
     gcp-bootstrap
@@ -145,7 +145,7 @@ Environment step terraform service account needs to be added to the restricted V
 git checkout production
 ```
 
-1. Update file `gcp-networks/modules/base_env/main.tf` in the `production` branch adding the Environment step terraform service account to the perimeter by updating the value for the variable `members` in the `restricted_shared_vpc` module:
+1. Update file `gcp-networks/modules/base_env/main.tf` in the `production` branch adding the Environment step terraform service account and the service account created in the foundation to the perimeter by updating the value for the variable `members` in the `restricted_shared_vpc` module:
 
     ```hcl
       members = distinct(concat([
@@ -153,6 +153,7 @@ git checkout production
         "serviceAccount:${local.projects_service_account}",
         "serviceAccount:${local.organization_service_account}",
         "serviceAccount:${data.terraform_remote_state.bootstrap.outputs.environment_step_terraform_service_account_email}",
+        "serviceAccount:sa-terraform-proj@<SEED_PROJECT_ID>.iam.gserviceaccount.com",
       ], var.perimeter_additional_members))
     ```
 
@@ -412,7 +413,7 @@ git checkout production
     }
     ```
 
-1. Copy the file `example_sdw_projects.tf` in folder `gcp-projects/modules/base_env` and copy the following code
+1. Copy the file `example_sdw_projects.tf` in folder `terraform-google-secured-data-warehouse/docs/foundation_deploy/gcp-projects/modules/base_env` to the following folder `../gcp-projects/modules/base_env`:
 
   ```sh
     export sdw_path="../terraform-google-secured-data-warehouse/docs/foundation_deploy/gcp-projects/modules/base_env"
@@ -439,37 +440,6 @@ git checkout production
 
 1. Wait for the `gcp-projects` build from the previous step to finish.
 1. Commit changes in the `gcp-projects` repository and push the code to the `production` branch.
-
-### Add data ingestion services accounts to the perimeter
-
-1. Get the services accounts and project numbers to be used on perimeter:
-
-    ```bash
-    terraform -chdir="gcp-projects/business_unit_1/production/" init
-    export DATA_INGESTION_PROJECT_NUMBER=$(terraform -chdir="gcp-projects/business_unit_1/production/" output -raw data_ingestion_project_number)
-    export NON_CONFIDENTIAL_PROJECT_NUMBER=$(terraform -chdir="gcp-projects/business_unit_1/production/" output -raw non_confidential_data_project_number)
-
-    terraform -chdir="gcp-projects/business_unit_1/shared" init
-    export app_infra_sa=$(terraform -chdir="gcp-projects/business_unit_1/shared" output -json terraform_service_accounts | jq '."bu1-sdw-app"' --raw-output)
-
-    echo "DATA_INGESTION_PROJECT_NUMBER = ${DATA_INGESTION_PROJECT_NUMBER}"
-    echo "NON_CONFIDENTIAL_PROJECT_NUMBER = ${NON_CONFIDENTIAL_PROJECT_NUMBER}"
-    echo "APP_INFRA_SA_EMAIL = ${app_infra_sa}"
-    ```
-
-1. Update file `gcp-networks/envs/production/main.tf` in the `production` branch adding Data Ingestion and Environment step services accounts to the perimeter by updating the value for the variable `perimeter_additional_members`:
-
-    ```hcl
-      perimeter_additional_members = distinct(concat([
-        "serviceAccount:service-<DATA_INGESTION_PROJECT_NUMBER>@gcp-sa-pubsub.iam.gserviceaccount.com",
-        "serviceAccount:service-<DATA_INGESTION_PROJECT_NUMBER>@gs-project-accounts.iam.gserviceaccount.com",
-        "serviceAccount:service-<DATA_INGESTION_PROJECT_NUMBER>@dataflow-service-producer-prod.iam.gserviceaccount.com",
-        "serviceAccount:service-<NON_CONFIDENTIAL_PROJECT_NUMBER>@bigquery-encryption.iam.gserviceaccount.com",
-        "serviceAccount:<APP_INFRA_SA_EMAIL>",
-      ], var.perimeter_additional_members))
-    ```
-
-1. Commit changes in the `gcp-network` repository and push the code to the `production` branch.
 
 ### 4-projects: Deploy the Secured Data Warehouse
 
@@ -704,6 +674,35 @@ git checkout production
 
 1. Commit changes in the `gcp-projects` repository and push the code to the `production` branch.
 
+### Add data ingestion services accounts to the perimeter
+
+1. Get the services accounts and project numbers to be used on perimeter:
+
+    ```bash
+    terraform -chdir="gcp-projects/business_unit_1/production/" init
+    export DATA_INGESTION_PROJECT_NUMBER=$(terraform -chdir="gcp-projects/business_unit_1/production/" output -raw data_ingestion_project_number)
+    export NON_CONFIDENTIAL_PROJECT_NUMBER=$(terraform -chdir="gcp-projects/business_unit_1/production/" output -raw non_confidential_data_project_number)
+
+    terraform -chdir="gcp-projects/business_unit_1/shared" init
+    export app_infra_sa=$(terraform -chdir="gcp-projects/business_unit_1/shared" output -json terraform_service_accounts | jq '."bu1-sdw-app"' --raw-output)
+
+    echo "DATA_INGESTION_PROJECT_NUMBER = ${DATA_INGESTION_PROJECT_NUMBER}"
+    echo "NON_CONFIDENTIAL_PROJECT_NUMBER = ${NON_CONFIDENTIAL_PROJECT_NUMBER}"
+    echo "APP_INFRA_SA_EMAIL = ${app_infra_sa}"
+    ```
+
+1. Update file `gcp-networks/envs/production/main.tf` in the `production` branch adding Data Ingestion and Environment step services accounts to the perimeter by updating the value for the variable `perimeter_additional_members`:
+
+    ```hcl
+      perimeter_additional_members = distinct(concat([
+        "serviceAccount:service-<DATA_INGESTION_PROJECT_NUMBER>@gcp-sa-pubsub.iam.gserviceaccount.com",
+        "serviceAccount:service-<DATA_INGESTION_PROJECT_NUMBER>@gs-project-accounts.iam.gserviceaccount.com",
+        "serviceAccount:service-<DATA_INGESTION_PROJECT_NUMBER>@dataflow-service-producer-prod.iam.gserviceaccount.com",
+        "serviceAccount:bq-<NON_CONFIDENTIAL_PROJECT_NUMBER>@bigquery-encryption.iam.gserviceaccount.com",
+        "serviceAccount:<APP_INFRA_SA_EMAIL>",
+      ], var.perimeter_additional_members))
+    ```
+
 ### Add Data Ingestion and Non-Confidential project to the perimeter
 
 1. Uncomment the VPC-SC configuration at the file `example_sdw_projects.tf` in folder `gcp-projects/modules/base_env`, at module `non_confidential_data_project`:
@@ -732,12 +731,12 @@ git checkout production
     export DATA_FLOW_TEMPLATE_PROJECT_NUMBER=$(terraform -chdir="gcp-projects/business_unit_1/production/" output -raw dataflow_template_project_number)
 
     echo "APP_INFRA_SA_EMAIL = ${app_infra_sa}"
-    echo "DATA_INGESTION_PROJECT_NUMBER = ${data_ingestion_dataflow_controller}"
+    echo "DATA_INGESTION_PROJECT_NUMBER = ${data_ingestion_project_number}"
     echo "DATA_FLOW_CONTROLLER = ${DATA_FLOW_CONTROLLER}"
     echo "DATA_FLOW_TEMPLATE_PROJECT_NUMBER = ${DATA_FLOW_TEMPLATE_PROJECT_NUMBER}"
     ```
 
-1. Update file `gcp-networks/envs/production/main.tf` in the `production` branch VPC-SC Egress rules in the `restricted_shared_vpc` module:
+1. Update file `gcp-networks/envs/production/main.tf` in the `production` branch VPC-SC Egress rules in the `base_env` module:
 
     ```hcl
       egress_policies  = concat(var.egress_policies,
@@ -805,6 +804,20 @@ git checkout production
     echo ${INFRA_PIPELINE_PROJECT_ID}
 
     gcloud source repos clone bu1-sdw-app --project=${INFRA_PIPELINE_PROJECT_ID}
+    ```
+
+- The layout should look like this:
+
+    ```text
+    bu1-sdw-app
+    gcp-bootstrap
+    gcp-environments
+    gcp-networks
+    gcp-org
+    gcp-policies
+    gcp-policies-app-infra
+    gcp-projects
+    terraform-google-secured-data-warehouse
     ```
 
 1. Copy the Cloud Build setup and the shared configuration folder:

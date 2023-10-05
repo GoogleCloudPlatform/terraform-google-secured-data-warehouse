@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-**
+
 locals {
   taxonomy_name         = "secured_taxonomy"
   taxonomy_display_name = "${local.taxonomy_name}-${random_id.suffix.hex}"
