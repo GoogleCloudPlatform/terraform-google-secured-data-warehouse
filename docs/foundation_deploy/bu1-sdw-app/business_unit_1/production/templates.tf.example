@@ -43,6 +43,9 @@ resource "google_storage_bucket" "cloudbuild_bucket" {
   uniform_bucket_level_access = true
 }
 
+# This null_resource triggers the build of the
+# Python DLP De-Identification template image
+# to be used by De-Identification Dataflow
 resource "null_resource" "python_de_identification_flex_template" {
 
   triggers = {
@@ -71,6 +74,9 @@ EOF
   ]
 }
 
+# This null_resource triggers the build of the
+# Python DLP Transform template image
+# to be used by the Re-Identification Dataflow
 resource "null_resource" "python_re_identification_flex_template" {
 
   triggers = {
@@ -99,6 +105,9 @@ EOF
   ]
 }
 
+# This null_resource triggers the build of the
+# Python modules dependencies image to be used by the templates
+# instead of download public dependencies.
 resource "null_resource" "upload_modules" {
 
   triggers = {

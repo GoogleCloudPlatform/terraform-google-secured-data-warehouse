@@ -91,9 +91,8 @@ data "google_secret_manager_secret_version" "wrapped_key" {
 }
 
 module "de_identification_template" {
-  source = "git::https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse.git//modules/de-identification-template?ref=release-please--branches--main"
-  # source  = "GoogleCloudPlatform/secured-data-warehouse/google//modules/de-identification-template"
-  # version = "~> 1.0"
+  source  = "GoogleCloudPlatform/secured-data-warehouse/google//modules/de-identification-template"
+  version = "~> 1.0"
 
   project_id                = local.data_governance_project_id
   terraform_service_account = local.sdw_app_infra_sa
@@ -106,9 +105,8 @@ module "de_identification_template" {
 }
 
 module "regional_deid_pipeline" {
-  source = "git::https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse.git//modules/dataflow-flex-job?ref=release-please--branches--main"
-  # source  = "GoogleCloudPlatform/secured-data-warehouse/google//modules/dataflow-flex-job"
-  # version = "~> 1.0"
+  source  = "GoogleCloudPlatform/secured-data-warehouse/google//modules/dataflow-flex-job"
+  version = "~> 1.0"
 
   project_id              = local.data_ingestion_project_id
   name                    = "dataflow-flex-regional-dlp-deid-job-python-query"
@@ -148,9 +146,8 @@ resource "time_sleep" "wait_de_identify_job_execution" {
 }
 
 module "regional_reid_pipeline" {
-  source = "git::https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse.git//modules/dataflow-flex-job?ref=release-please--branches--main"
-  # source  = "GoogleCloudPlatform/secured-data-warehouse/google//modules/dataflow-flex-job"
-  # version = "~> 1.0"
+  source  = "GoogleCloudPlatform/secured-data-warehouse/google//modules/dataflow-flex-job"
+  version = "~> 1.0"
 
   project_id              = local.confidential_data_project_id
   name                    = "dataflow-flex-regional-dlp-reid-job-python-query"
