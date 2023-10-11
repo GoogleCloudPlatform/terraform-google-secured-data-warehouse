@@ -9,8 +9,8 @@ of an existing Terraform Example Foundation and will deploy/create:
 
 - The infrastructure required by the Blueprint (*harness*),
 - The Blueprint itself,
-- A DataFlow reading from a public BigQuery de-identifing data and writing in a non-confidential Bigquery
-- A DataFlow reading from non-confidential Bigquery and re-identifing data and writing in a confidential BigQuery
+- A DataFlow reading from a public BigQuery de-identifying data and writing in a non-confidential Bigquery
+- A DataFlow reading from non-confidential Bigquery and re-identifying data and writing in a confidential BigQuery
 - The taxonomy being applied at confidential BigQuery.
 
 The following infrastructure will be created or reused:
