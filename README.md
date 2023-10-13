@@ -19,6 +19,49 @@ that incorporates and documents best practices for a performant and scalable des
 security by default for control, logging and evidence generation. It can be  simply deployed by
 customers through a Terraform workflow.
 
+## Resources created by this module
+
+- Data Ingestion
+  - Data Ingestion bucket
+  - Data Flow Bucket
+  - Data Ingestion Pub/Sub topic
+  - DataFlow Controller Service Account
+- Data Governance
+  - Cloud KMS Keyring
+  - Cloud KMS Keys
+    - Data Ingestion Key
+    - BigQuery Key
+    - Re-Identification Key
+    - De-Identification Key
+  - Encrypters and Decrypters roles
+- Non-confidential Data
+  - Big Query Dataset
+- Confidential Data
+  - DataFlow Bucket
+  - BigQuery Dataset
+  - DataFlow Controller Service Account
+- VPC Service Control
+  - Data Ingestion Perimeter
+  - Data Governance Perimeter
+  - Confidential Data Perimeter
+  - Access Level policy
+  - VPC SC Bridges between:
+    - Confidential Data and Data Governance
+    - Confidential Data and Data Ingestion
+    - Data Ingestion and Data Governance
+- IAM
+  - Remove Owner roles
+  - Grant roles to groups listed at [Security Groups](#security-groups) section
+- Organization Policies
+  - Restrict Protocol Forwarding Creation Policy
+  - Disable Serial Port Logging Policy
+  - Require OS Login
+  - Trusted VPC Subnetwork Policy
+  - VM External IP Access Policy
+  - Location Restriction Policy
+  - Service Account Disable Key Policy
+  - Service Account Disable Creation Policy
+
 ## Disclaimer
 
 When using this blueprint, it is important to understand how you manage [separation of duties](https://cloud.google.com/kms/docs/separation-of-duties). We recommend you remove all primitive `owner` roles in the projects used as inputs for the *Data Warehouse module*. The secured data warehouse itself does not need any primitive owner roles for correct operations.
@@ -377,10 +420,10 @@ Please see our [security disclosure process](./SECURITY.md).
 Refer to the [contribution guidelines](./CONTRIBUTING.md) for
 information on contributing to this module.
 
-[iam-module]: https://registry.terraform.io/modules/terraform-google-modules/iam/google
-[project-factory-module]: https://registry.terraform.io/modules/terraform-google-modules/project-factory/google
-[terraform-provider-gcp]: https://www.terraform.io/docs/providers/google/index.html
-[terraform]: https://www.terraform.io/downloads.html
+- [iam-module](https://registry.terraform.io/modules/terraform-google-modules/iam/google)
+- [project-factory-module](https://registry.terraform.io/modules/terraform-google-modules/project-factory/google)
+- [terraform-provider-gcp](https://www.terraform.io/docs/providers/google/index.html)
+- [terraform](https://www.terraform.io/downloads.html)
 
 ---
 This is not an officially supported Google product
