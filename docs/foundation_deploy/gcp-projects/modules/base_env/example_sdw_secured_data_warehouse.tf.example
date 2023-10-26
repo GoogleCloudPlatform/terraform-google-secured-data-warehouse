@@ -43,9 +43,8 @@ locals {
 }
 
 module "secured_data_warehouse" {
-  source = "git::https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse.git?ref=release-please--branches--main"
-  # source  = "GoogleCloudPlatform/secured-data-warehouse/google"
-  # version = "~> 1.0"
+  source  = "GoogleCloudPlatform/secured-data-warehouse/google"
+  version = "~> 1.0"
 
   count = var.enable_sdw ? 1 : 0
 

@@ -131,9 +131,8 @@ module "confidential_data_project" {
 }
 
 module "dwh_networking_confidential" {
-  source = "git::https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse.git//modules/dwh-networking?ref=release-please--branches--main"
-  # source  = "GoogleCloudPlatform/secured-data-warehouse/google//modules/dwh-networking"
-  # version = "~> 1.0"
+  source  = "GoogleCloudPlatform/secured-data-warehouse/google//modules/dwh-networking"
+  version = "~> 1.0"
 
   count = var.enable_sdw ? 1 : 0
 
@@ -153,10 +152,6 @@ module "non_confidential_data_project" {
   environment     = var.env
   project_budget  = var.project_budget
   project_prefix  = local.project_prefix
-
-  # vpc_type                   = "restricted"
-  # shared_vpc_host_project_id = local.restricted_host_project_id
-  # shared_vpc_subnets         = local.restricted_subnets_self_links
 
   enable_cloudbuild_deploy            = local.enable_cloudbuild_deploy
   app_infra_pipeline_service_accounts = local.app_infra_pipeline_service_accounts
@@ -206,15 +201,17 @@ module "data_ingestion_project" {
   source = "../single_project"
   count  = var.enable_sdw ? 1 : 0
 
-  org_id                     = local.org_id
-  billing_account            = local.billing_account
-  folder_id                  = local.env_folder_name
-  environment                = var.env
-  vpc_type                   = "restricted"
-  shared_vpc_host_project_id = local.restricted_host_project_id
-  shared_vpc_subnets         = local.restricted_subnets_self_links
-  project_budget             = var.project_budget
-  project_prefix             = local.project_prefix
+  org_id          = local.org_id
+  billing_account = local.billing_account
+  folder_id       = local.env_folder_name
+  environment     = var.env
+  project_budget  = var.project_budget
+  project_prefix  = local.project_prefix
+
+  # Uncomment after deploy of the Secure Data Warehouse to add the project to the Shared VPC
+  # vpc_type                   = "restricted"
+  # shared_vpc_host_project_id = local.restricted_host_project_id
+  # shared_vpc_subnets         = local.restricted_subnets_self_links
 
   enable_cloudbuild_deploy            = local.enable_cloudbuild_deploy
   app_infra_pipeline_service_accounts = local.app_infra_pipeline_service_accounts
@@ -313,4 +310,33 @@ resource "google_project_iam_member" "iam_admin" {
   project = module.data_ingestion_project[0].project_id
   role    = "roles/vpcaccess.admin"
   member  = "serviceAccount:${data.terraform_remote_state.bootstrap.outputs.networks_step_terraform_service_account_email}"
+}
+
+// initialize system service account
+data "google_storage_project_service_account" "sdw_gcs_account" {
+  count = var.enable_sdw ? 1 : 0
+
+  project = module.data_ingestion_project[0].project_id
+}
+
+resource "google_project_service_identity" "sdw_pubsub_sa" {
+  provider = google-beta
+  count    = var.enable_sdw ? 1 : 0
+
+  project = module.data_ingestion_project[0].project_id
+  service = "pubsub.googleapis.com"
+}
+
+resource "google_project_service_identity" "sdw_dataflow_sa" {
+  provider = google-beta
+  count    = var.enable_sdw ? 1 : 0
+
+  project = module.data_ingestion_project[0].project_id
+  service = "dataflow.googleapis.com"
+}
+
+data "google_bigquery_default_service_account" "sdw_bigquery_sa" {
+  count = var.enable_sdw ? 1 : 0
+
+  project = module.non_confidential_data_project[0].project_id
 }
