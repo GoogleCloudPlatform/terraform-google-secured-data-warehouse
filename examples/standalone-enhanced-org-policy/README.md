@@ -86,6 +86,7 @@ the service account will need the following roles in the folder in which the pro
 - Project Creator: `roles/resourcemanager.projectCreator`
 - Project Deleter: `roles/resourcemanager.projectDeleter`
 - Project IAM Admin: `roles/resourcemanager.projectIamAdmin`
+- Service Account Admin: `roles/iam.serviceAccountAdmin`
 - Service Usage Admin: `roles/serviceusage.serviceUsageAdmin`
 
 It will also be necessary to grant the `Billing Account User` role to the [service account](https://cloud.google.com/billing/docs/how-to/billing-access#update-cloud-billing-permissions).

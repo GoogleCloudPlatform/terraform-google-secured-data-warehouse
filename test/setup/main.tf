@@ -40,6 +40,7 @@ locals {
     "roles/cloudkms.cryptoOperator",
     "roles/logging.admin",
     "roles/resourcemanager.projectIamAdmin",
+    "roles/iam.serviceAccountAdmin",
     "roles/serviceusage.serviceUsageAdmin",
   ]
 }

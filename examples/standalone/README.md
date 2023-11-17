@@ -189,6 +189,7 @@ Grant the following roles to the service account.
   - Project Creator: `roles/resourcemanager.projectCreator`
   - Project Deleter: `roles/resourcemanager.projectDeleter`
   - Project IAM Admin: `roles/resourcemanager.projectIamAdmin`
+  - Service Account Admin: `roles/iam.serviceAccountAdmin`
   - Service Usage Admin: `roles/serviceusage.serviceUsageAdmin`
 
 As an alternative to granting the service account the `Billing Account User` role in organization,
@@ -258,6 +259,11 @@ gcloud resource-manager folders \
 add-iam-policy-binding ${FOLDER_ID} \
 --member="serviceAccount:${SA_EMAIL}" \
 --role="roles/resourcemanager.projectIamAdmin"
+
+gcloud resource-manager folders \
+add-iam-policy-binding ${FOLDER_ID} \
+--member="serviceAccount:${SA_EMAIL}" \
+--role="roles/iam.serviceAccountAdmin"
 
 gcloud resource-manager folders \
 add-iam-policy-binding ${FOLDER_ID} \
