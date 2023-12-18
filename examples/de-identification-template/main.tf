@@ -15,7 +15,8 @@
  */
 
 module "de_identification_template_example" {
-  source = "../..//modules/de-identification-template"
+  source  = "GoogleCloudPlatform/secured-data-warehouse/google//modules/de-identification-template"
+  version = "~> 0.2"
 
   project_id                = var.project_id
   terraform_service_account = var.terraform_service_account

@@ -33,7 +33,8 @@ resource "random_id" "suffix" {
 }
 
 module "secured_data_warehouse" {
-  source = "../.."
+  source  = "GoogleCloudPlatform/secured-data-warehouse/google"
+  version = "~> 0.2"
 
   org_id                           = var.org_id
   labels                           = { environment = "dev" }
@@ -97,7 +98,8 @@ module "secured_data_warehouse" {
 }
 
 module "de_identification_template" {
-  source = "../..//modules/de-identification-template"
+  source  = "GoogleCloudPlatform/secured-data-warehouse/google//modules/de-identification-template"
+  version = "~> 0.2"
 
   project_id                = module.base_projects.data_governance_project_id
   terraform_service_account = var.terraform_service_account
@@ -154,7 +156,8 @@ resource "google_artifact_registry_repository_iam_member" "confidential_python_r
 // that provides the public with financial information about a nonprofit organization
 // (https://console.cloud.google.com/marketplace/product/internal-revenue-service/irs-990?project=bigquery-public-data)
 module "regional_deid_pipeline" {
-  source = "../../modules/dataflow-flex-job"
+  source  = "GoogleCloudPlatform/secured-data-warehouse/google//modules/dataflow-flex-job"
+  version = "~> 0.2"
 
   project_id              = module.base_projects.data_ingestion_project_id
   name                    = "dataflow-flex-regional-dlp-deid-job-python-query"
@@ -189,7 +192,8 @@ resource "time_sleep" "wait_de_identify_job_execution" {
 }
 
 module "regional_reid_pipeline" {
-  source = "../../modules/dataflow-flex-job"
+  source  = "GoogleCloudPlatform/secured-data-warehouse/google//modules/dataflow-flex-job"
+  version = "~> 0.2"
 
   project_id              = module.base_projects.confidential_data_project_id
   name                    = "dataflow-flex-regional-dlp-reid-job-python-query"
