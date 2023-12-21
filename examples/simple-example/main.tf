@@ -15,7 +15,9 @@
  */
 
 module "secured_data_warehouse" {
-  source                           = "../.."
+  source  = "GoogleCloudPlatform/secured-data-warehouse/google"
+  version = "~> 0.2"
+
   org_id                           = var.org_id
   labels                           = { environment = "dev" }
   data_governance_project_id       = var.data_governance_project_id

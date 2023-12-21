@@ -147,7 +147,8 @@ data "google_secret_manager_secret_version" "wrapped_key" {
 }
 
 module "centralized_logging" {
-  source                      = "../../modules/centralized-logging"
+  source                      = "GoogleCloudPlatform/secured-data-warehouse/google//modules/centralized-logging"
+  version                     = "~> 0.2"
   projects_ids                = local.projects_ids
   labels                      = { environment = "dev" }
   logging_project_id          = module.base_projects.data_governance_project_id

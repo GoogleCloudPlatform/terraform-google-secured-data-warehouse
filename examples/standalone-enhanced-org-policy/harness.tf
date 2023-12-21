@@ -155,7 +155,8 @@ module "non_confidential_data_project_id" {
 }
 
 module "centralized_logging" {
-  source                      = "../../modules/centralized-logging"
+  source                      = "GoogleCloudPlatform/secured-data-warehouse/google//modules/centralized-logging"
+  version                     = "~> 0.2"
   projects_ids                = local.projects_ids
   logging_project_id          = var.data_governance_project_id
   kms_project_id              = var.data_governance_project_id
