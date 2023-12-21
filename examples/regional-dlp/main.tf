@@ -20,7 +20,9 @@ locals {
 }
 
 module "data_ingestion" {
-  source                           = "../.."
+  source  = "GoogleCloudPlatform/secured-data-warehouse/google"
+  version = "~> 0.2"
+
   org_id                           = var.org_id
   labels                           = { environment = "dev" }
   data_governance_project_id       = var.data_governance_project_id
@@ -45,7 +47,8 @@ module "data_ingestion" {
 }
 
 module "de_identification_template_example" {
-  source = "../..//modules/de-identification-template"
+  source  = "GoogleCloudPlatform/secured-data-warehouse/google//modules/de-identification-template"
+  version = "~> 0.2"
 
   project_id                = var.data_governance_project_id
   terraform_service_account = var.terraform_service_account
@@ -89,7 +92,8 @@ resource "google_artifact_registry_repository_iam_member" "python_reader" {
 }
 
 module "regional_dlp" {
-  source = "../../modules/dataflow-flex-job"
+  source  = "GoogleCloudPlatform/secured-data-warehouse/google//modules/dataflow-flex-job"
+  version = "~> 0.2"
 
   project_id              = var.data_ingestion_project_id
   name                    = "regional-flex-python-pubsub-dlp-bq"

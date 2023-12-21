@@ -20,7 +20,9 @@ locals {
 }
 
 module "secured_data_warehouse" {
-  source                           = "../.."
+  source  = "GoogleCloudPlatform/secured-data-warehouse/google"
+  version = "~> 0.2"
+
   org_id                           = var.org_id
   data_governance_project_id       = var.data_governance_project_id
   confidential_data_project_id     = var.confidential_data_project_id
