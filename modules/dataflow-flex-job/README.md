@@ -48,7 +48,7 @@ This is a simple usage:
 ```hcl
 module "dataflow-flex-job" {
   source  = "terraform-google-modules/secured-data-warehouse/google//modules/dataflow-flex-job"
-  version = "~> 0.1"
+  version = "~> 1.0"
 
   project_id              = "<project_id>"
   region                  = "us-east4"
