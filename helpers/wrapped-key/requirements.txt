@@ -8,7 +8,7 @@ google-cloud-kms==2.19.1
 googleapis-common-protos==1.60.0
 grpc-google-iam-v1==0.12.6
 grpcio==1.56.2
-grpcio-status==1.56.2
+grpcio-status==1.76.0
 idna==3.4
 proto-plus==1.22.3
 protobuf==4.23.4
