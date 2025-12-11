@@ -8,6 +8,47 @@ and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 This changelog is generated automatically based on [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).
 
+## [1.0.0](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/compare/v0.2.0...v1.0.0) (2025-12-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* updates vpc-sc configuration ([#334](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/334))
+* bumps providers and modules versions ([#330](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/330))
+* bumps dev-tools image, fixes linting error ([#319](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/319))
+
+### Features
+
+* add audit log to the centralized-logging module ([#274](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/274)) ([987aaf3](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/commit/987aaf34ae899edde82b7854530519ea9231e519))
+* Add support to use labels in Data Warehouse ([#282](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/282)) ([a9edac1](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/commit/a9edac12d910f4c65dbd5127c3139f67f2409b39))
+* Adding integration tests for the Standalone example ([#298](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/298)) ([9badb1c](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/commit/9badb1cd330cf4b36fed131af738f9e915c36ff5))
+* adding service_account_key_creation_policy in main module ([#294](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/294)) ([3e3c90e](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/commit/3e3c90e759a4bd912d9df22c12581e98861b0a6c))
+* Allow providing custom project names in the creation of projects in the standalone harness ([#329](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/329)) ([78749af](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/commit/78749afabf1fa0adc70c42673f5083af5ec2902a))
+* Create a new example where user can create new projects or use its own with enhanced org policies ([#284](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/284)) ([37e0b3e](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/commit/37e0b3e682c0d535d6e5747bbfbf8750025c9e48))
+* Improve outputs for standalone example ([#290](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/290)) ([844d02f](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/commit/844d02f11f52e9b87ac6c81e722b75a5137f38ff))
+* make sdx_project_number optional ([#288](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/288)) ([467fab2](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/commit/467fab2e9696f4f5415ad6fb3fd9389ca62ddea1))
+* Python standalone example ([#264](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/264)) ([4fc7497](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/commit/4fc749794d71bb7756d8c2d71e40f677ae75a703))
+* set audit log config at project level ([#286](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/286)) ([1a461d8](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/commit/1a461d8deac6bc2f090852fb1a81b9079b59e675))
+
+
+### Bug Fixes
+
+* add a validator to bucket name variables ([#279](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/279)) ([588df9a](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/commit/588df9a14ed6ad804188b4553296e648dfdcbbeb))
+* adds support to label, to use services accounts created in main module ([#336](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/336)) ([4f28981](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/commit/4f2898131ab0c21c86d441190da1d08d605953f8))
+* **deps:** update terraform null to v3.2.1 ([#339](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/339)) ([1982a0c](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/commit/1982a0c7f8ec376876ccf551327e348604d92f5e))
+* **deps:** update terraform random to v3.5.1 ([#347](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/347)) ([41d7da0](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/commit/41d7da0d435af08d550e2709ec8f662320c09a6d))
+* **deps:** update tf modules ([#350](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/350)) ([8b89911](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/commit/8b899113400b8b6f996dc889cedb71a9ca93cb8a))
+* list resources created by main module. ([#373](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/373)) ([d165499](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/commit/d165499e49a39ba21f1bb124a1307f12d2c34d8e))
+* set retention cycle logging bucket ([#299](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/299)) ([6b32180](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/commit/6b321805cf3dc4c52da23a8e32f060bf9c23f4e0))
+* waits iam policies propagates before submit builds ([#320](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/320)) ([67aa9e4](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/commit/67aa9e4ae4bef4feb24a1c875092380db8ab620b))
+
+
+### Miscellaneous Chores
+
+* bumps dev-tools image, fixes linting error ([#319](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/319)) ([6e980df](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/commit/6e980dfc594780147bf856cc6a5c54ca44bbc3a7))
+* bumps providers and modules versions ([#330](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/330)) ([4358c29](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/commit/4358c2954d9bea9709d99aaec0c5cd9c92a1f79e))
+* updates vpc-sc configuration ([#334](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/issues/334)) ([b64b2ea](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/commit/b64b2eae502f4ff1a2bef3f706d1b1ef05a62d10))
+
 ## [0.2.0](https://github.com/GoogleCloudPlatform/terraform-google-secured-data-warehouse/compare/v0.1.0...v0.2.0) (2022-02-23)
 
 
