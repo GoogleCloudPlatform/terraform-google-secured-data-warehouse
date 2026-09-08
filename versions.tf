@@ -47,10 +47,10 @@ terraform {
 
   #changed_meta
   provider_meta "google" {
-    module_name = "blueprints/terraform/terraform-google-secured-data-warehouse/v0.2.0"
+    module_name = "blueprints/terraform/terraform-google-secured-data-warehouse/v1.0.0"
   }
 
   provider_meta "google-beta" {
-    module_name = "blueprints/terraform/terraform-google-secured-data-warehouse/v0.2.0"
+    module_name = "blueprints/terraform/terraform-google-secured-data-warehouse/v1.0.0"
   }
 }
