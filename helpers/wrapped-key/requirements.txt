@@ -4,7 +4,7 @@ charset-normalizer==3.2.0
 crcmod==1.7
 google-api-core==2.11.1
 google-auth==2.22.0
-google-cloud-kms==2.19.1
+google-cloud-kms==2.24.2
 googleapis-common-protos==1.60.0
 grpc-google-iam-v1==0.12.6
 grpcio==1.56.2
