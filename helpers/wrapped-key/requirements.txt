@@ -1,4 +1,4 @@
-cachetools==5.3.1
+cachetools==5.5.2
 certifi==2023.7.22
 charset-normalizer==3.2.0
 crcmod==1.7
